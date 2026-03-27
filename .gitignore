@@ -1,0 +1,127 @@
+### DEPENDENCIAS ###
+node_modules/
+jspm_packages/
+bower_components/
+web_modules/
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+### ARCHIVOS DE CONSTRUCCIÓN Y EMPAQUETADO (BUILD) ###
+dist/
+build/
+out/
+target/
+.next/
+.nuxt/
+.output/
+.vuepress/dist
+.svelte-kit/
+.docusaurus/
+*.tsbuildinfo
+
+### LOGS Y DIAGNÓSTICOS ###
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+*.stackdump
+
+### VARIABLES DE ENTORNO Y SECRETOS ###
+.env
+.env.*
+*.env
+*.local
+
+### CACHÉ, TEMPORALES Y RUNTIME ###
+.cache/
+.temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+pids/
+*.pid
+*.seed
+*.pid.lock
+.eslintcache
+.stylelintcache
+.parcel-cache
+coverage/
+.nyc_output/
+*.lcov
+lib-cov/
+
+### DOCKER ###
+docker-volumes/
+.docker-sync/
+.docker/
+docker/data/
+docker/logs/
+docker-compose.override.y*ml
+docker-compose.dev.y*ml
+docker-compose.local.y*ml
+docker-compose.prod.y*ml
+*.env.docker
+
+### SISTEMAS OPERATIVOS ###
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Trashes/
+.Spotlight-V100/
+.fseventsd/
+*.icloud
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+### EDITORES E IDEs ###
+# VSCode (Aplicado a cualquier subcarpeta gracias a **/)
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/tasks.json
+!**/.vscode/launch.json
+!**/.vscode/extensions.json
+!**/.vscode/*.code-snippets
+.history/
+*.vsix
+*.code-workspace
+
+# Otros IDEs (JetBrains, Xcode, etc.)
+.idea/
+.ionide/
+.vs/
+xcuserdata/
+DerivedData/
+*.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/

@@ -17,7 +17,11 @@ const baseRules = {
 
 module.exports = [
   {
-    ignores: ['eslint.config.cjs', 'prettier.config.cjs', 'commitlint.config.cjs'],
+    ignores: [
+      'eslint.config.cjs',
+      'prettier.config.cjs',
+      'commitlint.config.cjs',
+    ],
   },
 
   // Proyecto

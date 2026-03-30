@@ -1,8 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2020",
-    "strict": true
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "strictNullChecks": true,
+    "paths": {
+      "@db/*": ["database/*"],
+      "@repo/*": ["repository/*"],
+      "@domain/*": ["domain/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["./src/**/*"]
 }

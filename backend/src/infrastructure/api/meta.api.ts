@@ -6,7 +6,7 @@ import type {
   PublishResult,
 } from '../../domain/ports/socialPublisher.port';
 
-const BASE_URL = 'https://graph.facebook.com/v19.0';
+const BASE_URL = 'https://graph.facebook.com/v25.0';
 
 /**
  * Generic helper function to make POST requests to the Meta API.
@@ -65,6 +65,36 @@ export const metaPublisher: SocialPublisher = {
       caption: data.caption,
       access_token: ACCESS_TOKEN,
     });
+
+    // Wait until the media container is fully processed
+    const waitForMediaContainer = async () => {
+      const maxAttempts = 10;
+      let attempts = 0;
+
+      while (attempts < maxAttempts) {
+        const res = await axios.get(`${BASE_URL}/${media.id}`, {
+          params: {
+            fields: 'status_code',
+            access_token: ACCESS_TOKEN,
+          },
+        });
+
+        const status = res.data.status_code;
+
+        if (status === 'FINISHED') return;
+
+        if (status === 'ERROR') {
+          throw new Error('Instagram media processing failed');
+        }
+
+        attempts++;
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+
+      throw new Error('Timeout waiting for Instagram media processing');
+    };
+
+    await waitForMediaContainer();
 
     // Publish the media container
     const publish = await post(`/${IG_USER_ID}/media_publish`, {

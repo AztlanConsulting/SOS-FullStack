@@ -10,7 +10,8 @@
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@types/*": ["./src/types/*"],
-      "@vectorDB": ["./src/vectorDatabase.ts"]
+      "@use-case/*": ["./src/use-cases//*"],
+      "@vectorDB": ["src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
   "include": ["./src/**/*"]

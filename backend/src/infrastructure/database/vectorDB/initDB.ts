@@ -1,9 +1,9 @@
-import client from '@vectorDB';
+import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
 import { petConfig } from 'src/domain/models/vector/petSchema';
 
-await client.schema.deleteAll();
+await vectorDB.schema.deleteAll();
 
-await client.schema.classCreator().withClass(petConfig).do();
+await vectorDB.schema.classCreator().withClass(petConfig).do();
 
-const schemaRes = await client.schema.getter().do();
+const schemaRes = await vectorDB.schema.getter().do();
 console.log(schemaRes);

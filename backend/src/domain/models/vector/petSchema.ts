@@ -9,6 +9,10 @@ export const petConfig = {
   },
   properties: [
     {
+      name: 'refId',
+      dataType: ['string'],
+    },
+    {
       name: 'image',
       dataType: ['blob'],
     },

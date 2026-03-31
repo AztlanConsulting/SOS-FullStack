@@ -2,65 +2,95 @@ import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface CountdownChartProps {
+  planName: string;
   totalDays: number;
   daysRemaining: number;
 }
 
-export const CountdownChart: React.FC<CountdownChartProps> = ({ totalDays, daysRemaining }) => {
+
+export const CountdownChart: React.FC<CountdownChartProps> = ({ planName, totalDays, daysRemaining }) => {
   const daysUsed = totalDays - daysRemaining;
 
   // Recharts necesita un arreglo de objetos. 
   // El primer valor es lo que queda (verde), el segundo es lo ya usado (gris).
   const data = [
-    { name: 'Restantes', value: daysRemaining },
-    { name: 'Usados', value: daysUsed },
+    { name: 'Transcurrido', value: daysRemaining },
+    { name: 'Restante', value: daysUsed },
   ];
   const COLORS = ['#DDEA25', '#D9D9D9'];
 
   return (
-    <div style={{ width: '100%', height: 160, position: 'relative' }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-        {/* Anillo de fondo */}
-        <Pie
-          data={[{ value: 100 }]}
-          cx="50%" cy="100%"
-          startAngle={180} endAngle={0}
-          innerRadius={100} outerRadius={120}
-          dataKey="value" 
-          stroke="none" 
-          fill="#D9D9D9"
-        />
-        
-        {/* Anillo de progreso */}
-        <Pie
-          data={data}
-          cx="50%" cy="100%"
-          startAngle={180} endAngle={0}
-          innerRadius={100} outerRadius={120}
-          dataKey="value" 
-          stroke="none" 
-          cornerRadius={10}
-        >
-          <Cell fill="#DDEA25" />
-          <Cell fill="transparent" />
-        </Pie>
-      </PieChart>
-      </ResponsiveContainer>
+    <div style={{ position: 'relative', width: '100%', paddingTop: '10px' }}>
       
       <div style={{
         position: 'absolute',
-        bottom: 10,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        textAlign: 'center'
+        top: '-10px',
+        left: '0',
+        backgroundColor: '#FCFCD4',
+        border: '1px solid #D4E157',
+        borderRadius: '4px',
+        padding: '4px 12px',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        color: '#333',
+        zIndex: 10
       }}>
-        <span style={{ fontSize: '28px', fontWeight: 'bold', color: '#2e7d32' }}>
-          {daysRemaining}
-        </span>
-        <br />
-        <span style={{ fontSize: '14px', color: '#666' }}>días restantes</span>
+        Quedan {daysRemaining} días
       </div>
+
+      {/* Contenedor de la gráfica */}
+      <div style={{ position: 'relative', width: '100%', height: '220px', marginTop: '30px' }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            {/* Anillo de fondo (Gris sólido) */}
+            <Pie
+              data={[{ value: 100 }]}
+              cx="50%" cy="100%"
+              startAngle={180} endAngle={0}
+              innerRadius={100} outerRadius={120}
+              dataKey="value"
+              stroke="none"
+              fill="#E0E0E0"
+            />
+            {/* Anillo de progreso (Verde/Amarillo) */}
+            <Pie
+              data={data}
+              cx="50%" cy="100%"
+              startAngle={180} endAngle={0}
+              innerRadius={100} outerRadius={120}
+              dataKey="value"
+              stroke="none"
+              cornerRadius={10}
+            >
+              <Cell fill="#D4E157" />
+              <Cell fill="transparent" />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+
+        {/* Texto centrado dentro de la media dona */}
+        <div style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          textAlign: 'center',
+          width: '100%'
+        }}>
+          <div style={{ fontSize: '20px', color: '#222', lineHeight: '1', fontWeight: '500' }}>
+            {daysUsed} días
+          </div>
+          <div style={{ fontSize: '12px', color: '#666', marginTop: '8px', fontWeight: 'bold' }}>
+            de {totalDays} días
+          </div>
+        </div>
+      </div>
+
+      {/* Título del plan */}
+      <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '20px', fontWeight: 'bold', color: '#222' }}>
+        {planName}
+      </div>
+
     </div>
   );
 };

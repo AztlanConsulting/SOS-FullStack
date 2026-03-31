@@ -7,18 +7,19 @@ export const getDashboardMetricsUseCase = async (): Promise<DashboardMetrics> =>
         plan: {
           planName: 'Plan Premium',
           totalDays: 15,
-          daysRemaining: 10,
+          daysRemaining: 6,
         },
         distribution: [
-          { name: 'Tipo A', value: 30 },
-          { name: 'Tipo B', value: 50 },
-          { name: 'Tipo C', value: 20 }
+          { name: 'Plan A', value: 30 },
+          { name: 'Plan B', value: 50 },
+          { name: 'Plan C', value: 20 },
+          { name: 'Plan personalizado', value: 20 },
         ],
         sales: [
-          { name: 'Ene', value: 30 },
-          { name: 'Feb', value: 45 },
-          { name: 'Mar', value: 60 },
-          { name: 'Abr', value: 55 }
+          { name: 'México', value: 30 },
+          { name: 'Chile', value: 45 },
+          { name: 'Colombia', value: 60 },
+          { name: 'Venezuela', value: 55 }
         ],
         visits: [
           { day: 1, val: 10 },

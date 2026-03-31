@@ -1,4 +1,3 @@
-import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface CountdownChartProps {
@@ -7,11 +6,14 @@ interface CountdownChartProps {
   daysRemaining: number;
 }
 
-
-export const CountdownChart: React.FC<CountdownChartProps> = ({ planName, totalDays, daysRemaining }) => {
+export const CountdownChart: React.FC<CountdownChartProps> = ({
+  planName,
+  totalDays,
+  daysRemaining,
+}) => {
   const daysUsed = totalDays - daysRemaining;
 
-  // Recharts necesita un arreglo de objetos. 
+  // Recharts necesita un arreglo de objetos.
   // El primer valor es lo que queda (verde), el segundo es lo ya usado (gris).
   const data = [
     { name: 'Transcurrido', value: daysRemaining },
@@ -21,46 +23,61 @@ export const CountdownChart: React.FC<CountdownChartProps> = ({ planName, totalD
 
   return (
     <div style={{ position: 'relative', width: '100%', paddingTop: '10px' }}>
-      
-      <div style={{
-        position: 'absolute',
-        top: '-10px',
-        left: '0',
-        backgroundColor: '#FCFCD4',
-        border: '1px solid #D4E157',
-        borderRadius: '4px',
-        padding: '4px 12px',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        color: '#333',
-        zIndex: 10
-      }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: '-10px',
+          left: '0',
+          backgroundColor: '#FCFCD4',
+          border: '1px solid #D4E157',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          color: '#333',
+          zIndex: 10,
+        }}
+      >
         Quedan {daysRemaining} días
       </div>
 
       {/* Contenedor de la gráfica */}
-      <div style={{ position: 'relative', width: '100%', height: '220px', marginTop: '30px' }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '220px',
+          marginTop: '30px',
+        }}
+      >
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             {/* Anillo de fondo (Gris sólido) */}
             <Pie
               data={[{ value: 100 }]}
-              cx="50%" cy="100%"
-              startAngle={180} endAngle={0}
-              innerRadius={100} outerRadius={120}
+              cx="50%"
+              cy="100%"
+              startAngle={180}
+              endAngle={0}
+              innerRadius={100}
+              outerRadius={120}
               dataKey="value"
               stroke="none"
               fill="#E0E0E0"
+              cornerRadius={5}
             />
             {/* Anillo de progreso (Verde/Amarillo) */}
             <Pie
               data={data}
-              cx="50%" cy="100%"
-              startAngle={180} endAngle={0}
-              innerRadius={100} outerRadius={120}
+              cx="50%"
+              cy="100%"
+              startAngle={180}
+              endAngle={0}
+              innerRadius={100}
+              outerRadius={120}
               dataKey="value"
               stroke="none"
-              cornerRadius={10}
+              cornerRadius={5}
             >
               <Cell fill="#D4E157" />
               <Cell fill="transparent" />
@@ -69,28 +86,51 @@ export const CountdownChart: React.FC<CountdownChartProps> = ({ planName, totalD
         </ResponsiveContainer>
 
         {/* Texto centrado dentro de la media dona */}
-        <div style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center',
-          width: '100%'
-        }}>
-          <div style={{ fontSize: '20px', color: '#222', lineHeight: '1', fontWeight: '500' }}>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            textAlign: 'center',
+            width: '100%',
+          }}
+        >
+          <div
+            style={{
+              fontSize: '20px',
+              color: '#222',
+              lineHeight: '1',
+              fontWeight: '500',
+            }}
+          >
             {daysUsed} días
           </div>
-          <div style={{ fontSize: '12px', color: '#666', marginTop: '8px', fontWeight: 'bold' }}>
+          <div
+            style={{
+              fontSize: '12px',
+              color: '#666',
+              marginTop: '8px',
+              fontWeight: 'bold',
+            }}
+          >
             de {totalDays} días
           </div>
         </div>
       </div>
 
       {/* Título del plan */}
-      <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '20px', fontWeight: 'bold', color: '#222' }}>
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: '20px',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#222',
+        }}
+      >
         {planName}
       </div>
-
     </div>
   );
 };

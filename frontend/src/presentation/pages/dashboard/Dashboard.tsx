@@ -4,8 +4,8 @@ import { getDashboardMetricsUseCase } from '../../../domain/use-cases/dashboard/
 
 // Prueba de componentes
 import { CountdownChart } from '../../components/molecule/CountDownChart/CountDownChart';
-import { DistributionPieChart } from '../../components/molecule/DistributionPieChart/DistributionPieChart';
-import { SalesBarChart } from '../../components/molecule/SalesBarChart/SalesBarChart';
+import { ActivePlanChart } from '../../components/molecule/ActivePlanChart/ActivePlanChart';
+import { CountriesBarChart } from '../../components/molecule/CountriesBarChart/CountriesBarChart';
 import { VisitsLineChart } from '../../components/molecule/VisitsLineChart/VisitsLineChart';
 
 export const Dashboard: React.FC = () => {
@@ -50,27 +50,25 @@ export const Dashboard: React.FC = () => {
 
       <div style={gridStyle}>
         <div style={cardStyle}>
-          <h3 style={{ textAlign: 'center', marginBottom: '0' }}>
-            Progreso: {metrics.plan.planName}
-          </h3>
           <CountdownChart
+            planName={metrics.plan.planName}
             totalDays={metrics.plan.totalDays}
             daysRemaining={metrics.plan.daysRemaining}
           />
         </div>
 
         <div style={cardStyle}>
-          <h3 style={{ textAlign: 'center' }}>Distribución de Tipos</h3>
-          <DistributionPieChart data={metrics.distribution} />
+          <h3 style={{ textAlign: 'left' }}>Planes activos</h3>
+          <ActivePlanChart data={metrics.distribution} />
         </div>
 
         <div style={cardStyle}>
-          <h3 style={{ textAlign: 'center' }}>Ventas Mensuales</h3>
-          <SalesBarChart data={metrics.sales} />
+          <h3 style={{ textAlign: 'left' }}>Distribución por país</h3>
+          <CountriesBarChart data={metrics.sales} />
         </div>
 
         <div style={cardStyle}>
-          <h3 style={{ textAlign: 'center' }}>Visitas Diarias</h3>
+          <h3 style={{ textAlign: 'left' }}> Visitantes </h3>
           <VisitsLineChart data={metrics.visits} />
         </div>
       </div>

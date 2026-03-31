@@ -6,10 +6,11 @@
     "baseUrl": ".",
     "strictNullChecks": true,
     "paths": {
-      "@db/*": ["database/*"],
-      "@repo/*": ["repository/*"],
-      "@vectorDB": ["src/database/vectorDB/vectorDatabase.ts"],
-      "@domain/*": ["domain/*"]
+      "@domain/*": ["./src/domain/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@types/*": ["./src/types/*"],
+      "@vectorDB": ["./src/vectorDatabase.ts"]
     }
   },
   "include": ["./src/**/*"]

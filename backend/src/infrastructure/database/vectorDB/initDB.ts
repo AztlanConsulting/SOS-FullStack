@@ -1,5 +1,5 @@
-import client from "@vectorDB";
-import { petConfig } from "../../repository/model/vector/petSchema";
+import client from '@vectorDB';
+import { petConfig } from 'src/domain/models/vector/petSchema';
 
 await client.schema.deleteAll();
 

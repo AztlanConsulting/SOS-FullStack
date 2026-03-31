@@ -1,4 +1,3 @@
-import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface CountdownChartProps {
@@ -65,6 +64,7 @@ export const CountdownChart: React.FC<CountdownChartProps> = ({
               dataKey="value"
               stroke="none"
               fill="#E0E0E0"
+              cornerRadius={5}
             />
             {/* Anillo de progreso (Verde/Amarillo) */}
             <Pie
@@ -77,7 +77,7 @@ export const CountdownChart: React.FC<CountdownChartProps> = ({
               outerRadius={120}
               dataKey="value"
               stroke="none"
-              cornerRadius={10}
+              cornerRadius={5}
             >
               <Cell fill="#D4E157" />
               <Cell fill="transparent" />

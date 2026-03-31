@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import type { VisitsData } from '../../../../../domain/model/dashboard/DashboardMetrics';
+import { VisitsData } from '../../../../../domain/model/dashboard/DashboardMetrics';
 
 interface Props {
   data: VisitsData[];

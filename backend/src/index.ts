@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyparser from 'body-parser';
-import routes from './routes/routes';
+import routes from './interfaces/routes/routes';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';

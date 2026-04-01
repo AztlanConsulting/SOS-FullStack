@@ -3,7 +3,6 @@ import type {
   PetImageDto,
   PetImages,
 } from '@domain/repositories/petImage.repository';
-import { PetImageResult } from '@domain/repositories/petImage.repository';
 import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
 
 export const petVector: PetImage = {
@@ -25,9 +24,9 @@ export const petVector: PetImage = {
       })
       .do();
 
-    if (!result) return { status: false };
+    if (!result) return false;
 
-    return { status: true };
+    return true;
   },
 
   /**

@@ -4,17 +4,13 @@ export interface PetImageDto {
   species: string;
 }
 
-export interface PetImageResult {
-  status: boolean;
-}
-
 export interface PetImages {
   refId: string;
   image: Buffer;
 }
 
 export interface PetImage {
-  createPetImage(petImageDto: PetImageDto): Promise<PetImageResult>;
+  createPetImage(petImageDto: PetImageDto): Promise<boolean>;
   getSimilarPets(
     petImageDto: PetImageDto,
     offset: number,

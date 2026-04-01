@@ -21,7 +21,7 @@ export default async function foundPet(req: Request, res: Response) {
       species,
     });
 
-    if (!result.status) throw Error('Error uploading image to vector db');
+    if (!result) throw Error('Error uploading image to vector db');
 
     res.status(200).json({
       message: 'Image inserted into database',

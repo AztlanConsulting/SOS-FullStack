@@ -1,11 +1,13 @@
 import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
-import { createPetImage } from '@use-case/images/createPetImage';
+import getSimilarPets from '@use-case/images/getSimilarPets';
 import type { Request, Response } from 'express';
 
-export default async function foundPet(req: Request, res: Response) {
+export default async function findSimilarPets(req: Request, res: Response) {
   try {
     const { species } = req.body;
+    const { page } = req.query;
 
+    console.log(req.file);
     const image = req.file;
 
     if (!image) {
@@ -15,16 +17,14 @@ export default async function foundPet(req: Request, res: Response) {
       });
     }
 
-    const result = await createPetImage(petVector, {
-      refId: '123',
+    const result = await getSimilarPets(petVector, Number(page), {
       image: image.buffer,
       species,
     });
 
-    if (!result.status) throw Error('Error uploading image to vector db');
-
     res.status(200).json({
-      message: 'Image inserted into database',
+      data: result,
+      status: 'success',
     });
   } catch (err: unknown) {
     console.log(err);

@@ -93,7 +93,7 @@ export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
           <div
             style={{
               fontSize: '20px',
-              color: '#222',
+              color: 'inherit',
               lineHeight: '1',
               fontWeight: '500',
             }}
@@ -103,7 +103,7 @@ export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
           <div
             style={{
               fontSize: '12px',
-              color: '#666',
+              color: 'inherit',
               marginTop: '8px',
               fontWeight: 'bold',
             }}
@@ -120,7 +120,7 @@ export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
           marginTop: '20px',
           fontSize: '20px',
           fontWeight: 'bold',
-          color: '#222',
+          color: 'inherit',
         }}
       >
         {planName}

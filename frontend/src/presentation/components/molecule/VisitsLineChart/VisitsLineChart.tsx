@@ -22,7 +22,7 @@ export const VisitsLineChart: React.FC<DailyVisitsMetric> = ({ data }) => (
         <YAxis
           axisLine={false}
           tickLine={false}
-          tick={{ fill: '#999', fontSize: 12 }}
+          tick={{ fill: 'inherit', fontSize: 12 }}
         />
 
         <Line
@@ -34,7 +34,7 @@ export const VisitsLineChart: React.FC<DailyVisitsMetric> = ({ data }) => (
           activeDot={{ r: 8 }}
           label={{
             position: 'top',
-            fill: '#333',
+            fill: 'inherit',
             fontSize: 14,
             fontWeight: 'bold',
           }}

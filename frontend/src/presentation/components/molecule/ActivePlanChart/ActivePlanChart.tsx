@@ -57,13 +57,13 @@ export const ActivePlanChart: React.FC<PlanDistributionMetric> = ({ data }) => {
             style={{
               fontSize: '20px',
               fontWeight: 'bold',
-              color: '#1A202C',
+              color: 'inherit',
               lineHeight: '1',
             }}
           >
             {total}
           </div>
-          <div style={{ fontSize: '12px', color: '#718096', marginTop: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#A0AEC0', marginTop: '4px' }}>
             Total
           </div>
         </div>
@@ -97,7 +97,7 @@ export const ActivePlanChart: React.FC<PlanDistributionMetric> = ({ data }) => {
                   backgroundColor: dotColor,
                 }}
               />
-              <span style={{ fontSize: '16px', color: '#2D3748' }}>
+              <span style={{ fontSize: '16px', color: 'inherit' }}>
                 {entry.name}
               </span>
             </div>

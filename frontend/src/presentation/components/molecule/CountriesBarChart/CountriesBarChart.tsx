@@ -71,7 +71,7 @@ export const CountriesBarChart: React.FC<CountryStatsMetric> = ({ data }) => {
               alignItems: 'center',
               justifyContent: 'space-between',
               fontSize: '14px',
-              color: '#4A5568',
+              color: 'inherit',
             }}
           >
             {/* Contenedor para el color y el nombre */}
@@ -92,7 +92,7 @@ export const CountriesBarChart: React.FC<CountryStatsMetric> = ({ data }) => {
             </div>
 
             {/* Valor/Porcentaje alineado a la derecha */}
-            <span style={{ fontWeight: 'bold', color: '#1A202C' }}>
+            <span style={{ fontWeight: 'bold', color: 'inherit' }}>
               {country.value}%
             </span>
           </div>

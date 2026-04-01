@@ -8,18 +8,10 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import { generateColorGradient } from '../../../../utils/colorsUtils'; // Ajusta la ruta si es necesario
+import { generateColorGradient } from '../../../../utils/colorsUtils';
+import { CountryStatsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
-interface CountryData {
-  name: string;
-  value: number;
-}
-
-interface Props {
-  data: CountryData[];
-}
-
-export const CountriesBarChart: React.FC<Props> = ({ data }) => {
+export const CountriesBarChart: React.FC<CountryStatsMetric> = ({ data }) => {
   const dynamicColors = useMemo(() => {
     return generateColorGradient('#7F0000', '#FFF099', data.length);
   }, [data]);

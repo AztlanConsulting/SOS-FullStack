@@ -1,12 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PlanSubscriptionProgress } from '../../../../../domain/models/DashboardMetrics';
 
-interface CountdownChartProps {
-  planName: string;
-  totalDays: number;
-  daysRemaining: number;
-}
-
-export const CountdownChart: React.FC<CountdownChartProps> = ({
+export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
   planName,
   totalDays,
   daysRemaining,

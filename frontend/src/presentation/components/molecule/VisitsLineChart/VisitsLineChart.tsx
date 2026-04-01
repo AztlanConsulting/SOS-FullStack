@@ -2,13 +2,11 @@ import React from 'react';
 import {
   LineChart,
   Line,
-  XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { DailyVisitsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
+import type { DailyVisitsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
 export const VisitsLineChart: React.FC<DailyVisitsMetric> = ({ data }) => (
   <div style={{ width: '100%', height: 300 }}>

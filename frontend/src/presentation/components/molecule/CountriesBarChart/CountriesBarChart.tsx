@@ -3,13 +3,12 @@ import {
   BarChart,
   Bar,
   Cell,
-  XAxis,
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
 import { generateColorGradient } from '../../../../utils/colorsUtils';
-import { CountryStatsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
+import type { CountryStatsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
 export const CountriesBarChart: React.FC<CountryStatsMetric> = ({ data }) => {
   const dynamicColors = useMemo(() => {
@@ -86,7 +85,7 @@ export const CountriesBarChart: React.FC<CountryStatsMetric> = ({ data }) => {
                   borderRadius: '50%',
                   backgroundColor: dynamicColors[index],
                 }}
-              ></span>
+              />
 
               {/* Nombre del país */}
               <span>{country.name}</span>

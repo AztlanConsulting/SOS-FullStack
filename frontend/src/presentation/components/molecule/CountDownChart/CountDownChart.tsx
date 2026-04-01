@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { PlanSubscriptionProgress } from '../../../../../domain/models/DashboardMetrics';
+import type { PlanSubscriptionProgress } from '../../../../../domain/models/DashboardMetrics';
 
 export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
   planName,
@@ -14,7 +14,6 @@ export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
     { name: 'Transcurrido', value: daysRemaining },
     { name: 'Restante', value: daysUsed },
   ];
-  const COLORS = ['#DDEA25', '#D9D9D9'];
 
   return (
     <div style={{ position: 'relative', width: '100%', paddingTop: '10px' }}>

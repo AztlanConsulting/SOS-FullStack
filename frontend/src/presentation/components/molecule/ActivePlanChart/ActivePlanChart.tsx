@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { PlanDistributionMetric } from '../../../../../domain/models/DashboardMetrics';
+import type { PlanDistributionMetric } from '../../../../../domain/models/DashboardMetrics';
 
 const PLAN_COLORS = [
   '#6B5B2E',
@@ -96,7 +96,7 @@ export const ActivePlanChart: React.FC<PlanDistributionMetric> = ({ data }) => {
                   borderRadius: '50%',
                   backgroundColor: dotColor,
                 }}
-              ></span>
+              />
               <span style={{ fontSize: '16px', color: '#2D3748' }}>
                 {entry.name}
               </span>

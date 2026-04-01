@@ -8,13 +8,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { VisitsData } from '../../../../../domain/model/dashboard/DashboardMetrics';
+import { DailyVisitsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
-interface Props {
-  data: VisitsData[];
-}
-
-export const VisitsLineChart: React.FC<Props> = ({ data }) => (
+export const VisitsLineChart: React.FC<DailyVisitsMetric> = ({ data }) => (
   <div style={{ width: '100%', height: 300 }}>
     <ResponsiveContainer width="100%" height="100%">
       <LineChart

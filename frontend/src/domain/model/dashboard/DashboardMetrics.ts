@@ -1,27 +1,28 @@
-export interface PlanProgress {
+export interface PlanSubscriptionProgress {
   planName: string;
   totalDays: number;
   daysRemaining: number;
 }
 
-export interface DistributionData {
+export interface PlanDistributionMetric {
+  name: string;
+  value: number;
+  color?: string;
+}
+
+export interface CountryStatsMetric {
   name: string;
   value: number;
 }
 
-export interface SalesData {
-  name: string;
-  value: number;
-}
-
-export interface VisitsData {
+export interface DailyVisitsMetric {
   day: number;
   val: number;
 }
 
-export interface DashboardMetrics {
-  plan: PlanProgress;
-  distribution: DistributionData[];
-  sales: SalesData[];
-  visits: VisitsData[];
+export interface DashboardStats {
+  subscription: PlanSubscriptionProgress;
+  planDistribution: PlanDistributionMetric[];
+  countryStats: CountryStatsMetric[];
+  dailyVisits: DailyVisitsMetric[];
 }

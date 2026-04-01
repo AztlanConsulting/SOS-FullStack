@@ -1,15 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-
-interface PlanData {
-  name: string;
-  value: number;
-  // Ya no exigimos que el color venga en los datos
-  color?: string;
-}
-
-interface Props {
-  data: PlanData[];
-}
+import { PlanDistributionMetric } from '../../../../../domain/models/DashboardMetrics';
 
 const PLAN_COLORS = [
   '#6B5B2E',
@@ -20,7 +10,7 @@ const PLAN_COLORS = [
   '#D4E157',
 ];
 
-export const ActivePlanChart: React.FC<Props> = ({ data }) => {
+export const ActivePlanChart: React.FC<PlanDistributionMetric> = ({ data }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (

@@ -9,7 +9,7 @@ export default async function foundPet(req: Request, res: Response) {
     const image = req.file;
 
     if (!image) {
-      return res.status(401).json({
+      return res.status(400).json({
         error: 'No picture provided',
         details: 'No picture provided',
       });

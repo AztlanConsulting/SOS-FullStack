@@ -7,11 +7,10 @@ export default async function findSimilarPets(req: Request, res: Response) {
     const { species } = req.body;
     const { page } = req.query;
 
-    console.log(req.file);
     const image = req.file;
 
     if (!image) {
-      return res.status(401).json({
+      return res.status(400).json({
         error: 'No picture provided',
         details: 'No picture provided',
       });

@@ -24,7 +24,7 @@ export const petVector: PetImage = {
       })
       .do();
 
-    if (!result) return false;
+    if (result == undefined) return false;
 
     return true;
   },

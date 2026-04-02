@@ -3,15 +3,15 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
     "strictNullChecks": true,
     "paths": {
+      "@/": ["./src"],
       "@domain/*": ["./src/domain/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@types/*": ["./src/types/*"],
       "@use-case/*": ["./src/use-cases//*"],
-      "@vectorDB": ["src/infrastructure/database/vectorDB/vectorDatabase.ts"]
+      "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
   "include": ["./src/**/*"]

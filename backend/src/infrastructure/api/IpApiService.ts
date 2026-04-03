@@ -7,9 +7,14 @@ export class IpApiService implements ILocationRepository {
     try {
       const response = await axios.get(`https://ipapi.co/${ip}/json/`);
 
+      if (response.data.error) {
+        console.error('error: ', response.data.reason);
+        return null;
+      }
+
       return {
-        country: response.data.string,
-        currency: response.data.string,
+        country: response.data.country_name,
+        currency: response.data.currency,
       };
     } catch (error) {
       console.error('Error en ApiService:', error);

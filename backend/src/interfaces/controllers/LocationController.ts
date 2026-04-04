@@ -5,11 +5,8 @@ import { GetLocationByIp } from 'src/use-cases/ip/GetLocationByIp';
 export const LocationController = {
   async handle(req: Request, res: Response) {
     const ipV6 = req.socket.remoteAddress || '8.8.8.8';
-    console.log(ipV6);
 
     const ip = ipV6.replace('::ffff:', '');
-    console.log(ip);
-
     const repository = new IpApiService();
     const location = await GetLocationByIp(ip, repository);
 

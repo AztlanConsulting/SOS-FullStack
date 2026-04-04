@@ -39,7 +39,10 @@ module.exports = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: './frontend/tsconfig.json',
+        project: [
+          './frontend/tsconfig.app.json',
+          './frontend/tsconfig.node.json',
+        ],
         warnOnUnsupportedTypeScriptVersion: false,
       },
     },

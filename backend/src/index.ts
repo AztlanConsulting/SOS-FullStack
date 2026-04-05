@@ -1,29 +1,34 @@
-import express from 'express';
-import bodyparser from 'body-parser';
-import routes from './interfaces/routes/routes';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Configure .env
+// Fix __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// loading .env
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+import express from 'express';
+import bodyparser from 'body-parser';
+import { connectDB } from './infrastructure/database/mongoClient';
+
+// Dynamic import for routes to ensure dotenv.config() has finished loading variables.
+const { default: routes } = await import('./interfaces/routes/routes');
 
 // Start app
 const app = express();
 
-// App configuration
 app.use(bodyparser.json());
-
-// Routes
 app.use('/', routes);
 
-// Port
 const port = process.env.SERVER_PORT ?? 3000;
 
-// START
+async function start() {
+  await connectDB();
+}
+
 app.listen(port, () => {
+  start().catch((err) => console.error('Failed to connect to DB:', err));
   console.log(`Server started on http://localhost:${port}`);
 });

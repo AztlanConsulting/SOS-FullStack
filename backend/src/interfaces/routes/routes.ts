@@ -1,5 +1,6 @@
 import express from 'express';
 import clientsRoutes from './clients.routes';
+import paymentRoutes from './payment.routes';
 
 const router = express.Router();
 
@@ -8,5 +9,7 @@ router.get('/health', (req, res) => {
 });
 
 router.use('/clients', clientsRoutes);
+
+router.use('/payments', paymentRoutes);
 
 export default router;

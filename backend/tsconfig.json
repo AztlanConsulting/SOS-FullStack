@@ -3,12 +3,11 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
     "strictNullChecks": true,
     "paths": {
-      "@db/*": ["database/*"],
-      "@repo/*": ["repository/*"],
-      "@domain/*": ["domain/*"]
+      "@db/*": ["./src/infrastructure/database/*"],
+      "@repo/*": ["./src/infrastructure/repository/*"],
+      "@domain/*": ["./src/domain/*"]
     }
   },
   "include": ["./src/**/*"]

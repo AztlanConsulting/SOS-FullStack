@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import type { PlanSubscriptionProgress } from '../../../../../domain/models/DashboardMetrics';
+import type { PlanSubscriptionProgress } from '../../../../domain/model/dashboard/DashboardMetrics';
 
 export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
   planName,

@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import type { DailyVisitsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
-export const VisitsLineChart: React.FC<DailyVisitsMetric> = ({ data }) => (
+export const VisitsLineChart: React.FC<DailyVisitsMetric[]> = (data) => (
   <div style={{ width: '100%', height: 300 }}>
     <ResponsiveContainer width="100%" height="100%">
       <LineChart

@@ -1,4 +1,4 @@
-import type { DashboardMetrics } from '../../model/dashboard/DashboardMetrics';
+import type DashboardMetrics from '../../model/dashboard/DashboardMetrics';
 
 export const getDashboardMetricsUseCase =
   async (): Promise<DashboardMetrics> => {

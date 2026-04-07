@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import type { PlanDistributionMetric } from '../../../../../domain/models/DashboardMetrics';
+import type { PlanDistributionMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
 const PLAN_COLORS = [
   '#6B5B2E',
@@ -10,7 +10,7 @@ const PLAN_COLORS = [
   '#D4E157',
 ];
 
-export const ActivePlanChart: React.FC<PlanDistributionMetric> = ({ data }) => {
+export const ActivePlanChart: React.FC<PlanDistributionMetric[]> = (data) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (

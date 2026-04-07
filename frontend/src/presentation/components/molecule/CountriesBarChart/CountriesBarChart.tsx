@@ -10,7 +10,7 @@ import {
 import { generateColorGradient } from '../../../../utils/colorsUtils';
 import type { CountryStatsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
-export const CountriesBarChart: React.FC<CountryStatsMetric> = ({ data }) => {
+export const CountriesBarChart: React.FC<CountryStatsMetric[]> = (data) => {
   const dynamicColors = useMemo(() => {
     return generateColorGradient('#7F0000', '#FFF099', data.length);
   }, [data]);

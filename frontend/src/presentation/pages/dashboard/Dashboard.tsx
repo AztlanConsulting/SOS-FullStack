@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { DashboardMetrics } from '../../../domain/model/dashboard/DashboardMetrics';
+import type DashboardMetrics from '../../../domain/model/dashboard/DashboardMetrics';
 import { getDashboardMetricsUseCase } from '../../../domain/use-cases/dashboard/GetDashboardMetrics';
 
 // Prueba de componentes

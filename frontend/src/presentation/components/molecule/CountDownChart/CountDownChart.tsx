@@ -1,16 +1,20 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import type { PlanSubscriptionProgress } from '../../../../domain/model/dashboard/DashboardMetrics';
 
-export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
-  planName,
-  totalDays,
-  daysRemaining,
-}) => {
+interface CountdownChartProps {
+  data?: PlanSubscriptionProgress;
+}
+
+// 2. Desestructuramos data
+export const CountdownChart = ({ data }: CountdownChartProps) => {
+  if (!data) {
+    return null;
+  }
+
+  const { planName, totalDays, daysRemaining } = data;
   const daysUsed = totalDays - daysRemaining;
 
-  // Recharts necesita un arreglo de objetos.
-  // El primer valor es lo que queda (verde), el segundo es lo ya usado (gris).
-  const data = [
+  const pieData = [
     { name: 'Transcurrido', value: daysRemaining },
     { name: 'Restante', value: daysUsed },
   ];
@@ -44,7 +48,12 @@ export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
           marginTop: '30px',
         }}
       >
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={1}
+          minHeight={1}
+        >
           <PieChart>
             {/* Anillo de fondo (Gris sólido) */}
             <Pie
@@ -62,7 +71,7 @@ export const CountdownChart: React.FC<PlanSubscriptionProgress> = ({
             />
             {/* Anillo de progreso (Verde/Amarillo) */}
             <Pie
-              data={data}
+              data={pieData}
               cx="50%"
               cy="100%"
               startAngle={180}

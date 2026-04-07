@@ -23,9 +23,8 @@ export interface DailyVisitsMetric {
 export interface DashboardStats {
   visits: DailyVisitsMetric[];
   sales: CountryStatsMetric[];
-  plan: any;
-  subscription: PlanSubscriptionProgress;
-  planDistribution: PlanDistributionMetric[];
+  plan: PlanSubscriptionProgress;
+  distribution: PlanDistributionMetric[];
   countryStats: CountryStatsMetric[];
   dailyVisits: DailyVisitsMetric[];
 }

@@ -14,6 +14,7 @@ export const Dashboard: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       const data = await getDashboardMetricsUseCase();
+      console.log('Datos reales del backend:', data);
       setMetrics(data);
     };
     loadData();
@@ -50,16 +51,12 @@ export const Dashboard: React.FC = () => {
 
       <div style={gridStyle}>
         <div style={cardStyle}>
-          <CountdownChart
-            planName={metrics.plan.planName}
-            totalDays={metrics.plan.totalDays}
-            daysRemaining={metrics.plan.daysRemaining}
-          />
+          <CountdownChart data={metrics.plan} />
         </div>
 
         <div style={cardStyle}>
           <h3 style={{ textAlign: 'left' }}>Planes activos</h3>
-          <ActivePlanChart data={metrics.planDistribution} />
+          <ActivePlanChart data={metrics.distribution} />
         </div>
 
         <div style={cardStyle}>

@@ -10,5 +10,8 @@
       "@domain/*": ["./src/domain/*"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/**/*",
+    "../frontend/src/features/payment/components/CheckoutForm.tsx"
+  ]
 }

@@ -11,6 +11,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 import express from 'express';
 import bodyparser from 'body-parser';
+import cors from 'cors';
 import { connectDB } from './infrastructure/database/mongoClient';
 
 // Dynamic import for routes to ensure dotenv.config() has finished loading variables.
@@ -19,7 +20,15 @@ const { default: routes } = await import('./interfaces/routes/routes');
 // Start app
 const app = express();
 
-app.use(bodyparser.json());
+app.use(cors());
+// Use a verify function to capture the raw body needed for Stripe signatures
+app.use(
+  bodyparser.json({
+    verify: (req: any, res, buf) => {
+      req.rawBody = buf;
+    },
+  }),
+);
 app.use('/', routes);
 
 const port = process.env.SERVER_PORT ?? 3000;

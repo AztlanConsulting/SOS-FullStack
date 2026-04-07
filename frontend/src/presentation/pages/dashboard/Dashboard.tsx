@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type DashboardMetrics from '../../../domain/model/dashboard/DashboardMetrics';
+import type { DashboardStats } from '../../../domain/model/dashboard/DashboardMetrics';
 import { getDashboardMetricsUseCase } from '../../../domain/use-cases/dashboard/GetDashboardMetrics';
 
 // Prueba de componentes
@@ -9,7 +9,7 @@ import { CountriesBarChart } from '../../components/molecule/CountriesBarChart/C
 import { VisitsLineChart } from '../../components/molecule/VisitsLineChart/VisitsLineChart';
 
 export const Dashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const [metrics, setMetrics] = useState<DashboardStats | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -59,7 +59,7 @@ export const Dashboard: React.FC = () => {
 
         <div style={cardStyle}>
           <h3 style={{ textAlign: 'left' }}>Planes activos</h3>
-          <ActivePlanChart data={metrics.distribution} />
+          <ActivePlanChart data={metrics.planDistribution} />
         </div>
 
         <div style={cardStyle}>

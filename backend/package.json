@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
+    "init:vectorDB": "tsx ./src/infrastructure/database/vectorDB/initDB.ts",
     "init:mongoDB": "tsx ./src/infrastructure/database/mongoDB/data/mock.data"
   },
   "author": "",
@@ -15,13 +16,17 @@
     "axios": "^1.14.0",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "multer": "^2.1.1",
     "mongoose": "^9.4.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
+    "graphql": "^16.13.2",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "weaviate-ts-client": "^2.2.0"
   }
 }

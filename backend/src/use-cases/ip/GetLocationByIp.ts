@@ -1,4 +1,4 @@
-import type { ILocationRepository } from 'src/domain/repositories/ILocationRepository';
+import type { ILocationRepository } from 'src/domain/ports/ILocationRepository';
 
 /**
  * Use case to retrieve location details based on the Ip adress.

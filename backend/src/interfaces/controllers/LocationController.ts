@@ -19,7 +19,7 @@ export const LocationController = {
     //Cleans the IP adress to format it into IPV4
     const ip = ipV6.replace('::ffff:', '');
     //Initializes the infraestructure service
-    const repository = new IpApiService();
+    const repository = IpApiService;
     // Exectues the domain use case to fetch the location
     const location = await GetLocationByIp(ip, repository);
 

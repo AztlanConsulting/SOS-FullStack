@@ -1,11 +1,11 @@
 import axios from 'axios';
-import type { Location } from '../../domain/models/location';
-import type { ILocationRepository } from '../../domain/repositories/ILocationRepository';
+import type { Location } from '../../domain/ports/ILocationRepository';
+import type { ILocationRepository } from '../../domain/ports/ILocationRepository';
 
 /**
  * Translates the Ip adresses unto the geographical and currency data
  */
-export class IpApiService implements ILocationRepository {
+export const IpApiService: ILocationRepository = {
   /**
    * Fetches location from Ipapi.co JSON endpoint
    * @param ip The target Ipv6 adress
@@ -30,5 +30,5 @@ export class IpApiService implements ILocationRepository {
       console.error('Error en ApiService:', error);
       return null;
     }
-  }
-}
+  },
+};

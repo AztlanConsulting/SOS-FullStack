@@ -10,7 +10,15 @@ const PLAN_COLORS = [
   '#D4E157',
 ];
 
-export const ActivePlanChart: React.FC<PlanDistributionMetric[]> = (data) => {
+interface ActivePlanChartProps {
+  data: PlanDistributionMetric[];
+}
+
+export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
+  if (!data || !Array.isArray(data)) {
+    return null;
+  }
+
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
@@ -98,7 +106,7 @@ export const ActivePlanChart: React.FC<PlanDistributionMetric[]> = (data) => {
                 }}
               />
               <span style={{ fontSize: '16px', color: 'inherit' }}>
-                {entry.name}
+                {entry.name} - {entry.value}
               </span>
             </div>
           );

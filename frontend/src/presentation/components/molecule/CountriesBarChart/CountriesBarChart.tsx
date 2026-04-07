@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -10,10 +10,18 @@ import {
 import { generateColorGradient } from '../../../../utils/colorsUtils';
 import type { CountryStatsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
 
-export const CountriesBarChart: React.FC<CountryStatsMetric[]> = (data) => {
+interface CountriesBarChartProps {
+  data: CountryStatsMetric[];
+}
+
+export const CountriesBarChart = ({ data = [] }: CountriesBarChartProps) => {
   const dynamicColors = useMemo(() => {
     return generateColorGradient('#7F0000', '#FFF099', data.length);
   }, [data]);
+
+  if (!Array.isArray(data) || data.length === 0) {
+    return null;
+  }
 
   return (
     <div style={{ width: '100%' }}>
@@ -45,8 +53,8 @@ export const CountriesBarChart: React.FC<CountryStatsMetric[]> = (data) => {
               barSize={40}
               radius={[2, 2, 0, 0]}
             >
-              {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={dynamicColors[index]} />
+              {data.map((entry, index) => (
+                <Cell key={`cell-${entry.name}`} fill={dynamicColors[index]} />
               ))}
             </Bar>
           </BarChart>
@@ -65,7 +73,7 @@ export const CountriesBarChart: React.FC<CountryStatsMetric[]> = (data) => {
       >
         {data.map((country, index) => (
           <div
-            key={`legend-${index}`}
+            key={`legend-${country.name}`}
             style={{
               display: 'flex',
               alignItems: 'center',

@@ -20,6 +20,7 @@ const app = express();
 
 // App configuration
 app.use(bodyparser.json());
+app.set('trust proxy', true);
 
 // Routes
 app.use('/', routes);

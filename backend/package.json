@@ -6,11 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
-<<<<<<< HEAD
-    "init:vectorDB": "tsx ./src/infrastructure/database/vectorDB/initDB.ts"
-=======
+    "init:vectorDB": "tsx ./src/infrastructure/database/vectorDB/initDB.ts",
     "init:mongoDB": "tsx ./src/infrastructure/database/mongoDB/data/mock.data"
->>>>>>> e8576f498343a47c551816d8e2f23e8dcc9945a2
   },
   "author": "",
   "license": "ISC",

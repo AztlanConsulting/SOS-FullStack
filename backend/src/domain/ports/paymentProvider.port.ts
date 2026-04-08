@@ -3,6 +3,8 @@ import type { Stripe } from 'stripe';
 export interface PaymentIntentDTO {
   amount: number;
   currency: string;
+  customerId?: string; // for SPEI
+  method?: string; // to seperate spei from the other methods
 }
 
 export interface PaymentIntentResult {

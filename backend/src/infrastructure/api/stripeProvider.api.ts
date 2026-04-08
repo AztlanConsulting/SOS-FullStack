@@ -16,13 +16,42 @@ export const StripeProvider: PaymentProvider = {
     }
 
     const stripe = new Stripe(key);
-    const { amount, currency } = data;
+    const { amount, currency, method = 'auto', customerId } = data;
 
-    const intent = await stripe.paymentIntents.create({
-      amount,
-      currency,
-      automatic_payment_methods: { enabled: true },
-    });
+    let intent: Stripe.PaymentIntent;
+
+    // for card payments and OXXO pay
+    if (method === 'auto') {
+      intent = await stripe.paymentIntents.create({
+        amount,
+        currency,
+        automatic_payment_methods: { enabled: true },
+      });
+    }
+
+    // for SPEI bank transfers in Mexico
+    else if (method === 'spei') {
+      if (!customerId) {
+        throw new Error('customerId is required for SPEI payments');
+      }
+
+      intent = await stripe.paymentIntents.create({
+        amount,
+        currency: 'mxn', // SPEI requires MXN
+        customer: customerId,
+        payment_method_types: ['customer_balance'],
+        payment_method_options: {
+          customer_balance: {
+            funding_type: 'bank_transfer',
+            bank_transfer: {
+              type: 'mx_bank_transfer',
+            },
+          },
+        },
+      });
+    } else {
+      throw new Error('Invalid payment method');
+    }
 
     return {
       id: intent.id,

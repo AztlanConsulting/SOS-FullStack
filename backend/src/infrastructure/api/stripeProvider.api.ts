@@ -7,16 +7,15 @@ import type {
   PaymentProvider,
 } from '../../domain/ports/paymentProvider.port';
 
-const key = process.env.STRIPE_SECRET_KEY;
-
-if (key === undefined || key === null || key === '') {
-  throw new Error('STRIPE_SECRET_KEY is missing');
-}
-
-const stripe = new Stripe(key);
-
 export const StripeProvider: PaymentProvider = {
   async createIntent(data: PaymentIntentDTO): Promise<PaymentIntentResult> {
+    const key = process.env.STRIPE_SECRET_KEY;
+
+    if (key === undefined || key === null || key === '') {
+      throw new Error('STRIPE_SECRET_KEY is missing');
+    }
+
+    const stripe = new Stripe(key);
     const { amount, currency } = data;
 
     const intent = await stripe.paymentIntents.create({
@@ -34,6 +33,13 @@ export const StripeProvider: PaymentProvider = {
   },
 
   async constructEvent(data: EventDTO): Promise<Stripe.Event> {
+    const key = process.env.STRIPE_SECRET_KEY;
+
+    if (key === undefined || key === null || key === '') {
+      throw new Error('STRIPE_SECRET_KEY is missing');
+    }
+
+    const stripe = new Stripe(key);
     const event = await stripe.webhooks.constructEvent(
       data.payload,
       data.sig,

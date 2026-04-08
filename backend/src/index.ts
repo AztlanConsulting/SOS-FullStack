@@ -1,53 +1,36 @@
+import express from 'express';
+import bodyparser from 'body-parser';
+import routes from './interfaces/routes/routes';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { mongoDB } from './infrastructure/database/mongoDB/mongoDB';
+import cors from 'cors';
 
-// Fix __dirname
+// Configure .env
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// loading .env
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-import express from 'express';
-import type { Request, Response } from 'express';
-import bodyparser from 'body-parser';
-import cors from 'cors';
-import { connectDB } from './infrastructure/database/mongoClient';
+// MongoDB connection
+await mongoDB();
 
+// Start app
+const app = express();
+
+// App configuration
+app.use(cors());
+app.use(bodyparser.json());
+app.set('trust proxy', true);
+
+// Routes
+app.use('/', routes);
+
+// Port
 const port = process.env.SERVER_PORT ?? 3000;
 
-async function start() {
-  try {
-    // Dynamic import for routes to ensure dotenv.config() has finished loading variables.
-    const { default: routes } = await import('./interfaces/routes/routes');
-
-    // Start app
-    const app = express();
-
-    app.use(cors());
-    // Use a verify function to capture the raw body needed for Stripe signatures
-    app.use(
-      bodyparser.json({
-        verify: (
-          req: Request & { rawBody?: Buffer },
-          res: Response,
-          buf: Buffer,
-        ) => {
-          req.rawBody = buf;
-        },
-      }),
-    );
-    app.use('/', routes);
-
-    await connectDB();
-    app.listen(port, () => {
-      console.log(`Server started on http://localhost:${port}`);
-    });
-  } catch (err) {
-    console.error('Failed to connect to DB:', err);
-    process.exit(1);
-  }
-}
-
-void start();
+// START
+app.listen(port, () => {
+  console.log(`Server started on http://localhost:${port}`);
+});

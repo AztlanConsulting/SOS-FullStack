@@ -24,7 +24,7 @@ function App() {
     fetch('http://localhost:3000/payments/payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: 2000, currency: 'usd' }),
+      body: JSON.stringify({ amount: 2000, currency: 'mxn' }),
     })
       .then((res) => res.json())
       .then((data: { clientSecret: string | null }) =>

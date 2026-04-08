@@ -1,5 +1,24 @@
-import type { PaymentIntent } from '../models/paymentIntent.model';
+import type { Stripe } from 'stripe';
+
+export interface PaymentIntentDTO {
+  amount: number;
+  currency: string;
+}
+
+export interface PaymentIntentResult {
+  id: string;
+  amount: number;
+  currency: string;
+  clientSecret: string | null;
+}
+
+export interface EventDTO {
+  payload: string | Buffer;
+  sig: string;
+  secret: string;
+}
 
 export interface PaymentProvider {
-  createIntent(amount: number, currency: string): Promise<PaymentIntent>;
+  createIntent(data: PaymentIntentDTO): Promise<PaymentIntentResult>;
+  constructEvent(data: EventDTO): Promise<Stripe.Event>;
 }

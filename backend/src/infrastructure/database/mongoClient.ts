@@ -1,6 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
-
-let client: MongoClient;
+import mongoose from 'mongoose';
 
 export const connectDB = async () => {
   const uri = process.env.DB_URL;
@@ -9,21 +7,13 @@ export const connectDB = async () => {
     throw new Error('DB_URL is not defined in .env');
   }
 
-  client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
-
-  await client.connect();
+  await mongoose.connect(uri);
   console.log('Connected to MongoDB');
 };
 
 export const getDB = () => {
-  if (client === undefined) {
+  if (mongoose.connection.readyState !== 1) {
     throw new Error('DB not initialized');
   }
-  return client.db();
+  return mongoose.connection;
 };

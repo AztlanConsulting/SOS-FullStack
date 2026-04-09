@@ -1,5 +1,5 @@
 import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
-import { petConfig } from 'src/domain/models/vector/petSchema';
+import { petConfig } from '@domain/models/vector/petSchema';
 
 await vectorDB.schema.deleteAll();
 

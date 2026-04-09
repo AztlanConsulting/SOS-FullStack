@@ -8,7 +8,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev:front": "npm run dev --prefix frontend",
+    "dev:back": "npm run dev --prefix backend"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
-import { createPetImage } from '@use-case/images/createPetImage';
+import { createPetImage } from '@use-cases/images/createPetImage';
 import type { Request, Response } from 'express';
 
 export default async function foundPet(req: Request, res: Response) {

@@ -1,5 +1,4 @@
 import * as L from 'leaflet';
-import type { ImapService } from '../../../domain/model/map/mapService';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -19,7 +18,7 @@ L.Marker.prototype.options.icon = defaultIcon;
 let map: L.Map | null = null;
 
 //Implementation of the Map Service using the API of Leaflet
-export const LeafletMapService: ImapService = {
+export const LeafletMapService = {
   /**
    * Initializes the Leaflet map, with OpenStreetMap tile's and also re initializes if the map already exists
    * @param coords Initial Latitude and longitude center points.
@@ -27,7 +26,11 @@ export const LeafletMapService: ImapService = {
    * @param onMove Callback trigegred when the user finishes moving the map.
    * @returns
    */
-  init(coords, elementId, onMove) {
+  init(
+    coords: [number, number],
+    elementId: string,
+    onMove?: (lat: number, lng: number) => void,
+  ) {
     if (map) return;
 
     //Container state to prevent "Map container is already initialized" errors.
@@ -63,7 +66,7 @@ export const LeafletMapService: ImapService = {
    * @param coords Target Latitude and longitude.
    */
 
-  addMarker(coords) {
+  addMarker(coords: [number, number]) {
     console.log('Marker placed at:', coords);
   },
 
@@ -72,7 +75,7 @@ export const LeafletMapService: ImapService = {
    * @param coords Latitude and longitude for the new marker position.
    */
 
-  flyTo(coords) {
+  flyTo(coords: [number, number]) {
     map?.flyTo(coords, 16, { duration: 1.5 });
   },
 
@@ -81,7 +84,7 @@ export const LeafletMapService: ImapService = {
    * @param coords Latitude and longitude for the new marker position.
    */
 
-  placeMarker(coords) {
+  placeMarker(coords: [number, number]) {
     if (!map) return;
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) map?.removeLayer(layer);

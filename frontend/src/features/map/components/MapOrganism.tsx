@@ -1,17 +1,15 @@
 import 'leaflet/dist/leaflet.css';
-import { UseMap } from '../../../hooks/maphook';
-import { initializeMapUseCase } from '../../../../use-cases/maps/mapUseCase';
-import { LeafletMapService } from '../../../../infrastructure/api/maps/leafletMapService';
-import AddressSearch from '../../molecule/AdressSearch';
+import { useMap } from '@features/map/hooks/useMap';
+import AddressSearch from './AdressSearch';
 
 /**
  * Organism component that integrates the map interface with address searching logic.
  * * @returns A React functional component containing the search bar, the map, and coordinate display.
  */
 
-const mapOrganism = () => {
+const MapOrganism = () => {
   const mapID = 'lost-pet-map';
-  const { coords } = UseMap(initializeMapUseCase, LeafletMapService, mapID); //Custom hookto handle the map initialization and coordinate state
+  const { coords } = useMap(mapID); //Custom hookto handle the map initialization and coordinate state
 
   return (
     <div style={{ padding: '20px' }}>
@@ -40,4 +38,4 @@ const mapOrganism = () => {
   );
 };
 
-export default mapOrganism;
+export default MapOrganism;

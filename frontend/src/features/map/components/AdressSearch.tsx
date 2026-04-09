@@ -1,10 +1,8 @@
-import { LeafletMapService } from '../../../infrastructure/api/maps/leafletMapService';
-import { PhotonGeocoding } from '../../../infrastructure/api/maps/photon.Geocoding';
-import { useGeocoding } from '../../hooks/geocodingHook';
+import { useGeocoding } from '@features/map/hooks/useGeocoding';
 
 const AddressSearch = () => {
   const { query, results, isLoading, handleSearch, handleSelect } =
-    useGeocoding(PhotonGeocoding, LeafletMapService);
+    useGeocoding();
 
   return (
     <div style={{ position: 'relative', marginBottom: '12px' }}>

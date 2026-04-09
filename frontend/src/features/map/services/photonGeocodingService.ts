@@ -1,10 +1,9 @@
-import type { IGeocodingService } from '../../../domain/model/map/geocodingService';
-import type { GeocodingResult } from '../../../domain/model/map/geocodingResult';
+import type { GeocodingResult } from '@features/map/types/geocodingResult';
 
 /**
  * Provides the atcion that transforms text queries into location data.
  */
-export const PhotonGeocoding: IGeocodingService = {
+export const PhotonGeocoding = {
   /**
    * Performs a serach request to the Photon API
    * @param query The location of the string to search for
@@ -15,6 +14,7 @@ export const PhotonGeocoding: IGeocodingService = {
     const res = await fetch(
       `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`,
     );
+
     //Returns empty results if the network reuqest fails
     if (!res.ok) return [];
 

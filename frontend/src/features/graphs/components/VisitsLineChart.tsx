@@ -5,7 +5,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import type { DailyVisitsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
+import type { DailyVisitsMetric } from '@features/graphs/types/dashboardMetrics';
 
 interface VisitsLineChartProps {
   data: DailyVisitsMetric[];

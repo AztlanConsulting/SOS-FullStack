@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import type { PlanDistributionMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
+import type { PlanDistributionMetric } from '@features/graphs/types/dashboardMetrics';
 
 const PLAN_COLORS = [
   '#6B5B2E',

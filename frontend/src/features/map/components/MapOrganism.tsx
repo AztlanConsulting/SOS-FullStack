@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { useMap } from '@features/map/hooks/useMap';
-import AddressSearch from './AdressSearch';
+import AddressSearch from './AddressSearch';
 
 /**
  * Organism component that integrates the map interface with address searching logic.

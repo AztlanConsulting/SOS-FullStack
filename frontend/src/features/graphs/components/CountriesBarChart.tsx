@@ -7,8 +7,8 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import { generateColorGradient } from '../../../../utils/colorsUtils';
-import type { CountryStatsMetric } from '../../../../domain/model/dashboard/DashboardMetrics';
+import { generateColorGradient } from '@shared/utils/colorsUtils';
+import type { CountryStatsMetric } from '@features/graphs/types/dashboardMetrics';
 
 interface CountriesBarChartProps {
   data: CountryStatsMetric[];

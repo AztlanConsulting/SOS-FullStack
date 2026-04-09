@@ -25,6 +25,4 @@ export interface DashboardStats {
   sales: CountryStatsMetric[];
   plan: PlanSubscriptionProgress;
   distribution: PlanDistributionMetric[];
-  countryStats: CountryStatsMetric[];
-  dailyVisits: DailyVisitsMetric[];
 }

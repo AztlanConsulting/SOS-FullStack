@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import type { PlanSubscriptionProgress } from '../../../../domain/model/dashboard/DashboardMetrics';
+import type { PlanSubscriptionProgress } from '@features/graphs/types/dashboardMetrics';
 
 interface CountdownChartProps {
   data?: PlanSubscriptionProgress;

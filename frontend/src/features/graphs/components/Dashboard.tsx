@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import type { DashboardStats } from '../../../domain/model/dashboard/DashboardMetrics';
-import { getDashboardMetricsUseCase } from '../../../domain/use-cases/dashboard/GetDashboardMetrics';
+import { useDashboardMetrics } from '@features/graphs/hooks/useDashboardMetrics';
 
 // Prueba de componentes
-import { CountdownChart } from '../../components/molecule/CountDownChart/CountDownChart';
-import { ActivePlanChart } from '../../components/molecule/ActivePlanChart/ActivePlanChart';
-import { CountriesBarChart } from '../../components/molecule/CountriesBarChart/CountriesBarChart';
-import { VisitsLineChart } from '../../components/molecule/VisitsLineChart/VisitsLineChart';
+import { CountdownChart } from './CountDownChart';
+import { ActivePlanChart } from './ActivePlanChart';
+import { CountriesBarChart } from './CountriesBarChart';
+import { VisitsLineChart } from './VisitsLineChart';
 
 export const Dashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<DashboardStats | null>(null);
+  const { metrics, loading, error } = useDashboardMetrics();
 
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await getDashboardMetricsUseCase();
-      console.log('Datos reales del backend:', data);
-      setMetrics(data);
-    };
-    loadData();
-  }, []);
+  if (loading)
+    return (
+      <p style={{ textAlign: 'center', marginTop: '50px' }}>
+        Cargando gráficas...
+      </p>
+    );
+
+  if (error) return <p>{error}</p>;
 
   if (!metrics)
     return (

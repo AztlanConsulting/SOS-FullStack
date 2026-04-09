@@ -10,11 +10,15 @@ export const CheckoutForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} id="payment-form">
+    <form onSubmit={onSubmit} id="payment-form" className="flex flex-col">
       <PaymentElement id="payment-element" />
 
-      <button disabled={isProcessing || !isReady} id="submit">
-        <span id="button-text">
+      <button
+        disabled={isProcessing || !isReady}
+        id="submit"
+        className="mt-6 bg-black py-3 rounded-sm"
+      >
+        <span id="button-text" className="text-white">
           {isProcessing ? 'Processing...' : 'Pay now'}
         </span>
       </button>

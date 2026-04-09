@@ -8,12 +8,12 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 export const PaymentPage = () => {
   const { clientSecret, isSuccess, loading } = usePaymentPage();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="align-center">Loading...</p>;
 
   if (isSuccess) {
     return (
       <div>
-        <h1>Payment Successful 🎉</h1>
+        <h3 className="align-center">Payment Successful</h3>
       </div>
     );
   }

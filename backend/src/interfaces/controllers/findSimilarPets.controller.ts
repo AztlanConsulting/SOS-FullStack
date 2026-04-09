@@ -1,5 +1,5 @@
 import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
-import getSimilarPets from '@use-case/images/getSimilarPets';
+import getSimilarPets from '@use-cases/images/getSimilarPets';
 import type { Request, Response } from 'express';
 
 export default async function findSimilarPets(req: Request, res: Response) {

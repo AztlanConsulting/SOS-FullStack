@@ -30,7 +30,6 @@ const paypalApi: PaymentApi = {
       },
     )
       .then((res) => {
-        console.log(res.status);
         return res.json();
       })
       .then((json) => ({ accessToken: json.access_token, error: null }))
@@ -39,7 +38,6 @@ const paypalApi: PaymentApi = {
         return { accessToken: null, error };
       });
 
-    console.log(accessToken, error);
     return { accessToken, error };
   },
 
@@ -50,15 +48,49 @@ const paypalApi: PaymentApi = {
       return { orderId: null, error };
     }
 
+    console.log(accessToken);
+
     let orderDataJson = {
+      intent: 'CAPTURE',
       purchase_units: [
         {
+          items: [
+            {
+              name: 'Simple search plan',
+              description: 'Add to search for your dogs',
+              quantity: '1',
+              unit_amount: {
+                currency_code: 'USD',
+                value: '50.00',
+              },
+            },
+          ],
           amount: {
             currency_code: 'USD',
-            value: '100.00',
+            value: '50.00',
+            breakdown: {
+              item_total: {
+                currency_code: 'USD',
+                value: '50.00',
+              },
+            },
           },
         },
       ],
+      payment_source: {
+        paypal: {
+          experience_context: {
+            payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
+            payment_method_selected: 'PAYPAL',
+            brand_name: 'SOS - Encontrando mascotas',
+            shipping_preference: 'NO_SHIPPING',
+            locale: 'en-US',
+            user_action: 'PAY_NOW',
+            return_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/complete-payment`,
+            cancel_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/cancel-payment`,
+          },
+        },
+      },
     };
 
     let data = JSON.stringify(orderDataJson);
@@ -76,10 +108,13 @@ const paypalApi: PaymentApi = {
       },
     )
       .then((res) => res.json())
-      .then((data) => ({
-        orderId: data.id,
-        error: null,
-      }))
+      .then((data) => {
+        console.log(data);
+        return {
+          orderId: data.id,
+          error: null,
+        };
+      })
       .catch((error: string) => {
         console.error(error);
         return { orderId: null, error };

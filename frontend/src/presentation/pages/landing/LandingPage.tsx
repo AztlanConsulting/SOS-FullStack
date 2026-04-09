@@ -5,6 +5,7 @@ import PlansSection from './components/PlansSection';
 import PublicationSection from './components/PublicationSection';
 import PetInfoSection from './components/PetInfoSection';
 import TestimonialsSection from './components/TestimonialsSection';
+import Footer from './components/Footer';
 
 const LandingPage = () => {
   return (
@@ -15,9 +16,10 @@ const LandingPage = () => {
         <ServicesSection />
         <PlansSection />
         <PublicationSection />
-        <PetInfoSection />
         <TestimonialsSection />
+        <PetInfoSection />
       </main>
+      <Footer />
     </div>
   );
 };

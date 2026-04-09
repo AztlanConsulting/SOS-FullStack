@@ -7,7 +7,7 @@ const ENDPOINT_URL =
     ? 'http://api-m.sandbox.paypal.com'
     : 'http://api-m.paypal.com';
 
-export function get_access_token() {
+export function getAccessToken() {
   const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
   const data = 'grant_type=client_credentials';
   return fetch(ENDPOINT_URL + '/v1/oauth2/token', {

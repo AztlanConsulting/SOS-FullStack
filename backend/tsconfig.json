@@ -5,9 +5,13 @@
     "moduleResolution": "bundler",
     "strictNullChecks": true,
     "paths": {
-      "@db/*": ["./src/database/*"],
-      "@repo/*": ["./src/repository/*"],
-      "@domain/*": ["./src/domain/*"]
+      "@/": ["./src"],
+      "@domain/*": ["./src/domain/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@types/*": ["./src/types/*"],
+      "@use-cases/*": ["./src/use-cases//*"],
+      "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
   "include": ["./src/**/*"]

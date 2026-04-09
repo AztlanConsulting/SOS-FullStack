@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChevronRight, ChevronLeft } from './icons';
 
 const testimonials = [
@@ -23,7 +24,35 @@ const testimonials = [
   },
 ];
 
+const TestimonialCard = ({ name, text }: { name: string; text: string }) => (
+  <div className="bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8 h-full">
+    <div className="flex items-start gap-4 mb-4">
+      <div className="w-12 h-12 rounded-full bg-light-gray border-2 border-border-gray flex-shrink-0 overflow-hidden">
+        <div className="w-5 h-5 rounded-full border-2 border-border-gray mx-auto mt-2"></div>
+      </div>
+      <p className="text-base lg:text-lg font-medium text-gray">{name}</p>
+    </div>
+    <p className="text-base lg:text-lg text-gray font-normal leading-6">
+      {text}
+    </p>
+  </div>
+);
+
 const TestimonialsSection = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const totalSlides = testimonials.length;
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
+
+  const displayedTestimonial = testimonials[currentIndex];
+
   return (
     <section className="bg-[rgba(249,205,72,0.20)] overflow-hidden py-8 lg:py-16">
       <div className="w-full px-4">
@@ -32,37 +61,40 @@ const TestimonialsSection = () => {
         </h2>
 
         <div className="relative">
-          <div className="overflow-x-auto lg:overflow-visible pb-4 lg:pb-0">
-            <div className="flex lg:grid lg:grid-cols-2 gap-6 snap-x snap-mandatory lg:snap-none">
-              {testimonials.map((testimonial) => (
-                <div
-                  key={testimonial.id}
-                  className="flex-shrink-0 w-[85%] lg:w-auto snap-center bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8"
-                >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-light-gray border-2 border-border-gray flex-shrink-0 overflow-hidden">
-                      <div className="w-5 h-5 rounded-full border-2 border-border-gray mx-auto mt-2"></div>
-                    </div>
-                    <p className="text-base lg:text-lg font-medium text-gray">
-                      {testimonial.name}
-                    </p>
-                  </div>
-
-                  <p className="text-base lg:text-lg text-gray font-normal leading-6">
-                    {testimonial.text}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
+            <TestimonialCard
+              name={displayedTestimonial.name}
+              text={displayedTestimonial.text}
+            />
           </div>
 
-          <button className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow">
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:left-1/2 lg:-translate-x-20 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+          >
             <ChevronLeft className="w-6 h-6 text-primary-yellow" />
           </button>
 
-          <button className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow">
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:left-1/2 lg:translate-x-16 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+          >
             <ChevronRight className="w-6 h-6 text-primary-yellow" />
           </button>
+        </div>
+
+        <div className="flex justify-center mt-8 gap-2">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full transition-colors ${
+                index === currentIndex
+                  ? 'bg-primary-yellow'
+                  : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+            />
+          ))}
         </div>
 
         <div className="flex justify-center mt-8">

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin 'flowbite/plugin';
 
 @theme {
   --color-primary-yellow: #f9cd48;

@@ -12,6 +12,7 @@ const ENDPOINT_URL =
     : 'http://api-m.paypal.com';
 
 const paypalApi: PaymentApi = {
+  // This value could be cached to optimize response, and lower api interactions
   async getAccessToken() {
     const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
     const data = 'grant_type=client_credentials';
@@ -36,10 +37,9 @@ const paypalApi: PaymentApi = {
     return { accessToken, error };
   },
 
-  async processPayment(intent: string) {
+  async createOrder() {
     const accessToken = await paypalApi.getAccessToken();
     let orderDataJson = {
-      intent: intent.toUpperCase(),
       purchase_units: [
         {
           amount: {
@@ -74,10 +74,10 @@ const paypalApi: PaymentApi = {
     return paymentId; // Send to browser
   },
 
-  async completeOrder(orderId: string, intent: string) {
+  async completeOrder(orderId: string) {
     const accessToken = await paypalApi.getAccessToken();
     const response: Promise<string | null[]> = fetch(
-      ENDPOINT_URL + '/v2/checkout/orders' + orderId + '/' + intent,
+      ENDPOINT_URL + '/v2/checkout/orders/' + orderId + '/capture',
       {
         method: 'POST',
         headers: {

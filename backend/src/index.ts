@@ -18,17 +18,12 @@ await mongoDB();
 // Start app
 const app = express();
 
-[].reduce((a, b) => {
-  a + b;
-  return a;
-});
-
 // App configuration
 app.use(bodyparser.json());
 app.set('trust proxy', true);
 
 // Routes
-app.use('/', routes);
+app.use('/api', routes);
 
 // Port
 const port = process.env.SERVER_PORT ?? 3000;

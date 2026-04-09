@@ -10,17 +10,21 @@ const CheckoutPage = () => {
       presentationMode="auto"
       createOrder={async () => {
         console.log('Create order');
-        const response = await fetch('http://localhost:3000/create-order', {
-          method: 'POST',
-        });
-        const { orderId } = await response.json();
+
+        const response = await axiosInstance.post('/create-order');
+        // const response = await fetch('http://localhost:3000/create-order', {
+        //   method: 'POST',
+        // });
+        const { orderId } = response.data;
         return { orderId };
       }}
       onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
         console.log('Approve order');
-        await fetch(`http://localhost:3000/capture-order/${orderId}`, {
-          method: 'POST',
-        });
+        const response = await axiosInstance.post(`/capture-order/${orderId}`);
+        console.log(response.data);
+        // await fetch(`http://localhost:3000/capture-order/${orderId}`, {
+        //   method: 'POST',
+        // });
         console.log('Payment captured!');
       }}
     />

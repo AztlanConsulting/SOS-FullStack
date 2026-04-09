@@ -1,10 +1,15 @@
 export interface PaypalAccessToken {
-  accessToken: string;
-  error: string;
+  accessToken: string | null;
+  error: string | null;
+}
+
+export interface PaymentOrderId {
+  orderId: string | null;
+  error: string | null;
 }
 
 export interface PaymentApi {
   getAccessToken(): Promise<PaypalAccessToken>;
-  createOrder(intent: string): Promise<string | null[]>;
-  completeOrder(orderId: string, intent: string): Promise<string | null[]>;
+  createOrder(): Promise<PaymentOrderId>;
+  completeOrder(orderId: string): Promise<string | null[]>;
 }

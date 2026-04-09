@@ -1,6 +1,9 @@
+import paypalApi from '@infrastructure/api/paypal.api';
 import type { Request, Response } from 'express';
+import { default as usCreateOrder } from '@use-cases/payments/createOrder';
 
 export default async function createOrder(req: Request, res: Response) {
-  console.log('Hola que hace');
-  res.status(200).send('Hola');
+  const orderId = await usCreateOrder(paypalApi);
+  if (orderId) res.status(200).json({ orderId });
+  res.status(500).send('Error');
 }

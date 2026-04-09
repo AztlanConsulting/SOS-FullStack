@@ -1,22 +1,24 @@
-import type { PaymentApi } from '@domain/ports/paypal.port';
+import type { PaymentApi, PaymentOrderId } from '@domain/ports/paypal.port';
 import 'crypto';
 import { randomUUID } from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const ENVIROMENT = process.env.ENVIROMENT;
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const CLIENT_ID = process.env.PAYPAL_CLIENT;
+const CLIENT_SECRET = process.env.PAYPAL_SECRET;
 
 const ENDPOINT_URL =
   ENVIROMENT === 'sandbox'
-    ? 'http://api-m.sandbox.paypal.com'
-    : 'http://api-m.paypal.com';
+    ? 'https://api-m.sandbox.paypal.com'
+    : 'https://api-m.paypal.com';
 
 const paypalApi: PaymentApi = {
   // This value could be cached to optimize response, and lower api interactions
   async getAccessToken() {
     const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
     const data = 'grant_type=client_credentials';
-    const [accessToken, error] = await fetch(
+    const { accessToken, error } = await fetch(
       ENDPOINT_URL + '/v1/oauth2/token',
       {
         method: 'POST',
@@ -27,18 +29,27 @@ const paypalApi: PaymentApi = {
         body: data,
       },
     )
-      .then((res) => res.json())
-      .then((json) => [json.access_token, null])
-      .catch((err) => {
-        console.error("Error generating paypal's access token: ", err);
-        return [null, err];
+      .then((res) => {
+        console.log(res.status);
+        return res.json();
+      })
+      .then((json) => ({ accessToken: json.access_token, error: null }))
+      .catch((error: string) => {
+        console.error("Error generating paypal's access token: ", error);
+        return { accessToken: null, error };
       });
 
+    console.log(accessToken, error);
     return { accessToken, error };
   },
 
   async createOrder() {
-    const accessToken = await paypalApi.getAccessToken();
+    const { accessToken, error } = await paypalApi.getAccessToken();
+
+    if (error) {
+      return { orderId: null, error };
+    }
+
     let orderDataJson = {
       purchase_units: [
         {
@@ -52,7 +63,7 @@ const paypalApi: PaymentApi = {
 
     let data = JSON.stringify(orderDataJson);
 
-    const paymentId: Promise<string | null[]> = fetch(
+    const paymentId: Promise<PaymentOrderId> = fetch(
       ENDPOINT_URL + '/v2/checkout/orders',
       {
         method: 'POST',
@@ -65,10 +76,13 @@ const paypalApi: PaymentApi = {
       },
     )
       .then((res) => res.json())
-      .then((data) => [data.id, null])
-      .catch((err) => {
-        console.error(err);
-        return [null, err];
+      .then((data) => ({
+        orderId: data.id,
+        error: null,
+      }))
+      .catch((error: string) => {
+        console.error(error);
+        return { orderId: null, error };
       });
 
     return paymentId; // Send to browser
@@ -88,7 +102,6 @@ const paypalApi: PaymentApi = {
     )
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
         return [json, null];
       })
       .catch((err) => {
@@ -99,3 +112,5 @@ const paypalApi: PaymentApi = {
     return response;
   },
 };
+
+export default paypalApi;

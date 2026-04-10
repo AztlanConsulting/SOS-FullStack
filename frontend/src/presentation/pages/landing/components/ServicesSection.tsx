@@ -20,7 +20,7 @@ const ServicesSection = () => {
               Ingresa la información de <br className="hidden lg:block" />
               tu mascota
             </h3>
-            <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7">
+            <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7 text-left">
               Compártenos el nombre de tu mascota, dónde se perdió, y algunas
               fotos para los anuncios en Facebook
             </p>

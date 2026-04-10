@@ -1,2 +1,13 @@
 @import 'tailwindcss';
 @plugin 'flowbite/plugin';
+
+@theme {
+  --color-primary-yellow: #f9cd48;
+  --color-dark: #19191b;
+  --color-gray: #61646b;
+  --color-light-gray: #efeff0;
+  --color-border-gray: #afb1b6;
+
+  --font-work-sans: 'Work Sans', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+}

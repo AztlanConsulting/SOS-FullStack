@@ -15,6 +15,10 @@ const PublicationSection = () => {
             <h2 className="text-xl lg:text-2xl xl:text-3xl font-medium text-dark mb-4 lg:mb-6">
               Tu publicación/anuncio estará visible dentro de un minuto
             </h2>
+            <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7 text-left">
+              Al registrar la información se hará la publicación con tu forma de contacto y tendrás 
+              acceso a los manuales y talleres de búsqueda.
+            </p>
           </div>
         </div>
       </div>

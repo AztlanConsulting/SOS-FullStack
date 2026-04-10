@@ -1,9 +1,9 @@
 const PublicationSection = () => {
   return (
-    <section className="bg-white overflow-hidden py-8 lg:py-16">
+    <section className="bg-white overflow-hidden p-8 lg:p-16">
       <div className="w-full px-4">
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
-          <div className="relative w-[190px] h-[203px] lg:w-[260px] lg:h-[280px] xl:w-[320px] xl:h-[350px] flex-shrink-0 order-2 lg:order-1">
+          <div className="">
             <img
               src="/Screenshot 2026-03-05 at 12.22.27 p.m. 1.png"
               alt="Publicación"

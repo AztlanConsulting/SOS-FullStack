@@ -1,6 +1,6 @@
 const PlansSection = () => {
   return (
-    <section className="bg-white py-8 lg:py-16">
+    <section className="bg-white p-8 lg:p-16">
       <div className="w-full px-4">
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="relative w-[200px] h-[196px] lg:w-[280px] lg:h-[260px] xl:w-[350px] xl:h-[320px] flex-shrink-0 order-2 lg:order-2">

@@ -1,4 +1,6 @@
 import express from 'express';
+import { LocationController } from '../controllers/LocationController';
+import imageRouter from './images.routes';
 import clientsRoutes from './clients.routes';
 import paymentRoutes from './payment.routes';
 
@@ -11,5 +13,10 @@ router.get('/health', (req, res) => {
 router.use('/clients', clientsRoutes);
 
 router.use('/payments', paymentRoutes);
+
+router.use('/images', imageRouter);
+
+//Route for the Ip based geolocation.
+router.get('/ip', LocationController.handle);
 
 export default router;

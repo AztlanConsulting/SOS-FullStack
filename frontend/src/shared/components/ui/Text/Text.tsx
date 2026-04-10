@@ -7,7 +7,7 @@ type Weight = 'regular' | 'medium' | 'bold';
 type TextProps = {
   variant?: Variant;
   weight?: Weight;
-  color?: string; // 👈 cualquier clase Tailwind (ej: "text-red-500")
+  color?: string;
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
@@ -44,8 +44,8 @@ export const Text = ({
       className={twMerge(
         variantStyles[variant],
         weightStyles[weight],
-        color ?? defaultColor,
         className,
+        color || defaultColor,
       )}
     >
       {children}

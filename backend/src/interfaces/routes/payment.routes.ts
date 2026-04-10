@@ -1,15 +1,12 @@
 import { Router } from 'express';
 import {
   makeCreatePaymentIntent,
-  makeHandleStripeWebhook,
+  makehandleStripeWebhook,
 } from '../controllers/payment.controller';
-import { processPaymentUseCase } from '../../infrastructure/config/payment.dependency';
-import { stripeProvider } from '../../infrastructure/config/stripe.dependency';
 
 const router = Router();
 
-// We pass the initialized Use Case from our dependencies container
-router.post('/payment-intent', makeCreatePaymentIntent(processPaymentUseCase));
-router.post('/webhook', makeHandleStripeWebhook(stripeProvider));
+router.post('/payment-intent', makeCreatePaymentIntent());
+router.post('/webhook', makehandleStripeWebhook);
 
 export default router;

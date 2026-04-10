@@ -7,7 +7,13 @@
     "paths": {
       "@db/*": ["./src/infrastructure/database/*"],
       "@repo/*": ["./src/infrastructure/repository/*"],
-      "@domain/*": ["./src/domain/*"]
+      "@/": ["./src"],
+      "@domain/*": ["./src/domain/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@types/*": ["./src/types/*"],
+      "@use-cases/*": ["./src/use-cases//*"],
+      "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
   "include": [

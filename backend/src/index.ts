@@ -1,43 +1,54 @@
+import express from 'express';
+import bodyparser from 'body-parser';
+import routes from './interfaces/routes/routes';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { mongoDB } from './infrastructure/database/mongoDB/mongoDB';
+import cors from 'cors';
 
-// Fix __dirname
+// Configure .env
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// loading .env
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-import express from 'express';
-import bodyparser from 'body-parser';
-import cors from 'cors';
-import { connectDB } from './infrastructure/database/mongoClient';
-
-// Dynamic import for routes to ensure dotenv.config() has finished loading variables.
-const { default: routes } = await import('./interfaces/routes/routes');
+// MongoDB connection
+await mongoDB();
 
 // Start app
 const app = express();
 
+// App configuration
 app.use(cors());
-// Use a verify function to capture the raw body needed for Stripe signatures
-app.use(
-  bodyparser.json({
-    verify: (req: any, res, buf) => {
-      req.rawBody = buf;
-    },
-  }),
-);
+app.set('trust proxy', true);
+
+// Middleware to capture raw body for Stripe webhook signature verification
+app.use((req, res, next) => {
+  if (req.path === '/payments/webhook') {
+    let rawBody = Buffer.alloc(0);
+    req.on('data', (chunk) => {
+      rawBody = Buffer.concat([rawBody, chunk]);
+    });
+    req.on('end', () => {
+      (req as any).rawBody = rawBody;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
+app.use(bodyparser.json());
+app.set('trust proxy', true);
+
+// Routes
 app.use('/', routes);
 
+// Port
 const port = process.env.SERVER_PORT ?? 3000;
 
-async function start() {
-  await connectDB();
-}
-
+// START
 app.listen(port, () => {
-  start().catch((err) => console.error('Failed to connect to DB:', err));
   console.log(`Server started on http://localhost:${port}`);
 });

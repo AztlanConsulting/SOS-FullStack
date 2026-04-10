@@ -17,6 +17,9 @@ const meta: Meta<typeof Text> = {
       control: 'select',
       options: ['regular', 'medium', 'bold'],
     },
+    color: {
+      control: 'text',
+    },
   },
 };
 
@@ -30,6 +33,7 @@ export const Playground: Story = {
     children: 'Texto de ejemplo',
     variant: 'body',
     weight: 'regular',
+    color: 'text-gray-900',
   },
 };
 

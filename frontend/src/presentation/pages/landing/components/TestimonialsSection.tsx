@@ -42,16 +42,20 @@ const TestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const totalSlides = testimonials.length;
+  const totalPairs = Math.ceil(totalSlides / 2);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    setCurrentIndex((prev) => (prev + 2) % totalSlides);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    setCurrentIndex((prev) => (prev - 2 + totalSlides) % totalSlides);
   };
 
-  const displayedTestimonial = testimonials[currentIndex];
+  const displayedTestimonials = [
+    testimonials[currentIndex],
+    testimonials[(currentIndex + 1) % totalSlides],
+  ];
 
   return (
     <section className="bg-[rgba(249,205,72,0.20)] overflow-hidden py-8 lg:py-16">
@@ -61,11 +65,18 @@ const TestimonialsSection = () => {
         </h2>
 
         <div className="relative">
-          <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
-            <TestimonialCard
-              name={displayedTestimonial.name}
-              text={displayedTestimonial.text}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {displayedTestimonials.map((testimonial, index) => (
+              <div
+                key={`${testimonial.id}-${index}`}
+                className={index === 1 ? 'hidden lg:block' : ''}
+              >
+                <TestimonialCard
+                  name={testimonial.name}
+                  text={testimonial.text}
+                />
+              </div>
+            ))}
           </div>
 
           <button
@@ -84,12 +95,12 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center mt-8 gap-2">
-          {testimonials.map((_, index) => (
+          {Array.from({ length: totalPairs }).map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => setCurrentIndex(index * 2)}
               className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex
+                Math.floor(currentIndex / 2) === index
                   ? 'bg-primary-yellow'
                   : 'bg-gray-300 hover:bg-gray-400'
               }`}

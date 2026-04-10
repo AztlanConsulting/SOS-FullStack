@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <header className="bg-white border-b border-light-gray px-4 py-4 lg:py-[17px] w-full">
       <div className="w-full flex items-center justify-between">
-        <img src="/1 81.png" alt="Logo" className="w-10 h-10 lg:w-12 lg:h-12" />
+        <img src="/1.png" alt="Logo" className="w-10 h-10 lg:w-12 lg:h-12" />
 
         <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (

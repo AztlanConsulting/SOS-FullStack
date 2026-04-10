@@ -3,8 +3,8 @@ import { ChevronRight } from './icons';
 const HeroSection = () => {
   return (
     <section className="relative bg-[rgba(249,205,72,0.20)] overflow-hidden p-8 lg:py-16 ">
-      <div className="lg:hidden fixed right-0 top-2/3 -translate-y-1/2 z-[1000]">
-        <div className="w-[30px] h-[104px] bg-primary-yellow rounded-tl-[8px] rounded-bl-[8px] flex items-center justify-center">
+      <div className="fixed right-0 top-2/3 -translate-y-1/2 z-[1000]">
+        <div className="w-[30px] h-[104px] bg-primary-yellow rounded-tl-[8px] rounded-bl-[8px] flex items-center justify-center lg:w-[40px] lg:h-[120px]">
           <span className="text-sm font-medium text-black -rotate-90 whitespace-nowrap tracking-[0.16px]">
             Síguenos
           </span>
@@ -40,7 +40,6 @@ const HeroSection = () => {
               alt="Mascota"
               className="w-[215px] h-[283px] lg:w-[300px] lg:h-[380px] xl:w-[350px] xl:h-[440px] rounded-lg"
             />
-
           </div>
         </div>
       </div>

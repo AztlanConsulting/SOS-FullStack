@@ -64,8 +64,8 @@ const TestimonialsSection = () => {
           ¿Qué dicen nuestros clientes?
         </h2>
 
-        <div className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-2xl relative">
             {displayedTestimonials.map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
@@ -77,21 +77,22 @@ const TestimonialsSection = () => {
                 />
               </div>
             ))}
+
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 lg:left-0 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <ChevronLeft className="w-6 h-6 text-primary-yellow" />
+            </button>
+
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 top-1/2 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <ChevronRight className="w-6 h-6 text-primary-yellow" />
+            </button>
           </div>
 
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:left-1/2 lg:-translate-x-20 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
-          >
-            <ChevronLeft className="w-6 h-6 text-primary-yellow" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:left-1/2 lg:translate-x-16 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
-          >
-            <ChevronRight className="w-6 h-6 text-primary-yellow" />
-          </button>
         </div>
 
         <div className="flex justify-center mt-8 gap-2">

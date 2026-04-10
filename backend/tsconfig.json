@@ -5,6 +5,8 @@
     "moduleResolution": "bundler",
     "strictNullChecks": true,
     "paths": {
+      "@db/*": ["./src/infrastructure/database/*"],
+      "@repo/*": ["./src/infrastructure/repository/*"],
       "@/": ["./src"],
       "@domain/*": ["./src/domain/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
@@ -14,5 +16,8 @@
       "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/**/*",
+    "../frontend/src/features/payment/components/CheckoutForm.tsx"
+  ]
 }

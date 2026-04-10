@@ -2,7 +2,7 @@ import {
   PayPalOneTimePaymentButton,
   type OnApproveDataOneTimePayments,
 } from '@paypal/react-paypal-js/sdk-v6';
-import axiosInstance from '@utils/axios';
+import axiosInstance from '@shared/utils/axios';
 
 const CheckoutPage = () => {
   return (

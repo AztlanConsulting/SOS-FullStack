@@ -7,7 +7,7 @@ export default async function captureOrder(req: Request, res: Response) {
 
   const response = await ucCaptureOrder(paypalApi, orderId as string);
 
-  if (response.id) return res.status(200).send(response.id);
+  if (response.id !== undefined) return res.status(200).send(response.id);
 
   res.status(500).send(response.error);
 }

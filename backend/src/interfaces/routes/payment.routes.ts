@@ -1,9 +1,15 @@
+import { Router } from 'express';
+import {
+  makeCreatePaymentIntent,
+  makehandleStripeWebhook,
+} from '../controllers/payment.controller';
 import captureOrder from '@interfaces/controllers/captureOrder.controller';
 import createOrder from '@interfaces/controllers/createOrder.controller';
-import express from 'express';
 
-const router = express.Router();
+const router = Router();
 
+router.post('/payment-intent', makeCreatePaymentIntent());
+router.post('/webhook', makehandleStripeWebhook);
 router.post('/create-order', createOrder);
 router.get('/capture-order/:orderId', captureOrder);
 

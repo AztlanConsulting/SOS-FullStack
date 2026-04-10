@@ -48,7 +48,7 @@ const paypalApi: PaymentApi = {
   async createOrder() {
     const { accessToken, error } = await paypalApi.getAccessToken();
 
-    if (error) {
+    if (error !== null) {
       return { orderId: null, error };
     }
 
@@ -127,7 +127,7 @@ const paypalApi: PaymentApi = {
   async completeOrder(orderId: string) {
     const { accessToken, error } = await paypalApi.getAccessToken();
 
-    if (error) {
+    if (error !== null) {
       return { error };
     }
 

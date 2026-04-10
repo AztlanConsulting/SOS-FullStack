@@ -14,6 +14,25 @@ await mongoDB();
 const app = express();
 
 // App configuration
+app.use(cors());
+app.set('trust proxy', true);
+
+// Middleware to capture raw body for Stripe webhook signature verification
+app.use((req, res, next) => {
+  if (req.path === '/payments/webhook') {
+    let rawBody = Buffer.alloc(0);
+    req.on('data', (chunk) => {
+      rawBody = Buffer.concat([rawBody, chunk]);
+    });
+    req.on('end', () => {
+      (req as any).rawBody = rawBody;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 app.use(bodyparser.json());
 app.set('trust proxy', true);
 app.use(

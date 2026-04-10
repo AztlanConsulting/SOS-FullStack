@@ -25,8 +25,14 @@
     "noUncheckedSideEffectImports": true,
 
     "paths": {
-      "@utils/*": ["./src/utils/*"]
+      "@/": ["./src"],
+      "@assets/*": ["./src/assets/*"],
+      "@features/*": ["./src/features/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@services/*": ["./src/services/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", ".storybook"]
 }

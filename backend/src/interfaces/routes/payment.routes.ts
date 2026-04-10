@@ -5,6 +5,6 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/create-order', createOrder);
-router.post('/capture-order/:orderId', captureOrder);
+router.get('/capture-order/:orderId', captureOrder);
 
 export default router;

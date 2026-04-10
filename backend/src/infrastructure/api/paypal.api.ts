@@ -1,4 +1,8 @@
-import type { PaymentApi, PaymentOrderId } from '@domain/ports/paypal.port';
+import type {
+  PaymentApi,
+  PaymentOrderId,
+  PaymentSuccess,
+} from '@domain/ports/paypal.port';
 import 'crypto';
 import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
@@ -47,8 +51,6 @@ const paypalApi: PaymentApi = {
     if (error) {
       return { orderId: null, error };
     }
-
-    console.log(accessToken);
 
     let orderDataJson = {
       intent: 'CAPTURE',
@@ -109,7 +111,6 @@ const paypalApi: PaymentApi = {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         return {
           orderId: data.id,
           error: null,
@@ -124,24 +125,24 @@ const paypalApi: PaymentApi = {
   },
 
   async completeOrder(orderId: string) {
-    const accessToken = await paypalApi.getAccessToken();
-    const response: Promise<string | null[]> = fetch(
-      ENDPOINT_URL + '/v2/checkout/orders/' + orderId + '/capture',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
+    const { accessToken, error } = await paypalApi.getAccessToken();
+
+    if (error) {
+      return { error };
+    }
+
+    const url = ENDPOINT_URL + '/v2/checkout/orders/' + orderId + '/capture';
+    const response: Promise<PaymentSuccess> = fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
-    )
+    })
       .then((res) => res.json())
-      .then((json) => {
-        return [json, null];
-      })
-      .catch((err) => {
-        console.error(err);
-        return [null, err];
+      .catch((error) => {
+        console.error(error);
+        return { error };
       });
 
     return response;

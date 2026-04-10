@@ -8,8 +8,13 @@ export interface PaymentOrderId {
   error: string | null;
 }
 
+export interface PaymentSuccess {
+  id?: string;
+  error?: string;
+}
+
 export interface PaymentApi {
   getAccessToken(): Promise<PaypalAccessToken>;
   createOrder(): Promise<PaymentOrderId>;
-  completeOrder(orderId: string): Promise<string | null[]>;
+  completeOrder(orderId: string): Promise<PaymentSuccess>;
 }

@@ -16,6 +16,9 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 // MongoDB connection
 await mongoDB();
 
+// MongoDB connection
+await mongoDB();
+
 // Start app
 const app = express();
 
@@ -40,6 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyparser.json());
+app.set('trust proxy', true);
 
 // Routes
 app.use('/', routes);

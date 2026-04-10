@@ -25,7 +25,10 @@ export function useGeocoding() {
     setQuery(value);
 
     // Helps us avoid API requests in the case the query is too short
-    if (query.trim().length < 3) return [];
+    if (value.trim().length < 3) {
+      setResults([]);
+      return [];
+    }
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);

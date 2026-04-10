@@ -10,6 +10,6 @@ export const mongoDB = async () => {
 
     console.log('MongoDB connected');
   } catch (error: unknown) {
-    console.error('Error connecting to MongoDB');
+    console.error('Error connecting to MongoDB', error);
   }
 };

@@ -5,12 +5,16 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { mongoDB } from './infrastructure/database/mongoDB/mongoDB';
+import cors from 'cors';
 
 // Configure .env
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+// MongoDB connection
+await mongoDB();
 
 // MongoDB connection
 await mongoDB();
@@ -19,6 +23,25 @@ await mongoDB();
 const app = express();
 
 // App configuration
+app.use(cors());
+app.set('trust proxy', true);
+
+// Middleware to capture raw body for Stripe webhook signature verification
+app.use((req, res, next) => {
+  if (req.path === '/payments/webhook') {
+    let rawBody = Buffer.alloc(0);
+    req.on('data', (chunk) => {
+      rawBody = Buffer.concat([rawBody, chunk]);
+    });
+    req.on('end', () => {
+      (req as any).rawBody = rawBody;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 app.use(bodyparser.json());
 app.set('trust proxy', true);
 

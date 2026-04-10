@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { IpApiService } from 'src/infrastructure/api/IpApiService';
-import { GetLocationByIp } from 'src/use-cases/ip/GetLocationByIp';
+import { IpApiService } from '@infrastructure/api/IpApiService';
+import { GetLocationByIp } from '@use-cases/ip/GetLocationByIp';
 
 /**
  * Orchestrates the flow between the incoming request, the domain use case, and the final response.

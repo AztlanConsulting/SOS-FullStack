@@ -1,3 +1,4 @@
+const storybook = require('eslint-plugin-storybook');
 const tsParser = require('@typescript-eslint/parser');
 const typescriptPlugin = require('@typescript-eslint/eslint-plugin');
 const reactPlugin = require('eslint-plugin-react');
@@ -35,7 +36,7 @@ module.exports = [
 
   // Frontend
   {
-    files: ['frontend/**/*.{ts,tsx}'],
+    files: ['frontend/**/*.{ts,tsx}', '!frontend/.storybook/**/*'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -77,6 +78,28 @@ module.exports = [
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/strict-boolean-expressions': 'warn',
       '@typescript-eslint/require-await': 'warn',
+    },
+  },
+
+  // Story Book
+  {
+    files: ['frontend/.storybook/**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ['./frontend/tsconfig.storybook.json'],
+      },
+    },
+  },
+
+  // Story Book stories
+  {
+    files: ['**/*.stories.@(ts|tsx|js|jsx|mjs)'],
+    plugins: {
+      storybook,
+    },
+    rules: {
+      ...storybook.configs.recommended.rules,
     },
   },
 

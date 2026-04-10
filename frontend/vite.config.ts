@@ -9,14 +9,14 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [tailwindcss(), react()],
-    server: {
-      proxy: {
-        '/api': {
-          target: env.VITE_BASE_URL,
-          changeOrigin: true,
-        },
-      },
-    },
+    // server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: env.VITE_BASE_URL,
+    //       changeOrigin: true,
+    //     },
+    //   },
+    // },
     resolve: {
       alias: {
         // If you add another file path, also update in tsconfig.app.json

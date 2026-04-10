@@ -14,11 +14,6 @@ function App() {
   return (
     <div className="App">
       <LandingPage />
-      <h1 className="font-bold mb-6">SOS FullStack</h1>
-      <PaymentPage />
-      <h1>SOS FullStack</h1>
-      <p>Welcome to the SOS-FullStack-feature-react project!</p>
-      <MapOrganism />
     </div>
   );
 }

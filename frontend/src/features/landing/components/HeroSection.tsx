@@ -1,7 +1,6 @@
-import { Text } from '../../../../shared/components/ui/Text';
-import { Button } from '../../../../shared/components/ui/Button';
+import { Text } from '../../../shared/components/ui/Text';
+import { Button } from '../../../shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
-
 
 const HeroSection = () => {
   return (

@@ -40,7 +40,7 @@ export function Button({
       )}
     >
       <div className="flex justify-center items-center">
-          {label}
+        {label}
 
         {Icon && (
           <span className="absolute right-3 top-[52%] -translate-y-1/2">

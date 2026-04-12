@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft } from './icons';
-import { Text } from '../../../../shared/components/ui/Text';
-import { Button } from '../../../../shared/components/ui/Button';
-import { CiShare1 } from "react-icons/ci";
+import { Text } from '../../../shared/components/ui/Text';
+import { Button } from '../../../shared/components/ui/Button';
+import { CiShare1 } from 'react-icons/ci';
 
 const ChevronRightIcon = ({ size = 22 }: { size?: number }) => (
   <ChevronRight className={`w-[${size}px] h-[${size}px]`} />
@@ -35,7 +35,7 @@ const TestimonialCard = ({ name, text }: { name: string; text: string }) => (
   <div className="bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8 h-full">
     <div className="flex items-start gap-4 mb-4">
       <div className="w-12 h-12 rounded-full bg-light-gray border-2 border-border-gray flex-shrink-0 overflow-hidden">
-        <div className="w-5 h-5 rounded-full border-2 border-border-gray mx-auto mt-2"></div>
+        <div className="w-5 h-5 rounded-full border-2 border-border-gray mx-auto mt-2" />
       </div>
       <Text variant="body" weight="medium">
         {name}

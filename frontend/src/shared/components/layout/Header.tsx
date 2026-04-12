@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { Text } from '../../../../shared/components/ui/Text';
+import { Text } from '../ui/Text';
 
 const navLinks = [
   { label: 'Inicio', href: '#' },

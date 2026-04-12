@@ -1,8 +1,8 @@
-import { Text } from '../../../../shared/components/ui/Text';
-import { FaWhatsapp } from "react-icons/fa6";
-import { CiFacebook } from "react-icons/ci";
-import { FaInstagram } from "react-icons/fa";
-import { PiTiktokLogoLight } from "react-icons/pi";
+import { Text } from '../ui/Text';
+import { FaWhatsapp } from 'react-icons/fa6';
+import { CiFacebook } from 'react-icons/ci';
+import { FaInstagram } from 'react-icons/fa';
+import { PiTiktokLogoLight } from 'react-icons/pi';
 
 const Footer = () => {
   return (

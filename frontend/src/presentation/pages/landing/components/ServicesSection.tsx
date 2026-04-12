@@ -3,9 +3,7 @@ import { Text } from '../../../../shared/components/ui/Text';
 const ServicesSection = () => {
   return (
     <section className="bg-white overflow-hidden p-8 lg:p-16 relative">
-      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] z-0 pointer-events-none">
-        <img src="/line.png" alt="" className="w-full h-auto" />
-      </div>
+    
 
       <div className="w-full relative z-10">
         <div className="text-center mb-8 lg:mb-12">

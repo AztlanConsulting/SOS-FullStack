@@ -1,6 +1,5 @@
 import { twMerge } from 'tailwind-merge';
 import type { ComponentType } from 'react';
-import { Text } from '../Text';
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'plans';
 type ButtonProps = {
   label: string;

@@ -1,4 +1,10 @@
 import { ChevronRight } from './icons';
+import { Text } from '../../../../shared/components/ui/Text';
+import { Button } from '../../../../shared/components/ui/Button';
+
+const ChevronRightIcon = ({ size = 22 }: { size?: number }) => (
+  <ChevronRight className={`w-[${size}px] h-[${size}px]`} />
+);
 
 const HeroSection = () => {
   return (
@@ -13,24 +19,26 @@ const HeroSection = () => {
       <div className="w-full px-3">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="flex-1 max-w-xl lg:max-w-2xl order-2 lg:order-1 text-left">
-            <h1 className="text-[32px] lg:text-4xl xl:text-5xl font-medium text-dark leading-tight lg:leading-[44px] mb-4 lg:mb-6">
+            <Text as="h1" variant="h1" weight="medium" className="mb-4 lg:mb-6">
               Te ayudamos a buscar tu mascota
-            </h1>
-            <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7 tracking-[0.20px] mb-8 lg:mb-10">
+            </Text>
+            <Text variant="body" weight="regular" className="mb-8 lg:mb-10">
               Publica anuncios, difunde la búsqueda y utiliza nuestros servicios
               para reunir a tu mascota con su familia.
-            </p>
+            </Text>
 
-            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 max-w-md">
-              <button className="h-[47px] lg:h-[52px] px-6 lg:px-8 bg-primary-yellow text-white rounded-[20px] font-semibold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-                Perdí mi mascota
-                <ChevronRight className="w-5 h-5 " />
-              </button>
+            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+              <Button
+                label="Perdí mi mascota"
+                variant="primary"
+                icon={ChevronRightIcon}
+              />
 
-              <button className="h-[47px] lg:h-[52px] px-6 lg:px-8 bg-white text-primary-yellow rounded-[20px] font-semibold text-base border-2 border-primary-yellow flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
-                Encontré una mascota
-                <ChevronRight className="w-5 h-5 " />
-              </button>
+              <Button
+                label="Encontré una mascota"
+                variant="secondary"
+                icon={ChevronRightIcon}
+              />
             </div>
           </div>
 

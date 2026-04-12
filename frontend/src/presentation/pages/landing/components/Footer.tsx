@@ -1,4 +1,5 @@
 import { InstagramIcon, FacebookIcon, WhatsAppIcon } from './icons';
+import { Text } from '../../../../shared/components/ui/Text';
 
 const Footer = () => {
   return (
@@ -16,16 +17,20 @@ const Footer = () => {
               <WhatsAppIcon className="w-6 h-6" />
             </a>
           </div>
-          <p className="text-center text-base text-dark font-normal underline">
-            Términos y Condiciones
-          </p>
-          <p className="text-center text-base text-dark font-normal">
-            © {new Date().getFullYear()} Copywrite SOS Encontrando Mascotas
-          </p>
+          <div className="text-center">
+            <Text variant="body" className="underline">
+              Términos y Condiciones
+            </Text>
+          </div>
+          <div className="text-center">
+            <Text variant="body">
+              © {new Date().getFullYear()} Copywrite SOS Encontrando Mascotas
+            </Text>
+          </div>
 
-          <p className="text-center text-base text-dark font-normal">
-            SOS Encontrando Mascotas
-          </p>
+          <div className="text-center">
+            <Text variant="body">SOS Encontrando Mascotas</Text>
+          </div>
         </div>
       </div>
     </footer>

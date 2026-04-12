@@ -1,3 +1,5 @@
+import { Text } from '../../../../shared/components/ui/Text';
+
 const PlansSection = () => {
   return (
     <section className="bg-white p-8 lg:p-16">
@@ -12,14 +14,14 @@ const PlansSection = () => {
           </div>
 
           <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg:text-left order-2 lg:order-1">
-            <h2 className="text-xl lg:text-2xl xl:text-3xl font-medium text-dark mb-4 lg:mb-6">
+            <Text as="h2" variant="h3" weight="medium" className="mb-4 lg:mb-6">
               Elige el plan que te acomode
-            </h2>
-            <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7 text-left">
+            </Text>
+            <Text variant="body" className="text-left">
               En SOS ofrecemos diferentes planes de alcance y seguimiento, para
               que puedas tener un plan personalizado que se ajuste a tus
               necesidades
-            </p>
+            </Text>
           </div>
         </div>
       </div>

@@ -40,9 +40,7 @@ export function Button({
       )}
     >
       <div className="flex justify-center items-center">
-        <Text variant="body" weight="medium" className="text-inherit">
           {label}
-        </Text>
 
         {Icon && (
           <span className="absolute right-3 top-[52%] -translate-y-1/2">

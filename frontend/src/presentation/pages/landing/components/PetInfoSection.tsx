@@ -1,10 +1,14 @@
+import { Text } from '../../../../shared/components/ui/Text';
+
 const PetInfoSection = () => {
   return (
     <section className="bg-white overflow-hidden border-b border-border-gray py-8 lg:py-16">
       <div className="w-full px-4">
-        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-medium text-black text-center mb-6 lg:mb-10 tracking-[0.40px]">
-          Cuéntanos de tu mascota
-        </h2>
+        <div className="text-center mb-6 lg:mb-10">
+          <Text as="h2" variant="h2" weight="medium">
+            Cuéntanos de tu mascota
+          </Text>
+        </div>
 
         <div className="max-w-3xl mx-auto">
           <img
@@ -15,9 +19,9 @@ const PetInfoSection = () => {
         </div>
 
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7">
+          <Text variant="body">
             Déjanos la información de tu mascota para comenzar la búsqueda
-          </p>
+          </Text>
         </div>
       </div>
     </section>

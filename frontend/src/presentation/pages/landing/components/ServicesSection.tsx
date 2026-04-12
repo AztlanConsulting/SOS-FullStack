@@ -1,10 +1,14 @@
+import { Text } from '../../../../shared/components/ui/Text';
+
 const ServicesSection = () => {
   return (
     <section className="bg-white overflow-hidden p-8 lg:p-16">
       <div className="w-full">
-        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-medium text-dark text-center mb-8 lg:mb-12">
-          ¿Cómo te podemos ayudar?
-        </h2>
+        <div className="text-center mb-8 lg:mb-12">
+          <Text as="h2" variant="h2" weight="medium">
+            ¿Cómo te podemos ayudar?
+          </Text>
+        </div>
 
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">
@@ -16,6 +20,19 @@ const ServicesSection = () => {
           </div>
 
           <div className="text-center lg:text-right">
+            <Text as="h3" variant="h3" weight="medium" className="mb-4 lg:mb-6">
+              Ingresa la información de <br className="hidden lg:block" />
+              tu mascota
+            </Text>
+            <Text variant="body" className="text-left">
+              Compártenos el nombre de tu mascota, dónde se perdió, y algunas
+              fotos para los anuncios en Facebook
+            </Text>
+          </div>
+        </div>
+      </div>
+
+          <div className="text-center lg:text-right">
             <h3 className="text-xl lg:text-2xl xl:text-3xl font-medium text-dark mb-4 lg:mb-6">
               Ingresa la información de <br className="hidden lg:block" />
               tu mascota
@@ -25,8 +42,6 @@ const ServicesSection = () => {
               fotos para los anuncios en Facebook
             </p>
           </div>
-        </div>
-      </div>
     </section>
   );
 };

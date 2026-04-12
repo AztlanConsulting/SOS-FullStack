@@ -1,4 +1,5 @@
 import { MenuIcon } from './icons';
+import { Text } from '../../../../shared/components/ui/Text';
 
 const navLinks = [
   { label: 'Inicio', href: '#' },
@@ -19,9 +20,11 @@ const Header = () => {
             <a
               key={link.label}
               href={link.href}
-              className="text-base font-medium text-gray hover:text-dark transition-colors"
+              className="hover:text-dark transition-colors"
             >
-              {link.label}
+              <Text variant="body" weight="medium">
+                {link.label}
+              </Text>
             </a>
           ))}
         </nav>

@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft } from './icons';
+import { Text } from '../../../../shared/components/ui/Text';
+import { Button } from '../../../../shared/components/ui/Button';
+
+const ChevronRightIcon = ({ size = 22 }: { size?: number }) => (
+  <ChevronRight className={`w-[${size}px] h-[${size}px]`} />
+);
 
 const testimonials = [
   {
@@ -30,11 +36,11 @@ const TestimonialCard = ({ name, text }: { name: string; text: string }) => (
       <div className="w-12 h-12 rounded-full bg-light-gray border-2 border-border-gray flex-shrink-0 overflow-hidden">
         <div className="w-5 h-5 rounded-full border-2 border-border-gray mx-auto mt-2"></div>
       </div>
-      <p className="text-base lg:text-lg font-medium text-gray">{name}</p>
+      <Text variant="body" weight="medium">
+        {name}
+      </Text>
     </div>
-    <p className="text-base lg:text-lg text-gray font-normal leading-6">
-      {text}
-    </p>
+    <Text variant="body">{text}</Text>
   </div>
 );
 
@@ -60,9 +66,11 @@ const TestimonialsSection = () => {
   return (
     <section className="bg-[rgba(249,205,72,0.20)] overflow-hidden py-8 lg:py-16">
       <div className="w-full px-4">
-        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-medium text-black text-center mb-8 lg:mb-12 tracking-[0.40px]">
-          ¿Qué dicen nuestros clientes?
-        </h2>
+        <div className="text-center mb-8 lg:mb-12">
+          <Text as="h2" variant="h2" weight="medium">
+            ¿Qué dicen nuestros clientes?
+          </Text>
+        </div>
 
         <div className="flex justify-center">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-2xl relative">
@@ -92,7 +100,6 @@ const TestimonialsSection = () => {
               <ChevronRight className="w-6 h-6 text-primary-yellow" />
             </button>
           </div>
-
         </div>
 
         <div className="flex justify-center mt-8 gap-2">
@@ -110,12 +117,7 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center mt-8">
-          <button className="h-[47px] lg:h-[52px] px-6 lg:px-8 bg-primary-yellow rounded-[54px] flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-            <span className="text-base font-medium text-black">
-              Ver más opiniones
-            </span>
-            <ChevronRight className="w-5 h-5 text-black" />
-          </button>
+          <Button label="Ver más opiniones" icon={ChevronRightIcon} />
         </div>
       </div>
     </section>

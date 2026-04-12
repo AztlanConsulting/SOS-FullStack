@@ -1,10 +1,7 @@
-import { ChevronRight } from './icons';
 import { Text } from '../../../../shared/components/ui/Text';
 import { Button } from '../../../../shared/components/ui/Button';
+import { HiChevronRight } from 'react-icons/hi';
 
-const ChevronRightIcon = ({ size = 22 }: { size?: number }) => (
-  <ChevronRight className={`w-[${size}px] h-[${size}px]`} />
-);
 
 const HeroSection = () => {
   return (
@@ -31,13 +28,13 @@ const HeroSection = () => {
               <Button
                 label="Perdí mi mascota"
                 variant="primary"
-                icon={ChevronRightIcon}
+                icon={HiChevronRight}
               />
 
               <Button
                 label="Encontré una mascota"
                 variant="secondary"
-                icon={ChevronRightIcon}
+                icon={HiChevronRight}
               />
             </div>
           </div>

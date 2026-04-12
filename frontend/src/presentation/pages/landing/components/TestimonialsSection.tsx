@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronRight, ChevronLeft } from './icons';
 import { Text } from '../../../../shared/components/ui/Text';
 import { Button } from '../../../../shared/components/ui/Button';
+import { CiShare1 } from "react-icons/ci";
 
 const ChevronRightIcon = ({ size = 22 }: { size?: number }) => (
   <ChevronRight className={`w-[${size}px] h-[${size}px]`} />
@@ -117,7 +118,7 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center mt-8">
-          <Button label="Ver más opiniones" icon={ChevronRightIcon} />
+          <Button label="Ver más opiniones" icon={CiShare1} />
         </div>
       </div>
     </section>

@@ -2,8 +2,12 @@ import { Text } from '../../../../shared/components/ui/Text';
 
 const ServicesSection = () => {
   return (
-    <section className="bg-white overflow-hidden p-8 lg:p-16">
-      <div className="w-full">
+    <section className="bg-white overflow-hidden p-8 lg:p-16 relative">
+      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] z-0 pointer-events-none">
+        <img src="/line.png" alt="" className="w-full h-auto" />
+      </div>
+
+      <div className="w-full relative z-10">
         <div className="text-center mb-8 lg:mb-12">
           <Text as="h2" variant="h2" weight="medium">
             ¿Cómo te podemos ayudar?
@@ -12,11 +16,7 @@ const ServicesSection = () => {
 
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">
-            <img
-              src="/image 7.png"
-              alt="Servicios"
-              className=""
-            />
+            <img src="/image 7.png" alt="Servicios" className="" />
           </div>
 
           <div className="text-center lg:text-right">

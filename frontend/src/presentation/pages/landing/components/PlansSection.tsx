@@ -7,7 +7,7 @@ const PlansSection = () => {
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="relative w-[200px] h-[196px] lg:w-[280px] lg:h-[260px] xl:w-[350px] xl:h-[320px] flex-shrink-0 order-1 lg:order-2">
             <img
-              src="/Screenshot 2026-03-05 at 12.15.07 p.m. 1.png"
+              src="/perro.png"
               alt="Planes"
               className="w-full h-full object-cover rounded-lg"
             />

@@ -7,7 +7,7 @@ const PublicationSection = () => {
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">
             <img
-              src="/Screenshot 2026-03-05 at 12.22.27 p.m. 1.png"
+              src="/perro2.png"
               alt="Publicación"
               className="w-full h-full object-cover rounded-lg"
             />

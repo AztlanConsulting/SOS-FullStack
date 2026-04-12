@@ -1,5 +1,8 @@
-import { InstagramIcon, FacebookIcon, WhatsAppIcon } from './icons';
 import { Text } from '../../../../shared/components/ui/Text';
+import { FaWhatsapp } from "react-icons/fa6";
+import { CiFacebook } from "react-icons/ci";
+import { FaInstagram } from "react-icons/fa";
+import { PiTiktokLogoLight } from "react-icons/pi";
 
 const Footer = () => {
   return (
@@ -8,13 +11,16 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4">
           <div className="flex justify-center gap-6">
             <a href="#" className="text-white hover:opacity-80">
-              <InstagramIcon className="w-6 h-6" />
+              <FaInstagram className="w-6 h-6" />
             </a>
             <a href="#" className="text-white hover:opacity-80">
-              <FacebookIcon className="w-6 h-6" />
+              <CiFacebook className="w-6 h-6" />
             </a>
             <a href="#" className="text-white hover:opacity-80">
-              <WhatsAppIcon className="w-6 h-6" />
+              <FaWhatsapp className="w-6 h-6" />
+            </a>
+            <a href="#" className="text-white hover:opacity-80">
+              <PiTiktokLogoLight className="w-6 h-6" />
             </a>
           </div>
           <div className="text-center">
@@ -24,7 +30,7 @@ const Footer = () => {
           </div>
           <div className="text-center">
             <Text variant="body">
-              © {new Date().getFullYear()} Copywrite SOS Encontrando Mascotas
+              © {new Date().getFullYear()} Copyright SOS Encontrando Mascotas
             </Text>
           </div>
 

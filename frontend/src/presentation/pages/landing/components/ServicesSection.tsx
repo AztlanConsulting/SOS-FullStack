@@ -31,17 +31,6 @@ const ServicesSection = () => {
           </div>
         </div>
       </div>
-
-          <div className="text-center lg:text-right">
-            <h3 className="text-xl lg:text-2xl xl:text-3xl font-medium text-dark mb-4 lg:mb-6">
-              Ingresa la información de <br className="hidden lg:block" />
-              tu mascota
-            </h3>
-            <p className="text-base lg:text-lg text-gray font-normal leading-6 lg:leading-7 text-left">
-              Compártenos el nombre de tu mascota, dónde se perdió, y algunas
-              fotos para los anuncios en Facebook
-            </p>
-          </div>
     </section>
   );
 };

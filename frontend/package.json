@@ -11,6 +11,8 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^9.1.1",
+    "axios": "^1.15.0",
     "@heroicons/react": "^2.2.0",
     "@stripe/react-stripe-js": "^6.1.0",
     "@stripe/stripe-js": "^9.1.0",

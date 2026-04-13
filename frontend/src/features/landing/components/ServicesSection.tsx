@@ -11,11 +11,20 @@ const ServicesSection = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
-          <div className="">
-            <img src="/image 7.png" alt="Servicios" className="" />
+          <div className="relative w-[300px] h-[200px] lg:w-[400px] lg:h-[400px]">
+            <img
+              src="/Group 36.png"
+              alt="Background"
+              className="absolute inset-0 w-full h-full object-contain"
+            />
+            <img
+              src="/image 7.png"
+              alt="Servicios"
+              className="relative z-10 w-[200px] h-[200px] lg:w-[280px] lg:h-[280px] mx-auto"
+            />
           </div>
 
-          <div className="text-center lg:text-right">
+          <div className="text-center lg:text-left">
             <Text as="h3" variant="h3" weight="medium" className="mb-4 lg:mb-6">
               Ingresa la información de <br className="hidden lg:block" />
               tu mascota

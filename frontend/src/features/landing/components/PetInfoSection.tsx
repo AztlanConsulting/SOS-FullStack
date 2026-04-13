@@ -3,7 +3,7 @@ import { Text } from '../../../shared/components/ui/Text';
 const PetInfoSection = () => {
   return (
     <section className="bg-white overflow-hidden border-b border-border-gray py-8 lg:py-16">
-      <div className="w-full px-4">
+      <div className="w-5/6 mx-auto">
         <div className="text-center mb-6 lg:mb-10">
           <Text as="h2" variant="h2" weight="medium">
             Cuéntanos de tu mascota

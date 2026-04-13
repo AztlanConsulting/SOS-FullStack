@@ -7,7 +7,7 @@ import { PiTiktokLogoLight } from 'react-icons/pi';
 const Footer = () => {
   return (
     <footer className="bg-primary-yellow py-8 lg:py-12">
-      <div className="w-full px-4">
+      <div className="w-5/6 mx-auto">
         <div className="flex flex-col items-center gap-4">
           <div className="flex justify-center gap-6">
             <a href="#" className="text-white hover:opacity-80">

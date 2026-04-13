@@ -14,8 +14,8 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-light-gray px-4 py-4 lg:py-[17px] w-full relative">
-      <div className="w-full flex items-center justify-between">
+    <header className="bg-white border-b border-light-gray py-4 lg:py-[17px] w-full relative">
+      <div className="w-5/6 mx-auto flex items-center justify-between">
         <img src="/1.png" alt="Logo" className="w-10 h-10 lg:w-12 lg:h-12" />
 
         <nav className="hidden lg:flex items-center gap-8">
@@ -42,19 +42,21 @@ const Header = () => {
 
       {isMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white shadow-lg border-t border-light-gray z-50">
-          <nav className="flex flex-col p-4 gap-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="hover:text-dark transition-colors"
-              >
-                <Text variant="body" weight="medium">
-                  {link.label}
-                </Text>
-              </a>
-            ))}
-          </nav>
+          <div className="w-5/6 mx-auto">
+            <nav className="flex flex-col p-4 gap-4">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="hover:text-dark transition-colors"
+                >
+                  <Text variant="body" weight="medium">
+                    {link.label}
+                  </Text>
+                </a>
+              ))}
+            </nav>
+          </div>
         </div>
       )}
     </header>

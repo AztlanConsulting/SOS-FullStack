@@ -2,8 +2,8 @@ import { Text } from '../../../shared/components/ui/Text';
 
 const PublicationSection = () => {
   return (
-    <section className="bg-white overflow-hidden p-8 lg:p-16">
-      <div className="w-full px-4">
+    <section className="bg-white overflow-hidden py-8 lg:py-16">
+      <div className="w-5/6 mx-auto">
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">
             <img

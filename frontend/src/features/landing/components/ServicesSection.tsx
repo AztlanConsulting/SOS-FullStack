@@ -15,7 +15,10 @@ const ServicesSection = () => {
             <img
               src="/Group 36.png"
               alt="Background"
-              className="absolute"
+              className="absolute left-0 -z-10 w-[120%] scale-150"
+              style={{
+                top: "calc((1 / 2 * 100%) - 25px)"
+              }}
             />
             <img
               src="/image 7.png"

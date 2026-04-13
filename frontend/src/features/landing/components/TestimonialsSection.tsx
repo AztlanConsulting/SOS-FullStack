@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import { CiShare1 } from 'react-icons/ci';
-import { MdNavigateNext } from "react-icons/md";
-import { MdNavigateBefore } from "react-icons/md";
-
+import { MdNavigateNext } from 'react-icons/md';
+import { MdNavigateBefore } from 'react-icons/md';
 
 const testimonials = [
   {
@@ -47,20 +46,16 @@ const TestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const totalSlides = testimonials.length;
-  const totalPairs = Math.ceil(totalSlides / 2);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 2) % totalSlides);
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 2 + totalSlides) % totalSlides);
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-  const displayedTestimonials = [
-    testimonials[currentIndex],
-    testimonials[(currentIndex + 1) % totalSlides],
-  ];
+  const displayedTestimonials = [testimonials[currentIndex]];
 
   return (
     <section className="bg-[rgba(249,205,72,0.20)] overflow-hidden py-8 lg:py-16">
@@ -72,12 +67,9 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-2xl relative">
+          <div className="grid grid-cols-1 gap-6 max-w-2xl relative">
             {displayedTestimonials.map((testimonial, index) => (
-              <div
-                key={`${testimonial.id}-${index}`}
-                className={index === 1 ? 'hidden lg:block' : ''}
-              >
+              <div key={`${testimonial.id}-${index}`}>
                 <TestimonialCard
                   name={testimonial.name}
                   text={testimonial.text}
@@ -87,32 +79,18 @@ const TestimonialsSection = () => {
 
             <button
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 lg:left-0 w-10 h-10 flex items-center justify-center transition-shadow"
+              className="absolute -left-10 top-1/2 w-12 h-12 -translate-x-1 lg:w-10 lg:h-10 lg:-left-12 lg:translate-x-0 flex items-center justify-center transition-shadow"
             >
-              <MdNavigateBefore className="w-6 h-6 text-primary-yellow" />
+              <MdNavigateBefore className="w-10 h-10 lg:w-15 lg:h-15 text-primary-yellow" />
             </button>
 
             <button
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 w-10 h-10 flex items-center justify-center  transition-shadow"
+              className="absolute -right-10 top-1/2 w-12 h-12 translate-x-1 lg:w-10 lg:h-10 lg:-right-12 lg:translate-x-0 flex items-center justify-center transition-shadow"
             >
-              <MdNavigateNext className="w-6 h-6 text-primary-yellow" />
+              <MdNavigateNext className="w-10 h-10 lg:w-15 lg:h-15 text-primary-yellow" />
             </button>
           </div>
-        </div>
-
-        <div className="flex justify-center mt-8 gap-2">
-          {Array.from({ length: totalPairs }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index * 2)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                Math.floor(currentIndex / 2) === index
-                  ? 'bg-primary-yellow'
-                  : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-            />
-          ))}
         </div>
 
         <div className="flex justify-center mt-8">

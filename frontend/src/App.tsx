@@ -1,16 +1,11 @@
-import { useEffect } from 'react';
-import { PhotonGeocoding } from '@features/map/services/photonGeocodingService';
-import './App.css';
-import { RouterProvider } from 'react-router';
-import router from '@routes/router';
+import { Outlet } from 'react-router';
 
-function App() {
-  useEffect(() => {
-    // Warm-up request for improved performance
-    PhotonGeocoding.search('init').catch(() => {});
-  }, []);
-
-  return <RouterProvider router={router} />;
+export function App() {
+  return (
+    <div className="app">
+      <Outlet />
+    </div>
+  );
 }
 
 export default App;

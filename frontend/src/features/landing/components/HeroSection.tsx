@@ -23,7 +23,7 @@ const HeroSection = () => {
               para reunir a tu mascota con su familia.
             </Text>
 
-            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 ">
+            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center">
               <Button
                 label="Perdí mi mascota"
                 variant="primary"

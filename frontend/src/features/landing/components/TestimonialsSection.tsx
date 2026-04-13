@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { ChevronRight, ChevronLeft } from './icons';
 import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import { CiShare1 } from 'react-icons/ci';
+import { MdNavigateNext } from "react-icons/md";
+import { MdNavigateBefore } from "react-icons/md";
 
-const ChevronRightIcon = ({ size = 22 }: { size?: number }) => (
-  <ChevronRight className={`w-[${size}px] h-[${size}px]`} />
-);
 
 const testimonials = [
   {
@@ -89,16 +87,16 @@ const TestimonialsSection = () => {
 
             <button
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 lg:left-0 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+              className="absolute left-0 top-1/2 lg:left-0 w-10 h-10 flex items-center justify-center transition-shadow"
             >
-              <ChevronLeft className="w-6 h-6 text-primary-yellow" />
+              <MdNavigateBefore className="w-6 h-6 text-primary-yellow" />
             </button>
 
             <button
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow"
+              className="absolute right-0 top-1/2 w-10 h-10 flex items-center justify-center  transition-shadow"
             >
-              <ChevronRight className="w-6 h-6 text-primary-yellow" />
+              <MdNavigateNext className="w-6 h-6 text-primary-yellow" />
             </button>
           </div>
         </div>

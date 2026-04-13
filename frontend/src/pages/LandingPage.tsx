@@ -6,6 +6,7 @@ import PublicationSection from '../features/landing/components/PublicationSectio
 import PetInfoSection from '../features/landing/components/PetInfoSection';
 import TestimonialsSection from '../features/landing/components/TestimonialsSection';
 import Footer from '../shared/components/layout/Footer';
+import FrecuentlyAsked from '@features/landing/components/FrecuentlyAsked';
 
 const LandingPage = () => {
   return (
@@ -18,6 +19,7 @@ const LandingPage = () => {
         <PublicationSection />
         <TestimonialsSection />
         <PetInfoSection />
+        <FrecuentlyAsked />
       </main>
       <Footer />
     </div>

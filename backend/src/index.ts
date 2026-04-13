@@ -24,6 +24,9 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyparser.json());
+app.set('trust proxy', true);
+
+// Routes
 app.use('/', routes);
 
 export default app;

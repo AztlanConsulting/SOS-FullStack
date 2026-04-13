@@ -1,15 +1,7 @@
-export interface User {
-  _id: string;
-  roleId: string;
-  username: string;
-  password: string;
-  email: string;
-  phone: string;
-  fbUser: string;
-  conversation: string;
-  active: string;
-}
+import type { User } from '@domain/models/user.model';
 
-export interface Users {
-  getUsers(page: number): User[];
+export interface UsersRepository {
+  getUsers(page: number): Promise<User[]>;
+  getUserById(id: string): Promise<User | null>;
+  getUserByName(username: string): Promise<User | null>;
 }

@@ -2,7 +2,7 @@ import type { User } from '@domain/models/user.model';
 import { UserModel } from '@domain/models/user.model';
 import type { UsersRepository } from '@domain/repositories/user.repository';
 
-export const UsersDataAccess: UsersRepository = {
+export const usersDataAccess: UsersRepository = {
   getUsers: function (page: number): Promise<User[]> {
     throw new Error('Function not implemented.');
   },

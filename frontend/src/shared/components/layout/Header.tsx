@@ -4,10 +4,10 @@ import { Text } from '../ui/Text';
 
 const navLinks = [
   { label: 'Inicio', href: '#' },
-  { label: 'Servicios', href: '#' },
-  { label: 'Planes', href: '#' },
-  { label: 'Testimonios', href: '#' },
-  { label: 'Contacto', href: '#' },
+  { label: 'Blog', href: '#' },
+  { label: 'Talleres', href: '#' },
+  { label: 'Manuales', href: '#' },
+  { label: 'Mascotas', href: '#' },
 ];
 
 const Header = () => {

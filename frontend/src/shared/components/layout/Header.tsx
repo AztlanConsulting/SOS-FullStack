@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
-import { LuHouse } from "react-icons/lu";
-import { TfiWrite } from "react-icons/tfi";
-import { LiaToolsSolid } from "react-icons/lia";
-import { IoBookOutline } from "react-icons/io5";
-import { PiDogLight } from "react-icons/pi";
+import { LuHouse } from 'react-icons/lu';
+import { TfiWrite } from 'react-icons/tfi';
+import { LiaToolsSolid } from 'react-icons/lia';
+import { IoBookOutline } from 'react-icons/io5';
+import { PiDogLight } from 'react-icons/pi';
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
   { label: 'Blog', href: '#', icon: <TfiWrite /> },
-  { label: 'Talleres', href: '#',icon: <LiaToolsSolid /> },
-  { label: 'Manuales', href: '#', icon: <IoBookOutline  /> },
-  { label: 'Mascotas', href: '#',icon: <PiDogLight /> },
+  { label: 'Talleres', href: '#', icon: <LiaToolsSolid /> },
+  { label: 'Manuales', href: '#', icon: <IoBookOutline /> },
+  { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
 ];
 
 const Header = () => {
@@ -35,7 +35,7 @@ const Header = () => {
             <a
               key={link.label}
               href={link.href}
-              className=" color-primary-bg hover:text-dark transition-colors"
+              className="hover:text-dark transition-colors"
             >
               <Text variant="body" weight="medium">
                 {link.label}
@@ -62,23 +62,18 @@ const Header = () => {
 
           {/* Drawer */}
           <div className="w-2/4 max-w-xs color-primary-bg h-full flex flex-col justify-between rounded-l-3xl">
-            
             {/* Top */}
             <div className="p-8 border-b border-white/100 flex justify-center">
-              <img 
-                src="/4.png" 
-                alt="Logo" 
-                className="w-12 h-12"
-              />
+              <img src="/4.png" alt="Logo" className="w-12 h-12" />
             </div>
 
             {/* Links */}
             <nav className="flex flex-col gap-6 p-6 flex-1">
               {navLinks.map((link) => (
                 <a key={link.label} href={link.href}>
-                  <div className="flex gap-2 items-center"> 
+                  <div className="flex gap-2 items-center">
                     <Text variant="h2" weight="medium" color="text-white">
-                      {link.icon} 
+                      {link.icon}
                     </Text>
                     <Text variant="h2" weight="medium" color="text-white">
                       {link.label}
@@ -96,7 +91,6 @@ const Header = () => {
                 </Text>
               </button>
             </div>
-
           </div>
         </div>
       )}

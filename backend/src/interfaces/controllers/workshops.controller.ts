@@ -1,6 +1,6 @@
 import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopDataAccess } from '@interfaces/data-access/workshop.data-access';
-import { workshopBody, workshopQuery } from '@validation/workshop';
+import { workshopBody, workshopQuery } from '@validation/workshop.types';
 import {
   getWorkshopById,
   getWorkshopList,
@@ -37,13 +37,20 @@ export async function postWorkshop(req: Request, res: Response) {
     const image = req.file;
 
     if (!body.success) throw body.error;
-    if (!image) throw Error('Image not provided');
+    if (!image && !body.data.imgUrl) throw Error('Image not provided');
 
+    // Only fills img if there is a file, unless it uses imgUrl
     const workshopData: Workshop = {
       ...body.data,
-      img: {
-        data: image.buffer,
-        contentType: image.mimetype,
+      ...() => {
+        if (!image) return {};
+
+        return {
+          img: {
+            data: image.buffer,
+            contentType: image.mimetype,
+          },
+        };
       },
     };
 

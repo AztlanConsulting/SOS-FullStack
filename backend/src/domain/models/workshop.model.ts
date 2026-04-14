@@ -7,10 +7,11 @@ export interface Workshop {
   description: string;
   price: number; // MXN
   category: string[];
-  img: {
+  img?: {
     data: Buffer;
     contentType: string;
   };
+  imgUrl?: string;
 }
 
 const WorkshopSchema = new Schema<Workshop>({
@@ -19,9 +20,10 @@ const WorkshopSchema = new Schema<Workshop>({
   price: { type: Number, required: true },
   category: { type: [String] },
   img: {
-    data: { type: Buffer, required: true },
-    contentType: { type: String, required: true },
+    data: { type: Buffer },
+    contentType: { type: String },
   },
+  imgUrl: { type: String, required: true },
 });
 
 export const WorkshopModel = model<Workshop>('Workshop', WorkshopSchema);

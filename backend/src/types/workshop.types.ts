@@ -10,4 +10,5 @@ export const workshopBody = z.object({
   description: z.string().min(10, 'Description required'),
   price: z.number().min(1, "Price can't be less than 1"),
   category: z.array(z.string()),
+  imgUrl: z.string().optional(),
 });

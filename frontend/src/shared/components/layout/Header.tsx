@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
 import { LuHouse } from 'react-icons/lu';
 import { TfiWrite } from 'react-icons/tfi';
@@ -23,20 +23,20 @@ const navLinks = [
 const socialLinks = [
   {
     href: 'https://www.instagram.com/sos_encontrando_mascotas/',
-    icon: <FaInstagram className="w-8 h-8" />,
+    icon: <FaInstagram className="w-5 h-5" />,
   },
   {
     href: 'https://www.facebook.com/SOSencontrandomascotas',
-    icon: <CiFacebook className="w-8 h-8" />,
+    icon: <CiFacebook className="w-5 h-5" />,
   },
-  { href: '#', icon: <FaWhatsapp className="w-8 h-8" /> },
+  { href: '#', icon: <FaWhatsapp className="w-5 h-5" /> },
   {
     href: 'https://www.tiktok.com/@sos_encontrando_mascotas',
-    icon: <PiTiktokLogoLight className="w-8 h-8" />,
+    icon: <PiTiktokLogoLight className="w-5 h-5" />,
   },
   {
     href: 'https://www.youtube.com/channel/UCJZ22JJX3yWsozu2y-Quixw',
-    icon: <CiYoutube className="w-8 h-8" />,
+    icon: <CiYoutube className="w-5 h-5" />,
   },
 ];
 
@@ -47,42 +47,41 @@ const Header = () => {
   return (
     <header className="bg-white border-b border-light-gray py-4 lg:py-[17px] w-full relative">
       {!isMenuOpen && (
-        <div className="fixed right-0 top-2/3 -translate-y-1/2 z-[1000]">
+        <>
           {isSocialOpen ? (
-            <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 lg:w-[40px] lg:h-[120px]">
-              <div className="flex flex-col gap-1">
+            <div className="fixed right-0 -translate-y-1/2 z-[1000]"
+              style={{
+                top: "calc(60% - 201px)"
+              }}
+            >
+              <div className="flex flex-col">
                 {socialLinks.map((link, index) => (
                   <a
                     key={index}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-[24px] h-[24px] bg-white border-2 border-[#f9cd48] rounded-[4px] flex items-center justify-center hover:opacity-80"
+                    className="w-[30px] h-[60px] bg-white border-2 border-[#f9cd48] rounded-tl-[8px] rounded-bl-[8px] flex items-center justify-center hover:opacity-80 cursor-pointer"
                   >
-                    <span className="text-black">{link.icon}</span>
+                    <span className="text-black -rotate-90">{link.icon}</span>
                   </a>
                 ))}
               </div>
+            </div>
+          ) : null}
+          <div className="fixed right-0 top-[60%] -translate-y-1/2 z-[1000]">
+            <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
               <button
-                onClick={() => setIsSocialOpen(false)}
-                className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center"
+                onClick={() => setIsSocialOpen((prev) => !prev)}
+                className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center cursor-pointer"
               >
                 <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
-                  Cerrar
+                  {isSocialOpen ? "Cerrar" : "Síguenos"}
                 </span>
               </button>
             </div>
-          ) : (
-            <button
-              onClick={() => setIsSocialOpen(true)}
-              className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex items-center justify-center lg:w-[40px] lg:h-[120px]"
-            >
-              <span className="text-sm font-medium text-black -rotate-90 whitespace-nowrap tracking-[0.16px]">
-                Síguenos
-              </span>
-            </button>
-          )}
-        </div>
+          </div>
+        </>
       )}
       <div className="w-5/6 mx-auto flex items-center justify-between">
         <img src="/1.png" alt="Logo" className="w-10 h-10 lg:w-12 lg:h-12" />

@@ -11,5 +11,3 @@ export const workshopBody = z.object({
   price: z.number().min(1, "Price can't be less than 1"),
   category: z.array(z.string()),
 });
-
-export type WorkshopBody = z.infer<typeof workshopBody>;

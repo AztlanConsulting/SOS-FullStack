@@ -39,11 +39,15 @@ export async function postWorkshop(req: Request, res: Response) {
     if (!body.success) throw body.error;
     if (!image) throw Error('Image not provided');
 
-    const workshopId = await createWorkshop(
-      WorkshopDataAccess,
-      body.data,
-      image.buffer,
-    );
+    const workshopData: Workshop = {
+      ...body.data,
+      img: {
+        data: image.buffer,
+        contentType: image.mimetype,
+      },
+    };
+
+    const workshopId = await createWorkshop(WorkshopDataAccess, workshopData);
 
     return res.status(200).json({ workshopId });
   } catch (error) {

@@ -1,17 +1,25 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
-import { ManualContent } from './ManualContent';
+import { useNavigate } from 'react-router';
 
 export const ManualItem = ({ manual }: { manual: any }) => {
+  const navigate = useNavigate();
   return (
-    <div key={manual._id} className="bg-white rounded-lg color-grey-border">
-      <img src={manual.imageUrl} alt={manual.name} className="rounded-lg" />
+    <div
+      key={manual._id}
+      className="bg-white rounded-lg color-grey-border w-full flex flex-col h-full"
+    >
+      <img
+        src={manual.imageUrl}
+        alt={manual.name}
+        className="rounded-t-lg w-full h-60 object-cover"
+      />
       <Text
         as="h3"
         variant="h3"
         weight="regular"
         color="text-black"
-        className="pl-4 py-4 color-grey-border-top"
+        className="pl-4 py-4 color-grey-border-top flex-grow"
       >
         {manual.name}
       </Text>
@@ -28,7 +36,9 @@ export const ManualItem = ({ manual }: { manual: any }) => {
         <Button
           label="Ver"
           variant="plans"
-          onClick={() => <ManualContent manual={manual} />}
+          onClick={() =>
+            navigate(`/manuales/${manual._id}`, { state: { manual } })
+          }
         />
       </div>
     </div>

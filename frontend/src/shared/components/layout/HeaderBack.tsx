@@ -1,10 +1,16 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import { HiChevronLeft } from 'react-icons/hi2';
+import { useNavigate } from 'react-router';
 
 export const HeaderBack = ({ name }: { name: string }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full flex items-center justify-start bg-white color-grey-border-bottom">
-      <button className="bg-white rounded-lg aspect-square flex flex-row justify-center items-center h-full w-1/8">
+      <button
+        onClick={() => navigate(-1)}
+        className="bg-white rounded-lg aspect-square flex flex-row justify-center items-center h-full w-1/8"
+      >
         <HiChevronLeft
           color="black"
           size="100%"

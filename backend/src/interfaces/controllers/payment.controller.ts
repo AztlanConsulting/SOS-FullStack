@@ -25,11 +25,14 @@ export const makeCreatePaymentIntent = () => {
         currency: result.currency,
       });
 
-      res.json(result);
+      return res.status(201).json({
+        message: 'Payment intent created successfully',
+        result: result,
+      });
     } catch (error) {
       console.error(error);
       const message = error instanceof Error ? error.message : 'Payment failed';
-      res.status(500).json({ error: message });
+      return res.status(500).json({ error: message });
     }
   };
 };

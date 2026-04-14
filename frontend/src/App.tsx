@@ -1,14 +1,9 @@
-import { ManualsListSection } from '@features/manuals/components/ManualsListSection';
-import './App.css';
-import { ManualsHeroSection } from '@features/manuals/components/ManualsHeroSection';
+import { Outlet } from 'react-router';
 
-function App() {
+export function App() {
   return (
-    <div className="App">
-      <ManualsHeroSection />
-      <ManualsListSection />
+    <div className="app">
+      <Outlet />
     </div>
   );
 }
-
-export default App;

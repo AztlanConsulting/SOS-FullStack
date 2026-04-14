@@ -4,6 +4,7 @@ import imageRouter from './images.routes';
 import clientsRoutes from './clients.routes';
 import paymentRoutes from './payments.routes';
 import manualRoutes from './manuals.routes';
+import purchaseRoutes from './purchase.routes';
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.use('/payments', paymentRoutes);
 router.use('/images', imageRouter);
 
 router.use('/manuals', manualRoutes);
+
+router.use('/purchases', purchaseRoutes);
 
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);

@@ -32,9 +32,9 @@ export const ManualsListSection = () => {
   }
 
   return (
-    <section className="color-secondary-bg w-full">
-      <div className="flex flex-col items-center justify-center">
-        <div className="flex flex-row justify-center items-center gap-2 my-5 w-5/6">
+    <section className="color-secondary-bg w-full flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
+        <div className="flex flex-row justify-center items-center gap-2 my-8 w-full md:w-1/3 md:place-self-end">
           <div className="bg-white rounded-lg h-10 aspect-square flex flex-row justify-center items-center color-grey-border">
             <HiOutlineFilter color="black" size="100%" className="h-6" />
           </div>
@@ -58,7 +58,7 @@ export const ManualsListSection = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center gap-6 w-5/6 pb-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full pb-5">
           {manuals.map((manual) => (
             <ManualItem key={manual._id} manual={manual} />
           ))}

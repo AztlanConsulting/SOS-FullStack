@@ -1,22 +1,12 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-
   return {
     plugins: [tailwindcss(), react()],
-    // server: {
-    //   proxy: {
-    //     '/api': {
-    //       target: env.VITE_BASE_URL,
-    //       changeOrigin: true,
-    //     },
-    //   },
-    // },
     resolve: {
       alias: {
         // If you add another file path, also update in tsconfig.app.json
@@ -26,6 +16,11 @@ export default defineConfig(({ mode }) => {
         '@shared': path.resolve(__dirname, './src/shared'),
         '@assets': path.resolve(__dirname, './src/assets'),
       },
+    },
+
+    test: {
+      globals: true,
+      environment: 'jsdom',
     },
   };
 });

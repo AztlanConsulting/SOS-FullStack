@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node"],
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strictNullChecks": true,
+    "esModuleInterop": true,
     "paths": {
       "@db/*": ["./src/infrastructure/database/*"],
       "@repo/*": ["./src/infrastructure/repository/*"],
-      "@/": ["./src"],
+      "@/*": ["./src/*"],
       "@domain/*": ["./src/domain/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@interfaces/*": ["./src/interfaces/*"],

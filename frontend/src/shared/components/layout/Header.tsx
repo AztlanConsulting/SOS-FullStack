@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
 import { LuHouse } from 'react-icons/lu';
 import { TfiWrite } from 'react-icons/tfi';
 import { LiaToolsSolid } from 'react-icons/lia';
 import { IoBookOutline } from 'react-icons/io5';
 import { PiDogLight } from 'react-icons/pi';
+import { FaWhatsapp } from 'react-icons/fa6';
+import { CiFacebook } from 'react-icons/ci';
+import { FaInstagram } from 'react-icons/fa';
+import { PiTiktokLogoLight } from 'react-icons/pi';
+import { CiYoutube } from 'react-icons/ci';
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
@@ -15,18 +20,68 @@ const navLinks = [
   { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
 ];
 
+const socialLinks = [
+  {
+    href: 'https://www.instagram.com/sos_encontrando_mascotas/',
+    icon: <FaInstagram className="w-8 h-8" />,
+  },
+  {
+    href: 'https://www.facebook.com/SOSencontrandomascotas',
+    icon: <CiFacebook className="w-8 h-8" />,
+  },
+  { href: '#', icon: <FaWhatsapp className="w-8 h-8" /> },
+  {
+    href: 'https://www.tiktok.com/@sos_encontrando_mascotas',
+    icon: <PiTiktokLogoLight className="w-8 h-8" />,
+  },
+  {
+    href: 'https://www.youtube.com/channel/UCJZ22JJX3yWsozu2y-Quixw',
+    icon: <CiYoutube className="w-8 h-8" />,
+  },
+];
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSocialOpen, setIsSocialOpen] = useState(false);
 
   return (
     <header className="bg-white border-b border-light-gray py-4 lg:py-[17px] w-full relative">
       {!isMenuOpen && (
         <div className="fixed right-0 top-2/3 -translate-y-1/2 z-[1000]">
-          <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex items-center justify-center lg:w-[40px] lg:h-[120px]">
-            <span className="text-sm font-medium text-black -rotate-90 whitespace-nowrap tracking-[0.16px]">
-              Síguenos
-            </span>
-          </div>
+          {isSocialOpen ? (
+            <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 lg:w-[40px] lg:h-[120px]">
+              <div className="flex flex-col gap-1">
+                {socialLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-[24px] h-[24px] bg-white border-2 border-[#f9cd48] rounded-[4px] flex items-center justify-center hover:opacity-80"
+                  >
+                    <span className="text-black">{link.icon}</span>
+                  </a>
+                ))}
+              </div>
+              <button
+                onClick={() => setIsSocialOpen(false)}
+                className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center"
+              >
+                <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
+                  Cerrar
+                </span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsSocialOpen(true)}
+              className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex items-center justify-center lg:w-[40px] lg:h-[120px]"
+            >
+              <span className="text-sm font-medium text-black -rotate-90 whitespace-nowrap tracking-[0.16px]">
+                Síguenos
+              </span>
+            </button>
+          )}
         </div>
       )}
       <div className="w-5/6 mx-auto flex items-center justify-between">
@@ -63,7 +118,7 @@ const Header = () => {
           />
 
           {/* Drawer */}
-          <div className="w-2/4 max-w-xs color-primary-bg h-full flex flex-col justify-between rounded-l-3xl">
+          <div className="w-3/5 max-w-xs color-primary-bg h-full flex flex-col justify-between rounded-l-3xl">
             {/* Top */}
             <div className="p-8 border-b border-white/100 flex justify-center">
               <img src="/4.png" alt="Logo" className="w-12 h-12" />

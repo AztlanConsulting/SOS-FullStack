@@ -81,14 +81,14 @@ const TestimonialsSection = () => {
               onClick={prevSlide}
               className="absolute -left-10 top-1/2 w-12 h-12 -translate-x-1 lg:w-10 lg:h-10 lg:-left-12 lg:translate-x-0 flex items-center justify-center transition-shadow"
             >
-              <MdNavigateBefore className="w-10 h-10 lg:w-15 lg:h-15 text-primary-yellow" />
+              <MdNavigateBefore className="w-10 h-10 lg:w-15 lg:h-15 text-[#f9cd48]" />
             </button>
 
             <button
               onClick={nextSlide}
-              className="absolute -right-10 top-1/2 w-12 h-12 translate-x-1 lg:w-10 lg:h-10 lg:-right-12 lg:translate-x-0 flex items-center justify-center transition-shadow"
+              className=" absolute -right-10 top-1/2 w-12 h-12 translate-x-1 lg:w-10 lg:h-10 lg:-right-12 lg:translate-x-0 flex items-center justify-center transition-shadow"
             >
-              <MdNavigateNext className="w-10 h-10 lg:w-15 lg:h-15 text-primary-yellow" />
+              <MdNavigateNext className="w-10 h-10 lg:w-15 lg:h-15 text-[#f9cd48]" />
             </button>
           </div>
         </div>

@@ -37,37 +37,30 @@ const FrecuentlyAsked = () => {
         </div>
 
         {/* FAQ container */}
-        <div className="max-w-2xl mx-auto flex flex-col gap-4">
+        <div className=" max-w-2xl mx-auto flex flex-col gap-4">
           {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="border border-yellow-400 rounded-xl px-5 py-4 cursor-pointer transition-all"
-              onClick={() => toggle(index)}
-            >
-              <div className="flex justify-between items-center">
-                <Text variant="body">
-                  {faq.question}
-                </Text>
+  <div key={index} className="border border-yellow-400 rounded-lg color-secondary-bg flex flex-col">
+    <div
+      className="border-b border-yellow-400 rounded-lg px-5 py-4 cursor-pointer transition-all bg-white"
+      onClick={() => toggle(index)}
+    >
+      <div className="flex justify-between items-center">
+        <Text variant="body">{faq.question}</Text>
+        <RiArrowDropDownLine
+          className={`text-yellow-400 transition-transform text-3xl ${
+            openIndex === index ? 'rotate-180' : ''
+          }`}
+        />
+      </div>
+    </div>
 
-                <span
-                  className={`transition-transform ${
-                    openIndex === index ? 'rotate-180' : ''
-                  }`}
-                >
-                <RiArrowDropDownLine 
-                className={`text-yellow-400 transition-transform text-3xl ${
-                    openIndex === index ? 'rotate-180' : ''}`}
-                />
-                </span>
-              </div>
-
-              {openIndex === index && (
-                <div className="mt-3 text-gray-600 text-sm">
-                  {faq.answer}
-                </div>
-              )}
-            </div>
-          ))}
+    {openIndex === index && (
+      <div className="px-5 py-3 text-gray-600 text-sm">
+        {faq.answer}
+      </div>
+    )}
+  </div>
+))}
         </div>
       </div>
     </section>

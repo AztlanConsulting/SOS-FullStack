@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { Dashboard } from './features/graphs/components/Dashboard';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
-    <Dashboard />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );

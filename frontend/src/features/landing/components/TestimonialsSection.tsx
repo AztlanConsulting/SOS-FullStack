@@ -4,6 +4,7 @@ import { Button } from '../../../shared/components/ui/Button';
 import { CiShare1 } from 'react-icons/ci';
 import { MdNavigateNext } from 'react-icons/md';
 import { MdNavigateBefore } from 'react-icons/md';
+import { HiOutlineUserCircle } from "react-icons/hi";
 
 const testimonials = [
   {
@@ -30,11 +31,11 @@ const testimonials = [
 
 const TestimonialCard = ({ name, text }: { name: string; text: string }) => (
   <div className="bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8 h-full">
-    <div className="flex items-start gap-4 mb-4">
-      <div className="w-12 h-12 rounded-full bg-light-gray border-2 border-border-gray flex-shrink-0 overflow-hidden">
-        <div className="w-5 h-5 rounded-full border-2 border-border-gray mx-auto mt-2" />
+    <div className="flex items-center gap-3 mb-4">
+      <div className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+        <HiOutlineUserCircle className="w-10 h-10 text-black" />
       </div>
-      <Text variant="body" weight="medium">
+      <Text variant="body" weight="medium" className="self-center">
         {name}
       </Text>
     </div>

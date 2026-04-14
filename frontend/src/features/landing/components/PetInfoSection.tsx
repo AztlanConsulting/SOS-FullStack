@@ -18,12 +18,14 @@ const PetInfoSection = () => {
           />
         </div>
 
-        <div className="text-center max-w-2xl mx-auto">
+        <div className="text-left max-w-2xl mx-auto">
           <Text variant="body">
             Déjanos la información de tu mascota para comenzar la búsqueda
           </Text>
         </div>
       </div>
+
+      <div className="w-5/6 mx-auto mt-6 lg:mt-8 border-t border-gray-200" />
     </section>
   );
 };

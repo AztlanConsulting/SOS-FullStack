@@ -45,13 +45,14 @@ const Header = () => {
   const [isSocialOpen, setIsSocialOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-light-gray py-4 lg:py-[17px] w-full relative">
+    <header className="bg-white border-b border-light-gray py-4 lg:py-[17px] w-full fixed top-0 left-0 right-0 z-50 lg:relative">
       {!isMenuOpen && (
         <>
           {isSocialOpen ? (
-            <div className="fixed right-0 -translate-y-1/2 z-[1000]"
+            <div
+              className="fixed right-0 -translate-y-1/2 z-[1000]"
               style={{
-                top: "calc(60% - 201px)"
+                top: 'calc(60% - 201px)',
               }}
             >
               <div className="flex flex-col">
@@ -76,7 +77,7 @@ const Header = () => {
                 className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center cursor-pointer"
               >
                 <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
-                  {isSocialOpen ? "Cerrar" : "Síguenos"}
+                  {isSocialOpen ? 'Cerrar' : 'Síguenos'}
                 </span>
               </button>
             </div>
@@ -84,7 +85,7 @@ const Header = () => {
         </>
       )}
       <div className="w-5/6 mx-auto flex items-center justify-between">
-        <img src="/1.png" alt="Logo" className="w-10 h-10 lg:w-12 lg:h-12" />
+        <img src="/1.png" alt="Logo" className="w-12 h-12 lg:w-14 lg:h-14" />
 
         <nav className=" hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
@@ -117,10 +118,10 @@ const Header = () => {
           />
 
           {/* Drawer */}
-          <div className="w-3/5 max-w-xs color-primary-bg h-full flex flex-col justify-between rounded-l-3xl">
+          <div className="w-3/5 max-w-xs color-primary-bg h-full flex flex-col justify-between">
             {/* Top */}
             <div className="p-8 border-b border-white/100 flex justify-center">
-              <img src="/4.png" alt="Logo" className="w-12 h-12" />
+              <img src="/4.png" alt="Logo" className="w-14 h-14" />
             </div>
 
             {/* Links */}

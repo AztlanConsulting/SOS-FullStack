@@ -34,7 +34,7 @@ const Header = () => {
 
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="lg:hidden p-3 rounded-[228px] hover:bg-light-gray transition-colors text-dark"
+          className="lg:hidden p-3 rounded-[228px] hover:bg-light-gray transition-colors text-black"
         >
           <Bars3Icon className="w-5 h-5" />
         </button>

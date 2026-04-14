@@ -58,7 +58,7 @@ const TestimonialsSection = () => {
   const displayedTestimonials = [testimonials[currentIndex]];
 
   return (
-    <section className="bg-[rgba(249,205,72,0.20)] overflow-hidden py-8 lg:py-16">
+    <section className="color-secondary-bg overflow-hidden py-8 lg:py-16">
       <div className="w-5/6 mx-auto">
         <div className="text-center mb-8 lg:mb-12">
           <Text as="h2" variant="h2" weight="medium">

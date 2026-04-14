@@ -7,7 +7,7 @@ import { CiYoutube } from "react-icons/ci";
 
 const Footer = () => {
   return (
-    <footer className="bg-primary-yellow py-8 lg:py-12">
+    <footer className="color-primary-bg py-8 lg:py-12">
       <div className="w-5/6 mx-auto">
         <div className="flex flex-col items-center gap-4">
           <div className="flex justify-center gap-6">

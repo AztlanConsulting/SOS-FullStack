@@ -13,7 +13,8 @@ export async function getWorkshops(req: Request, res: Response) {
     const query = workshopQuery.safeParse(req.query);
 
     if (!query.success) {
-      throw Error("Couldn't parse page or id");
+      console.error(query.error);
+      throw query.error;
     }
 
     const page = query.data.page;
@@ -54,10 +55,13 @@ export async function postWorkshop(req: Request, res: Response) {
       },
     };
 
+    console.log(workshopData);
+
     const workshopId = await createWorkshop(WorkshopDataAccess, workshopData);
 
     return res.status(200).json({ workshopId });
   } catch (error) {
-    return res.status(500).send('Error uploading workshop');
+    console.error(error);
+    return res.status(500).send(error);
   }
 }

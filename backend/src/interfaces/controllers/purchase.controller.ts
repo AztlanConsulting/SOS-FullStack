@@ -1,6 +1,11 @@
 import type { Request, Response } from 'express';
 import { createPurchaseDB } from '@use-cases/purchases/createPurchaseDB.usecase';
+import { PurchaseDataAccess } from '@interfaces/data-access/purchase.data-access';
 
+/**
+ * Factory function that returns a middleware to create a new purchase.
+ * @returns Express middleware handler that creates a purchase with user email, payment ID, product ID, and product type
+ */
 export const makeCreatePurchase = () => {
   return async (req: Request, res: Response) => {
     try {
@@ -20,7 +25,7 @@ export const makeCreatePurchase = () => {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
-      await createPurchaseDB({
+      await createPurchaseDB(PurchaseDataAccess, {
         userEmail,
         paymentId,
         productId,

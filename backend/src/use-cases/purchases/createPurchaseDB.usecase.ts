@@ -1,6 +1,9 @@
 import type { PurchaseDTO } from '@domain/repositories/purchase.repository';
-import { PurchaseDataAccess } from '@interfaces/data-access/purchase.data-access';
+import type { PurchaseRepository } from '@domain/repositories/purchase.repository';
 
-export const createPurchaseDB = async (data: PurchaseDTO): Promise<void> => {
-  await PurchaseDataAccess.createPurchase(data);
+export const createPurchaseDB = async (
+  purchaseRepository: PurchaseRepository,
+  data: PurchaseDTO,
+): Promise<void> => {
+  await purchaseRepository.createPurchase(data);
 };

@@ -1,10 +1,16 @@
 import type { Request, Response } from 'express';
-import { createPaymentIntent } from '../../use-cases/payments/createPaymentIntent.usecase';
-import { handleStripeWebhook } from '../../use-cases/payments/handleStripeWebhook.usecase';
-import { createPendingIntentDB } from '../../use-cases/payments/createPendingIntentDB.usecase';
-import { markAsSucceededDB } from '../../use-cases/payments/markAsSuccededDB.usecase';
+import { createPaymentIntent } from '@use-cases/payments/createPaymentIntent.usecase';
+import { handleStripeWebhook } from '@use-cases/payments/handleStripeWebhook.usecase';
+import { createPendingIntentDB } from '@use-cases/payments/createPendingIntentDB.usecase';
+import { markAsSucceededDB } from '@use-cases/payments/markAsSuccededDB.usecase';
+import { StripeProvider } from '@infrastructure/api/stripeProvider.api';
+import { PaymentDataAccess } from '@interfaces/data-access/payment.data-access';
 import type Stripe from 'stripe';
 
+/**
+ * Factory function that returns a middleware to create a Stripe payment intent.
+ * @returns Express middleware handler that creates a payment intent with amount and currency from request body
+ */
 export const makeCreatePaymentIntent = () => {
   return async (req: Request, res: Response) => {
     try {
@@ -17,9 +23,12 @@ export const makeCreatePaymentIntent = () => {
         return res.status(400).json({ error: 'Missing amount or currency' });
       }
 
-      const result = await createPaymentIntent({ amount, currency });
+      const result = await createPaymentIntent(StripeProvider, {
+        amount,
+        currency,
+      });
 
-      await createPendingIntentDB({
+      await createPendingIntentDB(PaymentDataAccess, {
         stripeId: result.id,
         amount: result.amount,
         currency: result.currency,
@@ -37,6 +46,11 @@ export const makeCreatePaymentIntent = () => {
   };
 };
 
+/**
+ * Stripe webhook handler that processes payment intent events and updates payment status.
+ * @param req - Express request with Stripe signature header and raw body
+ * @param res - Express response to send webhook confirmation
+ */
 export const makehandleStripeWebhook = async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -60,7 +74,7 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
     }
 
     // Use the raw body for signature verification
-    const event = await handleStripeWebhook({
+    const event = await handleStripeWebhook(StripeProvider, {
       payload: rawBody,
       sig: sig as string,
       secret: webhookSecret,
@@ -72,7 +86,10 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
       // Update the payment status in MongoDB
-      const result = await markAsSucceededDB(paymentIntent.id);
+      const result = await markAsSucceededDB(
+        PaymentDataAccess,
+        paymentIntent.id,
+      );
       if (result === 'not_found') {
         console.warn('Payment not found in DB');
       }

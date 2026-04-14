@@ -1,11 +1,12 @@
 import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopDataAccess } from '@interfaces/data-access/workshop.data-access';
-import { workshopQuery } from '@validation/workshop';
+import { workshopBody, workshopQuery } from '@validation/workshop';
 import {
   getWorkshopById,
   getWorkshopList,
 } from '@use-cases/workshops/getWorkshops.usecase';
 import type { Request, Response } from 'express';
+import { createWorkshop } from '@use-cases/workshops/createWorkshop.usecase';
 
 export async function getWorkshops(req: Request, res: Response) {
   try {
@@ -19,11 +20,33 @@ export async function getWorkshops(req: Request, res: Response) {
     const id = query.data.id;
 
     let workshops: Workshop[];
-    if (id) workshops = [await getWorkshopById(WorkshopDataAccess, id)];
-    else workshops = await getWorkshopList(WorkshopDataAccess, page);
+    if (id) {
+      const ws = await getWorkshopById(WorkshopDataAccess, id);
+      workshops = ws ? [ws] : [];
+    } else workshops = await getWorkshopList(WorkshopDataAccess, page);
 
     return res.status(200).json(workshops);
   } catch (error) {
     res.status(500).send(error);
+  }
+}
+
+export async function postWorkshop(req: Request, res: Response) {
+  try {
+    const body = workshopBody.safeParse(req.body);
+    const image = req.file;
+
+    if (!body.success) throw body.error;
+    if (!image) throw Error('Image not provided');
+
+    const workshopId = await createWorkshop(
+      WorkshopDataAccess,
+      body.data,
+      image.buffer,
+    );
+
+    return res.status(200).json({ workshopId });
+  } catch (error) {
+    return res.status(500).send('Error uploading workshop');
   }
 }

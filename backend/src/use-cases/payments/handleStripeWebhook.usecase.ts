@@ -1,4 +1,3 @@
-import type { PaymentIntentResult } from '../../domain/ports/paymentProvider.port';
 import { StripeProvider } from '../../infrastructure/api/stripeProvider.api';
 import type { EventDTO } from '../../domain/ports/paymentProvider.port';
 import type { Stripe } from 'stripe';

@@ -12,7 +12,7 @@ export async function getWorkshopList(
 export async function getWorkshopById(
   workshopImpl: WorkshopRepository,
   id: string,
-): Promise<Workshop> {
-  const workshops: Workshop = await workshopImpl.getWorkshopById(id);
+): Promise<Workshop | null> {
+  const workshops: Workshop | null = await workshopImpl.getWorkshopById(id);
   return workshops;
 }

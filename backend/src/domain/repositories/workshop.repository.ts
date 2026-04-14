@@ -1,8 +1,12 @@
 import type { Workshop } from '@domain/models/workshop.model';
-import { PaymentProvider } from '@domain/ports/paymentProvider.port';
+
+export interface CreateWorkshop {
+  workshopId: string | null;
+  error: string | null;
+}
 
 export interface WorkshopRepository {
-  createWorkshop(workshop: Workshop): Promise<boolean>;
+  createWorkshop(workshop: Workshop): Promise<CreateWorkshop>;
   getWorkshops(page: number): Promise<Workshop[]>;
   getWorkshopById(id: string): Promise<Workshop | null>;
   getWorkshopByCategory(

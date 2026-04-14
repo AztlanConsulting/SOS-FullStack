@@ -1,6 +1,9 @@
 import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopModel } from '@domain/models/workshop.model';
-import type { WorkshopRepository } from '@domain/repositories/workshop.repository';
+import type {
+  CreateWorkshop,
+  WorkshopRepository,
+} from '@domain/repositories/workshop.repository';
 
 export const WorkshopDataAccess: WorkshopRepository = {
   /**
@@ -47,8 +50,11 @@ export const WorkshopDataAccess: WorkshopRepository = {
    * @param workshop: Workshop object
    * @returns status success or error
    */
-  createWorkshop: async function (workshop: Workshop): Promise<boolean> {
-    await WorkshopModel.create(workshop);
-    return true;
+  createWorkshop: async function (workshop: Workshop): Promise<CreateWorkshop> {
+    const response = await WorkshopModel.create(workshop);
+    if (response.errors !== undefined) {
+      return { workshopId: null, error: response.errors.toString() };
+    }
+    return { workshopId: response._id.toString(), error: null };
   },
 };

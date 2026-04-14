@@ -1,16 +1,51 @@
 import PlanCard from '../features/plans/components/PlanCard';
-import { PLANS } from '../features/plans/components/plans';
 import Header from '../shared/components/layout/header';
 import { Text } from '../shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState } from 'react';
 import { Button } from '@shared/components/ui/Button/Button';
+import { usePlans } from '../features/plans/hooks/usePlans';
 
 export default function PlansPage() {
+  const { plans, loading, error } = usePlans();
   const [current, setCurrent] = useState(0);
 
   const prev = () => setCurrent((i) => Math.max(i - 1, 0));
-  const next = () => setCurrent((i) => Math.min(i + 1, PLANS.length - 1));
+  const next = () => setCurrent((i) => Math.min(i + 1, plans.length - 1));
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-[#FEF5DA] flex items-center justify-center">
+          <p className="text-gray-500">Cargando planes...</p>
+        </main>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-[#FEF5DA] flex items-center justify-center">
+          <p className="text-red-400">Error al cargar los planes.</p>
+        </main>
+      </>
+    );
+  }
+
+  if (plans.length === 0) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-[#FEF5DA] flex items-center justify-center">
+          <p className="text-gray-500">No se encontraron planes.</p>
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -25,7 +60,7 @@ export default function PlansPage() {
           Planes{' '}
         </Text>
         <div className="hidden md:flex flex-row gap-10 w-full justify-center items-stretch">
-          {PLANS.map((plan, i) => (
+          {plans.map((plan, i) => (
             <PlanCard
               key={i}
               {...plan}
@@ -47,14 +82,14 @@ export default function PlansPage() {
 
           <div className="w-9/12">
             <PlanCard
-              {...PLANS[current]}
-              onSelect={() => console.log(PLANS[current].name)}
+              {...plans[current]}
+              onSelect={() => console.log(plans[current].name)}
             />
           </div>
           <div className="w-1/12 flex justify-end">
             <button
               onClick={next}
-              disabled={current === PLANS.length - 1}
+              disabled={current === plans.length - 1}
               className="p-1.5 rounded-full bg-white border-[3.5px] border-[#F9CD48] disabled:opacity-30 shrink-0"
             >
               <HiArrowRight size={13} className="text-[#F9CD48]" />
@@ -63,7 +98,7 @@ export default function PlansPage() {
         </div>
 
         <div className="flex md:hidden gap-2 mt-4">
-          {PLANS.map((_, i) => (
+          {plans.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}

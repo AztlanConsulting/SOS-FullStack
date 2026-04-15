@@ -1,10 +1,12 @@
 import type { Request, Response } from 'express';
 import { getPlansDB } from '@use-cases/plans/getPlansDB.usecase';
+import { PlanDataAccess } from '../data-access/plan.data-access';
 
 export const makeGetPlans = () => {
   return async (req: Request, res: Response) => {
     try {
-      const plans = await getPlansDB.getPlans();
+      const repository = getPlansDB(PlanDataAccess);
+      const plans = await repository.getPlans();
       res.json(plans);
     } catch (error) {
       console.error(error);

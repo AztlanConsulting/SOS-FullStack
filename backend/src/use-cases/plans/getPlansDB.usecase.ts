@@ -1,11 +1,7 @@
-import type {
-  PlanRepository,
-  PlanResult,
-} from '@domain/repositories/plan.repository';
-import { PlanDataAccess } from '@interfaces/data-access/plan.data-access';
+import type { PlanRepository } from '@domain/repositories/plan.repository';
 
-export const getPlansDB: PlanRepository = {
-  async getPlans(): Promise<PlanResult[]> {
-    return await PlanDataAccess.getPlans();
+export const getPlansDB = (repository: PlanRepository): PlanRepository => ({
+  getPlans: async () => {
+    return await repository.getPlans();
   },
-};
+});

@@ -5,6 +5,7 @@ import type {
   WorkshopRepository,
 } from '@domain/repositories/workshop.repository';
 
+const limit = 6;
 export const WorkshopDataAccess: WorkshopRepository = {
   /**
    * Get a list of workshops
@@ -13,8 +14,8 @@ export const WorkshopDataAccess: WorkshopRepository = {
    */
   getWorkshops: async function (page: number): Promise<Workshop[]> {
     const workshops = await WorkshopModel.find()
-      .skip(page * 10)
-      .limit(10)
+      .skip(page * limit)
+      .limit(limit)
       .exec();
     return workshops;
   },
@@ -39,14 +40,24 @@ export const WorkshopDataAccess: WorkshopRepository = {
     const workshops = await WorkshopModel.find({
       category: { $all: categories },
     })
-      .skip(page * 10)
-      .limit(10)
+      .skip(page * limit)
+      .limit(limit)
       .exec();
 
     return workshops;
   },
+
   /**
-   * Get a list of workshops
+   * Get the total amount of workshops for pagination
+   * @returns number of records
+   */
+  getTotalWorkshops: async function (): Promise<number> {
+    const totalWorkshops = await WorkshopModel.countDocuments();
+    return totalWorkshops;
+  },
+
+  /**
+   * Create a workshop
    * @param workshop: Workshop object
    * @returns status success or error
    */

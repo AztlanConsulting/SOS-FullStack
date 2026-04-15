@@ -8,6 +8,7 @@ export interface CreateWorkshop {
 export interface WorkshopRepository {
   createWorkshop(workshop: Workshop): Promise<CreateWorkshop>;
   getWorkshops(page: number): Promise<Workshop[]>;
+  getTotalWorkshops(): Promise<number>;
   getWorkshopById(id: string): Promise<Workshop | null>;
   getWorkshopByCategory(
     categories: string[],

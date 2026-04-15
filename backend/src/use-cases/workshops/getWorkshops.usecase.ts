@@ -4,9 +4,10 @@ import type { WorkshopRepository } from '@domain/repositories/workshop.repositor
 export async function getWorkshopList(
   workshopImpl: WorkshopRepository,
   page: number = 0,
-): Promise<Workshop[]> {
+): Promise<{ workshops: Workshop[]; totalWorkshops: number }> {
   const workshops: Workshop[] = await workshopImpl.getWorkshops(page);
-  return workshops;
+  const totalWorkshops = await workshopImpl.getTotalWorkshops();
+  return { workshops, totalWorkshops };
 }
 
 export async function getWorkshopById(

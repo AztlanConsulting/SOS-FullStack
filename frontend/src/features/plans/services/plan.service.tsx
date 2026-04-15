@@ -1,3 +1,9 @@
+/**
+ * Fetches the list of available plans from the backend API.
+ * Uses the environment-configured base URL to construct the endpoint path.
+ * * @returns A promise that resolves to the plan data parsed from JSON.
+ * @throws An error if the network request fails or the server returns a non-OK status.
+ */
 export const getPlans = async () => {
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;

@@ -2,12 +2,19 @@ import React from 'react';
 import { HiX } from 'react-icons/hi';
 import { Text } from '../Text';
 
+/**
+ * Configuration properties for the Modal component.
+ */
 type ModalProps = {
   title: string;
   description: string;
   onClose: () => void;
 };
 
+/**
+ * A functional component that renders a centered informational dialog.
+ * Features a high-visibility header, a backdrop overlay, and responsive width constraints.
+ */
 export const Modal: React.FC<ModalProps> = ({
   title,
   description,

@@ -6,10 +6,20 @@ import { useState } from 'react';
 import { Button } from '@shared/components/ui/Button/Button';
 import { usePlans } from '@features/plans/hooks/usePlans';
 
+/**
+ * PlansPage Component.
+ * * Displays the available service plans to the user.
+ * It features a responsive design:
+ * - Desktop: Horizontal grid/flex layout showing all plans side-by-side.
+ * - Mobile: A carousel/slider view with navigation arrows and pagination dots.
+ */
 export default function PlansPage() {
   const { plans, loading, error } = usePlans();
   const [current, setCurrent] = useState(0);
 
+  /**
+   * Navigation handlers for the mobile carousel view.
+   */
   const prev = () => setCurrent((i) => Math.max(i - 1, 0));
   const next = () => setCurrent((i) => Math.min(i + 1, plans.length - 1));
 

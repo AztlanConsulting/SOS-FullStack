@@ -1,6 +1,14 @@
 import type { PlanCardProps } from './PlanCard';
 
+/**
+ * Static configuration for the available service tiers.
+ * Each plan includes specific coverage areas, durations, and feature sets.
+ */
+
 export const PLANS: PlanCardProps[] = [
+  /**
+   * Entry-level plan offering essential search tools for a limited time and radius.
+   */
   {
     name: 'Básico',
     price: '390',
@@ -39,6 +47,11 @@ export const PLANS: PlanCardProps[] = [
     ],
     onSelect: () => {},
   },
+
+  /**
+   * Recommended tier featuring a balance of extended coverage and personalized assistance.
+   * Marked as the "most popular" choice for users.
+   */
 
   {
     name: 'Estándar',
@@ -80,6 +93,11 @@ export const PLANS: PlanCardProps[] = [
     ],
     onSelect: () => {},
   },
+
+  /**
+   * Premium tier with maximum duration, radius, and all advanced geolocation features.
+   * Includes high-engagement formats like Instagram Reels.
+   */
 
   {
     name: 'Premium',

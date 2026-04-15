@@ -8,6 +8,10 @@ import {
 import { Text } from '@shared/components/ui/Text';
 import { Modal } from '@shared/components/ui/Modal/Modal';
 
+/**
+ * Represents an individual feature or service within a plan.
+ * Used to render list items with status icons and optional informational modals.
+ */
 export interface PlanFeature {
   label: string;
   included: boolean;
@@ -15,6 +19,10 @@ export interface PlanFeature {
   tooltipTitle?: string;
 }
 
+/**
+ * Props for the PlanCard component.
+ * Includes visual styling flags (highlighted/badge) and service details.
+ */
 export interface PlanCardProps {
   name: string;
   price: string;
@@ -27,6 +35,10 @@ export interface PlanCardProps {
   badge?: string;
 }
 
+/**
+ * Component that displays a service plan with its features and pricing.
+ * It handles its own state for displaying feature-specific information in a modal.
+ */
 const PlanCard: React.FC<PlanCardProps> = ({
   name,
   price,
@@ -110,6 +122,10 @@ const PlanCard: React.FC<PlanCardProps> = ({
   );
 };
 
+/**
+ * Internal sub-component to render a single row in the feature list.
+ * Displays check/cross icons and triggers the info modal if a tooltip is provided.
+ */
 const FeatureRow: React.FC<{
   feature: PlanFeature;
   onTooltipClick: (tooltip: { title: string; description: string }) => void;

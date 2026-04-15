@@ -1,6 +1,3 @@
-import { Text } from '@shared/components/ui/Text';
-import { ManualItem } from '@features/manuals/components/ManualItem';
-import type { Manual } from '@features/manuals/types/Manual.type';
 import WorkshopCard from './WorkshopCard';
 
 interface Props {

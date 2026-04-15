@@ -36,7 +36,11 @@ export const StripeProvider: PaymentProvider = {
 
     // for SPEI bank transfers in Mexico
     else if (method === 'spei') {
-      if (!customerId) {
+      if (
+        customerId === undefined ||
+        customerId === null ||
+        customerId === ''
+      ) {
         throw new Error('customerId is required for SPEI payments');
       }
 

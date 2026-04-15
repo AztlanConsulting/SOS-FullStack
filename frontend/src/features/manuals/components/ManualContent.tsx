@@ -2,12 +2,13 @@ import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
 import { HeaderBack } from '@shared/components/layout/HeaderBack';
 import { useManualPurchase } from '../hooks/useManualPurchase';
+import type { Manual } from '../types/Manual.type';
 
-export const ManualContent = ({ manual }: { manual: any }) => {
+export const ManualContent = ({ manual }: { manual: Manual }) => {
   const { userEmail, emailError, handleEmailChange, handleProceedToPayment } =
     useManualPurchase({
-      _id: manual._id as string,
-      price: manual.price as number,
+      _id: manual._id,
+      price: manual.price,
     });
 
   return (
@@ -16,7 +17,7 @@ export const ManualContent = ({ manual }: { manual: any }) => {
       <div className="flex flex-col items-center justify-center py-8 color-secondary-bg">
         <img
           src={manual.imageUrl}
-          alt={manual.title}
+          alt={manual.name}
           className="color-grey-border rounded-lg w-5/6"
         />
         <Text

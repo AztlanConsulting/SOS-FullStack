@@ -2,6 +2,7 @@ import { HiOutlineSearch } from 'react-icons/hi';
 import { HiOutlineFilter } from 'react-icons/hi';
 import { useManualsListSection } from '../hooks/useManualsListSection';
 import { ManualItem } from './ManualItem';
+import type { Manual } from '../types/Manual.type';
 
 export const ManualsListSection = () => {
   const { manuals, loading, error } = useManualsListSection();
@@ -59,7 +60,7 @@ export const ManualsListSection = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full pb-5">
-          {manuals.map((manual) => (
+          {manuals.map((manual: Manual) => (
             <ManualItem key={manual._id} manual={manual} />
           ))}
         </div>

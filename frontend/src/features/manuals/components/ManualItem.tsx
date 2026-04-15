@@ -1,8 +1,9 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
 import { useNavigate } from 'react-router';
+import type { Manual } from '../types/Manual.type';
 
-export const ManualItem = ({ manual }: { manual: any }) => {
+export const ManualItem = ({ manual }: { manual: Manual }) => {
   const navigate = useNavigate();
   return (
     <div

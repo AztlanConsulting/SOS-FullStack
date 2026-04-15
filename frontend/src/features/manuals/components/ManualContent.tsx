@@ -30,7 +30,7 @@ export const ManualContent = ({ manual }: { manual: Manual }) => {
           {manual.name}
         </Text>
         <div className="w-5/6 flex justify-between items-center">
-          <Text as="h3" variant="h3" weight="regular" color="text-black">
+          <Text as="p" variant="body" weight="regular" color="text-black">
             Precio
           </Text>
           <Text as="h3" variant="h3" weight="medium" color="text-black">

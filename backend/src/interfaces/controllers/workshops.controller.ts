@@ -21,7 +21,7 @@ export async function getWorkshops(req: Request, res: Response) {
     const id = query.data.id;
 
     let workshops: Workshop[];
-    if (id) {
+    if (id !== undefined) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
       workshops = ws ? [ws] : [];
     } else workshops = await getWorkshopList(WorkshopDataAccess, page);
@@ -38,7 +38,8 @@ export async function postWorkshop(req: Request, res: Response) {
     const image = req.file;
 
     if (!body.success) throw body.error;
-    if (!image && !body.data.imgUrl) throw Error('Image not provided');
+    if (image !== undefined && body.data.imgUrl === undefined)
+      throw Error('Image not provided');
 
     // Only fills img if there is a file, unless it uses imgUrl
     const workshopData: Workshop = {

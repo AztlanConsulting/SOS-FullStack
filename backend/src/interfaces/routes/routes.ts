@@ -2,7 +2,9 @@ import express from 'express';
 import { LocationController } from '../controllers/LocationController';
 import imageRoutes from './images.routes';
 import clientsRoutes from './clients.routes';
-import paymentRoutes from './payment.routes';
+import paymentRoutes from './payments.routes';
+import manualRoutes from './manuals.routes';
+import purchaseRoutes from './purchase.routes';
 import workshopRoutes from './workshops.routes';
 
 const router = express.Router();
@@ -15,6 +17,10 @@ router.use('/clients', clientsRoutes);
 router.use('/images', imageRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/workshop', workshopRoutes);
+
+router.use('/manuals', manualRoutes);
+
+router.use('/purchases', purchaseRoutes);
 
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);

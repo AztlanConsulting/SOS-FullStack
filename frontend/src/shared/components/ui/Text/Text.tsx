@@ -14,12 +14,12 @@ type TextProps = {
 };
 
 const variantStyles: Record<Variant, string> = {
-  display: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight',
-  h1: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight',
-  h2: 'text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-snug',
-  h3: 'text-lg sm:text-xl md:text-2xl lg:text-3xl leading-snug',
-  body: 'text-sm sm:text-base md:text-lg leading-relaxed',
-  caption: 'text-xs sm:text-sm leading-normal',
+  display: 'text-3xl md:text-5xl leading-tight',
+  h1: 'text-2xl md:text-3xl leading-tight',
+  h2: 'text-xl md:text-2xl font-semibold leading-snug',
+  h3: 'text-lg md:text-xl font-semibold leading-snug',
+  body: 'text-base leading-relaxed',
+  caption: 'text-sm leading-normal',
   small: 'text-xs leading-normal',
 };
 

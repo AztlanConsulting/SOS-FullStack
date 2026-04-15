@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getPlans } from '@features/plans/services/plan.service';
-import { PLANS } from '../components/plans';
-import type { PlanCardProps } from '../components/PlanCard';
+import { PLANS } from '@features/plans/components/plans';
+import type { PlanCardProps } from '@features/plans/components/PlanCard';
 
 export const usePlans = () => {
   const [plans, setPlans] = useState<PlanCardProps[]>([]);

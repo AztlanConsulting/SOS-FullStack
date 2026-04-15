@@ -1,10 +1,10 @@
-import PlanCard from '../features/plans/components/PlanCard';
-import Header from '../shared/components/layout/header';
-import { Text } from '../shared/components/ui/Text';
+import PlanCard from '@features/plans/components/PlanCard';
+import Header from '@shared/components/layout/header';
+import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState } from 'react';
 import { Button } from '@shared/components/ui/Button/Button';
-import { usePlans } from '../features/plans/hooks/usePlans';
+import { usePlans } from '@features/plans/hooks/usePlans';
 
 export default function PlansPage() {
   const { plans, loading, error } = usePlans();
@@ -76,7 +76,11 @@ export default function PlansPage() {
               disabled={current === 0}
               className="p-1.5 rounded-full bg-white border-[3.5px] border-[#F9CD48] disabled:opacity-30 shrink-0"
             >
-              <HiArrowLeft size={13} className="text-[#F9CD48]" />
+              <HiArrowLeft
+                size={17}
+                style={{ strokeWidth: 3 }}
+                className="text-[#F9CD48]"
+              />
             </button>
           </div>
 
@@ -92,7 +96,11 @@ export default function PlansPage() {
               disabled={current === plans.length - 1}
               className="p-1.5 rounded-full bg-white border-[3.5px] border-[#F9CD48] disabled:opacity-30 shrink-0"
             >
-              <HiArrowRight size={13} className="text-[#F9CD48]" />
+              <HiArrowRight
+                size={17}
+                style={{ strokeWidth: 3 }}
+                className="text-[#F9CD48]"
+              />
             </button>
           </div>
         </div>

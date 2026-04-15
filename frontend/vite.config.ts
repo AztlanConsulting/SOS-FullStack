@@ -12,6 +12,8 @@ export default defineConfig(({ mode }) => {
         // If you add another file path, also update in tsconfig.app.json
         '@': path.resolve(__dirname, './src'),
         '@features': path.resolve(__dirname, './src/features'),
+        '@pages': path.resolve(__dirname, './src/pages'),
+        '@routes': path.resolve(__dirname, './src/routes'),
         '@services': path.resolve(__dirname, './src/services'),
         '@shared': path.resolve(__dirname, './src/shared'),
         '@assets': path.resolve(__dirname, './src/assets'),

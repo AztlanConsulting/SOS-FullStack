@@ -1,12 +1,12 @@
-import { Button } from '../../../shared/components/ui/Button';
+import { Button } from '@shared/components/ui/Button';
 import React, { useState } from 'react';
 import {
   HiCheck,
   HiOutlineX,
   HiOutlineQuestionMarkCircle,
 } from 'react-icons/hi';
-import { Text } from '../../../shared/components/ui/Text';
-import { Modal } from '../../../shared/components/ui/Modal/Modal';
+import { Text } from '@shared/components/ui/Text';
+import { Modal } from '@shared/components/ui/Modal/Modal';
 
 export interface PlanFeature {
   label: string;

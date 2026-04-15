@@ -15,6 +15,7 @@ export default defineConfig(() => {
         '@services': path.resolve(__dirname, './src/services'),
         '@shared': path.resolve(__dirname, './src/shared'),
         '@assets': path.resolve(__dirname, './src/assets'),
+        '@pages': path.resolve(__dirname, './src/pages'),
       },
     },
 

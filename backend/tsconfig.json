@@ -20,6 +20,7 @@
   },
   "include": [
     "./src/**/*",
+    "jest-mongodb-config.ts",
     "../frontend/src/features/payment/components/CheckoutForm.tsx"
   ]
 }

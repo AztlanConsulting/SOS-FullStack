@@ -12,6 +12,8 @@ export const WorkshopDataAccess: WorkshopRepository = {
   /**
    * Get a list of workshops
    * @param page - page of query / skip
+   * @param sortOption - sorting options / string
+   * @param searchTerm - optional string - search term
    * @returns a list of workshops
    */
   getWorkshops: async function ({
@@ -65,6 +67,7 @@ export const WorkshopDataAccess: WorkshopRepository = {
 
   /**
    * Get the total amount of workshops for pagination
+   * @param searchTerm - filter to better calculate the amount of pages
    * @returns number of records
    */
   getTotalWorkshops: async function ({ searchTerm }): Promise<number> {

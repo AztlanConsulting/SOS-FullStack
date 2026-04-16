@@ -33,8 +33,8 @@ export default function useProduct<T extends Props>(
 
   // Pagination
   const [visiblePages, totalPages] = useMemo(() => {
-    return data ? calculatePages(data.total, 6) : [[], 0];
-  }, [data]);
+    return data ? calculatePages(data.total, page, 6) : [[], 0];
+  }, [data, page]);
 
   // Structure data
   const searchHook = { setSearchTerm, sortHook };

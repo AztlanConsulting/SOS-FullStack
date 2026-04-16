@@ -10,7 +10,9 @@ export async function getWorkshopList(
 ): Promise<{ workshops: Workshop[]; totalWorkshops: number }> {
   const workshops: Workshop[] =
     await workshopImpl.getWorkshops(workshopRequest);
+
   const totalWorkshops = await workshopImpl.getTotalWorkshops(workshopRequest);
+
   return { workshops, totalWorkshops };
 }
 

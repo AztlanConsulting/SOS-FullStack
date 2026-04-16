@@ -33,10 +33,6 @@
   background-color: var(--color-primary);
 }
 
-.color-secondary-bg {
-  background-color: var(--color-secondary);
-}
-
 .color-success {
   color: var(--color-success);
 }

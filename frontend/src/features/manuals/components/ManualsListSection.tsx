@@ -57,7 +57,7 @@ export const ManualsListSection = () => {
 
   if (loading) {
     return (
-      <section className="color-secondary-bg w-full p-10 text-center text-black">
+      <section className="bg-secondary w-full p-10 text-center text-black">
         <Text as="p" variant="body" weight="regular" color="text-black">
           Cargando manuales...
         </Text>
@@ -68,7 +68,7 @@ export const ManualsListSection = () => {
   if (error) {
     console.error(error);
     return (
-      <section className="color-secondary-bg w-full p-10 text-center text-black">
+      <section className="bg-secondary w-full p-10 text-center text-black">
         <Text as="p" variant="body" weight="regular" color="text-black">
           Error al cargar los manuales.
         </Text>
@@ -78,7 +78,7 @@ export const ManualsListSection = () => {
 
   if (manuals.length === 0) {
     return (
-      <section className="color-secondary-bg w-full p-10 text-center text-black">
+      <section className="bg-secondary w-full p-10 text-center text-black">
         <Text as="p" variant="body" weight="regular" color="text-black">
           No se encontraron manuales.
         </Text>
@@ -87,7 +87,7 @@ export const ManualsListSection = () => {
   }
 
   return (
-    <section className="color-secondary-bg w-full flex flex-col items-center justify-center">
+    <section className="bg-secondary w-full flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
         <div className="flex flex-row justify-center items-center gap-2 my-8 w-full md:w-1/2 lg:w-2/5 md:place-self-end">
           <div ref={dropdownRef} className="relative">

@@ -6,9 +6,11 @@ export const useManualsListSection = () => {
   const [manuals, setManuals] = useState<Manual[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [sortOption, setSortOption] = useState<string>('Nombre (A-Z)');
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 

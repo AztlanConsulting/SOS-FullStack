@@ -14,7 +14,7 @@ export const ManualContent = ({ manual }: { manual: Manual }) => {
   return (
     <section className="w-full h-screen flex flex-col items-center justify-start">
       <HeaderBack name="Manuales" />
-      <div className="flex flex-col items-center justify-center py-8 color-secondary-bg">
+      <div className="flex flex-col items-center justify-center py-8 bg-secondary">
         <img
           src={manual.imageUrl}
           alt={manual.name}

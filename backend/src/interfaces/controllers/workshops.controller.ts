@@ -43,10 +43,10 @@ export async function postWorkshop(req: Request, res: Response) {
     const image = req.file;
 
     if (!body.success) throw body.error;
-    if (image !== undefined && body.data.imgUrl === undefined)
+    if (image !== undefined && body.data.imageUrl === undefined)
       throw Error('Image not provided');
 
-    // Only fills img if there is a file, unless it uses imgUrl
+    // Only fills img if there is a file, unless it uses imageUrl
     const workshopData: Workshop = {
       ...body.data,
       ...() => {

@@ -5,6 +5,7 @@ import type {
   GetWorkshop,
   WorkshopRepository,
 } from '@domain/repositories/workshop.repository';
+import type { SortOrder } from 'mongoose';
 
 const limit = 6;
 export const WorkshopDataAccess: WorkshopRepository = {
@@ -18,12 +19,13 @@ export const WorkshopDataAccess: WorkshopRepository = {
     sortOption,
     searchTerm,
   }: GetWorkshop): Promise<Workshop[]> {
-    const sort: Record<string, { [key: string]: number }> = {
+    const sort: Record<string, { [key: string]: SortOrder }> = {
       'Nombre (A-Z)': { name: 1 },
       'Nombre (Z-A)': { name: -1 },
       'Precio: menor a mayor': { price: 1 },
       'Precio: mayor a menor': { price: -1 },
     };
+
     const workshops = await WorkshopModel.find({
       name: { $regex: searchTerm, $options: 'i' },
     })

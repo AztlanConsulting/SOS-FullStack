@@ -16,7 +16,7 @@ export const IpApiService: ILocationRepository = {
       //Get request to Ipapi.co
       const response = await axios.get(`https://ipapi.co/${ip}/json/`);
 
-      if (response.data.error) {
+      if (response.data.error !== undefined) {
         console.error('error: ', response.data.reason);
         return null;
       }

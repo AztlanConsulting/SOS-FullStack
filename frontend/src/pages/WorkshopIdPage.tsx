@@ -1,31 +1,13 @@
 import WorkshopContent from '@features/workshop/components/WorkshopContent';
+import useGetWorkshopContent from '@features/workshop/hooks/useGetWorkshopContent';
+import queryWorkshopById from '@features/workshop/services/queryWorkshopById';
+import type { Workshop } from '@features/workshop/types/workshop';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
-import axiosInstance from '@shared/utils/axios';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useLocation, useParams } from 'react-router';
 import { Text } from '@shared/components/ui/Text';
 
 const WorkshopIdPage = () => {
-  const { state } = useLocation();
-  const { id } = useParams();
-  const query = useQuery({
-    queryKey: ['workshop', id],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get(`/workshop/`, {
-        params: { id },
-      });
-      return data.workshops;
-    },
-    enabled: !state?.workshop && !!id,
-  });
-
-  const { isLoading, error } = query;
-  const workshop = state?.workshop || query.data;
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const { isLoading, error, workshop } =
+    useGetWorkshopContent<Workshop>(queryWorkshopById);
 
   if (isLoading) return <LoadingSpinner />;
   if (error)

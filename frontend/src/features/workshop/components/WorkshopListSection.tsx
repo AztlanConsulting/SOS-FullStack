@@ -9,8 +9,10 @@ import useProduct from '@shared/hooks/useProduct';
 import queryWorkshop from '../services/queryWorkshops';
 
 const WorkshopListSection = () => {
-  const { searchHook, query, pages } =
-    useProduct<WorkshopResult>(queryWorkshop);
+  const { searchHook, query, pages } = useProduct<WorkshopResult>(
+    queryWorkshop,
+    'workshops',
+  );
   const { isLoading, error, data } = query;
 
   return (

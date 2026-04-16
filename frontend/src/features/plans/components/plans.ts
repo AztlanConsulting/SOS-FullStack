@@ -16,14 +16,14 @@ export const PLANS: PlanCardProps[] = [
     radius: '10 km',
     features: [
       {
-        label: 'Anuncio de 3 días en una area de 10km a la redonda',
+        label: 'Anuncio de 3 días en una área de 10km a la redonda',
         included: true,
       },
       { label: 'Publicación en nuestras redes sociales', included: true },
-      { label: 'Video y lista de consejos de busqueda', included: true },
+      { label: 'Video y lista de consejos de búsqueda', included: true },
       { label: 'Cartel para imprimir', included: true },
       {
-        label: 'Asesor de busqueda',
+        label: 'Asesor de búsqueda',
         included: false,
         tooltipTitle: '¿Qué es el asesor de búsqueda?',
         tooltip:
@@ -62,14 +62,14 @@ export const PLANS: PlanCardProps[] = [
     badge: 'El más popular',
     features: [
       {
-        label: 'Anuncio de 7 días en una area de 30km a la redonda',
+        label: 'Anuncio de 7 días en una área de 30km a la redonda',
         included: true,
       },
       { label: 'Publicación en nuestras redes sociales', included: true },
-      { label: 'Video y lista de consejos de busqueda', included: true },
+      { label: 'Video y lista de consejos de búsqueda', included: true },
       { label: 'Cartel para imprimir', included: true },
       {
-        label: 'Asesor de busqueda',
+        label: 'Asesor de búsqueda',
         included: true,
         tooltipTitle: '¿Qué es el asesor de búsqueda?',
         tooltip:
@@ -106,14 +106,14 @@ export const PLANS: PlanCardProps[] = [
     radius: '40 km',
     features: [
       {
-        label: 'Anuncio de 15 días en una area de 40km a la redonda',
+        label: 'Anuncio de 15 días en una área de 40km a la redonda',
         included: true,
       },
       { label: 'Publicación en nuestras redes sociales', included: true },
-      { label: 'Video y lista de consejos de busqueda', included: true },
+      { label: 'Video y lista de consejos de búsqueda', included: true },
       { label: 'Cartel para imprimir', included: true },
       {
-        label: 'Asesor de busqueda',
+        label: 'Asesor de búsqueda',
         included: true,
         tooltipTitle: '¿Qué es el asesor de búsqueda?',
         tooltip:

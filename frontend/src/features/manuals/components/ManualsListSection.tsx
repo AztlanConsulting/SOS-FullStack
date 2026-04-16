@@ -9,7 +9,10 @@ import List from '@shared/components/ui/List';
 import Pagination from '@shared/components/ui/Pagination';
 
 export const ManualsListSection = () => {
-  const { searchHook, query, pages } = useProduct<ManualResult>(queryManual);
+  const { searchHook, query, pages } = useProduct<ManualResult>(
+    queryManual,
+    'manuals',
+  );
   const { isLoading, error, data } = query;
 
   return (
@@ -28,8 +31,12 @@ export const ManualsListSection = () => {
           />
         )}
 
+        {data && data.manuals.length == 0 && (
+          <Text className="mb-20">No hay resultados...</Text>
+        )}
+
         {/* Pagination */}
-        {data && <Pagination pages={pages} />}
+        {data && data.manuals.length > 0 && <Pagination pages={pages} />}
       </div>
     </section>
   );

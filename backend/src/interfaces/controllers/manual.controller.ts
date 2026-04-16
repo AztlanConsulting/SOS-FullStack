@@ -19,16 +19,16 @@ export const makeGetManuals = () => {
         console.error(query.error);
         throw query.error;
       }
-      console.log(req.query);
 
-      const page = query.data.page;
       const id = query.data.id;
 
       let manuals: ManualResult[];
       let total: number = 0;
       if (id !== undefined) {
         const mu = await getManualByIdDB(ManualDataAccess, id);
-        manuals = mu ? [mu] : [];
+        if (mu) manuals = [mu];
+        else
+          return res.status(404).send(`No se encontró el taller con id: ${id}`);
       } else {
         const manualsAndCount = await getManualsDB(
           ManualDataAccess,

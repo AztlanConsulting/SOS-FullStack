@@ -1,9 +1,16 @@
 import * as z from 'zod';
 
-export const manualQuery = z.object({
-  page: z.coerce.number().default(1),
-  id: z.string().optional(),
-});
+export const manualQuery = z
+  .object({
+    sortOption: z.string(),
+    page: z.coerce.number().optional(),
+    searchTerm: z.string().optional(),
+    id: z.string().optional(),
+  })
+  .refine((data) => data.page !== undefined || data.id !== undefined, {
+    message: "Error: 'page' or 'id' must be defined",
+    path: ['page'],
+  });
 
 export const manualBody = z.object({
   name: z.string().min(1, 'Name required'),

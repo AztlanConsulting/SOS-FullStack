@@ -10,6 +10,7 @@ export const getManualsDB = async (
 ): Promise<{ manuals: ManualResult[]; totalManuals: number }> => {
   const manuals: ManualResult[] =
     await manualRepository.getManuals(manualRequest);
-  const totalManuals: number = await manualRepository.getTotalManuals();
+  const totalManuals: number =
+    await manualRepository.getTotalManuals(manualRequest);
   return { manuals, totalManuals };
 };

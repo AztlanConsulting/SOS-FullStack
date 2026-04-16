@@ -1,6 +1,6 @@
 export const createPaymentIntent = async (amount: number, currency: string) => {
   try {
-    const base_url = import.meta.env.VITE_REACT_APP_API_URL;
+    const base_url = import.meta.env.VITE_API_BASE_URL;
     const res = await fetch(`${base_url}/payments/payment-intent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -13,7 +13,7 @@ const LoadingSpinner = ({ size = 'md' }: Props) => {
 
   return (
     <AiOutlineLoading3Quarters
-      className={`size-${sizes[size]} animate-spin text-black`}
+      className={`size-${sizes[size]} animate-spin text-black mb-20`}
     />
   );
 };

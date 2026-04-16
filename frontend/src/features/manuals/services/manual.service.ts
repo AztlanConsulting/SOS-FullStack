@@ -1,6 +1,6 @@
 export const getManuals = async () => {
   try {
-    const base_url = import.meta.env.VITE_REACT_APP_API_URL;
+    const base_url = import.meta.env.VITE_API_BASE_URL;
     const res = await fetch(`${base_url}/manuals/getManuals`);
     if (!res.ok) {
       throw new Error('Failed to fetch manuals');
@@ -15,7 +15,7 @@ export const getManuals = async () => {
 
 export const getManualById = async (id: string) => {
   try {
-    const base_url = import.meta.env.VITE_REACT_APP_API_URL;
+    const base_url = import.meta.env.VITE_API_BASE_URL;
     const res = await fetch(`${base_url}/manuals/getManualById/${id}`);
     if (!res.ok) {
       throw new Error('Failed to fetch a manual by id');

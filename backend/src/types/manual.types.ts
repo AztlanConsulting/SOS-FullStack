@@ -1,14 +1,13 @@
 import * as z from 'zod';
 
-export const workshopQuery = z.object({
+export const manualQuery = z.object({
   page: z.coerce.number().default(1),
   id: z.string().optional(),
 });
 
-export const workshopBody = z.object({
+export const manualBody = z.object({
   name: z.string().min(1, 'Name required'),
-  description: z.string().min(10, 'Description required'),
   price: z.coerce.number().min(1, "Price can't be less than 1"),
-  category: z.array(z.string()),
-  imgUrl: z.string().optional(),
+  content: z.string().min(10, 'Content required'),
+  imageUrl: z.string().optional(),
 });

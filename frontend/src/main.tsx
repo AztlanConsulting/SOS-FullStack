@@ -10,8 +10,8 @@ queryClient.invalidateQueries({ queryKey: ['workshops'] });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {/* <QueryClientProvider client={queryClient}> */}
-    <RouterProvider router={router} />
-    {/* </QueryClientProvider> */}
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>,
 );

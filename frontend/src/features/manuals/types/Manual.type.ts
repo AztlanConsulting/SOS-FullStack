@@ -5,3 +5,8 @@ export type Manual = {
   content: string;
   imageUrl: string;
 };
+
+export type ManualResult = {
+  manuals: Manual[];
+  total: number;
+};

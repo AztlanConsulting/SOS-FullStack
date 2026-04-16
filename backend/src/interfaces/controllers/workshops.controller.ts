@@ -20,11 +20,13 @@ export async function getWorkshops(req: Request, res: Response) {
     const page = query.data.page;
     const id = query.data.id;
 
-    let workshops: Workshop[];
+    let workshops: Workshop[] | Workshop;
     let total: number = 0;
     if (id !== undefined) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
-      workshops = ws ? [ws] : [];
+      if (ws) workshops = ws;
+      else
+        return res.status(404).send(`No se encontró el taller con id: ${id}`);
     } else {
       const workshopsAndCount = await getWorkshopList(WorkshopDataAccess, page);
       workshops = workshopsAndCount.workshops;

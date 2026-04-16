@@ -1,7 +1,6 @@
 import { Text } from '@shared/components/ui/Text';
 import type { Workshop } from '../types/workshop';
 import { HeaderBack } from '@shared/components/layout/HeaderBack';
-import { Button } from '@shared/components/ui/Button/Button';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import ProductPageHero from '@shared/components/layout/ProductPageHero';
 import ProductSale from '@shared/components/ui/ProductSale';

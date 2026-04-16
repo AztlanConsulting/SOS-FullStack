@@ -1,5 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
 import Search from '@shared/components/ui/Search';
 import List from '@shared/components/ui/List';
 import Pagination from '@shared/components/ui/Pagination';

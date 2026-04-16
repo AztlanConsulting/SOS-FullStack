@@ -1,9 +1,14 @@
 import * as z from 'zod';
 
-export const workshopQuery = z.object({
-  page: z.coerce.number(),
-  id: z.string().optional(),
-});
+export const workshopQuery = z
+  .object({
+    page: z.coerce.number().optional(),
+    id: z.string().optional(),
+  })
+  .refine((data) => data.page !== undefined || data.id !== undefined, {
+    message: "Error: 'page' or 'id' must be defined",
+    path: ['page'],
+  });
 
 export const workshopBody = z.object({
   name: z.string().min(1, 'Name required'),

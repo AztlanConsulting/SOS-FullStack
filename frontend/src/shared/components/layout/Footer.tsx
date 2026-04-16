@@ -4,7 +4,7 @@ import { CiFacebook } from 'react-icons/ci';
 import { FaInstagram } from 'react-icons/fa';
 import { PiTiktokLogoLight } from 'react-icons/pi';
 import { CiYoutube } from 'react-icons/ci';
-import { FaXTwitter } from "react-icons/fa6";
+import { FaXTwitter } from 'react-icons/fa6';
 
 export const Footer = () => {
   return (
@@ -63,7 +63,7 @@ export const Footer = () => {
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              Terminos y condiciones
+              <a href="/therms">Terminos y condiciones</a>
             </Text>
           </div>
           <div className="text-center">

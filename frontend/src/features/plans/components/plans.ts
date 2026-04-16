@@ -16,7 +16,7 @@ export const PLANS: PlanCardProps[] = [
     radius: '10 km',
     features: [
       {
-        label: 'Anuncio de 3 días en una área de 10km a la redonda',
+        label: 'Anuncio de 3 días en un área de 10km a la redonda',
         included: true,
       },
       { label: 'Publicación en nuestras redes sociales', included: true },
@@ -62,7 +62,7 @@ export const PLANS: PlanCardProps[] = [
     badge: 'El más popular',
     features: [
       {
-        label: 'Anuncio de 7 días en una área de 30km a la redonda',
+        label: 'Anuncio de 7 días en un área de 30km a la redonda',
         included: true,
       },
       { label: 'Publicación en nuestras redes sociales', included: true },
@@ -106,7 +106,7 @@ export const PLANS: PlanCardProps[] = [
     radius: '40 km',
     features: [
       {
-        label: 'Anuncio de 15 días en una área de 40km a la redonda',
+        label: 'Anuncio de 15 días en un área de 40km a la redonda',
         included: true,
       },
       { label: 'Publicación en nuestras redes sociales', included: true },

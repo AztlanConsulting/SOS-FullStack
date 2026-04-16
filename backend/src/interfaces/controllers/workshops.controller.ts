@@ -21,17 +21,17 @@ export async function getWorkshops(req: Request, res: Response) {
     const id = query.data.id;
 
     let workshops: Workshop[];
-    let totalWorkshops: number = 0;
+    let total: number = 0;
     if (id !== undefined) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
       workshops = ws ? [ws] : [];
     } else {
       const workshopsAndCount = await getWorkshopList(WorkshopDataAccess, page);
       workshops = workshopsAndCount.workshops;
-      totalWorkshops = workshopsAndCount.totalWorkshops;
+      total = workshopsAndCount.totalWorkshops;
     }
 
-    return res.status(200).json({ workshops, totalWorkshops });
+    return res.status(200).json({ workshops, total });
   } catch (error) {
     res.status(500).send(error);
   }

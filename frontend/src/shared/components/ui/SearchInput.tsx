@@ -1,9 +1,10 @@
 import { HiOutlineSearch } from 'react-icons/hi';
 
-const WorkshopSearchInput = () => {
-  function handleSearchChange(input: string) {
-    console.log(input);
-  }
+interface Props {
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const WorkshopSearchInput = ({ setSearchTerm }: Props) => {
   return (
     <div className="bg-white rounded-lg w-full h-10 flex flex-row justify-between items-center pl-3 color-grey-border">
       <input
@@ -11,7 +12,7 @@ const WorkshopSearchInput = () => {
         id="manuals-search"
         name="manuals-search"
         placeholder="Buscar..."
-        onChange={(event) => handleSearchChange(event.target.value)}
+        onChange={(event) => setSearchTerm(event.target.value)}
         className="bg-transparent outline-none text-black placeholder-gray-500 w-full h-full"
       />
       <button

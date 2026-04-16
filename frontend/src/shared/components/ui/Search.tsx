@@ -1,9 +1,19 @@
 import { HiArrowsUpDown } from 'react-icons/hi2';
-import WorkshopDropDown from './WorkshopDropDown';
-import WorkshopSearchInput from './WorkshopSearchInput';
-import { useEffect, useRef, useState } from 'react';
+import DropDown from './DropDown';
+import SearchInput from './SearchInput';
+import React, { useEffect, useRef, useState } from 'react';
 
-const WorkshopSearch = () => {
+interface Props {
+  searchHook: {
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+    sortHook: [
+      sortOption: string,
+      setSortOption: React.Dispatch<React.SetStateAction<string>>,
+    ];
+  };
+}
+
+const Search = ({ searchHook }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   // Ref for the dropdown menu to handle outside clicks
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,11 +46,11 @@ const WorkshopSearch = () => {
         >
           <HiArrowsUpDown color="black" size="100%" className="h-6" />
         </button>
-        <WorkshopDropDown isOpen={isOpen} />
+        <DropDown isOpen={isOpen} sortHook={searchHook.sortHook} />
       </div>
-      <WorkshopSearchInput />
+      <SearchInput setSearchTerm={searchHook.setSearchTerm} />
     </div>
   );
 };
 
-export default WorkshopSearch;
+export default Search;

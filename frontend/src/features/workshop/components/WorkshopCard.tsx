@@ -1,8 +1,9 @@
 import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
 import { useNavigate } from 'react-router';
+import type { Workshop } from '../types/workshop';
 
-const WorkshopCard = ({ workshop }: any) => {
+const WorkshopCard = ({ workshop }: { workshop: Workshop }) => {
   const navigate = useNavigate();
   return (
     <div

@@ -3,17 +3,20 @@ import type React from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
 
 interface Props {
-  visiblePages: number[];
-  totalPages: number;
-  pageHook: [
-    page: number,
-    setPage: React.Dispatch<React.SetStateAction<number>>,
-  ];
+  pages: {
+    visiblePages: number[];
+    totalPages: number;
+    pageHook: [
+      page: number,
+      setPage: React.Dispatch<React.SetStateAction<number>>,
+    ];
+  };
 }
 
-const WorkshopPagination = ({ visiblePages, totalPages, pageHook }: Props) => {
-  const page = pageHook[0];
-  const setPage = pageHook[1];
+const Pagination = ({ pages }: Props) => {
+  const page = pages.pageHook[0];
+  const setPage = pages.pageHook[1];
+  const totalPages = pages.totalPages;
 
   return (
     <div className="flex justify-center items-center gap-2 mt-6 pb-8">
@@ -25,7 +28,7 @@ const WorkshopPagination = ({ visiblePages, totalPages, pageHook }: Props) => {
         <HiChevronLeft size="100%" className="h-5" />
       </button>
 
-      {visiblePages.map((p) => (
+      {pages.visiblePages.map((p) => (
         <button
           key={p}
           onClick={() => setPage(p)}
@@ -50,4 +53,4 @@ const WorkshopPagination = ({ visiblePages, totalPages, pageHook }: Props) => {
   );
 };
 
-export default WorkshopPagination;
+export default Pagination;

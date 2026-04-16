@@ -1,12 +1,16 @@
 import { Text } from '@shared/components/ui/Text';
-import { useState } from 'react';
 
 interface Props {
   isOpen: boolean;
+  sortHook: [
+    sortOption: string,
+    setSortOption: React.Dispatch<React.SetStateAction<string>>,
+  ];
 }
 
-const WorkshopDropDown = ({ isOpen }: Props) => {
-  const [sortOption, setSortOption] = useState('');
+const DropDown = ({ isOpen, sortHook }: Props) => {
+  const sortOption = sortHook[0];
+  const setSortOption = sortHook[1];
   return (
     isOpen && (
       <div className="absolute top-12 left-0 bg-white border rounded-lg shadow-md w-56 z-50">
@@ -18,7 +22,7 @@ const WorkshopDropDown = ({ isOpen }: Props) => {
         ].map((option) => (
           <label
             key={option}
-            className="flex items-center gap-2 py-1 cursor-pointer hover:bg-(--color-grey-bg) py-2.5 px-3"
+            className="flex items-center gap-2 cursor-pointer hover:bg-(--color-grey-bg) py-2.5 px-3"
           >
             <input
               type="radio"
@@ -43,4 +47,4 @@ const WorkshopDropDown = ({ isOpen }: Props) => {
   );
 };
 
-export default WorkshopDropDown;
+export default DropDown;

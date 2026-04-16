@@ -20,7 +20,7 @@ const navLinks = [
   { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
 ];
 
-const socialLinks = [
+export const socialLinks = [
   {
     href: 'https://www.instagram.com/sos_encontrando_mascotas/',
     icon: <FaInstagram className="w-5 h-5" />,
@@ -45,7 +45,7 @@ const Header = () => {
   const [isSocialOpen, setIsSocialOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-light-gray py-4 lg:py-[17px] w-full fixed top-0 left-0 right-0 z-50 lg:relative">
+    <header className="bg-white border-b border-(--color-grey-border) py-4 lg:py-[17px] w-full fixed top-0 left-0 right-0 z-50 lg:relative">
       {!isMenuOpen && (
         <>
           {isSocialOpen ? (

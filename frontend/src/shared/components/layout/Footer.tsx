@@ -5,7 +5,7 @@ import { FaInstagram } from 'react-icons/fa';
 import { PiTiktokLogoLight } from 'react-icons/pi';
 import { CiYoutube } from "react-icons/ci";
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className="color-primary-bg py-8 lg:py-12">
       <div className="w-5/6 mx-auto">
@@ -53,9 +53,17 @@ const Footer = () => {
             </Text>
           </div>
           <div className="text-center">
+            <Text variant="body" className="underline">
+              Terminos y condiciones 
+            </Text>
+          </div>
+          <div className="text-center">
             <Text variant="body">
               © {new Date().getFullYear()} Copyright SOS Encontrando Mascotas
             </Text>
+          </div>
+          <div className="text-center">
+            <Text variant="body">SOS Encontrando Mascotas</Text>
           </div>
         </div>
       </div>

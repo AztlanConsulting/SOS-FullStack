@@ -2,15 +2,15 @@ import { Text } from '../../../shared/components/ui/Text';
 
 const Credits = () => {
   return (
-    <section className=" overflow-hidden border-b border-border-gray py-8 lg:py-16">
-      <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
+    <section className="color-secondary-bg overflow-hidden py-8 lg:py-16">
+      <div className="max-w-2xl mx-auto px-4">
         <div className="text-center mb-6 lg:mb-10">
           <Text as="h2" variant="h2" weight="medium">
             Creditos de imagenes
           </Text>
         </div>
 
-        <div className="text-left max-w-2xl mx-auto text-black">
+        <div className="text-left text-black">
           <ul className="space-y-2">
             <li>
               Dog illustration - Image by{' '}

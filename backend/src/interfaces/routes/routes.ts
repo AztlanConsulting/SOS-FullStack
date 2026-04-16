@@ -13,10 +13,8 @@ router.get('/health', (req, res) => {
 });
 
 router.use('/clients', clientsRoutes);
-
-router.use('/payments', paymentRoutes);
-
 router.use('/images', imageRouter);
+router.use('/payments', paymentRoutes);
 
 router.use('/manuals', manualRoutes);
 

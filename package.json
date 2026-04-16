@@ -7,8 +7,12 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "test:backend": "npm run test --prefix backend",
+    "test:frontend": "npm run test --prefix frontend",
+    "test": "concurrently \"npm run test --prefix backend\" \"npm run test --prefix frontend\"",
+    "prepare": "husky install",
+    "dev:front": "npm run dev --prefix frontend",
+    "dev:back": "npm run dev --prefix backend"
   },
   "repository": {
     "type": "git",
@@ -29,6 +33,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "concurrently": "^9.2.1",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^10.1.8",
@@ -41,6 +46,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
+    "storybook": "^10.3.5",
     "typescript": "^6.0.2"
   },
   "lint-staged": {

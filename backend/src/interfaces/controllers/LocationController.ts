@@ -14,7 +14,7 @@ export const LocationController = {
    */
   async handle(req: Request, res: Response) {
     //Retrieves the remote IP adress, defaulting to a public DNS IP for testing environments.
-    const ipV6 = req.socket.remoteAddress || '8.8.8.8';
+    const ipV6 = req.socket.remoteAddress ?? '8.8.8.8';
 
     //Cleans the IP adress to format it into IPV4
     const ip = ipV6.replace('::ffff:', '');
@@ -24,7 +24,7 @@ export const LocationController = {
     const location = await GetLocationByIp(ip, repository);
 
     // returns a 404 error if the service dails to resolve the IP
-    if (!location) {
+    if (location == undefined) {
       return res
         .status(404)
         .json({ message: 'No se pudo determinar su localizacion :(' });

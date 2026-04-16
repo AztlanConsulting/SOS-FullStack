@@ -5,10 +5,16 @@ export interface CreateWorkshop {
   error: string | null;
 }
 
+export interface GetWorkshop {
+  page?: number;
+  searchTerm?: string;
+  sortOption: string;
+}
+
 export interface WorkshopRepository {
   createWorkshop(workshop: Workshop): Promise<CreateWorkshop>;
-  getWorkshops(page: number): Promise<Workshop[]>;
-  getTotalWorkshops(): Promise<number>;
+  getWorkshops(workshopRequest: GetWorkshop): Promise<Workshop[]>;
+  getTotalWorkshops(workshopRequest: GetWorkshop): Promise<number>;
   getWorkshopById(id: string): Promise<Workshop | null>;
   getWorkshopByCategory(
     categories: string[],

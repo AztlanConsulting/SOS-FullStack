@@ -13,6 +13,7 @@ export default function useProduct<T extends Props>(
     searchTerm?: string,
     sortOption?: string,
   ) => Promise<T>,
+  type: string,
 ) {
   // Pagination state
   const pageHook = useState(1);
@@ -25,10 +26,10 @@ export default function useProduct<T extends Props>(
 
   // Query
   const query = useQuery({
-    queryKey: ['workshops', page, searchTerm, sortOption],
+    queryKey: [type, page, searchTerm, sortOption],
     queryFn: async () => queryFunction(page, searchTerm, sortOption),
   });
-  const { isLoading, error, data } = query;
+  const { data } = query;
 
   // Pagination
   const [visiblePages, totalPages] = useMemo(() => {

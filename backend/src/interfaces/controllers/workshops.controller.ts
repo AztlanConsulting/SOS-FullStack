@@ -17,16 +17,23 @@ export async function getWorkshops(req: Request, res: Response) {
       throw query.error;
     }
 
-    const page = query.data.page;
     const id = query.data.id;
 
-    let workshops: Workshop[];
+    let workshops: Workshop[] | Workshop;
     let total: number = 0;
+    // Get by ID
     if (id !== undefined) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
-      workshops = ws ? [ws] : [];
-    } else {
-      const workshopsAndCount = await getWorkshopList(WorkshopDataAccess, page);
+      if (ws) workshops = ws;
+      else
+        return res.status(404).send(`No se encontró el taller con id: ${id}`);
+    }
+    // Get with filters
+    else {
+      const workshopsAndCount = await getWorkshopList(
+        WorkshopDataAccess,
+        query.data,
+      );
       workshops = workshopsAndCount.workshops;
       total = workshopsAndCount.totalWorkshops;
     }
@@ -43,10 +50,10 @@ export async function postWorkshop(req: Request, res: Response) {
     const image = req.file;
 
     if (!body.success) throw body.error;
-    if (image !== undefined && body.data.imgUrl === undefined)
+    if (image !== undefined && body.data.imageUrl === undefined)
       throw Error('Image not provided');
 
-    // Only fills img if there is a file, unless it uses imgUrl
+    // Only fills img if there is a file, unless it uses imageUrl
     const workshopData: Workshop = {
       ...body.data,
       ...() => {

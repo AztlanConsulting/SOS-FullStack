@@ -1,6 +1,6 @@
 import Search from '@shared/components/ui/Search';
 import List from '@shared/components/ui/List';
-import Pagination from '@shared/components/Pagination';
+import Pagination from '@shared/components/ui/Pagination';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 import { Text } from '@shared/components/ui/Text';
 import WorkshopCard from './WorkshopCard';
@@ -9,8 +9,10 @@ import useProduct from '@shared/hooks/useProduct';
 import queryWorkshop from '../services/queryWorkshops';
 
 const WorkshopListSection = () => {
-  const { searchHook, query, pages } =
-    useProduct<WorkshopResult>(queryWorkshop);
+  const { searchHook, query, pages } = useProduct<WorkshopResult>(
+    queryWorkshop,
+    'workshops',
+  );
   const { isLoading, error, data } = query;
 
   return (

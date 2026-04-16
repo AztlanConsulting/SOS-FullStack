@@ -11,7 +11,7 @@ const WorkshopCard = ({ workshop }: { workshop: Workshop }) => {
       className="bg-white rounded-lg color-grey-border w-full flex flex-col h-full"
     >
       <img
-        src={workshop.imgUrl}
+        src={workshop.imageUrl}
         alt={workshop.name}
         className="rounded-t-lg w-full h-40 object-cover"
       />
@@ -49,7 +49,7 @@ const WorkshopCard = ({ workshop }: { workshop: Workshop }) => {
           label="Ver"
           variant="plans"
           onClick={() =>
-            navigate(`/manuales/${workshop._id}`, { state: { workshop } })
+            navigate(`/talleres/${workshop._id}`, { state: { workshop } })
           }
         />
       </div>

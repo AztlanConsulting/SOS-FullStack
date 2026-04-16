@@ -5,7 +5,8 @@ export type Workshop = {
   price: number;
   category: string[];
   image: Buffer;
-  imgUrl: string;
+  imageUrl: string;
+  content: string;
 };
 
 export type WorkshopResult = {

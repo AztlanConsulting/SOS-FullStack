@@ -1,9 +1,17 @@
 import { Text } from '@shared/components/ui/Text/Text';
-import manualHero from '@/assets/images/manual-hero.jpg';
 
-export const ManualsHeroSection = () => {
+interface Props {
+  bg?: string;
+  title: string;
+  image: string;
+  content: string;
+}
+
+const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
   return (
-    <section className="bg-white w-full flex flex-col items-center justify-center">
+    <section
+      className={`bg-${bg} w-full flex flex-col items-center justify-center`}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-x-16 my-4 md:my-8 w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
         <div className="order-1 md:order-2 md:place-self-end md:justify-self-start mb-3">
           <Text
@@ -13,15 +21,15 @@ export const ManualsHeroSection = () => {
             color="text-black"
             className="text-center md:text-left"
           >
-            Manuales
+            {title}
           </Text>
         </div>
 
         <div className="order-2 md:order-1 md:row-span-2 my-3 md:my-0">
           <img
-            src={manualHero}
+            src={image}
             alt="Manuales"
-            className="w-full color-primary-shadow rounded-lg object-cover"
+            className="w-full rounded-lg object-cover"
           />
         </div>
 
@@ -32,11 +40,12 @@ export const ManualsHeroSection = () => {
             color="color-grey-text"
             className="text-left"
           >
-            Consulta nuestros manuales con información y herramientas útiles
-            para el cuidado y protección de mascotas
+            {content}
           </Text>
         </div>
       </div>
     </section>
   );
 };
+
+export default HeroSection;

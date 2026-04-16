@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { App } from '../App';
 import LandingPage from '../pages/LandingPage';
+import CreditsPage from '../pages/CreditsPage';
 
 export const router = createBrowserRouter([
   {
@@ -9,6 +10,10 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <LandingPage />,
+      },
+      {
+        path: '/credits',
+        element: <CreditsPage />,
       },
     ],
   },

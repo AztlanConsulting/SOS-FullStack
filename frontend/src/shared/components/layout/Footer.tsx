@@ -49,17 +49,13 @@ const Footer = () => {
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              Términos y Condiciones
+              <a href="/credits">Creditos de imagenes</a>
             </Text>
           </div>
           <div className="text-center">
             <Text variant="body">
               © {new Date().getFullYear()} Copyright SOS Encontrando Mascotas
             </Text>
-          </div>
-
-          <div className="text-center">
-            <Text variant="body">SOS Encontrando Mascotas</Text>
           </div>
         </div>
       </div>

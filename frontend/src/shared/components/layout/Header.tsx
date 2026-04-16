@@ -118,7 +118,7 @@ const Header = () => {
           />
 
           {/* Drawer */}
-          <div className="w-3/5 max-w-xs color-primary-bg h-full flex flex-col justify-between">
+          <div className="w-2/3 max-w-xs color-primary-bg h-full flex flex-col justify-between">
             {/* Top */}
             <div className="p-8 border-b border-white/100 flex justify-center">
               <img src="/4.png" alt="Logo" className="w-14 h-14" />

@@ -17,18 +17,23 @@ export async function getWorkshops(req: Request, res: Response) {
       throw query.error;
     }
 
-    const page = query.data.page;
     const id = query.data.id;
 
     let workshops: Workshop[] | Workshop;
     let total: number = 0;
+    // Get by ID
     if (id !== undefined) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
       if (ws) workshops = ws;
       else
         return res.status(404).send(`No se encontró el taller con id: ${id}`);
-    } else {
-      const workshopsAndCount = await getWorkshopList(WorkshopDataAccess, page);
+    }
+    // Get with filters
+    else {
+      const workshopsAndCount = await getWorkshopList(
+        WorkshopDataAccess,
+        query.data,
+      );
       workshops = workshopsAndCount.workshops;
       total = workshopsAndCount.totalWorkshops;
     }

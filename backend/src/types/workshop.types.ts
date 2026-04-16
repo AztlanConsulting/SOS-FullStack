@@ -2,7 +2,9 @@ import * as z from 'zod';
 
 export const workshopQuery = z
   .object({
+    sortOption: z.string(),
     page: z.coerce.number().optional(),
+    searchTerm: z.string().optional(),
     id: z.string().optional(),
   })
   .refine((data) => data.page !== undefined || data.id !== undefined, {

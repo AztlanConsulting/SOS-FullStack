@@ -1,12 +1,16 @@
 import type { Workshop } from '@domain/models/workshop.model';
-import type { WorkshopRepository } from '@domain/repositories/workshop.repository';
+import type {
+  GetWorkshop,
+  WorkshopRepository,
+} from '@domain/repositories/workshop.repository';
 
 export async function getWorkshopList(
   workshopImpl: WorkshopRepository,
-  page: number = 0,
+  workshopRequest: GetWorkshop,
 ): Promise<{ workshops: Workshop[]; totalWorkshops: number }> {
-  const workshops: Workshop[] = await workshopImpl.getWorkshops(page);
-  const totalWorkshops = await workshopImpl.getTotalWorkshops();
+  const workshops: Workshop[] =
+    await workshopImpl.getWorkshops(workshopRequest);
+  const totalWorkshops = await workshopImpl.getTotalWorkshops(workshopRequest);
   return { workshops, totalWorkshops };
 }
 

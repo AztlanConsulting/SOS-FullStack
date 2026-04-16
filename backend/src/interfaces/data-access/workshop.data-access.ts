@@ -2,6 +2,7 @@ import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopModel } from '@domain/models/workshop.model';
 import type {
   CreateWorkshop,
+  GetWorkshop,
   WorkshopRepository,
 } from '@domain/repositories/workshop.repository';
 
@@ -12,10 +13,23 @@ export const WorkshopDataAccess: WorkshopRepository = {
    * @param page - page of query / skip
    * @returns a list of workshops
    */
-  getWorkshops: async function (page: number): Promise<Workshop[]> {
-    const workshops = await WorkshopModel.find()
+  getWorkshops: async function ({
+    page = 0,
+    sortOption,
+    searchTerm,
+  }: GetWorkshop): Promise<Workshop[]> {
+    const sort: Record<string, { [key: string]: number }> = {
+      'Nombre (A-Z)': { name: 1 },
+      'Nombre (Z-A)': { name: -1 },
+      'Precio: menor a mayor': { price: 1 },
+      'Precio: mayor a menor': { price: -1 },
+    };
+    const workshops = await WorkshopModel.find({
+      name: { $regex: searchTerm, $options: 'i' },
+    })
       .skip(page * limit)
       .limit(limit)
+      .sort(sort[sortOption])
       .exec();
     return workshops;
   },
@@ -51,8 +65,10 @@ export const WorkshopDataAccess: WorkshopRepository = {
    * Get the total amount of workshops for pagination
    * @returns number of records
    */
-  getTotalWorkshops: async function (): Promise<number> {
-    const totalWorkshops = await WorkshopModel.countDocuments();
+  getTotalWorkshops: async function ({ searchTerm }): Promise<number> {
+    const totalWorkshops = await WorkshopModel.countDocuments({
+      name: { $regex: searchTerm, $options: 'i' },
+    });
     return totalWorkshops;
   },
 

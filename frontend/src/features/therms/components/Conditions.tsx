@@ -2,7 +2,7 @@ import { Text } from '../../../shared/components/ui/Text';
 
 const Conditions = () => {
   return (
-    <section className="relative border-b border-(--color-grey-border) py-8 lg:py-8">
+    <section className="relative border-b border-(--color-grey-border) py-4 lg:py-8">
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
 
         {/* Contenido */}

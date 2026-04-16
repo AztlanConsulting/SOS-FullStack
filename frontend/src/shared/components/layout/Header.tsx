@@ -11,6 +11,7 @@ import { CiFacebook } from 'react-icons/ci';
 import { FaInstagram } from 'react-icons/fa';
 import { PiTiktokLogoLight } from 'react-icons/pi';
 import { CiYoutube } from 'react-icons/ci';
+import { FaXTwitter } from "react-icons/fa6";
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
@@ -37,6 +38,10 @@ export const socialLinks = [
   {
     href: 'https://www.youtube.com/channel/UCJZ22JJX3yWsozu2y-Quixw',
     icon: <CiYoutube className="w-5 h-5" />,
+  },
+  {
+    href: 'https://x.com/EncontrandoSos',
+    icon: <FaXTwitter className="w-5 h-5" />,
   },
 ];
 

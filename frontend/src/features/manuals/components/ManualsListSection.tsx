@@ -173,7 +173,7 @@ export const ManualsListSection = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="h-8 aspect-square mr-3 color-grey-bg text-black border rounded disabled:opacity-50"
+              className="h-8 aspect-square mr-3 color-grey-bg text-black color-grey-border rounded disabled:opacity-40"
             >
               <HiChevronLeft size="100%" className="h-5" />
             </button>
@@ -183,7 +183,7 @@ export const ManualsListSection = () => {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`h-8 aspect-square border rounded ${
+              className={`h-8 aspect-square color-grey-border rounded ${
                 currentPage === page
                   ? 'color-primary-bg text-black'
                   : 'bg-white text-black'
@@ -201,7 +201,7 @@ export const ManualsListSection = () => {
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               disabled={currentPage === totalPages}
-              className="h-8 aspect-square ml-3 color-grey-bg text-black border rounded disabled:opacity-50"
+              className="h-8 aspect-square ml-3 color-grey-bg text-black color-grey-border rounded disabled:opacity-40"
             >
               <HiChevronRight size="100%" className="h-5" />
             </button>

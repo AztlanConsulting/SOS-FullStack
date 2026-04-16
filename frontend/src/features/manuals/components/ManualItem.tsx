@@ -13,7 +13,7 @@ export const ManualItem = ({ manual }: { manual: Manual }) => {
       <img
         src={manual.imageUrl}
         alt={manual.name}
-        className="rounded-t-lg w-full h-40 object-cover"
+        className="rounded-t-lg w-full h-40 sm:h-60 md:h-40 object-cover"
       />
       <Text
         as="p"

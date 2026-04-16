@@ -2,7 +2,7 @@ import { Text } from '../../../shared/components/ui/Text';
 
 const CreditsInfo = () => {
   return (
-    <section className="relative color-secondary-bg overflow-hidden py-4 lg:py-8">
+    <section className="relative color-secondary-bg border-b border-(--color-grey-border) py-4 lg:py-8">
           <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
             <div className=" lg:flex-row lg:items-center lg:justify-between gap-8">
               <div className="text-center mb-6 lg:mb-10">

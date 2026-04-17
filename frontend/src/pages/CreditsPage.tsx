@@ -1,15 +1,14 @@
 import Header from '../shared/components/layout/Header';
 import Footer from '../shared/components/layout/Footer';
-import Credits from '@features/credits/components/Credits';
-import CreditsInfo from '@features/credits/components/CreditsInfo';
-
+import Credits from '@features/landing/credits/Credits';
+import CreditsInfo from '@features/landing/credits/CreditsInfo';
 
 const CreditsPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow pt-[72px] lg:pt-0">
-        <CreditsInfo /> 
+        <CreditsInfo />
         <Credits />
       </main>
       <Footer />

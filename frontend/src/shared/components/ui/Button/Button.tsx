@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import type { ComponentType } from 'react';
+import { Text } from '../Text';
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'plans';
 type ButtonProps = {
   label: string;
@@ -39,7 +40,9 @@ export function Button({
       )}
     >
       <div className="flex justify-center items-center">
-        {label}
+        <Text variant="body" weight="medium" className="text-inherit">
+          {label}
+        </Text>
 
         {Icon && (
           <span className="absolute right-3 top-[52%] -translate-y-1/2">

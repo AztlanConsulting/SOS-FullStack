@@ -1,4 +1,4 @@
-import { Text } from '../../../shared/components/ui/Text';
+import { Text } from '../../../../shared/components/ui/Text';
 
 const Therms = () => {
   return (

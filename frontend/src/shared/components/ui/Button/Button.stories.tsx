@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
-import { HiChevronRight } from 'react-icons/hi';
+import { HiChevronRight, HiArrowRight } from 'react-icons/hi';
 
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Buttons',
@@ -36,6 +36,7 @@ export const Danger: Story = {
   args: {
     label: '¿No es lo que buscas? Personalízalo',
     variant: 'danger',
+    icon: HiArrowRight,
   },
 };
 

@@ -69,6 +69,11 @@
 .color-grey-text {
   color: var(--color-grey-text);
 }
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
 
 .color-light-grey-text {
   color: var(--color-light-grey-text);

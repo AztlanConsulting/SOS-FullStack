@@ -36,6 +36,11 @@
 .color-success {
   color: var(--color-success);
 }
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
 
 .color-success-bg {
   background-color: var(--color-success-bg);

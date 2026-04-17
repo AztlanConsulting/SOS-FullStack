@@ -44,8 +44,8 @@ export const Text = ({
       className={twMerge(
         variantStyles[variant],
         weightStyles[weight],
-        className,
         color || defaultColor,
+        className,
       )}
     >
       {children}

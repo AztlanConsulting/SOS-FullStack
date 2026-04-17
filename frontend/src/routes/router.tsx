@@ -4,6 +4,7 @@ import { ManualsPage } from '../pages/ManualsPage';
 import { ManualPage } from '../pages/ManualPage';
 import { TempPurchasePage } from '../pages/TempPurchasePage';
 import routerWorkshop from './workshop.routes';
+import routerPlans from './plan.routes';
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
         element: <TempPurchasePage />,
       },
       ...routerWorkshop,
+      ...routerPlans,
     ],
   },
 ]);

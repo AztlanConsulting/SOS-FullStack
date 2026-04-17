@@ -7,7 +7,7 @@ import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body ?? {};
 
     if (!Boolean(email) || !Boolean(password)) {
       res.status(400).json({

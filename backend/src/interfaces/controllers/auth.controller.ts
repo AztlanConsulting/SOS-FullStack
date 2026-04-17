@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { loginUser } from '@use-cases/auth/login.usecase';
 import { refreshAccessToken } from '@use-cases/auth/refreshTokens.usecase';
+import { logoutUser } from '@/use-cases/auth/logout.usecase';
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
 import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
 
@@ -49,7 +50,6 @@ export const login = async (req: Request, res: Response) => {
 
 export const refresh = async (req: Request, res: Response) => {
   try {
-    console.log(req.cookies);
     const refreshToken: string | undefined = req.cookies?.refreshToken;
 
     if (refreshToken == null) {
@@ -95,7 +95,18 @@ export const refresh = async (req: Request, res: Response) => {
   }
 };
 
+export const logout = async (req: Request, res: Response) => {
+  const refreshToken: string | undefined = req.cookies?.refreshToken;
+
+  if (refreshToken != null) {
+    await logoutUser(refreshTokenDataAccess, refreshToken);
+  }
+  res.clearCookie('refreshToken', { path: '/auth/refresh' });
+  res.status(200).json({ message: 'Sesion cerrada correctamente' });
+};
+
 export default {
   login,
   refresh,
+  logout,
 };

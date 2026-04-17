@@ -23,7 +23,11 @@ const WorkshopListSection = () => {
 
         {/* State management and list */}
         {isLoading && <LoadingSpinner />}
-        {error && <Text>Error cargando resultados de búsqueda</Text>}
+        {error && (
+          <Text className="mb-60 mt-40">
+            Error cargando resultados de búsqueda
+          </Text>
+        )}
         {data && data.workshops.length == 0 && (
           <Text>No hay resultados...</Text>
         )}

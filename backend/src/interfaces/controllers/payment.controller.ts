@@ -99,7 +99,7 @@ export const paymentController = {
             const { amount, currency, email, petName } = req.body;
 
             // 1. Initiate the payment on Stripe
-            const paymentIntent = await createPaymentIntent(amount, currency);
+            const paymentIntent = await createPaymentIntent({amount, currency});
 
             // 2: Immediate registry (US-17): We do not need to wait for the payment to be successful
             // We execute the registry. If the user already exists, the UseCase will handle it.

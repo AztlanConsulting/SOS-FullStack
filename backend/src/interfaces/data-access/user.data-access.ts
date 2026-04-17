@@ -14,7 +14,7 @@ const userSchema = new Schema<IUser>({
 const UserModel: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
 
 // 3. Repository implementation
-export const clientDataAccess: userRepository = {
+export const userDataAccess: userRepository = {
     save: async (client: IUser): Promise<void> => {
         const newUser = new UserModel(client);
         await newUser.save();

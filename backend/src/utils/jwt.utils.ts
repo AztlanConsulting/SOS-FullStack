@@ -14,6 +14,7 @@ export function createTokenPair(payload: TokenPayload): AuthTokens {
   };
 }
 
+//TODO: Change issuer and audience
 export function verifyAccessToken(token: string): TokenPayload {
   try {
     const decoded = jwt.verify(token, config.jwtAccessSecret, {

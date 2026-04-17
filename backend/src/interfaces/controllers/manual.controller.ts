@@ -3,13 +3,15 @@ import { getManualsDB } from '@use-cases/manuals/getManualsDB.usecase';
 import { getManualByIdDB } from '@use-cases/manuals/getManualByIdDB.usecase';
 import { ManualDataAccess } from '@interfaces/data-access/manual.data-access';
 import { manualQuery } from '@/types/manual.types';
-import { IManual } from '@/domain/models/manual.model';
 import type { ManualResult } from '@/domain/repositories/manual.repository';
 
 /**
- * Factory function that returns a middleware to retrieve all manuals.
- * @returns Express middleware handler that fetches and returns all manuals
+ * Factory function that creates an Express middleware for retrieving manuals.
+ * Handles both list queries (with pagination and filtering) and individual manual lookups by ID.
+ * Validates request parameters using Zod schema validation before processing.
+ * @returns Express middleware function (req: Request, res: Response) that processes manual retrieval requests
  */
+
 export const makeGetManuals = () => {
   return async (req: Request, res: Response) => {
     try {

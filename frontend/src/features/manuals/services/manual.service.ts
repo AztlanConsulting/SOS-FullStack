@@ -1,3 +1,8 @@
+/**
+ * Fetches the complete list of manuals from the API.
+ * @returns Promise resolving to manual list data with metadata
+ * @throws Error if the fetch request fails or returns a non-2xx status
+ */
 export const getManuals = async () => {
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;
@@ -13,6 +18,12 @@ export const getManuals = async () => {
   }
 };
 
+/**
+ * Fetches a single manual by its ID from the API.
+ * @param id - The MongoDB ObjectId of the manual to retrieve
+ * @returns Promise resolving to the manual details
+ * @throws Error if the fetch request fails or the manual ID does not exist
+ */
 export const getManualById = async (id: string) => {
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;

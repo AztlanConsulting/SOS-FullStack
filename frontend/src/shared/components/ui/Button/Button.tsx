@@ -24,9 +24,9 @@ export function Button({
     secondary:
       'bg-white text-yellow-400 hover:bg-yellow-200 w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6 border-2 border-yellow-400',
     danger:
-      'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6 border-2 border-[#61646B]',
+      'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-full md:w-auto lg:w-full xl:w-full border-1 border-[#61646B]',
     plans:
-      'bg-yellow-400 text-black hover:bg-yellow-500 w-1/3 md:w-1/3 lg:w-1/3 xl:w-1/3',
+      'bg-[#F9CD48] text-black hover:bg-yellow-500 w-40 md:w-40 lg:w-40 xl:w-40',
   };
   return (
     <button
@@ -40,13 +40,13 @@ export function Button({
       )}
     >
       <div className="flex justify-center items-center">
-        <Text variant="body" weight="medium" className="text-inherit">
+        <Text variant="caption" weight="medium" className="text-inherit">
           {label}
         </Text>
 
         {Icon && (
-          <span className="absolute right-3 top-[52%] -translate-y-1/2">
-            <Icon size={22} />
+          <span className="mt-0.5 ml-2">
+            <Icon size={17} />
           </span>
         )}
       </div>

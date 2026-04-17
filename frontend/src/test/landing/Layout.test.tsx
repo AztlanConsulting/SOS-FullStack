@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router';
-import Header from '../../../shared/components/layout/Header';
-import Footer from '../../../shared/components/layout/Footer';
+import Header from '@shared/components/layout/Header';
+import Footer from '@shared/components/layout/Footer';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router', async () => {

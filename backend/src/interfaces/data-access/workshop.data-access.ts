@@ -18,8 +18,8 @@ export const WorkshopDataAccess: WorkshopRepository = {
    */
   getWorkshops: async function ({
     page = 0,
-    sortOption,
-    searchTerm,
+    sortOption = 'Nombre (A-Z)',
+    searchTerm = '',
   }: GetWorkshop): Promise<Workshop[]> {
     const sort: Record<string, { [key: string]: SortOrder }> = {
       'Nombre (A-Z)': { name: 1 },
@@ -70,7 +70,7 @@ export const WorkshopDataAccess: WorkshopRepository = {
    * @param searchTerm - filter to better calculate the amount of pages
    * @returns number of records
    */
-  getTotalWorkshops: async function ({ searchTerm }): Promise<number> {
+  getTotalWorkshops: async function ({ searchTerm = '' }): Promise<number> {
     const totalWorkshops = await WorkshopModel.countDocuments({
       name: { $regex: searchTerm, $options: 'i' },
     });

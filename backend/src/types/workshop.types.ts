@@ -2,7 +2,7 @@ import * as z from 'zod';
 
 export const workshopQuery = z
   .object({
-    sortOption: z.string(),
+    sortOption: z.string().optional(),
     page: z.coerce.number().optional(),
     searchTerm: z.string().optional(),
     id: z.string().optional(),

@@ -1,4 +1,4 @@
-import {} from '../../../shared/components/ui/Text';
+import {} from '../../../../shared/components/ui/Text';
 
 const Credits = () => {
   return (

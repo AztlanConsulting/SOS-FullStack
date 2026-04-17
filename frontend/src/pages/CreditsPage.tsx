@@ -1,7 +1,7 @@
 import Header from '../shared/components/layout/Header';
 import Footer from '../shared/components/layout/Footer';
-import Credits from '@features/landing/credits/Credits';
-import CreditsInfo from '@features/landing/credits/CreditsInfo';
+import Credits from '@features/landing/components/credits/Credits';
+import CreditsInfo from '@features/landing/components/credits/CreditsInfo';
 
 const CreditsPage = () => {
   return (

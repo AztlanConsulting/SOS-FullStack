@@ -6,6 +6,7 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   return {
+    publicDir: 'src/assets/images',
     plugins: [tailwindcss(), react()],
     resolve: {
       alias: {

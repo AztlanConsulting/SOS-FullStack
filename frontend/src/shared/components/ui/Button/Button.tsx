@@ -26,7 +26,7 @@ export function Button({
     danger:
       'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6 border-2 border-[#61646B]',
     plans:
-      'bg-yellow-400 text-black hover:bg-yellow-500 w-1/3 md:w-1/3 lg:w-1/3 xl:w-1/3',
+      'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
   };
   return (
     <button

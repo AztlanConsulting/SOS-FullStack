@@ -1,4 +1,4 @@
-import { Text } from '../../../shared/components/ui/Text';
+import { Text } from '../../../../shared/components/ui/Text';
 
 const ServicesSection = () => {
   return (
@@ -13,21 +13,21 @@ const ServicesSection = () => {
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="relative">
             <img
-              src="/Group 36.png"
+              src="/yellowLine.png"
               alt="Background"
               className="absolute left-0 -z-10 w-[120%] scale-150"
               style={{
-                top: "calc((1 / 2 * 100%) - 25px)"
+                top: 'calc((1 / 2 * 100%) - 25px)',
               }}
             />
             <img
-              src="/image 7.png"
+              src="/dog1.png"
               alt="Servicios"
               className="relative z-10 mx-auto"
             />
           </div>
 
-          <div className="text-center lg:text-left">
+          <div className="text-center lg:text-left ml-20">
             <Text as="h3" variant="h3" weight="medium" className="mb-4 lg:mb-6">
               Ingresa la información de <br className="hidden lg:block" />
               tu mascota

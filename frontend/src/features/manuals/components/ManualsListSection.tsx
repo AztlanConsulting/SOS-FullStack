@@ -23,7 +23,11 @@ export const ManualsListSection = () => {
 
         {/* State management and list */}
         {isLoading && <LoadingSpinner />}
-        {error && <Text>Error cargando resultados de búsqueda</Text>}
+        {error && (
+          <Text className="mb-60 mt-40">
+            Error cargando resultados de búsqueda
+          </Text>
+        )}
         {!isLoading && !error && data && (
           <List<Manual>
             cards={data.manuals}

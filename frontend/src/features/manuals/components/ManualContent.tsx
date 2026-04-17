@@ -31,25 +31,22 @@ export const ManualContent = ({
           </div>
           <div className="mx-auto w-5/6 md:w-full pb-8 md:pb-0">
             <Text
-              as="h3"
-              variant="h3"
+              as="h2"
+              variant="h2"
               weight="medium"
               color="text-black"
               className="py-5 w-full"
             >
               {manual.name}
             </Text>
-            <div className="w-full flex justify-between items-center">
-              <Text as="p" variant="body" weight="regular" color="text-black">
-                Precio
-              </Text>
-              <Text as="p" variant="body" weight="regular" color="text-black">
+            <div className="w-full flex justify-start items-center">
+              <Text as="h1" variant="h1" weight="medium" color="text-black">
                 $ {manual.price}
               </Text>
             </div>
           </div>
           <div
-            className="w-full bg-white md:bg-(--color-secondary) flex flex-col md:mt-8
+            className="w-full bg-white md:bg-(--color-secondary) flex flex-col md:mt-1
             items-center justify-center border-b border-[var(--color-grey-border)] shadow-xl/30 md:border-none md:shadow-none"
           >
             <Text

@@ -13,7 +13,8 @@ import { FaInstagram } from 'react-icons/fa';
 import { PiTiktokLogoLight } from 'react-icons/pi';
 import { CiYoutube } from 'react-icons/ci';
 import { FaXTwitter } from 'react-icons/fa6';
-import SOS_logo from '@assets/images/SOS_logo.png';
+import yellowIcon from '@assets/images/yellowIcon.png';
+import whiteIcon from '@assets/images/whiteIcon.png';
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
@@ -47,7 +48,7 @@ export const socialLinks = [
   },
 ];
 
-export const Header = () => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   const { pathname } = useLocation();
@@ -94,7 +95,11 @@ export const Header = () => {
         </>
       )}
       <div className="w-5/6 mx-auto flex items-center justify-between">
-        <img src={SOS_logo} alt="Logo" className="w-12 h-12 lg:w-14 lg:h-14" />
+        <img
+          src={yellowIcon}
+          alt="Logo"
+          className="w-12 h-12 lg:w-14 lg:h-14"
+        />
 
         <nav className=" hidden lg:flex items-center gap-8">
           {navLinks.map((link) => {
@@ -135,7 +140,7 @@ export const Header = () => {
           <div className="w-2/3 max-w-xs color-primary-bg h-full flex flex-col justify-between">
             {/* Top */}
             <div className="p-8 border-b border-white/100 flex justify-center">
-              <img src={SOS_logo} alt="Logo" className="w-14 h-14" />
+              <img src={whiteIcon} alt="Logo" className="w-14 h-14" />
             </div>
 
             {/* Links */}

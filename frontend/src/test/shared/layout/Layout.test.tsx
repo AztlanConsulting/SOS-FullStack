@@ -3,8 +3,8 @@ import { describe, test, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router';
 import Header from '../../../shared/components/layout/Header';
+import Footer from '../../../shared/components/layout/Footer';
 
-// Mock useNavigate and useLocation from react-router
 const mockNavigate = vi.fn();
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -35,8 +35,6 @@ describe('Header component', () => {
       </MemoryRouter>,
     );
 
-    // Burger icon is in a button with lg:hidden
-    // Find the button that isn't the social button (social buttons have 'Cerrar' or 'Síguenos')
     const buttons = screen.getAllByRole('button');
     const burger = buttons.find(
       (b) => b.querySelector('svg') && !b.textContent?.includes('Síguenos'),
@@ -44,8 +42,6 @@ describe('Header component', () => {
 
     if (burger) {
       fireEvent.click(burger);
-      // After clicking, the drawer should be visible.
-      // The drawer contains the "Iniciar Sesión" text
       expect(screen.getByText('Iniciar Sesión')).toBeInTheDocument();
     }
   });
@@ -75,7 +71,6 @@ describe('Header component', () => {
 
     expect(screen.getByText('Cerrar')).toBeInTheDocument();
 
-    // Check if one of the social links is rendered in the sidebar
     const instagramLink = document.querySelector(
       'a[href="https://www.instagram.com/sos_encontrando_mascotas/"]',
     );
@@ -83,5 +78,42 @@ describe('Header component', () => {
 
     fireEvent.click(screen.getByText('Cerrar'));
     expect(screen.getByText('Síguenos')).toBeInTheDocument();
+  });
+});
+
+describe('Footer component', () => {
+  test('renders copyright with current year', () => {
+    render(<Footer />);
+    const currentYear = new Date().getFullYear();
+    expect(
+      screen.getByText(new RegExp(`© ${currentYear}`)),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Copyright SOS Encontrando Mascotas/),
+    ).toBeInTheDocument();
+  });
+
+  test('renders social links', () => {
+    render(<Footer />);
+    const fbLink = document.querySelector(
+      'a[href="https://www.facebook.com/SOSencontrandomascotas"]',
+    );
+    expect(fbLink).toBeInTheDocument();
+
+    const igLink = document.querySelector(
+      'a[href="https://www.instagram.com/sos_encontrando_mascotas/"]',
+    );
+    expect(igLink).toBeInTheDocument();
+  });
+
+  test('renders Terminos y condiciones', () => {
+    render(<Footer />);
+    expect(screen.getByText(/Terminos y condiciones/)).toBeInTheDocument();
+  });
+
+  test('renders image credits link', () => {
+    render(<Footer />);
+    const creditsLink = screen.getByText('Creditos de imagenes').closest('a');
+    expect(creditsLink).toHaveAttribute('href', '/credits');
   });
 });

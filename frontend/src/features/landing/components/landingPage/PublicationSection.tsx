@@ -9,7 +9,7 @@ const PublicationSection = () => {
             <img
               src="/dog2.png"
               alt="Publicación"
-              className="w-full h-full object-cover rounded-lg"
+              className="object-contain rounded-lg w-[250px] h-[250px]"
             />
           </div>
 

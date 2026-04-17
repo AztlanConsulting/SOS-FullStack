@@ -11,7 +11,7 @@ const ServicesSection = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
-          <div className="relative">
+          <div className="relative ">
             <img
               src="/yellowLine.png"
               alt="Background"
@@ -23,7 +23,7 @@ const ServicesSection = () => {
             <img
               src="/dog1.png"
               alt="Servicios"
-              className="relative z-10 mx-auto"
+              className="relative z-10 mx-auto w-[200px] h-[200px] object-cover"
             />
           </div>
 

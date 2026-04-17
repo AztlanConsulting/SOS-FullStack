@@ -1,11 +1,26 @@
-import { useState } from 'react';
 import { FileUpload } from '../../../shared/components/ui/FileUpload/FileUpload';
 import { PhotoDistributionPicker } from './PhotoDistributionPicker';
+import type { PetReportData } from '../types/petReport.types';
 
-export const PetPhotosSection = () => {
-  const [photoCount, setPhotoCount] = useState<1 | 2 | 3 | 4>(3);
+export interface PetPhotosSectionProps {
+  formData: Partial<PetReportData>;
+  updateForm: (newData: Partial<PetReportData>) => void;
+}
+
+export const PetPhotosSection = ({
+  formData,
+  updateForm,
+}: PetPhotosSectionProps) => {
+  const photoCount = parseInt(formData.imageLayout || '3') as 1 | 2 | 3 | 4;
 
   const fileUploadSlots = Array.from({ length: photoCount }, (_, i) => i + 1);
+  const handleFileUpload = (index: number, file: File | null) => {
+    const newImages = [...(formData.images || [])];
+    if (file) {
+      newImages[index - 1] = file;
+      updateForm({ images: newImages });
+    }
+  };
 
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-6 py-4">
@@ -17,7 +32,10 @@ export const PetPhotosSection = () => {
         <p className="text-sm text-gray-700 font-medium">
           Selecciona la distribución de las fotos
         </p>
-        <PhotoDistributionPicker value={photoCount} onChange={setPhotoCount} />
+        <PhotoDistributionPicker
+          value={photoCount}
+          onChange={(val) => updateForm({ imageLayout: val.toString() })}
+        />
       </div>
 
       <div className="flex flex-col gap-3 mt-2">
@@ -29,7 +47,7 @@ export const PetPhotosSection = () => {
           <FileUpload
             key={num}
             index={num}
-            onChange={(file) => console.log(`Foto ${num} seleccionada:`, file)}
+            onChange={(file) => handleFileUpload(num, file)}
           />
         ))}
       </div>

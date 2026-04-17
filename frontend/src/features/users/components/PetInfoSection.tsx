@@ -1,4 +1,3 @@
-// import { Input } from '../../../shared/components/ui/Input';
 import { Input } from '@shared/components/ui/Input';
 import { Select } from '@shared/components/ui/Select';
 import { TextArea } from '@shared/components/ui/TextArea';
@@ -6,16 +5,16 @@ import { DateInput } from '@shared/components/ui/DateInput';
 import { FileUpload } from '@shared/components/ui/FileUpload';
 import type { PetReportData, ReportType } from '../types/petReport.types';
 
-interface PetInfoSectionProps {
-  data: Partial<PetReportData>;
-  updateField: (field: keyof PetReportData, value: string) => void;
-  reportType: ReportType;
+export interface PetInfoSectionProps {
+  formData: Partial<PetReportData>;
+  updateForm: (newData: Partial<PetReportData>) => void;
+  reportType?: ReportType;
 }
 
 export const PetInfoSection = ({
-  data,
-  updateField,
-  reportType,
+  formData,
+  updateForm,
+  reportType = 'lost',
 }: PetInfoSectionProps) => {
   const speciesOptions = [
     { value: 'Perro', label: 'Perro' },
@@ -31,28 +30,30 @@ export const PetInfoSection = ({
   ];
 
   const sizeOptions = [
-    { value: 'Pequeña', label: 'Pequeña' },
-    { value: 'Mediana', label: 'Mediana' },
-    { value: 'Grande', label: 'Grande' },
+    { value: 'Mini: 1 a 4 kg', label: 'Mini: 1 a 4 kg' },
+    { value: 'Pequeña: 5 a 10 kg', label: 'Pequeña: 5 a 10 kg' },
+    { value: 'Mediana: 11 a 25 kg', label: 'Mediana: 11 a 25 kg' },
+    { value: 'Grande: 26 a 45 kg', label: 'Grande: 26 a 45 kg' },
+    { value: 'Gigante: más de 45 kg', label: 'Gigante: más de 45 kg' },
   ];
 
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5">
-      {/* RENDERIZADO CONDICIONAL: Solo aparece si está perdida */}
       {reportType === 'lost' && (
         <Input
           id="petName"
           label="Nombre de la mascota"
-          value={data.name || ''}
-          onChange={(e) => updateField('name', e.target.value)}
+          value={formData.name || ''}
+          // 4. Actualizamos usando el formato: updateForm({ campo: valor })
+          onChange={(e) => updateForm({ name: e.target.value })}
         />
       )}
 
       <Select
         id="petSpecies"
         label="Especie de la mascota"
-        value={data.species || ''}
-        onChange={(e) => updateField('species', e.target.value)}
+        value={formData.species || ''}
+        onChange={(e) => updateForm({ species: e.target.value })}
         options={speciesOptions}
       />
 
@@ -61,48 +62,47 @@ export const PetInfoSection = ({
         label={
           reportType === 'lost' ? 'Fecha de extravío' : 'Fecha de encuentro'
         }
-        value={data.date || ''}
-        onChange={(e) => updateField('date', e.target.value)}
+        value={formData.date || ''}
+        onChange={(e) => updateForm({ date: e.target.value })}
       />
 
       <Input
         id="petBreed"
         label="Raza/tipo de la mascota"
-        value={data.breed || ''}
-        onChange={(e) => updateField('breed', e.target.value)}
+        value={formData.breed || ''}
+        onChange={(e) => updateForm({ breed: e.target.value })}
       />
 
       <Select
         id="petSex"
         label="Sexo de la mascota"
-        value={data.sex || ''}
-        onChange={(e) => updateField('sex', e.target.value)}
+        value={formData.sex || ''}
+        onChange={(e) => updateForm({ sex: e.target.value as any })}
         options={sexOptions}
       />
 
       <Input
         id="petColor"
         label="Color de la mascota"
-        value={data.color || ''}
-        onChange={(e) => updateField('color', e.target.value)}
+        value={formData.color || ''}
+        onChange={(e) => updateForm({ color: e.target.value })}
       />
 
       <Select
         id="petSize"
         label="Talla de la mascota"
-        value={data.size || ''}
-        onChange={(e) => updateField('size', e.target.value)}
+        value={formData.size || ''}
+        onChange={(e) => updateForm({ size: e.target.value as any })}
         options={sizeOptions}
       />
 
-      {/* RENDERIZADO CONDICIONAL: Solo aparece si está perdida */}
       {reportType === 'lost' && (
         <TextArea
           id="petDescription"
           label="Descripción adicional de la mascota"
           placeholder="Ejemplo: Hembra blanca con patas negras y nariz rosita, esterilizada"
-          value={data.description || ''}
-          onChange={(e) => updateField('description', e.target.value)}
+          value={formData.description || ''}
+          onChange={(e) => updateForm({ description: e.target.value })}
           maxLength={200}
         />
       )}

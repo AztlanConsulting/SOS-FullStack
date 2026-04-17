@@ -33,7 +33,6 @@ export const Select: React.FC<SelectProps> = ({
             </option>
           ))}
         </select>
-        {/* Ícono de flecha (Chevron) */}
         <div className="absolute right-3 top-1/2 translate-y-[-10%] pointer-events-none text-black">
           <svg
             width="14"

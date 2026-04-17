@@ -1,14 +1,18 @@
-import { mongoDB } from '../mongoDB';
-import { Mock } from '../../../../domain/models/mock.model';
+import { mongoDB } from '@infrastructure/database/mongoDB/mongoDB';
+import { Mock } from '@domain/models/mock.model';
+import { PlanModel } from '@domain/models/plan.model';
 
-// Temporary mock data used for architectural validation.
-// This is not part of the final data and will be removed in future iterations.
+// Temporary mock data used for testing.
+// This is not part of the final data.
 
 try {
   await mongoDB();
 
+  // Clean collections
   await Mock.deleteMany({});
+  await PlanModel.deleteMany({});
 
+  // Mock data
   await Mock.insertMany([
     {
       title: 'Mock Item 1',
@@ -27,9 +31,25 @@ try {
     },
   ]);
 
-  console.log('Mock data seeded successfully');
+  // Plans data
+  await PlanModel.insertMany([
+    {
+      name: 'Básico',
+      price: 9.99,
+    },
+    {
+      name: 'Estándar',
+      price: 19.99,
+    },
+    {
+      name: 'Premium',
+      price: 29.99,
+    },
+  ]);
+
+  console.log('Data seeded successfully');
   process.exit(0);
 } catch (error: unknown) {
-  console.error('Error seeding mock data:', error);
+  console.error('Error seeding data:', error);
   process.exit(1);
 }

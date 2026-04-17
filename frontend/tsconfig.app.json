@@ -32,8 +32,7 @@
       "@routes/*": ["./src/routes/*"],
       "@services/*": ["./src/services/*"],
       "@shared/*": ["./src/shared/*"]
-    },
-    "baseUrl": "."
+    }
   },
   "include": ["src", ".storybook"]
 }

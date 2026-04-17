@@ -9,8 +9,8 @@ export const Footer = () => {
   return (
     <footer className="color-primary-bg py-8 lg:py-12">
       <div className="w-5/6 mx-auto">
-        <div className="flex flex-col items-center  gap-3 lg:gap-5">
-          <div className="flex justify-center gap-8">
+        <div className="flex flex-col items-center  gap-5">
+          <div className="flex justify-center gap-8 mb-5">
             <a
               href="https://x.com/EncontrandoSos"
               target="_blank"
@@ -49,12 +49,12 @@ export const Footer = () => {
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              <a href="/credits">Creditos de imagenes</a>
+              <a href="/therms">Terminos y condiciones</a>
             </Text>
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              <a href="/therms">Terminos y condiciones</a>
+              <a href="/credits">Creditos de imagenes</a>
             </Text>
           </div>
           <div className="text-center">

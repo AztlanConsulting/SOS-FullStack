@@ -39,13 +39,15 @@ export function Button({
         disabled && 'opacity-50 cursor-not-allowed',
       )}
     >
-      <div className="flex justify-center items-center">
+      <div className="flex justify-between items-center w-full">
+        {Icon ? <div className="w-[33px]" /> : <div />}
+
         <Text variant="caption" weight="medium" className="text-inherit">
           {label}
         </Text>
 
         {Icon && (
-          <span className="mt-0.5 ml-2">
+          <span className="flex items-center justify-start w-[33px]">
             <Icon size={17} />
           </span>
         )}

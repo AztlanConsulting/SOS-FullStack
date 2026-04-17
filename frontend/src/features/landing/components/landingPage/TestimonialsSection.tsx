@@ -95,7 +95,12 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center mt-8 lg:w-1/2 max-w-md mx-auto">
-          <Button label="Ver más opiniones" icon={CiShare1} />
+          <a
+            href="https://www.instagram.com/stories/highlights/17876578843721551/"
+            className="w-full flex justify-center"
+          >
+            <Button label="Ver más opiniones" icon={CiShare1} />
+          </a>
         </div>
       </div>
     </section>

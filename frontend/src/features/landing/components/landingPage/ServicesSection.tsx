@@ -10,7 +10,7 @@ const ServicesSection = () => {
           </Text>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
+        <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-30">
           <div className="relative ">
             <img
               src="/yellowLine.png"
@@ -27,7 +27,12 @@ const ServicesSection = () => {
             />
           </div>
           <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg: text-left order-1 lg:order-2">
-            <Text as="h3" variant="h3" weight="medium" className="mb-4 lg:mb-6">
+            <Text
+              as="h3"
+              variant="h3"
+              weight="medium"
+              className="mb-4 lg:mb-6 text-center lg:text-left"
+            >
               Ingresa la información de <br className="hidden lg:block" />
               tu mascota
             </Text>

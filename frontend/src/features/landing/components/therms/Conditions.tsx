@@ -81,7 +81,7 @@ const Conditions = () => {
             <Text variant="h3" weight="medium">
               Importante
             </Text>
-            <ul className="list-disc pl-5 space-y-2 mt-4">
+            <ul className="list-disc marker:text-black marker:text-lg pl-5 space-y-2 mt-4">
               <li>
                 <Text variant="body">
                   Los servicios pagos no son reembolsables bajo ninguna

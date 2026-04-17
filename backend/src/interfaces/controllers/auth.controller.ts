@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { loginUser } from '@use-cases/auth/login.usecase';
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
-import { refreshTokenDataAccess } from '../data-access/refresToken.data-acces';
+import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
 
 export const login = async (req: Request, res: Response) => {
   try {

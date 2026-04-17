@@ -14,4 +14,15 @@ export const refreshTokenDataAccess: RefreshTokenRepository = {
       { $set: { revoked: true } },
     );
   },
+
+  async findRefreshToken(token: string): Promise<RefreshToken | null> {
+    return await RefreshTokenModel.findOne({
+      token,
+      revoked: false,
+    }).exec();
+  },
+
+  async revokeRefreshToken(token: string): Promise<void> {
+    await RefreshTokenModel.updateOne({ token }, { $set: { revoked: true } });
+  },
 };

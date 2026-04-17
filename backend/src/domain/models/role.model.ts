@@ -21,7 +21,7 @@ const RoleSchema = new Schema({
     {
       resourceId: {
         type: Types.ObjectId,
-        references: 'Resources',
+        ref: 'Resources',
         required: true,
       },
       actions: {

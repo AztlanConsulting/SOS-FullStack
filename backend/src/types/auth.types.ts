@@ -1,4 +1,13 @@
 import type { User } from '@domain/models/user.model';
+import type { Types } from 'mongoose';
+
+export type UserDTO = {
+  _id: Types.ObjectId;
+  username: string;
+  email: string;
+  roleId: Types.ObjectId;
+  active: boolean;
+};
 
 export interface TokenPayload {
   userId: User['_id'];

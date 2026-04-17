@@ -20,7 +20,7 @@ export function Button({
     'flex items-center justify-center gap-2 px-3 py-2 rounded-[20px] font-semibold text-base transition-colors duration-200';
   const variants: Record<ButtonVariant, string> = {
     primary:
-      'bg-yellow-400 text-white hover:bg-yellow-500 w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6',
+      'bg-yellow-400 text-white hover:bg-yellow-500 w-5/6 lg:w-1/2 xl:w-1/2',
     secondary:
       'bg-white text-yellow-400 hover:bg-yellow-200 w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6 border-2 border-yellow-400',
     danger:

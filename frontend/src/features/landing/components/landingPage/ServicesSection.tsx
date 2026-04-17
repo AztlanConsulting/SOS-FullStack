@@ -26,8 +26,7 @@ const ServicesSection = () => {
               className="relative z-10 mx-auto w-[200px] h-[200px] object-cover"
             />
           </div>
-
-          <div className="text-center lg:text-left ml-20">
+          <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg: text-left order-1 lg:order-2">
             <Text as="h3" variant="h3" weight="medium" className="mb-4 lg:mb-6">
               Ingresa la información de <br className="hidden lg:block" />
               tu mascota

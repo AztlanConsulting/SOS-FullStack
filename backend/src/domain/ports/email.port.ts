@@ -1,3 +1,3 @@
-export interface IEmailProvider {
+export interface emailPort {
     sendCredentials(email: string, petName: string): Promise<void>;
 }

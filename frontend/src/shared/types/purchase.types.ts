@@ -6,10 +6,8 @@ export type PurchaseRequest = {
 };
 
 export type Product = {
-  product: {
-    imageUrl: string;
-    name: string;
-    content: string;
-    price: number;
-  };
+  imageUrl: string;
+  name: string;
+  content: string;
+  price: number;
 };

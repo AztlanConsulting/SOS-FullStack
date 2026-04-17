@@ -51,6 +51,38 @@ export function verifyRefreshToken(token: string): TokenPayload {
   }
 }
 
+export function parseExpiration(exp: string): Date {
+  const match = exp.match(/(\d+)([smhd])/);
+
+  if (!match) {
+    console.error('[parseExpirationToDate] invalid format:', exp);
+    throw new Error('Invalid expiration format');
+  }
+
+  const value = parseInt(match[1], 10);
+  const unit = match[2];
+
+  const multipliers: Record<'s' | 'm' | 'h' | 'd', number> = {
+    s: 1000,
+    m: 60 * 1000,
+    h: 60 * 60 * 1000,
+    d: 24 * 60 * 60 * 1000,
+  };
+
+  const ms = value * multipliers[unit as 's' | 'm' | 'h' | 'd'];
+
+  const expiresAt = new Date(Date.now() + ms);
+
+  console.log('[parseExpirationToDate] result:', {
+    value,
+    unit,
+    ms,
+    expiresAt: expiresAt.toISOString(),
+  });
+
+  return expiresAt;
+}
+
 function generateAccessToken(payload: TokenPayload): string {
   const options: SignOptions = {
     ...baseOptions,

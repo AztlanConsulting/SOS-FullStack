@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { loginUser } from '@use-cases/auth/login.usecase';
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
+import { refreshTokenDataAccess } from '../data-access/refresToken.data-acces';
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -14,7 +15,7 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await loginUser(userDataAccess, {
+    const result = await loginUser(userDataAccess, refreshTokenDataAccess, {
       email,
       password,
     });

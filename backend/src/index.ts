@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyparser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import routes from '@interfaces/routes/routes';
 import cors from 'cors';
 
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyparser.json());
+app.use(cookieParser());
 app.set('trust proxy', true);
 
 // Routes

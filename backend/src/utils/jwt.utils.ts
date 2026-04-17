@@ -33,6 +33,7 @@ export function verifyAccessToken(token: string): TokenPayload {
   }
 }
 
+//TODO: Change issuer and audience
 export function verifyRefreshToken(token: string): TokenPayload {
   try {
     const decoded = jwt.verify(token, config.jwtRefreshSecret, {

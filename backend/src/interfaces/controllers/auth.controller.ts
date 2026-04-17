@@ -21,7 +21,7 @@ export const login = async (req: Request, res: Response) => {
       password,
     });
 
-    //TODO: Change to production
+    //TODO: Change for production
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
       secure: false,
@@ -65,7 +65,7 @@ export const refresh = async (req: Request, res: Response) => {
       refreshToken,
     );
 
-    //TODO: Change to production
+    //TODO: Change for production
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: false,

@@ -4,6 +4,9 @@ import { handleStripeWebhook } from '../../use-cases/payments/handleStripeWebhoo
 import { createPendingIntentDB } from '../../use-cases/payments/createPendingIntentDB.usecase';
 import { markAsSucceededDB } from '../../use-cases/payments/markAsSuccededDB.usecase';
 import type Stripe from 'stripe';
+import { registerClientUseCase } from '../../use-cases/clients/registerClient.usecase';
+import { userDataAccess } from '../data-access/user.data-access';
+import { emailProvider } from '../../infrastructure/api/email.service';
 
 export const makeCreatePaymentIntent = () => {
   return async (req: Request, res: Response) => {
@@ -88,4 +91,31 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       err instanceof Error ? err.message : 'Unknown webhook error';
     res.status(400).send(`Webhook Error: ${message}`);
   }
+};
+
+export const paymentController = {
+    createPaymentIntent: async (req: Request, res: Response) => {
+        try {
+            const { amount, currency, email, petName } = req.body;
+
+            // 1. Initiate the payment on Stripe
+            const paymentIntent = await createPaymentIntent(amount, currency);
+
+            // 2: Immediate registry (US-17): We do not need to wait for the payment to be successful
+            // We execute the registry. If the user already exists, the UseCase will handle it.
+            await registerClientUseCase(
+                userDataAccess,
+                emailProvider,
+                { email, petName }
+            );
+
+            // 3. Respond to the frontend with clientSecret so the payment form is shown.
+            res.status(200).json({
+                clientSecret: paymentIntent.clientSecret,
+                registrationStarted: true 
+            });
+        } catch (error: any) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 };

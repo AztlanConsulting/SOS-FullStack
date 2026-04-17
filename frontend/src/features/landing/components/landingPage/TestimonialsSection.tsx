@@ -94,7 +94,7 @@ const TestimonialsSection = () => {
           </div>
         </div>
 
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8 lg:w-1/2 max-w-md mx-auto">
           <Button label="Ver más opiniones" icon={CiShare1} />
         </div>
       </div>

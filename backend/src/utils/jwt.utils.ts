@@ -74,13 +74,6 @@ export function parseExpiration(exp: string): Date {
 
   const expiresAt = new Date(Date.now() + ms);
 
-  console.log('[parseExpirationToDate] result:', {
-    value,
-    unit,
-    ms,
-    expiresAt: expiresAt.toISOString(),
-  });
-
   return expiresAt;
 }
 

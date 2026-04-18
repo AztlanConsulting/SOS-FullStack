@@ -2,7 +2,12 @@ import * as z from 'zod';
 
 export const manualQuery = z
   .object({
-    sortOption: z.string(),
+    sortOption: z.enum([
+      'Nombre (A-Z)',
+      'Nombre (Z-A)',
+      'Precio: menor a mayor',
+      'Precio: mayor a menor',
+    ]),
     page: z.coerce.number().optional(),
     searchTerm: z.string().optional(),
     id: z.string().optional(),

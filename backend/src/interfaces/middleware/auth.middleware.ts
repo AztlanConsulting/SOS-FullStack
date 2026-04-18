@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '@utils/jwt.utils';
 import { getUserById } from '@use-cases/auth/getUser.usecase';
+import { getUserPermissions } from '@/use-cases/auth/getUserPermissions.usecase';
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
 import type { TokenPayload } from '@validation/auth.types';
 
@@ -68,4 +69,41 @@ export const authMiddleware = async (
       message: 'Token invalido o manipulado',
     });
   }
+};
+
+export const requirePermission = (
+  resource: string,
+  action: 'create' | 'read' | 'update' | 'delete',
+) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (!req.user?.userId) {
+        return res.status(401).json({
+          error: 'UNAUTHORIZED',
+          message: 'Autenticación requerida',
+        });
+      }
+
+      const permissions = await getUserPermissions(
+        userDataAccess,
+        req.user.userId.toString(),
+      );
+
+      const hasPermission = permissions[resource]?.[action] === true;
+
+      if (!hasPermission) {
+        return res.status(403).json({
+          error: 'FORBIDDEN',
+          message: 'No tienes permisos para esta acción',
+        });
+      }
+
+      next();
+    } catch (error) {
+      return res.status(500).json({
+        error: 'SERVER_ERROR',
+        message: 'Error validando permisos',
+      });
+    }
+  };
 };

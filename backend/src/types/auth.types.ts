@@ -9,6 +9,35 @@ export type UserDTO = {
   active: boolean;
 };
 
+export type PermissionMap = Record<
+  string,
+  {
+    create: boolean;
+    read: boolean;
+    update: boolean;
+    delete: boolean;
+  }
+>;
+
+export type PopulatedPermission = {
+  resourceId: {
+    name: string;
+  };
+  actions: {
+    create: boolean;
+    read: boolean;
+    update: boolean;
+    delete: boolean;
+  };
+};
+
+export type UserPermissions = {
+  roleId: {
+    permissions: PopulatedPermission[];
+  };
+  permissions: PopulatedPermission[];
+};
+
 export interface TokenPayload {
   userId: User['_id'];
   email: string;

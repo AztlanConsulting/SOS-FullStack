@@ -1,6 +1,8 @@
 import type { User } from '@domain/models/user.model';
 import { UserModel } from '@domain/models/user.model';
 import type { UserRepository } from '@domain/repositories/user.repository';
+import type { PopulatedPermission } from '@validation/auth.types';
+import type { UserPermissions } from '@validation/auth.types';
 
 export const userDataAccess: UserRepository = {
   getUsers: async function (page: number): Promise<User[]> {
@@ -34,5 +36,36 @@ export const userDataAccess: UserRepository = {
       .exec();
 
     return user;
+  },
+
+  getUserPermissions: async function (
+    userId: string,
+  ): Promise<PopulatedPermission[]> {
+    const user = await UserModel.findById(userId)
+      .populate({
+        path: 'roleId',
+        populate: {
+          path: 'permissions',
+          populate: {
+            path: 'resourceId',
+            select: 'name',
+          },
+        },
+      })
+      .populate({
+        path: 'permissions',
+        populate: {
+          path: 'resourceId',
+          select: 'name',
+        },
+      })
+      .lean<UserPermissions>();
+
+    if (!user) return [];
+
+    const rolePermissions = user.roleId?.permissions ?? [];
+    const userPermissions = user.permissions ?? [];
+
+    return [...rolePermissions, ...userPermissions];
   },
 };

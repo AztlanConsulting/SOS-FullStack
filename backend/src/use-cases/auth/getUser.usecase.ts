@@ -1,3 +1,4 @@
+import type { Types } from 'mongoose';
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { UserDTO } from '@validation/auth.types';
 
@@ -19,7 +20,7 @@ export const getUserById = async (
     _id: user._id,
     username: user.username,
     email: user.email,
-    roleId: user.roleId,
+    roleId: user.roleId as Types.ObjectId,
     active: user.active,
   };
 

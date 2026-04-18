@@ -7,7 +7,6 @@ import { TfiWrite } from 'react-icons/tfi';
 import { LiaToolsSolid } from 'react-icons/lia';
 import { IoBookOutline } from 'react-icons/io5';
 import { PiDogLight } from 'react-icons/pi';
-import { FaWhatsapp } from 'react-icons/fa6';
 import { CiFacebook } from 'react-icons/ci';
 import { FaInstagram } from 'react-icons/fa';
 import { PiTiktokLogoLight } from 'react-icons/pi';
@@ -15,6 +14,7 @@ import { CiYoutube } from 'react-icons/ci';
 import { FaXTwitter } from 'react-icons/fa6';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import whiteIcon from '@assets/images/whiteIcon.png';
+import { HiOutlineUserCircle } from 'react-icons/hi';
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
@@ -33,7 +33,6 @@ export const socialLinks = [
     href: 'https://www.facebook.com/SOSencontrandomascotas',
     icon: <CiFacebook className="w-5 h-5" />,
   },
-  { href: '#', icon: <FaWhatsapp className="w-5 h-5" /> },
   {
     href: 'https://www.tiktok.com/@sos_encontrando_mascotas',
     icon: <PiTiktokLogoLight className="w-5 h-5" />,
@@ -62,7 +61,7 @@ const Header = () => {
             <div
               className="fixed right-0 -translate-y-1/2 z-[1000]"
               style={{
-                top: 'calc(60% - 231px)',
+                top: 'calc(70% - 165px)',
               }}
             >
               <div className="flex flex-col">
@@ -80,7 +79,7 @@ const Header = () => {
               </div>
             </div>
           ) : null}
-          <div className="fixed right-0 top-[60%] -translate-y-1/2 z-[1000]">
+          <div className="fixed right-0 top-[75%] -translate-y-1/2 z-[1000]">
             <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
               <button
                 onClick={() => setIsSocialOpen((prev) => !prev)}
@@ -98,7 +97,8 @@ const Header = () => {
         <img
           src={yellowIcon}
           alt="Logo"
-          className="w-12 h-12 lg:w-14 lg:h-14"
+          className="w-12 h-12 lg:w-14 lg:h-14 cursor-pointer"
+          onClick={() => navigate('/')}
         />
 
         <nav className=" hidden lg:flex items-center gap-8">
@@ -140,7 +140,15 @@ const Header = () => {
           <div className="w-2/3 max-w-xs color-primary-bg h-full flex flex-col justify-between">
             {/* Top */}
             <div className="p-8 border-b border-white/100 flex justify-center">
-              <img src={whiteIcon} alt="Logo" className="w-14 h-14" />
+              <img
+                src={whiteIcon}
+                alt="Logo"
+                className="w-14 h-14 cursor-pointer"
+                onClick={() => {
+                  navigate('/');
+                  setIsMenuOpen(false);
+                }}
+              />
             </div>
 
             {/* Links */}
@@ -155,7 +163,7 @@ const Header = () => {
                       setIsMenuOpen(false);
                     }}
                     className={`flex gap-4 items-center py-3 pl-4 transition-all cursor-pointer ${
-                      isActive ? 'bg-white rounded-l-[20px] shadow' : ''
+                      isActive ? 'bg-white rounded-l-[40px] shadow-lg' : ''
                     }`}
                   >
                     <div className="flex gap-4 items-center box-shad">
@@ -182,9 +190,13 @@ const Header = () => {
             </nav>
 
             {/* Bottom button */}
-            <div className="p-8 border-t border-white/100">
-              <button className="w-full">
-                <Text variant="h3" weight="bold" color="text-white">
+            <div className="p-9 border-t border-white/100">
+              <button className="w-full flex items-center justify-start gap-4">
+                <HiOutlineUserCircle
+                  strokeWidth={1}
+                  className="w-7 h-7 text-white "
+                />
+                <Text variant="h2" weight="medium" color="text-white">
                   Iniciar Sesión
                 </Text>
               </button>

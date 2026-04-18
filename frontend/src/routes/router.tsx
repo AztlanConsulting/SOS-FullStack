@@ -4,6 +4,9 @@ import { ManualsPage } from '../pages/ManualsPage';
 import { ManualPage } from '../pages/ManualPage';
 import { TempPurchasePage } from '../pages/TempPurchasePage';
 import routerWorkshop from './workshop.routes';
+import LandingPage from '../pages/LandingPage';
+import CreditsPage from '../pages/CreditsPage';
+import Therms from '../pages/Therms';
 
 export const router = createBrowserRouter([
   {
@@ -11,7 +14,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>SOS</h1>,
+        element: <LandingPage />,
+      },
+      {
+        path: '/credits',
+        element: <CreditsPage />,
+      },
+      {
+        path: '/therms',
+        element: <Therms />,
       },
       {
         path: '/manuales',

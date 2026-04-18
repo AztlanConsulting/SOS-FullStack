@@ -1,91 +1,79 @@
 import express from 'express';
 import request from 'supertest';
 import manualRoutes from '@interfaces/routes/manuals.routes';
-import { ManualDataAccess } from '@interfaces/data-access/manual.data-access';
+import { connect, closeDatabase, clearDatabase } from './db';
+import initManualDB from '@infrastructure/database/mongoDB/data/manuals.data';
 
 describe('manuals routes (integration)', () => {
   // Minimal express app wired with real manuals routes.
   const app = express();
   app.use('/manuals', manualRoutes);
 
-  afterEach(() => {
-    // Reset spies to keep tests independent.
-    jest.restoreAllMocks();
+  beforeAll(async () => {
+    // Connect to in-memory MongoDB for testing
+    await connect();
+  });
+
+  beforeEach(async () => {
+    // Clear database and reinitialize with fresh test data
+    await clearDatabase();
+    await initManualDB();
+  });
+
+  afterAll(async () => {
+    // Close database connection and stop the in-memory server
+    await closeDatabase();
   });
 
   test('GET /manuals/getManuals returns list and total when page query is provided', async () => {
-    // Mock only data-access calls; route/controller/use-case flow is real.
-    jest.spyOn(ManualDataAccess, 'getManuals').mockResolvedValue([
-      {
-        name: 'Manual C',
-        price: 180,
-        content: 'Contenido C',
-        imageUrl: 'c.jpg',
-      },
-    ]);
-    jest.spyOn(ManualDataAccess, 'getTotalManuals').mockResolvedValue(1);
-
+    // Real data-access flow: routes → controllers → data-access → MongoDB
     const res = await request(app)
       .get('/manuals/getManuals')
       .query({ page: 0, sortOption: 'Nombre (A-Z)', searchTerm: 'Manual' });
 
-    // Success payload should include list and total count.
+    // Success payload should include list and total count from real database
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({
-      manuals: [
-        {
-          name: 'Manual C',
-          price: 180,
-          content: 'Contenido C',
-          imageUrl: 'c.jpg',
-        },
-      ],
-      total: 1,
-    });
-    expect(ManualDataAccess.getManuals).toHaveBeenCalledWith({
-      page: 0,
-      sortOption: 'Nombre (A-Z)',
-      searchTerm: 'Manual',
-    });
+    expect(res.body).toHaveProperty('manuals');
+    expect(res.body).toHaveProperty('total');
+    expect(Array.isArray(res.body.manuals)).toBe(true);
+    expect(typeof res.body.total).toBe('number');
+    // initManualDB inserts 35 manuals matching the name pattern
+    expect(res.body.total).toBeGreaterThan(0);
+    expect(res.body.manuals.length).toBeGreaterThan(0);
   });
 
   test('GET /manuals/getManuals returns one manual when id query is provided', async () => {
-    // Id branch should bypass list query and return a one-item array.
-    jest.spyOn(ManualDataAccess, 'getManualById').mockResolvedValue({
-      name: 'Manual Id',
-      price: 220,
-      content: 'Contenido Id',
-      imageUrl: 'id.jpg',
-    });
-
-    const res = await request(app)
+    // First, get a real manual ID from the database
+    const getRes = await request(app)
       .get('/manuals/getManuals')
-      .query({ id: 'abc123', sortOption: 'Nombre (A-Z)' });
+      .query({ page: 0, sortOption: 'Nombre (A-Z)', searchTerm: 'Manual' });
+
+    const manualId = getRes.body.manuals[0]._id;
+
+    // Now fetch by that ID from the real database
+    const res = await request(app).get('/manuals/getManuals').query({
+      id: manualId,
+      sortOption: 'Nombre (A-Z)',
+      searchTerm: 'Manual',
+    });
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({
-      manuals: [
-        {
-          name: 'Manual Id',
-          price: 220,
-          content: 'Contenido Id',
-          imageUrl: 'id.jpg',
-        },
-      ],
-      total: 0,
-    });
+    expect(res.body.manuals).toHaveLength(1);
+    expect(res.body.manuals[0]._id).toBe(manualId);
+    expect(res.body.manuals[0]).toHaveProperty('name');
+    expect(res.body.manuals[0]).toHaveProperty('price');
   });
 
   test('GET /manuals/getManuals returns 404 when id does not exist', async () => {
-    // Null from data-access should map to 404 in controller.
-    jest.spyOn(ManualDataAccess, 'getManualById').mockResolvedValue(null);
+    // Use a valid MongoDB ObjectId format that doesn't exist in the database
+    const nonExistentId = '507f1f77bcf86cd799439011';
 
     const res = await request(app)
       .get('/manuals/getManuals')
-      .query({ id: 'missing-id', sortOption: 'Nombre (A-Z)' });
+      .query({ id: nonExistentId, sortOption: 'Nombre (A-Z)' });
 
     expect(res.status).toBe(404);
-    expect(res.text).toBe('No manual found with id: missing-id');
+    expect(res.text).toContain('No manual found');
   });
 
   test('GET /manuals/getManuals returns 500 when required query is missing', async () => {

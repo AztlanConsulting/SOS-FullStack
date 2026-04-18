@@ -1,5 +1,7 @@
 import { Types } from 'mongoose';
 import { config } from '@config/env.config';
+import { getUserById } from '@use-cases/auth/getUser.usecase';
+import { userDataAccess } from '@interfaces/data-access/user.data-access';
 import type { RefreshTokenRepository } from '@domain/repositories/refreshToken.repository';
 import type { AuthTokens, TokenPayload } from '@/types/auth.types';
 import {
@@ -21,6 +23,14 @@ export const refreshAccessToken = async (
   refreshToken: string,
 ): Promise<AuthTokens> => {
   const payload = verifyRefreshToken(refreshToken);
+
+  // Validate that user still exists and is active in DB
+  const user = await getUserById(userDataAccess, payload.userId.toString());
+
+  if (user === null || user === undefined || !user.active) {
+    await tokenRepository.revokeAllUserTokens(payload.userId);
+    throw new Error('USER_DEACTIVATED');
+  }
 
   const storedToken = await tokenRepository.findRefreshToken(refreshToken);
 

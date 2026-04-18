@@ -2,6 +2,7 @@ import express from 'express';
 import bodyparser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import routes from '@interfaces/routes/routes';
+import '@domain/models';
 import cors from 'cors';
 
 const app = express();

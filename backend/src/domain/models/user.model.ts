@@ -1,10 +1,12 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
+import type { Role } from '@domain/models/role.model';
+import type { Permission } from '@domain/models/permmision.model';
 
 export interface User {
   _id: Types.ObjectId;
-  roleId: Types.ObjectId;
-  permissions?: Types.ObjectId[];
+  roleId: Types.ObjectId | Role;
+  permissions?: (Types.ObjectId | Permission)[];
   username: string;
   password: string;
   email: string;

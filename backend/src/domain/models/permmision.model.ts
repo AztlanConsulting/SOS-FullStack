@@ -1,9 +1,10 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
+import type { Resource } from '@domain/models/resource.model';
 
 export interface Permission {
   _id: Types.ObjectId;
-  resourceId: Types.ObjectId;
+  resourceId: Types.ObjectId | Resource;
   actions: {
     create: boolean;
     read: boolean;

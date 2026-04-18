@@ -4,6 +4,7 @@ import { Schema, model } from 'mongoose';
 export interface User {
   _id: Types.ObjectId;
   roleId: Types.ObjectId;
+  permissions?: Types.ObjectId[];
   username: string;
   password: string;
   email: string;
@@ -22,6 +23,12 @@ const UserSchema = new Schema<User>(
       ref: 'Roles',
       required: true,
     },
+    permissions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Permissions',
+      },
+    ],
     username: { type: String, required: true },
     password: { type: String, required: true },
     email: {

@@ -1,35 +1,18 @@
-import { Types, Schema, model } from 'mongoose';
-import type { Resource } from './resources.model';
+import type { Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 export interface Role {
   _id: Types.ObjectId;
   role: string;
-  permissions: {
-    resourceId: Types.ObjectId | Resource;
-    actions: {
-      create: boolean;
-      read: boolean;
-      update: boolean;
-      delete: boolean;
-    };
-  }[];
+  permissions: Types.ObjectId[];
 }
 
-const RoleSchema = new Schema({
+const RoleSchema = new Schema<Role>({
   role: { type: String, required: true, unique: true },
   permissions: [
     {
-      resourceId: {
-        type: Types.ObjectId,
-        ref: 'Resources',
-        required: true,
-      },
-      actions: {
-        create: { type: Boolean, default: false },
-        read: { type: Boolean, default: false },
-        update: { type: Boolean, default: false },
-        delete: { type: Boolean, default: false },
-      },
+      type: Schema.Types.ObjectId,
+      ref: 'Permissions',
     },
   ],
 });

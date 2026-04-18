@@ -26,7 +26,7 @@ export function Button({
     danger:
       'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-full md:w-auto lg:w-full xl:w-full border-1 border-[#61646B]',
     plans:
-      'bg-[#F9CD48] text-black hover:bg-yellow-500 w-40 md:w-40 lg:w-40 xl:w-40',
+      'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
   };
   return (
     <button
@@ -39,13 +39,15 @@ export function Button({
         disabled && 'opacity-50 cursor-not-allowed',
       )}
     >
-      <div className="flex justify-center items-center">
+      <div className="flex justify-between items-center w-full">
+        {Icon ? <div className="w-[33px]" /> : <div />}
+
         <Text variant="caption" weight="medium" className="text-inherit">
           {label}
         </Text>
 
         {Icon && (
-          <span className="mt-0.5 ml-2">
+          <span className="flex items-center justify-start w-[33px]">
             <Icon size={17} />
           </span>
         )}

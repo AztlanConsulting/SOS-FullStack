@@ -1,8 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import queryWorkshop from '@features/workshop/services/queryWorkshops';
 import queryWorkshopById from '@features/workshop/services/queryWorkshopById';
 import axiosInstance from '@shared/utils/axios';
-import { afterEach } from 'node:test';
 
 // Isolate service behavior by mocking the shared axios instance.
 vi.mock('@shared/utils/axios', () => ({

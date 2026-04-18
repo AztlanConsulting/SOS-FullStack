@@ -8,7 +8,6 @@ export default defineConfig(() => {
   return {
     publicDir: 'src/assets/images',
     plugins: [tailwindcss(), react()],
-    plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
         // If you add another file path, also update in tsconfig.app.json
@@ -19,7 +18,6 @@ export default defineConfig(() => {
         '@services': path.resolve(__dirname, './src/services'),
         '@shared': path.resolve(__dirname, './src/shared'),
         '@assets': path.resolve(__dirname, './src/assets'),
-        '@pages': path.resolve(__dirname, './src/pages'),
       },
     },
 

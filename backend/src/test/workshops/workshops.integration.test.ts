@@ -106,7 +106,6 @@ describe('Workshop integration test', () => {
       request(app)
         .get(`/workshop?page=0&sortOption=${option}`)
         .then(async (r) => {
-          console.log(await r.body.workshops[0]);
           return (await r.body).workshops[0];
         }),
     );

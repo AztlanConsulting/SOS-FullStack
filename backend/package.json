@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "ENV=test jest",
+    "test:silent": "ENV=test jest --silent",
     "dev": "nodemon",
     "init:vectorDB": "tsx ./src/infrastructure/database/vectorDB/initDB.ts",
     "init:mongoDB": "tsx ./src/infrastructure/database/mongoDB/data/mock.data"

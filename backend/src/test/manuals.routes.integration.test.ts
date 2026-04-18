@@ -85,7 +85,7 @@ describe('manuals routes (integration)', () => {
       .query({ id: 'missing-id', sortOption: 'Nombre (A-Z)' });
 
     expect(res.status).toBe(404);
-    expect(res.text).toBe('No se encontró el taller con id: missing-id');
+    expect(res.text).toBe('No manual found with id: missing-id');
   });
 
   test('GET /manuals/getManuals returns 500 when required query is missing', async () => {

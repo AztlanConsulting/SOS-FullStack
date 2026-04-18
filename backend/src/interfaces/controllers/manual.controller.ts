@@ -29,8 +29,7 @@ export const makeGetManuals = () => {
       if (id !== undefined) {
         const mu = await getManualByIdDB(ManualDataAccess, id);
         if (mu) manuals = [mu];
-        else
-          return res.status(404).send(`No se encontró el taller con id: ${id}`);
+        else return res.status(404).send(`No manual found with id: ${id}`);
       } else {
         const manualsAndCount = await getManualsDB(
           ManualDataAccess,

@@ -1,6 +1,10 @@
 // tests/sample.test.ts
 import mongoose from 'mongoose';
-import { connect, closeDatabase, clearDatabase } from './db';
+import {
+  mongoDB,
+  closeDatabase,
+  clearDatabase,
+} from '@infrastructure/database/mongoDB/mongoDB';
 
 // Define a simple Mongoose Schema and Model for testing
 const userSchema = new mongoose.Schema({
@@ -13,7 +17,7 @@ const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 // 1. Connect before any tests run
 beforeAll(async () => {
-  await connect();
+  await mongoDB('test');
 });
 
 // 2. Clear out data between each test

@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
-import type { Permission } from '@domain/models/permmision.model';
+import type { Permission } from '@/domain/models/permission.model';
 
 export interface Role {
   _id: Types.ObjectId;

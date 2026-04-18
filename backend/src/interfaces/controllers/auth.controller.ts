@@ -5,6 +5,10 @@ import { logoutUser } from '@/use-cases/auth/logout.usecase';
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
 import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
 
+/**
+ * Authenticates user credentials and issues JWT tokens.
+ * Sets refresh token as HTTP-only cookie.
+ */
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body ?? {};
@@ -48,6 +52,10 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Issues a new access token using refresh token rotation.
+ * If refresh token is invalid or revoked, session is invalidated.
+ */
 export const refresh = async (req: Request, res: Response) => {
   try {
     const refreshToken: string | undefined = req.cookies?.refreshToken;
@@ -66,6 +74,7 @@ export const refresh = async (req: Request, res: Response) => {
     );
 
     //TODO: Change for production
+    // Refresh token rotation (new cookie replaces old one)
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: false,
@@ -88,6 +97,7 @@ export const refresh = async (req: Request, res: Response) => {
         return;
       }
     }
+    // Generic invalid token fallback
     res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
     res
       .status(401)
@@ -95,12 +105,18 @@ export const refresh = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Logs out user by revoking refresh token (if present)
+ * and clearing authentication cookie.
+ */
 export const logout = async (req: Request, res: Response) => {
   const refreshToken: string | undefined = req.cookies?.refreshToken;
 
   if (refreshToken != null) {
     await logoutUser(refreshTokenDataAccess, refreshToken);
   }
+
+  // Clear cookie regardless of DB state
   res.clearCookie('refreshToken', { path: '/auth/refresh' });
   res.status(200).json({ message: 'Sesion cerrada correctamente' });
 };

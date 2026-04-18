@@ -5,6 +5,7 @@ import { getUserPermissions } from '@/use-cases/auth/getUserPermissions.usecase'
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
 import type { TokenPayload } from '@validation/auth.types';
 
+// Extend Express Request to include authenticated user payload
 declare global {
   namespace Express {
     interface Request {
@@ -13,6 +14,10 @@ declare global {
   }
 }
 
+/**
+ * Authentication middleware that validates JWT access tokens.
+ * Attaches decoded user payload to request object.
+ */
 export const authMiddleware = async (
   req: Request,
   res: Response,
@@ -20,6 +25,7 @@ export const authMiddleware = async (
 ): Promise<void> => {
   const authHeader = req.headers.authorization;
 
+  // Ensure Authorization header exists and follows Bearer scheme
   if (authHeader == null || !authHeader.startsWith('Bearer ')) {
     res.status(401).json({
       error: 'UNAUTHORIZED',
@@ -30,6 +36,7 @@ export const authMiddleware = async (
 
   const token = authHeader.split(' ')[1];
 
+  // Defensive check for malformed headers
   if (!token) {
     res.status(401).json({
       error: 'UNAUTHORIZED',
@@ -41,6 +48,7 @@ export const authMiddleware = async (
   try {
     const payload = verifyAccessToken(token);
 
+    // Validate that user still exists and is active in DB
     const user = await getUserById(userDataAccess, payload.userId.toString());
 
     if (user === null || user === undefined || !user.active) {
@@ -51,6 +59,7 @@ export const authMiddleware = async (
       return;
     }
 
+    // Attach user identity to request context for downstream usage
     req.user = payload;
 
     next();
@@ -64,6 +73,7 @@ export const authMiddleware = async (
       return;
     }
 
+    // Generic invalid token fallback (tampered, malformed, etc.)
     res.status(401).json({
       error: 'INVALID_TOKEN',
       message: 'Token invalido o manipulado',
@@ -71,6 +81,13 @@ export const authMiddleware = async (
   }
 };
 
+/**
+ * Authorization middleware factory.
+ * Checks whether authenticated user has permission for a given resource/action.
+ *
+ * @param resource - Resource name (e.g. 'users', 'plans')
+ * @param action - CRUD action to authorize
+ */
 export const requirePermission = (
   resource: string,
   action: 'create' | 'read' | 'update' | 'delete',
@@ -84,11 +101,13 @@ export const requirePermission = (
         });
       }
 
+      // Resolve full permission map for user (role + overrides)
       const permissions = await getUserPermissions(
         userDataAccess,
         req.user.userId.toString(),
       );
 
+      // Check if user has required permission for resource/action
       const hasPermission = permissions[resource]?.[action] === true;
 
       if (!hasPermission) {

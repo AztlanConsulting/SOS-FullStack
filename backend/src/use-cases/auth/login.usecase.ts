@@ -11,6 +11,15 @@ import type {
   UserDTO,
 } from '@validation/auth.types';
 
+/**
+ * Authenticates a user using email + password and issues JWT token pair.
+ * Also persists the refresh token for session management.
+ *
+ * @param userRepository - Repository abstraction for user data access
+ * @param tokenRepository - Repository abstraction for tokens data access
+ * @param input - Login credentials (email + password)
+ * @return Authenticated user (safe DTO) and JWT tokens
+ */
 export const loginUser = async (
   userRepository: UserRepository,
   tokenRepository: RefreshTokenRepository,
@@ -27,6 +36,7 @@ export const loginUser = async (
     throw new Error('INVALID_CREDENTIALS');
   }
 
+  // JWT payload contains minimal identity + authorization context
   const payload: TokenPayload = {
     userId: user._id,
     email: user.email,
@@ -35,6 +45,7 @@ export const loginUser = async (
 
   const tokens = createTokenPair(payload);
 
+  // Persist refresh token to enable revocation and session tracking
   await tokenRepository.storeRefreshToken({
     _id: new Types.ObjectId(),
     token: tokens.refreshToken,
@@ -44,11 +55,12 @@ export const loginUser = async (
     revoked: false,
   });
 
+  // Return only safe user fields
   const safeUser = {
     _id: user._id,
     username: user.username,
     email: user.email,
-    roleId: user.roleId,
+    roleId: user.roleId as Types.ObjectId,
     active: user.active,
   };
 

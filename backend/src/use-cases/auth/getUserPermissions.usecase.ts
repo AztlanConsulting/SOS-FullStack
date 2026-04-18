@@ -1,6 +1,14 @@
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { PermissionMap } from '@validation/auth.types';
 
+/**
+ * Resolves the effective permissions of a user into a normalized map.
+ * Combines all permissions (role + user overrides) and aggregates them by resource.
+ *
+ * @param userRepository - Repository abstraction for user data access
+ * @param userId - User ID
+ * @return A permission map grouped by resource name
+ */
 export const getUserPermissions = async (
   userRepository: UserRepository,
   userId: string,
@@ -22,6 +30,7 @@ export const getUserPermissions = async (
   for (const perm of permissions) {
     const resource = perm.resourceId.name;
 
+    // Initialize resource entry if it doesn't exist
     if (!(resource in permissionMap)) {
       permissionMap[resource] = {
         create: false,
@@ -33,6 +42,7 @@ export const getUserPermissions = async (
 
     const actions = perm.actions;
 
+    // if any permission grants access, it becomes true
     if (actions.create) permissionMap[resource].create = true;
     if (actions.read) permissionMap[resource].read = true;
     if (actions.update) permissionMap[resource].update = true;

@@ -2,6 +2,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+/**
+ * Retrieves and validates a required environment variable.
+ * Throws an error if the variable is missing or empty.
+ *
+ * @param name - The name of the environment variable to retrieve
+ * @return The validated environment variable value as a string
+ */
 function getEnv(name: string): string {
   const value = process.env[name];
 
@@ -23,8 +30,3 @@ export const config = {
 
   bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS ?? '12', 10),
 } as const;
-
-if (!config.jwtAccessSecret || !config.jwtRefreshSecret) {
-  console.error('FATAL: JWT secrets no configurados. Revisa tu archivo .env');
-  process.exit(1);
-}

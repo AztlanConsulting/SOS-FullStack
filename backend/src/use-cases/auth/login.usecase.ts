@@ -31,6 +31,10 @@ export const loginUser = async (
     throw new Error('INVALID_CREDENTIALS');
   }
 
+  if (!user.active) {
+    throw new Error('USER_DEACTIVATED');
+  }
+
   const isPasswordValid = await bcrypt.compare(input.password, user.password);
   if (!isPasswordValid) {
     throw new Error('INVALID_CREDENTIALS');

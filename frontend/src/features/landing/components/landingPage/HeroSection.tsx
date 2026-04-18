@@ -1,6 +1,7 @@
 import { Text } from '../../../../shared/components/ui/Text';
 import { Button } from '../../../../shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
+import owner from '@assets/images/owner.png';
 
 const HeroSection = () => {
   return (
@@ -42,7 +43,7 @@ const HeroSection = () => {
 
           <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
             <img
-              src="/owner.png"
+              src={owner}
               alt="Mascota"
               className="w-auto h-[283px] lg:h-[330px] rounded-lg"
             />

@@ -21,10 +21,12 @@ const faqs = [
 ];
 
 const FrecuentlyAsked = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
   const toggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+    setOpenIndexes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
   };
 
   return (
@@ -51,13 +53,13 @@ const FrecuentlyAsked = () => {
                   <Text variant="body">{faq.question}</Text>
                   <RiArrowDropDownLine
                     className={`text-yellow-400 transition-transform text-3xl ${
-                      openIndex === index ? 'rotate-180' : ''
+                      openIndexes.includes(index) ? 'rotate-180' : ''
                     }`}
                   />
                 </div>
               </div>
 
-              {openIndex === index && (
+              {openIndexes.includes(index) && (
                 <div className="px-5 py-3">
                   <Text variant="body" className="color-grey-text">
                     {faq.answer}

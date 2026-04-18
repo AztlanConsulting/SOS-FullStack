@@ -108,6 +108,7 @@ export const ManualContent = ({
                 label="Proceder al pago"
                 variant="primary"
                 onClick={handleProceedToPayment}
+                textColor="text-black"
               />
             </div>
           </div>

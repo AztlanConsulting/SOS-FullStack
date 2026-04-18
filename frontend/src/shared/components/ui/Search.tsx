@@ -42,7 +42,7 @@ const Search = ({ searchHook }: Props) => {
       <div ref={dropdownRef} className="relative">
         <button
           onClick={() => setIsOpen((prev) => !prev)}
-          className="bg-white rounded-lg h-10 aspect-square flex flex-row justify-center items-center color-grey-border"
+          className="bg-white rounded-lg h-10 aspect-square flex flex-row justify-center items-center color-grey-border cursor-pointer"
         >
           <HiArrowsUpDown color="black" size="100%" className="h-6" />
         </button>

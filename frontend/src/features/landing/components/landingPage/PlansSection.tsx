@@ -1,4 +1,5 @@
 import { Text } from '../../../../shared/components/ui/Text';
+import cat from '@assets/images/cat.png';
 
 const PlansSection = () => {
   return (
@@ -7,7 +8,7 @@ const PlansSection = () => {
         <div className="flex flex-col lg:flex-row-reverse items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">
             <img
-              src="/cat.png"
+              src={cat}
               alt="Planes"
               className="object-contain rounded-lg w-[250px] h-[250px]"
             />

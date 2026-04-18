@@ -20,7 +20,7 @@ const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
   { label: 'Blog', href: '#', icon: <TfiWrite /> },
   { label: 'Talleres', href: '#', icon: <LiaToolsSolid /> },
-  { label: 'Manuales', href: '#', icon: <IoBookOutline /> },
+  { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
   { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
 ];
 
@@ -59,9 +59,9 @@ const Header = () => {
         <>
           {isSocialOpen ? (
             <div
-              className="fixed right-0 -translate-y-1/2 z-[1000]"
+              className="fixed right-0 z-[1000] mb-0"
               style={{
-                top: 'calc(70% - 165px)',
+                bottom: 'calc(104px + 80px)',
               }}
             >
               <div className="flex flex-col">
@@ -79,7 +79,10 @@ const Header = () => {
               </div>
             </div>
           ) : null}
-          <div className="fixed right-0 top-[75%] -translate-y-1/2 z-[1000]">
+          <div
+            className="fixed right-0 z-[1000] shadow-xl rounded-lg"
+            style={{ bottom: '80px' }}
+          >
             <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
               <button
                 onClick={() => setIsSocialOpen((prev) => !prev)}
@@ -108,11 +111,17 @@ const Header = () => {
               <div
                 key={link.label}
                 onClick={() => navigate(link.href)}
-                className={`hover:text-dark transition-colors cursor-pointer ${
-                  isActive ? 'text-dark border-b-2 border-primary-bg' : ''
+                className={`transition-colors cursor-pointer ${
+                  isActive
+                    ? 'border-b-2 border-[color:var(--color-primary)]'
+                    : ''
                 }`}
               >
-                <Text variant="body" weight="medium">
+                <Text
+                  variant="body"
+                  weight="medium"
+                  className="hover:text-[color:var(--color-primary)]"
+                >
                   {link.label}
                 </Text>
               </div>
@@ -152,7 +161,7 @@ const Header = () => {
             </div>
 
             {/* Links */}
-            <nav className="flex flex-col gap-6 p-6 flex-1 pr-0">
+            <nav className="flex flex-col gap-6 py-6 pl-4 flex-1 pr-0">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
@@ -177,7 +186,7 @@ const Header = () => {
                         {link.icon}
                       </span>
                       <Text
-                        variant="h2"
+                        variant="h3"
                         weight="medium"
                         color={isActive ? 'text-yellow-400' : 'text-white'}
                       >
@@ -190,13 +199,13 @@ const Header = () => {
             </nav>
 
             {/* Bottom button */}
-            <div className="p-9 border-t border-white/100">
+            <div className="py-4 pl-7.5 border-t border-white/100">
               <button className="w-full flex items-center justify-start gap-4">
                 <HiOutlineUserCircle
                   strokeWidth={1}
                   className="w-7 h-7 text-white "
                 />
-                <Text variant="h2" weight="medium" color="text-white">
+                <Text variant="h3" weight="medium" color="text-white">
                   Iniciar Sesión
                 </Text>
               </button>

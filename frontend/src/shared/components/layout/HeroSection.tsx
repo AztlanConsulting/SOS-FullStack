@@ -7,10 +7,15 @@ interface Props {
   content: string;
 }
 
-const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
+const HeroSection = ({
+  bg = 'color-secondary-bg',
+  title,
+  image,
+  content,
+}: Props) => {
   return (
     <section
-      className={`bg-${bg} w-full flex flex-col items-center justify-center`}
+      className={`${bg} w-full flex flex-col items-center justify-center`}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-x-16 my-4 md:my-8 w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
         <div className="order-1 md:order-2 md:place-self-end md:justify-self-start mb-3">

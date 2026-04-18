@@ -1,10 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 
-@theme {
-  --color-secondary: #fef5da;
-}
-
 /* Hide scrollbars for all browsers */
 html,
 body {
@@ -35,7 +31,6 @@ input[type='search']::-webkit-search-cancel-button {
   font-family: 'Work Sans', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  /* color: rgba(255, 255, 255, 0.87); */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

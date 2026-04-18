@@ -3,7 +3,7 @@ import cat from '@assets/images/cat.png';
 
 const PlansSection = () => {
   return (
-    <section className="bg-white overflow-hidden py-8">
+    <section className="bg-white overflow-hidden">
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
         <div className="flex flex-col lg:flex-row-reverse items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">

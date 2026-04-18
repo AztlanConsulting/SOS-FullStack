@@ -5,7 +5,7 @@ import owner from '@assets/images/owner.png';
 
 const HeroSection = () => {
   return (
-    <section className="relative color-secondary-bg overflow-hidden py-8 lg:py-16">
+    <section className="relative color-secondary-bg overflow-hidden py-8 lg:py-10">
       <div className="lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-15 xl:gap-25">
           <div className="flex-1 lg:max-w-2xl order-2 lg:order-1 lg:mt-8 text-left flex flex-col items-center justify-center">

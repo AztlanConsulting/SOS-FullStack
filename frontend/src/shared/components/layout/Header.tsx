@@ -54,7 +54,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className="bg-white border-b border-(--color-grey-border) py-4 lg:py-[17px] w-full fixed top-0 left-0 right-0 z-50 lg:relative">
+    <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
       {!isMenuOpen && (
         <>
           {isSocialOpen ? (
@@ -96,37 +96,54 @@ const Header = () => {
           </div>
         </>
       )}
-      <div className="w-5/6 mx-auto flex items-center justify-between">
+      <div className="pl-8 pr-3 lg:w-5/6 mx-auto flex items-center justify-between">
         <img
           src={yellowIcon}
           alt="Logo"
-          className="w-12 h-12 lg:w-14 lg:h-14 cursor-pointer"
+          className="w-12 h-12 lg:hidden cursor-pointer"
           onClick={() => navigate('/')}
         />
 
-        <nav className=" hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <div
-                key={link.label}
-                onClick={() => navigate(link.href)}
-                className={`transition-colors cursor-pointer ${
-                  isActive
-                    ? 'border-b-2 border-[color:var(--color-primary)]'
-                    : ''
-                }`}
-              >
-                <Text
-                  variant="body"
-                  weight="medium"
-                  className="hover:text-[color:var(--color-primary)]"
+        <nav className="hidden lg:fixed lg:top-0 lg:left-0 lg:right-0 lg:flex items-center justify-between px-12 lg:px-8 z-40 bg-white py-2 border-b border-[color:var(--color-grey-border)]">
+          <img
+            src={yellowIcon}
+            alt="Logo"
+            className="w-12 h-12 lg:w-14 lg:h-14 cursor-pointer"
+            onClick={() => navigate('/')}
+          />
+          <div className="flex items-center gap-8">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <div
+                  key={link.label}
+                  onClick={() => navigate(link.href)}
+                  className={`transition-colors cursor-pointer ${
+                    isActive
+                      ? 'border-b-2 border-[color:var(--color-primary)]'
+                      : ''
+                  }`}
                 >
-                  {link.label}
-                </Text>
-              </div>
-            );
-          })}
+                  <Text
+                    variant="body"
+                    weight="medium"
+                    className="hover:text-[color:var(--color-primary)]"
+                  >
+                    {link.label}
+                  </Text>
+                </div>
+              );
+            })}
+            <div className="group hover:bg-[color:var(--color-primary)] bg-white border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors">
+              <Text
+                variant="body"
+                weight="medium"
+                className="group-hover:text-white text-[color:var(--color-primary)]"
+              >
+                Iniciar Sesión
+              </Text>
+            </div>
+          </div>
         </nav>
 
         <button

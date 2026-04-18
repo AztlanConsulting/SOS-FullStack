@@ -1,23 +1,41 @@
+import { useState, useEffect } from 'react';
 import { PaymentPage } from './features/payment/components/PaymentPage';
-import { useEffect } from 'react';
-import MapOrganism from '@features/map/components/MapOrganism';
+import { ReportConfirmationPage } from './pages/ReportConfirmation';
+import { PetReportProvider } from './features/users/context/PetReportContext';
 import { PhotonGeocoding } from '@features/map/services/photonGeocodingService';
 import './App.css';
 
 function App() {
+  const [currentView, setCurrentView] = useState<'confirmation' | 'payment'>(
+    'confirmation',
+  );
+
   useEffect(() => {
-    // Warm-up request for improved performance
     PhotonGeocoding.search('init').catch(() => {});
   }, []);
 
   return (
-    <div className="App">
-      <h1 className="font-bold mb-6">SOS FullStack</h1>
-      <PaymentPage />
-      <h1>SOS FullStack</h1>
-      <p>Welcome to the SOS-FullStack-feature-react project!</p>
-      <MapOrganism />
-    </div>
+    <PetReportProvider>
+      <div className="App">
+        {currentView === 'confirmation' && (
+          <ReportConfirmationPage
+            onNavigateToPayment={() => setCurrentView('payment')}
+          />
+        )}
+
+        {currentView === 'payment' && (
+          <div>
+            <button
+              onClick={() => setCurrentView('confirmation')}
+              className="mb-4 text-blue-500 underline"
+            >
+              &larr; Regresar a Confirmación
+            </button>
+            <PaymentPage />
+          </div>
+        )}
+      </div>
+    </PetReportProvider>
   );
 }
 

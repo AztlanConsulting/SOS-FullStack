@@ -223,7 +223,10 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
         </section>
 
         <div className="pt-4">
-          <button className="bg-[#FFD100] text-black font-bold py-4 rounded-full w-full shadow-md hover:bg-yellow-400 transition-colors">
+          <button
+            className="bg-[#FFD100] text-black font-bold py-4 rounded-full w-full shadow-md hover:bg-yellow-400 transition-colors"
+            // onClick={handleProced}
+          >
             Proceder al pago
           </button>
         </div>

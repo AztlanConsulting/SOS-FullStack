@@ -22,6 +22,7 @@ module.exports = [
       'eslint.config.cjs',
       'prettier.config.cjs',
       'commitlint.config.cjs',
+      'backend/jest.config.js',
     ],
   },
 

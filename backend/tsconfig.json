@@ -1,18 +1,20 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node"],
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strictNullChecks": true,
+    "esModuleInterop": true,
     "paths": {
       "@db/*": ["./src/infrastructure/database/*"],
       "@repo/*": ["./src/infrastructure/repository/*"],
-      "@/": ["./src"],
+      "@/*": ["./src/*"],
       "@domain/*": ["./src/domain/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@types/*": ["./src/types/*"],
-      "@use-cases/*": ["./src/use-cases//*"],
+      "@use-cases/*": ["./src/use-cases/*"],
       "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },

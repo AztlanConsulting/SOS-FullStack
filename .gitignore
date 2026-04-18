@@ -3,7 +3,9 @@ node_modules/
 jspm_packages/
 bower_components/
 web_modules/
+**/package-lock.json
 package-lock.json
+**/package-lock.json
 .pnp.*
 .yarn/cache
 .yarn/unplugged

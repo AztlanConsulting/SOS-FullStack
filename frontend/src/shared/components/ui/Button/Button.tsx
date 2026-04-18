@@ -39,8 +39,10 @@ export function Button({
         disabled && 'opacity-50 cursor-not-allowed',
       )}
     >
-      <div className="flex justify-between items-center w-full">
-        {Icon ? <div className="w-[33px]" /> : <div />}
+      <div
+        className={`flex justify-${Icon ? 'between' : 'center'} items-center w-full`}
+      >
+        {Icon ? <div className="w-[33px]" /> : <></>}
 
         <Text variant="caption" weight="medium" className="text-inherit">
           {label}

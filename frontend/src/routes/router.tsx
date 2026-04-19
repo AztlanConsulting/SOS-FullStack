@@ -7,6 +7,7 @@ import Therms from '../pages/Therms';
 import routerWorkshop from './workshop.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
+import LoginPage from '../pages/LoginPage';
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <LandingPage />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
       },
       {
         path: '/purchase',

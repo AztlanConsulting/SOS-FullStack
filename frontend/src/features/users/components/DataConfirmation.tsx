@@ -10,6 +10,8 @@ import { PhoneInput } from '@shared/components/ui/PhoneInput/PhoneInput';
 import { PetLocationSection } from './PetLocationSection';
 import { PetPhotosSection } from './PetPhotosSection';
 
+import { useEditableField } from '../hooks/useEditableField';
+
 export interface DataConfirmationProps {
   formData: PetReportData;
   updateForm: (newData: Partial<PetReportData>) => void;
@@ -32,17 +34,8 @@ const EditableField = ({
   maxLength?: number;
   updateForm: (newData: Partial<PetReportData>) => void;
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [tempValue, setTempValue] = useState(value);
-
-  useEffect(() => {
-    setTempValue(value);
-  }, [value]);
-
-  const handleSave = () => {
-    updateForm({ [field]: tempValue });
-    setIsEditing(false);
-  };
+  const { isEditing, setIsEditing, tempValue, setTempValue, handleSave } =
+    useEditableField(value, field, updateForm);
 
   return (
     <div

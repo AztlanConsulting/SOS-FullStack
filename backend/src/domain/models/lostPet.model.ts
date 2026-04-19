@@ -1,8 +1,5 @@
-import type { GeocodingResult } from '../../map/types/geocodingResult';
-
-export type ReportType = 'lost' | 'found';
-
-export interface PetReportData {
+export interface LostPetReport {
+  id?: string;
   name?: string;
   species: string;
   date: string;
@@ -16,14 +13,8 @@ export interface PetReportData {
     | 'Grande: 26 a 45 kg'
     | 'Gigante: más de 45 kg';
   description: string;
-
-  images: File[];
-  imageLayout?: string;
-
-  address?: string;
-  location: GeocodingResult | null;
+  location?: string;
   locationCoords?: [number, number];
-
   contactName: string;
   phoneNumber: string;
   email: string;

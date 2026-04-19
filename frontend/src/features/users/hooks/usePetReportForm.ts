@@ -1,4 +1,3 @@
-// frontend/src/features/users/hooks/usePetReportForm.ts
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { PetReportData } from '../types/petReport.types';
@@ -15,10 +14,10 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     breed: '',
     sex: 'Desconocido',
     color: '',
-    size: 'Mediana',
+    size: 'Mediana: 11 a 25 kg',
     description: '',
     images: [],
-    imageLayout: '3',
+    imageLayout: '1',
     address: '',
     location: null,
     locationCoords: undefined,
@@ -47,7 +46,16 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     if (!formData.name) newErrors.name = '¡Nos falta el nombre de tu mascota!';
     if (!formData.species)
       newErrors.species = '¡Por favor, selecciona una especie!';
-    if (!formData.date) newErrors.date = '¡Indícanos la fecha del suceso!';
+    if (!formData.date) {
+      newErrors.date = '¡Indícanos la fecha del suceso!';
+    } else {
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate > today) {
+        newErrors.date = '¡La fecha no puede ser en el futuro!';
+      }
+    }
     if (!formData.breed) newErrors.breed = '¡Nos falta conocer su raza o tipo!';
     if (!formData.color)
       newErrors.color = '¡Dinos de qué color es para identificarla mejor!';

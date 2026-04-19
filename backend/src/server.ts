@@ -4,7 +4,7 @@ import { mongoDB } from '@infrastructure/database/mongoDB/mongoDB';
 
 dotenv.config();
 
-await mongoDB();
+await mongoDB(process.env.ENV);
 
 const port = process.env.SERVER_PORT ?? 3000;
 

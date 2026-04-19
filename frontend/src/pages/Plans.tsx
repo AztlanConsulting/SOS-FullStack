@@ -1,5 +1,5 @@
 import PlanCard from '@features/plans/components/PlanCard';
-import Header from '@/shared/components/layout/Header';
+import Header from '@shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState } from 'react';

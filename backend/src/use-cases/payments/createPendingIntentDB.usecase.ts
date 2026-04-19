@@ -1,8 +1,11 @@
-import type { PaymentDBDto } from '@domain/repositories/payment.repository';
-import { PaymentDataAccess } from '../../interfaces/data-access/payment.data-access';
+import type {
+  PaymentDBDto,
+  PaymentRepository,
+} from '@domain/repositories/payment.repository';
 
 export const createPendingIntentDB = async (
+  paymentRepository: PaymentRepository,
   data: PaymentDBDto,
 ): Promise<void> => {
-  return await PaymentDataAccess.createPending(data);
+  return await paymentRepository.createPending(data);
 };

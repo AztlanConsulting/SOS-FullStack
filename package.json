@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "test:backend": "npm run test --prefix backend",
     "test:frontend": "npm run test --prefix frontend",
-    "test": "concurrently \"npm run test --prefix backend\" \"npm run test --prefix frontend\"",
+    "test": "npm run test --prefix backend && npm run test --prefix frontend",
     "prepare": "husky install",
     "dev:front": "npm run dev --prefix frontend",
     "dev:back": "npm run dev --prefix backend"
@@ -42,7 +42,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-storybook": "^10.3.4",
+    "eslint-plugin-storybook": "^10.3.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
@@ -56,6 +56,7 @@
     ]
   },
   "dependencies": {
-    "package.json": "^0.0.0"
+    "package.json": "^0.0.0",
+    "storybook": "^10.3.5"
   }
 }

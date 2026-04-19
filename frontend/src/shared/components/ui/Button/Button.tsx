@@ -8,6 +8,7 @@ type ButtonProps = {
   variant?: ButtonVariant;
   disabled?: boolean;
   icon?: ComponentType<{ size?: number }>;
+  textColor?: string;
 };
 export function Button({
   label,
@@ -15,6 +16,7 @@ export function Button({
   variant = 'primary',
   disabled = false,
   icon: Icon,
+  textColor = '',
 }: ButtonProps) {
   const base =
     'flex items-center justify-center gap-2 px-3 py-2 rounded-[20px] font-semibold text-base transition-colors duration-200';
@@ -37,10 +39,11 @@ export function Button({
         variants[variant],
         'relative flex justify-center',
         disabled && 'opacity-50 cursor-not-allowed',
+        textColor,
       )}
     >
       <div
-        className={`flex justify-${Icon ? 'between' : 'center'} items-center w-full`}
+        className={`flex justify-${Icon ? 'between' : 'center'} items-center w-full cursor-pointer`}
       >
         {Icon ? <div className="w-[33px]" /> : <></>}
 

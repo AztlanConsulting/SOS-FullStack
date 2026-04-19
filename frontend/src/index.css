@@ -3,13 +3,38 @@
 
 @theme {
   --color-secondary: #fef5da;
+  --color-primary: #f9cd48;
+}
+/* Hide scrollbars for all browsers */
+html,
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Hide scrollbars on all elements with overflow */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  display: none;
 }
 
 :root {
   font-family: 'Work Sans', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  /* color: rgba(255, 255, 255, 0.87); */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -71,11 +96,6 @@
 
 .color-grey-text {
   color: var(--color-grey-text);
-}
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 .color-light-grey-text {

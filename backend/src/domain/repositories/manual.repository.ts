@@ -5,7 +5,14 @@ export interface ManualResult {
   imageUrl: string;
 }
 
+export interface GetManual {
+  page?: number;
+  searchTerm?: string;
+  sortOption: string;
+}
+
 export interface ManualRepository {
-  getManuals(): Promise<ManualResult[]>;
+  getManuals(manualRequest: GetManual): Promise<ManualResult[]>;
+  getTotalManuals(manualRequest: GetManual): Promise<number>;
   getManualById(id: string): Promise<ManualResult | null>;
 }

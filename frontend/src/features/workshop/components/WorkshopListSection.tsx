@@ -29,7 +29,7 @@ const WorkshopListSection = () => {
           </Text>
         )}
         {data && data.workshops.length == 0 && (
-          <Text>No hay resultados...</Text>
+          <Text className="mb-20">No hay resultados...</Text>
         )}
         {!isLoading && !error && data && (
           <List<Workshop>

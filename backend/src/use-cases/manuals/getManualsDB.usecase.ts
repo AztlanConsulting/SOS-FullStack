@@ -1,8 +1,16 @@
-import type { ManualRepository } from '@domain/repositories/manual.repository';
-import type { ManualResult } from '@domain/repositories/manual.repository';
+import type {
+  ManualRepository,
+  GetManual,
+  ManualResult,
+} from '@domain/repositories/manual.repository';
 
 export const getManualsDB = async (
   manualRepository: ManualRepository,
-): Promise<ManualResult[]> => {
-  return await manualRepository.getManuals();
+  manualRequest: GetManual,
+): Promise<{ manuals: ManualResult[]; totalManuals: number }> => {
+  const manuals: ManualResult[] =
+    await manualRepository.getManuals(manualRequest);
+  const totalManuals: number =
+    await manualRepository.getTotalManuals(manualRequest);
+  return { manuals, totalManuals };
 };

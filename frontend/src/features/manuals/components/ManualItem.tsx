@@ -13,7 +13,7 @@ export const ManualItem = ({ manual }: { manual: Manual }) => {
       <img
         src={manual.imageUrl}
         alt={manual.name}
-        className="rounded-t-lg w-full h-40 object-cover"
+        className="rounded-t-lg w-full h-40 sm:h-60 md:h-40 object-cover"
       />
       <Text
         as="p"
@@ -24,22 +24,13 @@ export const ManualItem = ({ manual }: { manual: Manual }) => {
       >
         {manual.name}
       </Text>
-      <div className="w-full flex justify-between align-items">
+      <div className="w-full flex justify-start align-items">
         <Text
-          as="p"
-          variant="body"
-          weight="regular"
+          as="h3"
+          variant="h3"
+          weight="medium"
           color="text-black"
           className="text-left pl-4 pb-4"
-        >
-          Precio
-        </Text>
-        <Text
-          as="p"
-          variant="body"
-          weight="regular"
-          color="text-black"
-          className="text-right pr-4 pb-4"
         >
           $ {manual.price}
         </Text>

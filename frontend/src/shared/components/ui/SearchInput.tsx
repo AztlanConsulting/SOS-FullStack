@@ -1,10 +1,10 @@
 import { HiOutlineSearch } from 'react-icons/hi';
 
 interface Props {
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  handleSearch: (s: string) => void;
 }
 
-const WorkshopSearchInput = ({ setSearchTerm }: Props) => {
+const WorkshopSearchInput = ({ handleSearch }: Props) => {
   return (
     <div className="bg-white rounded-lg w-full h-10 flex flex-row justify-between items-center pl-3 color-grey-border">
       <input
@@ -12,7 +12,7 @@ const WorkshopSearchInput = ({ setSearchTerm }: Props) => {
         id="manuals-search"
         name="manuals-search"
         placeholder="Buscar..."
-        onChange={(event) => setSearchTerm(event.target.value)}
+        onChange={(event) => handleSearch(event.target.value)}
         className="bg-transparent outline-none text-black placeholder-gray-500 w-full h-full"
       />
       <button

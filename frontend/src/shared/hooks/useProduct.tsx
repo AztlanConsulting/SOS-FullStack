@@ -38,7 +38,7 @@ export default function useProduct<T extends Props>(
 
   function handleSearch(value: string) {
     setSearchTerm(value);
-    setPage(0);
+    setPage(1);
   }
 
   // Structure data

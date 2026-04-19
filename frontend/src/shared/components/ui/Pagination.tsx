@@ -23,7 +23,7 @@ const Pagination = ({ pages }: Props) => {
       <button
         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
         disabled={page === 1}
-        className="h-8 aspect-square mr-3 color-grey-bg text-black border rounded disabled:opacity-50"
+        className="h-8 aspect-square mr-3 color-grey-bg text-black border rounded disabled:opacity-50 enabled:cursor-pointer"
       >
         <HiChevronLeft size="100%" className="h-5" />
       </button>
@@ -32,7 +32,7 @@ const Pagination = ({ pages }: Props) => {
         <button
           key={p}
           onClick={() => setPage(p)}
-          className={`h-8 aspect-square border rounded ${
+          className={`h-8 aspect-square border rounded cursor-pointer ${
             page === p ? 'color-primary-bg text-black' : 'bg-white text-black'
           }`}
         >
@@ -45,7 +45,7 @@ const Pagination = ({ pages }: Props) => {
       <button
         onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
         disabled={page === totalPages}
-        className="h-8 aspect-square ml-3 color-grey-bg text-black border rounded disabled:opacity-50"
+        className="h-8 aspect-square ml-3 color-grey-bg text-black border rounded disabled:opacity-50 enabled:cursor-pointer"
       >
         <HiChevronRight size="100%" className="h-5" />
       </button>

@@ -6,6 +6,13 @@ type ManualPurchaseData = {
   price: number;
 };
 
+/**
+ * Custom hook to manage manual purchase flow state and navigation.
+ * Handles email validation, error display, and routing to the purchase page
+ * with pre-populated manual data and user email.
+ * @param manual - Object containing manual ID and price information
+ * @returns Object containing email state, error state, and handler functions for email input and payment proceeding
+ */
 export const useManualPurchase = (manual: ManualPurchaseData) => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState('');

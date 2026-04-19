@@ -5,6 +5,9 @@ import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import { ReportConfirmationPage } from '../pages/ReportConfirmation';
 import { PetReportProvider } from '../features/users/context/PetReportContext';
+import Plans from '../pages/Plans';
+import { PaymentPage } from '../features/payment/components/PaymentPage';
+import CheckoutPage from '../features/payment/components/CheckoutPage';
 
 export const router = createBrowserRouter([
   {
@@ -28,13 +31,19 @@ export const router = createBrowserRouter([
       },
       {
         path: '/report-confirmation',
-        element: (
-          <ReportConfirmationPage
-            onNavigateToPayment={() => {
-              console.log('Navegando al pago...');
-            }}
-          />
-        ),
+        element: <ReportConfirmationPage />,
+      },
+      {
+        path: '/plans',
+        element: <Plans />,
+      },
+      {
+        path: '/payment',
+        element: <PaymentPage />,
+      },
+      {
+        path: '/paypal-checkout',
+        element: <CheckoutPage />,
       },
     ],
   },

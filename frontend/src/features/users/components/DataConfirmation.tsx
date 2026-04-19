@@ -399,6 +399,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
           />
         </section>
 
+        <h3 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
+          Fotos de la mascota
+        </h3>
         <section>
           <EditablePhotos formData={formData} updateForm={updateForm} />
         </section>
@@ -412,7 +415,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
 
         <section>
           <h3 className="font-semibold text-gray-800 mb-4 text-center">
-            Información del dueño
+            Información de contacto
           </h3>
           <EditableField
             updateForm={updateForm}

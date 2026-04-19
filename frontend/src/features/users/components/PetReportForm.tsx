@@ -5,7 +5,7 @@ import { UserInfoSection } from './UserInfoSection';
 import { PetPhotosSection } from './PetPhotosSection';
 import { PetLocationSection } from './PetLocationSection';
 import { ContactInfoSection } from './ContactInfoSection';
-import { usePetReport } from '../context/PetReportContext'; // Ajusta la ruta si es necesario
+import { usePetReport } from '../context/PetReportContext';
 
 export interface PetReportFormProps {
   initialData?: Partial<PetReportData>;
@@ -93,10 +93,6 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
   return (
     <div className="min-h-screen pb-24 pt-8 bg-white">
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
-        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
-          Información de la mascota
-        </h2>
-
         {Object.keys(errors).length > 0 && (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm">
             <p className="font-bold mb-2">
@@ -110,12 +106,24 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           </div>
         )}
 
+        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
+          Información de la mascota
+        </h2>
         <UserInfoSection formData={formData} updateForm={updateFormData} />
 
+        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
+          Fotos de la mascota
+        </h2>
         <PetPhotosSection formData={formData} updateForm={updateFormData} />
 
+        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
+          Dónde se perdió
+        </h2>
         <PetLocationSection formData={formData} updateForm={updateFormData} />
 
+        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
+          Información de contacto
+        </h2>
         <ContactInfoSection formData={formData} updateForm={updateFormData} />
 
         <div className="mt-4">

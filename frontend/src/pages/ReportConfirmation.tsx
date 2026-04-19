@@ -6,11 +6,8 @@ import { usePetReport } from '../features/users/context/PetReportContext';
 import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
 
-export const ReportConfirmationPage: React.FC<{
-  onNavigateToPayment: () => void;
-}> = ({ onNavigateToPayment }) => {
+export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
-
   const { reportData, setReportData } = usePetReport();
 
   useEffect(() => {
@@ -26,7 +23,7 @@ export const ReportConfirmationPage: React.FC<{
   };
 
   const handleProceedToPayment = () => {
-    onNavigateToPayment();
+    navigate('/plans');
   };
 
   if (!reportData) return null;
@@ -35,7 +32,7 @@ export const ReportConfirmationPage: React.FC<{
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-grow py-8 px-4">
+      <main className="flex-grow pt-24 pb-8 px-4 lg:pt-8">
         <div className="bg-[#FFF3C7] py-4 mb-8 -mx-4">
           <h1 className="text-center text-2xl font-bold text-gray-900">
             Confirmación de datos

@@ -1,53 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { DataConfirmation } from '../features/users/components/DataConfirmation';
 import { usePetReport } from '../features/users/context/PetReportContext';
-import type { PetReportData } from '../features/users/types/petReport.types';
 
-const DUMMY_REPORT_DATA: PetReportData = {
-  name: 'Chiqui',
-  species: 'Perro',
-  date: '24/02/2026',
-  breed: 'Husky',
-  sex: 'Macho',
-  color: 'Café y blanco',
-  size: 'Grande',
-  description: 'Ojo izquierdo blanco, derecho café. Patas rosas.',
-  images: [],
-  imageLayout: '3',
-  address: 'Tec de Monterrey Campus Querétaro',
-  location: null,
-  locationCoords: [20.6133, -100.3953],
-  contactName: 'Juan Pedro Rodríguez',
-  phoneNumber: '+52 442 123 4567',
-  email: 'juan123@gmail.com',
-};
+import Header from '@shared/components/layout/Header';
+import { Footer } from '@shared/components/layout/Footer';
 
 export const ReportConfirmationPage: React.FC<{
   onNavigateToPayment: () => void;
 }> = ({ onNavigateToPayment }) => {
-  const [formData, setFormData] = useState<PetReportData>(DUMMY_REPORT_DATA);
-  const { setReportData } = usePetReport(); // Extraemos la función de nuestro Contexto
+  const navigate = useNavigate();
 
-  const handleUpdateForm = (newData: Partial<PetReportData>) => {
-    setFormData((prev) => ({ ...prev, ...newData }));
+  const { reportData, setReportData } = usePetReport();
+
+  useEffect(() => {
+    if (!reportData) {
+      navigate('/');
+    }
+  }, [reportData, navigate]);
+
+  const handleUpdateForm = (newData: Partial<typeof reportData>) => {
+    if (reportData) {
+      setReportData({ ...reportData, ...newData });
+    }
   };
 
   const handleProceedToPayment = () => {
-    setReportData(formData);
     onNavigateToPayment();
   };
 
+  if (!reportData) return null;
+
   return (
-    <div className="bg-[#FFF8E7] min-h-screen py-8 px-4">
-      <DataConfirmation formData={formData} updateForm={handleUpdateForm} />
-      <div className="max-w-lg mx-auto pb-8">
-        <button
-          onClick={handleProceedToPayment}
-          className="bg-[#FFD100] text-black font-bold py-4 rounded-full w-full shadow-md hover:bg-yellow-400 transition-colors mt-4"
-        >
-          Simular: Proceder al pago
-        </button>
-      </div>
+    <div className="flex flex-col min-h-screen bg-white">
+      <Header />
+
+      <main className="flex-grow py-8 px-4">
+        <div className="bg-[#FFF3C7] py-4 mb-8 -mx-4">
+          <h1 className="text-center text-2xl font-bold text-gray-900">
+            Confirmación de datos
+          </h1>
+        </div>
+
+        <DataConfirmation formData={reportData} updateForm={handleUpdateForm} />
+
+        <div className="max-w-lg mx-auto pb-8 mt-8">
+          <button
+            onClick={handleProceedToPayment}
+            className="bg-[#FFD100] text-black font-bold py-4 rounded-full w-full shadow-md hover:bg-yellow-400 transition-colors"
+          >
+            Proceder al pago
+          </button>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };

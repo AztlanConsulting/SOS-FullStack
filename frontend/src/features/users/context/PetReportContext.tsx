@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import React, { createContext, useState, useContext } from 'react';
 import type { PetReportData } from '../types/petReport.types';
 
-// Definimos qué información vivirá en el contexto
 interface PetReportContextType {
   reportData: PetReportData | null;
   setReportData: (data: PetReportData) => void;
@@ -12,7 +11,6 @@ const PetReportContext = createContext<PetReportContextType | undefined>(
   undefined,
 );
 
-// Creamos el "Proveedor" que envolverá nuestra App
 export const PetReportProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -25,7 +23,6 @@ export const PetReportProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-// Hook personalizado para usar el contexto fácilmente
 export const usePetReport = () => {
   const context = useContext(PetReportContext);
   if (!context) {

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FileUpload } from '../../../shared/components/ui/FileUpload/FileUpload';
 import { PhotoDistributionPicker } from './PhotoDistributionPicker';
 import type { PetReportData } from '../types/petReport.types';
@@ -14,13 +15,28 @@ export const PetPhotosSection = ({
   const photoCount = parseInt(formData.imageLayout || '3') as 1 | 2 | 3 | 4;
 
   const fileUploadSlots = Array.from({ length: photoCount }, (_, i) => i + 1);
+
   const handleFileUpload = (index: number, file: File | null) => {
-    const newImages = [...(formData.images || [])];
+    let newImages = [...(formData.images || [])];
+
     if (file) {
       newImages[index - 1] = file;
-      updateForm({ images: newImages });
+    } else {
+      newImages.splice(index - 1, 1);
     }
+
+    if (newImages.length > photoCount) {
+      newImages = newImages.slice(0, photoCount);
+    }
+
+    updateForm({ images: newImages });
   };
+
+  useEffect(() => {
+    if (formData.images && formData.images.length > photoCount) {
+      updateForm({ images: formData.images.slice(0, photoCount) });
+    }
+  }, [photoCount]);
 
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-6 py-4">

@@ -5,17 +5,17 @@ import { DateInput } from '@shared/components/ui/DateInput';
 import { FileUpload } from '@shared/components/ui/FileUpload';
 import type { PetReportData, ReportType } from '../types/petReport.types';
 
-export interface PetInfoSectionProps {
+export interface UsuerInfoSectionProps {
   formData: Partial<PetReportData>;
   updateForm: (newData: Partial<PetReportData>) => void;
   reportType?: ReportType;
 }
 
-export const PetInfoSection = ({
+export const UserInfoSection = ({
   formData,
   updateForm,
   reportType = 'lost',
-}: PetInfoSectionProps) => {
+}: UsuerInfoSectionProps) => {
   const speciesOptions = [
     { value: 'Perro', label: 'Perro' },
     { value: 'Gato', label: 'Gato' },
@@ -44,7 +44,6 @@ export const PetInfoSection = ({
           id="petName"
           label="Nombre de la mascota"
           value={formData.name || ''}
-          // 4. Actualizamos usando el formato: updateForm({ campo: valor })
           onChange={(e) => updateForm({ name: e.target.value })}
         />
       )}

@@ -1,4 +1,5 @@
 import { Text } from '../../../../shared/components/ui/Text';
+import dog2 from '@assets/images/dog2.png';
 
 const PublicationSection = () => {
   return (
@@ -7,7 +8,7 @@ const PublicationSection = () => {
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="">
             <img
-              src="/dog2.png"
+              src={dog2}
               alt="Publicación"
               className="object-contain rounded-lg w-[250px] h-[250px]"
             />

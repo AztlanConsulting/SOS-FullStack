@@ -1,8 +1,10 @@
-/** @type {import('jest').Config} */
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 export default {
   preset: 'ts-jest',
+  testMatch: ['**/*.test.ts'],
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
+  forceExit: true, // Helps ensure Jest doesn't hang after closing the DB connection
 
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -11,7 +13,7 @@ export default {
     '^@domain/(.*)$': '<rootDir>/src/domain/$1',
     '^@infrastructure/(.*)$': '<rootDir>/src/infrastructure/$1',
     '^@interfaces/(.*)$': '<rootDir>/src/interfaces/$1',
-    '^@types/(.*)$': '<rootDir>/src/types/$1',
+    '^@validation/(.*)$': '<rootDir>/src/types/$1',
     '^@use-cases/(.*)$': '<rootDir>/src/use-cases/$1',
     '^@vectorDB$':
       '<rootDir>/src/infrastructure/database/vectorDB/vectorDatabase.ts',

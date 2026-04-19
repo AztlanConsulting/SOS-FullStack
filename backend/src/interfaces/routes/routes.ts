@@ -1,10 +1,13 @@
 import express from 'express';
 import { LocationController } from '../controllers/LocationController';
-import authRouter from './auth.routes';
-import imageRouter from './images.routes';
+import authRoutes from './auth.routes';
+import imageRoutes from './images.routes';
 import clientsRoutes from './clients.routes';
+import paymentRoutes from './payments.routes';
+import manualRoutes from './manuals.routes';
+import purchaseRoutes from './purchase.routes';
+import workshopRoutes from './workshops.routes';
 import planRoutes from './plans.routes';
-import paymentRouter from './payment.routes';
 
 const router = express.Router();
 
@@ -12,11 +15,13 @@ router.get('/health', (req, res) => {
   res.status(200).send('Health-check successfull');
 });
 
-router.use('/auth', authRouter);
+router.use('/auth', authRoutes);
 router.use('/clients', clientsRoutes);
-router.use('/images', imageRouter);
-router.use('/payments', paymentRouter);
-
+router.use('/images', imageRoutes);
+router.use('/payments', paymentRoutes);
+router.use('/workshop', workshopRoutes);
+router.use('/manuals', manualRoutes);
+router.use('/purchases', purchaseRoutes);
 router.use('/plans', planRoutes);
 
 //Route for the Ip based geolocation.

@@ -1,16 +1,24 @@
 import { createBrowserRouter } from 'react-router';
 import { App } from '../App';
+import { TempPurchasePage } from '../pages/TempPurchasePage';
 import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
+import routerWorkshop from './workshop.routes';
+import routerPlans from './plan.routes';
+import routerManuals from './manual.routes';
 
 export const router = createBrowserRouter([
   {
     element: <App />,
     children: [
       {
-        path: '/',  
+        path: '/',
         element: <LandingPage />,
+      },
+      {
+        path: '/purchase',
+        element: <TempPurchasePage />,
       },
       {
         path: '/credits',
@@ -20,6 +28,9 @@ export const router = createBrowserRouter([
         path: '/therms',
         element: <Therms />,
       },
+      ...routerWorkshop,
+      ...routerPlans,
+      ...routerManuals,
     ],
   },
 ]);

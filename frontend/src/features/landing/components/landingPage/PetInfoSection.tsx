@@ -1,4 +1,5 @@
-import { Text } from '../../../../shared/components/ui/Text';
+import { Text } from '@shared/components/ui/Text';
+import petAndOwners from '@assets/images/petAndOwners.png';
 
 const PublicationSection = () => {
   return (
@@ -14,7 +15,7 @@ const PublicationSection = () => {
             Cuéntanos de tu mascota
           </Text>
           <img
-            src="/petAndOwners.png"
+            src={petAndOwners}
             alt="Publicación"
             className="object-cover rounded-lg w-full h-full md:order-1 md:row-span-2"
           />

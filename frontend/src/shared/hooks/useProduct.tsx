@@ -17,7 +17,7 @@ export default function useProduct<T extends Props>(
 ) {
   // Pagination state
   const pageHook = useState(1);
-  const page = pageHook[0];
+  const [page, setPage] = pageHook;
 
   // Search Options
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,8 +36,13 @@ export default function useProduct<T extends Props>(
     return data ? calculatePages(data.total, page, 6) : [[], 0];
   }, [data, page]);
 
+  function handleSearch(value: string) {
+    setSearchTerm(value);
+    setPage(0);
+  }
+
   // Structure data
-  const searchHook = { setSearchTerm, sortHook };
+  const searchHook = { handleSearch, sortHook };
   const pages = { pageHook, visiblePages, totalPages };
 
   return { searchHook, query, pages };

@@ -134,7 +134,10 @@ const Header = () => {
                 </div>
               );
             })}
-            <div className="group hover:bg-[color:var(--color-primary)] bg-white border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors">
+            <div
+              onClick={() => navigate('/login')}
+              className="group hover:bg-[color:var(--color-primary)] bg-white border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors"
+            >
               <Text
                 variant="body"
                 weight="medium"
@@ -217,7 +220,13 @@ const Header = () => {
 
             {/* Bottom button */}
             <div className="p-9 border-t border-white">
-              <button className="w-full flex items-center justify-start gap-4">
+              <button
+                onClick={() => {
+                  navigate('/login');
+                  setIsMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-start gap-4"
+              >
                 <HiOutlineUserCircle
                   strokeWidth={1}
                   className="w-7 h-7 text-white "

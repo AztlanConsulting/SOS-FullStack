@@ -9,6 +9,7 @@ import {
 } from '../services/auth.service';
 import type { User } from '../types/auth.types';
 
+// Authentication context exposed to the application.
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -25,31 +26,37 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
+/**
+ * AuthProvider is responsible for:
+ * - Session initialization (refresh + /me bootstrap)
+ * - Managing authentication state
+ * - Exposing login/logout actions
+ */
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Prevents React StrictMode (dev) from executing init twice.
   const hasRun = useRef(false);
 
+  /**
+   * Initial authentication bootstrap:
+   * 1. Try refreshing access token (if refresh cookie exists)
+   * 2. If successful, fetch authenticated user profile
+   * 3. If any step fails, clear session state
+   */
   useEffect(() => {
     if (hasRun.current) return;
     hasRun.current = true;
 
     const init = async () => {
       try {
-        console.log('1. calling refresh');
-
         const res = await refreshRequest();
-        console.log('2. refresh OK', res);
-
         setAccessToken(res.accessToken);
 
-        console.log('3. calling /me');
-
         const data = await meRequest();
-        console.log('4. me OK', data);
-
         setUser(data.user);
       } catch (err) {
         setUser(null);
@@ -62,6 +69,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     init();
   }, []);
 
+  /**
+   * Handles login flow:
+   * - Calls backend login endpoint
+   * - Stores access token in memory
+   * - Sets authenticated user state
+   * - Maps backend errors into user-friendly messages
+   */
   const login = async (email: string, password: string, remember: boolean) => {
     setLoading(true);
     setError(null);
@@ -104,6 +118,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  /**
+   * Logs out the user:
+   * - Calls backend logout endpoint
+   * - Clears local auth state regardless of backend response
+   */
   const logout = async () => {
     try {
       await logoutRequest();

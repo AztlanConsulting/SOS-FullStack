@@ -6,6 +6,12 @@ interface RoleProtectedRouteProps {
   allowedRoles: string[];
 }
 
+/**
+ * RoleProtectedRoute
+ *
+ * Route guard that enforces authentication and role-based authorization
+ * before allowing access to protected routes.
+ */
 export const RoleProtectedRoute = ({
   children,
   allowedRoles,
@@ -15,10 +21,12 @@ export const RoleProtectedRoute = ({
 
   if (isAuthLoading) return <p>Loading...</p>;
 
+  // Not authenticated → redirect to login
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
+  // Unauthorized role → forbidden page
   if (!allowedRoles.includes(user.role)) {
     return <Navigate to="/forbidden" replace />;
   }

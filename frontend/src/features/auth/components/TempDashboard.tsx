@@ -2,7 +2,6 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { Text } from '@shared/components/ui/Text';
 import { Button } from '@shared/components/ui/Button/Button';
-import axios from 'axios';
 
 export const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -11,17 +10,6 @@ export const Dashboard = () => {
   const handleLogout = async () => {
     await logout();
     navigate('/login');
-  };
-
-  const handleTestRequest = async () => {
-    try {
-      const res = await axios.get('/api/test');
-      console.log('Respuesta:', res.data);
-      alert('Petición exitosa');
-    } catch (err) {
-      console.error(err);
-      alert('Error en la petición');
-    }
   };
 
   return (
@@ -36,11 +24,6 @@ export const Dashboard = () => {
             {user && <Text className="mb-6">Bienvenido, {user.email}</Text>}
 
             <div className="flex flex-col gap-4 max-w-xs">
-              <Button
-                label="Hacer petición al backend"
-                onClick={handleTestRequest}
-              />
-
               <Button
                 label="Cerrar sesión"
                 variant="secondary"

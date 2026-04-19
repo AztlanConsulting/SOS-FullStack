@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import { Text } from '@shared/components/ui/Text';
 
+/**
+ * LoginForm component
+ *
+ * Handles user authentication flow:
+ * - Collects credentials
+ * - Performs basic client-side validation
+ * - Calls auth service via useAuth()
+ * - Redirects user on successful login
+ */
 export const LoginForm = () => {
   const { login, loading, error, setError } = useAuth();
   const navigate = useNavigate();
@@ -12,6 +21,15 @@ export const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
 
+  /**
+   * Handles form submission:
+   * - Prevents default form behavior
+   * - Validates input fields
+   * - Calls login API
+   * - Redirects user on success
+   *
+   * @param e - Form submit event
+   */
   const handle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -40,13 +58,14 @@ export const LoginForm = () => {
 
   return (
     <div className="w-full min-h-screen color-secondary-bg flex items-center justify-center px-6 py-6">
-      {/* CONTENEDOR ESTÁNDAR */}
       <div className="w-full flex items-center justify-center">
         <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
           {/* CARD */}
           <div className="bg-white rounded-2xl border-2 border-[var(--color-primary)] p-6 md:p-10 shadow-sm text-center mx-auto w-full max-w-lg">
+            {/* LOGO */}
             <img src={yellowIcon} alt="logo" className="w-28 mx-auto mb-4" />
 
+            {/* TITLE */}
             <Text
               as="h2"
               variant="h2"
@@ -93,7 +112,7 @@ export const LoginForm = () => {
                 </label>
               </div>
 
-              {/* REMEMBER */}
+              {/* REMEMBER ME*/}
               <div className="flex items-center gap-2 mb-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -108,10 +127,10 @@ export const LoginForm = () => {
 
                   <div
                     className="
-        w-5 h-5 rounded border-2 border-[var(--color-primary)]
-        flex items-center justify-center
-        transition
-      "
+                    w-5 h-5 rounded border-2 border-[var(--color-primary)]
+                    flex items-center justify-center
+                    transition
+                    "
                     style={{
                       backgroundColor: remember
                         ? 'var(--color-primary)'
@@ -137,7 +156,7 @@ export const LoginForm = () => {
                 </label>
               </div>
 
-              {/* BUTTON */}
+              {/* SUBMIT BUTTON */}
               <button
                 type="submit"
                 disabled={loading}
@@ -146,7 +165,7 @@ export const LoginForm = () => {
                 {loading ? 'Cargando...' : 'Iniciar sesión'}
               </button>
 
-              {/* ERROR */}
+              {/* ERROR MESSAGE */}
               {error && (
                 <Text variant="caption" className="color-danger mt-1">
                   {error}

@@ -2,6 +2,16 @@ import { useNavigate } from 'react-router';
 import { Text } from '@shared/components/ui/Text';
 import yellowIcon from '@assets/images/yellowIcon.png';
 
+/**
+ * ForbiddenPage
+ *
+ * Displays an access denied screen when the user tries to access
+ * a route without sufficient permissions.
+ *
+ * Provides navigation options to:
+ * - Return to home
+ * - Go back to the previous page
+ */
 export const ForbiddenPage = () => {
   const navigate = useNavigate();
 

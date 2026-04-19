@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "ENV=test jest",
+    "test:silent": "ENV=test jest --silent",
     "dev": "nodemon",
     "init:vectorDB": "tsx ./src/infrastructure/database/vectorDB/initDB.ts",
     "init:mongoDB": "tsx ./src/infrastructure/database/mongoDB/data/mock.data"
@@ -22,9 +23,11 @@
     "mongodb": "^7.1.1",
     "mongoose": "^9.4.1",
     "multer": "^2.1.1",
-    "stripe": "^22.0.0"
+    "stripe": "^22.0.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^6.0.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
@@ -32,6 +35,7 @@
     "@types/supertest": "^7.2.0",
     "graphql": "^16.13.2",
     "jest": "^30.3.0",
+    "mongodb-memory-server": "^11.0.1",
     "nodemon": "^3.1.14",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",

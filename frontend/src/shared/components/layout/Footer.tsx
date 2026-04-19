@@ -12,14 +12,6 @@ export const Footer = () => {
         <div className="flex flex-col items-center  gap-5">
           <div className="flex justify-center gap-8 mb-5">
             <a
-              href="https://x.com/EncontrandoSos"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white hover:opacity-80"
-            >
-              <FaXTwitter className="w-6 h-6 lg:w-8 lg:h-8" />
-            </a>
-            <a
               href="https://www.instagram.com/sos_encontrando_mascotas/"
               target="_blank"
               rel="noopener noreferrer"
@@ -33,10 +25,15 @@ export const Footer = () => {
               rel="noopener noreferrer"
               className="text-white hover:opacity-80"
             >
-              <CiFacebook className="w-6 h-6 lg:w-8 lg:h-8" />
+              <CiFacebook className="w-6 h-6 lg:w-10 lg:h-10" />
             </a>
-            <a href="#" className="text-white hover:opacity-80">
-              <PiTiktokLogoLight className="w-6 h-6 lg:w-8 lg:h-8" />
+            <a
+              href="https://www.tiktok.com/@sos_encontrando_mascotas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:opacity-80"
+            >
+              <PiTiktokLogoLight className="w-6 h-6 lg:w-10 lg:h-10" />
             </a>
             <a
               href="https://www.youtube.com/channel/UCJZ22JJX3yWsozu2y-Quixw"
@@ -45,6 +42,14 @@ export const Footer = () => {
               className="text-white hover:opacity-80"
             >
               <CiYoutube className="w-6 h-6 lg:w-8 lg:h-8" />
+            </a>
+            <a
+              href="https://x.com/EncontrandoSos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:opacity-80"
+            >
+              <FaXTwitter className="w-6 h-6 lg:w-8 lg:h-8" />
             </a>
           </div>
           <div className="text-center">

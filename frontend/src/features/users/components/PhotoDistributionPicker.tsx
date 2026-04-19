@@ -56,7 +56,6 @@ export const PhotoDistributionPicker: React.FC<
       {optionsConfig.map((option) => {
         const isActive = option.value === value;
 
-        // Clases dinámicas basadas en Figma (Amarillo si activo, Gris si inactivo)
         const buttonClasses = isActive
           ? 'border-2 border-yellow-500 bg-white text-yellow-500'
           : 'border border-gray-400 bg-white text-gray-600 hover:border-gray-500';

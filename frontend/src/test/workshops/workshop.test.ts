@@ -26,7 +26,7 @@ describe('queryWorkshop service', () => {
   it('calls endpoint with transformed params and returns response data', async () => {
     const mockedData = {
       workshops: [
-        { _id: 'm1', name: 'Workshops', price: 100, content: '', imageUrl: '' },
+        { _id: 'w1', name: 'Workshops', price: 100, content: '', imageUrl: '' },
       ],
       total: 1,
     };

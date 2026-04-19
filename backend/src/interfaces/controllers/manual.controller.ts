@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { getManualsDB } from '@use-cases/manuals/getManualsDB.usecase';
 import { getManualByIdDB } from '@use-cases/manuals/getManualByIdDB.usecase';
-import { ManualDataAccess } from '@interfaces/data-access/manual.data-access';
+import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
 import { manualQuery } from '@/types/manual.types';
 import type { ManualResult } from '@/domain/repositories/manual.repository';
 

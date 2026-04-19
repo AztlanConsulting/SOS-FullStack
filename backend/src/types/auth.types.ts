@@ -44,6 +44,10 @@ export interface TokenPayload {
   roleId: User['roleId'];
 }
 
+export interface RefreshTokenPayload extends TokenPayload {
+  remember: boolean;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -52,4 +56,5 @@ export interface AuthTokens {
 export interface LoginInput {
   email: string;
   password: string;
+  remember: boolean;
 }

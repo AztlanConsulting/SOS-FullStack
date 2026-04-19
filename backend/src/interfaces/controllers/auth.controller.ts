@@ -4,6 +4,7 @@ import { refreshAccessToken } from '@use-cases/auth/refreshTokens.usecase';
 import { logoutUser } from '@/use-cases/auth/logout.usecase';
 import { userDataAccess } from '@interfaces/data-access/user.data-access';
 import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
+import { verifyRefreshToken } from '@utils/jwt.utils';
 
 /**
  * Authenticates user credentials and issues JWT tokens.
@@ -11,7 +12,7 @@ import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
  */
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body ?? {};
+    const { email, password, remember } = req.body ?? {};
 
     if (!Boolean(email) || !Boolean(password)) {
       res.status(400).json({
@@ -24,14 +25,19 @@ export const login = async (req: Request, res: Response) => {
     const result = await loginUser(userDataAccess, refreshTokenDataAccess, {
       email,
       password,
+      remember,
     });
+
+    const maxAge = Boolean(remember)
+      ? 7 * 24 * 60 * 60 * 1000 // Persistance
+      : undefined; // Session
 
     //TODO: Change for production
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: maxAge,
       path: '/auth/refresh',
     });
 
@@ -73,13 +79,19 @@ export const refresh = async (req: Request, res: Response) => {
       refreshToken,
     );
 
+    const decoded = verifyRefreshToken(refreshToken);
+
+    const maxAge = Boolean(decoded.remember)
+      ? 7 * 24 * 60 * 60 * 1000 // Persistance
+      : undefined; // Session
+
     //TODO: Change for production
     // Refresh token rotation (new cookie replaces old one)
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: maxAge,
       path: '/auth/refresh',
     });
 

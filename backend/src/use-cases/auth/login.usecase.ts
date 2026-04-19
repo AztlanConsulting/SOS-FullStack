@@ -47,7 +47,12 @@ export const loginUser = async (
     roleId: user.roleId,
   };
 
-  const tokens = createTokenPair(payload);
+  const refreshPayload = {
+    ...payload,
+    remember: input.remember,
+  };
+
+  const tokens = createTokenPair(payload, refreshPayload);
 
   // Persist refresh token to enable revocation and session tracking
   await tokenRepository.storeRefreshToken({

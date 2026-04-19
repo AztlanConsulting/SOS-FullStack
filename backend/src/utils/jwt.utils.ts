@@ -1,16 +1,23 @@
 import jwt, { type SignOptions } from 'jsonwebtoken';
 import { config } from '@config/env.config';
-import type { TokenPayload, AuthTokens } from '@validation/auth.types';
+import type {
+  TokenPayload,
+  RefreshTokenPayload,
+  AuthTokens,
+} from '@validation/auth.types';
 
 const baseOptions = {
   issuer: 'tu-app-name',
   audience: 'tu-app-client',
 } as const;
 
-export function createTokenPair(payload: TokenPayload): AuthTokens {
+export function createTokenPair(
+  payload: TokenPayload,
+  refreshPayload: RefreshTokenPayload,
+): AuthTokens {
   return {
     accessToken: generateAccessToken(payload),
-    refreshToken: generateRefreshToken(payload),
+    refreshToken: generateRefreshToken(refreshPayload),
   };
 }
 
@@ -34,13 +41,18 @@ export function verifyAccessToken(token: string): TokenPayload {
 }
 
 //TODO: Change issuer and audience
-export function verifyRefreshToken(token: string): TokenPayload {
+export function verifyRefreshToken(token: string): RefreshTokenPayload {
   try {
     const decoded = jwt.verify(token, config.jwtRefreshSecret, {
       issuer: 'tu-app-name',
       audience: 'tu-app-client',
-    }) as TokenPayload;
-    return decoded;
+    }) as Partial<RefreshTokenPayload>;
+
+    if (typeof decoded.remember !== 'boolean') {
+      throw new Error('INVALID_REFRESH_PAYLOAD');
+    }
+
+    return decoded as RefreshTokenPayload;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       throw new Error('REFRESH_TOKEN_EXPIRED');
@@ -86,7 +98,7 @@ function generateAccessToken(payload: TokenPayload): string {
   return jwt.sign(payload, config.jwtAccessSecret, options);
 }
 
-function generateRefreshToken(payload: TokenPayload): string {
+function generateRefreshToken(payload: RefreshTokenPayload): string {
   const options: SignOptions = {
     ...baseOptions,
     expiresIn: config.jwtRefreshExpiration as SignOptions['expiresIn'],

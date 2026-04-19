@@ -50,7 +50,12 @@ export const refreshAccessToken = async (
     roleId: payload.roleId,
   };
 
-  const newTokens = createTokenPair(newTokenPayload);
+  const refreshPayload = {
+    ...newTokenPayload,
+    remember: payload.remember,
+  };
+
+  const newTokens = createTokenPair(newTokenPayload, refreshPayload);
 
   // Persist new refresh token for future validation
   await tokenRepository.storeRefreshToken({

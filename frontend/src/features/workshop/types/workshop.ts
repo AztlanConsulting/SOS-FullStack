@@ -4,7 +4,7 @@ export type Workshop = {
   description: string;
   price: number;
   category: string[];
-  image: Buffer;
+  image?: Buffer;
   imageUrl: string;
   content: string;
 };

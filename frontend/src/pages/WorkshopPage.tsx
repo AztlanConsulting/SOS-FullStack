@@ -2,15 +2,15 @@ import WorkshopListSection from '@features/workshop/components/WorkshopListSecti
 import Footer from '@shared/components/layout/Footer';
 import Header from '@shared/components/layout/Header';
 import HeroSection from '@shared/components/layout/HeroSection';
-import tallerHero from '@assets/images/taller-hero.png';
+import tallerHero from '@assets/images/taller-hero.jpg';
 
 const WorkshopPage = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <main>
+      <main className='max-md:pt-[80.67px] pt-0"'>
         <HeroSection
-          bg="secondary"
+          bg="bg-secondary"
           title={'Talleres'}
           image={tallerHero}
           content={`En SOS ofrecemos talleres con herramientas y acompañamiento para

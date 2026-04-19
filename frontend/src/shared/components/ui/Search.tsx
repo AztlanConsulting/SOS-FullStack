@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   searchHook: {
-    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+    handleSearch: (s: string) => void;
     sortHook: [
       sortOption: string,
       setSortOption: React.Dispatch<React.SetStateAction<string>>,
@@ -48,7 +48,7 @@ const Search = ({ searchHook }: Props) => {
         </button>
         <DropDown isOpen={isOpen} sortHook={searchHook.sortHook} />
       </div>
-      <SearchInput setSearchTerm={searchHook.setSearchTerm} />
+      <SearchInput handleSearch={searchHook.handleSearch} />
     </div>
   );
 };

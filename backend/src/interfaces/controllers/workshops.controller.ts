@@ -68,8 +68,6 @@ export async function postWorkshop(req: Request, res: Response) {
       },
     };
 
-    console.log(workshopData);
-
     const workshopId = await createWorkshop(WorkshopDataAccess, workshopData);
 
     return res.status(200).json({ workshopId });

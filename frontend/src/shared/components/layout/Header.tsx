@@ -19,7 +19,7 @@ import { HiOutlineUserCircle } from 'react-icons/hi';
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
   { label: 'Blog', href: '#', icon: <TfiWrite /> },
-  { label: 'Talleres', href: '#', icon: <LiaToolsSolid /> },
+  { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
   { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
 ];
@@ -165,7 +165,7 @@ const Header = () => {
           {/* Drawer */}
           <div className="w-2/3 max-w-xs color-primary-bg h-full flex flex-col justify-between">
             {/* Top */}
-            <div className="p-8 border-b border-white/100 flex justify-center">
+            <div className="p-8 border-b border-white flex justify-center">
               <img
                 src={whiteIcon}
                 alt="Logo"
@@ -216,7 +216,7 @@ const Header = () => {
             </nav>
 
             {/* Bottom button */}
-            <div className="py-4 pl-7.5 border-t border-white/100">
+            <div className="p-9 border-t border-white">
               <button className="w-full flex items-center justify-start gap-4">
                 <HiOutlineUserCircle
                   strokeWidth={1}

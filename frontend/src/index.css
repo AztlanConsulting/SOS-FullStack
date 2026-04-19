@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 
+@theme {
+  --color-secondary: #fef5da;
+  --color-primary: #f9cd48;
+}
 /* Hide scrollbars for all browsers */
 html,
 body {

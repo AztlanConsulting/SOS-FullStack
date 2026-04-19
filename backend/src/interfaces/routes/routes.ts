@@ -18,11 +18,8 @@ router.use('/clients', clientsRoutes);
 router.use('/images', imageRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/workshop', workshopRoutes);
-
 router.use('/manuals', manualRoutes);
-
 router.use('/purchases', purchaseRoutes);
-
 router.use('/plans', planRoutes);
 
 //Route for the Ip based geolocation.

@@ -7,12 +7,7 @@ interface Props {
   content: string;
 }
 
-const HeroSection = ({
-  bg = 'color-secondary-bg',
-  title,
-  image,
-  content,
-}: Props) => {
+const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
   return (
     <section
       className={`${bg} w-full flex flex-col items-center justify-center`}
@@ -34,7 +29,7 @@ const HeroSection = ({
           <img
             src={image}
             alt="Manuales"
-            className="w-full rounded-lg object-cover"
+            className="w-full rounded-lg object-cover color-primary-shadow "
           />
         </div>
 

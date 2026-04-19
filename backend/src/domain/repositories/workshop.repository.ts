@@ -8,7 +8,7 @@ export interface CreateWorkshop {
 export interface GetWorkshop {
   page?: number;
   searchTerm?: string;
-  sortOption: string;
+  sortOption?: string;
 }
 
 export interface WorkshopRepository {

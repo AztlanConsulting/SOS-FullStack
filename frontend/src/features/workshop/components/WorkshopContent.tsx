@@ -20,17 +20,19 @@ const WorkshopContent = ({ workshop }: Props) => {
   return (
     <section className="w-full h-screen flex flex-col items-center justify-start">
       <HeaderBack name="Talleres" />
-      <div className="md:flex">
-        <ProductPageHero product={workshop} />
-        <ProductSale purchaseData={purchaseData} />
+      <div className="bg-secondary w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 items-center md:py-8 color-secondary-bg w-full md:mx-auto md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
+          <ProductPageHero product={workshop} />
+          <ProductSale purchaseData={purchaseData} product={workshop} />
+        </div>
       </div>
-      <div className="w-full p py-8 bg-white flex items-center justify-center">
+      <div className="w-full p py-10 bg-white flex items-center justify-center">
         <Text
           as="p"
           variant="body"
           weight="regular"
           color="text-black"
-          className="w-5/6"
+          className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl"
         >
           {workshop.content}
         </Text>

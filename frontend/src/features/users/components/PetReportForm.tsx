@@ -18,7 +18,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
 
   return (
     <div className="min-h-screen pb-24 pt-8 bg-white">
-      <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {Object.keys(errors).length > 0 && (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm">
             <p className="font-bold mb-2">

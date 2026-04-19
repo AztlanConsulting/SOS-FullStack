@@ -17,7 +17,7 @@ export const ContactInfoSection = ({
         Información del dueño
       </h3>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full max-w-lg items-center mx-auto">
         <Input
           label="Nombre y apellido del dueño"
           value={formData.contactName || ''}

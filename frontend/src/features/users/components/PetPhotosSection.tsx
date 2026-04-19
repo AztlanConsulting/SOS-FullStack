@@ -22,7 +22,7 @@ export const PetPhotosSection = ({
         Fotos de la mascota
       </h3>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-full max-w-lg mx-auto">
         <p className="text-sm text-gray-700 font-medium">
           Selecciona la distribución de las fotos
         </p>
@@ -32,7 +32,7 @@ export const PetPhotosSection = ({
         />
       </div>
 
-      <div className="flex flex-col gap-3 mt-2">
+      <div className="flex flex-col gap-3 mt-2 w-full max-w-lg mx-auto">
         <p className="text-sm text-gray-700 font-medium">
           Sube fotos de tu mascota
         </p>

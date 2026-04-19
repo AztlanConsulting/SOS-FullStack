@@ -42,7 +42,7 @@ const EditableField = ({
       className={`rounded-lg flex flex-col justify-center mb-3 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 p-4'}`}
     >
       {isEditing ? (
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-2 w-full w-max-lg mx-auto">
           {type === 'text' && (
             <Input
               id={field}

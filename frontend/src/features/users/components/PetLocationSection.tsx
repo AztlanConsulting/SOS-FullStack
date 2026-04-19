@@ -27,17 +27,19 @@ export const PetLocationSection = ({
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-6 py-4 bg-white">
       <h3 className="text-xl font-bold text-center mb-2">{title}</h3>
 
-      <LocationSearchInput
-        label={inputLabel}
-        placeholder={placeholderText}
-        query={displayValue}
-        results={results}
-        isLoading={isLoading}
-        onSearch={onSearchWrapper}
-        onSelect={onSelectAddress}
-      />
+      <div className="w-full max-w-lg mx-auto">
+        <LocationSearchInput
+          label={inputLabel}
+          placeholder={placeholderText}
+          query={displayValue}
+          results={results}
+          isLoading={isLoading}
+          onSearch={onSearchWrapper}
+          onSelect={onSelectAddress}
+        />
 
-      <MapDisplay mapID={mapID} />
+        <MapDisplay mapID={mapID} />
+      </div>
     </section>
   );
 };

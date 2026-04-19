@@ -5,6 +5,10 @@ export interface PaymentIntentDTO {
   currency: string;
   customerId?: string; // for SPEI
   method?: string; // to seperate spei from the other methods
+  product?: {
+    productName: string;
+    productId: string;
+  };
 }
 
 export interface PaymentIntentResult {

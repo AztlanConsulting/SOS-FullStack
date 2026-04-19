@@ -1,3 +1,6 @@
+import type { PaymentProvider } from './paymentProvider.port';
+import { EventDTO } from './paymentProvider.port';
+
 export interface PaypalAccessToken {
   accessToken: string | null;
   error: string | null;
@@ -13,8 +16,7 @@ export interface PaymentSuccess {
   error?: string;
 }
 
-export interface PaymentApi {
+export interface PaypalApi extends PaymentProvider {
   getAccessToken(): Promise<PaypalAccessToken>;
-  createOrder(): Promise<PaymentOrderId>;
   completeOrder(orderId: string): Promise<PaymentSuccess>;
 }

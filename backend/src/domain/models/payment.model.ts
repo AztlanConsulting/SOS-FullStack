@@ -2,7 +2,7 @@ import type { Document } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 export interface IPayment extends Document {
-  stripeId: string;
+  orderId: string;
   amount: number;
   currency: string;
   status: string;
@@ -13,7 +13,7 @@ export interface IPayment extends Document {
 
 const paymentSchema = new Schema<IPayment>(
   {
-    stripeId: { type: String, required: true },
+    orderId: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
     status: { type: String, required: true },

@@ -1,11 +1,16 @@
 import type {
-  PaymentApi,
+  PaymentIntentDTO,
+  PaymentIntentResult,
+} from '@/domain/ports/paymentProvider.port';
+import type {
   PaymentOrderId,
   PaymentSuccess,
+  PaypalApi,
 } from '@domain/ports/paypal.port';
 import 'crypto';
 import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
+import type Stripe from 'stripe';
 dotenv.config();
 
 const ENVIROMENT = process.env.ENVIROMENT;
@@ -17,7 +22,7 @@ const ENDPOINT_URL =
     ? 'https://api-m.sandbox.paypal.com'
     : 'https://api-m.paypal.com';
 
-const paypalApi: PaymentApi = {
+const PaypalProvider: PaypalApi = {
   // This value could be cached to optimize response, and lower api interactions
   async getAccessToken() {
     const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
@@ -45,11 +50,11 @@ const paypalApi: PaymentApi = {
     return { accessToken, error };
   },
 
-  async createOrder() {
-    const { accessToken, error } = await paypalApi.getAccessToken();
+  async createIntent(data: PaymentIntentDTO): Promise<PaymentIntentResult> {
+    const { accessToken, error } = await PaypalProvider.getAccessToken();
 
     if (error !== null) {
-      return { orderId: null, error };
+      throw error;
     }
 
     let orderDataJson = {
@@ -58,24 +63,18 @@ const paypalApi: PaymentApi = {
         {
           items: [
             {
-              name: 'Simple search plan',
-              description: 'Add to search for your dogs',
+              name: data.product?.productId,
+              description: data.product?.productName,
               quantity: '1',
               unit_amount: {
-                currency_code: 'USD',
-                value: '50.00',
+                currency_code: data.currency,
+                value: data.amount,
               },
             },
           ],
           amount: {
-            currency_code: 'USD',
-            value: '50.00',
-            breakdown: {
-              item_total: {
-                currency_code: 'USD',
-                value: '50.00',
-              },
-            },
+            currency_code: data.currency,
+            value: data.amount,
           },
         },
       ],
@@ -95,9 +94,9 @@ const paypalApi: PaymentApi = {
       },
     };
 
-    let data = JSON.stringify(orderDataJson);
+    let orderData = JSON.stringify(orderDataJson);
 
-    const paymentId: Promise<PaymentOrderId> = fetch(
+    const paymentId: PaymentOrderId = await fetch(
       ENDPOINT_URL + '/v2/checkout/orders',
       {
         method: 'POST',
@@ -106,13 +105,13 @@ const paypalApi: PaymentApi = {
           Authorization: `Bearer ${accessToken}`,
           'Paypal-Request-Id': randomUUID(),
         },
-        body: data,
+        body: orderData,
       },
     )
       .then((res) => res.json())
-      .then((data) => {
+      .then((orderData) => {
         return {
-          orderId: data.id,
+          orderId: orderData.id,
           error: null,
         };
       })
@@ -121,11 +120,20 @@ const paypalApi: PaymentApi = {
         return { orderId: null, error };
       });
 
-    return paymentId; // Send to browser
+    if (paymentId.error) throw paymentId.error;
+
+    const paymentResult = {
+      id: paymentId.orderId!,
+      amount: data.amount,
+      currency: data.currency,
+      clientSecret: null,
+    };
+
+    return paymentResult; // Send to browser
   },
 
   async completeOrder(orderId: string) {
-    const { accessToken, error } = await paypalApi.getAccessToken();
+    const { accessToken, error } = await PaypalProvider.getAccessToken();
 
     if (error !== null) {
       return { error };
@@ -147,6 +155,13 @@ const paypalApi: PaymentApi = {
 
     return response;
   },
+  // To work with the interface: It would be better for stripe implementation to
+  // inherit from a common one, but for now its not to cause issues
+  async constructEvent(): Promise<Stripe.Event> {
+    throw Error(
+      'Error: Called Stripe implementation to finish transaction from PaypalProvider',
+    );
+  },
 };
 
-export default paypalApi;
+export default PaypalProvider;

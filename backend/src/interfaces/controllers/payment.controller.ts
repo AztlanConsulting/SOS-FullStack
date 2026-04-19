@@ -29,7 +29,7 @@ export const makeCreatePaymentIntent = () => {
       });
 
       await createPendingIntentDB(PaymentDataAccess, {
-        stripeId: result.id,
+        orderId: result.id,
         amount: result.amount,
         currency: result.currency,
       });

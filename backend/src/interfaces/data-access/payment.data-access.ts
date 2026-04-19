@@ -15,12 +15,12 @@ export const PaymentDataAccess: PaymentRepository = {
   },
   /**
    * Mark a payment as succeeded by updating its status in the database.
-   * @param stripeId - The Stripe payment intent ID
+   * @param orderId - The Stripe payment intent ID
    * @returns Status string: 'updated', 'already_updated', or 'not_found'
    */
-  async markAsSucceeded(stripeId: string): Promise<string> {
+  async markAsSucceeded(orderId: string): Promise<string> {
     const result = await PaymentModel.updateOne(
-      { stripeId },
+      { orderId },
       { status: 'succeeded' },
     );
 

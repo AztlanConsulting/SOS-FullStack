@@ -1,9 +1,56 @@
-import paypalApi from '@infrastructure/api/paypal.api';
 import type { Request, Response } from 'express';
-import { default as ucCreateOrder } from '@use-cases/payments/createOrder';
+import { paymentDetails } from '@/types/payment.types';
+import { createPaymentIntent } from '@/use-cases/payments/createPaymentIntent.usecase';
+import { StripeProvider } from '@/infrastructure/api/stripeProvider.api';
+import type { PaymentProvider } from '@/domain/ports/paymentProvider.port';
+import PaypalProvider from '@/infrastructure/api/paypal.api';
+import { createPendingIntentDB } from '@/use-cases/payments/createPendingIntentDB.usecase';
+import { PaymentDataAccess } from '../data-access/payment.data-access';
 
+/**
+ * Controller that receives payment and order detauls to build the transaction
+ * @params paymentDetail:
+ * @amount number
+ * @currency string - MXN, USD, etc
+ * @method- paypal | auto | spei...
+ * @customerId string ObjectId
+ * @product - productId & productName
+ */
 export default async function createOrder(req: Request, res: Response) {
-  const orderId = await ucCreateOrder(paypalApi);
-  if (orderId !== null) return res.status(200).json({ orderId });
-  res.status(500).send('Error');
+  try {
+    const paymentDetail = paymentDetails.safeParse(req.body);
+
+    if (paymentDetail.error) throw paymentDetail.error;
+
+    const paymentProvider: PaymentProvider = getPaymentProvider(
+      paymentDetail.data.method ?? '',
+    );
+
+    const result = await createPaymentIntent(
+      paymentProvider,
+      paymentDetail.data,
+    );
+
+    await createPendingIntentDB(PaymentDataAccess, {
+      orderId: result.id,
+      amount: result.amount,
+      currency: result.currency,
+    });
+
+    return res.status(201).json({
+      message: 'Payment intent created successfully',
+      result: result,
+    });
+  } catch (error) {
+    console.error(error);
+    const message = error instanceof Error ? error.message : 'Payment failed';
+    return res.status(500).json({ error: message });
+  }
+}
+
+function getPaymentProvider(paymentMethod: string): PaymentProvider {
+  if (paymentMethod == 'paypal') {
+    return PaypalProvider;
+  }
+  return StripeProvider;
 }

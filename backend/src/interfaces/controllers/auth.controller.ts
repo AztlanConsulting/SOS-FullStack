@@ -89,7 +89,7 @@ export const refresh = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'REFRESH_TOKEN_REVOKED') {
-        res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+        res.clearCookie('refreshToken', { path: '/auth/refresh' });
         res.status(401).json({
           error: 'TOKEN_REVOKED',
           message: 'Sesion invalidada. Inicia sesion nuevamente.',
@@ -98,7 +98,7 @@ export const refresh = async (req: Request, res: Response) => {
       }
     }
     // Generic invalid token fallback
-    res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+    res.clearCookie('refreshToken', { path: '/auth/refresh' });
     res
       .status(401)
       .json({ error: 'UNAUTHORIZED', message: 'Refresh token invalido' });
@@ -121,8 +121,25 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Sesion cerrada correctamente' });
 };
 
+export const me = (req: Request, res: Response): void => {
+  if (!req.user) {
+    res.status(401).json({
+      error: 'UNAUTHORIZED',
+      message: 'Usuario no autenticado',
+    });
+    return;
+  }
+
+  console.log(req.user);
+
+  res.status(200).json({
+    user: req.user,
+  });
+};
+
 export default {
   login,
   refresh,
   logout,
+  me,
 };

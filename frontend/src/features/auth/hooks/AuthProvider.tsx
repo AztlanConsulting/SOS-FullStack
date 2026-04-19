@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState, useRef } from 'react';
 import { setAccessToken } from '@shared/utils/tokenStorage';
 import {
   loginRequest,
   logoutRequest,
   meRequest,
+  refreshRequest,
 } from '../services/auth.service';
 import type { User } from '../types/auth.types';
 
@@ -24,16 +25,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasRun = useRef(false);
 
-  // 🔥 BOOTSTRAP: se ejecuta al abrir la app
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     const init = async () => {
       try {
-        const data = await meRequest(); // o refresh endpoint
-
+        const res = await refreshRequest();
+        setAccessToken(res.accessToken);
+        const data = await meRequest();
         setUser(data.user);
-        setAccessToken(data.accessToken);
-      } catch {
+      } catch (err) {
         setUser(null);
         setAccessToken(null);
       } finally {
@@ -77,8 +81,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setError('Error desconocido');
       }
-
-      throw err; // opcional para UI si quiere reaccionar
     } finally {
       setLoading(false);
     }

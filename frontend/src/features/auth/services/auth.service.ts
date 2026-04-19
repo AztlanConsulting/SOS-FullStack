@@ -1,5 +1,9 @@
 import axiosInstance from '@shared/utils/axios';
-import type { LoginResponse } from '../types/auth.types';
+import refreshClient from '@shared/utils/axios';
+import type { LoginResponse, RefreshResponse } from '../types/auth.types';
+import { setAccessToken } from '@shared/utils/tokenStorage';
+
+let refreshPromise: Promise<RefreshResponse> | null = null;
 
 export const loginRequest = async (
   email: string,
@@ -18,8 +22,19 @@ export const logoutRequest = async () => {
 };
 
 export const refreshRequest = async () => {
-  const { data } = await axiosInstance.post('/auth/refresh');
-  return data;
+  if (!refreshPromise) {
+    refreshPromise = refreshClient
+      .post('/auth/refresh')
+      .then((res) => {
+        setAccessToken(res.data.accessToken);
+        return res.data;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
 };
 
 export const meRequest = async () => {

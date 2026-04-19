@@ -25,39 +25,34 @@ axiosInstance.interceptors.request.use((config) => {
 
   return config;
 });
-
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   async (error) => {
-    const originalRequest = error.config;
+    const original = error.config;
 
-    if (!originalRequest) {
-      return Promise.reject(error);
-    }
+    if (!original) return Promise.reject(error);
 
     if (
       error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !originalRequest.url?.includes('/auth/login')
+      error.response?.data?.error === 'TOKEN_EXPIRED'
     ) {
-      originalRequest._retry = true;
+      original._retry = true;
 
       try {
         const res = await refreshClient.post('/auth/refresh');
 
-        const newAccessToken = res.data.accessToken;
+        const newToken = res.data.accessToken;
 
-        setAccessToken(newAccessToken);
+        setAccessToken(newToken);
 
-        originalRequest.headers = originalRequest.headers || {};
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        original.headers = original.headers || {};
+        original.headers.Authorization = `Bearer ${newToken}`;
 
-        return axiosInstance(originalRequest);
-      } catch (error) {
+        return axiosInstance(original);
+      } catch (err) {
         setAccessToken(null);
-        window.location.href = '/';
-
-        return Promise.reject(error);
+        window.location.href = '/login';
+        return Promise.reject(err);
       }
     }
 

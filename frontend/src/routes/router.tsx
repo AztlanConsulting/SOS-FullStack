@@ -7,6 +7,7 @@ import Therms from '../pages/Therms';
 import routerWorkshop from './workshop.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
+import routerCustomPlan from './customPlan.routes';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,
+      ...routerCustomPlan,
     ],
   },
 ]);

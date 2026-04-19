@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { HiArrowLeft } from 'react-icons/hi';
 import Header from '../shared/components/layout/Header';
 import { Text } from '../shared/components/ui/Text';

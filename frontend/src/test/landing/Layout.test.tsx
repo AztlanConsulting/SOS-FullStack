@@ -3,7 +3,7 @@ import { describe, test, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router';
 import Footer from '@shared/components/layout/Footer';
-import Header from '@shared/components/layout/Header';
+import Header from '@/shared/components/layout/Header';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router', async () => {

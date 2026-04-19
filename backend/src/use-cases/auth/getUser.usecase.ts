@@ -1,4 +1,3 @@
-import type { Types } from 'mongoose';
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { UserDTO } from '@validation/auth.types';
 

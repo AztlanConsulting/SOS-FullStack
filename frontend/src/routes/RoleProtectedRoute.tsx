@@ -20,7 +20,7 @@ export const RoleProtectedRoute = ({
   }
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/forbidden" replace />;
   }
 
   return children;

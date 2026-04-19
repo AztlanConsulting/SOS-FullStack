@@ -29,7 +29,7 @@ export const getUserById = async (
     _id: user._id,
     username: user.username,
     email: user.email,
-    roleId: user.roleId as Types.ObjectId,
+    role: user.roleId.role,
     active: user.active,
   };
 

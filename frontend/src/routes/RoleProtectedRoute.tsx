@@ -19,7 +19,7 @@ export const RoleProtectedRoute = ({
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  if (!allowedRoles.includes(user.roleId)) {
+  if (!allowedRoles.includes(user.role)) {
     return <Navigate to="/login" replace />;
   }
 

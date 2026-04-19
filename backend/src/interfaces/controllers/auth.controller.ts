@@ -141,7 +141,6 @@ export const me = (req: Request, res: Response): void => {
     });
     return;
   }
-
   res.status(200).json({
     user: req.user,
   });

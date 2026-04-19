@@ -3,6 +3,11 @@ import { UserModel } from '@domain/models/user.model';
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { PopulatedPermission } from '@validation/auth.types';
 import type { UserPermissions } from '@validation/auth.types';
+import type { Role } from '@domain/models/role.model';
+
+type UserWithRole = Omit<User, 'roleId'> & {
+  roleId: Role;
+};
 
 export const userDataAccess: UserRepository = {
   /**
@@ -31,8 +36,14 @@ export const userDataAccess: UserRepository = {
    * @param id - User ID
    * @return User if found, otherwise null
    */
-  getUserById: async function (id: string): Promise<User | null> {
-    const user = await UserModel.findById(id).lean<User>().exec();
+  getUserById: async function (id: string): Promise<UserWithRole | null> {
+    const user = await UserModel.findById(id)
+      .populate({
+        path: 'roleId',
+        select: 'role',
+      })
+      .lean<UserWithRole>()
+      .exec();
 
     return user;
   },
@@ -43,8 +54,16 @@ export const userDataAccess: UserRepository = {
    * @param username - Username to search
    * @return User if found, otherwise null
    */
-  getUserByName: async function (username: string): Promise<User | null> {
-    const user = await UserModel.findOne({ username }).lean<User>().exec();
+  getUserByName: async function (
+    username: string,
+  ): Promise<UserWithRole | null> {
+    const user = await UserModel.findOne({ username })
+      .populate({
+        path: 'roleId',
+        select: 'role',
+      })
+      .lean<UserWithRole>()
+      .exec();
 
     return user;
   },
@@ -56,9 +75,13 @@ export const userDataAccess: UserRepository = {
    * @param email - Email to search
    * @return User if found, otherwise null
    */
-  getUserByEmail: async function (email: string): Promise<User | null> {
+  getUserByEmail: async function (email: string): Promise<UserWithRole | null> {
     const user = await UserModel.findOne({ email: email.toLowerCase().trim() })
-      .lean<User>()
+      .populate({
+        path: 'roleId',
+        select: 'role',
+      })
+      .lean<UserWithRole>()
       .exec();
 
     return user;

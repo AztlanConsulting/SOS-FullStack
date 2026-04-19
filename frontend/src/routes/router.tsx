@@ -10,7 +10,6 @@ import routerManuals from './manual.routes';
 import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
-import path from 'path/win32';
 
 export const router = createBrowserRouter([
   {
@@ -27,9 +26,7 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: (
-          <RoleProtectedRoute
-            allowedRoles={['69e3bea8c23bd1f51afce0de', 'user']}
-          >
+          <RoleProtectedRoute allowedRoles={['admin', 'user']}>
             <Dashboard />
           </RoleProtectedRoute>
         ),

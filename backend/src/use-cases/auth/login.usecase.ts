@@ -36,7 +36,7 @@ export const loginUser = async (
   }
 
   const isPasswordValid = await bcrypt.compare(input.password, user.password);
-  if (!isPasswordValid) {
+  if (!Boolean(isPasswordValid)) {
     throw new Error('INVALID_CREDENTIALS');
   }
 
@@ -44,7 +44,7 @@ export const loginUser = async (
   const payload: TokenPayload = {
     userId: user._id,
     email: user.email,
-    roleId: user.roleId,
+    role: user.roleId.role,
   };
 
   const refreshPayload = {
@@ -69,7 +69,7 @@ export const loginUser = async (
     _id: user._id,
     username: user.username,
     email: user.email,
-    roleId: user.roleId as Types.ObjectId,
+    role: user.roleId.role,
     active: user.active,
   };
 

@@ -5,7 +5,7 @@ export type UserDTO = {
   _id: Types.ObjectId;
   username: string;
   email: string;
-  roleId: Types.ObjectId;
+  role: string;
   active: boolean;
 };
 
@@ -41,7 +41,7 @@ export type UserPermissions = {
 export interface TokenPayload {
   userId: User['_id'];
   email: string;
-  roleId: User['roleId'];
+  role: string;
 }
 
 export interface RefreshTokenPayload extends TokenPayload {

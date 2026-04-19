@@ -8,6 +8,9 @@ import routerWorkshop from './workshop.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import LoginPage from '../pages/LoginPage';
+import { Dashboard } from '@features/auth/components/TempDashboard';
+import { RoleProtectedRoute } from './RoleProtectedRoute';
+import path from 'path/win32';
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +23,16 @@ export const router = createBrowserRouter([
       {
         path: '/login',
         element: <LoginPage />,
+      },
+      {
+        path: '/dashboard',
+        element: (
+          <RoleProtectedRoute
+            allowedRoles={['69e3bea8c23bd1f51afce0de', 'user']}
+          >
+            <Dashboard />
+          </RoleProtectedRoute>
+        ),
       },
       {
         path: '/purchase',

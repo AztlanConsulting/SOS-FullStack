@@ -15,7 +15,11 @@ interface AuthContextType {
   isAuthLoading: boolean;
   error: string | null;
   setError: (msg: string | null) => void;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    remember: boolean,
+  ) => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
@@ -28,9 +32,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const hasRun = useRef(false);
 
-  // 🔥 BOOTSTRAP: se ejecuta al abrir la app
   useEffect(() => {
-    if (hasRun.current) return; // 👈 evita segunda ejecución
+    if (hasRun.current) return;
     hasRun.current = true;
 
     const init = async () => {
@@ -59,17 +62,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     init();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, remember: boolean) => {
     setLoading(true);
     setError(null);
 
     try {
-      const data = await loginRequest(email, password);
+      const data = await loginRequest(email, password, remember);
 
       setUser(data.user);
       setAccessToken(data.accessToken);
 
-      return true; // ✅ éxito
+      return true;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status;
@@ -95,7 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setError('Error desconocido');
       }
 
-      return false; // ❌ fallo
+      return false;
     } finally {
       setLoading(false);
     }

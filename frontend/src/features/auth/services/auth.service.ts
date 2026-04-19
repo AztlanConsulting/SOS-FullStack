@@ -8,10 +8,12 @@ let refreshPromise: Promise<RefreshResponse> | null = null;
 export const loginRequest = async (
   email: string,
   password: string,
+  remember: boolean,
 ): Promise<LoginResponse> => {
   const { data } = await axiosInstance.post('/auth/login', {
     email,
     password,
+    remember,
   });
 
   return data;

@@ -31,20 +31,20 @@ export const LoginForm = () => {
       return;
     }
 
-    const success = await login(email, password);
+    const success = await login(email, password, remember);
 
     if (success) {
-      navigate('/');
+      navigate('/dashboard');
     }
   };
 
   return (
-    <div className="min-h-screen color-secondary-bg flex items-center justify-center px-6 py-6">
+    <div className="w-full min-h-screen color-secondary-bg flex items-center justify-center px-6 py-6">
       {/* CONTENEDOR ESTÁNDAR */}
       <div className="w-full flex items-center justify-center">
         <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
           {/* CARD */}
-          <div className="bg-white rounded-2xl border-2 border-[var(--color-primary)] p-6 md:p-10 shadow-sm text-center mx-auto w-full max-w-md">
+          <div className="bg-white rounded-2xl border-2 border-[var(--color-primary)] p-6 md:p-10 shadow-sm text-center mx-auto w-full max-w-lg">
             <img src={yellowIcon} alt="logo" className="w-28 mx-auto mb-4" />
 
             <Text
@@ -58,7 +58,7 @@ export const LoginForm = () => {
 
             <form onSubmit={handle} noValidate className="flex flex-col gap-5">
               {/* EMAIL */}
-              <div className="relative w-full bg-white rounded-lg mt-4 mb-1">
+              <div className="relative w-full max-w-lg bg-white rounded-lg mt-4 mb-1">
                 <input
                   type="email"
                   id="email"
@@ -76,7 +76,7 @@ export const LoginForm = () => {
               </div>
 
               {/* PASSWORD */}
-              <div className="relative w-full bg-white rounded-lg mb-2">
+              <div className="relative w-full max-w-lg bg-white rounded-lg mb-2">
                 <input
                   type="password"
                   id="password"
@@ -99,7 +99,10 @@ export const LoginForm = () => {
                   <input
                     type="checkbox"
                     checked={remember}
-                    onChange={(e) => setRemember(e.target.checked)}
+                    onChange={(e) => {
+                      const value = e.target.checked;
+                      setRemember(value);
+                    }}
                     className="hidden"
                   />
 

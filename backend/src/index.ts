@@ -7,7 +7,25 @@ import cors from 'cors';
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = process.env.CORS_ORIGIN?.split(',') || [];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (origin == null) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
+
 app.set('trust proxy', 1);
 
 app.use((req, res, next) => {

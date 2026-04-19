@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import manualRoutes from '@interfaces/routes/manuals.routes';
-import { connect, closeDatabase, clearDatabase } from './db';
+import { connect, closeDatabase, clearDatabase } from '../db';
 import initManualDB from '@infrastructure/database/mongoDB/data/manuals.data';
 
 describe('manuals routes (integration)', () => {

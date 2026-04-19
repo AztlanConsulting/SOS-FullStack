@@ -1,43 +1,32 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router';
 
 export const LoginForm = () => {
+  const { login, loading, error } = useAuth();
   const navigate = useNavigate();
-  const { login, loading } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handle = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await login(email, password);
-      navigate('/planes');
-    } catch (error) {
-      console.error('Login error', error);
-    }
+    await login(email, password);
+    navigate('/');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-
+    <form onSubmit={handle}>
+      <input value={email} onChange={(e) => setEmail(e.target.value)} />
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
       />
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Loading...' : 'Login'}
-      </button>
+      <button disabled={loading}>{loading ? 'Loading...' : 'Login'}</button>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
   );
 };

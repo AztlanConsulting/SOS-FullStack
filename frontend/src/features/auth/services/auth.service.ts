@@ -16,3 +16,13 @@ export const loginRequest = async (
 export const logoutRequest = async () => {
   await axiosInstance.post('/auth/logout');
 };
+
+export const refreshRequest = async () => {
+  const { data } = await axiosInstance.post('/auth/refresh');
+  return data;
+};
+
+export const meRequest = async () => {
+  const { data } = await axiosInstance.get('/auth/me');
+  return data;
+};

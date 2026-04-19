@@ -1,4 +1,4 @@
-import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
+import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 import getSimilarPets from '@use-cases/images/getSimilarPets';
 import type { Request, Response } from 'express';
 

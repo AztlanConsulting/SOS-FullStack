@@ -130,8 +130,6 @@ export const me = (req: Request, res: Response): void => {
     return;
   }
 
-  console.log(req.user);
-
   res.status(200).json({
     user: req.user,
   });

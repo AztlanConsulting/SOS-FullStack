@@ -8,6 +8,11 @@ import type {
 } from '../../domain/ports/paymentProvider.port';
 
 export const StripeProvider: PaymentProvider = {
+  /**
+   * Create a Stripe payment intent for card, OXXO, or SPEI payments.
+   * @param data - Payment intent data including amount, currency, method, and optional customerId
+   * @returns PaymentIntentResult with intent ID, amount, currency, and client secret
+   */
   async createIntent(data: PaymentIntentDTO): Promise<PaymentIntentResult> {
     const key = process.env.STRIPE_SECRET_KEY;
 
@@ -31,7 +36,11 @@ export const StripeProvider: PaymentProvider = {
 
     // for SPEI bank transfers in Mexico
     else if (method === 'spei') {
-      if (customerId !== undefined) {
+      if (
+        customerId === undefined ||
+        customerId === null ||
+        customerId === ''
+      ) {
         throw new Error('customerId is required for SPEI payments');
       }
 
@@ -61,6 +70,11 @@ export const StripeProvider: PaymentProvider = {
     };
   },
 
+  /**
+   * Construct and verify a Stripe webhook event using the signature.
+   * @param data - Event data containing payload, signature, and webhook secret
+   * @returns The verified Stripe Event object
+   */
   async constructEvent(data: EventDTO): Promise<Stripe.Event> {
     const key = process.env.STRIPE_SECRET_KEY;
 

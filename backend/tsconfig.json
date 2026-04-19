@@ -13,13 +13,14 @@
       "@domain/*": ["./src/domain/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@interfaces/*": ["./src/interfaces/*"],
-      "@types/*": ["./src/types/*"],
-      "@use-cases/*": ["./src/use-cases/*"],
+      "@validation/*": ["./src/types/*"],
+      "@use-cases/*": ["./src/use-cases//*"],
       "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
   "include": [
     "./src/**/*",
+    "jest-mongodb-config.ts",
     "../frontend/src/features/payment/components/CheckoutForm.tsx"
   ]
 }

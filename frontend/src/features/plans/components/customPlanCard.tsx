@@ -1,0 +1,205 @@
+import React from 'react';
+import { Text } from '../../../shared/components/ui/Text';
+import { Button } from '../../../shared/components/ui/Button';
+import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
+import { useCustomPlan } from '../hooks/useCustomPlan';
+import { ALL_FEATURES } from './customPlan';
+import { HiExclamation } from 'react-icons/hi';
+
+const CustomPlanCard: React.FC = () => {
+  const {
+    days,
+    km,
+    tier,
+    selectedFeatures,
+    totalPrice,
+    warnings,
+    handleDaysChange,
+    setKm,
+    toggleFeature,
+  } = useCustomPlan();
+
+  return (
+    <div className="w-full max-w-sm rounded-2xl border-2 border-[#AFB1B6] bg-white overflow-hidden">
+      <div className="bg-[#F9CD48] border-b-2 border-[#AFB1B6] py-3 text-center">
+        <Text variant="body" weight="medium" className="text-white">
+          Personalizado
+        </Text>
+      </div>
+
+      <div className="px-5 pt-5 pb-5 flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <Text variant="body" weight="medium" className="text-gray-800">
+              Días
+            </Text>
+            <Text variant="body" className="text-gray-900">
+              {days} {days == 1 ? 'día' : 'días'}
+            </Text>
+          </div>
+          <input
+            type="range"
+            min={3}
+            max={30}
+            step={1}
+            value={days}
+            onChange={(e) => handleDaysChange(Number(e.target.value))}
+            className="w-full accent-[#F9CD48] range-slider"
+          />
+          <div className="flex justify-between">
+            <Text variant="small" className="text-gray-400">
+              {' '}
+              3 días
+            </Text>
+            <Text variant="small" className="text-gray-400">
+              {' '}
+              30 días
+            </Text>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <Text variant="body" weight="medium" className="text-gray-800">
+              Radio
+            </Text>
+            <Text variant="body" className="text-gray-900">
+              {km} km
+            </Text>
+          </div>
+          <input
+            type="range"
+            min={5}
+            max={40}
+            step={1}
+            value={km}
+            onChange={(e) => setKm(Number(e.target.value))}
+            className="w-full accent-[#F9CD48] range-slider"
+          />
+          <div className="flex justify-between">
+            <Text variant="small" className="text-gray-400">
+              5 km
+            </Text>
+            <Text variant="small" className="text-gray-400">
+              40 km
+            </Text>
+          </div>
+        </div>
+
+        {warnings.map((w, i) => (
+          <div
+            key={i}
+            className="flex items-start gap-2 bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2"
+          >
+            <HiExclamation
+              size={18}
+              className="text-yellow-500 shrink-0 mt-0.5"
+            />
+            <Text variant="small" className="text-yellow-700">
+              {w}
+            </Text>
+          </div>
+        ))}
+        <div className="flex flex-col gap-2">
+          <Text variant="body" weight="medium" className="text-gray-800">
+            Extras
+          </Text>
+          {ALL_FEATURES.map((feature) => {
+            const tierFeature = tier.features.find(
+              (tierFeature) => tierFeature.key === feature.key,
+            );
+            const isAvailable = Boolean(tierFeature);
+
+            return (
+              <label
+                key={feature.key}
+                className={`flex items-center justify-between gap-2 ${isAvailable ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={
+                        isAvailable && selectedFeatures.includes(feature.key)
+                      }
+                      disabled={!isAvailable}
+                      onChange={() => isAvailable && toggleFeature(feature.key)}
+                    />
+                    <Text variant="small" className="text-gray-700">
+                      {feature.label}
+                    </Text>
+                  </div>
+                  {!isAvailable && (
+                    <Text variant="small" className="text-[#FF3333]">
+                      No disponible con los días o km actuales.
+                    </Text>
+                  )}
+                </div>
+                <Text
+                  variant="small"
+                  className={isAvailable ? 'text-gray-500' : 'text-gray-400'}
+                >
+                  {isAvailable ? `+${tierFeature?.price}` : 'No disponible'}
+                </Text>
+              </label>
+            );
+          })}
+        </div>
+
+        <div className="border-t border-gray-100" />
+
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between">
+            <Text variant="small" className="text-gray-500">
+              Días ({days} x ${tier.pricePerDay.toFixed(2)})
+            </Text>
+            <Text variant="small" className="text-gray-700">
+              ${(days * tier.pricePerDay).toFixed(2)}
+            </Text>
+          </div>
+          <div className="flex justify-between">
+            <Text variant="small" className="text-gray-500">
+              Radio ({km} km x ${tier.pricePerKm.toFixed(2)})
+            </Text>
+            <Text variant="small" className="text-gray-700">
+              ${(km * tier.pricePerKm).toFixed(2)}
+            </Text>
+          </div>
+          {selectedFeatures.map((key) => {
+            const feature = tier.features.find((a) => a.key === key);
+            if (!feature) return null;
+            return (
+              <div key={key} className="flex justify-between">
+                <Text variant="small" className="text-gray-500">
+                  {feature.label}
+                </Text>
+                <Text variant="small" className="text-gray-700">
+                  +${feature.price}
+                </Text>
+              </div>
+            );
+          })}
+          <div className="flex justify-between mt-2">
+            <Text variant="body" weight="bold" className="text-gray-900">
+              Total
+            </Text>
+            <Text variant="body" weight="bold" className="text-gray-900">
+              ${totalPrice.toFixed(2)}
+            </Text>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <Button
+            label="Confirmar plan"
+            variant="plans"
+            onClick={() =>
+              console.log({ days, km, selectedFeatures, totalPrice })
+            }
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CustomPlanCard;

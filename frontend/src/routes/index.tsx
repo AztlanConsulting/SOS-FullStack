@@ -1,6 +1,6 @@
 import PlansPage from '@pages/Plans';
 import { createBrowserRouter } from 'react-router-dom';
-
+import CustomPlanPage from '@pages/CustomPlanPage';
 /**
  * Main application router configuration.
  * Defines the mapping between URL paths and their respective React components.
@@ -14,5 +14,9 @@ export const router = createBrowserRouter([
      */
     path: '/planes',
     element: <PlansPage />,
+  },
+  {
+    path: '/personalizar',
+    element: <CustomPlanPage />,
   },
 ]);

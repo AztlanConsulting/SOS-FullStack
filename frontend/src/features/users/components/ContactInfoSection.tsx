@@ -13,7 +13,7 @@ export const ContactInfoSection = ({
 }: ContactInfoSectionProps) => {
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col py-4">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full max-w-lg items-center mx-auto">
         <Input
           id="ownerName"
           label="Nombre y apellido del dueño"

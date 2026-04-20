@@ -38,15 +38,10 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
 
   return (
     <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
-      <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {/* Section 1: General pet data */}
         <div id="user-info-section">
-          <Text
-            variant="h2"
-            as="h2"
-            weight="bold"
-            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
-          >
+          <Text variant="h2" as="h2" weight="medium">
             Información de la mascota
           </Text>
         </div>
@@ -58,8 +53,8 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           <Text
             variant="h2"
             as="h2"
-            weight="bold"
-            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+            weight="medium"
+            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-2"
           >
             Fotos de la mascota
           </Text>
@@ -72,8 +67,8 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           <Text
             variant="h2"
             as="h2"
-            weight="bold"
-            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+            weight="medium"
+            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-2"
           >
             Dónde se perdió
           </Text>
@@ -86,8 +81,8 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           <Text
             variant="h2"
             as="h2"
-            weight="bold"
-            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+            weight="medium"
+            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-2"
           >
             Información de contacto
           </Text>

@@ -12,6 +12,7 @@ import CheckoutPage from '../features/payment/components/CheckoutPage';
 import routerWorkshop from './workshop.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
+import routerLostPet from './foundPet.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
 
 export const router = createBrowserRouter([
@@ -58,6 +59,7 @@ export const router = createBrowserRouter([
         path: '/paypal-checkout',
         element: <CheckoutPage />,
       },
+      ...routerLostPet,
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,

@@ -142,12 +142,20 @@ const Header = () => {
                 if (isAuthLoading) return;
                 navigate(user ? '/dashboard' : '/login');
               }}
-              className="group hover:bg-[color:var(--color-primary)] bg-white border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors"
+              className={`group border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
+                user
+                  ? 'bg-[color:var(--color-primary)] hover:bg-white'
+                  : 'bg-white hover:bg-[color:var(--color-primary)]'
+              }`}
             >
               <Text
                 variant="body"
                 weight="medium"
-                className="group-hover:text-white text-[color:var(--color-primary)]"
+                className={`${
+                  user
+                    ? 'text-white group-hover:text-[color:var(--color-primary)]'
+                    : 'text-[color:var(--color-primary)] group-hover:text-white'
+                }`}
               >
                 {user ? `Hola, ${firstName}` : 'Iniciar Sesión'}
               </Text>

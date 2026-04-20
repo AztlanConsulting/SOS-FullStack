@@ -15,6 +15,7 @@ describe('requirePermission middleware (unit)', () => {
     req = {
       user: {
         userId: new Types.ObjectId(),
+        username: 'admin',
         email: 'test@test.com',
         role: 'admin',
       },

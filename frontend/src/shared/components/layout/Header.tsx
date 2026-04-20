@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useAuth } from '@features/auth/hooks/useAuth';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
 import { LuHouse } from 'react-icons/lu';
@@ -52,6 +53,8 @@ const Header = () => {
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { user, isAuthLoading } = useAuth();
+  const firstName = user?.username.trim().split(/\s+/)[0] ?? '';
 
   return (
     <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
@@ -134,13 +137,27 @@ const Header = () => {
                 </div>
               );
             })}
-            <div className="group hover:bg-[color:var(--color-primary)] bg-white border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors">
+            <div
+              onClick={() => {
+                if (isAuthLoading) return;
+                navigate(user ? '/dashboard' : '/login');
+              }}
+              className={`group border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
+                user
+                  ? 'bg-[color:var(--color-primary)] hover:bg-white'
+                  : 'bg-white hover:bg-[color:var(--color-primary)]'
+              }`}
+            >
               <Text
                 variant="body"
                 weight="medium"
-                className="group-hover:text-white text-[color:var(--color-primary)]"
+                className={`${
+                  user
+                    ? 'text-white group-hover:text-[color:var(--color-primary)]'
+                    : 'text-[color:var(--color-primary)] group-hover:text-white'
+                }`}
               >
-                Iniciar Sesión
+                {user ? `Hola, ${firstName}` : 'Iniciar Sesión'}
               </Text>
             </div>
           </div>
@@ -217,13 +234,19 @@ const Header = () => {
 
             {/* Bottom button */}
             <div className="p-9 border-t border-white">
-              <button className="w-full flex items-center justify-start gap-4">
+              <button
+                onClick={() => {
+                  navigate(user ? '/dashboard' : '/login');
+                  setIsMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-start gap-4"
+              >
                 <HiOutlineUserCircle
                   strokeWidth={1}
                   className="w-7 h-7 text-white "
                 />
                 <Text variant="h3" weight="medium" color="text-white">
-                  Iniciar Sesión
+                  {user ? `Hola, ${firstName}` : 'Iniciar Sesión'}
                 </Text>
               </button>
             </div>

@@ -9,6 +9,7 @@ type ButtonProps = {
   disabled?: boolean;
   icon?: ComponentType<{ size?: number }>;
   textColor?: string;
+  type?: 'button' | 'submit' | 'reset';
 };
 export function Button({
   label,
@@ -17,6 +18,7 @@ export function Button({
   disabled = false,
   icon: Icon,
   textColor = '',
+  type = 'button',
 }: ButtonProps) {
   const base =
     'flex items-center justify-center gap-2 px-3 py-2 rounded-[20px] font-semibold text-base transition-colors duration-200';
@@ -34,6 +36,7 @@ export function Button({
     <button
       onClick={onClick}
       disabled={disabled}
+      type={type}
       className={twMerge(
         base,
         variants[variant],

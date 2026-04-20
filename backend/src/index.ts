@@ -1,12 +1,21 @@
 import express from 'express';
 import bodyparser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import routes from '@interfaces/routes/routes';
+import '@domain/models';
 import cors from 'cors';
 
 const app = express();
 
-app.use(cors());
-app.set('trust proxy', true);
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }),
+);
+
+app.set('trust proxy', 1);
 
 app.use((req, res, next) => {
   if (req.path === '/payments/webhook') {
@@ -24,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyparser.json());
-app.set('trust proxy', true);
+app.use(cookieParser());
 
 // Routes
 app.use('/', routes);

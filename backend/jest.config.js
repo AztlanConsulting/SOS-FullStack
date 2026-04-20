@@ -15,6 +15,8 @@ export default {
     '^@interfaces/(.*)$': '<rootDir>/src/interfaces/$1',
     '^@validation/(.*)$': '<rootDir>/src/types/$1',
     '^@use-cases/(.*)$': '<rootDir>/src/use-cases/$1',
+    '^@config/(.*)$': '<rootDir>/src/config/$1',
+    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
     '^@vectorDB$':
       '<rootDir>/src/infrastructure/database/vectorDB/vectorDatabase.ts',
   },

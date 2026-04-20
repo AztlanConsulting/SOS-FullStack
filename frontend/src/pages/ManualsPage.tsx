@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Footer } from '@shared/components/layout/Footer';
 import Header from '@shared/components/layout/Header';
 import { ManualsListSection } from '@features/manuals/components/ManualsListSection';
@@ -6,6 +7,10 @@ import HeroSection from '@shared/components/layout/HeroSection';
 import manualHero from '@/assets/images/manual-hero.jpg';
 
 export const ManualsPage = () => {
+  useEffect(() => {
+    document.title = 'Manuales';
+  }, []);
+
   return (
     <div className="min-h-screen relative">
       <Header />

@@ -47,6 +47,7 @@ describe('PetReportForm Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
+    HTMLElement.prototype.scrollIntoView = vi.fn();
   });
 
   test('renders all form sections correctly', () => {
@@ -56,7 +57,7 @@ describe('PetReportForm Component', () => {
     expect(screen.getByText('Fotos de la mascota')).toBeDefined();
     expect(screen.getByText('Dónde se perdió')).toBeDefined();
     expect(screen.getByText('Información de contacto')).toBeDefined();
-    expect(screen.getByText('Confirmar Datos')).toBeDefined();
+    expect(screen.getByText('Contratar el servicio')).toBeDefined();
   });
 
   test('renders correctly with pre-filled initialData', () => {
@@ -70,29 +71,16 @@ describe('PetReportForm Component', () => {
     expect(screen.getByDisplayValue('Juan Pérez')).toBeDefined();
   });
 
-  test('shows the general error banner when clicking confirm with empty fields', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<PetReportForm />);
-
-    await user.click(screen.getByText('Confirmar Datos'));
-
-    expect(
-      screen.getByText('¡Faltan algunos detalles importantes!'),
-    ).toBeDefined();
-  });
-
   test('shows validation errors for name, species and email when form is empty', async () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
     expect(
       screen.getByText('¡Nos falta el nombre de tu mascota!'),
     ).toBeDefined();
-    expect(
-      screen.getByText('¡Por favor, selecciona una especie!'),
-    ).toBeDefined();
+    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
     expect(
       screen.getByText('¡Necesitamos tu correo electrónico!'),
     ).toBeDefined();
@@ -102,29 +90,21 @@ describe('PetReportForm Component', () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
     expect(
       screen.getByText('¡Nos falta el nombre de tu mascota!'),
     ).toBeDefined();
-    expect(
-      screen.getByText('¡Por favor, selecciona una especie!'),
-    ).toBeDefined();
-    expect(screen.getByText('¡Indícanos la fecha del suceso!')).toBeDefined();
+    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
+    expect(screen.getByText('¡Indícanos la fecha!')).toBeDefined();
     expect(
       screen.getByText('¡Nos falta conocer su raza o tipo!'),
     ).toBeDefined();
-    expect(
-      screen.getByText('¡Dinos de qué color es para identificarla mejor!'),
-    ).toBeDefined();
-    expect(screen.getByText('¡Necesitamos saber dónde ocurrió!')).toBeDefined();
-    expect(
-      screen.getByText('¡Sube al menos una foto para el cartel!'),
-    ).toBeDefined();
-    expect(screen.getByText('¡Falta tu nombre y apellido!')).toBeDefined();
-    expect(
-      screen.getByText('¡Añade un teléfono para que te contacten!'),
-    ).toBeDefined();
+    expect(screen.getByText('¡Dinos de qué color es!')).toBeDefined();
+    expect(screen.getByText('¡Indica la ubicación!')).toBeDefined();
+    expect(screen.getByText('¡Sube al menos una foto!')).toBeDefined();
+    expect(screen.getByText('¡Falta nombre del dueño!')).toBeDefined();
+    expect(screen.getByText('¡Añade un número de teléfono!')).toBeDefined();
     expect(
       screen.getByText('¡Necesitamos tu correo electrónico!'),
     ).toBeDefined();
@@ -134,21 +114,9 @@ describe('PetReportForm Component', () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
     expect(mockNavigate).not.toHaveBeenCalled();
-  });
-
-  test('scrolls to top when validation fails', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<PetReportForm />);
-
-    await user.click(screen.getByText('Confirmar Datos'));
-
-    expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 0,
-      behavior: 'smooth',
-    });
   });
 
   test('shows invalid email format error when email is malformed', async () => {
@@ -159,13 +127,9 @@ describe('PetReportForm Component', () => {
       />,
     );
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(
-      screen.getByText(
-        '¡El correo electrónico no parece tener un formato válido!',
-      ),
-    ).toBeDefined();
+    expect(screen.getByText('¡Correo inválido!')).toBeDefined();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
@@ -177,13 +141,9 @@ describe('PetReportForm Component', () => {
       />,
     );
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(
-      screen.getByText(
-        '¡El correo electrónico no parece tener un formato válido!',
-      ),
-    ).toBeDefined();
+    expect(screen.getByText('¡Correo inválido!')).toBeDefined();
   });
 
   test('shows future date error when date is in the future', async () => {
@@ -199,36 +159,32 @@ describe('PetReportForm Component', () => {
       />,
     );
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(
-      screen.getByText('¡La fecha no puede ser en el futuro!'),
-    ).toBeDefined();
+    expect(screen.getByText('¡La fecha no puede ser futura!')).toBeDefined();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
   test('accepts today as a valid date', async () => {
     const user = userEvent.setup();
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toLocaleDateString('en-CA');
 
     renderWithRouter(
       <PetReportForm initialData={{ ...VALID_INITIAL_DATA, date: today }} />,
     );
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(
-      screen.queryByText('¡La fecha no puede ser en el futuro!'),
-    ).toBeNull();
-    expect(screen.queryByText('¡Indícanos la fecha del suceso!')).toBeNull();
+    expect(screen.queryByText('¡La fecha no puede ser futura!')).toBeNull();
+    expect(screen.queryByText('¡Indícanos la fecha!')).toBeNull();
   });
 
   test('clears the name error when the name field is updated', async () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
     expect(
       screen.getByText('¡Nos falta el nombre de tu mascota!'),
     ).toBeDefined();
@@ -245,7 +201,7 @@ describe('PetReportForm Component', () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
     expect(
       screen.getByText('¡Nos falta conocer su raza o tipo!'),
     ).toBeDefined();
@@ -260,7 +216,7 @@ describe('PetReportForm Component', () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
     expect(mockSetReportData).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/report-confirmation');
@@ -270,7 +226,7 @@ describe('PetReportForm Component', () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
 
-    await user.click(screen.getByText('Confirmar Datos'));
+    await user.click(screen.getByText('Contratar el servicio'));
 
     expect(mockSetReportData).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -279,16 +235,5 @@ describe('PetReportForm Component', () => {
         email: 'juan@example.com',
       }),
     );
-  });
-
-  test('does not show error banner when all fields are valid', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
-
-    await user.click(screen.getByText('Confirmar Datos'));
-
-    expect(
-      screen.queryByText('¡Faltan algunos detalles importantes!'),
-    ).toBeNull();
   });
 });

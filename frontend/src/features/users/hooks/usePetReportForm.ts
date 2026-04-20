@@ -90,18 +90,18 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     } else {
       const selectedDate = new Date(formData.date);
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-      if (selectedDate > today) {
+      if (formData.date > todayStr) {
         newErrors.date = '¡La fecha no puede ser futura!';
       }
     }
 
-    if (!formData.breed) newErrors.breed = '¡Falta raza o tipo!';
+    if (!formData.breed) newErrors.breed = '¡Nos falta conocer su raza o tipo!';
 
-    if (!formData.color) newErrors.color = '¡Falta color!';
+    if (!formData.color) newErrors.color = '¡Dinos de qué color es!';
 
-    if (!formData.address) newErrors.address = '¡Indica ubicación!';
+    if (!formData.address) newErrors.address = '¡Indica la ubicación!';
 
     if (!formData.images || formData.images.length === 0)
       newErrors.images = '¡Sube al menos una foto!';
@@ -117,7 +117,7 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.email) {
-      newErrors.email = '¡Falta correo!';
+      newErrors.email = '¡Necesitamos tu correo electrónico!';
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = '¡Correo inválido!';
     }

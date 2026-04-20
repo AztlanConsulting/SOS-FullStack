@@ -6,8 +6,19 @@ import { BrowserRouter } from 'react-router';
 import type { PetReportData } from '@features/users/types/petReport.types';
 
 vi.mock('@features/users/components/DataConfirmation', () => ({
-  DataConfirmation: ({ formData }: { formData: PetReportData }) => (
+  DataConfirmation: ({
+    formData,
+    updateForm,
+  }: {
+    formData: PetReportData;
+    updateForm?: (d: Partial<PetReportData>) => void;
+  }) => (
     <div data-testid="data-confirmation">
+      {updateForm && (
+        <button onClick={() => updateForm({ name: 'Nuevo nombre' })}>
+          Editar nombre
+        </button>
+      )}
       <span>{formData?.name}</span>
     </div>
   ),
@@ -106,27 +117,7 @@ describe('ReportConfirmationPage', () => {
   });
 
   test('calls setReportData with merged data when handleUpdateForm is triggered', () => {
-    // This behavior is tested indirectly: DataConfirmation receives
-    // updateForm as a property. Since DataConfirmation is a mock object, we verify
-    // that the property exists by passing it and that the state is updated when it is called.
     mockReportData = MOCK_REPORT_DATA;
-
-    vi.mock('@features/users/components/DataConfirmation', () => ({
-      DataConfirmation: ({
-        formData,
-        updateForm,
-      }: {
-        formData: PetReportData;
-        updateForm: (d: Partial<PetReportData>) => void;
-      }) => (
-        <div data-testid="data-confirmation">
-          <button onClick={() => updateForm({ name: 'Nuevo nombre' })}>
-            Editar nombre
-          </button>
-          <span>{formData.name}</span>
-        </div>
-      ),
-    }));
 
     renderWithRouter(<ReportConfirmationPage />);
     expect(screen.getByTestId('data-confirmation')).toBeDefined();

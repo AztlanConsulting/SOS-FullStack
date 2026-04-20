@@ -22,12 +22,11 @@ export function createTokenPair(
   };
 }
 
-//TODO: Change issuer and audience
 export function verifyAccessToken(token: string): TokenPayload {
   try {
     const decoded = jwt.verify(token, config.jwtAccessSecret, {
-      issuer: 'tu-app-name',
-      audience: 'tu-app-client',
+      issuer: 'sos-auth-api',
+      audience: 'sos-web-client',
     }) as TokenPayload;
     return decoded;
   } catch (error) {
@@ -41,12 +40,11 @@ export function verifyAccessToken(token: string): TokenPayload {
   }
 }
 
-//TODO: Change issuer and audience
 export function verifyRefreshToken(token: string): RefreshTokenPayload {
   try {
     const decoded = jwt.verify(token, config.jwtRefreshSecret, {
-      issuer: 'tu-app-name',
-      audience: 'tu-app-client',
+      issuer: 'sos-auth-api',
+      audience: 'sos-web-client',
     }) as Partial<RefreshTokenPayload>;
 
     if (typeof decoded.remember !== 'boolean') {

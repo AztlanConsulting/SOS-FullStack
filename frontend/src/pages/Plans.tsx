@@ -1,10 +1,11 @@
 import PlanCard from '@features/plans/components/PlanCard';
-import Header from '@shared/components/layout/Header';
+import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState } from 'react';
 import { Button } from '@shared/components/ui/Button/Button';
 import { usePlans } from '@features/plans/hooks/usePlans';
+import { useNavigate } from 'react-router';
 
 /**
  * PlansPage Component.
@@ -16,6 +17,7 @@ import { usePlans } from '@features/plans/hooks/usePlans';
 export default function PlansPage() {
   const { plans, loading, error } = usePlans();
   const [current, setCurrent] = useState(0);
+  const navigate = useNavigate();
 
   /**
    * Navigation handlers for the mobile carousel view.
@@ -132,7 +134,7 @@ export default function PlansPage() {
             label="¿No es lo que buscas? Personalízalo"
             variant="danger"
             icon={HiArrowRight}
-            onClick={() => console.log('Personalizar')}
+            onClick={() => navigate('/personalizar')}
           />
         </div>
       </main>

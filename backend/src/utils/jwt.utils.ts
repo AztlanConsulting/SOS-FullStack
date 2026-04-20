@@ -1,4 +1,5 @@
 import jwt, { type SignOptions } from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 import { config } from '@config/env.config';
 import type {
   TokenPayload,
@@ -104,5 +105,12 @@ function generateRefreshToken(payload: RefreshTokenPayload): string {
     expiresIn: config.jwtRefreshExpiration as SignOptions['expiresIn'],
   };
 
-  return jwt.sign(payload, config.jwtRefreshSecret, options);
+  return jwt.sign(
+    {
+      ...payload,
+      jti: randomUUID(),
+    },
+    config.jwtRefreshSecret,
+    options,
+  );
 }

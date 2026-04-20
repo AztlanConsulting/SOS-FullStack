@@ -46,6 +46,7 @@ export interface TokenPayload {
 
 export interface RefreshTokenPayload extends TokenPayload {
   remember: boolean;
+  jti?: string;
 }
 
 export interface AuthTokens {

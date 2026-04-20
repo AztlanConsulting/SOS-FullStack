@@ -21,7 +21,7 @@ export const PetPhotosSection = ({
       id="photo-upload-section"
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-6 py-4"
     >
-      <div className="flex flex-col gap-3">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-3">
         <p className="text-sm text-gray-700 font-medium">
           Selecciona la distribución de las fotos
         </p>
@@ -32,7 +32,7 @@ export const PetPhotosSection = ({
       </div>
 
       {/* Image upload slots according to the chosen layout */}
-      <div className="flex flex-col gap-3">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-3">
         <p className="text-sm text-gray-700 font-medium">
           Sube fotos de tu mascota
         </p>

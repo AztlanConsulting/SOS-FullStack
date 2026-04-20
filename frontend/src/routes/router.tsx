@@ -5,7 +5,7 @@ import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import { ReportConfirmationPage } from '../pages/ReportConfirmation';
-import { PetReportProvider } from '../features/users/context/PetReportContext';
+import { PetReportProvider } from '../features/found-pet/context/PetReportService';
 import Plans from '../pages/Plans';
 import { PaymentPage } from '../features/payment/components/PaymentPage';
 import CheckoutPage from '../features/payment/components/CheckoutPage';

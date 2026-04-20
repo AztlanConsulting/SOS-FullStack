@@ -42,84 +42,76 @@ export const UserInfoSection = ({
   const today = new Date().toLocaleDateString('en-CA');
 
   return (
-    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5">
-      {/* Name only applies when is a report for a lost pet. */}
-      {reportType === 'lost' && (
+    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
+        <Select
+          id="petSpecies"
+          label="Especie de la mascota"
+          value={formData.species || ''}
+          onChange={(e) => updateForm({ species: e.target.value })}
+          options={speciesOptions}
+        />
+
+        <DateInput
+          id="petDate"
+          label={
+            reportType === 'lost' ? 'Fecha de extravío' : 'Fecha de encuentro'
+          }
+          value={formData.date || ''}
+          onChange={(e) => updateForm({ date: e.target.value })}
+          max={today}
+        />
+
         <Input
-          id="petName"
-          label="Nombre de la mascota"
-          value={formData.name || ''}
-          onChange={(e) => updateForm({ name: e.target.value })}
+          id="petBreed"
+          label="Raza/tipo de la mascota"
+          value={formData.breed || ''}
+          onChange={(e) => updateForm({ breed: e.target.value })}
         />
-      )}
 
-      <Select
-        id="petSpecies"
-        label="Especie de la mascota"
-        value={formData.species || ''}
-        onChange={(e) => updateForm({ species: e.target.value })}
-        options={speciesOptions}
-      />
-
-      <DateInput
-        id="petDate"
-        label={
-          reportType === 'lost' ? 'Fecha de extravío' : 'Fecha de encuentro'
-        }
-        value={formData.date || ''}
-        onChange={(e) => updateForm({ date: e.target.value })}
-        max={today}
-      />
-
-      <Input
-        id="petBreed"
-        label="Raza/tipo de la mascota"
-        value={formData.breed || ''}
-        onChange={(e) => updateForm({ breed: e.target.value })}
-      />
-
-      <Select
-        id="petSex"
-        label="Sexo de la mascota"
-        value={formData.sex || ''}
-        onChange={(e) => updateForm({ sex: e.target.value as any })}
-        options={sexOptions}
-      />
-
-      <Input
-        id="petColor"
-        label="Color de la mascota"
-        value={formData.color || ''}
-        onChange={(e) => updateForm({ color: e.target.value })}
-      />
-
-      <Select
-        id="petSize"
-        label="Talla de la mascota"
-        value={formData.size || ''}
-        onChange={(e) => updateForm({ size: e.target.value as any })}
-        options={sizeOptions}
-      />
-
-      {reportType === 'lost' && (
-        <TextArea
-          id="petDescription"
-          label="Descripción adicional de la mascota"
-          placeholder="Ejemplo: Hembra blanca con patas negras y nariz rosita, esterilizada"
-          value={formData.description || ''}
-          onChange={(e) => updateForm({ description: e.target.value })}
-          maxLength={200}
+        <Select
+          id="petSex"
+          label="Sexo de la mascota"
+          value={formData.sex || ''}
+          onChange={(e) => updateForm({ sex: e.target.value as any })}
+          options={sexOptions}
         />
-      )}
 
-      {reportType === 'found' && (
-        <div className="mt-2">
-          <FileUpload
-            index={1}
-            onChange={(file) => console.log('Archivo cargado:', file)}
+        <Input
+          id="petColor"
+          label="Color de la mascota"
+          value={formData.color || ''}
+          onChange={(e) => updateForm({ color: e.target.value })}
+        />
+
+        <Select
+          id="petSize"
+          label="Talla de la mascota"
+          value={formData.size || ''}
+          onChange={(e) => updateForm({ size: e.target.value as any })}
+          options={sizeOptions}
+        />
+
+        {reportType === 'lost' && (
+          <TextArea
+            id="petDescription"
+            label="Descripción adicional de la mascota"
+            placeholder="Ejemplo: Hembra blanca con patas negras y nariz rosita, esterilizada"
+            value={formData.description || ''}
+            onChange={(e) => updateForm({ description: e.target.value })}
+            maxLength={200}
           />
-        </div>
-      )}
+        )}
+
+        {reportType === 'found' && (
+          <div className="mt-2">
+            <FileUpload
+              index={1}
+              onChange={(file) => console.log('Archivo cargado:', file)}
+            />
+          </div>
+        )}
+      </div>
     </section>
   );
 };

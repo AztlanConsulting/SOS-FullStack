@@ -8,8 +8,8 @@ import type {
 } from '@validation/auth.types';
 
 const baseOptions = {
-  issuer: 'tu-app-name',
-  audience: 'tu-app-client',
+  issuer: 'sos-auth-api',
+  audience: 'sos-web-client',
 } as const;
 
 export function createTokenPair(

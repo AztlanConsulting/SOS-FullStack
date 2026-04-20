@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { CookieOptions, Request, Response } from 'express';
 import { loginUser } from '@use-cases/auth/login.usecase';
 import { refreshAccessToken } from '@use-cases/auth/refreshTokens.usecase';
 import { logoutUser } from '@/use-cases/auth/logout.usecase';
@@ -28,19 +28,18 @@ export const login = async (req: Request, res: Response) => {
       remember,
     });
 
-    const maxAge = Boolean(remember)
-      ? 7 * 24 * 60 * 60 * 1000 // Persistance
-      : undefined; // Session
-
-    //TODO: Change for production
-    res.cookie('refreshToken', result.tokens.refreshToken, {
+    const cookieOptions: CookieOptions = {
       httpOnly: true,
-      secure: false,
+      secure: process.env.ENV === 'production',
       sameSite: 'lax',
-      maxAge: maxAge,
       path: '/auth/refresh',
-    });
+    };
 
+    if (Boolean(remember)) {
+      cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000;
+    }
+
+    res.cookie('refreshToken', result.tokens.refreshToken, cookieOptions);
     res.status(200).json({
       user: result.user,
       accessToken: result.tokens.accessToken,
@@ -81,20 +80,19 @@ export const refresh = async (req: Request, res: Response) => {
 
     const decoded = verifyRefreshToken(refreshToken);
 
-    const maxAge = Boolean(decoded.remember)
-      ? 7 * 24 * 60 * 60 * 1000 // Persistance
-      : undefined; // Session
-
-    //TODO: Change for production
     // Refresh token rotation (new cookie replaces old one)
-    res.cookie('refreshToken', tokens.refreshToken, {
+    const cookieOptions: CookieOptions = {
       httpOnly: true,
-      secure: false,
+      secure: process.env.ENV === 'production',
       sameSite: 'lax',
-      maxAge: maxAge,
       path: '/auth/refresh',
-    });
+    };
 
+    if (decoded.remember) {
+      cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000;
+    }
+
+    res.cookie('refreshToken', tokens.refreshToken, cookieOptions);
     res.status(200).json({
       accessToken: tokens.accessToken,
     });

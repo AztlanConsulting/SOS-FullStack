@@ -26,8 +26,8 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
 }) => {
   return (
     <div className="relative w-full">
-      <div className="w-full border border-gray-400 rounded-lg p-3 bg-white focus-within:border-gray-600 transition-colors">
-        <label className="block text-xs font-medium text-gray-400 mb-1">
+      <div className="w-full border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-gray-600 transition-colors">
+        <label className="block text-xs font-medium text-gray-400">
           {label}
         </label>
         <input

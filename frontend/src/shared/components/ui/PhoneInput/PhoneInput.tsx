@@ -5,19 +5,22 @@ import 'react-international-phone/style.css';
 interface PhoneInputProps {
   label: string;
   value: string;
+  id: string;
   onChange: (value: string) => void;
 }
 
 export const PhoneInput: React.FC<PhoneInputProps> = ({
   label,
+  id,
   value,
   onChange,
 }) => {
   return (
-    <div className="w-full border border-gray-400 rounded-lg p-3 bg-white focus-within:border-gray-600 transition-colors flex flex-col">
-      <label className="block text-xs font-medium text-gray-400 mb-1">
-        {label}
-      </label>
+    <div
+      className="w-full border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-gray-600 transition-colors flex flex-col"
+      id={id}
+    >
+      <label className="block text-xs font-medium text-gray-400">{label}</label>
 
       <div className="text-sm text-gray-700 w-full flex items-center">
         <ReactInternationalPhone

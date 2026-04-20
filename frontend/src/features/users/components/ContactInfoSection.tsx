@@ -12,13 +12,10 @@ export const ContactInfoSection = ({
   updateForm,
 }: ContactInfoSectionProps) => {
   return (
-    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-6 py-4">
-      <h3 className="text-xl font-bold text-center mb-2">
-        Información del dueño
-      </h3>
-
+    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col py-4">
       <div className="flex flex-col gap-4">
         <Input
+          id="ownerName"
           label="Nombre y apellido del dueño"
           value={formData.contactName || ''}
           onChange={(e) => updateForm({ contactName: e.target.value })}
@@ -26,11 +23,13 @@ export const ContactInfoSection = ({
 
         <PhoneInput
           label="Número de teléfono"
+          id="ownerPhone"
           value={formData.phoneNumber || ''}
           onChange={(value) => updateForm({ phoneNumber: value })}
         />
 
         <Input
+          id="ownerEmail"
           label="Correo electrónico"
           type="email"
           value={formData.email || ''}

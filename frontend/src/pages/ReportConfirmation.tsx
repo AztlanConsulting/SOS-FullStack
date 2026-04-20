@@ -5,6 +5,8 @@ import { usePetReport } from '../features/users/context/PetReportContext';
 
 import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
+import { Button } from '@shared/components/ui/Button';
+import { Text } from '@shared/components/ui/Text';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -32,22 +34,30 @@ export const ReportConfirmationPage: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-grow pt-24 pb-8 px-4 lg:pt-8">
-        <div className="bg-[#FFF3C7] py-4 mb-8 -mx-4">
-          <h1 className="text-center text-2xl font-bold text-gray-900">
-            Confirmación de datos
-          </h1>
-        </div>
-
-        <DataConfirmation formData={reportData} updateForm={handleUpdateForm} />
-
-        <div className="max-w-lg mx-auto pb-8 mt-8">
-          <button
-            onClick={handleProceedToPayment}
-            className="bg-[#FFD100] text-black font-bold py-4 rounded-full w-full shadow-md hover:bg-yellow-400 transition-colors"
+      <main className="flex-grow pt-20 lg:pt-0 pb-8">
+        <div className="w-full bg-[#FFF3C7] py-6 lg:py-8 px-4 border-b border-yellow-200">
+          <Text
+            variant="h1"
+            weight="bold"
+            as="h1"
+            className="text-center text-2xl text-gray-900"
           >
-            Proceder al pago
-          </button>
+            Confirmación de datos
+          </Text>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 pt-12 lg:pt-10">
+          <DataConfirmation
+            formData={reportData}
+            updateForm={handleUpdateForm}
+          />
+
+          <div className="max-w-lg mx-auto pb-8 mt-8 flex justify-center">
+            <Button
+              onClick={handleProceedToPayment}
+              label="Proceder al pago"
+              variant="primary"
+            />
+          </div>
         </div>
       </main>
 

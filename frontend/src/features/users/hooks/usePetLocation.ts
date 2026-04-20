@@ -32,6 +32,13 @@ export const usePetLocation = (
   }, []);
 
   useEffect(() => {
+    return () => {
+      LeafletMapService.destroyMap?.(mapID);
+      mapReadyRef.current = false;
+    };
+  }, [mapID]);
+
+  useEffect(() => {
     if (coords && mapReadyRef.current) {
       updateForm({ locationCoords: coords });
     }

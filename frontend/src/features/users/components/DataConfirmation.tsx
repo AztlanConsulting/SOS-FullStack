@@ -6,6 +6,7 @@ import { Select } from '@shared/components/ui/Select/Select';
 import { TextArea } from '@shared/components/ui/TextArea/TextArea';
 import { DateInput } from '@shared/components/ui/DateInput/DateInput';
 import { PhoneInput } from '@shared/components/ui/PhoneInput/PhoneInput';
+import { Button } from '@shared/components/ui/Button';
 
 import { PetLocationSection } from './PetLocationSection';
 import { PetPhotosSection } from './PetPhotosSection';
@@ -17,6 +18,7 @@ export interface DataConfirmationProps {
   updateForm: (newData: Partial<PetReportData>) => void;
 }
 
+/** Editable field generic for text, selects, dates, texareas and phones */
 const EditableField = ({
   label,
   value,
@@ -34,8 +36,16 @@ const EditableField = ({
   maxLength?: number;
   updateForm: (newData: Partial<PetReportData>) => void;
 }) => {
-  const { isEditing, setIsEditing, tempValue, setTempValue, handleSave } =
-    useEditableField(value, field, updateForm);
+  const {
+    isEditing,
+    setIsEditing,
+    tempValue,
+    setTempValue,
+    handleSave,
+    error,
+  } = useEditableField(value, field, updateForm);
+
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <div
@@ -50,6 +60,9 @@ const EditableField = ({
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
             />
+          )}
+          {error && (
+            <p className="text-red-500 text-xs font-semibold mt-1">{error}</p>
           )}
           {type === 'select' && (
             <Select
@@ -66,6 +79,7 @@ const EditableField = ({
               label={label}
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
+              max={today}
             />
           )}
           {type === 'textarea' && (
@@ -79,6 +93,7 @@ const EditableField = ({
           )}
           {type === 'phone' && (
             <PhoneInput
+              id="ownerPhone"
               label={label}
               value={tempValue}
               onChange={(val) => setTempValue(val)}
@@ -86,19 +101,16 @@ const EditableField = ({
           )}
 
           <div className="flex justify-end mt-1">
-            <button
-              onClick={handleSave}
-              className="bg-[#FFD100] text-black px-6 py-2 rounded-lg font-bold shadow-sm hover:bg-yellow-400 transition-colors"
-            >
-              Guardar
-            </button>
+            <Button onClick={handleSave} variant="primary" label="Guardar" />
           </div>
         </div>
       ) : (
         <div className="flex justify-between items-center w-full">
           <div className="flex flex-col">
             <span className="text-xs text-gray-400 font-medium">{label}</span>
-            <span className="text-sm text-gray-800 mt-1">{value || '-'}</span>
+            <span className="text-sm text-gray-800 mt-1 break-words whitespace-pre-wrap">
+              {value || '-'}
+            </span>
           </div>
           <button
             onClick={() => setIsEditing(true)}
@@ -125,6 +137,7 @@ const EditableField = ({
   );
 };
 
+/** Editable filed for the location component. */
 const EditableLocation = ({
   formData,
   updateForm,
@@ -144,6 +157,7 @@ const EditableLocation = ({
             formData={formData}
             updateForm={updateForm}
             reportType="lost"
+            mapID="edit-location-map"
           />
           <div className="flex justify-end mt-2">
             <button
@@ -189,6 +203,7 @@ const EditableLocation = ({
   );
 };
 
+/** Editable field for the photos. */
 const EditablePhotos = ({
   formData,
   updateForm,
@@ -200,6 +215,7 @@ const EditablePhotos = ({
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  // Generate object URLs fron the File[] on the formData
   useEffect(() => {
     if (formData.images && formData.images.length > 0) {
       imageUrls.forEach((url) => URL.revokeObjectURL(url));
@@ -302,10 +318,19 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
   formData,
   updateForm,
 }) => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant',
+    });
+  }, []);
+
   const speciesOptions = [
     { value: 'Perro', label: 'Perro' },
     { value: 'Gato', label: 'Gato' },
     { value: 'Ave', label: 'Ave' },
+    { value: 'Conejo', label: 'Conejo' },
+    { value: 'Hámster', label: 'Hámster' },
     { value: 'Otro', label: 'Otro' },
   ];
 
@@ -392,9 +417,6 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
           />
         </section>
 
-        <h3 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
-          Fotos de la mascota
-        </h3>
         <section>
           <EditablePhotos formData={formData} updateForm={updateForm} />
         </section>

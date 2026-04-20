@@ -12,13 +12,12 @@ export const DateInput: React.FC<DateInputProps> = ({
 }) => {
   return (
     <div className="flex flex-col w-full">
-      <div className="relative border border-gray-400 rounded-lg p-2 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
-        <label htmlFor={id} className="block text-xs text-gray-400 mb-1">
+      <div className="relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
+        <label htmlFor={id} className="block text-xs text-gray-400">
           {label}
           {required && <span className="text-red-500 font-bold">*</span>}
         </label>
 
-        {/* Input nativo con clases especiales de Tailwind para ocultar el ícono por defecto */}
         <input
           type="date"
           id={id}
@@ -32,7 +31,6 @@ export const DateInput: React.FC<DateInputProps> = ({
           {...props}
         />
 
-        {/* Nuestro ícono personalizado superpuesto */}
         <div className="absolute right-3 top-1/2 translate-y-[-10%] pointer-events-none text-black z-0">
           <svg
             width="20"

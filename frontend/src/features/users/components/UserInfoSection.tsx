@@ -20,6 +20,8 @@ export const UserInfoSection = ({
     { value: 'Perro', label: 'Perro' },
     { value: 'Gato', label: 'Gato' },
     { value: 'Ave', label: 'Ave' },
+    { value: 'Hámster', label: 'Hámster' },
+    { value: 'Conejo', label: 'Conejo' },
     { value: 'Otro', label: 'Otro' },
   ];
 
@@ -37,8 +39,11 @@ export const UserInfoSection = ({
     { value: 'Gigante: más de 45 kg', label: 'Gigante: más de 45 kg' },
   ];
 
+  const today = new Date().toLocaleDateString('en-CA');
+
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5">
+      {/* Name only applies when is a report for a lost pet. */}
       {reportType === 'lost' && (
         <Input
           id="petName"
@@ -63,6 +68,7 @@ export const UserInfoSection = ({
         }
         value={formData.date || ''}
         onChange={(e) => updateForm({ date: e.target.value })}
+        max={today}
       />
 
       <Input

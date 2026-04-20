@@ -31,57 +31,111 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
 
   const updateFormData = (newData: Partial<PetReportData>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
+
     const fieldName = Object.keys(newData)[0];
+
     if (errors[fieldName]) {
       setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[fieldName];
-        return newErrors;
+        const copy = { ...prev };
+        delete copy[fieldName];
+        return copy;
       });
+    }
+  };
+
+  const scrollToFirstError = (errors: Record<string, string>) => {
+    const fieldMap: Record<string, string> = {
+      name: 'petName',
+      species: 'petSpecies',
+      date: 'petDate',
+      breed: 'petBreed',
+      color: 'petColor',
+      images: 'photo-upload-section',
+      address: 'pet-location-input',
+      contactName: 'ownerName',
+      phoneNumber: 'ownerPhone',
+      email: 'ownerEmail',
+    };
+
+    const firstErrorField = Object.keys(errors)[0];
+    const elementId = fieldMap[firstErrorField];
+
+    if (!elementId) return;
+
+    const element = document.getElementById(elementId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+
+      setTimeout(() => {
+        if ('focus' in element) {
+          (element as HTMLElement).focus();
+        }
+      }, 400);
     }
   };
 
   const handleNext = () => {
     const newErrors: Record<string, string> = {};
+
     if (!formData.name) newErrors.name = '¡Nos falta el nombre de tu mascota!';
-    if (!formData.species)
-      newErrors.species = '¡Por favor, selecciona una especie!';
+
+    if (!formData.species) newErrors.species = '¡Selecciona una especie!';
+
     if (!formData.date) {
-      newErrors.date = '¡Indícanos la fecha del suceso!';
+      newErrors.date = '¡Indícanos la fecha!';
     } else {
       const selectedDate = new Date(formData.date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+
       if (selectedDate > today) {
-        newErrors.date = '¡La fecha no puede ser en el futuro!';
+        newErrors.date = '¡La fecha no puede ser futura!';
       }
     }
-    if (!formData.breed) newErrors.breed = '¡Nos falta conocer su raza o tipo!';
-    if (!formData.color)
-      newErrors.color = '¡Dinos de qué color es para identificarla mejor!';
-    if (!formData.address)
-      newErrors.address = '¡Necesitamos saber dónde ocurrió!';
+
+    if (!formData.breed) newErrors.breed = '¡Falta raza o tipo!';
+
+    if (!formData.color) newErrors.color = '¡Falta color!';
+
+    if (!formData.address) newErrors.address = '¡Indica ubicación!';
+
     if (!formData.images || formData.images.length === 0)
-      newErrors.images = '¡Sube al menos una foto para el cartel!';
+      newErrors.images = '¡Sube al menos una foto!';
+
     if (!formData.contactName)
-      newErrors.contactName = '¡Falta tu nombre y apellido!';
-    if (!formData.phoneNumber)
-      newErrors.phoneNumber = '¡Añade un teléfono para que te contacten!';
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = '¡Necesitamos tu correo electrónico!';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email =
-        '¡El correo electrónico no parece tener un formato válido!';
+      newErrors.contactName = '¡Falta nombre del dueño!';
+
+    const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
+    if (!cleanPhone || cleanPhone.length < 10) {
+      newErrors.phoneNumber = '¡Añade un número de teléfono!';
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.email) {
+      newErrors.email = '¡Falta correo!';
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = '¡Correo inválido!';
+    }
+
     setErrors(newErrors);
+
     if (Object.keys(newErrors).length === 0) {
       setReportData(formData);
       navigate('/report-confirmation');
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToFirstError(newErrors);
     }
   };
 
-  return { formData, errors, updateFormData, handleNext };
+  return {
+    formData,
+    errors,
+    updateFormData,
+    handleNext,
+  };
 };

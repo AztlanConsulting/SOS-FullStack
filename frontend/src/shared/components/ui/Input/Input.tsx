@@ -12,8 +12,8 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div className="flex flex-col w-full">
-      <div className="relative border border-gray-400 rounded-lg p-2 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
-        <label htmlFor={id} className="block text-xs text-gray-400 mb-1">
+      <div className="relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
+        <label htmlFor={id} className="block text-xs text-gray-400">
           {label}{' '}
           {required && <span className="text-red-500 font-bold">*</span>}
         </label>

@@ -8,15 +8,31 @@ export const useEditableField = (
 ) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setTempValue(value);
   }, [value]);
 
   const handleSave = () => {
-    updateForm({ [field]: tempValue });
+    const trimmed = tempValue.trim();
+
+    if (!trimmed) {
+      setError('Este campo no puede quedar vacío.');
+      return;
+    }
+
+    updateForm({ [field]: trimmed });
+    setError('');
     setIsEditing(false);
   };
 
-  return { isEditing, setIsEditing, tempValue, setTempValue, handleSave };
+  return {
+    isEditing,
+    setIsEditing,
+    tempValue,
+    setTempValue,
+    handleSave,
+    error,
+  };
 };

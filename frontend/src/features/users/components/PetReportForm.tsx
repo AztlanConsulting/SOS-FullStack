@@ -5,6 +5,8 @@ import { PetPhotosSection } from './PetPhotosSection';
 import { PetLocationSection } from './PetLocationSection';
 import { ContactInfoSection } from './ContactInfoSection';
 import { usePetReportForm } from '../hooks/usePetReportForm';
+import { Button } from '@shared/components/ui/Button';
+import { Text } from '@shared/components/ui/Text';
 
 export interface PetReportFormProps {
   initialData?: Partial<PetReportData>;
@@ -16,49 +18,92 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
   const { formData, errors, updateFormData, handleNext } =
     usePetReportForm(initialData);
 
-  return (
-    <div className="min-h-screen pb-24 pt-8 bg-white">
-      <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
-        {Object.keys(errors).length > 0 && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm">
-            <p className="font-bold mb-2">
-              ¡Faltan algunos detalles importantes!
-            </p>
-            <ul className="list-disc ml-5 text-sm flex flex-col gap-1">
-              {Object.values(errors).map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+  const renderSectionErrors = (fieldNames: string[]) => {
+    const sectionErrors = fieldNames
+      .map((field) => errors[field])
+      .filter(Boolean);
 
-        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
-          Información de la mascota
-        </h2>
+    if (sectionErrors.length === 0) return null;
+
+    return (
+      <div className="mt-3 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <ul className="list-disc pl-5 space-y-1">
+          {sectionErrors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  return (
+    <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
+      <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
+        {/* Section 1: General pet data */}
+        <div id="user-info-section">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="bold"
+            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+          >
+            Información de la mascota
+          </Text>
+        </div>
+        {renderSectionErrors(['name', 'species', 'date', 'breed', 'color'])}
         <UserInfoSection formData={formData} updateForm={updateFormData} />
 
-        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
-          Fotos de la mascota
-        </h2>
+        {/* Section 2: Photos of the pet */}
+        <div id="pet-photos-section">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="bold"
+            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+          >
+            Fotos de la mascota
+          </Text>
+        </div>
+        {renderSectionErrors(['images'])}
         <PetPhotosSection formData={formData} updateForm={updateFormData} />
 
-        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
-          Dónde se perdió
-        </h2>
+        {/* Section 3: Where the pet went lost. */}
+        <div id="pet-location-section">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="bold"
+            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+          >
+            Dónde se perdió
+          </Text>
+        </div>
+        {renderSectionErrors(['address'])}
         <PetLocationSection formData={formData} updateForm={updateFormData} />
 
-        <h2 className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2">
-          Información de contacto
-        </h2>
+        {/* Section 4: Owner information. */}
+        <div id="contact-info-section">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="bold"
+            className="text-center text-xl md:text-2xl font-bold text-gray-800 mb-2"
+          >
+            Información de contacto
+          </Text>
+        </div>
+        {renderSectionErrors(['contactName', 'phoneNumber', 'email'])}
         <ContactInfoSection formData={formData} updateForm={updateFormData} />
 
-        <div className="mt-4">
-          <button
-            onClick={handleNext}
-            className="bg-[#FFD100] text-black font-bold py-4 rounded-full w-full shadow-md hover:bg-yellow-400 transition-colors"
-          >
-            Confirmar Datos
-          </button>
+        {/* Section 5: Confirmation button. */}
+        <div className="w-full max-w-5xl mx-auto px-4 md:px-0">
+          <div className="w-full flex justify-center [&>button]:w-full [&>button]:max-w-none [&>button]:whitespace-nowrap">
+            <Button
+              onClick={handleNext}
+              label="Contratar el servicio"
+              variant="plans"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -6,6 +6,13 @@ import Footer from '@shared/components/layout/Footer';
 import Header from '@shared/components/layout/Header';
 
 const mockNavigate = vi.fn();
+vi.mock('@features/auth/hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: null,
+    isAuthLoading: false,
+  }),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {

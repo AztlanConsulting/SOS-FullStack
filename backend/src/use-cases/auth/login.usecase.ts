@@ -43,6 +43,7 @@ export const loginUser = async (
   // JWT payload contains minimal identity + authorization context
   const payload: TokenPayload = {
     userId: user._id,
+    username: user.username,
     email: user.email,
     role: user.roleId.role,
   };

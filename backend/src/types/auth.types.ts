@@ -40,6 +40,7 @@ export type UserPermissions = {
 
 export interface TokenPayload {
   userId: User['_id'];
+  username: string;
   email: string;
   role: string;
 }

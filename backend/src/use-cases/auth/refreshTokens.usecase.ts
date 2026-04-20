@@ -46,6 +46,7 @@ export const refreshAccessToken = async (
 
   const newTokenPayload: TokenPayload = {
     userId: payload.userId,
+    username: payload.username,
     email: payload.email,
     role: payload.role,
   };

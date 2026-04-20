@@ -61,12 +61,12 @@ export default function PlansPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8">
+      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8 pt-28 lg:pt-8">
         <Text
           variant="h2"
           weight="medium"
           as="h2"
-          className="text-gray-900 mb-6"
+          className="text-2xl lg:text-2xl text-gray-900 mb-2"
         >
           {' '}
           Planes{' '}
@@ -134,7 +134,7 @@ export default function PlansPage() {
             label="¿No es lo que buscas? Personalízalo"
             variant="danger"
             icon={HiArrowRight}
-            onClick={() => navigate('/personalizar')}
+            onClick={() => navigate('/planes/personalizado')}
           />
         </div>
       </main>

@@ -7,7 +7,6 @@ import Therms from '../pages/Therms';
 import routerWorkshop from './workshop.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
-import routerCustomPlan from './customPlan.routes';
 import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
@@ -52,7 +51,6 @@ export const router = createBrowserRouter([
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,
-      ...routerCustomPlan,
     ],
   },
 ]);

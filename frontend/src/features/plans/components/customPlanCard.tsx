@@ -4,8 +4,13 @@ import { Button } from '../../../shared/components/ui/Button';
 import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
 import { useCustomPlan } from '../hooks/useCustomPlan';
 import { ALL_FEATURES } from './customPlan';
-import { HiExclamation } from 'react-icons/hi';
 
+/**
+ * CustomPlanCard Component.
+ * Allows users to build a tailored plan by adjusting duration and radius via sliders,
+ * and selecting optional features via checkboxes.
+ * Prices and feature availability are updated in real-time based on the selected tier.
+ */
 const CustomPlanCard: React.FC = () => {
   const {
     days,
@@ -13,7 +18,6 @@ const CustomPlanCard: React.FC = () => {
     tier,
     selectedFeatures,
     totalPrice,
-    warnings,
     handleDaysChange,
     setKm,
     toggleFeature,
@@ -86,20 +90,6 @@ const CustomPlanCard: React.FC = () => {
           </div>
         </div>
 
-        {warnings.map((w, i) => (
-          <div
-            key={i}
-            className="flex items-start gap-2 bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2"
-          >
-            <HiExclamation
-              size={18}
-              className="text-yellow-500 shrink-0 mt-0.5"
-            />
-            <Text variant="small" className="text-yellow-700">
-              {w}
-            </Text>
-          </div>
-        ))}
         <div className="flex flex-col gap-2">
           <Text variant="body" weight="medium" className="text-gray-800">
             Extras

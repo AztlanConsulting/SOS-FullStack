@@ -1,13 +1,22 @@
 import React from 'react';
 import { HiCheck } from 'react-icons/hi';
-
+/**
+ * Props for the custom Checkbox component.
+ */
 interface CheckboxProps {
+  /** Current state of the checkbox. */
   checked: boolean;
+  /** If true, prevents interaction and applies a disabled style. */
   disabled?: boolean;
+  /** Callback function executed when the checkbox is clicked. */
   onChange: (checked: boolean) => void;
   className?: string;
 }
 
+/**
+ * A custom-styled Checkbox component built using a button element.
+ * It provides better cross-browser consistency and easier styling compared to the native input[type="checkbox"].
+ */
 const Checkbox: React.FC<CheckboxProps> = ({
   checked,
   disabled = false,

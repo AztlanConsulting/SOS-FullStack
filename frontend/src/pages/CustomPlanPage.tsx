@@ -4,6 +4,12 @@ import Header from '../shared/components/layout/Header';
 import { Text } from '../shared/components/ui/Text';
 import CustomPlanCard from '@/features/plans/components/customPlanCard';
 
+/**
+ * CustomPlanPage Component.
+ * * Provides a dedicated page for users to configure their own search plan.
+ * It integrates the CustomPlanCard logic within a consistent layout, featuring
+ * a navigation-back action and responsive padding.
+ */
 export default function CustomPlanPage() {
   const navigate = useNavigate();
 

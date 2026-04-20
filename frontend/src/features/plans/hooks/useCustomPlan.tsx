@@ -1,19 +1,38 @@
 import { useState, useMemo } from 'react';
 import { getTier, calculatePrice } from '../components/customPlan';
 
+/**
+ * Custom hook to manage the state and logic for building a personalized plan.
+ * Handles calculation updates, tier shifts, and feature selection logic.
+ */
 export const useCustomPlan = () => {
   const [days, setDays] = useState(3);
   const [km, setKm] = useState(5);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
+  /**
+   * Memoized tier information.
+   * Updates only when the number of days changes to determine available features and rates.
+   */
   const tier = useMemo(() => getTier(days), [days]);
 
+  /**
+   * Toggles a feature's selection status.
+   * Adds the feature key if missing, or removes it if already present in the array.
+   * @param key - The unique identifier of the feature.
+   */
   const toggleFeature = (key: string) => {
     setSelectedFeatures((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
     );
   };
 
+  /**
+   * Updates the duration of the plan and manages feature compatibility.
+   * If the new day count triggers a change in pricing tiers, selected features
+   * are reset to avoid carrying over invalid features or incorrect pricing.
+   * @param newDays - The new duration selected by the user.
+   */
   const handleDaysChange = (newDays: number) => {
     const newTier = getTier(newDays);
     const currentTier = getTier(days);
@@ -23,22 +42,14 @@ export const useCustomPlan = () => {
     setDays(newDays);
   };
 
+  /**
+   * Memoized total price calculation.
+   * Re-runs whenever days, kilometers, or feature selections change.
+   */
   const totalPrice = useMemo(
     () => calculatePrice(days, km, selectedFeatures),
     [days, km, selectedFeatures],
   );
-
-  const warnings: string[] = [];
-  if (km > 20 && days < 3) {
-    warnings.push(
-      'Sugerencia SOS: Para un radio de este tamaño, recomendamos al menos 3 días para garantizar que el algoritmo de pauta alcance a toda la audiencia.',
-    );
-  }
-  if (km > 50) {
-    warnings.push(
-      'Nota: Radios de búsqueda muy amplios pueden dispersar la atención. Asegúrate de que tu mascota tiene alta movilidad antes de confirmar.',
-    );
-  }
 
   return {
     days,
@@ -46,7 +57,6 @@ export const useCustomPlan = () => {
     tier,
     selectedFeatures,
     totalPrice,
-    warnings,
     handleDaysChange,
     setKm,
     toggleFeature,

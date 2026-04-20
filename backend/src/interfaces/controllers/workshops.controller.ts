@@ -1,5 +1,5 @@
 import type { Workshop } from '@domain/models/workshop.model';
-import { WorkshopDataAccess } from '@interfaces/data-access/workshop.data-access';
+import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
 import { workshopBody, workshopQuery } from '@validation/workshop.types';
 import {
   getWorkshopById,

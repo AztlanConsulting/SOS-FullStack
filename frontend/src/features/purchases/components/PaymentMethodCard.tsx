@@ -1,7 +1,14 @@
 import { Text } from '@shared/components/ui/Text';
 import type { PaymentMethod } from '../types/PaymentMethod.type';
+import type { ChangeEvent } from 'react';
 
-const PaymentMethodCard = ({ method, icons, description }: PaymentMethod) => {
+interface Props {
+  paymentMethod: PaymentMethod;
+  onChecked: (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
+}
+
+const PaymentMethodCard = ({ paymentMethod, onChecked }: Props) => {
+  const { method, description, icons } = paymentMethod;
   return (
     <label
       htmlFor={method}
@@ -9,7 +16,13 @@ const PaymentMethodCard = ({ method, icons, description }: PaymentMethod) => {
     >
       <div className="w-full grid grid-cols-3">
         <div className="flex gap-2 col-span-2">
-          <input type="radio" name="method" id={method} value={method} />
+          <input
+            type="radio"
+            name="method"
+            id={method}
+            value={method}
+            onChange={onChecked}
+          />
           <div>
             <Text className="text-sm md:text-base">{method}</Text>
             <Text color="text-gray-500" className="text-[10px] md:text-sm">

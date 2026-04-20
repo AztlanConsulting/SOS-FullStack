@@ -1,5 +1,5 @@
 import { PayPalProvider } from '@paypal/react-paypal-js/sdk-v6';
-import CheckoutPage from '../features/payment/components/CheckoutPage';
+import PaypalButton from './PaypalButton';
 
 const Paypal = () => {
   return (
@@ -9,7 +9,7 @@ const Paypal = () => {
         components={['paypal-payments']}
         pageType="checkout"
       >
-        <CheckoutPage />
+        <PaypalButton />
       </PayPalProvider>
     </>
   );

@@ -27,11 +27,9 @@ export const TempPurchaseForm = ({
   return (
     <>
       <Header />
-      <main className="max-md:pt-24 pt-4">
-        <div className="grid sm:grid-cols-2 grid-rows-2">
-          <div className="order-last sm:order-first" />
-          <PurchaseForm />
-        </div>
+      <main className="max-md:pt-24 pt-4 grid sm:grid-cols-2 grid-rows-2">
+        <div className="order-last sm:order-first" />
+        <PurchaseForm />
       </main>
     </>
   );

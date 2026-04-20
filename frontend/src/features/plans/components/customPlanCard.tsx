@@ -3,7 +3,7 @@ import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
 import { useCustomPlan } from '../hooks/useCustomPlan';
-import { ALL_FEATURES } from './customPlan';
+import { ALL_FEATURES } from '../hooks/useCustomPlan';
 
 /**
  * CustomPlanCard Component.

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { getTier, calculatePrice } from '@features/plans/components/customPlan';
+import { getTier, calculatePrice } from '@/features/plans/hooks/useCustomPlan';
 
 /**
  * Unit tests for customPlan utility functions.

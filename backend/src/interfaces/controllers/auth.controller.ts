@@ -2,8 +2,8 @@ import type { CookieOptions, Request, Response } from 'express';
 import { loginUser } from '@use-cases/auth/login.usecase';
 import { refreshAccessToken } from '@use-cases/auth/refreshTokens.usecase';
 import { logoutUser } from '@/use-cases/auth/logout.usecase';
-import { userDataAccess } from '@interfaces/data-access/user.data-access';
-import { refreshTokenDataAccess } from '../data-access/refreshToken.data-acces';
+import { userDataAccess } from '@infrastructure/data-access/user.data-access';
+import { refreshTokenDataAccess } from '@infrastructure/data-access/refreshToken.data-acces';
 import { verifyRefreshToken } from '@utils/jwt.utils';
 
 /**

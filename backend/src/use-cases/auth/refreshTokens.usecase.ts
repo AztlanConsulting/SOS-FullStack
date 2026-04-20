@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { config } from '@config/env.config';
 import { getUserById } from '@use-cases/auth/getUser.usecase';
-import { userDataAccess } from '@interfaces/data-access/user.data-access';
+import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import type { RefreshTokenRepository } from '@domain/repositories/refreshToken.repository';
 import type { AuthTokens, TokenPayload } from '@/types/auth.types';
 import {

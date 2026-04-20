@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '@utils/jwt.utils';
 import { getUserById } from '@use-cases/auth/getUser.usecase';
 import { getUserPermissions } from '@/use-cases/auth/getUserPermissions.usecase';
-import { userDataAccess } from '@interfaces/data-access/user.data-access';
+import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import type { TokenPayload } from '@validation/auth.types';
 
 // Extend Express Request to include authenticated user payload

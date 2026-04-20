@@ -35,6 +35,7 @@ export default async function createOrder(req: Request, res: Response) {
       orderId: result.id,
       amount: result.amount,
       currency: result.currency,
+      clientSecret: result.clientSecret!,
     });
 
     return res.status(201).json({
@@ -48,6 +49,10 @@ export default async function createOrder(req: Request, res: Response) {
   }
 }
 
+/**
+ * Determine the provider implemantation that needs to be used
+ * @returns PaymentProvider
+ */
 function getPaymentProvider(paymentMethod: string): PaymentProvider {
   if (paymentMethod == 'paypal') {
     return PaypalProvider;

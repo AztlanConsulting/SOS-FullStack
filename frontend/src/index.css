@@ -4,6 +4,7 @@
 @theme {
   --color-secondary: #fef5da;
   --color-primary: #f9cd48;
+  --radius-c: 20px;
 }
 /* Hide scrollbars for all browsers */
 html,

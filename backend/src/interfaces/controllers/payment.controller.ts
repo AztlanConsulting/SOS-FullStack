@@ -6,7 +6,7 @@ import { markAsSucceededDB } from '../../use-cases/payments/markAsSuccededDB.use
 import type Stripe from 'stripe';
 import { registerClientUseCase } from '../../use-cases/clients/registerClient.usecase';
 import { userDataAccess } from '../data-access/user.data-access';
-import { emailProvider } from '../../infrastructure/api/email.service';
+import { emailService } from '../../infrastructure/api/email.service';
 
 export const makeCreatePaymentIntent = () => {
   return async (req: Request, res: Response) => {
@@ -105,7 +105,7 @@ export const paymentController = {
             // We execute the registry. If the user already exists, the UseCase will handle it.
             await registerClientUseCase(
                 userDataAccess,
-                emailProvider,
+                emailService,
                 { email, petName }
             );
 

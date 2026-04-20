@@ -1,5 +1,8 @@
-import { PaymentDataAccess } from '../../interfaces/data-access/payment.data-access';
+import type { PaymentRepository } from '@domain/repositories/payment.repository';
 
-export const markAsSucceededDB = async (stripeId: string): Promise<string> => {
-  return await PaymentDataAccess.markAsSucceeded(stripeId);
+export const markAsSucceededDB = async (
+  paymentRepository: PaymentRepository,
+  stripeId: string,
+): Promise<string> => {
+  return await paymentRepository.markAsSucceeded(stripeId);
 };

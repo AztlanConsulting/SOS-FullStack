@@ -1,11 +1,14 @@
-import type { PaymentIntentResult } from '../../domain/ports/paymentProvider.port';
-import { StripeProvider } from '../../infrastructure/api/stripeProvider.api';
-import type { PaymentIntentDTO } from '../../domain/ports/paymentProvider.port';
+import type {
+  PaymentIntentResult,
+  PaymentProvider,
+  PaymentIntentDTO,
+} from '@domain/ports/paymentProvider.port';
 
 export const createPaymentIntent = async (
+  paymentProvider: PaymentProvider,
   data: PaymentIntentDTO,
 ): Promise<PaymentIntentResult> => {
-  return await StripeProvider.createIntent({
+  return await paymentProvider.createIntent({
     amount: data.amount,
     currency: data.currency,
   });

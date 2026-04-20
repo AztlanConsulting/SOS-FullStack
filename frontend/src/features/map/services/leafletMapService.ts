@@ -91,4 +91,19 @@ export const LeafletMapService = {
     });
     L.marker(coords).addTo(map);
   },
+
+  /**
+   * Destroy the actual instance of the map and clears the memory
+   * @param mapID ID of the HTML container.
+   */
+  destroyMap(mapID: string) {
+    if (map) {
+      map.remove();
+      map = null;
+    }
+    const container = L.DomUtil.get(mapID);
+    if (container) {
+      (container as HTMLElement & { _leaflet_id?: null })._leaflet_id = null;
+    }
+  },
 };

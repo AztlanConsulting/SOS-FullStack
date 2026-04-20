@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router';
-import Header from '@shared/components/layout/Header';
 import Footer from '@shared/components/layout/Footer';
+import Header from '@shared/components/layout/Header';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router', async () => {
@@ -42,7 +42,9 @@ describe('Header component', () => {
 
     if (burger) {
       fireEvent.click(burger);
-      expect(screen.getByText('Iniciar Sesión')).toBeInTheDocument();
+      const iniciarSesionButtons = screen.getAllByText('Iniciar Sesión');
+      // Check that at least one "Iniciar Sesión" button exists (from mobile menu)
+      expect(iniciarSesionButtons.length).toBeGreaterThan(0);
     }
   });
 

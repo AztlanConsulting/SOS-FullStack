@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { PetReportData } from '../types/petReport.types.ts';
-import { useGeocoding } from '../../map/hooks/useGeocoding';
-import { useMap } from '../../map/hooks/useMap';
-import { LeafletMapService } from '../../map/services/leafletMapService';
+import { useGeocoding } from '../../map/hooks/useGeocoding.tsx';
+import { useMap } from '../../map/hooks/useMap.tsx';
+import { LeafletMapService } from '../../map/services/leafletMapService.ts';
 
 export const usePetLocation = (
   mapID: string,

@@ -2,7 +2,7 @@ import type { Blog } from '@domain/models/blog.model';
 import type {
   BlogRequest,
   BlogRepository,
-} from '@/domain/repositories/blog.repository';
+} from '@domain/repositories/blog.repository';
 
 /**
  * Fetch blogs and total count.
@@ -11,7 +11,7 @@ import type {
  * @param blogRequest - Query parameters (filters, pagination, etc.)
  * @returns Blogs list and total count
  */
-export async function getBlogs(
+export async function getBlogsList(
   blogRepository: BlogRepository,
   blogRequest: BlogRequest,
 ): Promise<{ blogs: Blog[]; totalBlogs: number }> {

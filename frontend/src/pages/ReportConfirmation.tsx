@@ -35,17 +35,17 @@ export const ReportConfirmationPage: React.FC = () => {
       <Header />
 
       <main className="flex-grow pt-20 lg:pt-0 pb-8">
-        <div className="w-full bg-[#FFF3C7] py-6 lg:py-8 px-4 border-b border-yellow-200">
+        <div className="w-full color-secondary-bg py-6 lg:py-8 px-4 border-b border-yellow-200">
           <Text
             variant="h1"
-            weight="bold"
+            weight="medium"
             as="h1"
             className="text-center text-2xl text-gray-900"
           >
             Confirmación de datos
           </Text>
         </div>
-        <div className="max-w-2xl mx-auto px-4 pt-12 lg:pt-10">
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto pt-12 lg:pt-10">
           <DataConfirmation
             formData={reportData}
             updateForm={handleUpdateForm}

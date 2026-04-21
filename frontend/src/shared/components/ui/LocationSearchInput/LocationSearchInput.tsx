@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from '../Text';
 
 interface SearchResult {
   displayName: string;
@@ -13,6 +14,7 @@ interface LocationSearchInputProps {
   isLoading: boolean;
   onSearch: (value: string) => void;
   onSelect: (result: SearchResult) => void;
+  error?: string;
 }
 
 export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
@@ -23,6 +25,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
   isLoading,
   onSearch,
   onSelect,
+  error,
 }) => {
   return (
     <div className="relative w-full">
@@ -57,6 +60,16 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
             </li>
           ))}
         </ul>
+      )}
+      {error && (
+        <Text
+          variant="small"
+          as="small"
+          weight="bold"
+          className="color-danger ml-1 italic"
+        >
+          {error}
+        </Text>
       )}
     </div>
   );

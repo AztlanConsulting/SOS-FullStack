@@ -18,24 +18,6 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
   const { formData, errors, updateFormData, handleNext } =
     usePetReportForm(initialData);
 
-  const renderSectionErrors = (fieldNames: string[]) => {
-    const sectionErrors = fieldNames
-      .map((field) => errors[field])
-      .filter(Boolean);
-
-    if (sectionErrors.length === 0) return null;
-
-    return (
-      <div className="mt-3 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-        <ul className="list-disc pl-5 space-y-1">
-          {sectionErrors.map((error, index) => (
-            <li key={index}>{error}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
   return (
     <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
@@ -44,9 +26,12 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           <Text variant="h2" as="h2" weight="medium">
             Información de la mascota
           </Text>
+          <UserInfoSection
+            formData={formData}
+            updateForm={updateFormData}
+            errors={errors}
+          />
         </div>
-        {renderSectionErrors(['name', 'species', 'date', 'breed', 'color'])}
-        <UserInfoSection formData={formData} updateForm={updateFormData} />
 
         {/* Section 2: Photos of the pet */}
         <div id="pet-photos-section">
@@ -54,13 +39,16 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
             variant="h2"
             as="h2"
             weight="medium"
-            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-2"
+            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-6"
           >
             Fotos de la mascota
           </Text>
+          <PetPhotosSection
+            formData={formData}
+            updateForm={updateFormData}
+            errors={errors}
+          />
         </div>
-        {renderSectionErrors(['images'])}
-        <PetPhotosSection formData={formData} updateForm={updateFormData} />
 
         {/* Section 3: Where the pet went lost. */}
         <div id="pet-location-section">
@@ -68,13 +56,16 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
             variant="h2"
             as="h2"
             weight="medium"
-            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-2"
+            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-6"
           >
             Dónde se perdió
           </Text>
+          <PetLocationSection
+            formData={formData}
+            updateForm={updateFormData}
+            errors={errors}
+          />
         </div>
-        {renderSectionErrors(['address'])}
-        <PetLocationSection formData={formData} updateForm={updateFormData} />
 
         {/* Section 4: Owner information. */}
         <div id="contact-info-section">
@@ -82,13 +73,16 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
             variant="h2"
             as="h2"
             weight="medium"
-            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-2"
+            className="text-center text-xl md:text-2xl font-medium text-gray-800 mb-6"
           >
             Información de contacto
           </Text>
+          <ContactInfoSection
+            formData={formData}
+            updateForm={updateFormData}
+            errors={errors}
+          />
         </div>
-        {renderSectionErrors(['contactName', 'phoneNumber', 'email'])}
-        <ContactInfoSection formData={formData} updateForm={updateFormData} />
 
         {/* Section 5: Confirmation button. */}
         <div className="w-full max-w-5xl mx-auto px-4 md:px-0">

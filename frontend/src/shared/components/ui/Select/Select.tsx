@@ -1,8 +1,10 @@
 import React from 'react';
+import { Text } from '../Text';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   options: { value: string; label: string }[];
+  error?: string;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -10,6 +12,7 @@ export const Select: React.FC<SelectProps> = ({
   id,
   options,
   required,
+  error,
   ...props
 }) => {
   return (
@@ -51,6 +54,16 @@ export const Select: React.FC<SelectProps> = ({
           </svg>
         </div>
       </div>
+      {error && (
+        <Text
+          variant="small"
+          as="small"
+          weight="bold"
+          className="color-danger ml-1 italic"
+        >
+          {error}
+        </Text>
+      )}
     </div>
   );
 };

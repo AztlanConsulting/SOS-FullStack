@@ -5,8 +5,11 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 
 vi.mock('@features/users/components/PetLocationSection', () => ({
-  PetLocationSection: () => (
-    <div data-testid="mock-location-section">Sección de ubicación</div>
+  PetLocationSection: ({ errors }: { errors: Record<string, string> }) => (
+    <section>
+      <div data-testid="mock-location-section">Sección de ubicación</div>
+      {errors.address && <small>{errors.address}</small>}
+    </section>
   ),
 }));
 

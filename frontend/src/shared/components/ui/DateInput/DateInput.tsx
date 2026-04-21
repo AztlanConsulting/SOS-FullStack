@@ -1,13 +1,16 @@
 import React from 'react';
+import { Text } from '../Text';
 
 interface DateInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  error?: string;
 }
 
 export const DateInput: React.FC<DateInputProps> = ({
   label,
   id,
   required,
+  error,
   ...props
 }) => {
   return (
@@ -50,6 +53,16 @@ export const DateInput: React.FC<DateInputProps> = ({
           </svg>
         </div>
       </div>
+      {error && (
+        <Text
+          variant="small"
+          as="small"
+          weight="bold"
+          className="color-danger ml-1 italic"
+        >
+          {error}
+        </Text>
+      )}
     </div>
   );
 };

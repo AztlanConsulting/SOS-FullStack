@@ -1,8 +1,10 @@
 import React from 'react';
+import { Text } from '../Text';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   maxLength?: number;
+  error?: string;
 }
 
 export const TextArea: React.FC<TextAreaProps> = ({
@@ -10,6 +12,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
   id,
   maxLength,
   value = '',
+  error,
   ...props
 }) => {
   const currentLength = String(value).length;
@@ -29,11 +32,25 @@ export const TextArea: React.FC<TextAreaProps> = ({
           {...props}
         />
       </div>
-      {/* Contador dinámico de caracteres */}
       {maxLength && (
-        <div className="text-right text-sm text-emerald-700 mt-2 font-medium">
+        <Text
+          variant="caption"
+          as="caption"
+          weight="medium"
+          className="text-right text-emerald-700"
+        >
           Quedan {remaining} caracteres
-        </div>
+        </Text>
+      )}
+      {error && (
+        <Text
+          variant="small"
+          as="small"
+          weight="bold"
+          className="color-danger ml-1 italic"
+        >
+          {error}
+        </Text>
       )}
     </div>
   );

@@ -9,12 +9,14 @@ export interface UsuerInfoSectionProps {
   formData: Partial<PetReportData>;
   updateForm: (newData: Partial<PetReportData>) => void;
   reportType?: ReportType;
+  errors: Record<string, string>;
 }
 
 export const UserInfoSection = ({
   formData,
   updateForm,
   reportType = 'lost',
+  errors,
 }: UsuerInfoSectionProps) => {
   const speciesOptions = [
     { value: 'Perro', label: 'Perro' },
@@ -49,7 +51,9 @@ export const UserInfoSection = ({
           id="petName"
           label="Nombre de la mascota"
           value={formData.name || ''}
+          maxLength={50}
           onChange={(e) => updateForm({ name: e.target.value })}
+          error={errors.name}
         />
       )}
 
@@ -59,6 +63,7 @@ export const UserInfoSection = ({
         value={formData.species || ''}
         onChange={(e) => updateForm({ species: e.target.value })}
         options={speciesOptions}
+        error={errors.species}
       />
 
       <DateInput
@@ -69,13 +74,16 @@ export const UserInfoSection = ({
         value={formData.date || ''}
         onChange={(e) => updateForm({ date: e.target.value })}
         max={today}
+        error={errors.date}
       />
 
       <Input
         id="petBreed"
         label="Raza/tipo de la mascota"
         value={formData.breed || ''}
+        maxLength={50}
         onChange={(e) => updateForm({ breed: e.target.value })}
+        error={errors.breed}
       />
 
       <Select
@@ -84,13 +92,16 @@ export const UserInfoSection = ({
         value={formData.sex || ''}
         onChange={(e) => updateForm({ sex: e.target.value as any })}
         options={sexOptions}
+        error={errors.sex}
       />
 
       <Input
         id="petColor"
         label="Color de la mascota"
         value={formData.color || ''}
+        maxLength={50}
         onChange={(e) => updateForm({ color: e.target.value })}
+        error={errors.color}
       />
 
       <Select
@@ -99,6 +110,7 @@ export const UserInfoSection = ({
         value={formData.size || ''}
         onChange={(e) => updateForm({ size: e.target.value as any })}
         options={sizeOptions}
+        error={errors.size}
       />
 
       {reportType === 'lost' && (

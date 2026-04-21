@@ -1,7 +1,31 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { PhoneNumberUtil } from 'google-libphonenumber';
 import type { PetReportData } from '../types/petReport.types';
 import { usePetReport } from '../context/PetReportContext';
+
+const phoneUtil = PhoneNumberUtil.getInstance();
+
+const normalizePhone = (phone: string) => phone.replace(/[^\d+]/g, '');
+
+const isPhonePossible = (phone: string) => {
+  try {
+    const normalized = normalizePhone(phone);
+    const parsed = phoneUtil.parse(normalized, 'MX'); // ← fallback a México
+    return phoneUtil.isPossibleNumber(parsed);
+  } catch {
+    return false;
+  }
+};
+
+const isPhoneEmpty = (phone: string) => {
+  try {
+    const parsed = phoneUtil.parse(normalizePhone(phone));
+    return phoneUtil.getNationalSignificantNumber(parsed).length === 0;
+  } catch {
+    return true;
+  }
+};
 
 export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
   const navigate = useNavigate();
@@ -79,6 +103,8 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
   };
 
   const handleNext = () => {
+    console.log('phoneNumber raw:', JSON.stringify(formData.phoneNumber));
+    console.log('normalized:', normalizePhone(formData.phoneNumber));
     const newErrors: Record<string, string> = {};
 
     if (!formData.name) newErrors.name = '¡Nos falta el nombre de tu mascota!';
@@ -88,7 +114,6 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     if (!formData.date) {
       newErrors.date = '¡Indícanos la fecha!';
     } else {
-      const selectedDate = new Date(formData.date);
       const today = new Date();
       const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
@@ -96,6 +121,8 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
         newErrors.date = '¡La fecha no puede ser futura!';
       }
     }
+
+    if (!formData.size) newErrors.size = '¡Dinos su tamaño!';
 
     if (!formData.breed) newErrors.breed = '¡Nos falta conocer su raza o tipo!';
 
@@ -109,9 +136,10 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     if (!formData.contactName)
       newErrors.contactName = '¡Falta nombre del dueño!';
 
-    const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
-    if (!cleanPhone || cleanPhone.length < 10) {
+    if (!formData.phoneNumber || isPhoneEmpty(formData.phoneNumber)) {
       newErrors.phoneNumber = '¡Añade un número de teléfono!';
+    } else if (!isPhonePossible(formData.phoneNumber)) {
+      newErrors.phoneNumber = '¡Número de teléfono inválido!';
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

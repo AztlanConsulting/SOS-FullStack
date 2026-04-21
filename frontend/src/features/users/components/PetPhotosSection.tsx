@@ -6,11 +6,13 @@ import { usePetPhotos } from '../hooks/usePetPhotos';
 export interface PetPhotosSectionProps {
   formData: Partial<PetReportData>;
   updateForm: (newData: Partial<PetReportData>) => void;
+  errors: Record<string, string>;
 }
 
 export const PetPhotosSection = ({
   formData,
   updateForm,
+  errors,
 }: PetPhotosSectionProps) => {
   const { photoCount, fileUploadSlots, handleFileUpload } = usePetPhotos(
     formData,
@@ -42,6 +44,7 @@ export const PetPhotosSection = ({
             key={num}
             index={num}
             onChange={(file) => handleFileUpload(num, file)}
+            error={errors.images}
           />
         ))}
       </div>

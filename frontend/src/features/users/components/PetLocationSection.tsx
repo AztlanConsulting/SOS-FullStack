@@ -8,12 +8,14 @@ export interface PetLocationSectionProps {
   updateForm: (newData: Partial<PetReportData>) => void;
   reportType?: ReportType;
   mapID?: string;
+  errors: Record<string, string>;
 }
 
 export const PetLocationSection = ({
   formData,
   updateForm,
   reportType = 'lost',
+  errors,
 }: PetLocationSectionProps) => {
   const mapID = 'pet-location-map';
   const inputLabel =
@@ -36,6 +38,7 @@ export const PetLocationSection = ({
         isLoading={isLoading}
         onSearch={onSearchWrapper}
         onSelect={onSelectAddress}
+        error={errors.address}
       />
 
       <MapDisplay mapID={mapID} />

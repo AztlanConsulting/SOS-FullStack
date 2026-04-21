@@ -5,6 +5,13 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import type { PetReportData } from '@features/users/types/petReport.types';
 
+vi.mock('@features/auth/hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: null,
+    isAuthLoading: false,
+  }),
+}));
+
 vi.mock('@features/users/components/DataConfirmation', () => ({
   DataConfirmation: ({
     formData,

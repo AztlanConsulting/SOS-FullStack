@@ -7,6 +7,7 @@ import { TextArea } from '@shared/components/ui/TextArea/TextArea';
 import { DateInput } from '@shared/components/ui/DateInput/DateInput';
 import { PhoneInput } from '@shared/components/ui/PhoneInput/PhoneInput';
 import { Button } from '@shared/components/ui/Button';
+import { Text } from '@shared/components/ui/Text';
 
 import { PetLocationSection } from './PetLocationSection';
 import { PetPhotosSection } from './PetPhotosSection';
@@ -59,6 +60,7 @@ const EditableField = ({
               label={label}
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
+              maxLength={maxLength}
             />
           )}
           {error && (
@@ -108,7 +110,7 @@ const EditableField = ({
         <div className="flex justify-between items-center w-full">
           <div className="flex flex-col">
             <span className="text-xs text-gray-400 font-medium">{label}</span>
-            <span className="text-sm text-gray-800 mt-1 break-words whitespace-pre-wrap">
+            <span className="text-sm text-gray-800 mt-1 break-all whitespace-pre-wrap">
               {value || '-'}
             </span>
           </div>
@@ -162,7 +164,7 @@ const EditableLocation = ({
           <div className="flex justify-end mt-2">
             <button
               onClick={() => setIsEditing(false)}
-              className="bg-[#FFD100] text-black px-6 py-2 rounded-lg font-bold shadow-sm hover:bg-yellow-400 transition-colors"
+              className="color-primary-bg text-black px-6 py-2 rounded-lg font-bold shadow-sm hover:bg-yellow-400 transition-colors"
             >
               Confirmar Ubicación
             </button>
@@ -350,17 +352,23 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-lg flex flex-col gap-6">
+      <div className="w-full max-w-lg flex flex-col gap-4">
         <section>
-          <h3 className="font-semibold text-gray-800 mb-4 text-center">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-8"
+          >
             Información de la mascota
-          </h3>
+          </Text>
           <EditableField
             updateForm={updateForm}
             type="text"
             label="Nombre de la mascota"
             value={formData.name || ''}
             field="name"
+            maxLength={50}
           />
           <EditableField
             updateForm={updateForm}
@@ -383,6 +391,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Raza/tipo de la mascota"
             value={formData.breed || ''}
             field="breed"
+            maxLength={50}
           />
           <EditableField
             updateForm={updateForm}
@@ -398,6 +407,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Color de la mascota"
             value={formData.color || ''}
             field="color"
+            maxLength={50}
           />
           <EditableField
             updateForm={updateForm}
@@ -422,16 +432,26 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
         </section>
 
         <section>
-          <h3 className="font-semibold text-gray-800 mb-4 text-center">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-8"
+          >
             Donde se perdió
-          </h3>
+          </Text>
           <EditableLocation formData={formData} updateForm={updateForm} />
         </section>
 
         <section>
-          <h3 className="font-semibold text-gray-800 mb-4 text-center">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-8"
+          >
             Información de contacto
-          </h3>
+          </Text>
           <EditableField
             updateForm={updateForm}
             type="text"
@@ -452,6 +472,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Correo electrónico"
             value={formData.email || ''}
             field="email"
+            maxLength={200}
           />
         </section>
       </div>

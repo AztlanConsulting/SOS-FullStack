@@ -6,11 +6,11 @@ async function getProductImage(
   productId: string,
 ): Promise<Product> {
   const types: Record<string, string> = {
-    manual: 'manuals',
+    manual: 'manuals/getManuals',
     taller: 'workshop',
   };
 
-  const response = await axiosInstance.get(`/${types[type]}/`, {
+  const response = await axiosInstance.get(`/${types[type]}`, {
     params: {
       id: productId,
     },

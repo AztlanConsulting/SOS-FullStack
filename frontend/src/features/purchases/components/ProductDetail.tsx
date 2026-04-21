@@ -1,9 +1,5 @@
-import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
-import type { UseQueryResult } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router';
 
 interface Props {
   product: Product;

@@ -30,7 +30,7 @@ export async function getBlogs(req: Request, res: Response) {
       total = blogs.totalBlogs;
     }
 
-    return res.status(200).json({ result, total });
+    return res.status(200).json({ blogs: result, total });
   } catch (error) {
     res.status(500).send(error);
   }

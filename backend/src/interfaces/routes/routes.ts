@@ -17,7 +17,7 @@ router.get('/health', (req, res) => {
 });
 
 router.use('/auth', authRoutes);
-router.use('/blogs', blogRoutes);
+router.use('/blog', blogRoutes);
 router.use('/clients', clientsRoutes);
 router.use('/images', imageRoutes);
 router.use('/payments', paymentRoutes);

@@ -15,7 +15,7 @@ export default function CustomPlanPage() {
   return (
     <>
       <HeaderBack name="Regresar a planes" onBack={() => navigate('/planes')} />
-      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8 px-4">
+      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8 px-8">
         <Text
           variant="h2"
           weight="medium"

@@ -25,13 +25,13 @@ const CustomPlanCard: React.FC = () => {
 
   return (
     <div className="w-full max-w-sm rounded-2xl border-2 border-[#AFB1B6] bg-white overflow-hidden">
-      <div className="bg-[#F9CD48] border-b-2 border-[#AFB1B6] py-3 text-center">
+      <div className="bg-[#F9CD48] border-b-2 border-[#AFB1B6] py-2 text-center">
         <Text variant="body" weight="medium" className="text-white">
           Personalizado
         </Text>
       </div>
 
-      <div className="px-5 pt-5 pb-5 flex flex-col gap-5">
+      <div className="px-5 pt-5 pb-5 flex flex-col gap-3">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <Text variant="body" weight="medium" className="text-gray-800">
@@ -140,7 +140,7 @@ const CustomPlanCard: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <Text variant="body" weight="medium" className="text-gray-800">
             Extras
           </Text>
@@ -187,7 +187,7 @@ const CustomPlanCard: React.FC = () => {
 
         <div className="border-t border-gray-100" />
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           <div className="flex justify-between">
             <Text variant="small" className="text-gray-500">
               Días ({days} x ${tier.pricePerDay.toFixed(2)})

@@ -1,22 +1,24 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
-import { useCreatePurchase } from '../hooks/useCreatePurchase';
-import type { TempPurchase } from '../types/TempPurchase.type';
-import PurchaseForm from './PurchaseForm';
+import { useCreatePurchase } from '../features/purchases/hooks/useCreatePurchase';
+import type { TempPurchase } from '../features/purchases/types/TempPurchase.type';
+import PurchaseForm from '../features/purchases/components/PurchaseForm';
 import Header from '@shared/components/layout/Header';
-import PurchaseDetails from './PurhcaseDetails';
+import PurchaseDetails from '../features/purchases/components/PurhcaseDetails';
+import { useQuery } from '@tanstack/react-query';
+import getProductImage from '../features/purchases/services/getProductImage';
+import { useLocation } from 'react-router';
+import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 
 // This is a temporary component to test the purchase flow.
 // It will be removed once the purchase flow is implemented.
 
 const paymentId = 'pi_1234567890';
 
-export const TempPurchaseForm = ({
-  userEmail,
-  productId,
-  productType,
-  price,
-}: TempPurchase) => {
+export const PurchasePage = () => {
+  const { state } = useLocation();
+  const { productId, productType, price, userEmail } = state;
+
   const { status, message, error, createPurchaseRequest } = useCreatePurchase({
     userEmail,
     paymentId,
@@ -24,14 +26,24 @@ export const TempPurchaseForm = ({
     productType,
   });
 
-  const product = { productId, productType };
+  const query = useQuery({
+    queryKey: ['img'],
+    queryFn: async () => await getProductImage(productType, productId),
+  });
+  const { isLoading, error: queryError, data: product } = query;
 
   return (
     <>
       <Header />
-      <main className="max-md:pt-24 pt-4 grid sm:grid-cols-2 grid-rows-2">
-        <PurchaseDetails product={product} />
-        <PurchaseForm />
+      <main className="max-md:pt-24 pt-4">
+        {isLoading && <LoadingSpinner size="lg" />}
+        {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
+        {product && (
+          <div className="grid sm:grid-cols-2 grid-rows-2">
+            <PurchaseDetails product={product} />
+            <PurchaseForm product={product} />
+          </div>
+        )}
       </main>
     </>
   );

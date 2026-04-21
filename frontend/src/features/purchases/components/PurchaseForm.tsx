@@ -8,29 +8,40 @@ import PaymentMethodCard from './PaymentMethodCard';
 import type { PaymentMethod } from '../types/PaymentMethod.type';
 import { Text } from '@shared/components/ui/Text';
 import { useState, type ChangeEvent } from 'react';
+import type { Product } from '@shared/types/purchase.types';
+import Paypal from '@features/payment/components/paypal/Paypal';
 
 const paymentMethods: PaymentMethod[] = [
   {
     method: 'Tarjeta de crédito / debito',
     icons: [visa, mastercard, american],
+    element: <div />,
   },
   {
     method: 'Transferencia SPEI',
     description: 'Aprobación instantánea desde cualquier banca en línea',
     icons: [bank],
+    element: <div />,
   },
   {
     method: 'Paypal',
     icons: [paypal],
+    element: <Paypal />,
   },
   {
     method: 'Oxoo',
     icons: [oxxo],
+    element: <div />,
   },
 ];
 
-const PurchaseForm = () => {
-  const [_, setSelected] = useState<string | null>(null);
+interface Props {
+  product: Product;
+}
+
+const PurchaseForm = ({ product }: Props) => {
+  const [selected, setSelected] = useState<string | null>(null);
+  // const [isExpanded, setIsExpanded] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
     console.log(e.target.value);
@@ -55,8 +66,25 @@ const PurchaseForm = () => {
                 paymentMethod={pM}
                 onChecked={handleChange}
               />
+              <div
+                className={`grid transition-all duration-300 ease-in-out ${
+                  selected == pM.method
+                    ? 'grid-rows-[1fr] opacity-100 mt-4'
+                    : 'grid-rows-[0fr] opacity-0 mt-0'
+                }`}
+              >
+                <div className="overflow-hidden">{pM.element}</div>
+              </div>
             </>
           ))}
+          <div className="flex justify-between">
+            <Text weight="semibold" color="text-gray-600">
+              Total a pagar:
+            </Text>
+            <Text variant="h1" color="text-gray-600">
+              ${product.price}
+            </Text>
+          </div>
         </section>
       </section>
     </div>

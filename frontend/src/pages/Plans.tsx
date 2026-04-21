@@ -1,10 +1,11 @@
 import PlanCard from '@features/plans/components/PlanCard';
-import Header from '@shared/components/layout/Header';
+import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState } from 'react';
 import { Button } from '@shared/components/ui/Button/Button';
 import { usePlans } from '@features/plans/hooks/usePlans';
+import { useNavigate } from 'react-router';
 
 /**
  * PlansPage Component.
@@ -16,6 +17,7 @@ import { usePlans } from '@features/plans/hooks/usePlans';
 export default function PlansPage() {
   const { plans, loading, error } = usePlans();
   const [current, setCurrent] = useState(0);
+  const navigate = useNavigate();
 
   /**
    * Navigation handlers for the mobile carousel view.
@@ -59,12 +61,12 @@ export default function PlansPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8">
+      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8 pt-28 lg:pt-8">
         <Text
           variant="h2"
           weight="medium"
           as="h2"
-          className="text-gray-900 mb-6"
+          className="text-2xl lg:text-2xl text-gray-900 mb-2"
         >
           {' '}
           Planes{' '}
@@ -132,7 +134,7 @@ export default function PlansPage() {
             label="¿No es lo que buscas? Personalízalo"
             variant="danger"
             icon={HiArrowRight}
-            onClick={() => console.log('Personalizar')}
+            onClick={() => navigate('/planes/personalizado')}
           />
         </div>
       </main>

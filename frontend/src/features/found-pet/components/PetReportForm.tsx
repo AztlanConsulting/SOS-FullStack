@@ -70,7 +70,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           <div className="w-full w-max-lg mx-auto flex justify-center [&>button]:whitespace-nowrap">
             <Button
               onClick={handleNext}
-              label="Contratar el servicio"
+              label="Reportar mascota encontrada"
               variant="primary"
             />
           </div>

@@ -86,12 +86,12 @@ export default function PlansPage() {
             <button
               onClick={prev}
               disabled={current === 0}
-              className="p-1.5 rounded-full bg-white border-[3.5px] border-[#F9CD48] disabled:opacity-30 shrink-0"
+              className="p-1.5 rounded-full bg-white border-[3.5px] border-[#61646B] disabled:opacity-30 shrink-0"
             >
               <HiArrowLeft
                 size={17}
                 style={{ strokeWidth: 3 }}
-                className="text-[#F9CD48]"
+                className="text-[#61646B]"
               />
             </button>
           </div>
@@ -106,12 +106,12 @@ export default function PlansPage() {
             <button
               onClick={next}
               disabled={current === plans.length - 1}
-              className="p-1.5 rounded-full bg-white border-[3.5px] border-[#F9CD48] disabled:opacity-30 shrink-0"
+              className="p-1.5 rounded-full bg-white border-[3.5px] border-[#61646B] disabled:opacity-30 shrink-0"
             >
               <HiArrowRight
                 size={17}
                 style={{ strokeWidth: 3 }}
-                className="text-[#F9CD48]"
+                className="text-[#61646B]"
               />
             </button>
           </div>

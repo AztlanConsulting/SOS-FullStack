@@ -68,9 +68,10 @@ const getPricingTiers = (): PricingTier[] => [
  * @returns The matching PricingTier object.
  */
 export const getTier = (days: number): PricingTier => {
-  return getPricingTiers().find(
+  const tier = getPricingTiers().find(
     (t) => days >= t.minDays && days <= t.maxDays,
-  ) as PricingTier;
+  );
+  return tier || getPricingTiers()[0];
 };
 
 /**

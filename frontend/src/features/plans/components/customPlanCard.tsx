@@ -37,9 +37,36 @@ const CustomPlanCard: React.FC = () => {
             <Text variant="body" weight="medium" className="text-gray-800">
               Días
             </Text>
-            <Text variant="body" className="text-gray-900">
-              {days} {days == 1 ? 'día' : 'días'}
-            </Text>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={days}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === '' || !isNaN(Number(value))) {
+                    handleDaysChange(Number(value));
+                  }
+                }}
+                onBlur={(e) => {
+                  const value = Number(e.target.value) || 0;
+                  handleDaysChange(
+                    value === 0 ? 3 : Math.min(30, Math.max(3, value)),
+                  );
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const value = Number(e.currentTarget.value) || 0;
+                    handleDaysChange(
+                      value === 0 ? 3 : Math.min(30, Math.max(3, value)),
+                    );
+                  }
+                }}
+                className="w-12 px-1 py-0.5 border border-gray-300 rounded text-right text-gray-900 text-sm flex-shrink-0"
+              />
+              <Text variant="body" className="text-gray-900">
+                {days == 1 ? 'día' : 'días'}
+              </Text>
+            </div>
           </div>
           <input
             type="range"
@@ -67,9 +94,32 @@ const CustomPlanCard: React.FC = () => {
             <Text variant="body" weight="medium" className="text-gray-800">
               Radio
             </Text>
-            <Text variant="body" className="text-gray-900">
-              {km} km
-            </Text>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={km}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === '' || !isNaN(Number(value))) {
+                    setKm(Number(value));
+                  }
+                }}
+                onBlur={(e) => {
+                  const value = Number(e.target.value) || 0;
+                  setKm(value === 0 ? 5 : Math.min(40, Math.max(5, value)));
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const value = Number(e.currentTarget.value) || 0;
+                    setKm(value === 0 ? 5 : Math.min(40, Math.max(5, value)));
+                  }
+                }}
+                className="w-12 px-1 py-0.5 border border-gray-300 rounded text-right text-gray-900 text-sm flex-shrink-0"
+              />
+              <Text variant="body" className="text-gray-900">
+                km
+              </Text>
+            </div>
           </div>
           <input
             type="range"

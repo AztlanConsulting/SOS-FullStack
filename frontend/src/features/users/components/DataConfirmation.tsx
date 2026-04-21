@@ -373,7 +373,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
           <EditableField
             updateForm={updateForm}
             type="date"
-            label="Fecha de extravío"
+            label="Fecha de encuentro"
             value={formData.date || ''}
             field="date"
           />

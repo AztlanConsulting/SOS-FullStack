@@ -2,9 +2,9 @@ import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
 import { useCreatePurchase } from '../hooks/useCreatePurchase';
 import type { TempPurchase } from '../types/TempPurchase.type';
-import { PaymentPage } from '@features/payment/components/PaymentPage';
 import PurchaseForm from './PurchaseForm';
 import Header from '@shared/components/layout/Header';
+import PurchaseDetails from './PurhcaseDetails';
 
 // This is a temporary component to test the purchase flow.
 // It will be removed once the purchase flow is implemented.
@@ -28,7 +28,7 @@ export const TempPurchaseForm = ({
     <>
       <Header />
       <main className="max-md:pt-24 pt-4 grid sm:grid-cols-2 grid-rows-2">
-        <div className="order-last sm:order-first" />
+        <PurchaseDetails />
         <PurchaseForm />
       </main>
     </>

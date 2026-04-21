@@ -31,8 +31,8 @@ const PaymentMethodCard = ({ paymentMethod, onChecked }: Props) => {
           </div>
         </div>
         <div className="flex gap-2 items-center justify-center w-full">
-          {icons.map((i) => (
-            <img src={i} className="h-6" />
+          {icons.map((i, idx) => (
+            <img key={idx} src={i} className="h-6" />
           ))}
         </div>
       </div>

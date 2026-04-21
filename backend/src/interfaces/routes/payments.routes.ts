@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import {
-  makeCreatePaymentIntent,
-  makehandleStripeWebhook,
-} from '../controllers/payment.controller';
+import { makehandleStripeWebhook } from '../controllers/payment.controller';
 import captureOrder from '@interfaces/controllers/captureOrder.controller';
 import createOrder from '@interfaces/controllers/createOrder.controller';
 

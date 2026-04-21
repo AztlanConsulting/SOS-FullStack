@@ -30,7 +30,7 @@ const paymentMethods: PaymentMethod[] = [
 ];
 
 const PurchaseForm = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [_, setSelected] = useState<string | null>(null);
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
     console.log(e.target.value);
@@ -39,7 +39,11 @@ const PurchaseForm = () => {
 
   return (
     <div>
-      <Text className="text-center mb-4" variant="h2">
+      <Text
+        className="text-center mb-4 text-gray-700"
+        variant="h3"
+        weight="semibold"
+      >
         Método de pago
       </Text>
       <section className="w-full flex justify-center">

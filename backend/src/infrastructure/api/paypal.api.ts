@@ -120,7 +120,7 @@ const PaypalProvider: PaypalApi = {
         return { orderId: null, error };
       });
 
-    if (paymentId.error) throw paymentId.error;
+    if (Boolean(paymentId.error)) throw paymentId.error;
 
     const paymentResult = {
       id: paymentId.orderId!,
@@ -157,7 +157,7 @@ const PaypalProvider: PaypalApi = {
   },
   // To work with the interface: It would be better for stripe implementation to
   // inherit from a common one, but for now its not to cause issues
-  async constructEvent(): Promise<Stripe.Event> {
+  constructEvent(): Promise<Stripe.Event> {
     throw Error(
       'Error: Called Stripe implementation to finish transaction from PaypalProvider',
     );

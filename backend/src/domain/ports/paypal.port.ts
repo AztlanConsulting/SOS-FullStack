@@ -1,5 +1,4 @@
 import type { PaymentProvider } from './paymentProvider.port';
-import { EventDTO } from './paymentProvider.port';
 
 export interface PaypalAccessToken {
   accessToken: string | null;

@@ -24,11 +24,13 @@ export const TempPurchaseForm = ({
     productType,
   });
 
+  const product = { productId, productType };
+
   return (
     <>
       <Header />
       <main className="max-md:pt-24 pt-4 grid sm:grid-cols-2 grid-rows-2">
-        <PurchaseDetails />
+        <PurchaseDetails product={product} />
         <PurchaseForm />
       </main>
     </>

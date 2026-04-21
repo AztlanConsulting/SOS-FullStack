@@ -11,7 +11,13 @@ const createPetReportDTOSchema = z.object({
   breed: z.string().optional(),
   sex: z.enum(['Macho', 'Hembra', 'Desconocido']),
   color: z.string().min(1, 'El color es requerido'),
-  size: z.string(),
+  size: z.enum([
+    'Mini: 1 a 4 kg',
+    'Pequeña: 5 a 10 kg',
+    'Mediana: 11 a 25 kg',
+    'Grande: 26 a 45 kg',
+    'Gigante: más de 45 kg',
+  ]),
   description: z.string().min(1, 'La descripción es requerida'),
   location: z.string().optional(),
   locationCoords: z.preprocess(

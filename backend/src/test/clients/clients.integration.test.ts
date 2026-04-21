@@ -2,6 +2,8 @@ import request from 'supertest';
 import app from '@/index';
 import { createPetImage } from '@/use-cases/images/createPetImage';
 import { publishLostPet } from '@/use-cases/clients/publishLostPet.usecase';
+import mongoose from 'mongoose';
+import { any } from 'zod';
 
 jest.mock('@/use-cases/images/createPetImage');
 jest.mock('@/use-cases/clients/publishLostPet.usecase');
@@ -23,6 +25,7 @@ const VALID_FIELDS: Record<string, string> = {
   contactName: 'Juan Pérez',
   phoneNumber: '5551234567',
   email: 'juan@example.com',
+  locationCoords: '[0,0]',
 };
 
 const MOCK_IMAGE = Buffer.from('mock image data');
@@ -42,6 +45,16 @@ const buildLostPetRequest = (overrides: Record<string, string> = {}) => {
 };
 
 describe('POST /clients/lost-pet (Integration Tests)', () => {
+  beforeAll(async () => {
+    const mongoUri =
+      process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mock-db';
+    await mongoose.connect(mongoUri);
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
     (createPetImage as jest.Mock).mockResolvedValue(true);
@@ -55,10 +68,7 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
     );
 
     expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty(
-      'message',
-      'Reporte de mascota perdida creado exitosamente',
-    );
+    expect(res.body).toHaveProperty('message', 'Reporte creado exitosamente');
     expect(res.body.data).toHaveProperty('name', 'Firulais');
     expect(createPetImage).toHaveBeenCalledTimes(1);
   });
@@ -138,7 +148,7 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
     const res = await buildLostPetRequest();
 
     expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty('error', 'No pictures provided');
+    expect(res.body).toHaveProperty('error', 'Se requiere al menos una imagen');
   });
 
   test('replies with 400 when required body fields are missing', async () => {
@@ -188,11 +198,9 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
   });
 
   test('replies with 400 when size value is not one of the allowed options', async () => {
-    const res = await buildLostPetRequest({ size: 'Enorme' }).attach(
-      'images',
-      MOCK_IMAGE,
-      'perrito.jpg',
-    );
+    const res = await buildLostPetRequest({
+      size: 'Mediana: 11 a 25 kg',
+    }).attach('images', MOCK_IMAGE, 'perrito.jpg');
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error', 'Datos inválidos');

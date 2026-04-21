@@ -1,11 +1,15 @@
 import fs from 'fs/promises';
-import path from 'path';
+import path, { dirname } from 'path';
 import { petVector } from '@infrastructure/data-access/vectorDB/petVector.data-access';
 import { createPetImage } from '@use-cases/images/createPetImage';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { petDataAccess } from '@/infrastructure/data-access/pet.data-access';
 import type { CreatePetReportDTO } from '@interfaces/controllers/clients.controller';
 import { RoleModel } from '@domain/models/role.model';
+import { fileURLToPath } from 'url';
+
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename);
 
 export const createLostPetReport = async (
   reportData: CreatePetReportDTO,
@@ -14,7 +18,7 @@ export const createLostPetReport = async (
   let user = await userDataAccess.getUserByEmail(reportData.email);
 
   if (!user) {
-    const clientRole = await RoleModel.findOne({ role: 'client' }).lean();
+    const clientRole = await RoleModel.findOne({ role: 'user' }).lean();
 
     if (!clientRole) {
       throw new Error('No se encontró el rol de cliente en la base de datos.');
@@ -31,7 +35,7 @@ export const createLostPetReport = async (
   }
 
   const localImageUrls: string[] = [];
-  const uploadDir = path.join(__dirname, '../../../../public/uploads');
+  const uploadDir = path.join(__dirname, '../../../public/uploads');
 
   await fs.mkdir(uploadDir, { recursive: true });
 

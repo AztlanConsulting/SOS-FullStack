@@ -1,7 +1,6 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
 import { useCreatePurchase } from '../features/purchases/hooks/useCreatePurchase';
-import type { TempPurchase } from '../features/purchases/types/TempPurchase.type';
 import PurchaseForm from '../features/purchases/components/PurchaseForm';
 import Header from '@shared/components/layout/Header';
 import PurchaseDetails from '../features/purchases/components/PurhcaseDetails';
@@ -9,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import getProductImage from '../features/purchases/services/getProductImage';
 import { useLocation } from 'react-router';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
+import { useEffect } from 'react';
 
 // This is a temporary component to test the purchase flow.
 // It will be removed once the purchase flow is implemented.

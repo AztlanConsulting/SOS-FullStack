@@ -17,7 +17,10 @@ async function getProductImage(
   });
 
   if (response.status == 200) {
-    const product = response.data[Object.keys(response.data)[0]];
+    let product;
+    if (type == 'manual') {
+      product = response.data[Object.keys(response.data)[0]][0];
+    } else product = response.data[Object.keys(response.data)[0]];
     return product;
   } else throw Error('Error recuperando información');
 }

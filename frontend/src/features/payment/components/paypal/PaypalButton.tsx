@@ -12,8 +12,8 @@ const CheckoutPage = () => {
         createOrder={async () => {
           console.log('Create order');
 
-          const response = await axiosInstance.post('/payments/create-order');
-          console.log(response.data);
+          const response = await axiosInstance.post('/payments/payment-intent');
+          // console.log(response.data);
           const { orderId } = response.data;
           return { orderId };
         }}

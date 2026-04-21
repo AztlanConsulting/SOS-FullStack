@@ -36,7 +36,7 @@ export const PetLocationSection = ({
           weight="medium"
           className="text-center text-xl md:text-2xl "
         >
-          Dónde se perdió
+          Dónde se enocontró
         </Text>
       </div>
       <div className="w-full max-w-lg mx-auto">

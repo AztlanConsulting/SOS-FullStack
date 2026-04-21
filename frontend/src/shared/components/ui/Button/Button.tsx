@@ -7,6 +7,7 @@ type ButtonProps = {
   onClick?: () => void;
   variant?: ButtonVariant;
   disabled?: boolean;
+  isLoading?: boolean;
   icon?: ComponentType<{ size?: number }>;
   textColor?: string;
 };
@@ -15,6 +16,7 @@ export function Button({
   onClick,
   variant = 'primary',
   disabled = false,
+  isLoading = false,
   icon: Icon,
   textColor = '',
 }: ButtonProps) {
@@ -33,12 +35,12 @@ export function Button({
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       className={twMerge(
         base,
         variants[variant],
         'relative flex justify-center',
-        disabled && 'opacity-50 cursor-not-allowed',
+        (disabled || isLoading) && 'opacity-50 cursor-not-allowed',
         textColor,
       )}
     >
@@ -48,7 +50,7 @@ export function Button({
         {Icon ? <div className="w-[33px]" /> : <></>}
 
         <Text variant="caption" weight="medium" className="text-inherit">
-          {label}
+          {isLoading ? 'Guardando...' : label}
         </Text>
 
         {Icon && (

@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import type { PetReportData } from '../types/petReport.types';
 import { usePetReport } from '../context/PetReportService';
+import { reportFoundPet } from '../services/foundPetApi';
 
 export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
-  const navigate = useNavigate();
   const { setReportData } = usePetReport();
 
   const [formData, setFormData] = useState<PetReportData>({
@@ -28,6 +27,33 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      species: '',
+      date: '',
+      breed: '',
+      sex: 'Desconocido',
+      color: '',
+      size: 'Mediana: 11 a 25 kg',
+      description: '',
+      images: [],
+      imageLayout: '1',
+      address: '',
+      location: null,
+      locationCoords: undefined,
+      contactName: '',
+      phoneNumber: '',
+      email: '',
+    });
+    setErrors({});
+    setSuccess(false);
+    setSubmitError(null);
+  };
 
   const updateFormData = (newData: Partial<PetReportData>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
@@ -78,10 +104,8 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const newErrors: Record<string, string> = {};
-
-    if (!formData.name) newErrors.name = '¡Nos falta el nombre de tu mascota!';
 
     if (!formData.species) newErrors.species = '¡Selecciona una especie!';
 
@@ -125,8 +149,22 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      setReportData(formData);
-      navigate('/report-confirmation');
+      setIsSubmitting(true);
+      setSubmitError(null);
+
+      try {
+        await reportFoundPet(formData);
+        setReportData(formData);
+        setSuccess(true);
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : 'Error al reportar la mascota',
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     } else {
       scrollToFirstError(newErrors);
     }
@@ -137,5 +175,9 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     errors,
     updateFormData,
     handleNext,
+    isSubmitting,
+    submitError,
+    success,
+    resetForm,
   };
 };

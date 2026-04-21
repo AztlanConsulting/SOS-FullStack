@@ -27,7 +27,7 @@ export const ContactInfoSection = ({
       <div className="w-full max-w-lg mx-auto flex flex-col gap-4">
         <Input
           id="ownerName"
-          label="Nombre y apellido del dueño"
+          label="Nombre y apellido"
           value={formData.contactName || ''}
           onChange={(e) => updateForm({ contactName: e.target.value })}
         />

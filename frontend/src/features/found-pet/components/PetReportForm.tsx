@@ -15,8 +15,16 @@ export interface PetReportFormProps {
 export const PetReportForm: React.FC<PetReportFormProps> = ({
   initialData,
 }) => {
-  const { formData, errors, updateFormData, handleNext } =
-    usePetReportForm(initialData);
+  const {
+    formData,
+    errors,
+    updateFormData,
+    handleNext,
+    isSubmitting,
+    submitError,
+    success,
+    resetForm,
+  } = usePetReportForm(initialData);
 
   const renderSectionErrors = (fieldNames: string[]) => {
     const sectionErrors = fieldNames
@@ -36,6 +44,23 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
     );
   };
 
+  if (success) {
+    return (
+      <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8 items-center justify-center py-16">
+          <Text
+            variant="h1"
+            as="h1"
+            weight="bold"
+            className="text-center text-3xl text-green-600"
+          >
+            ¡Mascota reportada!
+          </Text>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
@@ -45,7 +70,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
             Información de la mascota
           </Text>
         </div>
-        {renderSectionErrors(['name', 'species', 'date', 'breed', 'color'])}
+        {renderSectionErrors(['species', 'date', 'breed', 'color'])}
         <UserInfoSection formData={formData} updateForm={updateFormData} />
 
         {/* Section 2: Photos of the pet */}
@@ -67,11 +92,18 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
 
         {/* Section 5: Confirmation button. */}
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
+          {submitError && (
+            <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {submitError}
+            </div>
+          )}
           <div className="w-full w-max-lg mx-auto flex justify-center [&>button]:whitespace-nowrap">
             <Button
               onClick={handleNext}
               label="Reportar mascota encontrada"
               variant="primary"
+              disabled={isSubmitting}
+              isLoading={isSubmitting}
             />
           </div>
         </div>

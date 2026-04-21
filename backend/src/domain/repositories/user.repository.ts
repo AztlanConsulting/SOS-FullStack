@@ -12,4 +12,5 @@ export interface UserRepository {
   getUserByName(username: string): Promise<UserWithRole | null>;
   getUserByEmail(email: string): Promise<UserWithRole | null>;
   getUserPermissions(userId: string): Promise<PopulatedPermission[]>;
+  createUser(userData: Partial<User>): Promise<User>;
 }

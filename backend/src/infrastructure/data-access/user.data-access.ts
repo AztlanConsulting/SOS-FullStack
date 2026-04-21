@@ -126,4 +126,15 @@ export const userDataAccess: UserRepository = {
 
     return [...rolePermissions, ...userPermissions];
   },
+
+  /**
+   *
+   * @param userData -
+   * @returns
+   */
+  createUser: async function (userData: Partial<User>): Promise<User> {
+    const newUser = new UserModel(userData);
+    const savedUser = await newUser.save();
+    return savedUser.toObject();
+  },
 };

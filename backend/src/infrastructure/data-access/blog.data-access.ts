@@ -2,7 +2,7 @@ import type { SortOrder } from 'mongoose';
 import type { Blog } from '@/domain/models/blog.model';
 import { BlogModel } from '@/domain/models/blog.model';
 import type {
-  BlogQuery,
+  BlogRequest,
   BlogRepository,
 } from '@/domain/repositories/blog.repository';
 
@@ -19,7 +19,7 @@ export const BlogDataAccess: BlogRepository = {
     page = 0,
     sortOption = 'Nombre (A-Z)',
     searchTerm = '',
-  }: BlogQuery): Promise<Blog[]> {
+  }: BlogRequest): Promise<Blog[]> {
     const sort: Record<string, { [key: string]: SortOrder }> = {
       'Nombre (A-Z)': { name: 1 },
       'Nombre (Z-A)': { name: -1 },

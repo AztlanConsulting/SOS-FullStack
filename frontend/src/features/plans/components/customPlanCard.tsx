@@ -37,7 +37,7 @@ const CustomPlanCard: React.FC = () => {
             <Text variant="body" weight="medium" className="text-gray-800">
               Días
             </Text>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-24">
               <input
                 type="text"
                 value={days}
@@ -94,7 +94,7 @@ const CustomPlanCard: React.FC = () => {
             <Text variant="body" weight="medium" className="text-gray-800">
               Radio
             </Text>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-24">
               <input
                 type="text"
                 value={km}

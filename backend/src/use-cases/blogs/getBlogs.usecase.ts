@@ -36,7 +36,7 @@ export async function getBlogById(
   blogRepository: BlogRepository,
   id: string,
 ): Promise<Blog | null> {
-  const blog = await blogRepository.getBlogById(id);
+  const blog: Blog | null = await blogRepository.getBlogById(id);
 
   if (!blog) return null;
 

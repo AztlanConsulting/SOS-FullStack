@@ -1,9 +1,16 @@
+export type BlogContentBlock = {
+  content: string;
+  type: string;
+};
+
 export type Blog = {
   _id: string;
   name: string;
-  price: number;
-  content: string;
+  duration: number;
+  content: BlogContentBlock[];
   imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type BlogResult = {

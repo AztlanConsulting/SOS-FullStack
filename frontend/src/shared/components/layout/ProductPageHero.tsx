@@ -6,7 +6,7 @@ interface Props {
 
 const ProductPageHero = ({ product }: Props) => {
   return (
-    <div className="pt-8 md:pt-0 md:row-span-2 mx-auto w-5/6 md:w-full">
+    <div className="pt-0 md:pt-0 md:row-span-2 mx-auto w-full md:w-full">
       <img
         src={product.imageUrl}
         alt={product.name}

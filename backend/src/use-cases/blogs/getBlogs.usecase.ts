@@ -3,6 +3,7 @@ import type {
   BlogRequest,
   BlogRepository,
 } from '@domain/repositories/blog.repository';
+import { normalizeContent } from '@utils/content.mapper';
 
 /**
  * Fetch blogs and total count.
@@ -15,10 +16,13 @@ export async function getBlogsList(
   blogRepository: BlogRepository,
   blogRequest: BlogRequest,
 ): Promise<{ blogs: Blog[]; totalBlogs: number }> {
-  const blogs: Blog[] = await blogRepository.getBlogs(blogRequest);
+  const blogs = await blogRepository.getBlogs(blogRequest);
   const totalBlogs = await blogRepository.getTotalBlogs(blogRequest);
 
-  return { blogs, totalBlogs };
+  return {
+    blogs: blogs.map(normalizeBlog),
+    totalBlogs,
+  };
 }
 
 /**
@@ -32,7 +36,28 @@ export async function getBlogById(
   blogRepository: BlogRepository,
   id: string,
 ): Promise<Blog | null> {
-  const blogs: Blog | null = await blogRepository.getBlogById(id);
+  const blog = await blogRepository.getBlogById(id);
 
-  return blogs;
+  if (!blog) return null;
+
+  return normalizeBlog(blog);
+}
+
+/**
+ * Normalizes a Blog entity.
+ *
+ * @param blog - Blog document or plain object
+ * @returns Normalized Blog
+ */
+function normalizeBlog(blog: Blog): Blog {
+  const plainBlog =
+    typeof (blog as Blog & { toObject?: () => Blog }).toObject === 'function'
+      ? (blog as Blog & { toObject: () => Blog }).toObject()
+      : blog;
+
+  return {
+    ...plainBlog,
+    duration: typeof plainBlog.duration === 'number' ? plainBlog.duration : 0,
+    content: normalizeContent(plainBlog.content),
+  };
 }

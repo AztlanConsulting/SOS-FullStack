@@ -1,10 +1,13 @@
 import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
+import { formatDateEsShort } from '@shared/utils/dateUtils';
 import { useNavigate } from 'react-router';
 import type { Blog } from '../types/blog.types';
 
 const BlogCard = ({ blog }: { blog: Blog }) => {
   const navigate = useNavigate();
+  const createdAtLabel = formatDateEsShort(blog.createdAt);
+
   return (
     <div
       key={blog._id}
@@ -27,21 +30,21 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
       <div className="w-full flex justify-between align-items">
         <Text
           as="p"
-          variant="body"
+          variant="caption"
           weight="regular"
           color="text-black"
           className="text-left pl-4 pb-4"
         >
-          Precio
+          {createdAtLabel}
         </Text>
         <Text
           as="p"
-          variant="body"
+          variant="caption"
           weight="regular"
           color="text-black"
           className="text-right pr-4 pb-4"
         >
-          $ {blog.name}
+          {blog.duration} Min. de lectura
         </Text>
       </div>
       <div className="w-full flex flex-col items-center justify-center py-5 color-grey-border-top">

@@ -14,6 +14,7 @@ const BlogListSection = () => {
     'blogs',
   );
   const { isLoading, error, data } = query;
+  const blogs = Array.isArray(data?.blogs) ? data.blogs : [];
 
   return (
     <section className="bg-secondary w-full flex flex-col items-center justify-center">
@@ -28,18 +29,18 @@ const BlogListSection = () => {
             Error cargando resultados de búsqueda
           </Text>
         )}
-        {data && data.blogs.length == 0 && (
+        {data && blogs.length == 0 && (
           <Text className="mb-20">No hay resultados...</Text>
         )}
         {!isLoading && !error && data && (
           <List<Blog>
-            cards={data.blogs}
+            cards={blogs}
             component={(card, idx) => <BlogCard blog={card} key={idx} />}
           />
         )}
 
         {/* Pagination */}
-        {data && data.blogs.length > 0 && <Pagination pages={pages} />}
+        {data && blogs.length > 0 && <Pagination pages={pages} />}
       </div>
     </section>
   );

@@ -7,6 +7,6 @@ const router = Router();
 
 router.post('/payment-intent', createOrder);
 router.post('/webhook', makehandleStripeWebhook);
-router.get('/capture-order/:orderId', captureOrder);
+router.post('/capture-order/:orderId', captureOrder);
 
 export default router;

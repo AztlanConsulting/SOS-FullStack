@@ -27,7 +27,7 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
     }
 
     setEmailError('');
-    navigate('/purchase', {
+    navigate('/compra', {
       state: {
         userEmail: trimmedEmail,
         productId: purchaseRequest._id,

@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: '/purchase',
+        path: '/compra',
         element: <PurchasePage />,
       },
       {

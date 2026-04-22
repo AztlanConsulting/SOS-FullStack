@@ -71,11 +71,7 @@ export default function PlansPage() {
         </Text>
         <div className="hidden md:flex flex-row gap-10 w-full justify-center items-stretch">
           {plans.map((plan, i) => (
-            <PlanCard
-              key={i}
-              {...plan}
-              onSelect={() => console.log(plan.name)}
-            />
+            <PlanCard key={i} {...plan} />
           ))}
         </div>
 

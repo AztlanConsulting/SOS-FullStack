@@ -48,7 +48,6 @@ const PlanCard: React.FC<PlanCardProps> = ({
   features,
   highlighted = false,
   badge,
-  onSelect,
 }) => {
   const [activeTooltip, setActiveTooltip] = useState<{
     title: string;
@@ -108,7 +107,13 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </ul>
 
         <div className="flex justify-center pb-5">
-          <Button label="Seleccionar" variant="plans" onClick={onSelect} />
+          <Button
+            label="Seleccionar"
+            variant="plans"
+            onClick={() => {
+              console.log('CLick en plan: Santi le movio, esperence');
+            }}
+          />
         </div>
       </div>
       {activeTooltip && (

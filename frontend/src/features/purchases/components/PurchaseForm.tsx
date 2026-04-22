@@ -1,52 +1,37 @@
-import visa from '@assets/images/paymentIcons/Visa.png';
-import mastercard from '@assets/images/paymentIcons/MasterC.png';
-import american from '@assets/images/paymentIcons/American.png';
-import paypal from '@assets/images/paymentIcons/PayPal.png';
-import oxxo from '@assets/images/paymentIcons/oxxoPay.png';
-import bank from '@assets/images/paymentIcons/Bank.svg';
 import PaymentMethodCard from './PaymentMethodCard';
-import type { PaymentMethod } from '../types/PaymentMethod.type';
 import { Text } from '@shared/components/ui/Text';
 import { useState, type ChangeEvent } from 'react';
 import type { Product } from '@shared/types/purchase.types';
-import Paypal from '@features/payment/components/paypal/Paypal';
-
-const paymentMethods: PaymentMethod[] = [
-  {
-    method: 'Tarjeta de crédito / debito',
-    icons: [visa, mastercard, american],
-    element: <div />,
-  },
-  {
-    method: 'Transferencia SPEI',
-    description: 'Aprobación instantánea desde cualquier banca en línea',
-    icons: [bank],
-    element: <div />,
-  },
-  {
-    method: 'Paypal',
-    icons: [paypal],
-    element: <Paypal />,
-  },
-  {
-    method: 'Oxoo',
-    icons: [oxxo],
-    element: <div />,
-  },
-];
+import type {
+  Order,
+  PurchaseDetail,
+} from '@features/payment/types/payment.types';
+import paymentMethods from '../services/paymentMethods.service';
 
 interface Props {
   product: Product;
+  purchaseDetail: PurchaseDetail;
+  success: () => void;
 }
 
-const PurchaseForm = ({ product }: Props) => {
+// Logic to handle payment method, display different cards for each payment
+// method and display payment details on option click, as well as the
+// Price of purchase
+const PurchaseForm = ({ product, purchaseDetail, success }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
-  // const [isExpanded, setIsExpanded] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
-    console.log(e.target.value);
     setSelected(e.target.value);
   }
+
+  const orderDetails: Order = {
+    amount: product.price,
+    currency: 'MXN',
+    product: {
+      productId: product._id,
+      productName: product.name,
+    },
+  };
 
   return (
     <div>
@@ -69,11 +54,13 @@ const PurchaseForm = ({ product }: Props) => {
               <div
                 className={`grid transition-all duration-300 ease-in-out ${
                   selected == pM.method
-                    ? 'grid-rows-[1fr] opacity-100 mt-4'
-                    : 'grid-rows-[0fr] opacity-0 mt-0'
+                    ? 'grid-rows-[1fr] opacity-100'
+                    : 'grid-rows-[0fr] opacity-0'
                 }`}
               >
-                <div className="overflow-hidden">{pM.element}</div>
+                <div className="overflow-hidden">
+                  {pM.element(orderDetails, purchaseDetail, success)}
+                </div>
               </div>
             </>
           ))}

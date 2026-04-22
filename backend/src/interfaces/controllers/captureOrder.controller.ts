@@ -1,13 +1,41 @@
 import type { Request, Response } from 'express';
 import { default as ucCaptureOrder } from '@use-cases/payments/captureOrder';
 import paypalApi from '@infrastructure/api/paypal.api';
+import { PaymentDataAccess } from '../data-access/payment.data-access';
+import { markAsSucceededDB } from '@/use-cases/payments/markAsSuccededDB.usecase';
+import { createPurchaseDB } from '@/use-cases/purchases/createPurchaseDB.usecase';
+import { PurchaseDataAccess } from '../data-access/purchase.data-access';
+import { purchaseDetails } from '@/types/payment.types';
 
 export default async function captureOrder(req: Request, res: Response) {
-  const { orderId } = req.params;
+  try {
+    const { orderId } = req.params;
 
-  const response = await ucCaptureOrder(paypalApi, orderId as string);
+    const details = purchaseDetails.safeParse(req.body);
+    if (details.error) throw details.error;
 
-  if (response.id !== undefined) return res.status(200).send(response.id);
+    const { userEmail, productId, productType } = details.data;
 
-  res.status(500).send(response.error);
+    const response = await ucCaptureOrder(paypalApi, orderId as string);
+
+    if (Boolean(response.error)) throw response.error;
+
+    const result = await markAsSucceededDB(PaymentDataAccess, String(orderId));
+
+    if (result === 'not_found' || result === 'already_updated') {
+      console.warn('Payment not found in DB or already updated');
+    }
+
+    await createPurchaseDB(PurchaseDataAccess, {
+      userEmail,
+      paymentId: response.id!,
+      productId,
+      productType,
+    });
+
+    if (response.id !== undefined) return res.status(200).send(response.id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
 }

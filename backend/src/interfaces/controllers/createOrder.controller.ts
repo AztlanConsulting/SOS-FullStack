@@ -40,10 +40,9 @@ export default async function createOrder(req: Request, res: Response) {
 
     return res.status(201).json({
       message: 'Payment intent created successfully',
-      result: result,
+      result,
     });
   } catch (error) {
-    console.error(error);
     const message = error instanceof Error ? error.message : 'Payment failed';
     return res.status(500).json({ error: message });
   }

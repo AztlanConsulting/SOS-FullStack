@@ -38,7 +38,7 @@ export const useManualPurchase = (manual: ManualPurchaseData) => {
     }
 
     setEmailError('');
-    navigate('/purchase', {
+    navigate('/compra', {
       state: {
         userEmail: trimmedEmail,
         productId: manual._id,

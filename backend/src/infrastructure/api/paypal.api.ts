@@ -63,8 +63,8 @@ const PaypalProvider: PaypalApi = {
         {
           items: [
             {
-              name: data.product?.productId,
-              description: data.product?.productName,
+              name: data.product?.productName,
+              description: data.product?.productId,
               quantity: '1',
               unit_amount: {
                 currency_code: data.currency,
@@ -75,6 +75,12 @@ const PaypalProvider: PaypalApi = {
           amount: {
             currency_code: data.currency,
             value: data.amount,
+            breakdown: {
+              item_total: {
+                currency_code: data.currency,
+                value: data.amount,
+              },
+            },
           },
         },
       ],
@@ -126,7 +132,7 @@ const PaypalProvider: PaypalApi = {
       id: paymentId.orderId!,
       amount: data.amount,
       currency: data.currency,
-      clientSecret: null,
+      clientSecret: '1234567',
     };
 
     return paymentResult; // Send to browser

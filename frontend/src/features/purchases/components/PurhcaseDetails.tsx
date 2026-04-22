@@ -1,18 +1,19 @@
 import { Text } from '@shared/components/ui/Text';
 import ProductDetail from './ProductDetail';
 import PlanDetail from './PlanDetail';
-import type { Product } from '@shared/types/purchase.types';
+import type { Plan, Product } from '@shared/types/purchase.types';
+import { useNavigate } from 'react-router';
+import ConfirmPaymentModal from './ConfirmPaymentModal';
 
 interface Props {
-  plan?: {
-    planType: string;
-    duration: string;
-    distance: string;
-  };
+  plan?: Plan;
   product?: Product;
+  success: boolean;
 }
 
-const PurchaseDetails = ({ plan, product }: Props) => {
+// Get all product details and display them to the user
+const PurchaseDetails = ({ plan, product, success }: Props) => {
+  const navigate = useNavigate();
   return (
     <div className="pt-4 md:p-2">
       <Text
@@ -22,8 +23,21 @@ const PurchaseDetails = ({ plan, product }: Props) => {
       >
         Detalles de la compra
       </Text>
+      {/* Different UI elements depending if its a plan or manual / workshop */}
       {plan && <PlanDetail />}
       {product && <ProductDetail product={product} />}
+      {/* Modal to show success state */}
+      {success && (
+        <ConfirmPaymentModal plan={plan} product={product} />
+        // <Modal
+        //   title={'Compra exitosa'}
+        //   description={`El producto se ha comprado de manera exitosa
+        //     Nombre: ${product?.name}
+        //     Precio: ${product?.price}
+        //     `}
+        //   onClose={() => navigate('/')}
+        // />
+      )}
     </div>
   );
 };

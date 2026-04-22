@@ -14,7 +14,7 @@ const BlogContent = ({ blog }: Props) => {
   return (
     <section className="w-full min-h-screen flex flex-col">
       <HeaderBack name="Blog" onBack={() => navigate('/blog')} />
-      <BlogHeader blog={blog} />;
+      <BlogHeader blog={blog} />
       <div className="w-full bg-white flex justify-center py-6 md:py-10">
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-2xl xl:max-w-2xl flex flex-col gap-6">
           <ContentRenderer content={blog.content} />

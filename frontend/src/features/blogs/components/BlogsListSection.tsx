@@ -6,7 +6,7 @@ import { Text } from '@shared/components/ui/Text';
 import BlogCard from './BlogCard';
 import type { BlogResult, Blog } from '../types/blog.types';
 import useProduct from '@shared/hooks/useProduct';
-import queryBlog from '../services/queryBlogs';
+import queryBlog from '../services/queryBlog';
 
 const BlogListSection = () => {
   const { searchHook, query, pages } = useProduct<BlogResult>(

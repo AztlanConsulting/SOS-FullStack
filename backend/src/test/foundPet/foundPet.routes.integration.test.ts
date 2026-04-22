@@ -3,6 +3,23 @@ import request from 'supertest';
 import foundPetRoutes from '@interfaces/routes/foundPet.routes';
 import { connect, closeDatabase, clearDatabase } from '../db';
 
+jest.mock(
+  '@/infrastructure/data-access/vectorDB/petVector.data-access',
+  () => ({
+    petVector: {
+      createPetImage: jest.fn().mockResolvedValue(true),
+      getSimilarPets: jest.fn().mockResolvedValue([]),
+    },
+  }),
+);
+
+jest.mock('@use-cases/images/createPetImage', () => ({
+  createPetImage: jest.fn().mockResolvedValue(true),
+}));
+
+const IMAGE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAADUlEQVR42mP8z/C/HwAFgwJ/lxXH3wAAAABJRU5ErkJggg==';
+
 describe('foundPet routes (integration)', () => {
   const app = express();
   app.use(express.json());
@@ -34,6 +51,7 @@ describe('foundPet routes (integration)', () => {
       contactName: 'Juan Perez',
       phoneNumber: '+521234567890',
       email: 'juan@example.com',
+      images: [IMAGE],
     };
 
     const res = await request(app)
@@ -45,7 +63,7 @@ describe('foundPet routes (integration)', () => {
     expect(res.body).toHaveProperty('data');
   });
 
-  test('POST /found-pets/report returns 500 when required fields missing', async () => {
+  test('POST /found-pets/report returns 400 when required fields missing', async () => {
     const invalidPayload = {
       color: 'Dorado',
     };
@@ -54,7 +72,7 @@ describe('foundPet routes (integration)', () => {
       .post('/found-pets/report')
       .send(invalidPayload);
 
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
   });
 });

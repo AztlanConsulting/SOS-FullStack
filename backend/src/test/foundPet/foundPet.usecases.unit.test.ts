@@ -3,9 +3,11 @@ import type {
   FoundPetRepository,
   FoundPetResult,
 } from '@domain/repositories/foundPet.repository';
+import { Types } from 'mongoose';
 
 describe('foundPet createFoundPet (unit)', () => {
   const validFoundPetData = {
+    _id: new Types.ObjectId(),
     species: 'Perro',
     date: '2024-03-15',
     breed: 'Labrador',

@@ -1,3 +1,5 @@
+import type { PlanDetails } from '@features/plans/types/plan.types';
+
 export type Order = {
   amount: number;
   currency: string;
@@ -7,11 +9,7 @@ export type Order = {
     productName: string;
     productId: string;
   };
-  plan?: {
-    planType: string;
-    duration: number;
-    distance: number;
-  };
+  plan?: PlanDetails;
 };
 
 export type PurchaseDetail = {

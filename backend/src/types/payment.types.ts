@@ -11,11 +11,15 @@ export const paymentDetails = z.object({
       productId: z.string(),
     })
     .optional(),
-  plane: z
+  plan: z
     .object({
-      planType: z.string(),
-      duration: z.number(),
-      distance: z.number(),
+      name: z.string(),
+      price: z.number(),
+      currency: z.string(),
+      duration: z.string(),
+      radius: z.string(),
+      features: z.array(z.string()),
+      productType: z.string(),
     })
     .optional(),
 });

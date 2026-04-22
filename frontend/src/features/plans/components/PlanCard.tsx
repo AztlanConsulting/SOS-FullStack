@@ -7,6 +7,8 @@ import {
 } from 'react-icons/hi';
 import { Text } from '@shared/components/ui/Text';
 import { Modal } from '@shared/components/ui/Modal/Modal';
+import { useNavigate } from 'react-router';
+import type { PlanDetails } from '../types/plan.types';
 
 /**
  * Represents an individual feature or service within a plan.
@@ -53,8 +55,20 @@ const PlanCard: React.FC<PlanCardProps> = ({
     title: string;
     description: string;
   } | null>(null);
+  const navigate = useNavigate();
+
   const included = features.filter((f) => f.included);
   const excluded = features.filter((f) => !f.included);
+
+  const planDetails: PlanDetails = {
+    name,
+    price: Number(price),
+    currency,
+    duration,
+    radius,
+    features: features.filter((f) => f.included).map((f) => f.label),
+    productType: 'plan',
+  };
 
   return (
     <div className="relative pt-4 md:h-full">
@@ -111,7 +125,11 @@ const PlanCard: React.FC<PlanCardProps> = ({
             label="Seleccionar"
             variant="plans"
             onClick={() => {
-              console.log('CLick en plan: Santi le movio, esperence');
+              navigate('/compra', {
+                state: {
+                  planDetails: { ...planDetails },
+                },
+              });
             }}
           />
         </div>

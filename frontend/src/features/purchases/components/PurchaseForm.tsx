@@ -7,9 +7,11 @@ import type {
   PurchaseDetail,
 } from '@features/payment/types/payment.types';
 import paymentMethods from '../services/paymentMethods.service';
+import type { PlanDetails } from '@features/plans/types/plan.types';
 
 interface Props {
-  product: Product;
+  product?: Product;
+  plan?: PlanDetails;
   purchaseDetail: PurchaseDetail;
   success: () => void;
 }
@@ -17,20 +19,25 @@ interface Props {
 // Logic to handle payment method, display different cards for each payment
 // method and display payment details on option click, as well as the
 // Price of purchase
-const PurchaseForm = ({ product, purchaseDetail, success }: Props) => {
+const PurchaseForm = ({ product, plan, purchaseDetail, success }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
     setSelected(e.target.value);
   }
 
-  const orderDetails: Order = {
-    amount: product.price,
+  const orderDetails: Order | null = {
+    amount: product?.price ?? plan!.price,
     currency: 'MXN',
-    product: {
-      productId: product._id,
-      productName: product.name,
-    },
+    ...(product && {
+      product: {
+        productId: product._id,
+        productName: product.name,
+      },
+    }),
+    ...(plan && {
+      plan: plan,
+    }),
   };
 
   return (
@@ -69,7 +76,7 @@ const PurchaseForm = ({ product, purchaseDetail, success }: Props) => {
               Total a pagar:
             </Text>
             <Text variant="h1" color="text-gray-600">
-              ${product.price}
+              ${product?.price ?? plan?.price}
             </Text>
           </div>
         </section>

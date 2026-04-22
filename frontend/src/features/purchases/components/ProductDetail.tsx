@@ -7,14 +7,12 @@ interface Props {
 
 const ProductDetail = ({ product }: Props) => {
   return (
-    <div className="w-10/12 mx-auto mt-3 mb-3 md:mb-0 rounded-c bg-secondary p-4 py-6">
-      <div className="flex flex-col items-center md:gap-3 gap-1">
-        <img src={product.imageUrl} className="rounded-c" />
-        <Text variant="h3" weight="semibold">
-          {product?.name}
-        </Text>
-      </div>
-    </div>
+    <>
+      <img src={product.imageUrl} className="rounded-c" />
+      <Text variant="h3" weight="semibold">
+        {product?.name}
+      </Text>
+    </>
   );
 };
 

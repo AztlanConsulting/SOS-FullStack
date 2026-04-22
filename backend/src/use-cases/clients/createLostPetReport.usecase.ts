@@ -1,6 +1,6 @@
-import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
 import { createPetImage } from '@use-cases/images/createPetImage';
 import type { LostPetReport } from '@domain/models/lostPet.model';
+import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 
 export const createLostPetReport = async (
   petData: LostPetReport,

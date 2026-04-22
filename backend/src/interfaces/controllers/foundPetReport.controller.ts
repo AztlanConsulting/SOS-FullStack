@@ -1,10 +1,10 @@
 import { Types } from 'mongoose';
 import type { FoundPetReport } from '@domain/models/foundPet.model';
 import type { PetImageDto } from '@domain/repositories/petImage.repository';
-import { FoundPetDataAccess } from '@interfaces/data-access/foundPet.data-access';
-import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
 import { createFoundPet } from '@use-cases/foundPet/createFoundPet.usecase';
 import type { Request, Response } from 'express';
+import { FoundPetDataAccess } from '@/infrastructure/data-access/foundPet.data-access';
+import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 
 function parseBase64Image(imageBase64: string): Buffer | null {
   if (!imageBase64 || typeof imageBase64 !== 'string') {

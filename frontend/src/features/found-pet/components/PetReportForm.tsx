@@ -7,6 +7,7 @@ import { ContactInfoSection } from './ContactInfoSection';
 import { usePetReportForm } from '../hooks/usePetReportForms';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
+import { Modal } from '@/shared/components/ui/Modal/Modal';
 
 export interface PetReportFormProps {
   initialData?: Partial<PetReportData>;
@@ -46,18 +47,11 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
 
   if (success) {
     return (
-      <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
-        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8 items-center justify-center py-16">
-          <Text
-            variant="h1"
-            as="h1"
-            weight="bold"
-            className="text-center text-3xl text-green-600"
-          >
-            ¡Mascota reportada!
-          </Text>
-        </div>
-      </div>
+      <Modal
+        title="¡Mascota reportada!"
+        description="Gracias por reportar a tu mascota. Te contactaremos pronto."
+        onClose={resetForm}
+      />
     );
   }
 

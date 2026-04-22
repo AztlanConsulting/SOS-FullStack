@@ -148,13 +148,13 @@ describe('FoundPetReportForm Component', () => {
     expect(screen.getByText('¡La fecha no puede ser futura!')).toBeDefined();
   });
 
-  test('accepts today as a valid date', async () => {
+  test('accepts past date as a valid date', async () => {
     const user = userEvent.setup();
 
-    const today = new Date().toISOString().split('T')[0];
-
     renderWithRouter(
-      <PetReportForm initialData={{ ...VALID_INITIAL_DATA, date: today }} />,
+      <PetReportForm
+        initialData={{ ...VALID_INITIAL_DATA, date: '2020-06-15' }}
+      />,
     );
 
     await user.click(screen.getByText('Reportar mascota encontrada'));

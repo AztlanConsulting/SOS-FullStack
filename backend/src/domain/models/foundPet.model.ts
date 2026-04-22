@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 
 export interface FoundPetReport {
   id?: string;
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId;
   species: string;
   date: string;
   breed?: string;

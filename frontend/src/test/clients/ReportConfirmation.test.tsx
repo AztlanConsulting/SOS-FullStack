@@ -13,6 +13,12 @@ vi.mock('@features/users/components/DataConfirmation', () => ({
   ),
 }));
 
+vi.mock('@shared/components/layout/Header', () => ({
+  __esModule: true,
+  Header: () => <header>Header</header>,
+  default: () => <header>Header</header>,
+}));
+
 const mockNavigate = vi.fn();
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -22,10 +28,19 @@ vi.mock('react-router', async () => {
 let mockReportData: PetReportData | null = null;
 const mockSetReportData = vi.fn();
 
-vi.mock('@features/users/context/PetReportContext', () => ({
+vi.mock('@features/found-pet/context/PetReportService', () => ({
   usePetReport: () => ({
     reportData: mockReportData,
     setReportData: mockSetReportData,
+  }),
+}));
+
+vi.mock('@features/auth/hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: null,
+    isAuthenticated: false,
+    login: vi.fn(),
+    logout: vi.fn(),
   }),
 }));
 
@@ -106,9 +121,6 @@ describe('ReportConfirmationPage', () => {
   });
 
   test('calls setReportData with merged data when handleUpdateForm is triggered', () => {
-    // This behavior is tested indirectly: DataConfirmation receives
-    // updateForm as a property. Since DataConfirmation is a mock object, we verify
-    // that the property exists by passing it and that the state is updated when it is called.
     mockReportData = MOCK_REPORT_DATA;
 
     vi.mock('@features/users/components/DataConfirmation', () => ({

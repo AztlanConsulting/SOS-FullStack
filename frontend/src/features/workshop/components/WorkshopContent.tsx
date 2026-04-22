@@ -1,4 +1,4 @@
-import { Text } from '@shared/components/ui/Text';
+import ContentRenderer from '@shared/components/ui/ContentRenderer';
 import type { Workshop } from '../types/workshop';
 import { HeaderBack } from '@shared/components/layout/HeaderBack';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
@@ -27,15 +27,9 @@ const WorkshopContent = ({ workshop }: Props) => {
         </div>
       </div>
       <div className="w-full p py-10 bg-white flex items-center justify-center">
-        <Text
-          as="p"
-          variant="body"
-          weight="regular"
-          color="text-black"
-          className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl"
-        >
-          {workshop.content}
-        </Text>
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-2xl xl:max-w-2xl flex flex-col gap-6">
+          <ContentRenderer content={workshop.content} />
+        </div>
       </div>
     </section>
   );

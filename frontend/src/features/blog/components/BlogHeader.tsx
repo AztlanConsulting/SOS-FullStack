@@ -15,7 +15,7 @@ const BlogHeader = ({ blog }: Props) => {
   const heroProduct = {
     imageUrl: blog.imageUrl,
     name: blog.name,
-    content: '',
+    content: blog.content,
     price: 0,
   };
 
@@ -33,7 +33,13 @@ const BlogHeader = ({ blog }: Props) => {
           </Text>
         </div>
 
-        <ProductPageHero product={heroProduct} />
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+          <div className="flex justify-center">
+            <div className="w-full max-w-6xl md:px-0">
+              <ProductPageHero product={heroProduct} />
+            </div>
+          </div>
+        </div>
 
         <Text as="h1" variant="h2" weight="medium" className="pt-2">
           {blog.name}

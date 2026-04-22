@@ -8,9 +8,12 @@ import { UserModel } from '@domain/models/user.model';
 import { PermissionModel } from '@domain/models/permission.model';
 import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
+import initWorkshopDB from './workshops.data';
 
 try {
   await mongoDB();
+
+  await initWorkshopDB();
 
   await Mock.deleteMany({});
   await PlanModel.deleteMany({});

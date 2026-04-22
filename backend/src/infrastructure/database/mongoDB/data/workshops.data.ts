@@ -1,6 +1,8 @@
 import { WorkshopModel } from '@/domain/models/workshop.model';
 
-async function initWorkshopDB() {
+export async function initWorkshopDB() {
+  await WorkshopModel.deleteMany({});
+
   const baseContent = [
     {
       type: 'text',

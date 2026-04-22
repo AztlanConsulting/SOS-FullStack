@@ -1,8 +1,9 @@
-import type { Document } from 'mongoose';
+import type { Document, Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 export interface FoundPetReport {
   id?: string;
+  _id?: Types.ObjectId;
   species: string;
   date: string;
   breed?: string;
@@ -20,6 +21,7 @@ export interface FoundPetReport {
   contactName: string;
   phoneNumber: string;
   email: string;
+  imageIds?: string[];
 }
 
 export interface IFoundPet extends FoundPetReport, Document {
@@ -55,6 +57,7 @@ const foundPetSchema = new Schema<IFoundPet>(
     contactName: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     email: { type: String, required: true },
+    imageIds: { type: [String] },
   },
   { timestamps: true },
 );

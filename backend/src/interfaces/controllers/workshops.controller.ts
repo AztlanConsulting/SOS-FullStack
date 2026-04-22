@@ -23,7 +23,7 @@ export async function getWorkshops(req: Request, res: Response) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
 
       if (!ws) {
-        return res.status(404).send(`No se encontró el blog con id: ${id}`);
+        return res.status(404).send(`No se encontró el taller con id: ${id}`);
       }
 
       return res.status(200).json({

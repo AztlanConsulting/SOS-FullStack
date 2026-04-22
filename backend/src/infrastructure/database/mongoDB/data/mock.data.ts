@@ -9,11 +9,13 @@ import { PermissionModel } from '@domain/models/permission.model';
 import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
 import initWorkshopDB from './workshops.data';
+import initManualDB from './manuals.data';
 
 try {
   await mongoDB();
 
   await initWorkshopDB();
+  await initManualDB();
 
   await Mock.deleteMany({});
   await PlanModel.deleteMany({});

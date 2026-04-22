@@ -1,7 +1,7 @@
-import BlogContent from '@features/blogs/components/BlogContent';
-import useGetBlogContent from '@features/blogs/hooks/useGetBlogContent';
-import queryBlogById from '@features/blogs/services/queryBlogById';
-import type { Blog } from '@features/blogs/types/blog.types';
+import BlogContent from '@features/blog/components/BlogContent';
+import useGetBlogContent from '@features/blog/hooks/useGetBlogContent';
+import queryBlogById from '@features/blog/services/queryBlogById';
+import type { Blog } from '@features/blog/types/blog.types';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 import { Text } from '@shared/components/ui/Text';
 

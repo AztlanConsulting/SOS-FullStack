@@ -2,9 +2,9 @@ import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { createMemoryRouter, RouterProvider, useLocation } from 'react-router';
-import type { Blog } from '@features/blogs/types/blog.types';
-import BlogCard from '@features/blogs/components/BlogCard';
-import BlogContent from '@features/blogs/components/BlogContent';
+import type { Blog } from '@features/blog/types/blog.types';
+import BlogCard from '@features/blog/components/BlogCard';
+import BlogContent from '@features/blog/components/BlogContent';
 
 const blog: Blog = {
   _id: 'b1',

@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
-import useGetBlogContent from '@features/blogs/hooks/useGetBlogContent';
+import useGetBlogContent from '@features/blog/hooks/useGetBlogContent';
 import { useLocation, useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 

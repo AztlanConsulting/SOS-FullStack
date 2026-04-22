@@ -1,5 +1,5 @@
 import axiosInstance from '@shared/utils/axios';
-import queryBlogById from '@features/blogs/services/queryBlogById';
+import queryBlogById from '@features/blog/services/queryBlogById';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 // Mock Axios to isolate service logic from real HTTP requests

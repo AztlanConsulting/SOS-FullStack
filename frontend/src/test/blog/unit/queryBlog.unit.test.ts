@@ -1,5 +1,5 @@
 import axiosInstance from '@shared/utils/axios';
-import queryBlog from '@features/blogs/services/queryBlog';
+import queryBlog from '@features/blog/services/queryBlog';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 vi.mock('@shared/utils/axios', () => ({

@@ -1,4 +1,4 @@
-import BlogListSection from '@features/blogs/components/BlogsListSection';
+import BlogListSection from '@features/blog/components/BlogsListSection';
 import Footer from '@shared/components/layout/Footer';
 import Header from '@shared/components/layout/Header';
 import HeroSection from '@shared/components/layout/HeroSection';

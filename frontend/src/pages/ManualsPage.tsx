@@ -1,5 +1,5 @@
 import { Footer } from '@shared/components/layout/Footer';
-import Header from '@shared/components/layout/Header';
+import Header from '@/shared/components/layout/Header';
 import { ManualsListSection } from '@features/manuals/components/ManualsListSection';
 import { Outlet } from 'react-router';
 import HeroSection from '@shared/components/layout/HeroSection';

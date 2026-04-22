@@ -14,7 +14,9 @@
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@validation/*": ["./src/types/*"],
-      "@use-cases/*": ["./src/use-cases//*"],
+      "@use-cases/*": ["./src/use-cases/*"],
+      "@config/*": ["./src/config/*"],
+      "@utils/*": ["./src/utils/*"],
       "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },

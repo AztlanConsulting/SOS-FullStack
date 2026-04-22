@@ -14,6 +14,10 @@ import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import routerLostPet from './foundPet.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
+import LoginPage from '../pages/LoginPage';
+import { Dashboard } from '@features/auth/components/TempDashboard';
+import { RoleProtectedRoute } from './RoleProtectedRoute';
+import { ForbiddenPage } from '../pages/ForbiddenPage';
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +30,22 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <LandingPage />,
+      },
+      {
+        path: '/forbidden',
+        element: <ForbiddenPage />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/dashboard',
+        element: (
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <Dashboard />
+          </RoleProtectedRoute>
+        ),
       },
       {
         path: '/purchase',

@@ -10,6 +10,7 @@ type ButtonProps = {
   isLoading?: boolean;
   icon?: ComponentType<{ size?: number }>;
   textColor?: string;
+  type?: 'button' | 'submit' | 'reset';
 };
 export function Button({
   label,
@@ -19,6 +20,7 @@ export function Button({
   isLoading = false,
   icon: Icon,
   textColor = '',
+  type = 'button',
 }: ButtonProps) {
   const base =
     'flex items-center justify-center gap-2 px-3 py-2.5 rounded-full font-semibold text-base transition-colors duration-200';
@@ -35,7 +37,8 @@ export function Button({
   return (
     <button
       onClick={onClick}
-      disabled={disabled || isLoading}
+      disabled={disabled}
+      type={type}
       className={twMerge(
         base,
         variants[variant],

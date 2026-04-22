@@ -1,5 +1,6 @@
 import express from 'express';
 import { LocationController } from '../controllers/LocationController';
+import authRoutes from './auth.routes';
 import imageRoutes from './images.routes';
 import clientsRoutes from './clients.routes';
 import paymentRoutes from './payments.routes';
@@ -15,6 +16,7 @@ router.get('/health', (req, res) => {
   res.status(200).send('Health-check successfull');
 });
 
+router.use('/auth', authRoutes);
 router.use('/clients', clientsRoutes);
 router.use('/images', imageRoutes);
 router.use('/payments', paymentRoutes);

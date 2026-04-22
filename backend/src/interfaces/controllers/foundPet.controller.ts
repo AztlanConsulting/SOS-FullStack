@@ -1,4 +1,4 @@
-import { petVector } from '@interfaces/data-access/vectorDB/petVector.data-access';
+import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 import { createPetImage } from '@use-cases/images/createPetImage';
 import type { Request, Response } from 'express';
 

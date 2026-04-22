@@ -36,10 +36,10 @@ export const PetLocationSection = ({
           weight="medium"
           className="text-center text-xl md:text-2xl "
         >
-          Dónde se enocontró
+          Dónde se encontró
         </Text>
       </div>
-      <div className="w-full max-w-lg mx-auto">
+      <div className="w-full max-w-lg mx-auto flex flex-col gap-6">
         <LocationSearchInput
           label={inputLabel}
           placeholder={placeholderText}

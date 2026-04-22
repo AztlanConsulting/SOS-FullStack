@@ -2,8 +2,6 @@ import axiosInstance from '@shared/utils/axios';
 import type { PetReportData } from '../types/petReport.types';
 
 export const reportFoundPet = async (data: PetReportData) => {
-  console.log('aa', data.images);
-
   const imagesBase64 = await Promise.all(
     data.images.map((file: File) => {
       return new Promise<string>((resolve, reject) => {

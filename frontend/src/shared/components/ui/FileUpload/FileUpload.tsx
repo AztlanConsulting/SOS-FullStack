@@ -17,7 +17,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ index, onChange }) => {
   };
 
   return (
-    <label className="w-full border border-gray-400 rounded-lg px-2 py-1 bg-white flex items-center justify-center gap-2 text-gray-600 text-sm hover:bg-gray-50 transition-colors cursor-pointer active:scale-[0.99] overflow-hidden">
+    <label className="w-full border border-gray-400 rounded-lg px-20 py-3 bg-white flex items-center justify-center gap-2 text-gray-600 text-sm hover:bg-gray-50 transition-colors cursor-pointer active:scale-[0.99] overflow-hidden">
       <input
         type="file"
         className="hidden"

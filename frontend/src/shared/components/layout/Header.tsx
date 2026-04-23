@@ -19,7 +19,7 @@ import { HiOutlineUserCircle } from 'react-icons/hi';
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
-  { label: 'Blog', href: '#', icon: <TfiWrite /> },
+  { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
   { label: 'Mascotas', href: '#', icon: <PiDogLight /> },

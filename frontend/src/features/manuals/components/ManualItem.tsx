@@ -24,13 +24,22 @@ export const ManualItem = ({ manual }: { manual: Manual }) => {
       >
         {manual.name}
       </Text>
-      <div className="w-full flex justify-start align-items">
+      <div className="w-full flex justify-between align-items">
         <Text
-          as="h3"
-          variant="h3"
-          weight="medium"
+          as="p"
+          variant="body"
+          weight="regular"
           color="text-black"
           className="text-left pl-4 pb-4"
+        >
+          Precio
+        </Text>
+        <Text
+          as="p"
+          variant="body"
+          weight="regular"
+          color="text-black"
+          className="text-right pr-4 pb-4"
         >
           $ {manual.price}
         </Text>

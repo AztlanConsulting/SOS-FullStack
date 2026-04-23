@@ -5,7 +5,7 @@ import { StripeProvider } from '@/infrastructure/api/stripeProvider.api';
 import type { PaymentProvider } from '@/domain/ports/paymentProvider.port';
 import PaypalProvider from '@/infrastructure/api/paypal.api';
 import { createPendingIntentDB } from '@/use-cases/payments/createPendingIntentDB.usecase';
-import { PaymentDataAccess } from '../data-access/payment.data-access';
+import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 
 /**
  * Controller that receives payment and order detauls to build the transaction

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { publishLostPet } from '../../use-cases/clients/publishLostPet.usecase';
-import { metaPublisher } from '../../infrastructure/api/meta.api';
+import { publishLostPet } from '@use-cases/clients/publishLostPet.usecase';
+import { metaPublisher } from '@infrastructure/api/meta.api';
 
 const publishPet = async (req: Request, res: Response) => {
   try {

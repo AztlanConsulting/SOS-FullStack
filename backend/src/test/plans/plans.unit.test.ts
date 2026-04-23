@@ -1,4 +1,4 @@
-import { PlanDataAccess } from '@/interfaces/data-access/plan.data-access';
+import { PlanDataAccess } from '@infrastructure/data-access/plan.data-access';
 import { PlanModel } from '@/domain/models/plan.model';
 // Mock the Mongoose model to isolate the data access logic from the database.
 jest.mock('@domain/models/plan.model');

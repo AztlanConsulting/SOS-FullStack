@@ -1,5 +1,5 @@
 import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
-import app from '../../index';
+import app from '@/index';
 import request from 'supertest';
 import initWorkshopDB from '@db/mongoDB/data/workshops.data';
 

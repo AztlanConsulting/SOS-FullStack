@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express';
 import { default as ucCaptureOrder } from '@use-cases/payments/captureOrder';
 import paypalApi from '@infrastructure/api/paypal.api';
-import { PaymentDataAccess } from '../data-access/payment.data-access';
+import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 import { markAsSucceededDB } from '@/use-cases/payments/markAsSuccededDB.usecase';
 import { createPurchaseDB } from '@/use-cases/purchases/createPurchaseDB.usecase';
-import { PurchaseDataAccess } from '../data-access/purchase.data-access';
+import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
 import { purchaseDetails } from '@/types/payment.types';
 
 export default async function captureOrder(req: Request, res: Response) {

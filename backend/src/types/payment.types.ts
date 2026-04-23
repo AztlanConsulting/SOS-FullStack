@@ -24,6 +24,6 @@ export const paymentDetails = z.object({
 
 export const purchaseDetails = z.object({
   userEmail: z.string(),
-  productId: z.string(),
+  productId: z.string().optional(),
   productType: z.string(),
 });

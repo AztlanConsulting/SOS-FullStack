@@ -1,10 +1,11 @@
+import type { PlanDetails } from '@features/plans/types/plan.types';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
-import type { Plan, Product } from '@shared/types/purchase.types';
+import type { Product } from '@shared/types/purchase.types';
 import { useNavigate } from 'react-router';
 
 interface Props {
-  plan?: Plan;
+  plan?: PlanDetails;
   product?: Product;
 }
 
@@ -31,9 +32,9 @@ const ConfirmPaymentModal = ({ plan, product }: Props) => {
           </Text>
           {plan && (
             <Text className="text-start">
-              Tipo de plan: {plan.planType} <br />
+              Tipo de plan: {plan.name} <br />
               Duración: {plan.duration} <br />
-              Distancia: {plan.distance}
+              Distancia: {plan.radius}
             </Text>
           )}
           {product && (

@@ -26,10 +26,15 @@ export default async function captureOrder(req: Request, res: Response) {
       console.warn('Payment not found in DB or already updated');
     }
 
+    let id: string | undefined = productId;
+    if (!Boolean(productId)) {
+      id = '123'; // Register plan details and return id
+    }
+
     await createPurchaseDB(PurchaseDataAccess, {
       userEmail,
       paymentId: response.id!,
-      productId,
+      productId: productId ?? id!,
       productType,
     });
 

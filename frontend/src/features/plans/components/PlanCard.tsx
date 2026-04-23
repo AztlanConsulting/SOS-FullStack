@@ -129,6 +129,8 @@ const PlanCard: React.FC<PlanCardProps> = ({
               navigate('/compra', {
                 state: {
                   planDetails: { ...planDetails },
+                  productType: 'plan',
+                  userEmail: 'test@mail.com',
                 },
               });
             }}

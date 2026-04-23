@@ -7,9 +7,10 @@ import ProductSale from '@shared/components/ui/ProductSale';
 
 interface Props {
   workshop: Workshop;
+  onBack?: () => void;
 }
 
-const WorkshopContent = ({ workshop }: Props) => {
+const WorkshopContent = ({ workshop, onBack }: Props) => {
   const purchaseData = usePurchaseProduct({
     _id: workshop._id,
     item: 'taller',
@@ -19,7 +20,7 @@ const WorkshopContent = ({ workshop }: Props) => {
 
   return (
     <section className="w-full h-screen flex flex-col items-center justify-start">
-      <HeaderBack name="Talleres" />
+      <HeaderBack name="Talleres" onBack={onBack} />
       <div className="bg-secondary w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 items-center md:py-8 color-secondary-bg w-full md:mx-auto md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
           <ProductPageHero product={workshop} />

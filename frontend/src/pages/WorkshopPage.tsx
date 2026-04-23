@@ -6,9 +6,9 @@ import tallerHero from '@assets/images/taller-hero.jpg';
 
 const WorkshopPage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       <Header />
-      <main className='max-md:pt-[80.67px] pt-0"'>
+      <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
           bg="bg-secondary"
           title={'Talleres'}

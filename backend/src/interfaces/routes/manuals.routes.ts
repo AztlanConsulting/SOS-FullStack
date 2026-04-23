@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { makeGetManuals } from '../controllers/manual.controller';
+import { getManuals } from '../controllers/manual.controller';
 
 const router = Router();
 
-router.get('/getManuals', makeGetManuals());
-
+router.get('/getManuals', getManuals);
 export default router;

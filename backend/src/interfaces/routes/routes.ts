@@ -1,6 +1,7 @@
 import express from 'express';
 import { LocationController } from '../controllers/LocationController';
 import authRoutes from './auth.routes';
+import blogRoutes from './blog.routes';
 import imageRoutes from './images.routes';
 import clientsRoutes from './clients.routes';
 import paymentRoutes from './payments.routes';
@@ -16,6 +17,7 @@ router.get('/health', (req, res) => {
 });
 
 router.use('/auth', authRoutes);
+router.use('/blog', blogRoutes);
 router.use('/clients', clientsRoutes);
 router.use('/images', imageRoutes);
 router.use('/payments', paymentRoutes);

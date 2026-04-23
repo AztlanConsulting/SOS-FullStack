@@ -6,9 +6,9 @@ import blogHero from '@assets/images/blog-hero.jpg';
 
 const BlogsPage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       <Header />
-      <main className='max-md:pt-[80.67px] pt-0"'>
+      <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
           bg="bg-white"
           title={'Blog'}

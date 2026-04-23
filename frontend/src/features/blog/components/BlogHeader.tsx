@@ -33,7 +33,18 @@ const BlogHeader = ({ blog }: Props) => {
           </Text>
         </div>
 
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+        <div
+          className="
+  w-screen 
+  relative 
+  left-1/2 right-1/2 
+  -ml-[50vw] -mr-[50vw]
+
+  md:w-full 
+  md:left-0 md:right-0 
+  md:ml-0 md:mr-0
+"
+        >
           <div className="flex justify-center">
             <div className="w-full max-w-6xl md:px-0">
               <ProductPageHero product={heroProduct} />

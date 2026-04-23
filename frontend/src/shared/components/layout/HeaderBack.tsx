@@ -21,7 +21,7 @@ export const HeaderBack = ({
   };
 
   return (
-    <div className="w-full px-4 py-4 lg:py-[17px] flex items-center justify-start bg-white color-grey-border-bottom">
+    <div className="w-full px-4 py-4 lg:py-[17px] flex items-center justify-start bg-white color-grey-border-bottom sticky top-0 z-50">
       <button
         onClick={handleBack}
         className="bg-white rounded-lg aspect-square flex flex-row justify-center items-center h-10 w-7"

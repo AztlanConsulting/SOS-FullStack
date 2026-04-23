@@ -15,11 +15,9 @@ export const paymentDetails = z.object({
     .object({
       name: z.string(),
       price: z.number(),
-      currency: z.string(),
       duration: z.string(),
       radius: z.string(),
       features: z.array(z.string()),
-      productType: z.string(),
     })
     .optional(),
 });

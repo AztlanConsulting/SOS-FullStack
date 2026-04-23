@@ -9,6 +9,13 @@ export interface PaymentIntentDTO {
     productName: string;
     productId: string;
   };
+  plan?: {
+    name: string;
+    price: number;
+    duration: string;
+    radius: string;
+    features: string[];
+  };
 }
 
 export interface PaymentIntentResult {

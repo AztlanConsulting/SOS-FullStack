@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import PlanCard from '@features/plans/components/PlanCard';
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import type * as ReactRouter from 'react-router';
+import type { PlanDetails } from '@features/plans/types/plan.types';
 
 /**
  * Mock data representing the features included in a plan.
@@ -23,6 +25,7 @@ const mockFeatures = [
  * Includes basic info and a mocked selection handler.
  */
 const mockProps = {
+  _id: '1234567',
   name: 'Básico',
   price: '390',
   duration: '3 días',
@@ -30,6 +33,17 @@ const mockProps = {
   features: mockFeatures,
   onSelect: vi.fn(),
 };
+
+const navigateMock = vi.fn();
+
+// Replace useNavigate so we can assert route targets and payloads.
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual<typeof ReactRouter>('react-router');
+  return {
+    ...actual,
+    useNavigate: () => navigateMock,
+  };
+});
 
 /**
  * Unit tests for the PlanCard component.
@@ -73,8 +87,22 @@ describe('PlanCard Component', () => {
    */
   test('calls onSelect when "Seleccionar" button is clicked', async () => {
     render(<PlanCard {...mockProps} />);
+    const planDetails: PlanDetails = {
+      _id: mockProps._id,
+      name: mockProps.name,
+      price: Number(mockProps.price),
+      duration: mockProps.duration,
+      radius: mockProps.radius,
+      features: mockProps.features
+        .filter((f) => f.included)
+        .map((f) => f.label),
+    };
     await userEvent.click(screen.getByText('Seleccionar'));
-    expect(mockProps.onSelect).toHaveBeenCalledTimes(1);
+    expect(navigateMock).toHaveBeenCalledWith('/compra', {
+      state: {
+        planDetails: { ...planDetails },
+      },
+    });
   });
 
   /**

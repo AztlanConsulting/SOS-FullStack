@@ -1,9 +1,8 @@
 export type PlanDetails = {
+  _id: string;
   name: string;
   price: number;
-  currency: string;
   duration: string;
   radius: string;
   features: string[];
-  productType: string;
 };

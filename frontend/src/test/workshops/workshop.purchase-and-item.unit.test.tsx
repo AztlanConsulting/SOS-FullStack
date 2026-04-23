@@ -89,7 +89,7 @@ describe('usePurchaseProduct', () => {
       result.current.handleProceedToPayment();
     });
 
-    expect(navigateMock).toHaveBeenCalledWith('/purchase', {
+    expect(navigateMock).toHaveBeenCalledWith('/compra', {
       state: {
         userEmail: 'buyer@example.com',
         productId: 'w1',

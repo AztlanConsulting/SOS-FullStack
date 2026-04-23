@@ -69,7 +69,7 @@ describe('workshops integration', () => {
           element: <WorkshopContent workshop={workshop} />,
         },
         {
-          path: '/purchase',
+          path: '/compra',
           element: <PurchaseStateProbe />,
         },
       ],

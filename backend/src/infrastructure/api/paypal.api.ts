@@ -57,48 +57,12 @@ const PaypalProvider: PaypalApi = {
       throw error;
     }
 
-    let orderDataJson = {
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          items: [
-            {
-              name: data.product?.productName,
-              description: data.product?.productId,
-              quantity: '1',
-              unit_amount: {
-                currency_code: data.currency,
-                value: data.amount,
-              },
-            },
-          ],
-          amount: {
-            currency_code: data.currency,
-            value: data.amount,
-            breakdown: {
-              item_total: {
-                currency_code: data.currency,
-                value: data.amount,
-              },
-            },
-          },
-        },
-      ],
-      payment_source: {
-        paypal: {
-          experience_context: {
-            payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
-            payment_method_selected: 'PAYPAL',
-            brand_name: 'SOS - Encontrando mascotas',
-            shipping_preference: 'NO_SHIPPING',
-            locale: 'en-US',
-            user_action: 'PAY_NOW',
-            return_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/complete-payment`,
-            cancel_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/cancel-payment`,
-          },
-        },
-      },
-    };
+    let orderDataJson;
+    if (Object.keys(data).includes('product')) {
+      orderDataJson = productOrderCreator(data);
+    } else if (Object.keys(data).includes('plan')) {
+      orderDataJson = planOrderCreator(data);
+    }
 
     let orderData = JSON.stringify(orderDataJson);
 
@@ -161,6 +125,7 @@ const PaypalProvider: PaypalApi = {
 
     return response;
   },
+
   // To work with the interface: It would be better for stripe implementation to
   // inherit from a common one, but for now its not to cause issues
   constructEvent(): Promise<Stripe.Event> {
@@ -169,5 +134,95 @@ const PaypalProvider: PaypalApi = {
     );
   },
 };
+
+function productOrderCreator(data: PaymentIntentDTO) {
+  return {
+    intent: 'CAPTURE',
+    purchase_units: [
+      {
+        items: [
+          {
+            name: data.product!.productName,
+            description: data.product!.productId,
+            quantity: '1',
+            unit_amount: {
+              currency_code: data.currency,
+              value: data.amount,
+            },
+          },
+        ],
+        amount: {
+          currency_code: data.currency,
+          value: data.amount,
+          breakdown: {
+            item_total: {
+              currency_code: data.currency,
+              value: data.amount,
+            },
+          },
+        },
+      },
+    ],
+    payment_source: {
+      paypal: {
+        experience_context: {
+          payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
+          payment_method_selected: 'PAYPAL',
+          brand_name: 'SOS - Encontrando mascotas',
+          shipping_preference: 'NO_SHIPPING',
+          locale: 'en-US',
+          user_action: 'PAY_NOW',
+          return_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/complete-payment`,
+          cancel_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/cancel-payment`,
+        },
+      },
+    },
+  };
+}
+
+function planOrderCreator(data: PaymentIntentDTO) {
+  return {
+    intent: 'CAPTURE',
+    purchase_units: [
+      {
+        items: [
+          {
+            name: data.plan!.name,
+            description: `${data.plan!.duration} | ${data.plan!.radius}`,
+            quantity: '1',
+            unit_amount: {
+              currency_code: data.currency,
+              value: data.amount,
+            },
+          },
+        ],
+        amount: {
+          currency_code: data.currency,
+          value: data.amount,
+          breakdown: {
+            item_total: {
+              currency_code: data.currency,
+              value: data.amount,
+            },
+          },
+        },
+      },
+    ],
+    payment_source: {
+      paypal: {
+        experience_context: {
+          payment_method_preference: 'IMMEDIATE_PAYMENT_REQUIRED',
+          payment_method_selected: 'PAYPAL',
+          brand_name: 'SOS - Encontrando mascotas',
+          shipping_preference: 'NO_SHIPPING',
+          locale: 'en-US',
+          user_action: 'PAY_NOW',
+          return_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/complete-payment`,
+          cancel_url: `${process.env.PAYPAL_REDIRECT_BASE_URL}/cancel-payment`,
+        },
+      },
+    },
+  };
+}
 
 export default PaypalProvider;

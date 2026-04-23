@@ -44,6 +44,7 @@ export default async function createOrder(req: Request, res: Response) {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Payment failed';
+    console.error(error);
     return res.status(500).json({ error: message });
   }
 }

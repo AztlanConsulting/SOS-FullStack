@@ -39,7 +39,7 @@ export const PurchasePage = () => {
       <main className="max-md:pt-24 pt-4">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
-        <div className="grid sm:grid-cols-2 grid-rows-2 mb-10">
+        <div className="sm:grid sm:grid-cols-2 mb-10">
           <PurchaseDetails
             product={product}
             plan={planDetails}

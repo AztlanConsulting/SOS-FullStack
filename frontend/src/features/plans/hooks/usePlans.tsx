@@ -25,19 +25,22 @@ export const usePlans = () => {
          * We iterate through API results and find the matching local configuration
          * based on the plan name to ensure UI features (tooltips, icons) are preserved.
          */
-        const merged = data.map((apiPlan: { name: string; price: number }) => {
-          const staticPlan = PLANS.find((p) => p.name === apiPlan.name);
-          console.log(
-            'apiPlan:',
-            apiPlan.name,
-            '| staticPlan:',
-            staticPlan?.name || 'Not found',
-          );
-          return {
-            ...staticPlan,
-            price: String(apiPlan.price),
-          };
-        });
+        const merged = data.map(
+          (apiPlan: { name: string; price: number; _id: string }) => {
+            const staticPlan = PLANS.find((p) => p.name === apiPlan.name);
+            console.log(
+              'apiPlan:',
+              apiPlan.name,
+              '| staticPlan:',
+              staticPlan?.name || 'Not found',
+            );
+            return {
+              ...staticPlan,
+              price: String(apiPlan.price),
+              _id: apiPlan._id,
+            };
+          },
+        );
         setPlans(merged);
       } catch (err) {
         setError('Failed to fetch plans');

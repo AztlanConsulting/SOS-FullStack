@@ -66,7 +66,7 @@ describe('manuals integration', () => {
           element: <ManualContent manual={manual} />,
         },
         {
-          path: '/purchase',
+          path: '/compra',
           element: <PurchaseStateProbe />,
         },
       ],

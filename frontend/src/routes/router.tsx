@@ -7,6 +7,10 @@ import routerWorkshop from './workshop.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import { PurchasePage } from '@pages/PurchasePage';
+import LoginPage from '../pages/LoginPage';
+import { Dashboard } from '@features/auth/components/TempDashboard';
+import { RoleProtectedRoute } from './RoleProtectedRoute';
+import { ForbiddenPage } from '../pages/ForbiddenPage';
 
 export const router = createBrowserRouter([
   {
@@ -21,7 +25,22 @@ export const router = createBrowserRouter([
         element: <PurchasePage />,
       },
       {
-        path: '/credits',
+        path: '/forbidden',
+        element: <ForbiddenPage />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/dashboard',
+        element: (
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <Dashboard />
+          </RoleProtectedRoute>
+        ),
+      },
+      {
         element: <CreditsPage />,
       },
       {

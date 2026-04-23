@@ -10,6 +10,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      JWT_ACCESS_SECRET: tu-secret-de-al-menos-64-caracteres-generado-con-openssl-rand
+      JWT_REFRESH_SECRET: otro-secret-diferente-de-al-menos-64-caracteres
+      JWT_ACCESS_EXPIRATION: 15m
+      JWT_REFRESH_EXPIRATION: 7d
+      BCRYPT_SALT_ROUNDS: 12
+      CORS_ORIGIN: http://localhost:5173
+      ENV: test
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4

@@ -1,18 +1,22 @@
 import { mongoDB } from '@infrastructure/database/mongoDB/mongoDB';
 import { Mock } from '@domain/models/mock.model';
 import { PlanModel } from '@domain/models/plan.model';
-
-// Temporary mock data used for testing.
-// This is not part of the final data.
+import { ResourcesModel } from '@domain/models/resource.model';
+import { RoleModel } from '@domain/models/role.model';
+import { UserModel } from '@domain/models/user.model';
+import { PermissionModel } from '@domain/models/permission.model';
+import bcrypt from 'bcryptjs';
 
 try {
   await mongoDB();
 
-  // Clean collections
   await Mock.deleteMany({});
   await PlanModel.deleteMany({});
+  await UserModel.deleteMany({});
+  await RoleModel.deleteMany({});
+  await ResourcesModel.deleteMany({});
+  await PermissionModel.deleteMany({});
 
-  // Mock data
   await Mock.insertMany([
     {
       title: 'Mock Item 1',
@@ -31,7 +35,6 @@ try {
     },
   ]);
 
-  // Plans data
   await PlanModel.insertMany([
     {
       name: 'Básico',
@@ -47,9 +50,71 @@ try {
     },
   ]);
 
-  console.log('Data seeded successfully');
+  const resources = await ResourcesModel.insertMany([
+    { name: 'users', description: 'User management' },
+    { name: 'posts', description: 'Posts management' },
+    { name: 'products', description: 'Products management' },
+  ]);
+
+  const adminPermissions = await PermissionModel.insertMany(
+    resources.map((r) => ({
+      resourceId: r._id,
+      actions: {
+        create: true,
+        read: true,
+        update: true,
+        delete: true,
+      },
+    })),
+  );
+
+  const userPermissions = await PermissionModel.insertMany(
+    resources.map((r) => ({
+      resourceId: r._id,
+      actions: {
+        create: false,
+        read: true,
+        update: false,
+        delete: false,
+      },
+    })),
+  );
+
+  const adminRole = await RoleModel.create({
+    role: 'admin',
+    permissions: adminPermissions.map((p) => p._id),
+  });
+
+  const userRole = await RoleModel.create({
+    role: 'user',
+    permissions: userPermissions.map((p) => p._id),
+  });
+
+  const passwordHash = await bcrypt.hash('12345', 12);
+
+  await UserModel.insertMany([
+    {
+      username: 'admin',
+      email: 'admin@test.com',
+      password: passwordHash,
+      roleId: adminRole._id,
+      permissions: [],
+      phone: '1234567890',
+      active: true,
+    },
+    {
+      username: 'user1',
+      email: 'user1@test.com',
+      password: passwordHash,
+      roleId: userRole._id,
+      permissions: [],
+      phone: '1234567890',
+      active: true,
+    },
+  ]);
+
   process.exit(0);
-} catch (error: unknown) {
+} catch (error) {
   console.error('Error seeding data:', error);
   process.exit(1);
 }

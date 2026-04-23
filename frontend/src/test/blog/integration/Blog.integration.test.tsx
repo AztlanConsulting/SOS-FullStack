@@ -120,14 +120,16 @@ describe('blog integration suite (frontend routing flow)', () => {
       [
         {
           path: '/blog/:id',
-          element: <BlogContent blog={blog} />,
+          element: (
+            <BlogContent blog={blog} onBack={() => router.navigate(-1)} />
+          ),
         },
         {
           path: '/blog',
           element: <BlogListProbe />,
         },
       ],
-      { initialEntries: ['/blog/b1'] },
+      { initialEntries: ['/blog', '/blog/b1'], initialIndex: 1 },
     );
 
     render(<RouterProvider router={router} />);

@@ -4,7 +4,6 @@ import { TempPurchasePage } from '../pages/TempPurchasePage';
 import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
-import { ReportConfirmationPage } from '../pages/ReportConfirmation';
 import { PetReportProvider } from '../features/found-pet/context/PetReportService';
 import Plans from '../pages/Plans';
 import { PaymentPage } from '../features/payment/components/PaymentPage';
@@ -18,6 +17,7 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import { ReportConfirmationPage } from '@/pages/ReportConfirmation';
 
 export const router = createBrowserRouter([
   {

@@ -30,12 +30,7 @@ export const PetLocationSection = ({
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col py-4 bg-white gap-8"
     >
       <div id="pet-location-section">
-        <Text
-          variant="h2"
-          as="h2"
-          weight="medium"
-          className="text-center text-xl md:text-2xl "
-        >
+        <Text variant="h2" as="h2" weight="medium" className="text-center">
           Dónde se encontró
         </Text>
       </div>

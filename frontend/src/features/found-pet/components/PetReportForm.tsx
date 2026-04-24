@@ -47,11 +47,42 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
 
   if (success) {
     return (
-      <Modal
-        title="¡Mascota reportada!"
-        description="Gracias por reportar a tu mascota. Te contactaremos pronto."
-        onClose={resetForm}
-      />
+      <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-8">
+          <div id="user-info-section">
+            <Text variant="h2" as="h2" weight="medium" className="text-center">
+              Información de la mascota
+            </Text>
+          </div>
+          <UserInfoSection formData={formData} updateForm={updateFormData} />
+
+          <div id="pet-photos-section">
+            <Text variant="h2" as="h2" weight="medium" className="text-center">
+              Fotos de la mascota
+            </Text>
+          </div>
+          <PetPhotosSection formData={formData} updateForm={updateFormData} />
+
+          <PetLocationSection formData={formData} updateForm={updateFormData} />
+
+          <ContactInfoSection formData={formData} updateForm={updateFormData} />
+
+          <div className=" w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
+            <Button
+              onClick={handleNext}
+              label="Reportar mascota encontrada"
+              variant="primary"
+              disabled={isSubmitting}
+              isLoading={isSubmitting}
+            />
+          </div>
+        </div>
+        <Modal
+          title="¡Mascota reportada!"
+          description="Gracias por reportar a tu mascota. Te contactaremos pronto."
+          onClose={resetForm}
+        />
+      </div>
     );
   }
 
@@ -85,21 +116,19 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
         <ContactInfoSection formData={formData} updateForm={updateFormData} />
 
         {/* Section 5: Confirmation button. */}
-        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
+        <div className=" w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
           {submitError && (
             <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {submitError}
             </div>
           )}
-          <div className="w-full w-max-lg mx-auto flex justify-center [&>button]:whitespace-nowrap">
-            <Button
-              onClick={handleNext}
-              label="Reportar mascota encontrada"
-              variant="primary"
-              disabled={isSubmitting}
-              isLoading={isSubmitting}
-            />
-          </div>
+          <Button
+            onClick={handleNext}
+            label="Reportar mascota encontrada"
+            variant="primary"
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
+          />
         </div>
       </div>
     </div>

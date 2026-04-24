@@ -214,6 +214,6 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.queryByText('Información de la mascota')).toBeNull();
+    expect(screen.getByText('Información de la mascota')).toBeDefined();
   });
 });

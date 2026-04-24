@@ -23,6 +23,7 @@ const ENDPOINT_URL =
     : 'https://api-m.paypal.com';
 
 const PaypalProvider: PaypalApi = {
+  // Get token to use paypal api
   // This value could be cached to optimize response, and lower api interactions
   async getAccessToken() {
     const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
@@ -96,7 +97,7 @@ const PaypalProvider: PaypalApi = {
       id: paymentId.orderId!,
       amount: data.amount,
       currency: data.currency,
-      clientSecret: '1234567',
+      clientSecret: null,
     };
 
     return paymentResult; // Send to browser

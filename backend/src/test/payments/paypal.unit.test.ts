@@ -1,24 +1,53 @@
-import type { GetWorkshop } from '@domain/repositories/workshop.repository';
-import { WorkshopModel } from '@domain/models/workshop.model';
-import { WorkshopDataAccess } from '@infrastructure/data-access/workshop.data-access';
-// Mock the Mongoose model to isolate the data access logic from the database.
-jest.mock('@domain/models/workshop.model');
+import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
+import { PaymentModel } from '@domain/models/payment.model';
 
-/**
- * Unit tests for the WorkshopDataAccess layer.
- * Focuses on verifying that the repository correctly interacts with the Mongoose model
- * and handles various database response scenarios.
- */
-describe('Workshop unit-test', () => {
+jest.mock('@domain/models/payment.model');
+
+describe('PaymentDataAccess unit-test', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  /**
-   * Verifies that getPlans successfully retrieves and returns all plan documents
-   * when the database query is successful.
-   */
-  test('Get workshops - returns list of workshops', async () => {
-    expect(1).toBe(1);
+  test('createPending - successfully creates a pending payment record', async () => {
+    const mockPaymentData = {
+      orderId: 'pi_123',
+      amount: 100,
+      currency: 'MXN',
+      clientSecret: 'secret_123',
+    };
+
+    (PaymentModel.create as jest.Mock).mockResolvedValue(mockPaymentData);
+
+    await PaymentDataAccess.createPending(mockPaymentData);
+
+    expect(PaymentModel.create).toHaveBeenCalledWith({
+      ...mockPaymentData,
+      status: 'pending',
+    });
+  });
+
+  test('markAsSucceeded - returns "updated" when document is modified', async () => {
+    (PaymentModel.updateOne as jest.Mock).mockResolvedValue({
+      matchedCount: 1,
+      modifiedCount: 1,
+    });
+
+    const result = await PaymentDataAccess.markAsSucceeded('pi_123');
+
+    expect(result).toBe('updated');
+    expect(PaymentModel.updateOne).toHaveBeenCalledWith(
+      { orderId: 'pi_123' },
+      { status: 'succeeded' },
+    );
+  });
+
+  test('markAsSucceeded - returns "not_found" when no document matches', async () => {
+    (PaymentModel.updateOne as jest.Mock).mockResolvedValue({
+      matchedCount: 0,
+      modifiedCount: 0,
+    });
+
+    const result = await PaymentDataAccess.markAsSucceeded('invalid_id');
+    expect(result).toBe('not_found');
   });
 });

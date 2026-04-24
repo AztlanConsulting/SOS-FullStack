@@ -12,5 +12,5 @@ export async function confirmPaypalPayment(
   );
 }
 export async function createPaypalPayment(data: Order) {
-  return await axiosInstance.post('/payments/payment-intent', { ...data });
+  return await axiosInstance.post('/payments/create-order', { ...data });
 }

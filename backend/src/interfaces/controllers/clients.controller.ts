@@ -3,6 +3,7 @@ import { createLostPetReport } from '../../use-cases/clients/createLostPetReport
 import { publishLostPet } from '../../use-cases/clients/publishLostPet.usecase';
 import { metaPublisher } from '../../infrastructure/api/meta.api';
 import { z } from 'zod';
+import type { CreatePetReportDTO } from '../../types/clients.type';
 
 const createPetReportDTOSchema = z.object({
   name: z.string().optional(),
@@ -27,7 +28,7 @@ const createPetReportDTOSchema = z.object({
   contactName: z.string().min(1, 'El nombre de contacto es requerido'),
   phoneNumber: z.string().min(1, 'El número de teléfono es requerido'),
   email: z.email('El correo electrónico no es válido'),
-});
+}) as z.ZodType<CreatePetReportDTO>;
 
 const publishPet = async (req: Request, res: Response) => {
   try {
@@ -54,8 +55,6 @@ const publishPet = async (req: Request, res: Response) => {
   }
 };
 
-export type CreatePetReportDTO = z.infer<typeof createPetReportDTOSchema>;
-
 const createLostPetReportController = async (req: Request, res: Response) => {
   try {
     const images = req.files as Express.Multer.File[] | undefined;
@@ -73,7 +72,7 @@ const createLostPetReportController = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await createLostPetReport(validation.data, images);
+    const result = await createLostPetReport(validation.data);
 
     return res.status(201).json({
       message: 'Reporte creado exitosamente',

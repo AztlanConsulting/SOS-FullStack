@@ -1,20 +1,13 @@
 import request from 'supertest';
 import app from '@/index';
-import { createPetImage } from '@/use-cases/images/createPetImage';
 import { publishLostPet } from '@/use-cases/clients/publishLostPet.usecase';
 import mongoose from 'mongoose';
-import { any } from 'zod';
 
-jest.mock('@/use-cases/images/createPetImage');
 jest.mock('@/use-cases/clients/publishLostPet.usecase');
 jest.mock('@/infrastructure/api/meta.api', () => ({
   metaPublisher: {},
 }));
 
-/**
- * Valid fields that satisfy the controller's Zod schema.
- * Use them as a base and override only the field you want to test.
- */
 const VALID_FIELDS: Record<string, string> = {
   species: 'Perro',
   date: '2023-10-25',
@@ -30,17 +23,14 @@ const VALID_FIELDS: Record<string, string> = {
 
 const MOCK_IMAGE = Buffer.from('mock image data');
 
-/**
- * Builds a POST /clients/lost-pet request with the base valid fields.
- * Returns the request so each test can add or override fields with .field()
- * and attach images with .attach() before awaiting.
- */
 const buildLostPetRequest = (overrides: Record<string, string> = {}) => {
   const fields = { ...VALID_FIELDS, ...overrides };
   let req = request(app).post('/clients/lost-pet');
+
   for (const [key, value] of Object.entries(fields)) {
     req = req.field(key, value);
   }
+
   return req;
 };
 
@@ -55,11 +45,6 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
     await mongoose.connection.close();
   });
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (createPetImage as jest.Mock).mockResolvedValue(true);
-  });
-
   test('replies with 201 and creates the lost pet report successfully', async () => {
     const res = await buildLostPetRequest({ name: 'Firulais' }).attach(
       'images',
@@ -70,7 +55,8 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('message', 'Reporte creado exitosamente');
     expect(res.body.data).toHaveProperty('name', 'Firulais');
-    expect(createPetImage).toHaveBeenCalledTimes(1);
+    expect(res.body.data).toHaveProperty('id');
+    expect(res.body.data).toHaveProperty('status', 'Buscando');
   });
 
   test('report id starts with lost_pet_', async () => {
@@ -93,55 +79,6 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
 
     expect(res.status).toBe(201);
     expect(res.body.data.status).toBe('Buscando');
-  });
-
-  test('returns imagesUploaded: true when images upload to vector DB succeeds', async () => {
-    const res = await buildLostPetRequest().attach(
-      'images',
-      MOCK_IMAGE,
-      'perrito.jpg',
-    );
-
-    expect(res.status).toBe(201);
-    expect(res.body.data.imagesUploaded).toBe(true);
-  });
-
-  test('handles multiple images and calls createPetImage once per each', async () => {
-    const res = await buildLostPetRequest({ name: 'Firulais' })
-      .attach('images', Buffer.from('img1'), 'foto1.jpg')
-      .attach('images', Buffer.from('img2'), 'foto2.jpg')
-      .attach('images', Buffer.from('img3'), 'foto3.jpg');
-
-    expect(res.status).toBe(201);
-    expect(createPetImage).toHaveBeenCalledTimes(3);
-  });
-
-  test('replies with 201 even when vector DB upload fails (bug 5)', async () => {
-    (createPetImage as jest.Mock).mockRejectedValue(
-      new Error('Vector DB down'),
-    );
-
-    const res = await buildLostPetRequest().attach(
-      'images',
-      MOCK_IMAGE,
-      'perrito.jpg',
-    );
-
-    expect(res.status).toBe(201);
-  });
-
-  test('returns imagesUploaded: false when vector DB upload fails', async () => {
-    (createPetImage as jest.Mock).mockRejectedValue(
-      new Error('Vector DB down'),
-    );
-
-    const res = await buildLostPetRequest().attach(
-      'images',
-      MOCK_IMAGE,
-      'perrito.jpg',
-    );
-
-    expect(res.body.data.imagesUploaded).toBe(false);
   });
 
   test('replies with 400 when no pictures are provided', async () => {
@@ -168,6 +105,7 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
     for (const [key, value] of Object.entries(fieldsWithoutSpecies)) {
       req = req.field(key, value);
     }
+
     const res = await req.attach('images', MOCK_IMAGE, 'perrito.jpg');
 
     expect(res.status).toBe(400);
@@ -199,7 +137,7 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
 
   test('replies with 400 when size value is not one of the allowed options', async () => {
     const res = await buildLostPetRequest({
-      size: 'Mediana: 11 a 25 kg',
+      size: 'Gigantísimo: más de 200 kg',
     }).attach('images', MOCK_IMAGE, 'perrito.jpg');
 
     expect(res.status).toBe(400);

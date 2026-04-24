@@ -1,8 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { poster } from './poster.component';
-import type { PetReportData } from '../types/PetReportData.types';
+import { Poster } from '@features/poster/components/Poster.component';
+import type { PetReportData } from '@features/poster/types/petReportData.types';
 import dog1 from '@assets/images/dog1.png';
 import dog2 from '@assets/images/dog2.png';
+import husky1 from '@assets/images/husky1.jpg';
+import husky2 from '@assets/images/husky2.jpg';
+import husky3 from '@assets/images/husky3.jpg';
+import husky4 from '@assets/images/husky4.jpg';
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {
   const res = await fetch(url);
@@ -12,20 +16,25 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
 
 const file1 = await urlToFile(dog1, 'dog1.jpg');
 const file2 = await urlToFile(dog2, 'dog2.jpg');
+const file3 = await urlToFile(husky1, 'husky1.jpg');
+const file4 = await urlToFile(husky2, 'husky2.jpg');
+const file5 = await urlToFile(husky3, 'husky3.jpg');
+const file6 = await urlToFile(husky4, 'husky4.jpg');
 
 const mockPetReportData: PetReportData = {
   name: 'Travieso',
   species: 'Perro',
   date: '2026-04-23',
-  breed: 'Pastor Suizo',
+  breed: 'Mixto de husky y galgo italinno y shitzu',
   sex: 'Macho',
-  color: 'Blanco con manchas café',
+  color: 'Es blanco y negro y 3 manchas amarillas.',
   size: 'Mediana: 11 a 25 kg',
   description:
-    'Es amigable pero puede estar asustado. Tiene una mancha café en la oreja izquierda y llevaba un collar azul.',
-  images: [file1, file2],
-  imageLayout: '2',
-  address: 'Rancho Nuevo, Querétaro, México',
+    'Es amigable pero puede estar asustado. Tiene una mancha café en la oreja izquierda y llevaba collar.',
+  images: [file4],
+  imageLayout: '1',
+  address:
+    'Tertiary Road Lateral Bernardo Quintana, Residencial Bellavista, Delegación Epigmenio González, Querétaro, Municipio de Querétaro, Querétaro, 73130, Mexico',
   location: {
     coords: [-100.3899, 20.5888],
     displayName: 'Rancho Nuevo, Querétaro, México',
@@ -36,14 +45,14 @@ const mockPetReportData: PetReportData = {
   email: 'juan.perez@email.com',
 };
 
-const meta: Meta<typeof poster> = {
+const meta: Meta<typeof Poster> = {
   title: 'Components/Poster',
-  component: poster,
+  component: Poster,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof poster>;
+type Story = StoryObj<typeof Poster>;
 
 export const Default: Story = {
   args: {

@@ -90,15 +90,15 @@ export const Poster = ({ pet }: { pet: PetReportData }) => {
         <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
       </div>
 
-      <div className="w-[1080px] h-[689px] flex flex-col items-center justify-center bg-[#F9F1DE]">
+      <div className="w-[1080px] h-[689px] flex flex-col items-center justify-end bg-[#F9F1DE]">
         {renderImages()}
         <div className="w-[850px] flex justify-between items-center">
-          <img src={phone} alt="Phone" className="w-[86px] h-[129px]" />
+          <img src={phone} alt="Phone" className="w-[86px] h-[120px]" />
           <div className="flex flex-col justify-center items-end">
-            <Text variant="body" weight="regular" className="text-[38px]">
+            <Text variant="body" weight="regular" className="text-[34px]">
               SI LE VES, LLAMA AL
             </Text>
-            <Text variant="body" weight="bold" className="text-[48px]">
+            <Text variant="body" weight="bold" className="text-[46px]">
               {pet.phoneNumber}
             </Text>
           </div>

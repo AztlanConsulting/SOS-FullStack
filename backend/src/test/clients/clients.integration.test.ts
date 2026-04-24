@@ -1,7 +1,6 @@
 import request from 'supertest';
 import app from '@/index';
 import { publishLostPet } from '@/use-cases/clients/publishLostPet.usecase';
-import mongoose from 'mongoose';
 
 jest.mock('@/use-cases/clients/publishLostPet.usecase');
 jest.mock('@/infrastructure/api/meta.api', () => ({
@@ -35,14 +34,8 @@ const buildLostPetRequest = (overrides: Record<string, string> = {}) => {
 };
 
 describe('POST /clients/lost-pet (Integration Tests)', () => {
-  beforeAll(async () => {
-    const mongoUri =
-      process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mock-db';
-    await mongoose.connect(mongoUri);
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   test('replies with 201 and creates the lost pet report successfully', async () => {
@@ -158,8 +151,15 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
 });
 
 describe('POST /clients/publish (Integration Tests)', () => {
+  let consoleErrorSpy: jest.SpyInstance;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   test('replies with 200 and publishes to social media successfully', async () => {

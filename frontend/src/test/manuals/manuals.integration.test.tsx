@@ -9,7 +9,12 @@ const manual = {
   _id: 'm-42',
   name: 'Manual Integracion',
   price: 300,
-  content: 'Contenido de prueba',
+  content: [
+    {
+      type: 'text',
+      content: 'Contenido de prueba',
+    },
+  ],
   imageUrl: 'https://example.com/manual.jpg',
 };
 

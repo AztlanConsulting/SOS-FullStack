@@ -41,7 +41,7 @@ export function ManualPage() {
         {manual ? (
           <ManualContent manual={manual} onBack={handleClose} />
         ) : (
-          <div className="p-8">Manual not found</div>
+          <div className="p-8">Manual no encontrado</div>
         )}
       </main>
     </div>

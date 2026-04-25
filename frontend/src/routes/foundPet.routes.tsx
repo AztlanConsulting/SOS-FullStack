@@ -1,9 +1,9 @@
-import FoundPet from "@pages/FoundPet";
+import FoundPet from '@pages/FoundPet';
 
 const routes = [
   {
-    path: '/found',
-    element: <FoundPet/>,
+    path: '/mascotas-encontradas',
+    element: <FoundPet />,
   },
 ];
 

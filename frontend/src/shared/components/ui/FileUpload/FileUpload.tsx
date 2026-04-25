@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text } from '../Text';
 
 interface FileUploadProps {
   index: number;
   onChange?: (file: File | null) => void;
   error?: string;
+  currentFileName?: string;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
   index,
   onChange,
   error,
+  currentFileName,
 }) => {
-  const [fileName, setFileName] = useState<string | null>(null);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setFileName(file ? file.name : null);
     if (onChange) onChange(file);
   };
 
+  const hasErrorState = Boolean(error);
+
   return (
     <div>
-      <label className="relative w-full h-12 border border-gray-300 shadow-sm rounded-lg bg-white flex items-center justify-center text-gray-700 text-sm font-medium hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer active:scale-[0.98] overflow-hidden px-4">
+      <label
+        className={`relative w-full h-12 border rounded-lg bg-white flex items-center justify-center text-gray-700 text-sm font-medium transition-all cursor-pointer active:scale-[0.98] overflow-hidden px-4 ${hasErrorState ? 'border-red-500' : 'border-gray-400'}`}
+      >
         <input
           type="file"
           className="hidden"
@@ -31,7 +34,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         />
 
         <span className="truncate max-w-[70%]">
-          {fileName ? fileName : `Subir foto ${index}`}
+          {currentFileName || `Subir foto ${index}`}
         </span>
 
         <svg
@@ -54,7 +57,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <Text
           variant="small"
           as="small"
-          weight="bold"
+          weight="regular"
           className="color-danger ml-1 italic"
         >
           {error}

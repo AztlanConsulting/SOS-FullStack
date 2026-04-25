@@ -7,15 +7,16 @@ export interface PetReportData {
   species: string;
   date: string;
   breed?: string;
-  sex: 'Macho' | 'Hembra' | 'Desconocido';
+  sex?: '' | 'Macho' | 'Hembra' | 'Desconocido';
   color: string;
-  size:
+  size?:
+    | ''
     | 'Mini: 1 a 4 kg'
     | 'Pequeña: 5 a 10 kg'
     | 'Mediana: 11 a 25 kg'
     | 'Grande: 26 a 45 kg'
     | 'Gigante: más de 45 kg';
-  description: string;
+  description?: string;
 
   images: File[];
   imageLayout?: string;

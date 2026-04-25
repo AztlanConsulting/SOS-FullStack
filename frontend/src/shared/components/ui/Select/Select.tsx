@@ -15,10 +15,21 @@ export const Select: React.FC<SelectProps> = ({
   error,
   ...props
 }) => {
+  const hasErrorState = Boolean(error);
+
   return (
     <div className="flex flex-col w-full">
-      <div className="relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
-        <label htmlFor={id} className="block text-xs text-gray-400">
+      <div
+        className={`group relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:ring-1 group ${
+          hasErrorState
+            ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500'
+            : 'border-gray-400 focus-within:border-yellow-500 focus-within:ring-yellow-500'
+        }`}
+      >
+        <label
+          htmlFor={id}
+          className={`block text-xs text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+        >
           {label}
           {required && <span className="text-red-500 font-bold">*</span>}
         </label>
@@ -58,7 +69,7 @@ export const Select: React.FC<SelectProps> = ({
         <Text
           variant="small"
           as="small"
-          weight="bold"
+          weight="regular"
           className="color-danger ml-1 italic"
         >
           {error}

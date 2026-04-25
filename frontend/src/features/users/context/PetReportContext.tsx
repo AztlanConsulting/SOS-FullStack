@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import type { PetReportData } from '../types/petReport.types';
 
 interface PetReportContextType {
@@ -15,6 +15,10 @@ export const PetReportProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [reportData, setReportData] = useState<PetReportData | null>(null);
+
+  useEffect(() => {
+    console.log('[PetReportContext] reportData updated:', reportData);
+  }, [reportData]);
 
   return (
     <PetReportContext.Provider value={{ reportData, setReportData }}>

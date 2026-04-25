@@ -10,7 +10,7 @@ interface PhotoDistributionPickerProps {
 const optionsConfig = [
   {
     value: 1 as DistributionOption,
-    label: '1 foto',
+    label: '1 foto \u00A0',
     icon: <rect x="3" y="3" width="18" height="18" rx="2" strokeWidth="1.5" />,
   },
   {
@@ -67,7 +67,7 @@ export const PhotoDistributionPicker: React.FC<
             key={option.value}
             type="button"
             onClick={() => onChange(option.value)}
-            className={`${buttonClasses} rounded-lg p-4 flex items-center justify-center gap-3 transition-all active:scale-[0.98]`}
+            className={`${buttonClasses} rounded-lg px-4 py-3 flex items-center justify-center gap-3 transition-all active:scale-[0.98]`}
           >
             <svg
               width="24"

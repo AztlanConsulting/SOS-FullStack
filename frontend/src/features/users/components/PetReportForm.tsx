@@ -23,7 +23,12 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {/* Section 1: General pet data */}
         <div id="user-info-section">
-          <Text variant="h2" as="h2" weight="medium">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-6 mt-2"
+          >
             Información de la mascota
           </Text>
           <UserInfoSection

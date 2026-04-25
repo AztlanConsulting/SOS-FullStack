@@ -22,8 +22,6 @@ export const UserInfoSection = ({
     { value: 'Perro', label: 'Perro' },
     { value: 'Gato', label: 'Gato' },
     { value: 'Ave', label: 'Ave' },
-    { value: 'Hámster', label: 'Hámster' },
-    { value: 'Conejo', label: 'Conejo' },
     { value: 'Otro', label: 'Otro' },
   ];
 
@@ -44,14 +42,14 @@ export const UserInfoSection = ({
   const today = new Date().toLocaleDateString('en-CA');
 
   return (
-    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5">
+    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4">
       {/* Name only applies when is a report for a lost pet. */}
       {reportType === 'lost' && (
         <Input
           id="petName"
           label="Nombre de la mascota"
           value={formData.name || ''}
-          maxLength={50}
+          hasLength={false}
           onChange={(e) => updateForm({ name: e.target.value })}
           error={errors.name}
         />
@@ -81,7 +79,7 @@ export const UserInfoSection = ({
         id="petBreed"
         label="Raza/tipo de la mascota"
         value={formData.breed || ''}
-        maxLength={50}
+        maxLength={40}
         onChange={(e) => updateForm({ breed: e.target.value })}
         error={errors.breed}
       />
@@ -99,7 +97,7 @@ export const UserInfoSection = ({
         id="petColor"
         label="Color de la mascota"
         value={formData.color || ''}
-        maxLength={50}
+        maxLength={40}
         onChange={(e) => updateForm({ color: e.target.value })}
         error={errors.color}
       />
@@ -120,7 +118,7 @@ export const UserInfoSection = ({
           placeholder="Ejemplo: Hembra blanca con patas negras y nariz rosita, esterilizada"
           value={formData.description || ''}
           onChange={(e) => updateForm({ description: e.target.value })}
-          maxLength={200}
+          maxLength={100}
         />
       )}
 

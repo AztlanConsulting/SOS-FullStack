@@ -19,6 +19,7 @@ export const ContactInfoSection = ({
         <Input
           id="ownerName"
           label="Nombre y apellido del dueño"
+          hasLength={false}
           value={formData.contactName || ''}
           onChange={(e) => updateForm({ contactName: e.target.value })}
           error={errors.contactName}
@@ -36,6 +37,7 @@ export const ContactInfoSection = ({
           id="ownerEmail"
           label="Correo electrónico"
           type="email"
+          hasLength={false}
           value={formData.email || ''}
           onChange={(e) => updateForm({ email: e.target.value })}
           error={errors.email}

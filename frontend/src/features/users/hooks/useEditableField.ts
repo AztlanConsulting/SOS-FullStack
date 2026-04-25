@@ -22,7 +22,7 @@ export const useEditableField = (
     setError('');
 
     if (!trimmed) {
-      setError('Este campo no puede quedar vacío.');
+      setError('Campo obligatorio');
       return;
     }
 
@@ -30,11 +30,11 @@ export const useEditableField = (
       try {
         const parsedNumber = phoneUtil.parseAndKeepRawInput(trimmed);
         if (!phoneUtil.isValidNumber(parsedNumber)) {
-          setError('El número no es válido para el país seleccionado.');
+          setError('Número de teléfono inválido');
           return;
         }
       } catch (e) {
-        setError('Añade un número de teléfono válido.');
+        setError('Número de teléfono inválido');
         return;
       }
     }
@@ -42,7 +42,7 @@ export const useEditableField = (
     if (field === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(trimmed)) {
-        setError('El formato del correo es inválido.');
+        setError('Correo inválido');
         return;
       }
     }

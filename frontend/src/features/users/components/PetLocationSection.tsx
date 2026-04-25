@@ -8,22 +8,30 @@ export interface PetLocationSectionProps {
   updateForm: (newData: Partial<PetReportData>) => void;
   reportType?: ReportType;
   mapID?: string;
-  errors: Record<string, string>;
+  errors?: Record<string, string>;
+  onInteraction?: () => void;
 }
 
 export const PetLocationSection = ({
   formData,
   updateForm,
   reportType = 'lost',
-  errors,
+  mapID = 'pet-location-map',
+  errors = {},
+  onInteraction,
 }: PetLocationSectionProps) => {
-  const mapID = 'pet-location-map';
   const inputLabel =
     reportType === 'lost' ? 'Lugar de extravío' : 'Lugar de encuentro';
   const placeholderText = 'Ej: Parque Central, Centro Histórico';
 
-  const { results, isLoading, displayValue, onSelectAddress, onSearchWrapper } =
-    usePetLocation(mapID, formData, updateForm);
+  const {
+    results,
+    isLoading,
+    displayValue,
+    onSelectAddress,
+    onSearchWrapper,
+    onFocusWrapper,
+  } = usePetLocation(mapID, formData, updateForm);
 
   return (
     <section
@@ -36,8 +44,18 @@ export const PetLocationSection = ({
         query={displayValue}
         results={results}
         isLoading={isLoading}
-        onSearch={onSearchWrapper}
-        onSelect={onSelectAddress}
+        onFocus={() => {
+          onFocusWrapper();
+          onInteraction?.();
+        }}
+        onSearch={(value) => {
+          onSearchWrapper(value);
+          onInteraction?.();
+        }}
+        onSelect={(result) => {
+          onSelectAddress(result);
+          onInteraction?.();
+        }}
         error={errors.address}
       />
 

@@ -2,6 +2,19 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { FileUpload } from '@shared/components/ui/FileUpload/FileUpload';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import { useState } from 'react';
+
+const FileUploadHarness = ({ index = 1 }: { index?: number }) => {
+  const [fileName, setFileName] = useState<string | undefined>(undefined);
+
+  return (
+    <FileUpload
+      index={index}
+      currentFileName={fileName}
+      onChange={(file) => setFileName(file?.name)}
+    />
+  );
+};
 
 describe('FileUpload Component', () => {
   beforeEach(() => {
@@ -33,7 +46,7 @@ describe('FileUpload Component', () => {
 
   test('displays the file name after a file is selected', async () => {
     const user = userEvent.setup();
-    const { container } = render(<FileUpload index={1} />);
+    const { container } = render(<FileUploadHarness index={1} />);
 
     const file = new File(['content'], 'mi-perro.jpg', { type: 'image/jpeg' });
     const input = container.querySelector(
@@ -93,7 +106,7 @@ describe('FileUpload Component', () => {
 
   test('displays the new file name when a second file is uploaded', async () => {
     const user = userEvent.setup();
-    const { container } = render(<FileUpload index={1} onChange={vi.fn()} />);
+    const { container } = render(<FileUploadHarness index={1} />);
 
     const input = container.querySelector(
       'input[type="file"]',

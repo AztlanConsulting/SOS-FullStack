@@ -73,16 +73,19 @@ describe('manuals routes (integration)', () => {
       .query({ id: nonExistentId, sortOption: 'Nombre (A-Z)' });
 
     expect(res.status).toBe(404);
-    expect(res.text).toContain('No manual found');
+    expect(res.text).toContain(
+      `No se encontró el manual con id: ${nonExistentId}`,
+    );
   });
 
-  test('GET /manuals/getManuals returns 500 when required query is missing', async () => {
+  test('GET /manuals/getManuals returns 400 when required query is missing', async () => {
     // Missing page/id violates zod refinement and triggers error path.
     const res = await request(app)
       .get('/manuals/getManuals')
       .query({ sortOption: 'Nombre (A-Z)' });
 
-    expect(res.status).toBe(500);
-    expect(res.body).toHaveProperty('error');
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('message');
+    expect(res.body).toHaveProperty('name');
   });
 });

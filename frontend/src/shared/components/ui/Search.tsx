@@ -11,9 +11,10 @@ interface Props {
       setSortOption: React.Dispatch<React.SetStateAction<string>>,
     ];
   };
+  onlyAlphabetic?: boolean;
 }
 
-const Search = ({ searchHook }: Props) => {
+const Search = ({ searchHook, onlyAlphabetic }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   // Ref for the dropdown menu to handle outside clicks
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -46,7 +47,11 @@ const Search = ({ searchHook }: Props) => {
         >
           <HiArrowsUpDown color="black" size="100%" className="h-6" />
         </button>
-        <DropDown isOpen={isOpen} sortHook={searchHook.sortHook} />
+        <DropDown
+          isOpen={isOpen}
+          sortHook={searchHook.sortHook}
+          onlyAlphabetic={onlyAlphabetic}
+        />
       </div>
       <SearchInput handleSearch={searchHook.handleSearch} />
     </div>

@@ -36,12 +36,7 @@ export const ReportConfirmationPage: React.FC = () => {
 
       <main className="flex-grow pt-20 lg:pt-0 pb-8">
         <div className="w-full color-secondary-bg py-6 lg:py-8 px-4 border-b border-yellow-200">
-          <Text
-            variant="h1"
-            weight="medium"
-            as="h1"
-            className="text-center text-2xl text-gray-900"
-          >
+          <Text variant="h1" weight="medium" as="h1" className="text-center">
             Confirmación de datos
           </Text>
         </div>

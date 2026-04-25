@@ -19,11 +19,16 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
     usePetReportForm(initialData);
 
   return (
-    <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
+    <div id="report-section" className="min-h-screen pt-8 bg-white">
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {/* Section 1: General pet data */}
         <div id="user-info-section">
-          <Text variant="h2" as="h2" weight="medium">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-6 mt-2"
+          >
             Información de la mascota
           </Text>
           <UserInfoSection
@@ -85,7 +90,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
         </div>
 
         {/* Section 5: Confirmation button. */}
-        <div className="w-full max-w-5xl mx-auto px-4 md:px-0">
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto py-4">
           <div className="w-full flex justify-center [&>button]:w-full [&>button]:max-w-none [&>button]:whitespace-nowrap">
             <Button
               onClick={handleNext}

@@ -6,18 +6,24 @@ import { usePetPhotos } from '../hooks/usePetPhotos';
 export interface PetPhotosSectionProps {
   formData: Partial<PetReportData>;
   updateForm: (newData: Partial<PetReportData>) => void;
-  errors: Record<string, string>;
+  errors?: Record<string, string>;
 }
 
 export const PetPhotosSection = ({
   formData,
   updateForm,
-  errors,
+  errors = {},
 }: PetPhotosSectionProps) => {
   const { photoCount, fileUploadSlots, handleFileUpload } = usePetPhotos(
     formData,
     updateForm,
   );
+
+  const handleLayoutChange = (val: 1 | 2 | 3 | 4) => {
+    // Apply as one atomic update to avoid stale-state overwrites in confirmation.
+    updateForm({ imageLayout: val.toString(), images: [] });
+  };
+
   return (
     <section
       id="photo-upload-section"
@@ -29,7 +35,7 @@ export const PetPhotosSection = ({
         </p>
         <PhotoDistributionPicker
           value={photoCount}
-          onChange={(val) => updateForm({ imageLayout: val.toString() })}
+          onChange={handleLayoutChange}
         />
       </div>
 
@@ -44,7 +50,8 @@ export const PetPhotosSection = ({
             key={num}
             index={num}
             onChange={(file) => handleFileUpload(num, file)}
-            error={errors.images}
+            error={errors[`images_${num}`]}
+            currentFileName={formData.images?.[num - 1]?.name}
           />
         ))}
       </div>

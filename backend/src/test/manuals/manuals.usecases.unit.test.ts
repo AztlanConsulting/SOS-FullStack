@@ -1,5 +1,7 @@
-import { getManualsDB } from '@use-cases/manuals/getManualsDB.usecase';
-import { getManualByIdDB } from '@use-cases/manuals/getManualByIdDB.usecase';
+import {
+  getManualsDB,
+  getManualByIdDB,
+} from '@use-cases/manuals/getManualsDB.usecase';
 import type {
   GetManual,
   ManualRepository,
@@ -20,7 +22,12 @@ describe('manuals use-cases (unit)', () => {
         {
           name: 'Manual A',
           price: 100,
-          content: 'Contenido A',
+          content: [
+            {
+              type: 'text',
+              content: 'Contenido A',
+            },
+          ],
           imageUrl: 'a.jpg',
         },
       ]),
@@ -38,7 +45,12 @@ describe('manuals use-cases (unit)', () => {
         {
           name: 'Manual A',
           price: 100,
-          content: 'Contenido A',
+          content: [
+            {
+              type: 'text',
+              content: 'Contenido A',
+            },
+          ],
           imageUrl: 'a.jpg',
         },
       ],
@@ -65,7 +77,12 @@ describe('manuals use-cases (unit)', () => {
       getManualById: jest.fn().mockResolvedValue({
         name: 'Manual B',
         price: 250,
-        content: 'Contenido B',
+        content: [
+          {
+            type: 'text',
+            content: 'Contenido B',
+          },
+        ],
         imageUrl: 'b.jpg',
       }),
     };
@@ -76,7 +93,12 @@ describe('manuals use-cases (unit)', () => {
     expect(result).toEqual({
       name: 'Manual B',
       price: 250,
-      content: 'Contenido B',
+      content: [
+        {
+          type: 'text',
+          content: 'Contenido B',
+        },
+      ],
       imageUrl: 'b.jpg',
     });
   });

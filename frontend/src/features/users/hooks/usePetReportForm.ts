@@ -11,8 +11,17 @@ const normalizePhone = (phone: string) => phone.replace(/[^\d+]/g, '');
 const isPhonePossible = (phone: string) => {
   try {
     const normalized = normalizePhone(phone);
-    const parsed = phoneUtil.parse(normalized, 'MX'); // ← fallback a México
-    return phoneUtil.isPossibleNumber(parsed);
+    const parsed = phoneUtil.parseAndKeepRawInput(normalized);
+    const regionCode = phoneUtil.getRegionCodeForNumber(parsed);
+
+    if (!regionCode) {
+      return false;
+    }
+
+    return (
+      phoneUtil.isValidNumber(parsed) &&
+      phoneUtil.isValidNumberForRegion(parsed, regionCode)
+    );
   } catch {
     return false;
   }
@@ -36,9 +45,9 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     species: '',
     date: '',
     breed: '',
-    sex: 'Desconocido',
+    sex: '',
     color: '',
-    size: 'Mediana: 11 a 25 kg',
+    size: '',
     description: '',
     images: [],
     imageLayout: '1',
@@ -56,15 +65,35 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
   const updateFormData = (newData: Partial<PetReportData>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
 
-    const fieldName = Object.keys(newData)[0];
+    setErrors((prev) => {
+      const copy = { ...prev };
+      const updatedFields = Object.keys(newData);
 
-    if (errors[fieldName]) {
-      setErrors((prev) => {
-        const copy = { ...prev };
-        delete copy[fieldName];
-        return copy;
+      updatedFields.forEach((fieldName) => {
+        if (copy[fieldName]) {
+          delete copy[fieldName];
+        }
       });
-    }
+
+      if (
+        updatedFields.includes('images') ||
+        updatedFields.includes('imageLayout')
+      ) {
+        delete copy.images;
+        Object.keys(copy).forEach((key) => {
+          if (key.startsWith('images_')) {
+            delete copy[key];
+          }
+        });
+      }
+
+      // Moving the pin updates coordinates first; treat that as valid location interaction.
+      if (updatedFields.includes('locationCoords')) {
+        delete copy.address;
+      }
+
+      return copy;
+    });
   };
 
   const scrollToFirstError = (errors: Record<string, string>) => {
@@ -107,47 +136,63 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     console.log('normalized:', normalizePhone(formData.phoneNumber));
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name) newErrors.name = '¡Nos falta el nombre de tu mascota!';
+    if (!formData.name) newErrors.name = 'Ingresa el nombre de tu mascota';
 
-    if (!formData.species) newErrors.species = '¡Selecciona una especie!';
+    if (!formData.species) newErrors.species = 'Selecciona una especie';
 
     if (!formData.date) {
-      newErrors.date = '¡Indícanos la fecha!';
+      newErrors.date = 'Selecciona una fecha';
     } else {
       const today = new Date();
       const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
       if (formData.date > todayStr) {
-        newErrors.date = '¡La fecha no puede ser futura!';
+        newErrors.date = 'La fecha no puede ser futura';
       }
     }
 
-    if (!formData.size) newErrors.size = '¡Dinos su tamaño!';
+    if (!formData.sex) newErrors.sex = 'Selecciona el sexo de la mascota';
 
-    if (!formData.breed) newErrors.breed = '¡Nos falta conocer su raza o tipo!';
+    if (!formData.size) newErrors.size = 'Selecciona el tamaño de la mascota';
 
-    if (!formData.color) newErrors.color = '¡Dinos de qué color es!';
+    if (!formData.breed) newErrors.breed = 'Ingresa una raza o tipo';
 
-    if (!formData.address) newErrors.address = '¡Indica la ubicación!';
+    if (!formData.color) newErrors.color = 'Ingresa un color';
 
-    if (!formData.images || formData.images.length === 0)
-      newErrors.images = '¡Sube al menos una foto!';
+    if (!formData.address && !formData.locationCoords) {
+      newErrors.address = 'Ingresa una ubicación';
+    }
+
+    const expectedPhotoCount = parseInt(formData.imageLayout || '1');
+    const selectedPhotos = (formData.images || []).slice(0, expectedPhotoCount);
+    const uploadedPhotoCount = selectedPhotos.filter((file) => !!file).length;
+
+    if (uploadedPhotoCount < expectedPhotoCount) {
+      newErrors.images =
+        'Debes subir todas las fotos de la distribución seleccionada';
+
+      for (let i = 0; i < expectedPhotoCount; i++) {
+        if (!selectedPhotos[i]) {
+          newErrors[`images_${i + 1}`] = `Falta la foto ${i + 1}`;
+        }
+      }
+    }
 
     if (!formData.contactName)
-      newErrors.contactName = '¡Falta nombre del dueño!';
+      newErrors.contactName = 'Ingresa el nombre del dueño';
 
     if (!formData.phoneNumber || isPhoneEmpty(formData.phoneNumber)) {
-      newErrors.phoneNumber = '¡Añade un número de teléfono!';
+      newErrors.phoneNumber = 'Ingresa un número de teléfono';
     } else if (!isPhonePossible(formData.phoneNumber)) {
-      newErrors.phoneNumber = '¡Número de teléfono inválido!';
+      newErrors.phoneNumber = 'Número de teléfono inválido';
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.email) {
-      newErrors.email = '¡Necesitamos tu correo electrónico!';
+      newErrors.email = 'Ingresa un correo electrónico';
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = '¡Correo inválido!';
+      newErrors.email = 'Correo inválido';
     }
 
     setErrors(newErrors);

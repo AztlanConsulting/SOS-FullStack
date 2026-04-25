@@ -3,6 +3,9 @@ import type { PetReportData } from '../types/petReport.types';
 import { useGeocoding } from '../../map/hooks/useGeocoding';
 import { useMap } from '../../map/hooks/useMap';
 import { LeafletMapService } from '../../map/services/leafletMapService';
+import type { GeocodingResult } from '../../map/types/geocodingResult';
+
+const DEFAULT_LOCATION_LABEL = 'Mexico City, Mexico';
 
 export const usePetLocation = (
   mapID: string,
@@ -11,7 +14,18 @@ export const usePetLocation = (
 ) => {
   const { coords } = useMap(mapID);
   const { query, results, isLoading, handleSearch, handleSelect } =
-    useGeocoding();
+    useGeocoding(({ coords: markerCoords, address }) => {
+      const markerLocation: GeocodingResult = {
+        coords: markerCoords,
+        displayName: address,
+      };
+
+      updateForm({
+        address,
+        locationCoords: markerCoords,
+        location: markerLocation,
+      });
+    });
 
   const mapReadyRef = useRef(false);
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -27,7 +41,12 @@ export const usePetLocation = (
       }, 350);
       return () => clearTimeout(timer);
     } else {
-      mapReadyRef.current = true;
+      const timer = setTimeout(() => {
+        LeafletMapService.flyTo(coords);
+        LeafletMapService.placeMarker(coords, false);
+        mapReadyRef.current = true;
+      }, 350);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -52,10 +71,24 @@ export const usePetLocation = (
 
   const onSearchWrapper = (val: string) => {
     setHasInteracted(true);
+    updateForm({ address: formData.address || '' });
     handleSearch(val);
   };
 
-  const displayValue = hasInteracted ? query : formData.address || '';
+  const onFocusWrapper = () => {
+    updateForm({ address: formData.address || '' });
+  };
 
-  return { results, isLoading, displayValue, onSelectAddress, onSearchWrapper };
+  const displayValue = hasInteracted
+    ? query
+    : formData.address || query || DEFAULT_LOCATION_LABEL;
+
+  return {
+    results,
+    isLoading,
+    displayValue,
+    onSelectAddress,
+    onSearchWrapper,
+    onFocusWrapper,
+  };
 };

@@ -14,6 +14,7 @@ interface LocationSearchInputProps {
   isLoading: boolean;
   onSearch: (value: string) => void;
   onSelect: (result: SearchResult) => void;
+  onFocus?: () => void;
   error?: string;
 }
 
@@ -25,17 +26,29 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
   isLoading,
   onSearch,
   onSelect,
+  onFocus,
   error,
 }) => {
+  const hasErrorState = Boolean(error);
+
   return (
     <div className="relative w-full">
-      <div className="w-full border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-gray-600 transition-colors">
-        <label className="block text-xs font-medium text-gray-400">
+      <div
+        className={`group w-full border rounded-lg px-2 py-1 bg-white focus-within:ring-1 group ${
+          hasErrorState
+            ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500'
+            : 'border-gray-400 focus-within:border-yellow-500 focus-within:ring-yellow-500'
+        }`}
+      >
+        <label
+          className={`block text-xs font-medium text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+        >
           {label}
         </label>
         <input
           type="text"
           value={query}
+          onFocus={onFocus}
           onChange={(e) => onSearch(e.target.value)}
           placeholder={placeholder}
           className="w-full bg-transparent outline-none text-gray-700 text-sm"
@@ -65,7 +78,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
         <Text
           variant="small"
           as="small"
-          weight="bold"
+          weight="regular"
           className="color-danger ml-1 italic"
         >
           {error}

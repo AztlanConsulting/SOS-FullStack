@@ -13,10 +13,7 @@ export const PetPhotosSection = ({
 }: PetPhotosSectionProps) => {
   const { handleFileUpload } = usePetPhotos(formData, updateForm);
   return (
-    <section
-      id="photo-upload-section"
-      className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto"
-    >
+    <section id="photo-upload-section" className="w-full mx-auto">
       <div className="w-full max-w-lg mx-auto flex flex-col gap-3">
         <FileUpload index={1} onChange={(file) => handleFileUpload(1, file)} />
       </div>

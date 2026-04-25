@@ -5,7 +5,7 @@ const FoundInfo = () => {
   return (
     <section className="relative color-secondary-bg overflow-hidden py-8 lg:py-16">
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div className="flex flex-col md:flex-row-reverse lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="flex-1 max-w-xl lg:max-w-2xl order-2 lg:order-1 text-left">
             <Text as="h1" variant="h1" weight="medium" className="mb-4 lg:mb-6">
               Encontraste una mascota perdida?

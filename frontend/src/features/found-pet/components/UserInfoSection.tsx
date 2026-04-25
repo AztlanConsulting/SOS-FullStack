@@ -42,7 +42,7 @@ export const UserInfoSection = ({
   const today = new Date().toLocaleDateString('en-CA');
 
   return (
-    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
+    <section>
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         <Select
           id="petSpecies"

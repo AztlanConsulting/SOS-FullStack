@@ -31,3 +31,7 @@ or context that reviewers should know.
 ## 💥 Issues
 
 Document any known issues, limitations, or pending concerns.
+
+## Requirements Traceability Matrix (RTM)
+
+- [Requirements Traceability Matrix](https://docs.google.com/spreadsheets/d/1fwXbemwmduZ1ytTG2XoRd4ecBOJ-aBa_tn-7cJkgnUc/edit?gid=0#gid=0)

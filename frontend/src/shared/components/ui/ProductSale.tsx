@@ -39,7 +39,7 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
       </div>
       <div
         className="w-full bg-white md:bg-secondary flex flex-col md:mt-1
-      items-center justify-center border-b border-secondary shadow-xl/30 md:border-none md:shadow-none"
+      items-center justify-center border-b border-[var(--color-grey-border)] shadow-xl/30 md:border-none md:shadow-none"
       >
         <Text
           as="p"

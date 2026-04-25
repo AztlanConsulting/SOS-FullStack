@@ -14,14 +14,9 @@ const isPhonePossible = (phone: string) => {
     const parsed = phoneUtil.parseAndKeepRawInput(normalized);
     const regionCode = phoneUtil.getRegionCodeForNumber(parsed);
 
-    if (!regionCode) {
-      return false;
-    }
+    if (!regionCode) return false;
 
-    return (
-      phoneUtil.isValidNumber(parsed) &&
-      phoneUtil.isValidNumberForRegion(parsed, regionCode)
-    );
+    return phoneUtil.isValidNumber(parsed);
   } catch {
     return false;
   }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import type { PetReportData } from '../types/petReport.types';
 import { useGeocoding } from '../../map/hooks/useGeocoding';
 import { useMap } from '../../map/hooks/useMap';
@@ -13,19 +13,33 @@ export const usePetLocation = (
   updateForm: (newData: Partial<PetReportData>) => void,
 ) => {
   const { coords } = useMap(mapID);
-  const { query, results, isLoading, handleSearch, handleSelect } =
-    useGeocoding(({ coords: markerCoords, address }) => {
+
+  const updateFormRef = useRef(updateForm);
+  updateFormRef.current = updateForm;
+
+  const onMarkerAddressChange = useCallback(
+    ({
+      coords: markerCoords,
+      address,
+    }: {
+      coords: [number, number];
+      address: string;
+    }) => {
       const markerLocation: GeocodingResult = {
         coords: markerCoords,
         displayName: address,
       };
-
-      updateForm({
+      updateFormRef.current({
         address,
         locationCoords: markerCoords,
         location: markerLocation,
       });
-    });
+    },
+    [],
+  );
+
+  const { query, results, isLoading, handleSearch, handleSelect } =
+    useGeocoding(onMarkerAddressChange);
 
   const mapReadyRef = useRef(false);
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -59,24 +73,27 @@ export const usePetLocation = (
 
   useEffect(() => {
     if (coords && mapReadyRef.current) {
-      updateForm({ locationCoords: coords });
+      updateFormRef.current({ locationCoords: coords });
     }
   }, [coords]);
 
   const onSelectAddress = (result: any) => {
     handleSelect(result);
     setHasInteracted(true);
-    updateForm({ address: result.displayName, location: result });
+    updateFormRef.current({
+      address: result.displayName,
+      location: result,
+      locationCoords: result.coords,
+    });
   };
 
   const onSearchWrapper = (val: string) => {
     setHasInteracted(true);
-    updateForm({ address: formData.address || '' });
     handleSearch(val);
   };
 
   const onFocusWrapper = () => {
-    updateForm({ address: formData.address || '' });
+    updateFormRef.current({ address: formData.address || '' });
   };
 
   const displayValue = hasInteracted

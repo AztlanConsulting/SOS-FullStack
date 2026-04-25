@@ -2,33 +2,10 @@ import type { Request, Response } from 'express';
 import { createLostPetReport } from '../../use-cases/clients/createLostPetReport.usecase';
 import { publishLostPet } from '../../use-cases/clients/publishLostPet.usecase';
 import { metaPublisher } from '../../infrastructure/api/meta.api';
-import { z } from 'zod';
-import type { CreatePetReportDTO } from '../../types/clients.type';
-
-const createPetReportDTOSchema = z.object({
-  name: z.string().optional(),
-  species: z.string().min(1, 'La especie es requerida'),
-  date: z.string().min(1, 'La fecha es requerida'),
-  breed: z.string().optional(),
-  sex: z.enum(['Macho', 'Hembra', 'Desconocido']),
-  color: z.string().min(1, 'El color es requerido'),
-  size: z.enum([
-    'Mini: 1 a 4 kg',
-    'Pequeña: 5 a 10 kg',
-    'Mediana: 11 a 25 kg',
-    'Grande: 26 a 45 kg',
-    'Gigante: más de 45 kg',
-  ]),
-  description: z.string().min(1, 'La descripción es requerida'),
-  location: z.string().optional(),
-  locationCoords: z.preprocess(
-    (val) => (typeof val === 'string' ? JSON.parse(val) : val),
-    z.tuple([z.number(), z.number()]),
-  ),
-  contactName: z.string().min(1, 'El nombre de contacto es requerido'),
-  phoneNumber: z.string().min(1, 'El número de teléfono es requerido'),
-  email: z.email('El correo electrónico no es válido'),
-}) as z.ZodType<CreatePetReportDTO>;
+import {
+  createPetReportDTOSchema,
+  getCreatePetReportFieldErrors,
+} from '../../types/clients.type';
 
 const publishPet = async (req: Request, res: Response) => {
   try {
@@ -68,7 +45,7 @@ const createLostPetReportController = async (req: Request, res: Response) => {
     if (!validation.success) {
       return res.status(400).json({
         error: 'Datos inválidos',
-        details: validation.error.flatten().fieldErrors,
+        details: getCreatePetReportFieldErrors(validation.error),
       });
     }
 

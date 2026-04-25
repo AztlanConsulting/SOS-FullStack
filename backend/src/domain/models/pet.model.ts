@@ -2,8 +2,8 @@ import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 export interface Pet {
-  _id?: Types.ObjectId;
-  userId: Types.ObjectId | string;
+  _id: Types.ObjectId;
+  userId: Types.ObjectId;
   name?: string;
   species: string;
   dateMissing: Date;
@@ -14,9 +14,11 @@ export interface Pet {
   description: string;
   photos: string[];
   placeMissing?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+export type PetCreateInput = Omit<Pet, '_id' | 'createdAt' | 'updatedAt'>;
 
 const PetSchema = new Schema<Pet>(
   {

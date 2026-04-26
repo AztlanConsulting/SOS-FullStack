@@ -10,7 +10,7 @@ const PublicationSection = () => {
             ¿Cómo te podemos ayudar?
           </Text>
         </div>
-        <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-12">
+        <div className="flex flex-col md:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <img
             src={acompanamiento}
             alt="Publicación"

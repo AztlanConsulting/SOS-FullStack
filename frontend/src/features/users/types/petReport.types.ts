@@ -3,11 +3,11 @@ import type { GeocodingResult } from '../../map/types/geocodingResult';
 export type ReportType = 'lost' | 'found';
 
 export interface PetReportData {
-  name?: string;
+  name: string;
   species: string;
   date: string;
-  breed?: string;
-  sex?: '' | 'Macho' | 'Hembra' | 'Desconocido';
+  breed: string;
+  sex: '' | 'Macho' | 'Hembra' | 'Desconocido';
   color: string;
   size?:
     | ''
@@ -19,13 +19,21 @@ export interface PetReportData {
   description?: string;
 
   images: File[];
-  imageLayout?: string;
+  imageLayout: string;
 
-  address?: string;
+  address: string;
   location: GeocodingResult | null;
-  locationCoords?: [number, number];
+  locationCoords: [number, number];
 
   contactName: string;
   phoneNumber: string;
   email: string;
+
+  planName: string;
+  planDetails?: {
+    days: number;
+    km: number;
+    selectedFeatures: string[];
+    totalPrice: number;
+  };
 }

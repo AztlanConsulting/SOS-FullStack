@@ -396,8 +396,6 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
     { value: 'Perro', label: 'Perro' },
     { value: 'Gato', label: 'Gato' },
     { value: 'Ave', label: 'Ave' },
-    { value: 'Conejo', label: 'Conejo' },
-    { value: 'Hámster', label: 'Hámster' },
     { value: 'Otro', label: 'Otro' },
   ];
 

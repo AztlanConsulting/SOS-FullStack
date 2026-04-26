@@ -32,6 +32,13 @@ export type CreatePetReportDTO = {
   contactName: string;
   phoneNumber: string;
   email: string;
+  planName: string;
+  planDetails: {
+    days: number;
+    km: number;
+    selectedFeatures: string[];
+    totalPrice: number;
+  };
 };
 
 export type LostPetReport = Omit<
@@ -59,6 +66,17 @@ export const createPetReportDTOSchema = z.object({
   contactName: z.string().min(1, 'El nombre de contacto es requerido'),
   phoneNumber: z.string().min(1, 'El número de teléfono es requerido'),
   email: z.email('El correo electrónico no es válido'),
+  planName: z.string().min(1, 'El plan es requerido'),
+
+  planDetails: z.preprocess(
+    (val) => (typeof val === 'string' ? JSON.parse(val) : val),
+    z.object({
+      days: z.number(),
+      km: z.number(),
+      selectedFeatures: z.array(z.string()),
+      totalPrice: z.number(),
+    }),
+  ),
 }) satisfies z.ZodType<CreatePetReportDTO>;
 
 export const getCreatePetReportFieldErrors = (

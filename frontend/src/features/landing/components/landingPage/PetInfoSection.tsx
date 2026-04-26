@@ -3,7 +3,10 @@ import petAndOwners from '@assets/images/petAndOwners.png';
 
 const PublicationSection = () => {
   return (
-    <section className="bg-white overflow-hidden py-8 lg:py-16 color-grey-border-bottom">
+    <section
+      id="lostpet-section"
+      className="bg-white overflow-hidden py-8 lg:py-16 color-grey-border-bottom"
+    >
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 md:gap-x-8 md:gap-y-0">
           <Text

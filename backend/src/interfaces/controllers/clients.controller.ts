@@ -48,7 +48,6 @@ const createLostPetReportController = async (req: Request, res: Response) => {
         details: getCreatePetReportFieldErrors(validation.error),
       });
     }
-
     const result = await createLostPetReport(validation.data);
 
     return res.status(201).json({

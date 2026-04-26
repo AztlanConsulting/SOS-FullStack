@@ -5,7 +5,7 @@ import owner from '@assets/images/owner.png';
 
 const HeroSection = () => {
   const handleScrollToReport = () => {
-    const section = document.getElementById('report-section');
+    const section = document.getElementById('lostpet-section');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }

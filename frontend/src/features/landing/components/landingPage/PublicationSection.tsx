@@ -14,7 +14,7 @@ const PublicationSection = () => {
           <img
             src={acompanamiento}
             alt="Publicación"
-            className="object-contain rounded-lg w-[250px] h-[250px]"
+            className="object-contain rounded-lg h-[250px] w-[250px]"
           />
 
           <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg:text-left order-1 lg:order-2">

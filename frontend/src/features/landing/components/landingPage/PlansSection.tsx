@@ -10,7 +10,7 @@ const PlansSection = () => {
             <img
               src={experiencia}
               alt="Planes"
-              className="object-contain rounded-lg w-[250px] h-[250px]"
+              className="object-contain rounded-lg h-[250px] w-[250px]"
             />
           </div>
 

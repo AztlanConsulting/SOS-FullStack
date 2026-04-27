@@ -38,4 +38,27 @@ export const PhotonGeocoding = {
       ] as [number, number],
     }));
   },
+
+  async reverse(coords: [number, number]): Promise<string | null> {
+    const [lat, lon] = coords;
+
+    const res = await fetch(
+      `https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}`,
+    );
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    const feature = data?.features?.[0];
+    if (!feature?.properties) return null;
+
+    const props = feature.properties;
+
+    const address = [props.name, props.street, props.city, props.country]
+      .filter(Boolean)
+      .join(', ')
+      .trim();
+
+    return address || null;
+  },
 };

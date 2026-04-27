@@ -5,8 +5,8 @@ import type { Permission } from '@domain/models/permission.model';
 
 export interface User {
   _id: Types.ObjectId;
-  roleId: Types.ObjectId | Role;
-  permissions?: (Types.ObjectId | Permission)[];
+  roleId: Types.ObjectId;
+  permissions?: Types.ObjectId[];
   username: string;
   password: string;
   email: string;
@@ -17,6 +17,22 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type UserCreateInput = Omit<
+  User,
+  '_id' | 'createdAt' | 'updatedAt' | 'active'
+>;
+
+export type UserWithRole = Omit<User, 'roleId'> & {
+  roleId: Pick<Role, '_id' | 'role'>;
+};
+
+export type UserWithPermissions = Omit<User, 'permissions' | 'roleId'> & {
+  roleId: {
+    permissions?: Permission[];
+  };
+  permissions?: Permission[];
+};
 
 const UserSchema = new Schema<User>(
   {
@@ -43,7 +59,7 @@ const UserSchema = new Schema<User>(
     phone: { type: String },
     fbUser: { type: String },
     conversation: { type: String },
-    active: { type: Boolean, default: true },
+    active: { type: Boolean, default: false },
   },
   {
     timestamps: true,

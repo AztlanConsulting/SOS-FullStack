@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router';
 import yellowIcon from '@assets/images/yellowIcon.png';
@@ -20,6 +20,10 @@ export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+
+  useEffect(() => {
+    setError(null);
+  }, [setError]);
 
   /**
    * Handles form submission:

@@ -76,7 +76,7 @@ try {
     })),
   );
 
-  const userPermissions = await PermissionModel.insertMany(
+  const clientPermissions = await PermissionModel.insertMany(
     resources.map((r) => ({
       resourceId: r._id,
       actions: {
@@ -89,13 +89,13 @@ try {
   );
 
   const adminRole = await RoleModel.create({
-    role: 'admin',
+    role: 'ADMIN',
     permissions: adminPermissions.map((p) => p._id),
   });
 
   const userRole = await RoleModel.create({
-    role: 'user',
-    permissions: userPermissions.map((p) => p._id),
+    role: 'CLIENT',
+    permissions: clientPermissions.map((p) => p._id),
   });
 
   const passwordHash = await bcrypt.hash('12345', 12);

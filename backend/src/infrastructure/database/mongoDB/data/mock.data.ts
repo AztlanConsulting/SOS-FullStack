@@ -1,17 +1,25 @@
 import { mongoDB } from '@infrastructure/database/mongoDB/mongoDB';
 import { Mock } from '@domain/models/mock.model';
 import { PlanModel } from '@domain/models/plan.model';
+import { BlogModel } from '@domain/models/blog.model';
 import { ResourcesModel } from '@domain/models/resource.model';
 import { RoleModel } from '@domain/models/role.model';
 import { UserModel } from '@domain/models/user.model';
 import { PermissionModel } from '@domain/models/permission.model';
 import bcrypt from 'bcryptjs';
+import initBlogDB from './blogs.data';
+import initWorkshopDB from './workshops.data';
+import initManualDB from './manuals.data';
 
 try {
   await mongoDB();
 
+  await initWorkshopDB();
+  await initManualDB();
+
   await Mock.deleteMany({});
   await PlanModel.deleteMany({});
+  await BlogModel.deleteMany({});
   await UserModel.deleteMany({});
   await RoleModel.deleteMany({});
   await ResourcesModel.deleteMany({});
@@ -112,6 +120,8 @@ try {
       active: true,
     },
   ]);
+
+  await initBlogDB();
 
   process.exit(0);
 } catch (error) {

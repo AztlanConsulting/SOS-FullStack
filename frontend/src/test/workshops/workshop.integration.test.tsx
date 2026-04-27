@@ -10,7 +10,12 @@ const workshop: Workshop = {
   _id: 'w1',
   name: 'Workshop Integration',
   price: 100,
-  content: 'Contenido de prueba',
+  content: [
+    {
+      type: 'text',
+      content: 'Contenido de prueba',
+    },
+  ],
   imageUrl: 'https://example.com/workshop.jpg',
   description: 'workshop description',
   category: ['1', '2', '3'],

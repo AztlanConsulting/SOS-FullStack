@@ -1,7 +1,9 @@
+import type { ContentBlock } from '@validation/content.types';
+
 export interface ManualResult {
   name: string;
   price: number;
-  content: string;
+  content: ContentBlock[];
   imageUrl: string;
 }
 

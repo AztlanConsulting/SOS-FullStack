@@ -1,4 +1,5 @@
 import { Text } from '@shared/components/ui/Text/Text';
+import ContentRenderer from '@shared/components/ui/ContentRenderer';
 import { Button } from '@shared/components/ui/Button/Button';
 import { HeaderBack } from '@shared/components/layout/HeaderBack';
 import { useManualPurchase } from '../hooks/useManualPurchase';
@@ -115,15 +116,9 @@ export const ManualContent = ({
         </div>
       </div>
       <div className="w-full p py-10 bg-white flex items-center justify-center">
-        <Text
-          as="p"
-          variant="body"
-          weight="regular"
-          color="text-black"
-          className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl"
-        >
-          {manual.content}
-        </Text>
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-2xl xl:max-w-2xl flex flex-col gap-6">
+          <ContentRenderer content={manual.content} />
+        </div>
       </div>
     </section>
   );

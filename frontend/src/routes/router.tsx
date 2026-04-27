@@ -4,6 +4,7 @@ import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import routerWorkshop from './workshop.routes';
+import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import { PurchasePage } from '@pages/PurchasePage';
@@ -50,6 +51,7 @@ export const router = createBrowserRouter([
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,
+      ...routerBlogs,
     ],
   },
 ]);

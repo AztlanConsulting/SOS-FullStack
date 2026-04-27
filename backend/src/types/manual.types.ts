@@ -24,9 +24,14 @@ export const manualQuery = z
     },
   );
 
+export const ContentBlockZodSchema = z.object({
+  content: z.string(),
+  type: z.string(),
+});
+
 export const manualBody = z.object({
   name: z.string().min(1, 'Name required'),
   price: z.coerce.number().min(1, "Price can't be less than 1"),
-  content: z.string().min(10, 'Content required'),
+  content: z.array(ContentBlockZodSchema),
   imageUrl: z.string().optional(),
 });

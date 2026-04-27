@@ -13,32 +13,32 @@ export async function getWorkshops(req: Request, res: Response) {
     const query = workshopQuery.safeParse(req.query);
 
     if (!query.success) {
-      console.error(query.error);
-      throw query.error;
+      return res.status(400).json(query.error);
     }
 
-    const id = query.data.id;
+    const { id } = query.data;
 
-    let workshops: Workshop[] | Workshop;
-    let total: number = 0;
     // Get by ID
-    if (id !== undefined) {
+    if (id != undefined) {
       const ws = await getWorkshopById(WorkshopDataAccess, id);
-      if (ws) workshops = ws;
-      else
+
+      if (!ws) {
         return res.status(404).send(`No se encontró el taller con id: ${id}`);
-    }
-    // Get with filters
-    else {
-      const workshopsAndCount = await getWorkshopList(
-        WorkshopDataAccess,
-        query.data,
-      );
-      workshops = workshopsAndCount.workshops;
-      total = workshopsAndCount.totalWorkshops;
+      }
+
+      return res.status(200).json({
+        workshops: [ws],
+        total: 1,
+      });
     }
 
-    return res.status(200).json({ workshops, total });
+    // Get with filters
+    const { workshops, totalWorkshops } = await getWorkshopList(
+      WorkshopDataAccess,
+      query.data,
+    );
+
+    return res.status(200).json({ workshops, total: totalWorkshops });
   } catch (error) {
     res.status(500).send(error);
   }

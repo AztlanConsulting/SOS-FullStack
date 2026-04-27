@@ -1,3 +1,5 @@
+import type { ContentBlock } from '@shared/types/content.types';
+
 export type Workshop = {
   _id: string;
   name: string;
@@ -6,7 +8,7 @@ export type Workshop = {
   category: string[];
   image?: Buffer;
   imageUrl: string;
-  content: string;
+  content: ContentBlock[];
 };
 
 export type WorkshopResult = {

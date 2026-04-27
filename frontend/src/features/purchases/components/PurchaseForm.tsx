@@ -71,14 +71,6 @@ const PurchaseForm = ({ product, plan, purchaseDetail, success }: Props) => {
               </div>
             </>
           ))}
-          <div className="flex justify-between">
-            <Text weight="semibold" color="text-gray-600">
-              Total a pagar:
-            </Text>
-            <Text variant="h1" color="text-gray-600">
-              ${product?.price ?? plan?.price}
-            </Text>
-          </div>
         </section>
       </section>
     </div>

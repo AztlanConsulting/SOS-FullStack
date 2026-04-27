@@ -45,15 +45,28 @@ export const login = async (req: Request, res: Response) => {
       accessToken: result.tokens.accessToken,
     });
   } catch (error) {
-    if (error instanceof Error && error.message === 'INVALID_CREDENTIALS') {
-      res
-        .status(401)
-        .json({ error: 'UNAUTHORIZED', message: 'Credenciales invalidas' });
-      return;
+    if (error instanceof Error) {
+      switch (error.message) {
+        case 'INVALID_CREDENTIALS':
+          res.status(401).json({
+            error: 'UNAUTHORIZED',
+            message: 'Credenciales inválidas',
+          });
+          return;
+
+        case 'USER_DEACTIVATED':
+          res.status(403).json({
+            error: 'FORBIDDEN',
+            message: 'USER_DISABLED',
+          });
+          return;
+      }
     }
-    res
-      .status(500)
-      .json({ error: 'INTERNAL_ERROR', message: 'Error al iniciar sesion' });
+
+    res.status(500).json({
+      error: 'INTERNAL_ERROR',
+      message: 'Error al iniciar sesión',
+    });
   }
 };
 

@@ -190,6 +190,14 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
       newErrors.email = 'Correo inválido';
     }
 
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+    (formData.images || []).forEach((file, index) => {
+      if (file && file.size > MAX_SIZE) {
+        newErrors[`images_${index + 1}`] = 'La imagen no debe superar los 5MB';
+      }
+    });
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {

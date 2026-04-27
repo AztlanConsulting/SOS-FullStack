@@ -19,7 +19,7 @@ const PublicationSection = () => {
 
           <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg:text-left order-1 lg:order-2">
             <Text as="h2" variant="h3" weight="medium" className="mb-4 lg:mb-6">
-              No estas solo en esto.
+              No estás solo en esto.
             </Text>
             <Text variant="body" className="text-left">
               Sabemos lo duro que es este momento. Estamos contigo desde el

@@ -20,10 +20,10 @@ const ServicesSection = () => {
               weight="medium"
               className="mb-4 lg:mb-6 text-center lg:text-left"
             >
-              La tecnologia detras
+              La tecnología detrás.
             </Text>
             <Text variant="body" className="text-left">
-              Utilizando herramientas de segmentación geográfica, mostramos la
+              Utilizamos herramientas de segmentación geográfica para mostrar la
               publicación a usuarios en tu zona, aumentando significativamente
               las probabilidades de que alguien lo reconozca y pueda ayudarte a
               encontrarlo más rápido.

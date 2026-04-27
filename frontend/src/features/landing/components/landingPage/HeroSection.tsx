@@ -15,7 +15,7 @@ const HeroSection = () => {
               weight="medium"
               className="mb-4 lg:mb-6 w-5/6 md:w-4/5 lg:w-full mx-auto"
             >
-              Te ayudamos a buscar tu mascota
+              Te ayudamos a buscar a tu mascota.
             </Text>
             <Text
               variant="body"
@@ -24,7 +24,7 @@ const HeroSection = () => {
             >
               El tiempo es clave y cada minuto puede marcar la diferencia. No
               tienes que pasar por esto solo. Vamos a difundir su búsqueda de
-              forma estratégica, para aumentar las posibilidades de encontrarla
+              forma estratégica para aumentar las posibilidades de encontrarla
               lo antes posible.
             </Text>
 

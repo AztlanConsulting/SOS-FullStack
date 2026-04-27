@@ -22,7 +22,7 @@ export interface PaymentIntentResult {
   id: string;
   amount: number;
   currency: string;
-  clientSecret: string | null;
+  clientSecret: string;
 }
 
 export interface EventDTO {

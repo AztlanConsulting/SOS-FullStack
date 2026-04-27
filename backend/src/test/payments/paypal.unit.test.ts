@@ -1,11 +1,107 @@
+import type { PaypalApi } from '@/domain/ports/paypal.port';
+import {
+  DetailOrder,
+  PaymentSuccess,
+  PaypalAccessToken,
+} from '@/domain/ports/paypal.port';
 import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 import { PaymentModel } from '@domain/models/payment.model';
+import type { PaymentIntentDTO } from '@/domain/ports/paymentProvider.port';
+import { PaymentIntentResult } from '@/domain/ports/paymentProvider.port';
+import orderCreator from '@/use-cases/payments/orderCreator';
 
 jest.mock('@domain/models/payment.model');
 
 describe('PaymentDataAccess unit-test', () => {
+  const originalEnv = process.env;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    process.env = {
+      ...originalEnv,
+      PAYPAL_REDIRECT_BASE_URL: 'https://test.com',
+    };
+  });
+
+  afterAll(() => {
+    afterAll(() => {
+      process.env = originalEnv;
+    });
+  });
+
+  test('should correctly build a PayPal order when a PRODUCT is provided', () => {
+    const productMock: PaymentIntentDTO = {
+      amount: 50.0,
+      currency: 'MXN',
+      product: {
+        productName: 'Manual 1',
+        productId: '1234',
+      },
+    };
+
+    const result = orderCreator(productMock);
+
+    // Verify general structure
+    expect(result.intent).toBe('CAPTURE');
+    expect(result.purchase_units[0].amount.value).toBe(50.0);
+
+    // Verify Item Mapping
+    const item = result.purchase_units[0].items![0];
+    expect(item.name).toBe('Manual 1');
+    expect(item.description).toBe('1234');
+    expect(item.unit_amount.value).toBe(50.0);
+
+    // Verify Breakdown
+    expect(result.purchase_units[0].amount.breakdown?.item_total.value).toBe(
+      50.0,
+    );
+  });
+
+  test('should correctly build a PayPal order when a PLAN is provided', () => {
+    const planMock: PaymentIntentDTO = {
+      amount: 15.0,
+      currency: 'MXN',
+      plan: {
+        name: 'Premium Plan',
+        price: 15.0,
+        duration: '30 days',
+        radius: '5km',
+        features: ['reel', 'geolocalizacion'],
+      },
+    };
+
+    const result = orderCreator(planMock);
+
+    const item = result.purchase_units[0].items![0];
+    expect(item.name).toBe('Premium Plan');
+
+    // Description should be: duration | radius
+    expect(item.description).toBe('30 days | 5km');
+    expect(item.unit_amount.currency_code).toBe('MXN');
+  });
+
+  test('create and capture orders usecases', () => {
+    const productMock: PaymentIntentDTO = {
+      amount: 50.0,
+      currency: 'MXN',
+      product: {
+        productName: 'Manual 1',
+        productId: '1234',
+      },
+    };
+
+    const api: PaypalApi = {
+      getAccessToken: jest
+        .fn()
+        .mockResolvedValue({ accessToken: '1234', error: new Error('Error') }),
+      createOrder: jest.fn().mockResolvedValue({
+        id: 'orderId',
+        amount: productMock.amount,
+        currency: productMock.currency,
+        clientSecret: 'temp_client_secret',
+      }),
+      completeOrder: jest.fn().mockResolvedValue({ id: 'paymentSuccess' }),
+    };
   });
 
   test('createPending - successfully creates a pending payment record', async () => {

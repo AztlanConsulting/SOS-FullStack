@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
 import { paymentDetails } from '@/types/payment.types';
-import { createPaymentIntent } from '@/use-cases/payments/createPaymentIntent.usecase';
-import { StripeProvider } from '@/infrastructure/api/stripeProvider.api';
-import type { PaymentProvider } from '@/domain/ports/paymentProvider.port';
+import { createOrder as usCreateOrder } from '@/use-cases/payments/createOrder';
 import PaypalProvider from '@/infrastructure/api/paypal.api';
 import { createPendingIntentDB } from '@/use-cases/payments/createPendingIntentDB.usecase';
 import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
@@ -22,20 +20,13 @@ export default async function createOrder(req: Request, res: Response) {
 
     if (paymentDetail.error) throw paymentDetail.error;
 
-    const paymentProvider: PaymentProvider = getPaymentProvider(
-      paymentDetail.data.method ?? '',
-    );
-
-    const result = await createPaymentIntent(
-      paymentProvider,
-      paymentDetail.data,
-    );
+    const result = await usCreateOrder(PaypalProvider, paymentDetail.data);
 
     await createPendingIntentDB(PaymentDataAccess, {
       orderId: result.id,
       amount: result.amount,
       currency: result.currency,
-      // userId
+      clientSecret: result.clientSecret,
     });
 
     return res.status(201).json({
@@ -47,15 +38,4 @@ export default async function createOrder(req: Request, res: Response) {
     console.error(error);
     return res.status(500).json({ error: message });
   }
-}
-
-/**
- * Determine the provider implemantation that needs to be used
- * @returns PaymentProvider
- */
-function getPaymentProvider(paymentMethod: string): PaymentProvider {
-  if (paymentMethod == 'paypal') {
-    return PaypalProvider;
-  }
-  return StripeProvider;
 }

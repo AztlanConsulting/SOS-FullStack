@@ -13,8 +13,6 @@ interface Props {
 
 // Get all product details and display them to the user
 const PurchaseDetails = ({ plan, product, success }: Props) => {
-  console.log('PurchaseDetails:', plan);
-
   return (
     <div className="pt-4 md:p-2">
       <Text

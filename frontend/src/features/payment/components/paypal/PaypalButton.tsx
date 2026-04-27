@@ -25,30 +25,32 @@ const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
 
   return (
     <>
-      <PayPalOneTimePaymentButton
-        className="-z-20"
-        presentationMode="auto"
-        createOrder={async () => {
-          console.log('Create order');
-
-          const response = await createPaypalPayment(data);
-
-          const orderId = response.data.result.id;
-          return { orderId };
-        }}
-        onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
-          console.log('Approve order');
-          const response = await confirmPaypalPayment(orderId, purchaseDetail);
-
-          if (response.status == 200) {
-            console.log('Payment captured!');
-            success();
-          }
-        }}
-        onError={(error) => {
-          console.log(error);
-        }}
-      />
+      <div className="mx-auto w-full">
+        <PayPalOneTimePaymentButton
+          className="-z-20"
+          presentationMode="auto"
+          createOrder={async () => {
+            console.log('Create order');
+            const response = await createPaypalPayment(data);
+            const orderId = response.data.result.id;
+            return { orderId };
+          }}
+          onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
+            console.log('Approve order');
+            const response = await confirmPaypalPayment(
+              orderId,
+              purchaseDetail,
+            );
+            if (response.status == 200) {
+              console.log('Payment captured!');
+              success();
+            }
+          }}
+          onError={(error) => {
+            console.log(error);
+          }}
+        />
+      </div>
     </>
   );
 };

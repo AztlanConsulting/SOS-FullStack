@@ -1,46 +1,32 @@
 import { Text } from '../../../../shared/components/ui/Text';
-import yellowLine from '@assets/images/yellowLine.png';
-import dog1 from '@assets/images/dog1.png';
+import Localizacion from '@assets/images/Localizacion.png';
 
 const ServicesSection = () => {
   return (
     <section className="bg-white overflow-hidden py-8 lg:py-16 relative">
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto relative z-10">
-        <div className="text-center mb-8 lg:mb-20">
-          <Text as="h2" variant="h2" weight="medium">
-            ¿Cómo te podemos ayudar?
-          </Text>
-        </div>
-
-        <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-8 lg:gap-30">
+        <div className="flex flex-col md:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="relative ">
             <img
-              src={yellowLine}
-              alt="Background"
-              className="absolute left-0 -z-10 w-[120%] scale-150"
-              style={{
-                top: 'calc((1 / 2 * 100%) - 25px)',
-              }}
-            />
-            <img
-              src={dog1}
+              src={Localizacion}
               alt="Servicios"
-              className="relative z-10 mx-auto w-[200px] h-[200px] object-cover"
+              className="w-full max-w-[250px] h-auto rounded-lg"
             />
           </div>
-          <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg: text-left order-1 lg:order-2">
+          <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg:text-left order-1 lg:order-2">
             <Text
               as="h3"
               variant="h3"
               weight="medium"
               className="mb-4 lg:mb-6 text-center lg:text-left"
             >
-              Ingresa la información de <br className="hidden lg:block" />
-              tu mascota
+              La tecnologia detras
             </Text>
             <Text variant="body" className="text-left">
-              Compártenos el nombre de tu mascota, dónde se perdió, y algunas
-              fotos para los anuncios en Facebook
+              Utilizando herramientas de segmentación geográfica, mostramos la
+              publicación a usuarios en tu zona, aumentando significativamente
+              las probabilidades de que alguien lo reconozca y pueda ayudarte a
+              encontrarlo más rápido.
             </Text>
           </div>
         </div>

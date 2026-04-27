@@ -10,7 +10,7 @@ const ServicesSection = () => {
             <img
               src={Localizacion}
               alt="Servicios"
-              className="w-full max-w-[250px] h-auto rounded-lg"
+              className="w-full max-w-[350px] h-auto rounded-lg"
             />
           </div>
           <div className="flex-1 max-w-xl lg:max-w-2xl text-center lg:text-left order-1 lg:order-2">
@@ -18,7 +18,7 @@ const ServicesSection = () => {
               as="h3"
               variant="h3"
               weight="medium"
-              className="mb-4 lg:mb-6 text-center lg:text-left"
+              className="mb-4 lg:mb-6 text-center md:text-left lg:text-left"
             >
               La tecnología detrás.
             </Text>

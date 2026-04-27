@@ -100,7 +100,11 @@ describe('PlanCard Component', () => {
     await userEvent.click(screen.getByText('Seleccionar'));
     expect(navigateMock).toHaveBeenCalledWith('/compra', {
       state: {
-        planDetails: { ...planDetails },
+        planDetails: {
+          ...planDetails,
+        },
+        productType: 'plan',
+        userEmail: 'test@mail.com',
       },
     });
   });

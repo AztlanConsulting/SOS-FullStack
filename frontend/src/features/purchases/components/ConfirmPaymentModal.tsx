@@ -20,15 +20,14 @@ const ConfirmPaymentModal = ({ plan, product }: Props) => {
     <section
       className="fixed top-0 left-0 h-screen w-screen bg-gray-800/50 flex items-center justify-center z-10"
       onClick={close}
+      id="dialog"
     >
       <div className="rounded-c bg-primary flex items-center h-68 ">
         <div className="bg-white h-56 flex flex-col gap-5 p-5">
           <Text variant="h1" className="text-center">
-            ¡
             {plan
-              ? 'Su anuncio será publicado en unos minutos'
-              : 'La compra ha sido exitosa'}{' '}
-            !
+              ? '¡Su anuncio será publicado en unos minutos!'
+              : '¡La compra ha sido exitosa!'}{' '}
           </Text>
           {plan && (
             <Text className="text-start">

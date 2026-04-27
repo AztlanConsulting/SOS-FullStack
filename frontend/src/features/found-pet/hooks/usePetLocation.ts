@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { PetReportData } from '../types/petReport.types.ts';
 import { useGeocoding } from '../../map/hooks/useGeocoding.tsx';
 import { useMap } from '../../map/hooks/useMap.tsx';
@@ -9,7 +9,16 @@ export const usePetLocation = (
   formData: Partial<PetReportData>,
   updateForm: (newData: Partial<PetReportData>) => void,
 ) => {
-  const { coords } = useMap(mapID);
+  const { coords } = useMap(
+    mapID,
+    useCallback(
+      (lat: number, lng: number) => {
+        LeafletMapService.placeMarker([lat, lng]);
+        updateForm({ locationCoords: [lat, lng] });
+      },
+      [updateForm],
+    ),
+  );
   const { query, results, isLoading, handleSearch, handleSelect } =
     useGeocoding();
 
@@ -20,9 +29,6 @@ export const usePetLocation = (
     if (formData.locationCoords && !mapReadyRef.current) {
       const timer = setTimeout(() => {
         LeafletMapService.flyTo(formData.locationCoords as [number, number]);
-        LeafletMapService.placeMarker(
-          formData.locationCoords as [number, number],
-        );
         mapReadyRef.current = true;
       }, 350);
       return () => clearTimeout(timer);

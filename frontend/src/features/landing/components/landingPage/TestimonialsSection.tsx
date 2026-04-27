@@ -47,21 +47,21 @@ const TestimonialCard = ({
   };
 
   return (
-    <div
-      className={`bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8 h-full absolute inset-0 ${stateClasses[state]}`}
-    >
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
-          <HiOutlineUserCircle
-            strokeWidth={1}
-            className="w-10 h-10 text-black"
-          />
+    <div className={`relative w-full ${stateClasses[state]}`}>
+      <div className="bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+            <HiOutlineUserCircle
+              strokeWidth={1}
+              className="w-10 h-10 text-black"
+            />
+          </div>
+          <Text variant="body" weight="medium" className="self-center">
+            {name}
+          </Text>
         </div>
-        <Text variant="body" weight="medium" className="self-center">
-          {name}
-        </Text>
+        <Text variant="body">{text}</Text>
       </div>
-      <Text variant="body">{text}</Text>
 
       <style>{`
         @keyframes enterLeft {
@@ -171,7 +171,7 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 gap-6 w-full max-w-2xl relative h-60">
+          <div className="grid grid-cols-1 gap-6 w-full max-w-2xl relative">
             {!isAnimating ? (
               <TestimonialCard
                 name={currentTestimonial.name}

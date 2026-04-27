@@ -18,7 +18,7 @@ export const FoundPetDataAccess: FoundPetRepository = {
    */
   async createFoundPet(foundPetData: FoundPetReport): Promise<FoundPetResult> {
     const created = await FoundPetModel.create(foundPetData);
-    return created.toObject() as FoundPetResult;
+    return created.toObject() as unknown as FoundPetResult;
   },
 
   /**
@@ -28,7 +28,7 @@ export const FoundPetDataAccess: FoundPetRepository = {
    */
   async getFoundPetById(id: string): Promise<FoundPetResult | null> {
     const found = await FoundPetModel.findById(id);
-    return found?.toObject() as FoundPetResult | null;
+    return found?.toObject() as unknown as FoundPetResult | null;
   },
 
   /**
@@ -52,7 +52,7 @@ export const FoundPetDataAccess: FoundPetRepository = {
     const updated = await FoundPetModel.findByIdAndUpdate(id, foundPetData, {
       new: true,
     });
-    return updated?.toObject() as FoundPetResult | null;
+    return updated?.toObject() as unknown as FoundPetResult | null;
   },
 
   /**

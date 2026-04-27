@@ -1,9 +1,6 @@
 import { PayPalProvider } from '@paypal/react-paypal-js/sdk-v6';
 import PaypalButton from './PaypalButton';
-import type {
-  Order,
-  PurchaseDetail,
-} from '@features/payment/types/payment.types';
+import type { Order, PurchaseDetail } from '../../types/payment.types';
 
 interface Props {
   data: Order;

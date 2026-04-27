@@ -23,10 +23,7 @@ export interface FoundPetReport {
   imageIds?: string[];
 }
 
-export interface IFoundPet extends FoundPetReport, Document {
-  createdAt: Date;
-  updatedAt: Date;
-}
+export interface IFoundPet extends FoundPetReport, Document {}
 
 const foundPetSchema = new Schema<IFoundPet>(
   {

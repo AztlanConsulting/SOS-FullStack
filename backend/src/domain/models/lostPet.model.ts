@@ -1,6 +1,6 @@
 export interface LostPetReport {
   id?: string;
-  name?: string;
+  name: string;
   species: string;
   date: string;
   breed?: string;

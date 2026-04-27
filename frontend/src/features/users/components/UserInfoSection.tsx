@@ -16,27 +16,16 @@ export const UserInfoSection = ({
   updateForm,
   reportType = 'lost',
 }: UsuerInfoSectionProps) => {
-  const speciesOptions = [
-    { value: 'Perro', label: 'Perro' },
-    { value: 'Gato', label: 'Gato' },
-    { value: 'Ave', label: 'Ave' },
-    { value: 'Hámster', label: 'Hámster' },
-    { value: 'Conejo', label: 'Conejo' },
-    { value: 'Otro', label: 'Otro' },
-  ];
+  const speciesOptions = ['Perro', 'Gato', 'Ave', 'Hámster', 'Conejo', 'Otro'];
 
-  const sexOptions = [
-    { value: 'Macho', label: 'Macho' },
-    { value: 'Hembra', label: 'Hembra' },
-    { value: 'Desconocido', label: 'Desconocido' },
-  ];
+  const sexOptions = ['Macho', 'Hembra', 'Desconocido'];
 
   const sizeOptions = [
-    { value: 'Mini: 1 a 4 kg', label: 'Mini: 1 a 4 kg' },
-    { value: 'Pequeña: 5 a 10 kg', label: 'Pequeña: 5 a 10 kg' },
-    { value: 'Mediana: 11 a 25 kg', label: 'Mediana: 11 a 25 kg' },
-    { value: 'Grande: 26 a 45 kg', label: 'Grande: 26 a 45 kg' },
-    { value: 'Gigante: más de 45 kg', label: 'Gigante: más de 45 kg' },
+    'Mini: 1 a 4 kg',
+    'Pequeña: 5 a 10 kg',
+    'Mediana: 11 a 25 kg',
+    'Grande: 26 a 45 kg',
+    'Gigante: más de 45 kg',
   ];
 
   const today = new Date().toLocaleDateString('en-CA');

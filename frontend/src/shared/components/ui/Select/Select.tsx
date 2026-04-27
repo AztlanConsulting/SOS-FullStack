@@ -1,8 +1,13 @@
 import React from 'react';
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
-  options: { value: string; label: string }[];
+  options: SelectOption[] | string[];
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -27,11 +32,15 @@ export const Select: React.FC<SelectProps> = ({
           <option value="" disabled>
             Seleccionar una opción
           </option>
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
+          {options.map((opt, index) => {
+            const value = typeof opt === 'string' ? opt : opt.value;
+            const label = typeof opt === 'string' ? opt : opt.label;
+            return (
+              <option key={value + index} value={value}>
+                {label}
+              </option>
+            );
+          })}
         </select>
         <div className="absolute right-3 top-1/2 translate-y-[-10%] pointer-events-none text-black">
           <svg

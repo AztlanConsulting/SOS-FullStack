@@ -7,6 +7,7 @@ type ButtonProps = {
   onClick?: () => void;
   variant?: ButtonVariant;
   disabled?: boolean;
+  isLoading?: boolean;
   icon?: ComponentType<{ size?: number }>;
   textColor?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -16,19 +17,20 @@ export function Button({
   onClick,
   variant = 'primary',
   disabled = false,
+  isLoading = false,
   icon: Icon,
   textColor = '',
   type = 'button',
 }: ButtonProps) {
   const base =
-    'flex items-center justify-center gap-2 px-3 py-2 rounded-[20px] font-semibold text-base transition-colors duration-200';
+    'flex items-center justify-center gap-2 px-3 py-2.5 rounded-full font-semibold text-base transition-colors duration-200';
   const variants: Record<ButtonVariant, string> = {
     primary:
-      'bg-yellow-400 text-white hover:bg-yellow-500 w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6',
+      'bg-yellow-400 text-white hover:bg-yellow-500 w-full md:max-w-lg mx-auto',
     secondary:
-      'bg-white text-yellow-400 hover:bg-yellow-200 w-5/6 md:w-5/6 lg:w-5/6 xl:w-5/6 border-2 border-yellow-400',
+      'bg-white text-yellow-400 hover:bg-yellow-200 w-full md:max-w-lg mx-auto border-2 border-yellow-400',
     danger:
-      'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-full md:w-auto lg:w-full xl:w-full border-1 border-[#61646B]',
+      'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-full md:max-w-lg mx-auto border-1 border-[#61646B]',
     plans:
       'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
   };
@@ -41,7 +43,7 @@ export function Button({
         base,
         variants[variant],
         'relative flex justify-center',
-        disabled && 'opacity-50 cursor-not-allowed',
+        (disabled || isLoading) && 'opacity-50 cursor-not-allowed',
         textColor,
       )}
     >
@@ -51,7 +53,7 @@ export function Button({
         {Icon ? <div className="w-[33px]" /> : <></>}
 
         <Text variant="caption" weight="medium" className="text-inherit">
-          {label}
+          {isLoading ? 'Guardando...' : label}
         </Text>
 
         {Icon && (

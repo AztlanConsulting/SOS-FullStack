@@ -32,7 +32,8 @@ app.use((req, res, next) => {
   }
 });
 
-app.use(bodyparser.json());
+app.use(bodyparser.json({ limit: '20mb' }));
+app.set('trust proxy', true);
 app.use(cookieParser());
 
 // Routes

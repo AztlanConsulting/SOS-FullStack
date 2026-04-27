@@ -30,6 +30,7 @@ export const LeafletMapService = {
     coords: [number, number],
     elementId: string,
     onMove?: (lat: number, lng: number) => void,
+    onClick?: (lat: number, lng: number) => void,
   ) {
     if (map) return;
 
@@ -57,6 +58,12 @@ export const LeafletMapService = {
       map.on('moveend', () => {
         const center = map!.getCenter();
         onMove(center.lat, center.lng);
+      });
+    }
+
+    if (onClick) {
+      map.on('click', (e: L.LeafletMouseEvent) => {
+        onClick(e.latlng.lat, e.latlng.lng);
       });
     }
   },
@@ -90,5 +97,20 @@ export const LeafletMapService = {
       if (layer instanceof L.Marker) map?.removeLayer(layer);
     });
     L.marker(coords).addTo(map);
+  },
+
+  /**
+   * Destroy the actual instance of the map and clears the memory
+   * @param mapID ID of the HTML container.
+   */
+  destroyMap(mapID: string) {
+    if (map) {
+      map.remove();
+      map = null;
+    }
+    const container = L.DomUtil.get(mapID);
+    if (container) {
+      (container as HTMLElement & { _leaflet_id?: null })._leaflet_id = null;
+    }
   },
 };

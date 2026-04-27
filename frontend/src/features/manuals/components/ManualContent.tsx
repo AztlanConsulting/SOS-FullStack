@@ -1,6 +1,7 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import ContentRenderer from '@shared/components/ui/ContentRenderer';
 import { Button } from '@shared/components/ui/Button/Button';
+import { Input } from '@shared/components/ui/Input/Input';
 import { HeaderBack } from '@shared/components/layout/HeaderBack';
 import { useManualPurchase } from '../hooks/useManualPurchase';
 import type { Manual } from '../types/Manual.type';
@@ -69,29 +70,15 @@ export const ManualContent = ({
               Te enviaremos el manual por tu correo electrónico después de la
               compra.
             </Text>
-            <div className="relative w-5/6 md:place-self-start md:w-5/6 mt-6 bg-white rounded-lg">
-              <input
+            <div className="relative w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6">
+              <Input
                 type="email"
                 id="email"
+                label="Correo electrónico"
                 placeholder=" "
                 value={userEmail}
                 onChange={(event) => handleEmailChange(event.target.value)}
-                className="peer w-full rounded-lg border border-[var(--color-grey-border)] 
-                px-4 pt-5 pb-2 text-sm focus:border-[var(--color-primary)] 
-                focus:outline-none text-black
-                "
               />
-
-              <label
-                htmlFor="email"
-                className="
-                absolute left-4 top-0.5 text-sm text-gray-500
-                pointer-events-none transition-colors
-                peer-focus:text-[var(--color-primary)]
-                "
-              >
-                Correo electrónico
-              </label>
             </div>
             {emailError && (
               <Text

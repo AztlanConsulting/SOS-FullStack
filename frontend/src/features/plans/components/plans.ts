@@ -43,7 +43,7 @@ export const PLANS: PlanCardProps[] = [
         tooltip:
           'La geolocalización doble permite colocar un segundo pin de ubicación para mostrar el anuncio en otra zona. Si reportan que la mascota fue vista en otra colonia o área, se puede agregar ese pin para que el anuncio también se difunda allí.',
       },
-      { label: 'Instagram Reel', included: false },
+      { label: 'Reel de Instagram y Facebook', included: false },
     ],
     onSelect: () => {},
   },
@@ -89,7 +89,7 @@ export const PLANS: PlanCardProps[] = [
         tooltip:
           'La geolocalización doble permite colocar un segundo pin de ubicación para mostrar el anuncio en otra zona. Si reportan que la mascota fue vista en otra colonia o área, se puede agregar ese pin para que el anuncio también se difunda allí.',
       },
-      { label: 'Instagram Reel', included: false },
+      { label: 'Reel de Instagram y Facebook', included: false },
     ],
     onSelect: () => {},
   },
@@ -133,7 +133,7 @@ export const PLANS: PlanCardProps[] = [
         tooltip:
           'La geolocalización doble permite colocar un segundo pin de ubicación para mostrar el anuncio en otra zona. Si reportan que la mascota fue vista en otra colonia o área, se puede agregar ese pin para que el anuncio también se difunda allí.',
       },
-      { label: 'Instagram Reel', included: true },
+      { label: 'Reel de Instagram y Facebook', included: true },
     ],
     onSelect: () => {},
   },

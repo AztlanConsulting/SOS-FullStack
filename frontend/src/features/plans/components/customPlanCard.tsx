@@ -3,6 +3,7 @@ import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
 import { useCustomPlan } from '../hooks/useCustomPlan';
+import { usePetReport } from '@features/users/context/PetReportContext';
 import { ALL_FEATURES } from '../hooks/useCustomPlan';
 
 /**
@@ -22,6 +23,14 @@ const CustomPlanCard: React.FC = () => {
     setKm,
     toggleFeature,
   } = useCustomPlan();
+
+  const BASE_FEATURES = [
+    'Publicación en nuestras redes sociales',
+    'Video y lista de consejos de búsqueda',
+    'Cartel para imprimir',
+  ];
+
+  const { reportData, setReportData } = usePetReport();
 
   return (
     <div className="w-full max-w-sm rounded-2xl border-2 border-[#AFB1B6] bg-white overflow-hidden">
@@ -232,9 +241,35 @@ const CustomPlanCard: React.FC = () => {
           <Button
             label="Confirmar plan"
             variant="plans"
-            onClick={() =>
-              console.log({ days, km, selectedFeatures, totalPrice })
-            }
+            onClick={() => {
+              if (!reportData) return;
+
+              const dynamicFeature = `Anuncio de ${days} días en un área de ${km} km a la redonda`;
+
+              const updated = {
+                ...reportData,
+                planName: 'Personalizado',
+                planDetails: {
+                  days,
+                  km,
+                  selectedFeatures: Array.from(
+                    new Set([
+                      dynamicFeature,
+                      ...BASE_FEATURES,
+                      ...selectedFeatures.map((key) => {
+                        const feature = tier.features.find(
+                          (f) => f.key === key,
+                        );
+                        return feature?.label || key;
+                      }),
+                    ]),
+                  ),
+                  totalPrice,
+                },
+              };
+
+              setReportData(updated);
+            }}
           />
         </div>
       </div>

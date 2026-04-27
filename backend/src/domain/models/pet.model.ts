@@ -4,16 +4,16 @@ import { Schema, model } from 'mongoose';
 export interface Pet {
   _id: Types.ObjectId;
   userId: Types.ObjectId;
-  name?: string;
+  name: string;
   species: string;
   dateMissing: Date;
-  breed?: string;
+  breed: string;
   sex: string;
   color: string;
   size: string;
   description: string;
   photos: string[];
-  placeMissing?: string;
+  placeMissing: string;
   createdAt: Date;
   updatedAt: Date;
 }

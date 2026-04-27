@@ -19,15 +19,15 @@ export type PetReportSex = (typeof PET_REPORT_SEX_VALUES)[number];
 export type PetReportSize = (typeof PET_REPORT_SIZE_VALUES)[number];
 
 export type CreatePetReportDTO = {
-  name?: string;
+  name: string;
   species: string;
   date: string;
-  breed?: string;
+  breed: string;
   sex: PetReportSex;
   color: string;
   size: PetReportSize;
   description: string;
-  location?: string;
+  location: string;
   locationCoords: [number, number];
   contactName: string;
   phoneNumber: string;
@@ -50,15 +50,15 @@ export type LostPetReport = Omit<
 };
 
 export const createPetReportDTOSchema = z.object({
-  name: z.string().optional(),
+  name: z.string(),
   species: z.string().min(1, 'La especie es requerida'),
   date: z.string().min(1, 'La fecha es requerida'),
-  breed: z.string().optional(),
+  breed: z.string(),
   sex: z.enum(PET_REPORT_SEX_VALUES),
   color: z.string().min(1, 'El color es requerido'),
   size: z.enum(PET_REPORT_SIZE_VALUES),
   description: z.string().min(1, 'La descripción es requerida'),
-  location: z.string().optional(),
+  location: z.string(),
   locationCoords: z.preprocess(
     (val) => (typeof val === 'string' ? JSON.parse(val) : val),
     z.tuple([z.number(), z.number()]),

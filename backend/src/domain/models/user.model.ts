@@ -18,7 +18,10 @@ export interface User {
   updatedAt: Date;
 }
 
-export type UserCreateInput = Omit<User, '_id' | 'createdAt' | 'updatedAt'>;
+export type UserCreateInput = Omit<
+  User,
+  '_id' | 'createdAt' | 'updatedAt' | 'active'
+>;
 
 export type UserWithRole = Omit<User, 'roleId'> & {
   roleId: Pick<Role, '_id' | 'role'>;
@@ -56,7 +59,7 @@ const UserSchema = new Schema<User>(
     phone: { type: String },
     fbUser: { type: String },
     conversation: { type: String },
-    active: { type: Boolean, default: true },
+    active: { type: Boolean, default: false },
   },
   {
     timestamps: true,

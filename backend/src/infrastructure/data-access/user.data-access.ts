@@ -1,13 +1,12 @@
-import type { User } from '@domain/models/user.model';
+import type {
+  User,
+  UserWithRole,
+  UserCreateInput,
+} from '@domain/models/user.model';
 import { UserModel } from '@domain/models/user.model';
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { PopulatedPermission } from '@validation/auth.types';
 import type { UserPermissions } from '@validation/auth.types';
-import type { Role } from '@domain/models/role.model';
-
-type UserWithRole = Omit<User, 'roleId'> & {
-  roleId: Role;
-};
 
 export const userDataAccess: UserRepository = {
   /**
@@ -128,13 +127,15 @@ export const userDataAccess: UserRepository = {
   },
 
   /**
+   * Creates a new user in the database.
    *
-   * @param userData -
-   * @returns
+   * @param userData - Data required to create the user (excluding id and timestamps)
+   * @returns The ID of the newly created user as a string
    */
-  createUser: async function (userData: Partial<User>): Promise<User> {
+  createUser: async function (userData: UserCreateInput): Promise<string> {
     const newUser = new UserModel(userData);
     const savedUser = await newUser.save();
-    return savedUser.toObject();
+
+    return savedUser._id.toString();
   },
 };

@@ -1,7 +1,11 @@
 import type { Request, Response } from 'express';
-import { createLostPetReport } from '../../use-cases/clients/createLostPetReport.usecase';
-import { publishLostPet } from '../../use-cases/clients/publishLostPet.usecase';
-import { metaPublisher } from '../../infrastructure/api/meta.api';
+import { createLostPetReport } from '@use-cases/clients/createLostPetReport.usecase';
+import { publishLostPet } from '@use-cases/clients/publishLostPet.usecase';
+import { metaPublisher } from '@infrastructure/api/meta.api';
+import { userDataAccess } from '@infrastructure/data-access/user.data-access';
+import { petDataAccess } from '@infrastructure/data-access/pet.data-access';
+import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
+import { roleDataAccess } from '@/infrastructure/data-access/role.data-access';
 import {
   createPetReportDTOSchema,
   getCreatePetReportFieldErrors,
@@ -48,14 +52,29 @@ const createLostPetReportController = async (req: Request, res: Response) => {
         details: getCreatePetReportFieldErrors(validation.error),
       });
     }
-    const result = await createLostPetReport(validation.data);
+
+    const imageUrls = images.map((file) => {
+      return `${process.env.BASE_URL}/uploads/${file.filename}`;
+    });
+
+    const result = await createLostPetReport(
+      {
+        userRepository: userDataAccess,
+        petRepository: petDataAccess,
+        purchasedPlanRepository: purchasedPlanDataAccess,
+        roleRepository: roleDataAccess,
+      },
+      {
+        ...validation.data,
+        images: imageUrls,
+      },
+    );
 
     return res.status(201).json({
       message: 'Reporte creado exitosamente',
       data: result,
     });
   } catch (err: unknown) {
-    console.error(err);
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
 
     return res.status(500).json({

@@ -10,6 +10,7 @@ export const PaymentDataAccess: PaymentRepository = {
   async createPending(data: PaymentDBDto): Promise<void> {
     await PaymentModel.create({
       ...data,
+      clientSecret: data.clientSecret ?? 'unknown',
       status: 'pending',
     });
   },

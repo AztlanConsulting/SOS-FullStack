@@ -1,9 +1,4 @@
 import type { PaypalApi } from '@/domain/ports/paypal.port';
-import {
-  DetailOrder,
-  PaymentSuccess,
-  PaypalAccessToken,
-} from '@/domain/ports/paypal.port';
 import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 import { PaymentModel } from '@domain/models/payment.model';
 import type { PaymentIntentDTO } from '@/domain/ports/paymentProvider.port';
@@ -24,9 +19,7 @@ describe('PaymentDataAccess unit-test', () => {
   });
 
   afterAll(() => {
-    afterAll(() => {
-      process.env = originalEnv;
-    });
+    process.env = originalEnv;
   });
 
   test('should correctly build a PayPal order when a PRODUCT is provided', () => {

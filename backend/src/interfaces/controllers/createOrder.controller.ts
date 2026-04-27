@@ -26,7 +26,7 @@ export default async function createOrder(req: Request, res: Response) {
       orderId: result.id,
       amount: result.amount,
       currency: result.currency,
-      clientSecret: result.clientSecret,
+      clientSecret: result.clientSecret ?? null,
     });
 
     return res.status(201).json({

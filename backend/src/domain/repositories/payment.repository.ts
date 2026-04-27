@@ -3,7 +3,7 @@ export interface PaymentDBDto {
   amount: number;
   currency: string;
   // change to clientId when registering client si finished
-  clientSecret?: string;
+  clientSecret: string | null;
 }
 export interface PaymentRepository {
   createPending(data: PaymentDBDto): Promise<void>;

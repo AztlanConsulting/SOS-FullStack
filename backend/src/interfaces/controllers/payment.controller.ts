@@ -32,6 +32,7 @@ export const makeCreatePaymentIntent = () => {
         orderId: result.id,
         amount: result.amount,
         currency: result.currency,
+        clientSecret: null,
       });
 
       return res.status(201).json({

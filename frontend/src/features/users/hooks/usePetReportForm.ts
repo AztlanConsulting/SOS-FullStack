@@ -49,9 +49,19 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     address: '',
     location: null,
     locationCoords: undefined,
+
     contactName: '',
     phoneNumber: '',
     email: '',
+
+    planName: '',
+    planDetails: {
+      days: 3,
+      km: 5,
+      selectedFeatures: [],
+      totalPrice: 0,
+    },
+
     ...initialData,
   });
 

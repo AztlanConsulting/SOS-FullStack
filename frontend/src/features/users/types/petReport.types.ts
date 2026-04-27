@@ -23,7 +23,7 @@ export interface PetReportData {
 
   address: string;
   location: GeocodingResult | null;
-  locationCoords: [number, number];
+  locationCoords?: [number, number];
 
   contactName: string;
   phoneNumber: string;

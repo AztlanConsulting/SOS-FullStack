@@ -10,7 +10,7 @@ import type {
   PurchasedPlanCreateInput,
 } from '@domain/models/purchasedPlan.model';
 
-interface CreateLostPetReportInput {
+export interface CreateLostPetReportInput {
   name: string;
   species: string;
   date: string;

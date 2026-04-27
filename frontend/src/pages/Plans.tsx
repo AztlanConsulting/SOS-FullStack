@@ -1,8 +1,11 @@
-import PlanCard from '@features/plans/components/PlanCard';
+import PlanCard, {
+  type PlanCardProps,
+} from '@features/plans/components/PlanCard';
 import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePetReport } from '@features/users/context/PetReportContext';
 import { Button } from '@shared/components/ui/Button/Button';
 import { usePlans } from '@features/plans/hooks/usePlans';
 import { useNavigate } from 'react-router';
@@ -17,7 +20,33 @@ import { useNavigate } from 'react-router';
 export default function PlansPage() {
   const { plans, loading, error } = usePlans();
   const [current, setCurrent] = useState(0);
+  const { reportData, setReportData } = usePetReport();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!reportData) {
+      navigate('/');
+    }
+  }, [reportData, navigate]);
+
+  const handleSelectPlan = (plan: PlanCardProps) => {
+    if (!reportData) return;
+
+    const updated = {
+      ...reportData,
+      planName: plan.name,
+      planDetails: {
+        days: parseInt(plan.duration) || 0,
+        km: parseInt(plan.radius) || 0,
+        selectedFeatures: plan.features
+          .filter((f) => f.included)
+          .map((f) => f.label),
+        totalPrice: Number(plan.price),
+      },
+    };
+
+    setReportData(updated);
+  };
 
   /**
    * Navigation handlers for the mobile carousel view.
@@ -76,7 +105,7 @@ export default function PlansPage() {
             <PlanCard
               key={i}
               {...plan}
-              onSelect={() => console.log(plan.name)}
+              onSelect={() => handleSelectPlan(plan)}
             />
           ))}
         </div>
@@ -99,7 +128,7 @@ export default function PlansPage() {
           <div className="w-9/12">
             <PlanCard
               {...plans[current]}
-              onSelect={() => console.log(plans[current].name)}
+              onSelect={() => handleSelectPlan(plans[current])}
             />
           </div>
           <div className="w-1/12 flex justify-end">

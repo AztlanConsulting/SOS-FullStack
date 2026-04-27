@@ -171,7 +171,7 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 gap-6 w-full max-w-2xl relative h-60">
+          <div className="grid grid-cols-1 gap-6 w-full max-w-2xl relative h-96 sm:h-60">
             {!isAnimating ? (
               <TestimonialCard
                 name={currentTestimonial.name}
@@ -213,7 +213,7 @@ const TestimonialsSection = () => {
           </div>
         </div>
 
-        <div className="flex justify-center mt-8 lg:w-1/2 max-w-md mx-auto">
+        <div className="flex justify-center mt-8 w-full mx-auto">
           <a
             href="https://www.instagram.com/stories/highlights/17876578843721551/"
             className="w-full flex justify-center"

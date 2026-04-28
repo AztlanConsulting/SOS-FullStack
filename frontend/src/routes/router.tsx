@@ -4,11 +4,13 @@ import { TempPurchasePage } from '../pages/TempPurchasePage';
 import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
-import { PetReportProvider } from '../features/found-pet/context/PetReportService';
+import { ReportConfirmationPage } from '../pages/ReportConfirmation';
+import { PetReportProvider } from '../features/users/context/PetReportContext';
 import Plans from '../pages/Plans';
 import { PaymentPage } from '../features/payment/components/PaymentPage';
 import CheckoutPage from '../features/payment/components/CheckoutPage';
 import routerWorkshop from './workshop.routes';
+import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import routerLostPet from './foundPet.routes';
@@ -17,7 +19,6 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
-import { ReportConfirmationPage } from '@/pages/ReportConfirmation';
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +84,7 @@ export const router = createBrowserRouter([
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,
+      ...routerBlogs,
     ],
   },
 ]);

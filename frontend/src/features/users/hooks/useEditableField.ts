@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { PetReportData } from '../types/petReport.types';
+import { PhoneNumberUtil } from 'google-libphonenumber';
+
+const phoneUtil = PhoneNumberUtil.getInstance();
 
 export const useEditableField = (
   value: string,
@@ -16,14 +19,46 @@ export const useEditableField = (
 
   const handleSave = () => {
     const trimmed = tempValue.trim();
+    setError('');
 
     if (!trimmed) {
-      setError('Este campo no puede quedar vacío.');
+      setError('Campo obligatorio');
       return;
     }
 
+    if (field === 'phoneNumber') {
+      try {
+        const parsedNumber = phoneUtil.parseAndKeepRawInput(trimmed);
+        if (!phoneUtil.isValidNumber(parsedNumber)) {
+          setError('Número de teléfono inválido');
+          return;
+        }
+      } catch (e) {
+        setError('Número de teléfono inválido');
+        return;
+      }
+    }
+
+    if (field === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(trimmed)) {
+        setError('Correo inválido');
+        return;
+      }
+    }
+
+    if (field === 'date') {
+      const selectedDate = new Date(trimmed);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate > today) {
+        setError('La fecha no puede ser futura.');
+        return;
+      }
+    }
+
     updateForm({ [field]: trimmed });
-    setError('');
     setIsEditing(false);
   };
 

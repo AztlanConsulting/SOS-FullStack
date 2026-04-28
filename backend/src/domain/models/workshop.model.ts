@@ -1,12 +1,14 @@
 import type { Types } from 'mongoose';
 import { model, Schema } from 'mongoose';
+import type { ContentBlock } from '@validation/content.types';
+import { ContentBlockSchema } from '@validation/content.types';
 
 export interface Workshop {
   _id?: Types.ObjectId;
   name: string;
   description: string;
   price: number; // MXN;
-  content: string;
+  content: ContentBlock[];
   category: string[];
   img?: {
     data: Buffer;
@@ -19,7 +21,7 @@ const WorkshopSchema = new Schema<Workshop>({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  content: { type: String },
+  content: { type: [ContentBlockSchema], required: true, default: [] },
   category: { type: [String] },
   img: {
     data: { type: Buffer },

@@ -1,8 +1,10 @@
 import React from 'react';
+import { Text } from '../Text';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   maxLength?: number;
+  error?: string;
 }
 
 export const TextArea: React.FC<TextAreaProps> = ({
@@ -10,30 +12,55 @@ export const TextArea: React.FC<TextAreaProps> = ({
   id,
   maxLength,
   value = '',
+  error,
   ...props
 }) => {
   const currentLength = String(value).length;
   const remaining = maxLength ? maxLength - currentLength : null;
+  const hasErrorState = Boolean(error);
 
   return (
     <div className="flex flex-col w-full">
-      <div className="relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
-        <label htmlFor={id} className="block text-xs text-gray-400">
+      <div
+        className={`group relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:ring-1 group ${
+          hasErrorState
+            ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500'
+            : 'border-gray-400 focus-within:border-yellow-500 focus-within:ring-yellow-500'
+        }`}
+      >
+        <label
+          htmlFor={id}
+          className="block text-xs text-gray-400 group-focus-within:text-[var(--color-primary)]"
+        >
           {label}
         </label>
         <textarea
           id={id}
           maxLength={maxLength}
           value={value}
-          className="w-full text-sm text-gray-700 bg-transparent outline-none resize-none min-h-[100px]"
+          className="w-full text-sm text-gray-700 bg-transparent outline-none resize-none min-h-[60px]"
           {...props}
         />
       </div>
-      {/* Contador dinámico de caracteres */}
       {maxLength && (
-        <div className="text-right text-sm text-emerald-700 mt-2 font-medium">
+        <Text
+          variant="caption"
+          as="caption"
+          weight="medium"
+          className="text-right text-emerald-700"
+        >
           Quedan {remaining} caracteres
-        </div>
+        </Text>
+      )}
+      {error && (
+        <Text
+          variant="small"
+          as="small"
+          weight="bold"
+          className="color-danger ml-1 italic"
+        >
+          {error}
+        </Text>
       )}
     </div>
   );

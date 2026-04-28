@@ -67,7 +67,7 @@ describe('usePetPhotos hook', () => {
     });
 
     const { images } = updateForm.mock.calls[0][0];
-    expect(images[1]).toStrictEqual(newFile);
+    expect(images[1]).toBe(newFile);
   });
 
   test('handleFileUpload replaces a file at an existing slot', () => {
@@ -144,7 +144,7 @@ describe('usePetPhotos hook', () => {
 
     const { images } = updateForm.mock.calls[0][0];
     expect(images).toHaveLength(1);
-    expect(images[0]).toStrictEqual(newFile);
+    expect(images[0]).toBe(newFile);
   });
 
   test('trims existing images when photoCount decreases via imageLayout change', () => {

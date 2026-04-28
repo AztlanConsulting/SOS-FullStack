@@ -39,7 +39,7 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
       </div>
       <div
         className="w-full bg-white md:bg-secondary flex flex-col md:mt-1
-      items-center justify-center border-b border-secondary shadow-xl/30 md:border-none md:shadow-none"
+      items-center justify-center border-b border-[var(--color-grey-border)] shadow-xl/30 md:border-none md:shadow-none"
       >
         <Text
           as="p"
@@ -57,30 +57,21 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
           color="color-grey-text"
           className="w-5/6 md:w-full"
         >
-          Te enviaremos el manual por tu correo electrónico después de la
-          compra.
+          Te enviaremos los detalles de tu compra por correo electrónico después
+          de completar el pago.
         </Text>
-        <div className="relative w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6 bg-white rounded-lg">
+        <div className="relative w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6 color-secondary-bg rounded-lg">
           <Input
             type="email"
             id="email"
             label="Correo electrónico"
             placeholder=" "
+            hasLength={false}
+            error={emailError}
             value={userEmail}
             onChange={(event) => handleEmailChange(event.target.value)}
           />
         </div>
-        {emailError && (
-          <Text
-            as="p"
-            variant="caption"
-            weight="regular"
-            color="color-danger"
-            className="w-5/6 pl-4 md:place-self-start pt-1"
-          >
-            {emailError}
-          </Text>
-        )}
         <div className="w-full flex justify-center items-center md:justify-start mt-6 mb-8">
           <Button
             label="Proceder al pago"

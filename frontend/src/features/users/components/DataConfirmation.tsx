@@ -7,6 +7,7 @@ import { TextArea } from '@shared/components/ui/TextArea/TextArea';
 import { DateInput } from '@shared/components/ui/DateInput/DateInput';
 import { PhoneInput } from '@shared/components/ui/PhoneInput/PhoneInput';
 import { Button } from '@shared/components/ui/Button';
+import { Text } from '@shared/components/ui/Text';
 
 import { PetLocationSection } from './PetLocationSection';
 import { PetPhotosSection } from './PetPhotosSection';
@@ -26,6 +27,7 @@ const EditableField = ({
   type = 'text',
   options = [],
   maxLength,
+  hasLength,
   updateForm,
 }: {
   label: string;
@@ -34,6 +36,7 @@ const EditableField = ({
   type?: 'text' | 'select' | 'date' | 'textarea' | 'phone';
   options?: { value: string; label: string }[];
   maxLength?: number;
+  hasLength?: boolean;
   updateForm: (newData: Partial<PetReportData>) => void;
 }) => {
   const {
@@ -45,11 +48,11 @@ const EditableField = ({
     error,
   } = useEditableField(value, field, updateForm);
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleDateString('en-CA');
 
   return (
     <div
-      className={`rounded-lg flex flex-col justify-center mb-3 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 p-4'}`}
+      className={`rounded-lg flex flex-col justify-center mb-4 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 px-4'}`}
     >
       {isEditing ? (
         <div className="flex flex-col gap-2 w-full w-max-lg mx-auto">
@@ -58,11 +61,11 @@ const EditableField = ({
               id={field}
               label={label}
               value={tempValue}
+              error={error}
+              hasLength={hasLength}
               onChange={(e) => setTempValue(e.target.value)}
+              maxLength={maxLength}
             />
-          )}
-          {error && (
-            <p className="text-red-500 text-xs font-semibold mt-1">{error}</p>
           )}
           {type === 'select' && (
             <Select
@@ -97,6 +100,7 @@ const EditableField = ({
               label={label}
               value={tempValue}
               onChange={(val) => setTempValue(val)}
+              error={error}
             />
           )}
 
@@ -108,7 +112,7 @@ const EditableField = ({
         <div className="flex justify-between items-center w-full">
           <div className="flex flex-col">
             <span className="text-xs text-gray-400 font-medium">{label}</span>
-            <span className="text-sm text-gray-800 mt-1 break-words whitespace-pre-wrap">
+            <span className="text-sm text-gray-800 mt-1 break-all whitespace-pre-wrap">
               {value || '-'}
             </span>
           </div>
@@ -146,6 +150,23 @@ const EditableLocation = ({
   updateForm: (newData: Partial<PetReportData>) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleConfirm = () => {
+    if (!formData.address?.trim() && !formData.locationCoords) {
+      setError('Debes seleccionar una ubicación válida.');
+      return;
+    }
+
+    setError(null);
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    if (formData.address?.trim() || formData.locationCoords) {
+      setError(null);
+    }
+  }, [formData.address, formData.locationCoords]);
 
   return (
     <div
@@ -158,15 +179,14 @@ const EditableLocation = ({
             updateForm={updateForm}
             reportType="lost"
             mapID="edit-location-map"
+            errors={{ address: error || '' }}
+            onInteraction={() => setError(null)}
           />
-          <div className="flex justify-end mt-2">
-            <button
-              onClick={() => setIsEditing(false)}
-              className="bg-[#FFD100] text-black px-6 py-2 rounded-lg font-bold shadow-sm hover:bg-yellow-400 transition-colors"
-            >
-              Confirmar Ubicación
-            </button>
-          </div>
+          <Button
+            variant="primary"
+            label="Confirmar Ubicación"
+            onClick={handleConfirm}
+          />
         </div>
       ) : (
         <div className="flex justify-between items-center w-full">
@@ -179,7 +199,10 @@ const EditableLocation = ({
             </span>
           </div>
           <button
-            onClick={() => setIsEditing(true)}
+            onClick={() => {
+              setIsEditing(true);
+              setError(null);
+            }}
             className="text-gray-500 hover:text-black p-2 rounded-full hover:bg-gray-200 transition-colors"
           >
             <svg
@@ -213,7 +236,8 @@ const EditablePhotos = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [slotErrors, setSlotErrors] = useState<Record<string, string>>({});
+  const [hasTriedConfirm, setHasTriedConfirm] = useState(false);
 
   // Generate object URLs fron the File[] on the formData
   useEffect(() => {
@@ -231,13 +255,60 @@ const EditablePhotos = ({
   }, [formData.images]);
 
   const handleConfirm = () => {
-    if (!formData.images || formData.images.filter((f) => !!f).length === 0) {
-      setError('Debes subir al menos una foto de tu mascota.');
+    setHasTriedConfirm(true);
+
+    const expectedPhotoCount = parseInt(formData.imageLayout || '1');
+    const selectedPhotos = (formData.images || []).slice(0, expectedPhotoCount);
+    const missingSlots: Record<string, string> = {};
+
+    for (let i = 0; i < expectedPhotoCount; i++) {
+      if (!selectedPhotos[i]) {
+        missingSlots[`images_${i + 1}`] = `Falta la foto ${i + 1}`;
+      }
+    }
+
+    if (Object.keys(missingSlots).length > 0) {
+      setSlotErrors(missingSlots);
       return;
     }
-    setError(null);
+
+    setSlotErrors({});
+    setHasTriedConfirm(false);
     setIsEditing(false);
   };
+
+  const handlePhotosUpdate = (newData: Partial<PetReportData>) => {
+    if ('imageLayout' in newData) {
+      // Reset errors immediately on first layout click.
+      setSlotErrors({});
+      setHasTriedConfirm(false);
+    }
+
+    updateForm(newData);
+  };
+
+  useEffect(() => {
+    if (!isEditing) {
+      return;
+    }
+
+    // After first confirm attempt, keep errors visible for still-missing slots.
+    if (!hasTriedConfirm) {
+      return;
+    }
+
+    const expectedPhotoCount = parseInt(formData.imageLayout || '1');
+    const selectedPhotos = (formData.images || []).slice(0, expectedPhotoCount);
+    const nextMissingSlots: Record<string, string> = {};
+
+    for (let i = 0; i < expectedPhotoCount; i++) {
+      if (!selectedPhotos[i]) {
+        nextMissingSlots[`images_${i + 1}`] = `Falta la foto ${i + 1}`;
+      }
+    }
+
+    setSlotErrors(nextMissingSlots);
+  }, [formData.images, isEditing, hasTriedConfirm]);
 
   return (
     <div
@@ -245,22 +316,17 @@ const EditablePhotos = ({
     >
       {isEditing ? (
         <div className="flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
-          <PetPhotosSection formData={formData} updateForm={updateForm} />
+          <PetPhotosSection
+            formData={formData}
+            updateForm={handlePhotosUpdate}
+            errors={slotErrors}
+          />
 
-          {error && (
-            <p className="text-red-500 text-xs text-center font-bold">
-              {error}
-            </p>
-          )}
-
-          <div className="flex justify-end mt-2">
-            <button
-              onClick={handleConfirm}
-              className="bg-[#FFD100] text-black px-6 py-2 rounded-lg font-bold shadow-sm hover:bg-yellow-400 transition-colors"
-            >
-              Confirmar Fotos
-            </button>
-          </div>
+          <Button
+            variant="primary"
+            label="Confirmar Fotos"
+            onClick={handleConfirm}
+          />
         </div>
       ) : (
         <div className="w-full flex flex-col">
@@ -269,7 +335,8 @@ const EditablePhotos = ({
             <button
               onClick={() => {
                 setIsEditing(true);
-                setError(null);
+                setSlotErrors({});
+                setHasTriedConfirm(false);
               }}
               className="text-gray-500 hover:text-black p-2 rounded-full hover:bg-gray-200 transition-colors"
             >
@@ -329,8 +396,6 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
     { value: 'Perro', label: 'Perro' },
     { value: 'Gato', label: 'Gato' },
     { value: 'Ave', label: 'Ave' },
-    { value: 'Conejo', label: 'Conejo' },
-    { value: 'Hámster', label: 'Hámster' },
     { value: 'Otro', label: 'Otro' },
   ];
 
@@ -350,17 +415,24 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-lg flex flex-col gap-6">
+      <div className="w-full max-w-lg flex flex-col gap-4">
         <section>
-          <h3 className="font-semibold text-gray-800 mb-4 text-center">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-8"
+          >
             Información de la mascota
-          </h3>
+          </Text>
           <EditableField
             updateForm={updateForm}
             type="text"
             label="Nombre de la mascota"
             value={formData.name || ''}
             field="name"
+            hasLength={false}
+            maxLength={40}
           />
           <EditableField
             updateForm={updateForm}
@@ -373,7 +445,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
           <EditableField
             updateForm={updateForm}
             type="date"
-            label="Fecha de encuentro"
+            label="Fecha de extravío"
             value={formData.date || ''}
             field="date"
           />
@@ -383,6 +455,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Raza/tipo de la mascota"
             value={formData.breed || ''}
             field="breed"
+            maxLength={40}
           />
           <EditableField
             updateForm={updateForm}
@@ -398,6 +471,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Color de la mascota"
             value={formData.color || ''}
             field="color"
+            maxLength={50}
           />
           <EditableField
             updateForm={updateForm}
@@ -413,31 +487,44 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Descripción adicional de la mascota"
             value={formData.description || ''}
             field="description"
-            maxLength={200}
+            maxLength={100}
           />
         </section>
-
+        <Text variant="h2" as="h2" weight="medium" className="text-center mb-4">
+          Fotos de la mascota
+        </Text>
         <section>
           <EditablePhotos formData={formData} updateForm={updateForm} />
         </section>
 
         <section>
-          <h3 className="font-semibold text-gray-800 mb-4 text-center">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-8"
+          >
             Donde se perdió
-          </h3>
+          </Text>
           <EditableLocation formData={formData} updateForm={updateForm} />
         </section>
 
         <section>
-          <h3 className="font-semibold text-gray-800 mb-4 text-center">
+          <Text
+            variant="h2"
+            as="h2"
+            weight="medium"
+            className="text-center mb-8"
+          >
             Información de contacto
-          </h3>
+          </Text>
           <EditableField
             updateForm={updateForm}
             type="text"
             label="Nombre y apellido"
             value={formData.contactName || ''}
             field="contactName"
+            hasLength={false}
           />
           <EditableField
             updateForm={updateForm}
@@ -452,6 +539,8 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Correo electrónico"
             value={formData.email || ''}
             field="email"
+            hasLength={false}
+            maxLength={40}
           />
         </section>
       </div>

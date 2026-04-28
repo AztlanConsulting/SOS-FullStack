@@ -1,13 +1,10 @@
 import React from 'react';
-
-interface SelectOption {
-  value: string;
-  label: string;
-}
+import { Text } from '../Text';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
-  options: SelectOption[] | string[];
+  options: { value: string; label: string }[];
+  error?: string;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -15,12 +12,24 @@ export const Select: React.FC<SelectProps> = ({
   id,
   options,
   required,
+  error,
   ...props
 }) => {
+  const hasErrorState = Boolean(error);
+
   return (
     <div className="flex flex-col w-full">
-      <div className="relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
-        <label htmlFor={id} className="block text-xs text-gray-400">
+      <div
+        className={`group relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:ring-1 group ${
+          hasErrorState
+            ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500'
+            : 'border-gray-400 focus-within:border-yellow-500 focus-within:ring-yellow-500'
+        }`}
+      >
+        <label
+          htmlFor={id}
+          className={`block text-xs text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+        >
           {label}
           {required && <span className="text-red-500 font-bold">*</span>}
         </label>
@@ -32,15 +41,11 @@ export const Select: React.FC<SelectProps> = ({
           <option value="" disabled>
             Seleccionar una opción
           </option>
-          {options.map((opt, index) => {
-            const value = typeof opt === 'string' ? opt : opt.value;
-            const label = typeof opt === 'string' ? opt : opt.label;
-            return (
-              <option key={value + index} value={value}>
-                {label}
-              </option>
-            );
-          })}
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
         <div className="absolute right-3 top-1/2 translate-y-[-10%] pointer-events-none text-black">
           <svg
@@ -60,6 +65,16 @@ export const Select: React.FC<SelectProps> = ({
           </svg>
         </div>
       </div>
+      {error && (
+        <Text
+          variant="small"
+          as="small"
+          weight="regular"
+          className="color-danger ml-1 italic"
+        >
+          {error}
+        </Text>
+      )}
     </div>
   );
 };

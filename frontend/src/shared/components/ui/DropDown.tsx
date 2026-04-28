@@ -6,20 +6,24 @@ interface Props {
     sortOption: string,
     setSortOption: React.Dispatch<React.SetStateAction<string>>,
   ];
+  onlyAlphabetic?: boolean;
 }
 
-const DropDown = ({ isOpen, sortHook }: Props) => {
+const DropDown = ({ isOpen, sortHook, onlyAlphabetic }: Props) => {
   const sortOption = sortHook[0];
   const setSortOption = sortHook[1];
+  const options = [
+    'Nombre (A-Z)',
+    'Nombre (Z-A)',
+    'Precio: menor a mayor',
+    'Precio: mayor a menor',
+  ];
+
+  const filteredOptions = onlyAlphabetic ? options.slice(0, 2) : options;
   return (
     isOpen && (
       <div className="absolute top-12 left-0 bg-white border rounded-lg shadow-md w-56 z-50">
-        {[
-          'Nombre (A-Z)',
-          'Nombre (Z-A)',
-          'Precio: menor a mayor',
-          'Precio: mayor a menor',
-        ].map((option) => (
+        {filteredOptions.map((option) => (
           <label
             key={option}
             className="flex items-center gap-2 cursor-pointer hover:bg-(--color-grey-bg) py-2.5 px-3"

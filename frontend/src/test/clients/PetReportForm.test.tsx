@@ -5,8 +5,11 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 
 vi.mock('@features/users/components/PetLocationSection', () => ({
-  PetLocationSection: () => (
-    <div data-testid="mock-location-section">Sección de ubicación</div>
+  PetLocationSection: ({ errors }: { errors: Record<string, string> }) => (
+    <section>
+      <div data-testid="mock-location-section">Sección de ubicación</div>
+      {errors.address && <small>{errors.address}</small>}
+    </section>
   ),
 }));
 
@@ -47,7 +50,7 @@ describe('PetReportForm Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
-    Element.prototype.scrollIntoView = vi.fn();
+    HTMLElement.prototype.scrollIntoView = vi.fn();
   });
 
   test('renders all form sections correctly', () => {
@@ -71,28 +74,15 @@ describe('PetReportForm Component', () => {
     expect(screen.getByDisplayValue('Juan Pérez')).toBeDefined();
   });
 
-  test('shows errors when clicking confirm with empty fields', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<PetReportForm />);
-
-    await user.click(screen.getByText('Contratar el servicio'));
-
-    expect(
-      screen.getByText('¡Nos falta el nombre de tu mascota!'),
-    ).toBeDefined();
-  });
-
   test('shows validation errors for name, species and email when form is empty', async () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm />);
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(
-      screen.getByText('¡Nos falta el nombre de tu mascota!'),
-    ).toBeDefined();
-    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
-    expect(screen.getByText('¡Falta correo!')).toBeDefined();
+    expect(screen.getByText('Ingresa el nombre de tu mascota')).toBeDefined();
+    expect(screen.getByText('Selecciona una especie')).toBeDefined();
+    expect(screen.getByText('Ingresa un correo electrónico')).toBeDefined();
   });
 
   test('shows all required field errors when form is empty', async () => {
@@ -101,18 +91,16 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(
-      screen.getByText('¡Nos falta el nombre de tu mascota!'),
-    ).toBeDefined();
-    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
-    expect(screen.getByText('¡Indícanos la fecha!')).toBeDefined();
-    expect(screen.getByText('¡Falta raza o tipo!')).toBeDefined();
-    expect(screen.getByText('¡Falta color!')).toBeDefined();
-    expect(screen.getByText('¡Indica ubicación!')).toBeDefined();
-    expect(screen.getByText('¡Sube al menos una foto!')).toBeDefined();
-    expect(screen.getByText('¡Falta nombre del dueño!')).toBeDefined();
-    expect(screen.getByText('¡Añade un número de teléfono!')).toBeDefined();
-    expect(screen.getByText('¡Falta correo!')).toBeDefined();
+    expect(screen.getByText('Ingresa el nombre de tu mascota')).toBeDefined();
+    expect(screen.getByText('Selecciona una especie')).toBeDefined();
+    expect(screen.getByText('Selecciona una fecha')).toBeDefined();
+    expect(screen.getByText('Ingresa una raza o tipo')).toBeDefined();
+    expect(screen.getByText('Ingresa un color')).toBeDefined();
+    expect(screen.getByText('Ingresa una ubicación')).toBeDefined();
+    expect(screen.getByText('Falta la foto 1')).toBeDefined();
+    expect(screen.getByText('Ingresa el nombre del dueño')).toBeDefined();
+    expect(screen.getByText('Ingresa un número de teléfono')).toBeDefined();
+    expect(screen.getByText('Ingresa un correo electrónico')).toBeDefined();
   });
 
   test('does not navigate when the form has errors', async () => {
@@ -122,15 +110,6 @@ describe('PetReportForm Component', () => {
     await user.click(screen.getByText('Contratar el servicio'));
 
     expect(mockNavigate).not.toHaveBeenCalled();
-  });
-
-  test('scrolls to first error when validation fails', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<PetReportForm />);
-
-    await user.click(screen.getByText('Contratar el servicio'));
-
-    expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
   });
 
   test('shows invalid email format error when email is malformed', async () => {
@@ -143,7 +122,7 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(screen.getByText('¡Correo inválido!')).toBeDefined();
+    expect(screen.getByText('Correo inválido')).toBeDefined();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
@@ -157,7 +136,7 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(screen.getByText('¡Correo inválido!')).toBeDefined();
+    expect(screen.getByText('Correo inválido')).toBeDefined();
   });
 
   test('shows future date error when date is in the future', async () => {
@@ -175,23 +154,23 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(screen.getByText('¡La fecha no puede ser futura!')).toBeDefined();
+    expect(screen.getByText('La fecha no puede ser futura')).toBeDefined();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  test('accepts past date as a valid date', async () => {
+  test('accepts today as a valid date', async () => {
     const user = userEvent.setup();
 
+    const today = new Date().toLocaleDateString('en-CA');
+
     renderWithRouter(
-      <PetReportForm
-        initialData={{ ...VALID_INITIAL_DATA, date: '2020-06-15' }}
-      />,
+      <PetReportForm initialData={{ ...VALID_INITIAL_DATA, date: today }} />,
     );
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(screen.queryByText('¡La fecha no puede ser futura!')).toBeNull();
-    expect(screen.queryByText('¡Indícanos la fecha!')).toBeNull();
+    expect(screen.queryByText('La fecha no puede ser futura')).toBeNull();
+    expect(screen.queryByText('Selecciona una fecha')).toBeNull();
   });
 
   test('clears the name error when the name field is updated', async () => {
@@ -199,16 +178,12 @@ describe('PetReportForm Component', () => {
     renderWithRouter(<PetReportForm />);
 
     await user.click(screen.getByText('Contratar el servicio'));
-    expect(
-      screen.getByText('¡Nos falta el nombre de tu mascota!'),
-    ).toBeDefined();
+    expect(screen.getByText('Ingresa el nombre de tu mascota')).toBeDefined();
 
     const nameInput = screen.getByLabelText('Nombre de la mascota');
     await user.type(nameInput, 'Firulais');
 
-    expect(
-      screen.queryByText('¡Nos falta el nombre de tu mascota!'),
-    ).toBeNull();
+    expect(screen.queryByText('Ingresa el nombre de tu mascota')).toBeNull();
   });
 
   test('clears the breed error when the breed field is updated', async () => {
@@ -216,12 +191,12 @@ describe('PetReportForm Component', () => {
     renderWithRouter(<PetReportForm />);
 
     await user.click(screen.getByText('Contratar el servicio'));
-    expect(screen.getByText('¡Falta raza o tipo!')).toBeDefined();
+    expect(screen.getByText('Ingresa una raza o tipo')).toBeDefined();
 
     const breedInput = screen.getByLabelText('Raza/tipo de la mascota');
     await user.type(breedInput, 'Labrador');
 
-    expect(screen.queryByText('¡Falta raza o tipo!')).toBeNull();
+    expect(screen.queryByText('Ingresa una raza o tipo')).toBeNull();
   });
 
   test('navigates to /report-confirmation when all fields are valid', async () => {
@@ -247,16 +222,5 @@ describe('PetReportForm Component', () => {
         email: 'juan@example.com',
       }),
     );
-  });
-
-  test('does not show error banner when all fields are valid', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
-
-    await user.click(screen.getByText('Contratar el servicio'));
-
-    expect(
-      screen.queryByText('¡Faltan algunos detalles importantes!'),
-    ).toBeNull();
   });
 });

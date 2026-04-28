@@ -15,12 +15,12 @@ const LandingPage = () => {
       <Header />
       <main className="pt-[72px] lg:pt-0">
         <HeroSection />
-        <PetReportForm />
-        <ServicesSection />
-        <PlansSection />
         <PublicationSection />
+        <PlansSection />
+        <ServicesSection />
         <TestimonialsSection />
         <PetInfoSection />
+        <PetReportForm />
         <FrecuentlyAsked />
       </main>
       <Footer />

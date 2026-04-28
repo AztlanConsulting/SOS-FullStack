@@ -9,36 +9,49 @@ export interface UsuerInfoSectionProps {
   formData: Partial<PetReportData>;
   updateForm: (newData: Partial<PetReportData>) => void;
   reportType?: ReportType;
+  errors: Record<string, string>;
 }
 
 export const UserInfoSection = ({
   formData,
   updateForm,
   reportType = 'lost',
+  errors,
 }: UsuerInfoSectionProps) => {
-  const speciesOptions = ['Perro', 'Gato', 'Ave', 'Hámster', 'Conejo', 'Otro'];
+  const speciesOptions = [
+    { value: 'Perro', label: 'Perro' },
+    { value: 'Gato', label: 'Gato' },
+    { value: 'Ave', label: 'Ave' },
+    { value: 'Otro', label: 'Otro' },
+  ];
 
-  const sexOptions = ['Macho', 'Hembra', 'Desconocido'];
+  const sexOptions = [
+    { value: 'Macho', label: 'Macho' },
+    { value: 'Hembra', label: 'Hembra' },
+    { value: 'Desconocido', label: 'Desconocido' },
+  ];
 
   const sizeOptions = [
-    'Mini: 1 a 4 kg',
-    'Pequeña: 5 a 10 kg',
-    'Mediana: 11 a 25 kg',
-    'Grande: 26 a 45 kg',
-    'Gigante: más de 45 kg',
+    { value: 'Mini: 1 a 4 kg', label: 'Mini: 1 a 4 kg' },
+    { value: 'Pequeña: 5 a 10 kg', label: 'Pequeña: 5 a 10 kg' },
+    { value: 'Mediana: 11 a 25 kg', label: 'Mediana: 11 a 25 kg' },
+    { value: 'Grande: 26 a 45 kg', label: 'Grande: 26 a 45 kg' },
+    { value: 'Gigante: más de 45 kg', label: 'Gigante: más de 45 kg' },
   ];
 
   const today = new Date().toLocaleDateString('en-CA');
 
   return (
-    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5">
+    <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4">
       {/* Name only applies when is a report for a lost pet. */}
       {reportType === 'lost' && (
         <Input
           id="petName"
           label="Nombre de la mascota"
           value={formData.name || ''}
+          hasLength={false}
           onChange={(e) => updateForm({ name: e.target.value })}
+          error={errors.name}
         />
       )}
 
@@ -48,6 +61,7 @@ export const UserInfoSection = ({
         value={formData.species || ''}
         onChange={(e) => updateForm({ species: e.target.value })}
         options={speciesOptions}
+        error={errors.species}
       />
 
       <DateInput
@@ -58,13 +72,16 @@ export const UserInfoSection = ({
         value={formData.date || ''}
         onChange={(e) => updateForm({ date: e.target.value })}
         max={today}
+        error={errors.date}
       />
 
       <Input
         id="petBreed"
         label="Raza/tipo de la mascota"
         value={formData.breed || ''}
+        maxLength={40}
         onChange={(e) => updateForm({ breed: e.target.value })}
+        error={errors.breed}
       />
 
       <Select
@@ -73,13 +90,16 @@ export const UserInfoSection = ({
         value={formData.sex || ''}
         onChange={(e) => updateForm({ sex: e.target.value as any })}
         options={sexOptions}
+        error={errors.sex}
       />
 
       <Input
         id="petColor"
         label="Color de la mascota"
         value={formData.color || ''}
+        maxLength={40}
         onChange={(e) => updateForm({ color: e.target.value })}
+        error={errors.color}
       />
 
       <Select
@@ -88,6 +108,7 @@ export const UserInfoSection = ({
         value={formData.size || ''}
         onChange={(e) => updateForm({ size: e.target.value as any })}
         options={sizeOptions}
+        error={errors.size}
       />
 
       {reportType === 'lost' && (
@@ -97,7 +118,7 @@ export const UserInfoSection = ({
           placeholder="Ejemplo: Hembra blanca con patas negras y nariz rosita, esterilizada"
           value={formData.description || ''}
           onChange={(e) => updateForm({ description: e.target.value })}
-          maxLength={200}
+          maxLength={100}
         />
       )}
 

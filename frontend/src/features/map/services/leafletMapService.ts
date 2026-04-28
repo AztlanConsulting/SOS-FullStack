@@ -1,12 +1,13 @@
 import * as L from 'leaflet';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon from '@assets/images/markerIcon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 //The default Leaflet marker icons.
 const defaultIcon = L.icon({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
-  iconSize: [25, 41],
+  className: 'custom-pin-border',
+  iconSize: [35, 50],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -16,6 +17,12 @@ L.Marker.prototype.options.icon = defaultIcon;
 
 //Internal singleton that references the Map Instance
 let map: L.Map | null = null;
+let marker: L.Marker | null = null;
+const markerMoveListeners = new Set<(coords: [number, number]) => void>();
+
+function emitMarkerMove(coords: [number, number]) {
+  markerMoveListeners.forEach((listener) => listener(coords));
+}
 
 //Implementation of the Map Service using the API of Leaflet
 export const LeafletMapService = {
@@ -61,11 +68,13 @@ export const LeafletMapService = {
       });
     }
 
-    if (onClick) {
-      map.on('click', (e: L.LeafletMouseEvent) => {
-        onClick(e.latlng.lat, e.latlng.lng);
-      });
-    }
+    map.on('click', (event: L.LeafletMouseEvent) => {
+      const clickedCoords: [number, number] = [
+        event.latlng.lat,
+        event.latlng.lng,
+      ];
+      this.placeMarker(clickedCoords);
+    });
   },
 
   /**
@@ -91,12 +100,52 @@ export const LeafletMapService = {
    * @param coords Latitude and longitude for the new marker position.
    */
 
-  placeMarker(coords: [number, number]) {
+  placeMarker(coords: [number, number], emitChange = true) {
     if (!map) return;
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Marker) map?.removeLayer(layer);
-    });
-    L.marker(coords).addTo(map);
+
+    if (!marker) {
+      marker = L.marker(coords, { draggable: true }).addTo(map);
+
+      marker.on('dragend', () => {
+        const currentCoords = marker!.getLatLng();
+        const draggedCoords: [number, number] = [
+          currentCoords.lat,
+          currentCoords.lng,
+        ];
+        emitMarkerMove(draggedCoords);
+      });
+    } else {
+      marker.setLatLng(coords);
+    }
+
+    if (emitChange) {
+      emitMarkerMove(coords);
+    }
+  },
+
+  onMarkerMove(listener: (coords: [number, number]) => void) {
+    markerMoveListeners.add(listener);
+
+    return () => {
+      markerMoveListeners.delete(listener);
+    };
+  },
+
+  /**
+   * Destroy the actual instance of the map and clears the memory
+   * @param mapID ID of the HTML container.
+   */
+  destroyMap(mapID: string) {
+    if (map) {
+      map.remove();
+      map = null;
+    }
+    marker = null;
+    markerMoveListeners.clear();
+    const container = L.DomUtil.get(mapID);
+    if (container) {
+      (container as HTMLElement & { _leaflet_id?: null })._leaflet_id = null;
+    }
   },
 
   /**

@@ -5,18 +5,30 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import type { PetReportData } from '@features/users/types/petReport.types';
 
+vi.mock('@features/auth/hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: null,
+    isAuthLoading: false,
+  }),
+}));
+
 vi.mock('@features/users/components/DataConfirmation', () => ({
-  DataConfirmation: ({ formData }: { formData: PetReportData }) => (
+  DataConfirmation: ({
+    formData,
+    updateForm,
+  }: {
+    formData: PetReportData;
+    updateForm?: (d: Partial<PetReportData>) => void;
+  }) => (
     <div data-testid="data-confirmation">
+      {updateForm && (
+        <button onClick={() => updateForm({ name: 'Nuevo nombre' })}>
+          Editar nombre
+        </button>
+      )}
       <span>{formData?.name}</span>
     </div>
   ),
-}));
-
-vi.mock('@shared/components/layout/Header', () => ({
-  __esModule: true,
-  Header: () => <header>Header</header>,
-  default: () => <header>Header</header>,
 }));
 
 const mockNavigate = vi.fn();
@@ -28,19 +40,10 @@ vi.mock('react-router', async () => {
 let mockReportData: PetReportData | null = null;
 const mockSetReportData = vi.fn();
 
-vi.mock('@features/found-pet/context/PetReportService', () => ({
+vi.mock('@features/users/context/PetReportContext', () => ({
   usePetReport: () => ({
     reportData: mockReportData,
     setReportData: mockSetReportData,
-  }),
-}));
-
-vi.mock('@features/auth/hooks/useAuth', () => ({
-  useAuth: () => ({
-    user: null,
-    isAuthenticated: false,
-    login: vi.fn(),
-    logout: vi.fn(),
   }),
 }));
 
@@ -122,23 +125,6 @@ describe('ReportConfirmationPage', () => {
 
   test('calls setReportData with merged data when handleUpdateForm is triggered', () => {
     mockReportData = MOCK_REPORT_DATA;
-
-    vi.mock('@features/users/components/DataConfirmation', () => ({
-      DataConfirmation: ({
-        formData,
-        updateForm,
-      }: {
-        formData: PetReportData;
-        updateForm: (d: Partial<PetReportData>) => void;
-      }) => (
-        <div data-testid="data-confirmation">
-          <button onClick={() => updateForm({ name: 'Nuevo nombre' })}>
-            Editar nombre
-          </button>
-          <span>{formData.name}</span>
-        </div>
-      ),
-    }));
 
     renderWithRouter(<ReportConfirmationPage />);
     expect(screen.getByTestId('data-confirmation')).toBeDefined();

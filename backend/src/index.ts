@@ -4,8 +4,11 @@ import cookieParser from 'cookie-parser';
 import routes from '@interfaces/routes/routes';
 import '@domain/models';
 import cors from 'cors';
+import path from 'path';
 
 const app = express();
+
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use(
   cors({

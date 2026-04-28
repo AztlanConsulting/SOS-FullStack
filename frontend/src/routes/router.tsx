@@ -22,15 +22,15 @@ import { ForbiddenPage } from '../pages/ForbiddenPage';
 
 export const router = createBrowserRouter([
   {
-    element: (
-      <PetReportProvider>
-        <App />
-      </PetReportProvider>
-    ),
+    element: <App />,
     children: [
       {
         path: '/',
-        element: <LandingPage />,
+        element: (
+          <PetReportProvider>
+            <LandingPage />,
+          </PetReportProvider>
+        ),
       },
       {
         path: '/forbidden',

@@ -101,6 +101,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setError('Credenciales incorrectas');
             break;
 
+          case 403:
+            setError('Tu cuenta se encuentra desactivada');
+            break;
+
           case 429:
             setError('Demasiados intentos, intenta más tarde');
             break;

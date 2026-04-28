@@ -3,7 +3,7 @@ import type * as ReactRouter from 'react-router';
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useManualPurchase } from '@features/manuals/hooks/useManualPurchase';
+import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import { ManualItem } from '@features/manuals/components/ManualItem';
 
 const navigateMock = vi.fn();
@@ -17,14 +17,19 @@ vi.mock('react-router', async () => {
   };
 });
 
-describe('useManualPurchase', () => {
+describe('usePurchaseProduct', () => {
   beforeEach(() => {
     navigateMock.mockReset();
   });
 
   it('shows validation error for invalid email', () => {
     const { result } = renderHook(() =>
-      useManualPurchase({ _id: 'm1', price: 250 }),
+      usePurchaseProduct({
+        _id: 'm1',
+        item: 'manual',
+        url: 'manual',
+        price: 250,
+      }),
     );
 
     act(() => {
@@ -41,7 +46,12 @@ describe('useManualPurchase', () => {
 
   it('clears previous error when user edits email', () => {
     const { result } = renderHook(() =>
-      useManualPurchase({ _id: 'm1', price: 250 }),
+      usePurchaseProduct({
+        _id: 'm1',
+        item: 'manual',
+        url: 'manual',
+        price: 250,
+      }),
     );
 
     act(() => {
@@ -61,7 +71,12 @@ describe('useManualPurchase', () => {
 
   it('navigates to purchase with trimmed email and manual payload', () => {
     const { result } = renderHook(() =>
-      useManualPurchase({ _id: 'm9', price: 399 }),
+      usePurchaseProduct({
+        _id: 'm9',
+        item: 'manual',
+        url: 'manual',
+        price: 399,
+      }),
     );
 
     act(() => {

@@ -27,6 +27,7 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
   const blob = await res.blob();
   return new File([blob], filename, { type: blob.type });
 };
+import { PetReportForm } from '@features/users/components/PetReportForm';
 
 const LandingPage = () => {
   const posterRef = useRef<HTMLDivElement>(null);
@@ -79,6 +80,7 @@ const LandingPage = () => {
         <PublicationSection />
         <TestimonialsSection />
         <PetInfoSection />
+        <PetReportForm />
         <FrecuentlyAsked />
 
         {petData && (

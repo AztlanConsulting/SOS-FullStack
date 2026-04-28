@@ -1,15 +1,24 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { LeafletMapService } from '../services/leafletMapService';
 import { PhotonGeocoding } from '@features/map/services/photonGeocodingService';
 import type { GeocodingResult } from '@features/map/types/geocodingResult';
+
+const DEFAULT_LOCATION_LABEL = 'Mexico City, Mexico';
+
+type MarkerAddressPayload = {
+  coords: [number, number];
+  address: string;
+};
 
 /**
  * React hook that seraches the input state, result suggestions and updates the maps view upon selection.
  * @returns state and handlers for searching and selecting addresses.
  */
-export function useGeocoding() {
+export function useGeocoding(
+  onMarkerAddressChange?: (payload: MarkerAddressPayload) => void,
+) {
   // Current text value of the search input
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(DEFAULT_LOCATION_LABEL);
 
   // Lists address sugestions returned from Photon
   const [results, setResults] = useState<GeocodingResult[]>([]);
@@ -48,11 +57,30 @@ export function useGeocoding() {
   // Updates the map camera, places a marker, and resets the search UI state
   const handleSelect = useCallback((result: GeocodingResult) => {
     LeafletMapService.flyTo(result.coords);
-    LeafletMapService.placeMarker(result.coords);
+    LeafletMapService.placeMarker(result.coords, false);
 
     setQuery(result.displayName);
     setResults([]);
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = LeafletMapService.onMarkerMove(async (coords) => {
+      setResults([]);
+      const address = await PhotonGeocoding.reverse(coords);
+
+      if (address) {
+        setQuery(address);
+        onMarkerAddressChange?.({ coords, address });
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [onMarkerAddressChange]);
 
   return { query, results, isLoading, handleSearch, handleSelect };
 }

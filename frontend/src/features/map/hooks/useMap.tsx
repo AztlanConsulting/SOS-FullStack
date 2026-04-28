@@ -10,11 +10,18 @@ export function useMap(divID: string) {
   // Defaults coordinates to Mexico City [19.4326, -99.1332]
   const [coords, setCoords] = useState<[number, number]>([19.4326, -99.1332]);
 
-  // Initializes the map once the component mounts and updates state whenever the map finishes moving
+  // Initializes the map once and keeps coords synced with marker movement.
   useEffect(() => {
-    LeafletMapService.init(divID ? coords : coords, divID, (lat, lng) => {
-      setCoords([lat, lng]);
+    LeafletMapService.init(coords, divID);
+
+    const unsubscribe = LeafletMapService.onMarkerMove((nextCoords) => {
+      setCoords(nextCoords);
     });
+
+    return () => {
+      unsubscribe();
+      LeafletMapService.destroyMap(divID);
+    };
   }, []);
 
   return { coords };

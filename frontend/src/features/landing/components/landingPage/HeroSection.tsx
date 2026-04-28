@@ -4,6 +4,12 @@ import { HiChevronRight } from 'react-icons/hi';
 import owner from '@assets/images/owner.png';
 
 const HeroSection = () => {
+  const handleScrollToReport = () => {
+    const section = document.getElementById('lostpet-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <section className="relative color-secondary-bg overflow-hidden py-8 lg:py-10">
       <div className="lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
@@ -33,6 +39,7 @@ const HeroSection = () => {
                 label="Perdí mi mascota"
                 variant="primary"
                 icon={HiChevronRight}
+                onClick={handleScrollToReport}
               />
 
               <Button

@@ -1,8 +1,10 @@
+import type { ContentBlock } from '@shared/types/content.types';
+
 export type Manual = {
   _id: string;
   name: string;
   price: number;
-  content: string;
+  content: ContentBlock[];
   imageUrl: string;
 };
 

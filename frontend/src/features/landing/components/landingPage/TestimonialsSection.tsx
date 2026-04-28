@@ -99,7 +99,7 @@ const TestimonialsSection = () => {
           </div>
         </div>
 
-        <div className="flex justify-center mt-8 lg:w-1/2 max-w-md mx-auto">
+        <div className="flex justify-center mt-8 w-full mx-auto">
           <a
             href="https://www.instagram.com/stories/highlights/17876578843721551/"
             className="w-full flex justify-center"

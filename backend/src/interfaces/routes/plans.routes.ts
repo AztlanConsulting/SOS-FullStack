@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { makeGetPlans } from '@interfaces/controllers/plan.controller';
+import { getPlans } from '@interfaces/controllers/plan.controller';
 
 const router = Router();
 
@@ -8,6 +8,6 @@ const router = Router();
  * GET /getPlans
  * Retrieves the list of all available service plans from the database.
  */
-router.get('/getPlans', makeGetPlans());
+router.get('/getPlans', getPlans);
 
 export default router;

@@ -31,3 +31,17 @@ or context that reviewers should know.
 ## 💥 Issues
 
 Document any known issues, limitations, or pending concerns.
+
+## Requirements Traceability Matrix (RTM)
+
+- [Requirements Traceability Matrix](https://docs.google.com/spreadsheets/d/1fwXbemwmduZ1ytTG2XoRd4ecBOJ-aBa_tn-7cJkgnUc/edit?gid=0#gid=0)
+
+## Checklist
+
+- [] I reviewed spelling and grammar
+- [] I verified the links work correctly
+- [] I checked that images/files/resources load properly
+- [] I confirmed the content is clear and understandable
+- [] I tested the change locally
+- [] The change follows the project’s structure and style guidelines
+- [] I checked the defect log and the department checklist

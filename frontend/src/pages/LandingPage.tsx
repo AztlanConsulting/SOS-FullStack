@@ -7,6 +7,7 @@ import PetInfoSection from '../features/landing/components/landingPage/PetInfoSe
 import TestimonialsSection from '../features/landing/components/landingPage/TestimonialsSection';
 import Footer from '../shared/components/layout/Footer';
 import FrecuentlyAsked from '@features/landing/components/landingPage/FrecuentlyAsked';
+import { PetReportForm } from '@features/users/components/PetReportForm';
 
 const LandingPage = () => {
   return (
@@ -19,6 +20,7 @@ const LandingPage = () => {
         <ServicesSection />
         <TestimonialsSection />
         <PetInfoSection />
+        <PetReportForm />
         <FrecuentlyAsked />
       </main>
       <Footer />

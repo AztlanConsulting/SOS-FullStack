@@ -15,7 +15,7 @@ const PublicationSection = () => {
             weight="medium"
             className="mb-3 md:order-2 text-center md:text-left md:row-span-1 md:place-self-end md:justify-self-start"
           >
-            Cuéntanos de tu mascota
+            Comencemos la búsqueda
           </Text>
           <img
             src={petAndOwners}

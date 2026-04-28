@@ -5,20 +5,21 @@ import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-acce
 import { markAsSucceededDB } from '@/use-cases/payments/markAsSuccededDB.usecase';
 import { createPurchaseDB } from '@/use-cases/purchases/createPurchaseDB.usecase';
 import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
-import { purchaseDetails } from '@/types/payment.types';
+import { purchaseDetailsSchema } from '@validation/payment.types';
 
 export default async function captureOrder(req: Request, res: Response) {
   try {
     const { orderId } = req.params;
 
-    const details = purchaseDetails.safeParse(req.body);
+    const details = purchaseDetailsSchema.safeParse(req.body);
     if (details.error) throw details.error;
 
-    const { userEmail, productId, productType } = details.data;
+    const { purchaseDetails, planId } = details.data;
+    const { userEmail, productId, productType } = purchaseDetails;
 
-    const response = await ucCaptureOrder(paypalApi, orderId as string);
+    const capturedOrder = await ucCaptureOrder(paypalApi, orderId as string);
 
-    if (Boolean(response.error)) throw response.error;
+    if (Boolean(capturedOrder.error)) throw capturedOrder.error;
 
     const result = await markAsSucceededDB(PaymentDataAccess, String(orderId));
 
@@ -33,12 +34,13 @@ export default async function captureOrder(req: Request, res: Response) {
 
     await createPurchaseDB(PurchaseDataAccess, {
       userEmail,
-      paymentId: response.id!,
+      paymentId: capturedOrder.id!,
       productId: productId ?? id!,
       productType,
     });
 
-    if (response.id !== undefined) return res.status(200).send(response.id);
+    if (capturedOrder.id !== undefined)
+      return res.status(200).send(capturedOrder.id);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);

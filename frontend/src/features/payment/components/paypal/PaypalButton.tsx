@@ -1,5 +1,6 @@
 import { createLostPetReportRequest } from '@/features/users/services/lostPet.service';
 import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { PurchasedPlanResponse } from '@/shared/types/pet.types';
 import {
   createPaypalPayment,
   confirmPaypalPayment,
@@ -12,6 +13,7 @@ import {
   PayPalOneTimePaymentButton,
   type OnApproveDataOneTimePayments,
 } from '@paypal/react-paypal-js/sdk-v6';
+import { useState } from 'react';
 
 interface Props {
   data: Order;
@@ -23,6 +25,9 @@ interface Props {
 // When transaction starts and order is created
 // When the transaction is confirmed and finished
 const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
+  const [planId, setPlanId] = useState<string | null>(null);
+  console.log('PurchaseDetail', purchaseDetail);
+
   data.method = 'paypal';
 
   return (
@@ -36,15 +41,29 @@ const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
 
             const response = await createPaypalPayment(data);
             if (data.plan) {
-              const petResult = await createLostPetReportRequest(data.plan);
-              console.log(petResult);
+              const petResult: PurchasedPlanResponse =
+                await createLostPetReportRequest(data.plan);
+
+              setPlanId(petResult.plan._id);
             }
             const orderId = response.data.result.id;
             return { orderId };
           }}
           onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
             console.log('Approve order');
-            const response = await confirmPaypalPayment(orderId);
+            let purchaseInfo = purchaseDetail;
+            if (!Boolean(purchaseDetail)) {
+              purchaseInfo = {
+                userEmail: data.plan!.email,
+                productId: planId!,
+                productType: 'plan',
+              };
+            }
+            const response = await confirmPaypalPayment(
+              orderId,
+              purchaseInfo,
+              planId,
+            );
             if (response.status == 200) {
               console.log('Payment captured!');
               success();

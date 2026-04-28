@@ -7,19 +7,33 @@ import Footer from '@shared/components/layout/Footer';
 import type { PurchaseDetail } from '@features/payment/types/payment.types';
 import usePurchase from '@features/purchases/hooks/usePurchase';
 import { usePetReport } from '@/features/users/context/PetReportContext';
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import type { Product } from '@/shared/types/purchase.types';
 
 // Container for purchase information and purchase logic
 export const PurchasePage = () => {
-  const { state, successHook, query } = usePurchase();
+  const successHook = useState(false);
+  const [product, setProduct] = useState<Product | undefined>(undefined);
+
   const { reportData } = usePetReport();
+  const { state, query } = usePurchase();
+  const navigate = useNavigate();
   const { productId, productType, userEmail } = state ?? {};
 
   const [success, setSuccess] = successHook;
 
-  if (!state && !reportData) return null;
+  const { isLoading, error: queryError, data } = query;
 
-  const { isLoading, error: queryError, data: product } = query;
+  useEffect(() => {
+    const p: Product | undefined = reportData ? undefined : data;
+    setProduct(p);
+
+    if (!Boolean(state) && !Boolean(reportData)) {
+      navigate('/');
+    }
+  }, [data, state]);
+
   const purchaseDetail: PurchaseDetail = {
     userEmail,
     productId,

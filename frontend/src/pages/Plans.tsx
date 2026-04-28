@@ -46,7 +46,7 @@ export default function PlansPage() {
     };
 
     setReportData(updated);
-    navigate('/compra', { state: {} });
+    navigate('/compra', { replace: true, state: null });
   };
 
   /**

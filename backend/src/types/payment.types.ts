@@ -14,8 +14,11 @@ export const paymentDetails = z.object({
   plan: z.any(),
 });
 
-export const purchaseDetails = z.object({
-  userEmail: z.string(),
-  productId: z.string().optional(),
-  productType: z.string(),
+export const purchaseDetailsSchema = z.object({
+  planId: z.string(),
+  purchaseDetails: z.object({
+    userEmail: z.string(),
+    productId: z.string().optional(),
+    productType: z.string(),
+  }),
 });

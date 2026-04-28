@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router';
 import { Text } from '../../../../shared/components/ui/Text';
 import { Button } from '../../../../shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
 import owner from '@assets/images/owner.png';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   const handleScrollToReport = () => {
     const section = document.getElementById('lostpet-section');
     if (section) {
@@ -46,6 +49,7 @@ const HeroSection = () => {
                 label="Encontré una mascota"
                 variant="secondary"
                 icon={HiChevronRight}
+                onClick={() => navigate('/mascotas-encontradas')}
               />
             </div>
           </div>

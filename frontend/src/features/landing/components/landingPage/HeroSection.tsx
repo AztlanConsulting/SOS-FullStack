@@ -21,15 +21,17 @@ const HeroSection = () => {
               weight="medium"
               className="mb-4 lg:mb-6 w-5/6 md:w-4/5 lg:w-full mx-auto"
             >
-              Te ayudamos a buscar tu mascota
+              Te ayudamos a buscar a tu mascota.
             </Text>
             <Text
               variant="body"
               weight="regular"
               className="mb-8 lg:mb-1 w-5/6 md:w-4/5 lg:w-full mx-auto"
             >
-              Publica anuncios, difunde la búsqueda y utiliza nuestros servicios
-              para reunir a tu mascota con su familia.
+              El tiempo es clave y cada minuto puede marcar la diferencia. No
+              tienes que pasar por esto solo. Vamos a difundir su búsqueda de
+              forma estratégica para aumentar las posibilidades de encontrarla
+              lo antes posible.
             </Text>
 
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center w-full sm:w-5/6 lg:w-full lg:mt-10">

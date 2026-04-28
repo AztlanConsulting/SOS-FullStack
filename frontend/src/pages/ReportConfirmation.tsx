@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DataConfirmation } from '../features/users/components/DataConfirmation';
 import { usePetReport } from '../features/users/context/PetReportContext';
-
 import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
+import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -94,6 +94,17 @@ export const ReportConfirmationPage: React.FC = () => {
               >
                 <Poster ref={posterRef} pet={reportData} />
               </div>
+
+              {/* Watermark to prevent exporting image */}
+              <div
+                className="absolute inset-0 pointer-events-none opacity-50"
+                style={{
+                  backgroundImage: `url(${whiteLogoSimple})`,
+                  backgroundRepeat: 'repeat',
+                  backgroundSize: '100px',
+                  transform: 'rotate(-30deg)',
+                }}
+              />
             </div>
           </div>
 

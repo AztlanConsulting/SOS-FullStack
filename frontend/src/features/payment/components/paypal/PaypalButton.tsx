@@ -1,3 +1,5 @@
+import { createLostPetReportRequest } from '@/features/users/services/lostPet.service';
+import type { PetReportData } from '@/features/users/types/petReport.types';
 import {
   createPaypalPayment,
   confirmPaypalPayment,
@@ -31,16 +33,18 @@ const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
           presentationMode="auto"
           createOrder={async () => {
             console.log('Create order');
+
             const response = await createPaypalPayment(data);
+            if (data.plan) {
+              const petResult = await createLostPetReportRequest(data.plan);
+              console.log(petResult);
+            }
             const orderId = response.data.result.id;
             return { orderId };
           }}
           onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
             console.log('Approve order');
-            const response = await confirmPaypalPayment(
-              orderId,
-              purchaseDetail,
-            );
+            const response = await confirmPaypalPayment(orderId);
             if (response.status == 200) {
               console.log('Payment captured!');
               success();

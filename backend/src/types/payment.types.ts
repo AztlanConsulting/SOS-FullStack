@@ -11,15 +11,7 @@ export const paymentDetails = z.object({
       productId: z.string(),
     })
     .optional(),
-  plan: z
-    .object({
-      name: z.string(),
-      price: z.number(),
-      duration: z.string(),
-      radius: z.string(),
-      features: z.array(z.string()),
-    })
-    .optional(),
+  plan: z.any(),
 });
 
 export const purchaseDetails = z.object({

@@ -28,12 +28,6 @@ export const usePlans = () => {
         const merged = data.map(
           (apiPlan: { name: string; price: number; _id: string }) => {
             const staticPlan = PLANS.find((p) => p.name === apiPlan.name);
-            console.log(
-              'apiPlan:',
-              apiPlan.name,
-              '| staticPlan:',
-              staticPlan?.name || 'Not found',
-            );
             return {
               ...staticPlan,
               price: String(apiPlan.price),

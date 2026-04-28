@@ -1,17 +1,24 @@
-import type { PlanDetails } from '@features/plans/types/plan.types';
+import type { PetReportData } from '@/features/users/types/petReport.types';
 import { Text } from '@shared/components/ui/Text';
 
 interface Props {
-  plan: PlanDetails;
+  reportData: PetReportData;
 }
 
-const PlanDetail = ({ plan }: Props) => {
+const PlanDetail = ({ reportData }: Props) => {
+  console.log('PlanDetail', reportData);
   return (
     <div className="w-10/12">
       <ul>
-        <Row label={'Plan seleccionado'} value={plan.name} />
-        <Row label={'Duración'} value={plan.duration} />
-        <Row label={'Distancia'} value={plan.radius} />
+        <Row label={'Plan seleccionado'} value={reportData.planName} />
+        <Row
+          label={'Duración'}
+          value={String(reportData.planDetails!.days) + ' días'}
+        />
+        <Row
+          label={'Distancia'}
+          value={String(reportData.planDetails!.km) + ' km'}
+        />
       </ul>
     </div>
   );

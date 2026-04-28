@@ -46,6 +46,7 @@ export default function PlansPage() {
     };
 
     setReportData(updated);
+    navigate('/compra', { state: {} });
   };
 
   /**

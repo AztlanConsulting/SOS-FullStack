@@ -27,7 +27,7 @@ export async function getWorkshops(req: Request, res: Response) {
       }
 
       return res.status(200).json({
-        workshops: [ws],
+        workshops: ws,
         total: 1,
       });
     }

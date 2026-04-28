@@ -3,16 +3,19 @@ import ProductDetail from './ProductDetail';
 import PlanDetail from './PlanDetail';
 import type { Product } from '@shared/types/purchase.types';
 import ConfirmPaymentModal from './ConfirmPaymentModal';
-import type { PlanDetails } from '@features/plans/types/plan.types';
+import type { PetReportData } from '@/features/users/types/petReport.types';
+import { useEffect } from 'react';
 
 interface Props {
-  plan?: PlanDetails;
+  reportData: PetReportData | null;
   product?: Product;
   success: boolean;
 }
 
 // Get all product details and display them to the user
-const PurchaseDetails = ({ plan, product, success }: Props) => {
+const PurchaseDetails = ({ reportData, product, success }: Props) => {
+  const plan = reportData?.planDetails ?? null;
+
   return (
     <div className="pt-4 md:p-2 w-10/12 mx-auto">
       <Text
@@ -27,7 +30,7 @@ const PurchaseDetails = ({ plan, product, success }: Props) => {
       >
         <div className="flex flex-col items-center md:gap-3 gap-1">
           {/* Different UI elements depending if its a plan or manual / workshop */}
-          {plan && <PlanDetail plan={plan} />}
+          {reportData && <PlanDetail reportData={reportData} />}
           {product && <ProductDetail product={product} />}
         </div>
       </div>
@@ -36,11 +39,11 @@ const PurchaseDetails = ({ plan, product, success }: Props) => {
           Total a pagar:
         </Text>
         <Text variant="h1" color="text-gray-600">
-          ${product?.price ?? plan?.price}
+          ${product?.price ?? plan?.totalPrice}
         </Text>
       </div>
       {/* Modal to show success state */}
-      {success && <ConfirmPaymentModal plan={plan} product={product} />}
+      {success && <ConfirmPaymentModal plan={reportData} product={product} />}
     </div>
   );
 };

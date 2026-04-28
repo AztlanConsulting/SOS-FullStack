@@ -1,4 +1,4 @@
-import type { PlanDetails } from '@features/plans/types/plan.types';
+import type { PetReportData } from '@/features/users/types/petReport.types';
 
 export type Order = {
   amount: number;
@@ -9,7 +9,7 @@ export type Order = {
     productName: string;
     productId: string;
   };
-  plan?: PlanDetails;
+  plan?: PetReportData;
 };
 
 export type PurchaseDetail = {

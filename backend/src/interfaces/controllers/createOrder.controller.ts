@@ -17,7 +17,6 @@ import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-acce
 export default async function createOrder(req: Request, res: Response) {
   try {
     const paymentDetail = paymentDetails.safeParse(req.body);
-
     if (paymentDetail.error) throw paymentDetail.error;
 
     const result = await usCreateOrder(PaypalProvider, paymentDetail.data);

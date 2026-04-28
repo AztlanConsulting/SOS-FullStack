@@ -1,3 +1,4 @@
+import type { PetReportData } from '@/features/users/types/petReport.types';
 import type { PlanDetails } from '@features/plans/types/plan.types';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
@@ -5,7 +6,7 @@ import type { Product } from '@shared/types/purchase.types';
 import { useNavigate } from 'react-router';
 
 interface Props {
-  plan?: PlanDetails;
+  plan: PetReportData | null;
   product?: Product;
 }
 
@@ -31,9 +32,9 @@ const ConfirmPaymentModal = ({ plan, product }: Props) => {
           </Text>
           {plan && (
             <Text className="text-start">
-              Tipo de plan: {plan.name} <br />
-              Duración: {plan.duration} <br />
-              Distancia: {plan.radius}
+              Tipo de plan: {plan.planName} <br />
+              Duración: {plan.planDetails!.days} <br />
+              Distancia: {plan.planDetails!.km}
             </Text>
           )}
           {product && (

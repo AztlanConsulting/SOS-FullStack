@@ -7,27 +7,36 @@ import type {
   PurchaseDetail,
 } from '@features/payment/types/payment.types';
 import paymentMethods from '../services/paymentMethods.service';
-import type { PlanDetails } from '@features/plans/types/plan.types';
+import type { PetReportData } from '@/features/users/types/petReport.types';
 
 interface Props {
   product?: Product;
-  plan?: PlanDetails;
-  purchaseDetail: PurchaseDetail;
+  petReportData: PetReportData | null;
   success: () => void;
+  purchaseDetail: PurchaseDetail;
 }
 
 // Logic to handle payment method, display different cards for each payment
 // method and display payment details on option click, as well as the
 // Price of purchase
-const PurchaseForm = ({ product, plan, purchaseDetail, success }: Props) => {
+const PurchaseForm = ({
+  product,
+  petReportData,
+  purchaseDetail,
+  success,
+}: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
     setSelected(e.target.value);
   }
 
-  const orderDetails: Order | null = {
-    amount: product?.price ?? plan!.price,
+  if (!Boolean(petReportData) && !Boolean(product)) {
+    return;
+  }
+
+  const orderDetails: Order = {
+    amount: product?.price ?? petReportData?.planDetails!.totalPrice ?? 0,
     currency: 'MXN',
     ...(product && {
       product: {
@@ -35,10 +44,12 @@ const PurchaseForm = ({ product, plan, purchaseDetail, success }: Props) => {
         productName: product.name,
       },
     }),
-    ...(plan && {
-      plan: plan,
+    ...(petReportData && {
+      plan: petReportData,
     }),
   };
+
+  console.log(orderDetails);
 
   return (
     <div>

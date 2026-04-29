@@ -14,15 +14,26 @@ jest.mock('@/infrastructure/api/meta.api', () => ({
  * Use them as a base and override only the field you want to test.
  */
 const VALID_FIELDS: Record<string, string> = {
+  name: 'Firulais',
   species: 'Perro',
   date: '2023-10-25',
+  breed: 'Labrador',
   sex: 'Macho',
   color: 'Café',
   size: 'Mediana: 11 a 25 kg',
   description: 'Perrito muy amigable, llevaba collar azul.',
+  location: 'Ciudad de México',
+  locationCoords: JSON.stringify([19.4326, -99.1332]),
   contactName: 'Juan Pérez',
   phoneNumber: '5551234567',
   email: 'juan@example.com',
+  planName: 'Básico',
+  planDetails: JSON.stringify({
+    days: 30,
+    km: 10,
+    selectedFeatures: ['publicacion', 'fotos'],
+    totalPrice: 299,
+  }),
 };
 
 const MOCK_IMAGE = Buffer.from('mock image data');
@@ -48,11 +59,13 @@ describe('POST /clients/lost-pet (Integration Tests)', () => {
   });
 
   test('replies with 201 and creates the lost pet report successfully', async () => {
-    const res = await buildLostPetRequest({ name: 'Firulais' }).attach(
+    const res = await buildLostPetRequest(VALID_FIELDS).attach(
       'images',
       MOCK_IMAGE,
       'perrito.jpg',
     );
+
+    console.log('res', res);
 
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty(

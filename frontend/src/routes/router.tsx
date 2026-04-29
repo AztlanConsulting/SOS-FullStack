@@ -6,6 +6,7 @@ import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import { ReportConfirmationPage } from '../pages/ReportConfirmation';
 import { PetReportProvider } from '../features/users/context/PetReportContext';
+import { PetReportProvider as PRP } from '../features/found-pet/context/PetReportService';
 import Plans from '../pages/Plans';
 import { PaymentPage } from '../features/payment/components/PaymentPage';
 import CheckoutPage from '../features/payment/components/CheckoutPage';
@@ -22,15 +23,17 @@ import { ForbiddenPage } from '../pages/ForbiddenPage';
 
 export const router = createBrowserRouter([
   {
-    element: <App />,
+    element: (
+      <PRP>
+        <PetReportProvider>
+          <App />
+        </PetReportProvider>
+      </PRP>
+    ),
     children: [
       {
         path: '/',
-        element: (
-          <PetReportProvider>
-            <LandingPage />,
-          </PetReportProvider>
-        ),
+        element: <LandingPage />,
       },
       {
         path: '/forbidden',

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { DataConfirmation } from '../features/users/components/DataConfirmation';
-import { usePetReport } from '../features/found-pet/context/PetReportService';
 import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
+import { usePetReport } from '@/features/users/context/PetReportContext';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();

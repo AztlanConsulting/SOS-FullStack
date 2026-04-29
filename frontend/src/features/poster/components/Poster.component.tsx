@@ -235,7 +235,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: PetReportData }>(
           <Text
             variant="body"
             weight="medium"
-            className="text-[25px] ms-[20px] pb-[10px]"
+            className="text-[25px] ms-[20px] pb-[10px] pr-[15px]"
           >
             {pet.description}
           </Text>

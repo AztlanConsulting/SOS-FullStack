@@ -1,13 +1,16 @@
 import '@testing-library/jest-dom/vitest';
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
-import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchase from '@/features/purchases/hooks/usePurchase';
 import { PurchasePage } from '@/pages/PurchasePage';
 import getProductImage from '@/features/purchases/services/getProductImage.service';
 import { useLocation } from 'react-router';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import wrapper from '../utils/wrapper.util';
+import type { PetReportData } from '@/features/users/types/petReport.types';
+import { usePetReport } from '@/features/users/context/PetReportContext';
+import { useEffect } from 'react';
+import TestComponent from '../utils/TestContextComponent';
 
 const navigateMock = vi.fn();
 // Replace useNavigate so we can assert route targets and payloads.
@@ -30,16 +33,30 @@ const mockStateManual = {
   productType: 'manual',
   price: '399',
 };
-const mockStatePlan = {
-  productType: 'plan',
-  userEmail: 'test@mail.com',
+
+const mockReportData: PetReportData = {
+  name: 'Firulais',
+  species: 'Perro',
+  date: '2023-10-25',
+  breed: 'Labrador',
+  sex: 'Macho',
+  color: 'Café',
+  size: 'Mediana: 11 a 25 kg',
+  description: 'Perro amigable',
+  images: [],
+  imageLayout: '1',
+  address: 'Calle 123, Querétaro',
+  location: null,
+  locationCoords: undefined,
+  contactName: 'Juan Pérez',
+  phoneNumber: '+52 442 123 4567',
+  email: 'juan@example.com',
+  planName: 'Básico',
   planDetails: {
-    _id: '1234567890',
-    name: 'Básico',
-    price: '500',
-    duration: '3 days',
-    radius: '12 km',
-    features: ['1', '2', '3'],
+    days: 3,
+    km: 12,
+    selectedFeatures: ['feat 1', 'feat 2'],
+    totalPrice: 500,
   },
 };
 
@@ -47,24 +64,9 @@ const mockProduct = {
   _id: '123456789',
   imageUrl: 'img_url',
   name: 'manual',
-  content: 'Hola que hace',
+  content: [{ content: 'Hola que hace', type: 'text' }],
   price: 399,
 };
-
-const createTestQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false, // Prevents vitest from waiting for retries on failure
-      },
-    },
-  });
-
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={createTestQueryClient()}>
-    {children}
-  </QueryClientProvider>
-);
 
 describe('usePurchase', () => {
   beforeEach(() => {
@@ -84,10 +86,6 @@ describe('usePurchase', () => {
     vi.mocked(getProductImage).mockResolvedValue(mockProduct);
 
     const { result } = renderHook(() => usePurchase(), { wrapper });
-
-    act(() => {
-      result.current.successHook[1](true);
-    });
 
     await waitFor(() => expect(result.current.query.isLoading).toBe(false));
 
@@ -110,7 +108,13 @@ describe('usePurchase', () => {
       isAuthLoading: false,
     } as any);
 
-    render(<PurchasePage />, { wrapper });
+    // const {reportData, setReportData} = usePetReport()
+    // Add context here
+    // setReportData(mockReportData)
+
+    render(<TestComponent mockRData={null} component={<PurchasePage />} />, {
+      wrapper,
+    });
 
     const manualName = await screen.findByText('manual');
     const price = await screen.findByText('$399');
@@ -120,23 +124,15 @@ describe('usePurchase', () => {
   });
 
   it('loads page plan information', async () => {
-    vi.mocked(useLocation).mockReturnValue({
-      state: mockStatePlan,
-      key: 'test-key',
-      pathname: '/compra',
-      search: '',
-      hash: '',
-      unstable_mask: undefined,
-    });
-
-    vi.mocked(getProductImage).mockResolvedValue(mockProduct);
-
-    render(<PurchasePage />, { wrapper });
+    render(
+      <TestComponent mockRData={mockReportData} component={<PurchasePage />} />,
+      { wrapper },
+    );
 
     const planName = await screen.findByText('Básico');
     const price = await screen.findByText('$500');
 
-    expect(planName).toBeInTheDocument(); // Plan name
+    expect(planName).toBeInTheDocument();
     expect(price).toBeInTheDocument();
   });
 });

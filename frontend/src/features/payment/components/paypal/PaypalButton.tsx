@@ -26,15 +26,16 @@ interface Props {
 // When the transaction is confirmed and finished
 const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
   const [planId, setPlanId] = useState<string | null>(null);
-  console.log('PurchaseDetail', purchaseDetail);
+  console.log('PurchaseDetail Paypal Btn', purchaseDetail);
 
   data.method = 'paypal';
 
   let purchaseInfo = purchaseDetail;
 
-  if (Object.keys(purchaseDetail).length > 0) {
+  if (Object.keys(purchaseDetail).length > 0 && data.plan) {
+    console.log('redefining');
     purchaseInfo = {
-      userEmail: data.plan!.email,
+      userEmail: data.plan.email,
       productId: planId!,
       productType: 'plan',
     };

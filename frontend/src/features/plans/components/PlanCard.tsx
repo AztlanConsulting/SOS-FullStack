@@ -7,8 +7,6 @@ import {
 } from 'react-icons/hi';
 import { Text } from '@shared/components/ui/Text';
 import { Modal } from '@shared/components/ui/Modal/Modal';
-import { useNavigate } from 'react-router';
-import type { PlanDetails } from '../types/plan.types';
 
 /**
  * Represents an individual feature or service within a plan.
@@ -43,7 +41,6 @@ export interface PlanCardProps {
  * It handles its own state for displaying feature-specific information in a modal.
  */
 const PlanCard: React.FC<PlanCardProps> = ({
-  _id,
   name,
   price,
   currency = '$',
@@ -58,19 +55,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
     title: string;
     description: string;
   } | null>(null);
-  const navigate = useNavigate();
 
   const included = features.filter((f) => f.included);
   const excluded = features.filter((f) => !f.included);
-
-  const planDetails: PlanDetails = {
-    _id,
-    name,
-    price: Number(price),
-    duration,
-    radius,
-    features: features.filter((f) => f.included).map((f) => f.label),
-  };
 
   return (
     <div className="relative pt-4 md:h-full">

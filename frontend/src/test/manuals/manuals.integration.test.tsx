@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { createMemoryRouter, RouterProvider, useLocation } from 'react-router';
 import { ManualItem } from '@features/manuals/components/ManualItem';
 import { ManualContent } from '@features/manuals/components/ManualContent';
+import wrapper from '../utils/wrapper.util';
+import TestComponent from '../utils/TestContextComponent';
 
 const manual = {
   _id: 'm-42',
@@ -78,7 +80,13 @@ describe('manuals integration', () => {
       { initialEntries: ['/manuales/m-42'] },
     );
 
-    render(<RouterProvider router={router} />);
+    render(
+      <TestComponent
+        mockRData={null}
+        component={<RouterProvider router={router} />}
+      />,
+      { wrapper },
+    );
 
     // First submit should fail with validation message.
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));

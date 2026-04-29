@@ -7,7 +7,7 @@ function createItems(data: PaymentIntentDTO) {
       name: data.product?.productName ?? data.plan!.name,
       description:
         data.product?.productId ??
-        `${data.plan!.duration} | ${data.plan!.radius}`,
+        `${data.plan!.planDetails?.days} | ${data.plan!.planDetails?.km}`,
       quantity: '1',
       unit_amount: {
         currency_code: data.currency,

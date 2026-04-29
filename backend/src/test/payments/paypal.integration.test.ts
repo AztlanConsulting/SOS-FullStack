@@ -92,16 +92,17 @@ describe('Paypal integration tests', () => {
           json: async () => ({ id: 'CAPTURE_ID_123', status: 'COMPLETED' }),
         }); // completeOrder
 
-      const capturePayload = {
+      const purchaseDetails = {
         userEmail: 'santiago@example.com',
         productId: 'workshop_abc',
         productType: 'workshop',
       };
+      const planId = null;
 
       // 3. Execute Request
       const response = await request(app)
         .post(`/payments/capture-order/${mockOrderId}`)
-        .send(capturePayload);
+        .send({ purchaseDetails, planId });
 
       // 4. Assertions
       expect(response.status).toBe(200);
@@ -123,17 +124,20 @@ describe('Paypal integration tests', () => {
     });
 
     it('should return 500 if the PayPal capture fails', async () => {
+      const purchaseDetails = {
+        userEmail: 'santiago@example.com',
+        productId: 'workshop_abc',
+        productType: 'workshop',
+      };
+      const planId = null;
+
       (global.fetch as jest.Mock).mockRejectedValue(
         new Error('PayPal API Down'),
       );
 
       const response = await request(app)
         .post('/payments/capture-order/FAIL_ID')
-        .send({
-          userEmail: 'fail@test.com',
-          productId: '1',
-          productType: 'plan',
-        });
+        .send({ purchaseDetails, planId });
 
       expect(response.status).toBe(500);
     });

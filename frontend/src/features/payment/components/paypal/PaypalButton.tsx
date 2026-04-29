@@ -30,6 +30,18 @@ const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
 
   data.method = 'paypal';
 
+  let purchaseInfo = purchaseDetail;
+
+  if (Object.keys(purchaseDetail).length > 0) {
+    purchaseInfo = {
+      userEmail: data.plan!.email,
+      productId: planId!,
+      productType: 'plan',
+    };
+  }
+
+  console.log(purchaseInfo);
+
   return (
     <>
       <div className="mx-auto w-full">
@@ -51,14 +63,7 @@ const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
           }}
           onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
             console.log('Approve order');
-            let purchaseInfo = purchaseDetail;
-            if (!Boolean(purchaseDetail)) {
-              purchaseInfo = {
-                userEmail: data.plan!.email,
-                productId: planId!,
-                productType: 'plan',
-              };
-            }
+
             const response = await confirmPaypalPayment(
               orderId,
               purchaseInfo,

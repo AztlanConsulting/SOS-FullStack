@@ -6,7 +6,10 @@ import oxxo from '@assets/images/paymentIcons/oxxoPay.png';
 import bank from '@assets/images/paymentIcons/Bank.svg';
 import type { PaymentMethod } from '../types/PaymentMethod.type';
 import Paypal from '@features/payment/components/paypal/Paypal';
-import type { Order } from '@features/payment/types/payment.types';
+import type {
+  Order,
+  PurchaseDetail,
+} from '@features/payment/types/payment.types';
 import type { PetReportData } from '@/features/users/types/petReport.types';
 
 const paymentMethods: PaymentMethod[] = [
@@ -15,9 +18,11 @@ const paymentMethods: PaymentMethod[] = [
     icons: [visa, mastercard, american],
     element: (
       data: Order,
-      petReportData: PetReportData,
+      purchaseDetails: PurchaseDetail,
       success: () => void,
-    ) => <div />,
+    ) => (
+      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+    ),
   },
   {
     method: 'Transferencia SPEI',
@@ -25,27 +30,33 @@ const paymentMethods: PaymentMethod[] = [
     icons: [bank],
     element: (
       data: Order,
-      petReportData: PetReportData,
+      purchaseDetails: PurchaseDetail,
       success: () => void,
-    ) => <div />,
+    ) => (
+      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+    ),
   },
   {
     method: 'Paypal',
     icons: [paypal],
     element: (
       data: Order,
-      petReportData: PetReportData,
+      purchaseDetails: PurchaseDetail,
       success: () => void,
-    ) => <Paypal data={data} petReportData={petReportData} success={success} />,
+    ) => (
+      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+    ),
   },
   {
     method: 'Oxoo',
     icons: [oxxo],
     element: (
       data: Order,
-      petReportData: PetReportData,
+      purchaseDetails: PurchaseDetail,
       success: () => void,
-    ) => <div />,
+    ) => (
+      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+    ),
   },
 ];
 

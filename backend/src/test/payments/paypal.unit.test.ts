@@ -56,10 +56,37 @@ describe('PaymentDataAccess unit-test', () => {
       currency: 'MXN',
       plan: {
         name: 'Premium Plan',
-        price: 15.0,
-        duration: '30 days',
-        radius: '5km',
-        features: ['reel', 'geolocalizacion'],
+        species: 'Perro',
+        date: '2025-03-27',
+        breed: 'oighrjwpfdk',
+        sex: 'Macho',
+        color: 'ighwjfkd',
+        size: 'Mini: 1 a 4 kg',
+        description: '0hjgprowkfd',
+        imageLayout: '1',
+        address: 'Metropolitan Tabernacle, Calle Moneda, Mexico',
+        location: {
+          coords: [19.434063867321765, -99.13269035300812],
+          displayName: 'Metropolitan Tabernacle, Calle Moneda, Mexico',
+        },
+        locationCoords: [19.434063867321765, -99.13269035300812],
+        contactName: 'hgroipjskfd',
+        phoneNumber: '+525555555555',
+        email: 'q@q.com',
+        planName: 'Personalizado',
+        planDetails: {
+          days: 23,
+          km: 28,
+          selectedFeatures: [
+            'Anuncio de 23 días en un área de 28 km a la redonda',
+            'Publicación en nuestras redes sociales',
+            'Video y lista de consejos de búsqueda',
+            'Cartel para imprimir',
+            'Geolocalización doble',
+            'Reel de Instagram y Facebook',
+          ],
+          totalPrice: 2170,
+        },
       },
     };
 
@@ -69,7 +96,7 @@ describe('PaymentDataAccess unit-test', () => {
     expect(item.name).toBe('Premium Plan');
 
     // Description should be: duration | radius
-    expect(item.description).toBe('30 days | 5km');
+    expect(item.description).toBe('23 | 28');
     expect(item.unit_amount.currency_code).toBe('MXN');
   });
 

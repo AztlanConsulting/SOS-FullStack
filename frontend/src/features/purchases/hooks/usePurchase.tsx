@@ -6,8 +6,6 @@ export default function usePurchase() {
   const location = useLocation();
   const { state } = location ?? { state: null };
 
-  // if (!state) return null; // evita que el resto del código truene
-
   const { productId, productType } = state
     ? state
     : {
@@ -15,7 +13,7 @@ export default function usePurchase() {
         productType: null,
       };
   const query = useQuery({
-    queryKey: ['img'],
+    queryKey: ['img', productId, productType],
     queryFn: async () => await getProductImage(productType, productId),
     enabled: Boolean(productId && productType),
   });

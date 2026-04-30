@@ -18,9 +18,11 @@ async function getProductImage(
 
   if (response.status == 200) {
     let product;
+    const key = Object.keys(response.data)[0];
+
     if (type == 'manual') {
-      product = response.data[Object.keys(response.data)[0]][0];
-    } else product = response.data[Object.keys(response.data)[0]];
+      product = response.data[key][0];
+    } else product = response.data[key];
     return product;
   } else throw Error('Error recuperando información');
 }

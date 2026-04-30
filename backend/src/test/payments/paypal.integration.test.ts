@@ -8,7 +8,7 @@ import request from 'supertest';
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 /**
- * Unit tests for the WorkshopDataAccess layer.
+ * Integration tests for paypal.
  * Focuses on verifying that the repository correctly interacts with the Mongoose model
  * and handles various database response scenarios.
  */

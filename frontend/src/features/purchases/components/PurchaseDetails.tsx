@@ -4,7 +4,6 @@ import PlanDetail from './PlanDetail';
 import type { Product } from '@shared/types/purchase.types';
 import ConfirmPaymentModal from './ConfirmPaymentModal';
 import type { PetReportData } from '@/features/users/types/petReport.types';
-import { useEffect } from 'react';
 
 interface Props {
   reportData: PetReportData | null;

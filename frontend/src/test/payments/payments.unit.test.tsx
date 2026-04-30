@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import PurchaseDetails from '@/features/purchases/components/PurhcaseDetails';
+import PurchaseDetails from '@/features/purchases/components/PurchaseDetails';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import wrapper from '../utils/wrapper.util';

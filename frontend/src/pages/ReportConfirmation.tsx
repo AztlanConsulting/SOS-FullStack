@@ -5,21 +5,21 @@ import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
-import { usePetReport } from '@/features/users/context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
-  const { reportData, setReportData } = usePetReport();
+  const { lostPetReportData, setLostPetReportData } = usePetReport();
 
   useEffect(() => {
-    if (!reportData) {
+    if (!lostPetReportData) {
       navigate('/');
     }
-  }, [reportData, navigate]);
+  }, [lostPetReportData, navigate]);
 
-  const handleUpdateForm = (newData: Partial<typeof reportData>) => {
-    if (reportData) {
-      setReportData({ ...reportData, ...newData });
+  const handleUpdateForm = (newData: Partial<typeof lostPetReportData>) => {
+    if (lostPetReportData) {
+      setLostPetReportData({ ...lostPetReportData, ...newData });
     }
   };
 
@@ -27,7 +27,7 @@ export const ReportConfirmationPage: React.FC = () => {
     navigate('/plans');
   };
 
-  if (!reportData) return null;
+  if (!lostPetReportData) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -41,7 +41,7 @@ export const ReportConfirmationPage: React.FC = () => {
         </div>
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto pt-12 lg:pt-10">
           <DataConfirmation
-            formData={reportData}
+            formData={lostPetReportData}
             updateForm={handleUpdateForm}
           />
 

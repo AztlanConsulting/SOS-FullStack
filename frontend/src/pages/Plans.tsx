@@ -5,7 +5,7 @@ import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState, useEffect } from 'react';
-import { usePetReport } from '@features/users/context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
 import { Button } from '@shared/components/ui/Button/Button';
 import { usePlans } from '@features/plans/hooks/usePlans';
 import { useNavigate } from 'react-router';
@@ -20,20 +20,20 @@ import { useNavigate } from 'react-router';
 export default function PlansPage() {
   const { plans, loading, error } = usePlans();
   const [current, setCurrent] = useState(0);
-  const { reportData, setReportData } = usePetReport();
+  const { lostPetReportData, setLostPetReportData } = usePetReport();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!reportData) {
+    if (!lostPetReportData) {
       navigate('/');
     }
-  }, [reportData, navigate]);
+  }, [lostPetReportData, navigate]);
 
   const handleSelectPlan = (plan: PlanCardProps) => {
-    if (!reportData) return;
+    if (!lostPetReportData) return;
 
     const updated = {
-      ...reportData,
+      ...lostPetReportData,
       planName: plan.name,
       planDetails: {
         days: parseInt(plan.duration) || 0,
@@ -45,7 +45,7 @@ export default function PlansPage() {
       },
     };
 
-    setReportData(updated);
+    setLostPetReportData(updated);
   };
 
   /**

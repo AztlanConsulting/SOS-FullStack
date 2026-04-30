@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import type { PetReportData } from '../types/petReport.types';
-import { usePetReport } from '../context/PetReportService';
 import { reportFoundPet } from '../services/foundPetApi';
+import type { FoundPetReportData } from '@/shared/types/petReport.types';
+import { usePetReport } from '@/shared/context/PetReportContext';
 
-export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
-  const { setReportData } = usePetReport();
+export const usePetReportForm = (initialData?: Partial<FoundPetReportData>) => {
+  const { setFoundPetReportData } = usePetReport();
 
-  const [formData, setFormData] = useState<PetReportData>({
+  const [formData, setFormData] = useState<FoundPetReportData>({
     name: '',
     species: '',
     date: '',
@@ -31,31 +31,7 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      species: '',
-      date: '',
-      breed: '',
-      sex: 'Desconocido',
-      color: '',
-      size: 'Mediana: 11 a 25 kg',
-      description: '',
-      images: [],
-      imageLayout: '1',
-      address: '',
-      location: null,
-      locationCoords: undefined,
-      contactName: '',
-      phoneNumber: '',
-      email: '',
-    });
-    setErrors({});
-    setSuccess(false);
-    setSubmitError(null);
-  };
-
-  const updateFormData = (newData: Partial<PetReportData>) => {
+  const updateFormData = (newData: Partial<FoundPetReportData>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
 
     const fieldName = Object.keys(newData)[0];
@@ -125,13 +101,13 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
 
     if (!formData.color) newErrors.color = '¡Falta color!';
 
-    if (!formData.address) newErrors.address = '¡Indica ubicación!';
+    if (!formData.address) newErrors.address = '¡Dónde se encontró!';
 
     if (!formData.images || formData.images.length === 0)
       newErrors.images = '¡Sube al menos una foto!';
 
     if (!formData.contactName)
-      newErrors.contactName = '¡Falta nombre del dueño!';
+      newErrors.contactName = '¡Falta nombre para contactarte!';
 
     const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
     if (!cleanPhone || cleanPhone.length < 10) {
@@ -154,7 +130,7 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
 
       try {
         await reportFoundPet(formData);
-        setReportData(formData);
+        setFoundPetReportData(formData);
         setSuccess(true);
       } catch (error) {
         setSubmitError(
@@ -178,6 +154,5 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     isSubmitting,
     submitError,
     success,
-    resetForm,
   };
 };

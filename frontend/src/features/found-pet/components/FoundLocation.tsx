@@ -1,12 +1,15 @@
-import { LocationSearchInput } from '../../../shared/components/ui/LocationSearchInput/LocationSearchInput';
-import { MapDisplay } from '../../../shared/components/ui/MapDisplay/MapDisplay';
-import type { PetReportData, ReportType } from '../types/petReport.types';
-import { usePetLocation } from '../hooks/usePetLocation';
+import type {
+  FoundPetReportData,
+  ReportType,
+} from '@/shared/types/petReport.types';
+import { LocationSearchInput } from '@shared/components/ui/LocationSearchInput/LocationSearchInput';
+import { MapDisplay } from '@shared/components/ui/MapDisplay/MapDisplay';
+import { usePetLocation } from '@features/users/hooks/usePetLocation';
 import { Text } from '@shared/components/ui/Text';
 
 export interface PetLocationSectionProps {
-  formData: Partial<PetReportData>;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: Partial<FoundPetReportData>;
+  updateForm: (newData: Partial<FoundPetReportData>) => void;
   reportType?: ReportType;
   mapID?: string;
 }

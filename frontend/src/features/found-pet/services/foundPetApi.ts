@@ -1,5 +1,5 @@
 import axiosInstance from '@shared/utils/axios';
-import type { PetReportData } from '../types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 export const reportFoundPet = async (data: PetReportData) => {
   const imagesBase64 = await Promise.all(

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import type { PetReportData } from '../types/petReport.types';
-import { usePetReport } from '../context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -31,11 +31,11 @@ const isPhoneEmpty = (phone: string) => {
   }
 };
 
-export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
+export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
   const navigate = useNavigate();
-  const { setReportData } = usePetReport();
+  const { setLostPetReportData } = usePetReport();
 
-  const [formData, setFormData] = useState<PetReportData>({
+  const [formData, setFormData] = useState<LostPetReportData>({
     name: '',
     species: '',
     date: '',
@@ -67,7 +67,7 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const updateFormData = (newData: Partial<PetReportData>) => {
+  const updateFormData = (newData: Partial<LostPetReportData>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
 
     setErrors((prev) => {
@@ -211,7 +211,7 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      setReportData(formData);
+      setLostPetReportData(formData);
       navigate('/report-confirmation');
     } else {
       scrollToFirstError(newErrors);

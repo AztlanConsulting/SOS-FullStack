@@ -2,7 +2,6 @@ import Header from '../shared/components/layout/Header';
 import Footer from '../shared/components/layout/Footer';
 import FoundInfo from '@features/found-pet/components/FoundInfo';
 import { PetReportForm } from '@features/found-pet/components/PetReportForm';
-import { PetReportProvider } from '@/features/found-pet/context/PetReportService';
 
 const CreditsPage = () => {
   return (
@@ -10,9 +9,7 @@ const CreditsPage = () => {
       <Header />
       <main className="grow pt-18 lg:pt-0">
         <FoundInfo />
-        <PetReportProvider>
-          <PetReportForm initialData={{}} />
-        </PetReportProvider>
+        <PetReportForm initialData={{}} />
       </main>
       <Footer />
     </div>

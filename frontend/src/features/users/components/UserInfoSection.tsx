@@ -3,11 +3,14 @@ import { Select } from '@shared/components/ui/Select';
 import { TextArea } from '@shared/components/ui/TextArea';
 import { DateInput } from '@shared/components/ui/DateInput';
 import { FileUpload } from '@shared/components/ui/FileUpload';
-import type { PetReportData, ReportType } from '../types/petReport.types';
+import type {
+  LostPetReportData,
+  ReportType,
+} from '@shared/types/petReport.types';
 
 export interface UsuerInfoSectionProps {
-  formData: Partial<PetReportData>;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: Partial<LostPetReportData>;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
   reportType?: ReportType;
   errors: Record<string, string>;
 }

@@ -1,9 +1,9 @@
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { useEffect, useRef } from 'react';
-import type { PetReportData } from '../types/petReport.types';
 
 export const usePetPhotos = (
-  formData: Partial<PetReportData>,
-  updateForm: (newData: Partial<PetReportData>) => void,
+  formData: Partial<LostPetReportData>,
+  updateForm: (newData: Partial<LostPetReportData>) => void,
 ) => {
   const photoCount = parseInt(formData.imageLayout || '3') as 1 | 2 | 3 | 4;
   const fileUploadSlots = Array.from({ length: photoCount }, (_, i) => i + 1);

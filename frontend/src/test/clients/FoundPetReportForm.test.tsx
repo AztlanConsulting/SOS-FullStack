@@ -4,13 +4,12 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 
-const { mockNavigate, mockSetReportData, mockReportFoundPet } = vi.hoisted(
-  () => ({
+const { mockNavigate, mockSetFoundPetReportData, mockReportFoundPet } =
+  vi.hoisted(() => ({
     mockNavigate: vi.fn(),
-    mockSetReportData: vi.fn(),
+    mockSetFoundPetReportData: vi.fn(),
     mockReportFoundPet: vi.fn(),
-  }),
-);
+  }));
 
 vi.mock('@features/found-pet/components/FoundLocation', () => ({
   PetLocationSection: () => (
@@ -23,10 +22,10 @@ vi.mock('react-router', async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-vi.mock('@features/found-pet/context/PetReportService', () => ({
+vi.mock('@/shared/context/PetReportContext', () => ({
   usePetReport: () => ({
-    setReportData: mockSetReportData,
-    reportData: null,
+    setFoundPetReportData: mockSetFoundPetReportData,
+    foundPetReportData: null,
   }),
 }));
 
@@ -62,7 +61,7 @@ describe('FoundPetReportForm Component', () => {
 
     expect(screen.getByText('Información de la mascota')).toBeDefined();
     expect(screen.getByText('Fotos de la mascota')).toBeDefined();
-    expect(screen.getByText('Dónde se encontró')).toBeDefined();
+    expect(screen.getByText('¿Dónde se encontró?')).toBeDefined();
   });
 
   test('renders correctly with pre-filled initialData', () => {
@@ -86,9 +85,9 @@ describe('FoundPetReportForm Component', () => {
     expect(screen.getByText('¡Indícanos la fecha!')).toBeDefined();
     expect(screen.getByText('¡Falta raza o tipo!')).toBeDefined();
     expect(screen.getByText('¡Falta color!')).toBeDefined();
-    expect(screen.getByText('¡Indica ubicación!')).toBeDefined();
+    expect(screen.getByText('¡Dónde se encontró!')).toBeDefined();
     expect(screen.getByText('¡Sube al menos una foto!')).toBeDefined();
-    expect(screen.getByText('¡Falta nombre del dueño!')).toBeDefined();
+    expect(screen.getByText('¡Falta nombre para contactarte!')).toBeDefined();
     expect(screen.getByText('¡Añade un número de teléfono!')).toBeDefined();
     expect(screen.getByText('¡Falta correo!')).toBeDefined();
   });
@@ -181,14 +180,14 @@ describe('FoundPetReportForm Component', () => {
     expect(screen.getByText('¡Mascota reportada!')).toBeDefined();
   });
 
-  test('calls setReportData with the complete form data on success', async () => {
+  test('calls setFoundPetReportData with the complete form data on success', async () => {
     const user = userEvent.setup();
     mockReportFoundPet.mockResolvedValue(undefined);
     renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(mockSetReportData).toHaveBeenCalledWith(
+    expect(mockSetFoundPetReportData).toHaveBeenCalledWith(
       expect.objectContaining({
         species: 'Perro',
         breed: 'Labrador',

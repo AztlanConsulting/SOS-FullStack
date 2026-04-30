@@ -2,18 +2,18 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import CustomPlanCard from '@/features/plans/components/customPlanCard';
-import { PetReportProvider } from '@/features/users/context/PetReportContext';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
 
-const setReportData = vi.hoisted(() => vi.fn());
+const setLostPetReportData = vi.hoisted(() => vi.fn());
 
-vi.mock('@features/users/context/PetReportContext', async (importOriginal) => {
+vi.mock('@/shared/context/PetReportContext', async (importOriginal) => {
   const actual = await importOriginal();
 
   return {
     ...(actual as Record<string, unknown>),
     usePetReport: () => ({
-      reportData: {},
-      setReportData,
+      lostPetReportData: {},
+      setLostPetReportData,
     }),
   };
 });
@@ -141,7 +141,7 @@ describe('CustomPlanCard Component', () => {
    * Verifies confirm button calls console.log with correct shape.
    * Initial state: days=3, km=5, selectedFeatures=[], totalPrice=315
    */
-  test('calls setReportData with correct data when confirm is clicked', async () => {
+  test('calls setLostPetReportData with correct data when confirm is clicked', async () => {
     const BASE_FEATURES = [
       'Publicación en nuestras redes sociales',
       'Video y lista de consejos de búsqueda',
@@ -154,7 +154,7 @@ describe('CustomPlanCard Component', () => {
 
     await userEvent.click(screen.getByText('Confirmar plan'));
 
-    expect(setReportData).toHaveBeenCalledWith(
+    expect(setLostPetReportData).toHaveBeenCalledWith(
       expect.objectContaining({
         planName: 'Personalizado',
         planDetails: expect.objectContaining({

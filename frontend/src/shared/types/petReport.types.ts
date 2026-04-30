@@ -1,15 +1,16 @@
-import type { GeocodingResult } from '../../map/types/geocodingResult';
+import type { GeocodingResult } from '@/features/map/types/geocodingResult';
 
 export type ReportType = 'lost' | 'found';
 
-export interface PetReportData {
+export interface FoundPetReportData {
   name?: string;
   species: string;
   date: string;
   breed?: string;
-  sex: 'Macho' | 'Hembra' | 'Desconocido';
+  sex: '' | 'Macho' | 'Hembra' | 'Desconocido';
   color: string;
   size:
+    | ''
     | 'Mini: 1 a 4 kg'
     | 'Pequeña: 5 a 10 kg'
     | 'Mediana: 11 a 25 kg'
@@ -27,4 +28,17 @@ export interface PetReportData {
   contactName: string;
   phoneNumber: string;
   email: string;
+}
+
+export interface LostPetReportData extends FoundPetReportData {
+  name: string;
+  address: string;
+
+  planName: string;
+  planDetails?: {
+    days: number;
+    km: number;
+    selectedFeatures: string[];
+    totalPrice: number;
+  };
 }

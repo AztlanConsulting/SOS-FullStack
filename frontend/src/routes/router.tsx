@@ -5,8 +5,6 @@ import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import { ReportConfirmationPage } from '../pages/ReportConfirmation';
-import { PetReportProvider } from '../features/users/context/PetReportContext';
-import { PetReportProvider as PRP } from '../features/found-pet/context/PetReportService';
 import Plans from '../pages/Plans';
 import { PaymentPage } from '../features/payment/components/PaymentPage';
 import CheckoutPage from '../features/payment/components/CheckoutPage';
@@ -20,15 +18,14 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
 
 export const router = createBrowserRouter([
   {
     element: (
-      <PRP>
-        <PetReportProvider>
-          <App />
-        </PetReportProvider>
-      </PRP>
+      <PetReportProvider>
+        <App />
+      </PetReportProvider>
     ),
     children: [
       {

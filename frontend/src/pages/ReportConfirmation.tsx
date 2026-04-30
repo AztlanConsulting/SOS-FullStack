@@ -40,7 +40,11 @@ export const ReportConfirmationPage: React.FC = () => {
     // Run once when component mounts
     updateScale();
 
-    // Watch for container resizing
+    // Watch for container resizing when available (jsdom may not provide it).
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
     const resizeObserver = new ResizeObserver(updateScale);
     resizeObserver.observe(previewContainer);
 
@@ -49,27 +53,25 @@ export const ReportConfirmationPage: React.FC = () => {
     };
   }, []);
 
-  const handleUpdateForm = (newData: Partial<typeof reportData>) => {
+  const handleUpdateForm = async (newData: Partial<typeof reportData>) => {
+    if (!reportData) return;
     if (reportData) {
+      const posterFile = await exportPosterAsFile(
+        posterRef.current,
+        `${reportData.name}-poster`,
+      );
+
+      if (posterFile) {
+        setReportData({
+          ...reportData,
+          images: [...reportData.images, posterFile],
+        });
+      }
       setReportData({ ...reportData, ...newData });
     }
   };
 
-  const handleProceedToPayment = async () => {
-    if (!reportData) return;
-
-    const posterFile = await exportPosterAsFile(
-      posterRef.current,
-      `${reportData.name}-poster`,
-    );
-
-    if (posterFile) {
-      setReportData({
-        ...reportData,
-        images: [...reportData.images, posterFile],
-      });
-    }
-
+  const handleProceedToPayment = () => {
     navigate('/plans');
   };
 

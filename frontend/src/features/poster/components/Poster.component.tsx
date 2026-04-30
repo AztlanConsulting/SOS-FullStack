@@ -6,69 +6,68 @@ import phone from '@assets/images/phone.png';
 
 export const Poster = forwardRef<HTMLDivElement, { pet: PetReportData }>(
   ({ pet }, ref) => {
+    const renderImage = (file: File | undefined, className: string) => {
+      if (!file) {
+        return <div className={`${className} bg-[#E7E0CC]`} />;
+      }
+
+      return <img src={URL.createObjectURL(file)} className={className} />;
+    };
+
     const renderImages = () => {
       switch (pet.imageLayout) {
         case '1':
           return (
             <div className="w-[850px] h-[550px]">
-              <img
-                src={URL.createObjectURL(pet.images[0])}
-                className="w-[850px] h-[550px] object-cover"
-              />
+              {renderImage(pet.images[0], 'w-[850px] h-[550px] object-cover')}
             </div>
           );
 
         case '2':
           return (
             <div className="grid grid-cols-2 w-[850px] h-[550px]">
-              <img
-                src={URL.createObjectURL(pet.images[0])}
-                className="w-[425px] h-[550px] object-cover"
-              />
-              <img
-                src={URL.createObjectURL(pet.images[1])}
-                className="w-[425px] h-[550px] object-cover"
-              />
+              {renderImage(pet.images[0], 'w-[425px] h-[550px] object-cover')}
+              {renderImage(pet.images[1], 'w-[425px] h-[550px] object-cover')}
             </div>
           );
 
         case '3':
           return (
             <div className="grid grid-cols-2 grid-rows-2 w-[850px] h-[550px]">
-              <img
-                src={URL.createObjectURL(pet.images[0])}
-                className="w-[425px] h-[275px] object-cover col-start-1 row-start-1"
-              />
-              <img
-                src={URL.createObjectURL(pet.images[1])}
-                className="w-[425px] h-[275px] object-cover col-start-1 row-start-2"
-              />
-              <img
-                src={URL.createObjectURL(pet.images[2])}
-                className="w-[425px] h-[550px] object-cover col-start-2 row-start-1 row-span-2"
-              />
+              {renderImage(
+                pet.images[0],
+                'w-[425px] h-[275px] object-cover col-start-1 row-start-1',
+              )}
+              {renderImage(
+                pet.images[1],
+                'w-[425px] h-[275px] object-cover col-start-1 row-start-2',
+              )}
+              {renderImage(
+                pet.images[2],
+                'w-[425px] h-[550px] object-cover col-start-2 row-start-1 row-span-2',
+              )}
             </div>
           );
 
         case '4':
           return (
             <div className="grid grid-cols-2 grid-rows-2 w-[850px] h-[550px]">
-              <img
-                src={URL.createObjectURL(pet.images[0])}
-                className="w-[425px] h-[275px] object-cover col-start-1 row-start-1"
-              />
-              <img
-                src={URL.createObjectURL(pet.images[1])}
-                className="w-[425px] h-[275px] object-cover col-start-1 row-start-2"
-              />
-              <img
-                src={URL.createObjectURL(pet.images[2])}
-                className="w-[425px] h-[275px] object-cover col-start-2 row-start-1"
-              />
-              <img
-                src={URL.createObjectURL(pet.images[3])}
-                className="w-[425px] h-[275px] object-cover col-start-2 row-start-2"
-              />
+              {renderImage(
+                pet.images[0],
+                'w-[425px] h-[275px] object-cover col-start-1 row-start-1',
+              )}
+              {renderImage(
+                pet.images[1],
+                'w-[425px] h-[275px] object-cover col-start-1 row-start-2',
+              )}
+              {renderImage(
+                pet.images[2],
+                'w-[425px] h-[275px] object-cover col-start-2 row-start-1',
+              )}
+              {renderImage(
+                pet.images[3],
+                'w-[425px] h-[275px] object-cover col-start-2 row-start-2',
+              )}
             </div>
           );
 

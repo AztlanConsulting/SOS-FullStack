@@ -16,6 +16,7 @@ import { FaXTwitter } from 'react-icons/fa6';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import whiteIcon from '@assets/images/whiteIcon.png';
 import { HiOutlineUserCircle } from 'react-icons/hi';
+import roleNavigation from '@/shared/utils/roleNavigation';
 
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
@@ -140,7 +141,7 @@ const Header = () => {
             <div
               onClick={() => {
                 if (isAuthLoading) return;
-                navigate(user ? '/dashboard' : '/login');
+                navigate(user ? roleNavigation(user.role) : '/login');
               }}
               className={`group border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
                 user
@@ -236,7 +237,7 @@ const Header = () => {
             <div className="p-9 border-t border-white">
               <button
                 onClick={() => {
-                  navigate(user ? '/dashboard' : '/login');
+                  navigate(user ? roleNavigation(user.role) : '/login');
                   setIsMenuOpen(false);
                 }}
                 className="w-full flex items-center justify-start gap-4"

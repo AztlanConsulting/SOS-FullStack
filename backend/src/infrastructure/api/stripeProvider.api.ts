@@ -21,12 +21,12 @@ export const StripeProvider: PaymentProvider = {
     }
 
     const stripe = new Stripe(key);
-    const { amount, currency, method = 'auto', customerId } = data;
+    const { amount, currency, method, name, email } = data;
 
     let intent: Stripe.PaymentIntent;
 
     // for card payments and OXXO pay
-    if (method === 'auto') {
+    if (method === '') {
       intent = await stripe.paymentIntents.create({
         amount,
         currency,
@@ -36,18 +36,23 @@ export const StripeProvider: PaymentProvider = {
 
     // for SPEI bank transfers in Mexico
     else if (method === 'spei') {
-      if (
-        customerId === undefined ||
-        customerId === null ||
-        customerId === ''
-      ) {
-        throw new Error('customerId is required for SPEI payments');
+      if (name === undefined || name === null || name === '') {
+        throw new Error('Name is required for SPEI payments');
       }
+
+      if (email === undefined || email === null || email === '') {
+        throw new Error('Email is required for SPEI payments');
+      }
+
+      const customer = await stripe.customers.create({
+        email: email,
+        name: name,
+      });
 
       intent = await stripe.paymentIntents.create({
         amount,
         currency: 'mxn', // SPEI requires MXN
-        customer: customerId,
+        customer: customer.id,
         payment_method_types: ['customer_balance'],
         payment_method_options: {
           customer_balance: {

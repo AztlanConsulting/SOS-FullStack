@@ -44,7 +44,8 @@ export interface PetReportData {
 export interface PaymentIntentDTO {
   amount: number;
   currency: string;
-  customerId?: string; // for SPEI
+  name?: string; // for SPEI
+  email?: string; // for SPEI
   method?: string; // to seperate spei from the other methods
   product?: {
     productName: string;

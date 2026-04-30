@@ -8,43 +8,41 @@ import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-acce
 import type Stripe from 'stripe';
 
 /**
- * Factory function that returns a middleware to create a Stripe payment intent.
+ * middleware to create a Stripe payment intent.
  * @returns Express middleware handler that creates a payment intent with amount and currency from request body
  */
-export const makeCreatePaymentIntent = () => {
-  return async (req: Request, res: Response) => {
-    try {
-      const { amount, currency } = req.body as {
-        amount?: number;
-        currency?: string;
-      };
+export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
+  try {
+    const { amount, currency } = req.body as {
+      amount?: number;
+      currency?: string;
+    };
 
-      if (amount === undefined || currency === undefined) {
-        return res.status(400).json({ error: 'Missing amount or currency' });
-      }
-
-      const result = await createPaymentIntent(StripeProvider, {
-        amount,
-        currency,
-      });
-
-      await createPendingIntentDB(PaymentDataAccess, {
-        orderId: result.id,
-        amount: result.amount,
-        currency: result.currency,
-        clientSecret: null,
-      });
-
-      return res.status(201).json({
-        message: 'Payment intent created successfully',
-        result: result,
-      });
-    } catch (error) {
-      console.error(error);
-      const message = error instanceof Error ? error.message : 'Payment failed';
-      return res.status(500).json({ error: message });
+    if (amount === undefined || currency === undefined) {
+      return res.status(400).json({ error: 'Missing amount or currency' });
     }
-  };
+
+    const result = await createPaymentIntent(StripeProvider, {
+      amount,
+      currency,
+    });
+
+    await createPendingIntentDB(PaymentDataAccess, {
+      orderId: result.id,
+      amount: result.amount,
+      currency: result.currency,
+      clientSecret: null,
+    });
+
+    return res.status(201).json({
+      message: 'Payment intent created successfully',
+      result: result,
+    });
+  } catch (error) {
+    console.error(error);
+    const message = error instanceof Error ? error.message : 'Payment failed';
+    return res.status(500).json({ error: message });
+  }
 };
 
 /**

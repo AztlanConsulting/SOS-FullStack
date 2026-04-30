@@ -1,5 +1,6 @@
 import { PaymentElement } from '@stripe/react-stripe-js';
 import { useCheckout } from '../hooks/useCheckOut';
+import { SpeiSection } from './SpeiSection';
 
 export const CheckoutForm = () => {
   const { handleSubmit, isProcessing, message, isReady } = useCheckout();
@@ -12,7 +13,7 @@ export const CheckoutForm = () => {
   return (
     <form onSubmit={onSubmit} id="payment-form" className="flex flex-col">
       <PaymentElement id="payment-element" />
-
+      <SpeiSection />
       <button
         disabled={isProcessing || !isReady}
         id="submit"

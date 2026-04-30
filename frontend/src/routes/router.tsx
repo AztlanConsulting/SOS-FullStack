@@ -53,8 +53,7 @@ export const router = createBrowserRouter([
         path: '/inicio',
         element: (
           <RoleProtectedRoute allowedRoles={['CLIENT']}>
-            {/* <ClientDashboard /> */}
-            <Dashboard />
+            <ClientDashboard />
           </RoleProtectedRoute>
         ),
         children: [...routerClient],

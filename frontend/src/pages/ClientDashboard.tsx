@@ -5,7 +5,7 @@ import { Outlet } from 'react-router';
 const ClientDashboard = () => {
   return (
     <>
-      <Header />
+      <Header navLinks={[]} />
       <Outlet />
       <Footer />
     </>

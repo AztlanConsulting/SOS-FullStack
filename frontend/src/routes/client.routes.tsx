@@ -1,4 +1,4 @@
-import ClientDashboardContent from '@/features/client/ClientDashboardContent';
+import ClientDashboardContent from '@/features/client/components/ClientDashboardContent';
 
 const router = [
   {

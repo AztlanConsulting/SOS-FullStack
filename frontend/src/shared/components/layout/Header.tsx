@@ -17,8 +17,9 @@ import yellowIcon from '@assets/images/yellowIcon.png';
 import whiteIcon from '@assets/images/whiteIcon.png';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import roleNavigation from '@/shared/utils/roleNavigation';
+import type { NavLink, SocialLink } from '@/shared/types/header.types';
 
-const navLinks = [
+const defaultNavLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
@@ -26,7 +27,7 @@ const navLinks = [
   { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
 ];
 
-export const socialLinks = [
+export const defaultSocialLinks = [
   {
     href: 'https://www.instagram.com/sos_encontrando_mascotas/',
     icon: <FaInstagram className="w-5 h-5" />,
@@ -49,7 +50,15 @@ export const socialLinks = [
   },
 ];
 
-const Header = () => {
+interface Props {
+  navLinks: NavLink[];
+  socialLinks?: SocialLink[];
+}
+
+const Header = ({
+  navLinks = defaultNavLinks,
+  socialLinks = defaultSocialLinks,
+}: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   const { pathname } = useLocation();

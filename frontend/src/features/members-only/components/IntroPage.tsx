@@ -11,7 +11,7 @@ const IntroPage = () => {
     }
   };
   return (
-    <section className="relative color-purple-bg overflow-hidden py-8 lg:py-10">
+    <section className="relative color-light-purple-bg overflow-hidden py-8 lg:py-10">
       <div className="lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-15 xl:gap-25">
           <div className="flex-1 lg:max-w-2xl order-2 lg:order-1 lg:mt-8 text-left flex flex-col items-center justify-center">
@@ -35,7 +35,7 @@ const IntroPage = () => {
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center w-full sm:w-5/6 lg:w-full lg:mt-10">
               <Button
                 label="Perdí mi mascota"
-                variant="primary"
+                variant="purple"
                 icon={HiChevronRight}
                 onClick={handleScrollToReport}
               />

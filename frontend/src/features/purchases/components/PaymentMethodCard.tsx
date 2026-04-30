@@ -12,7 +12,7 @@ const PaymentMethodCard = ({ paymentMethod, onChecked }: Props) => {
   return (
     <label
       htmlFor={method}
-      className="h-20 rounded-lg border-2 radius-c border-gray-300 flex align-middle items-center px-5"
+      className="h-20 rounded-lg border-2 radius-c border-gray-300 flex align-middle items-center px-5 mb-2"
     >
       <div className="w-full grid grid-cols-3">
         <div className="flex gap-2 col-span-2">

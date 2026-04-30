@@ -49,7 +49,7 @@ export const PurchasePage = () => {
   return (
     <>
       <Header />
-      <main className="max-md:pt-24 pt-4">
+      <main className="max-md:pt-24 pt-4 min-h-screen">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
         {Boolean(product || reportData) && (

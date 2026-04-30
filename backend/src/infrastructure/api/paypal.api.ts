@@ -18,7 +18,7 @@ const CLIENT_ID = process.env.PAYPAL_CLIENT;
 const CLIENT_SECRET = process.env.PAYPAL_SECRET;
 
 const ENDPOINT_URL =
-  ENVIRONMENT !== 'sandbox'
+  ENVIRONMENT === 'production'
     ? 'https://api-m.paypal.com'
     : 'https://api-m.sandbox.paypal.com';
 

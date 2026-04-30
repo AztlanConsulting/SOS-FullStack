@@ -76,7 +76,7 @@ const createLostPetReportController = async (req: Request, res: Response) => {
     });
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-
+    console.error(err);
     return res.status(500).json({
       error: 'Error creando el reporte de mascota',
       details: errorMessage,

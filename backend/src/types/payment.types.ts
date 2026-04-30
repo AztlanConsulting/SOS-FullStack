@@ -11,7 +11,7 @@ export const paymentDetails = z.object({
       productId: z.string(),
     })
     .optional(),
-  plan: z.unknown().optional(),
+  plan: z.any().optional(),
 });
 
 export const purchaseDetailsSchema = z

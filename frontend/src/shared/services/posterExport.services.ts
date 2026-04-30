@@ -1,11 +1,11 @@
 import { toPng, toJpeg } from 'html-to-image';
 import jsPDF from 'jspdf';
 
-export const exportPosterAsImage = async (
+export const exportPosterAsFile = async (
   node: HTMLElement | null,
   fileName: string,
-) => {
-  if (!node) return;
+): Promise<File | null> => {
+  if (!node) return null;
 
   const dataUrl = await toPng(node, {
     quality: 1,
@@ -13,10 +13,16 @@ export const exportPosterAsImage = async (
     cacheBust: false,
   });
 
-  const link = document.createElement('a');
-  link.download = `${fileName}.png`;
-  link.href = dataUrl;
-  link.click();
+  // Convert base64 to Blob
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+
+  // Create File from Blob
+  const file = new File([blob], `${fileName}.png`, {
+    type: 'image/png',
+  });
+
+  return file;
 };
 
 export const exportPosterAsPdfColor = async (

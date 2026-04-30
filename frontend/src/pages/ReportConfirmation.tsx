@@ -7,6 +7,7 @@ import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
+import { exportPosterAsFile } from '@/shared/services/posterExport.services';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
 
 export const ReportConfirmationPage: React.FC = () => {
@@ -54,7 +55,21 @@ export const ReportConfirmationPage: React.FC = () => {
     }
   };
 
-  const handleProceedToPayment = () => {
+  const handleProceedToPayment = async () => {
+    if (!reportData) return;
+
+    const posterFile = await exportPosterAsFile(
+      posterRef.current,
+      `${reportData.name}-poster`,
+    );
+
+    if (posterFile) {
+      setReportData({
+        ...reportData,
+        images: [...reportData.images, posterFile],
+      });
+    }
+
     navigate('/plans');
   };
 

@@ -43,6 +43,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           updateForm={updateFormData}
           errors={errors}
           hideNameInput
+          reportType="found"
         />
 
         {/* Section 2: Photos of the pet */}
@@ -72,6 +73,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
               formData={formData}
               updateForm={updateFormData}
               errors={errors}
+              reportType="found"
             />
           </div>
         </section>

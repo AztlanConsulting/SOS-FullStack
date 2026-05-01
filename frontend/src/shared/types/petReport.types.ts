@@ -16,7 +16,7 @@ export interface FoundPetReportData {
     | 'Mediana: 11 a 25 kg'
     | 'Grande: 26 a 45 kg'
     | 'Gigante: más de 45 kg';
-  description: string;
+  description?: string;
 
   images: File[];
   imageLayout?: string;

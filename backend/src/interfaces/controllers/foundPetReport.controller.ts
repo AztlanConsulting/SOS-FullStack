@@ -61,8 +61,6 @@ export async function postFoundPetReport(req: Request, res: Response) {
       imageIds,
     };
 
-    const result = await createFoundPet(FoundPetDataAccess, foundPetData);
-
     for (let i = 0; i < imageBuffers.length; i++) {
       const petImageDto: PetImageDto = {
         refId: imageIds[i],
@@ -72,6 +70,8 @@ export async function postFoundPetReport(req: Request, res: Response) {
 
       await petVector.createPetImage(petImageDto);
     }
+
+    const result = await createFoundPet(FoundPetDataAccess, foundPetData);
 
     return res.status(201).json({
       message: 'Found pet report created successfully',

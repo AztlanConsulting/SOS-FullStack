@@ -22,7 +22,7 @@ const navLinks = [
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
-  { label: 'Mascotas', href: '#', icon: <PiDogLight /> },
+  { label: 'Mascotas', href: '/mascotas-encontradas', icon: <PiDogLight /> },
 ];
 
 export const socialLinks = [

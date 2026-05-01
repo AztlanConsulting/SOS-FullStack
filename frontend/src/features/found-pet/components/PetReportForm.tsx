@@ -25,6 +25,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
     isSubmitting,
     submitError,
     success,
+    handleClean,
   } = usePetReportForm(initialData);
   const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           formData={formData}
           updateForm={updateFormData}
           errors={errors}
+          hideNameInput
         />
 
         {/* Section 2: Photos of the pet */}
@@ -91,7 +93,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
         />
 
         {/* Section 5: Confirmation button. */}
-        <div className="w-full mx-auto">
+        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col py-4">
           {submitError && (
             <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {submitError}
@@ -109,8 +111,11 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
       {success && (
         <Modal
           title="¡Mascota reportada!"
-          description="Gracias por reportar a tu mascota. Te contactaremos pronto."
-          onClose={() => navigate('/')}
+          description="Gracias por reportar la mascota perdida."
+          onClose={() => {
+            navigate('/mascotas-encontradas');
+            handleClean();
+          }}
         />
       )}
     </div>

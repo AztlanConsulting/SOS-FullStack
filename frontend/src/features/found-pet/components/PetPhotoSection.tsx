@@ -23,6 +23,7 @@ export const PetPhotosSection = ({
           onChange={(file) => handleFileUpload(1, file)}
           error={errors[`images`]}
           currentFileName={formData.images?.[0]?.name}
+          defaultDisplayName="Subir foto"
         />
       </div>
     </section>

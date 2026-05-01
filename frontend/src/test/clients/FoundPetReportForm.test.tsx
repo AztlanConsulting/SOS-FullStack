@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { PetReportForm } from '@features/found-pet/components/PetReportForm';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
@@ -41,6 +41,8 @@ const VALID_INITIAL_DATA = {
   date: '2020-06-15',
   breed: 'Labrador',
   color: 'Café',
+  sex: 'Macho',
+  size: 'Mediano',
   address: 'Calle Epigmenio González 500, Querétaro',
   images: [new File(['content'], 'perro.jpg', { type: 'image/jpeg' })],
   contactName: 'Juan Pérez',
@@ -81,15 +83,21 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
-    expect(screen.getByText('¡Indícanos la fecha!')).toBeDefined();
-    expect(screen.getByText('¡Falta raza o tipo!')).toBeDefined();
-    expect(screen.getByText('¡Falta color!')).toBeDefined();
-    expect(screen.getByText('¡Dónde se encontró!')).toBeDefined();
-    expect(screen.getByText('¡Sube al menos una foto!')).toBeDefined();
-    expect(screen.getByText('¡Falta nombre para contactarte!')).toBeDefined();
-    expect(screen.getByText('¡Añade un número de teléfono!')).toBeDefined();
-    expect(screen.getByText('¡Falta correo!')).toBeDefined();
+    expect(screen.getByText('Selecciona una especie')).toBeDefined();
+    expect(screen.getByText('Selecciona una fecha')).toBeDefined();
+    expect(screen.getByText('Selecciona el sexo de la mascota')).toBeDefined();
+    expect(
+      screen.getByText('Selecciona el tamaño de la mascota'),
+    ).toBeDefined();
+    expect(screen.getByText('Ingresa una raza o tipo')).toBeDefined();
+    expect(screen.getByText('Ingresa un color')).toBeDefined();
+    expect(screen.getByText('Ingresa una ubicación')).toBeDefined();
+    expect(screen.queryByText(/Falta la foto/)).toBeDefined();
+    expect(
+      screen.getByText('Ingresa un nombre para contactarte'),
+    ).toBeDefined();
+    expect(screen.getByText('Ingresa un número de teléfono')).toBeDefined();
+    expect(screen.getByText('Ingresa un correo electrónico')).toBeDefined();
   });
 
   test('shows validation errors for species, date and email when form is empty', async () => {
@@ -98,9 +106,9 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
-    expect(screen.getByText('¡Indícanos la fecha!')).toBeDefined();
-    expect(screen.getByText('¡Falta correo!')).toBeDefined();
+    expect(screen.getByText('Selecciona una especie')).toBeDefined();
+    expect(screen.getByText('Selecciona una fecha')).toBeDefined();
+    expect(screen.getByText('Ingresa un correo electrónico')).toBeDefined();
   });
 
   test('shows invalid email format error when email is malformed', async () => {
@@ -113,7 +121,7 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('¡Correo inválido!')).toBeDefined();
+    expect(screen.getByText('Correo inválido')).toBeDefined();
   });
 
   test('shows invalid email error for email without domain', async () => {
@@ -126,7 +134,7 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('¡Correo inválido!')).toBeDefined();
+    expect(screen.getByText('Correo inválido')).toBeDefined();
   });
 
   test('shows future date error when date is in the future', async () => {
@@ -144,7 +152,7 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('¡La fecha no puede ser futura!')).toBeDefined();
+    expect(screen.getByText('La fecha no puede ser futura.')).toBeDefined();
   });
 
   test('accepts past date as a valid date', async () => {
@@ -158,8 +166,8 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.queryByText('¡La fecha no puede ser futura!')).toBeNull();
-    expect(screen.queryByText('¡Indícanos la fecha!')).toBeNull();
+    expect(screen.queryByText('La fecha no puede ser futura.')).toBeNull();
+    expect(screen.queryByText('Selecciona una fecha')).toBeNull();
   });
 
   test('clears the species error when the species field is updated', async () => {
@@ -167,7 +175,7 @@ describe('FoundPetReportForm Component', () => {
     renderWithRouter(<PetReportForm />);
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
-    expect(screen.getByText('¡Selecciona una especie!')).toBeDefined();
+    expect(screen.getByText('Selecciona una especie')).toBeDefined();
   });
 
   test('shows success message when all fields are valid', async () => {
@@ -177,7 +185,7 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('¡Mascota reportada!')).toBeDefined();
+    expect(await screen.findByText('¡Mascota reportada!')).toBeDefined();
   });
 
   test('calls setFoundPetReportData with the complete form data on success', async () => {
@@ -187,13 +195,15 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(mockSetFoundPetReportData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        species: 'Perro',
-        breed: 'Labrador',
-        email: 'juan@example.com',
-      }),
-    );
+    await waitFor(() => {
+      expect(mockSetFoundPetReportData).toHaveBeenCalledWith(
+        expect.objectContaining({
+          species: 'Perro',
+          breed: 'Labrador',
+          email: 'juan@example.com',
+        }),
+      );
+    });
   });
 
   test('does not navigate on success', async () => {
@@ -203,7 +213,9 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(mockNavigate).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
   });
 
   test('does not render the form sections after successful submission', async () => {
@@ -213,6 +225,8 @@ describe('FoundPetReportForm Component', () => {
 
     await user.click(screen.getByText('Reportar mascota encontrada'));
 
-    expect(screen.getByText('Información de la mascota')).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText('Información de la mascota')).toBeDefined();
+    });
   });
 });

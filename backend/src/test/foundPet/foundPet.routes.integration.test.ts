@@ -63,6 +63,31 @@ describe('foundPet routes (integration)', () => {
     expect(res.body).toHaveProperty('data');
   });
 
+  test('POST /found-pets/report returns 201 without description', async () => {
+    const payloadWithoutDescription = {
+      species: 'Perro',
+      date: '2024-03-15',
+      breed: 'Labrador',
+      sex: 'Macho',
+      color: 'Dorado',
+      size: 'Mediana: 11 a 25 kg',
+      location: 'Parque Central',
+      locationCoords: [-99.1332, 19.4326],
+      contactName: 'Juan Perez',
+      phoneNumber: '+521234567890',
+      email: 'juan@example.com',
+      images: [IMAGE],
+    };
+
+    const res = await request(app)
+      .post('/found-pets/report')
+      .send(payloadWithoutDescription);
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('message');
+    expect(res.body).toHaveProperty('data');
+  });
+
   test('POST /found-pets/report returns 400 when required fields missing', async () => {
     const invalidPayload = {
       color: 'Dorado',

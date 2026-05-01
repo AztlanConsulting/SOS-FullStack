@@ -14,7 +14,7 @@ export interface FoundPetReport {
     | 'Mediana: 11 a 25 kg'
     | 'Grande: 26 a 45 kg'
     | 'Gigante: más de 45 kg';
-  description: string;
+  description?: string;
   location?: string;
   locationCoords?: [number, number];
   contactName: string;
@@ -47,7 +47,7 @@ const foundPetSchema = new Schema<IFoundPet>(
         'Gigante: más de 45 kg',
       ],
     },
-    description: { type: String, required: true },
+    description: { type: String },
     location: { type: String },
     locationCoords: { type: [Number] },
     contactName: { type: String, required: true },

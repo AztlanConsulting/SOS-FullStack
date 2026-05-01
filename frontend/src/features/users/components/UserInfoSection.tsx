@@ -13,6 +13,7 @@ export interface UsuerInfoSectionProps {
   updateForm: (newData: Partial<LostPetReportData>) => void;
   reportType?: ReportType;
   errors: Record<string, string>;
+  hideNameInput?: boolean;
 }
 
 export const UserInfoSection = ({
@@ -20,6 +21,7 @@ export const UserInfoSection = ({
   updateForm,
   reportType = 'lost',
   errors,
+  hideNameInput = false,
 }: UsuerInfoSectionProps) => {
   const speciesOptions = [
     { value: 'Perro', label: 'Perro' },
@@ -47,7 +49,7 @@ export const UserInfoSection = ({
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4">
       {/* Name only applies when is a report for a lost pet. */}
-      {reportType === 'lost' && (
+      {reportType === 'lost' && !hideNameInput && (
         <Input
           id="petName"
           label="Nombre de la mascota"
@@ -130,6 +132,7 @@ export const UserInfoSection = ({
           <FileUpload
             index={1}
             onChange={(file) => console.log('Archivo cargado:', file)}
+            defaultDisplayName="Subir foto"
           />
         </div>
       )}

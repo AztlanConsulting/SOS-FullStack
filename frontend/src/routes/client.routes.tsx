@@ -4,7 +4,7 @@ import { ClientsPage } from '@/pages/ClientPage';
 
 const routerClients = [
   {
-    path: '/clients',
+    path: '/clientes',
     element: (
       <RoleProtectedRoute allowedRoles={['ADMIN']}>
         <ClientsPage />

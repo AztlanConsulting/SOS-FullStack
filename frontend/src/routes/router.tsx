@@ -18,6 +18,7 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import routerClients from './client.routes';
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +84,7 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
+      ...routerClients,
     ],
   },
 ]);

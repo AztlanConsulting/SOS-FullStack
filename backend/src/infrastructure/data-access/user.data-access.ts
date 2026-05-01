@@ -1,3 +1,5 @@
+import type { ClientDetail } from '@/types/client.type';
+import type { GetClientsResult } from '@/use-cases/clients/getClients.usecase';
 import type {
   User,
   UserWithRole,
@@ -7,6 +9,7 @@ import { UserModel } from '@domain/models/user.model';
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { PopulatedPermission } from '@validation/auth.types';
 import type { UserPermissions } from '@validation/auth.types';
+import { Types } from 'mongoose';
 
 export const userDataAccess: UserRepository = {
   /**
@@ -137,5 +140,93 @@ export const userDataAccess: UserRepository = {
     const savedUser = await newUser.save();
 
     return savedUser._id.toString();
+  },
+
+  getUsersWithPets: async (
+    page: number,
+    search?: string,
+  ): Promise<GetClientsResult> => {
+    const LIMIT = 10;
+    const skip = (page - 1) * LIMIT;
+    const matchStage =
+      search != null ? { username: { $regex: search, $options: 'i' } } : {};
+
+    const [result] = await UserModel.aggregate([
+      { $match: matchStage },
+      { $sort: { createdAt: -1 } },
+      {
+        $facet: {
+          data: [
+            { $skip: skip },
+            { $limit: LIMIT },
+            {
+              $lookup: {
+                from: 'pets',
+                localField: '_id',
+                foreignField: 'userId',
+                as: 'pets',
+              },
+            },
+            {
+              $lookup: {
+                from: 'purchasedplans',
+                let: { petIds: '$pets._id' },
+                pipeline: [
+                  { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
+                  { $sort: { createdAt: -1 } },
+                  { $limit: 1 },
+                ],
+                as: 'plans',
+              },
+            },
+            {
+              $addFields: {
+                pet: { $arrayElemAt: ['$pets', 0] },
+                plan: { $arrayElemAt: ['$plans', 0] },
+              },
+            },
+            { $project: { password: 0, pets: 0, plans: 0 } },
+          ],
+          total: [{ $count: 'count' }],
+        },
+      },
+    ]);
+
+    const clients = result?.data ?? [];
+    const total = result?.total?.[0]?.count ?? 0;
+
+    return {
+      clients,
+      total,
+      page,
+      totalPages: Math.ceil(total / LIMIT),
+    };
+  },
+  getClientDetail: async (id: string): Promise<ClientDetail | null> => {
+    const [client] = await UserModel.aggregate([
+      { $match: { _id: new Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: 'pets',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'pets',
+        },
+      },
+      {
+        $lookup: {
+          from: 'purchasedplans',
+          let: { petIds: '$pets._id' },
+          pipeline: [
+            { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'plans',
+        },
+      },
+      { $project: { password: 0 } },
+    ]);
+
+    return client ?? null;
   },
 };

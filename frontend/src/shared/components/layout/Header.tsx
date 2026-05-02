@@ -74,6 +74,21 @@ const Header = ({
   const navigate = useNavigate();
   const MobileSignIn = signBtn.mobile;
 
+  const textColors: Record<string, string> = {
+    primary: 'text-primary',
+    'purple-primary': 'text-purple-primary',
+  };
+
+  const bgColors: Record<string, string> = {
+    primary: 'bg-primary',
+    'purple-primary': 'bg-purple-primary',
+  };
+
+  const borderColors: Record<string, string> = {
+    primary: 'border-primary',
+    'purple-primary': 'border-purple-primary',
+  };
+
   return (
     <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
       {!isMenuOpen && (
@@ -142,13 +157,13 @@ const Header = ({
                   key={link.label}
                   onClick={() => navigate(link.href)}
                   className={`transition-colors cursor-pointer  ${
-                    isActive ? `border-b-2 border-${color}` : ''
+                    isActive ? `border-b-2 ${borderColors[color]}` : ''
                   }`}
                 >
                   <Text
                     variant="body"
                     weight="medium"
-                    className={`hover:text-${color}`}
+                    className={`hover:${textColors[color]}`}
                   >
                     {link.label}
                   </Text>
@@ -177,7 +192,7 @@ const Header = ({
 
           {/* Drawer */}
           <div
-            className={`w-2/3 max-w-xs bg-${color} h-full flex flex-col justify-between`}
+            className={`w-2/3 max-w-xs ${bgColors[color]} h-full flex flex-col justify-between`}
           >
             {/* Top */}
             <div className="p-8 border-b border-white flex justify-center">
@@ -211,7 +226,7 @@ const Header = ({
                       <span
                         className={
                           isActive
-                            ? `text-${color} text-2xl`
+                            ? `${textColors[color]} text-2xl`
                             : 'text-white text-2xl'
                         }
                       >
@@ -220,7 +235,7 @@ const Header = ({
                       <Text
                         variant="h3"
                         weight="medium"
-                        color={isActive ? `text-${color}` : 'text-white'}
+                        color={isActive ? `${textColors[color]}` : 'text-white'}
                       >
                         {link.label}
                       </Text>

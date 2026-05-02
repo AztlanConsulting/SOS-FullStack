@@ -2,8 +2,8 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-secondary: #fef5da;
   --color-primary: #f9cd48;
+  --color-secondary: #fef5da;
   --color-purple-primary: #9d7fad;
 }
 /* Hide scrollbars for all browsers */

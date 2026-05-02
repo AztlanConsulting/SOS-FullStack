@@ -92,3 +92,11 @@ export const getCreatePetReportFieldErrors = (
     return acc;
   }, {});
 };
+
+export interface PurchasedResourceResponse {
+  id: string;
+  name: string;
+  type: 'manual' | 'workshop';
+  imageUrl: string;
+  description?: string;
+}

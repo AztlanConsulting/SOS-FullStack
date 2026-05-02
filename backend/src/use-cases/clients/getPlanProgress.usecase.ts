@@ -34,9 +34,9 @@ export const getPlanProgress = async (
 
   const diffTime = today.getTime() - createdAt.getTime();
 
-  const daysTranscurridos = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const daysElapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  const daysRemaining = Math.max(0, totalDays - daysTranscurridos);
+  const daysRemaining = Math.max(0, totalDays - daysElapsed);
 
   return {
     planName: plan.name,

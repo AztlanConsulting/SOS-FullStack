@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { Text } from '../Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { HiOutlineUserCircle } from 'react-icons/hi';
+import type { ExpandedProps } from '@/shared/types/header.types';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const SignIn = () => {
   );
 };
 
-const ExpandedSignIn = (setIsMenuOpen: (b: boolean) => void) => {
+const ExpandedSignIn = ({ setIsMenuOpen }: ExpandedProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const firstName = user?.username.trim().split(/\s+/)[0] ?? '';

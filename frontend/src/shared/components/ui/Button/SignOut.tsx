@@ -1,5 +1,6 @@
 import { Text } from '../Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import type { ExpandedProps } from '@/shared/types/header.types';
 import { TbLogout } from 'react-icons/tb';
 
 const SignOut = () => {
@@ -17,7 +18,7 @@ const SignOut = () => {
   );
 };
 
-const ExpandedSignOut = (setIsMenuOpen: (b: boolean) => void) => {
+const ExpandedSignOut = ({ setIsMenuOpen }: ExpandedProps) => {
   const { logout } = useAuth();
 
   return (

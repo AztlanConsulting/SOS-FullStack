@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useAuth } from '@features/auth/hooks/useAuth';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
 import { LuHouse } from 'react-icons/lu';
@@ -15,7 +14,11 @@ import { CiYoutube } from 'react-icons/ci';
 import { FaXTwitter } from 'react-icons/fa6';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import whiteIcon from '@assets/images/whiteIcon.png';
-import type { NavLink, SocialLink } from '@/shared/types/header.types';
+import type {
+  ExpandedProps,
+  NavLink,
+  SocialLink,
+} from '@/shared/types/header.types';
 import SignIn from '../ui/Button/SignIn';
 
 const defaultNavLinks = [
@@ -55,7 +58,7 @@ interface Props {
   color?: string;
   signBtn?: {
     desktop: () => React.ReactNode;
-    mobile: (setIsMenuOpen: (b: boolean) => void) => React.ReactNode;
+    mobile: ({ setIsMenuOpen }: ExpandedProps) => React.ReactNode;
   };
 }
 
@@ -69,8 +72,7 @@ const Header = ({
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, isAuthLoading } = useAuth();
-  const firstName = user?.username.trim().split(/\s+/)[0] ?? '';
+  const MobileSignIn = signBtn.mobile;
 
   return (
     <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
@@ -229,7 +231,7 @@ const Header = ({
             </nav>
 
             {/* Bottom button */}
-            {signBtn.mobile(setIsMenuOpen)}
+            {<MobileSignIn setIsMenuOpen={setIsMenuOpen} />}
           </div>
         </div>
       )}

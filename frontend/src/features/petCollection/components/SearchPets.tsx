@@ -1,18 +1,12 @@
 import PetGallery from './PetGallery';
 import UploadPet from './UploadPet';
-import { useState, type ChangeEvent } from 'react';
+import { type ChangeEvent } from 'react';
 import uploadImage from '../services/uploadImage.service';
-import { useQuery } from '@tanstack/react-query';
+import usePetGallery from '../hooks/usePetGallery';
 
 const SearchPets = () => {
-  const [img, setImg] = useState<File | null>(null);
-  const [page, setPage] = useState(0);
-
-  const query = useQuery({
-    queryKey: [img, page],
-    queryFn: () => img && uploadImage(img, page),
-    enabled: Boolean(img),
-  });
+  const { imgHook, pages, handleSearch } = usePetGallery(uploadImage);
+  const [img, setImg] = imgHook;
 
   async function uploadFile(
     event: ChangeEvent<HTMLInputElement, HTMLInputElement>,
@@ -23,9 +17,9 @@ const SearchPets = () => {
   }
 
   return (
-    <div className="flex max-md:flex-col min-h-screen md:pt-0 pt-[80.67px]">
+    <div className="flex max-md:flex-col min-h-screen md:pt-0 pt-[80.67px] h-full">
       <UploadPet img={img} uploadFile={uploadFile} />
-      <PetGallery />
+      <PetGallery handleSearch={handleSearch} pages={pages} />
     </div>
   );
 };

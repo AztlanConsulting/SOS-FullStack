@@ -16,4 +16,5 @@ export interface UserRepository {
   createUser(userData: UserCreateInput): Promise<string>;
   getUsersWithPets(page: number, search?: string): Promise<GetClientsResult>;
   getClientDetail(id: string): Promise<ClientDetail | null>;
+  updateUser(id: string, data: Partial<User>): Promise<void>;
 }

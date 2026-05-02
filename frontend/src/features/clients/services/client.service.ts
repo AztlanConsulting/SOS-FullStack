@@ -19,4 +19,12 @@ export const ClientService = {
     const data = await fetch(`/api/clients/${id}`).then((res) => res.json());
     return data;
   },
+
+  updateConversation: async (id: string, conversation: string) => {
+    await fetch(`/api/clients/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conversation }),
+    });
+  },
 };

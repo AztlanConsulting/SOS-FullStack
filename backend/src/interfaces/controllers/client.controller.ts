@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { getClientById } from '@/use-cases/clients/getClientById.usecase';
 import { getClients } from '@/use-cases/clients/getClients.usecase';
+import { updateClient } from '@/use-cases/clients/updateClient.usecase';
 
 const deps = { userRepository: userDataAccess };
 
@@ -30,6 +31,25 @@ export const ClientController = {
       res.status(200).json(client);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching client' });
+    }
+  },
+
+  updateClient: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const id = Array.isArray(req.params.id)
+        ? req.params.id[0]
+        : req.params.id;
+      const { conversation } = req.body;
+
+      if (!id || typeof id !== 'string') {
+        res.status(400).json({ error: 'Invalid client id' });
+        return;
+      }
+
+      await updateClient(deps, id, { conversation });
+      res.status(200).json({ message: 'Client updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error updating client' });
     }
   },
 };

@@ -7,8 +7,9 @@ import { Text } from '../Text';
  */
 type ModalProps = {
   title: string;
-  description: string;
+  description?: string;
   onClose: () => void;
+  children?: React.ReactNode;
 };
 
 /**
@@ -19,6 +20,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   description,
   onClose,
+  children,
 }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -38,9 +40,11 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
 
         <div className="bg-white px-5 py-5">
-          <Text variant="body" className="text-gray-700 leading-relaxed">
-            {description}
-          </Text>
+          {children ?? (
+            <Text variant="body" className="text-gray-700 leading-relaxed">
+              {description}
+            </Text>
+          )}
         </div>
       </div>
     </div>

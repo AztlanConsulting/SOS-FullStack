@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Text } from '@/shared/components/ui/Text';
 import { PlanStatusBadge } from '@/shared/components/ui/StatusBadge/PlanStatus';
 import type { ClientListItem } from '../types/client.type';
@@ -15,11 +14,10 @@ const HEADERS = [
 interface Props {
   clients: ClientListItem[];
   loading: boolean;
+  onRowClick?: (client: ClientListItem) => void;
 }
 
-export const ClientTable = ({ clients, loading }: Props) => {
-  const navigate = useNavigate();
-
+export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
   return (
     <div>
       <div className="hidden md:block overflow-x-auto rounded-lg border border-[#AFB1B6]">
@@ -63,7 +61,7 @@ export const ClientTable = ({ clients, loading }: Props) => {
               clients.map((client) => (
                 <tr
                   key={client._id}
-                  onClick={() => navigate(`/clients/${client._id}`)}
+                  onClick={() => onRowClick?.(client)}
                   className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
                   <td className="px-4 py-3">
@@ -136,7 +134,7 @@ export const ClientTable = ({ clients, loading }: Props) => {
           clients.map((client) => (
             <div
               key={client._id}
-              onClick={() => navigate(`/clients/${client._id}`)}
+              onClick={() => onRowClick?.(client)}
               className="bg-white rounded-lg border border-gray-200 p-4 cursor-pointer hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center justify-between mb-2">

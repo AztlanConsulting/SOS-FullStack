@@ -1,12 +1,18 @@
-import { HiDownload, HiPencil, HiFilter } from 'react-icons/hi';
+import { HiDownload, HiFilter } from 'react-icons/hi';
 import { Text } from '@/shared/components/ui/Text';
 import { ClientTable } from '@/features/clients/components/ClientTable';
 import { useClients } from '@/features/clients/hooks/useClients';
 import { Button } from '@/shared/components/ui/Button/Button';
 import { ClientSearch } from '@/features/clients/components/ClientSearch';
 import { Sidebar } from '@/shared/components/layout/Sidebar';
+import { useState } from 'react';
+import type { ClientListItem } from '@/features/clients/types/client.type';
+import { ClientDetailModal } from '@/shared/components/ui/Modal/ClientDetailModal';
 
 export const ClientsPage = () => {
+  const [selectedClient, setSelectedClient] = useState<ClientListItem | null>(
+    null,
+  );
   const {
     clients,
     loading,
@@ -16,6 +22,7 @@ export const ClientsPage = () => {
     setPage,
     search,
     setSearch,
+    fetchClients,
   } = useClients();
 
   return (
@@ -29,7 +36,6 @@ export const ClientsPage = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
             <div className="flex items-center gap-2">
               <Button variant="toolbar" label="Exportar" icon={HiDownload} />
-              <Button variant="toolbar" label="" icon={HiPencil} />
             </div>
             <div className="flex items-center gap-2">
               <Button variant="toolbar" label="" icon={HiFilter} />
@@ -41,7 +47,11 @@ export const ClientsPage = () => {
               {error}
             </Text>
           )}
-          <ClientTable clients={clients} loading={loading} />
+          <ClientTable
+            clients={clients}
+            loading={loading}
+            onRowClick={(client) => setSelectedClient(client)}
+          />
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-3 mt-4">
               <button
@@ -62,6 +72,13 @@ export const ClientsPage = () => {
                 →
               </button>
             </div>
+          )}
+          {selectedClient && (
+            <ClientDetailModal
+              client={selectedClient}
+              onClose={() => setSelectedClient(null)}
+              onUpdate={fetchClients}
+            />
           )}
         </div>
       </div>

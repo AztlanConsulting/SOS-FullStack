@@ -11,6 +11,7 @@ export const useClients = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const [refetch, setRefetch] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), DEBOUNCE_DELAY);
@@ -36,10 +37,11 @@ export const useClients = () => {
       setLoading(false);
     }
   }, [page, debouncedSearch]);
-
   useEffect(() => {
     fetchClients();
-  }, [fetchClients]);
+  }, [fetchClients, refetch]);
+
+  const refresh = () => setRefetch((r) => r + 1);
 
   return {
     clients,
@@ -50,5 +52,7 @@ export const useClients = () => {
     search,
     setPage,
     setSearch,
+    fetchClients,
+    refresh,
   };
 };

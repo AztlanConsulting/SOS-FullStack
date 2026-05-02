@@ -229,4 +229,8 @@ export const userDataAccess: UserRepository = {
 
     return client ?? null;
   },
+
+  updateUser: async (id: string, data: Partial<User>): Promise<void> => {
+    await UserModel.findByIdAndUpdate(id, { $set: data }).exec();
+  },
 };

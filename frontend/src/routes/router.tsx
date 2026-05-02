@@ -13,11 +13,13 @@ import routerWorkshop from './workshop.routes';
 import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
+import routerPetCollection from './petCollection.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
 import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import PetCollectionPage from '@/pages/PetCollectionPage';
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +85,7 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
+      ...routerPetCollection,
     ],
   },
 ]);

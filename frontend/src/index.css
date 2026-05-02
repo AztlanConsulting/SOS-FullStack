@@ -4,6 +4,8 @@
 @theme {
   --color-secondary: #fef5da;
   --color-primary: #f9cd48;
+  --color-purple-primary: #9d7fad;
+  --color-purple-secondary: #ddd2e3;
 }
 /* Hide scrollbars for all browsers */
 html,

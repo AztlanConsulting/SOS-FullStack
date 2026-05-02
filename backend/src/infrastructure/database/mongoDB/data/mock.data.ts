@@ -6,6 +6,8 @@ import { ResourcesModel } from '@domain/models/resource.model';
 import { RoleModel } from '@domain/models/role.model';
 import { UserModel } from '@domain/models/user.model';
 import { PermissionModel } from '@domain/models/permission.model';
+import { PetModel } from '@/domain/models/pet.model';
+import { PurchasedPlanModel } from '@domain/models/purchasedPlan.model';
 import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
 import initWorkshopDB from './workshops.data';
@@ -24,6 +26,8 @@ try {
   await RoleModel.deleteMany({});
   await ResourcesModel.deleteMany({});
   await PermissionModel.deleteMany({});
+  await PetModel.deleteMany({});
+  await PurchasedPlanModel.deleteMany({});
 
   await Mock.insertMany([
     {
@@ -43,7 +47,7 @@ try {
     },
   ]);
 
-  await PlanModel.insertMany([
+  const createdPlans = await PlanModel.insertMany([
     {
       name: 'Básico',
       price: 9.99,
@@ -100,7 +104,7 @@ try {
 
   const passwordHash = await bcrypt.hash('12345', 12);
 
-  await UserModel.insertMany([
+  const createdUsers = await UserModel.insertMany([
     {
       username: 'admin',
       email: 'admin@test.com',
@@ -120,6 +124,32 @@ try {
       active: true,
     },
   ]);
+
+  const testUser = createdUsers[1];
+
+  const testPet = await PetModel.create({
+    userId: testUser._id,
+    name: 'Firulais',
+    species: 'Perro',
+    dateMissing: new Date('2026-05-01T12:00:00Z'),
+    breed: 'Mestizo',
+    sex: 'Macho',
+    color: 'Café',
+    size: 'Mediano',
+    description: 'Perrito amigable, llevaba un collar rojo cuando se perdió.',
+    photos: [], // Insert any image to test.
+    placeMissing: 'Mexico City, Mexico',
+  });
+
+  await PurchasedPlanModel.create({
+    petId: testPet._id,
+    name: 'Básico',
+    price: 9.99,
+    duration: 30,
+    radius: 5,
+    features: ['Publicación estándar', 'Soporte por email'],
+    active: true,
+  });
 
   await initBlogDB();
 

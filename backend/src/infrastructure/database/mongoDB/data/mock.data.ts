@@ -8,6 +8,11 @@ import { UserModel } from '@domain/models/user.model';
 import { PermissionModel } from '@domain/models/permission.model';
 import { PetModel } from '@/domain/models/pet.model';
 import { PurchasedPlanModel } from '@domain/models/purchasedPlan.model';
+import { ManualModel } from '@domain/models/manual.model';
+import { WorkshopModel } from '@domain/models/workshop.model';
+import { PurchaseModel } from '@domain/models/purchase.model';
+import initPlanDB from './plans.data';
+
 import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
 import initWorkshopDB from './workshops.data';
@@ -15,9 +20,6 @@ import initManualDB from './manuals.data';
 
 try {
   await mongoDB();
-
-  await initWorkshopDB();
-  await initManualDB();
 
   await Mock.deleteMany({});
   await PlanModel.deleteMany({});
@@ -28,39 +30,14 @@ try {
   await PermissionModel.deleteMany({});
   await PetModel.deleteMany({});
   await PurchasedPlanModel.deleteMany({});
+  await ManualModel.deleteMany({});
+  await WorkshopModel.deleteMany({});
+  await PurchaseModel.deleteMany({});
 
-  await Mock.insertMany([
-    {
-      title: 'Mock Item 1',
-      description: 'This is a test item',
-      value: 100,
-    },
-    {
-      title: 'Mock Item 2',
-      description: 'Another test item',
-      value: 200,
-    },
-    {
-      title: 'Mock Item 3',
-      description: 'More mock data',
-      value: 300,
-    },
-  ]);
-
-  const createdPlans = await PlanModel.insertMany([
-    {
-      name: 'Básico',
-      price: 9.99,
-    },
-    {
-      name: 'Estándar',
-      price: 19.99,
-    },
-    {
-      name: 'Premium',
-      price: 29.99,
-    },
-  ]);
+  await initWorkshopDB();
+  await initManualDB();
+  await initBlogDB();
+  await initPlanDB();
 
   const resources = await ResourcesModel.insertMany([
     { name: 'users', description: 'User management' },
@@ -71,24 +48,14 @@ try {
   const adminPermissions = await PermissionModel.insertMany(
     resources.map((r) => ({
       resourceId: r._id,
-      actions: {
-        create: true,
-        read: true,
-        update: true,
-        delete: true,
-      },
+      actions: { create: true, read: true, update: true, delete: true },
     })),
   );
 
   const clientPermissions = await PermissionModel.insertMany(
     resources.map((r) => ({
       resourceId: r._id,
-      actions: {
-        create: false,
-        read: true,
-        update: false,
-        delete: false,
-      },
+      actions: { create: false, read: true, update: false, delete: false },
     })),
   );
 
@@ -137,22 +104,44 @@ try {
     color: 'Café',
     size: 'Mediano',
     description: 'Perrito amigable, llevaba un collar rojo cuando se perdió.',
-    photos: [], // Insert any image to test.
+    photos: [],
     placeMissing: 'Mexico City, Mexico',
   });
 
+  const plans = await PlanModel.find();
+  const basicPlan = plans.find((p) => p.name === 'Básico') || plans[0];
+
   await PurchasedPlanModel.create({
     petId: testPet._id,
-    name: 'Básico',
-    price: 9.99,
+    name: basicPlan.name,
+    price: basicPlan.price,
     duration: 30,
     radius: 5,
     features: ['Publicación estándar', 'Soporte por email'],
     active: true,
   });
 
-  await initBlogDB();
+  const realManual = await ManualModel.findOne();
+  const realWorkshop = await WorkshopModel.findOne();
 
+  if (realManual && realWorkshop) {
+    await PurchaseModel.create([
+      {
+        userEmail: testUser.email,
+        paymentId: 'pay_mock_123',
+        productId: realManual._id.toString(),
+        productType: 'manual',
+      },
+      {
+        userEmail: testUser.email,
+        paymentId: 'pay_mock_456',
+        productId: realWorkshop._id.toString(),
+        productType: 'workshop',
+      },
+    ]);
+  }
+
+  console.log('Mock data for data base done.');
   process.exit(0);
 } catch (error) {
   console.error('Error seeding data:', error);

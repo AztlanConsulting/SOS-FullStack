@@ -14,9 +14,9 @@ router.post(
 );
 
 router.get(
-  '/plan-progress',
+  '/dashboard',
   authMiddleware,
-  clientsController.getPlanProgressController,
+  clientsController.getDashboardController,
 );
 
 export default router;

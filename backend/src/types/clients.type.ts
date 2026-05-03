@@ -100,3 +100,14 @@ export interface PurchasedResourceResponse {
   imageUrl: string;
   description?: string;
 }
+
+export interface PlanProgressResult {
+  planName: string;
+  totalDays: number;
+  daysRemaining: number;
+}
+
+export interface DashboardResponse {
+  planProgress: PlanProgressResult | null;
+  resources: PurchasedResourceResponse[];
+}

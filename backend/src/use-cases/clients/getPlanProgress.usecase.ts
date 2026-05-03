@@ -1,11 +1,6 @@
 import type { PetRepository } from '@domain/repositories/pet.repository';
 import type { PurchasedPlanRepository } from '@domain/repositories/purchasedPlan.repository';
-
-interface PlanProgressResult {
-  planName: string;
-  totalDays: number;
-  daysRemaining: number;
-}
+import type { PlanProgressResult } from '../../types/clients.type';
 
 interface Dependencies {
   petRepository: PetRepository;
@@ -33,9 +28,7 @@ export const getPlanProgress = async (
   const today = new Date();
 
   const diffTime = today.getTime() - createdAt.getTime();
-
   const daysElapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
   const daysRemaining = Math.max(0, totalDays - daysElapsed);
 
   return {

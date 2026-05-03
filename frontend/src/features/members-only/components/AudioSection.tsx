@@ -1,5 +1,5 @@
 import { Text } from '@shared/components/ui/Text';
-import petAndOwners from '@assets/images/petAndOwners.png';
+import meditacion from '@assets/videos/meditacion.mp4';
 
 const AudioSection = () => {
   return (
@@ -15,18 +15,22 @@ const AudioSection = () => {
             weight="medium"
             className="mb-3 md:order-2 text-center md:text-left md:row-span-1 md:place-self-end md:justify-self-start"
           >
-            Cuéntanos de tu mascota
+            La búsqueda se convierte en un espejo: muestra nuestra paciencia,
+            nuestra resiliencia, nuestra fe y nuestra capacidad de estar
+            presentes.
           </Text>
-          <img
-            src={petAndOwners}
-            alt="Publicación"
+          <video
+            src={meditacion}
             className="object-cover rounded-lg w-full h-full md:order-1 md:row-span-2"
+            controls
           />
           <Text
             variant="body"
             className="text-left md:order-3 md:row-span-1 md:place-self-start md:justify-self-start mt-3"
           >
-            Déjanos la información de tu mascota para comenzar la búsqueda
+            Cuando buscamos a nuestra mascota, nos enfrentamos a incertidumbre,
+            miedo y ansiedad. Este proceso nos revela aspectos internos que
+            normalmente permanecen ocultos.
           </Text>
         </div>
       </div>

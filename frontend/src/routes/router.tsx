@@ -18,7 +18,7 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
-import MembersOnly from '../pages/MembersOnly';
+import routerMembersOnly from './membersOnly.routes';
 
 export const router = createBrowserRouter([
   {
@@ -80,14 +80,11 @@ export const router = createBrowserRouter([
         path: '/paypal-checkout',
         element: <CheckoutPage />,
       },
-      {
-        path: '/members-only',
-        element: <MembersOnly />,
-      },
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
+      ...routerMembersOnly,
     ],
   },
 ]);

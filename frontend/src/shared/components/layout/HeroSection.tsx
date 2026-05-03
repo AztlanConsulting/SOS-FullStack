@@ -1,10 +1,11 @@
 import { Text } from '@shared/components/ui/Text/Text';
+import type React from 'react';
 
 interface Props {
   bg?: string;
   title: string;
   image: string;
-  content: string;
+  content: string | React.ReactNode;
 }
 
 const HeroSection = ({ bg = 'white', title, image, content }: Props) => {

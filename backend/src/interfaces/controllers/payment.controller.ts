@@ -13,9 +13,12 @@ import type Stripe from 'stripe';
  */
 export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
   try {
-    const { amount, currency } = req.body as {
+    const { amount, currency, method, name, email } = req.body as {
       amount?: number;
       currency?: string;
+      method?: string;
+      name?: string;
+      email?: string;
     };
 
     if (amount === undefined || currency === undefined) {
@@ -25,6 +28,9 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
     const result = await createPaymentIntent(StripeProvider, {
       amount,
       currency,
+      method,
+      name,
+      email,
     });
 
     await createPendingIntentDB(PaymentDataAccess, {
@@ -79,7 +85,7 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       secret: webhookSecret,
     });
 
-    console.log(`Webhook received: ${event.type}`);
+    console.log(`ethod,Webhook received: ${event.type}`);
 
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;

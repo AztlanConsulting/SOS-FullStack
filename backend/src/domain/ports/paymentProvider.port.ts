@@ -54,11 +54,18 @@ export interface PaymentIntentDTO {
   plan?: PetReportData;
 }
 
+export interface SpeiDetails {
+  clabe: string;
+  bankName: string;
+  reference: string;
+}
+
 export interface PaymentIntentResult {
   id: string;
   amount: number;
   currency: string;
   clientSecret: string | null;
+  speiDetails: SpeiDetails | null;
 }
 
 export interface EventDTO {

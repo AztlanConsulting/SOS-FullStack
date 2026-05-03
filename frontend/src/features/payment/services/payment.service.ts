@@ -1,10 +1,16 @@
-export const createPaymentIntent = async (amount: number, currency: string) => {
+export const createPaymentIntent = async (
+  amount: number,
+  currency: string,
+  method: string,
+  name: string,
+  email: string,
+) => {
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;
     const res = await fetch(`${base_url}/payments/payment-intent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount, currency }),
+      body: JSON.stringify({ amount, currency, method, name, email }),
     });
     const data: { clientSecret: string | null } = await res.json();
     return data.clientSecret;

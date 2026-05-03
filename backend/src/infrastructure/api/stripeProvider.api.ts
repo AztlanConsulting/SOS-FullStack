@@ -63,6 +63,35 @@ export const StripeProvider: PaymentProvider = {
           },
         },
       });
+
+      // Confirm the intent to generate bank transfer instructions
+      const confirmedIntent = await stripe.paymentIntents.confirm(intent.id, {
+        payment_method_data: {
+          type: 'customer_balance',
+        },
+      });
+
+      // Ensure we have the bank transfer instructions for SPEI
+      const bankTransfer =
+        confirmedIntent.next_action?.display_bank_transfer_instructions;
+
+      return {
+        id: intent.id,
+        amount: intent.amount,
+        currency: intent.currency,
+        clientSecret: intent.client_secret ?? null,
+        speiDetails:
+          bankTransfer &&
+          bankTransfer.financial_addresses?.[0]?.spei?.clabe &&
+          bankTransfer.financial_addresses?.[0]?.spei?.bank_name
+            ? {
+                clabe: bankTransfer.financial_addresses?.[0]?.spei?.clabe,
+                bankName:
+                  bankTransfer.financial_addresses?.[0]?.spei?.bank_name,
+                reference: bankTransfer.reference ?? '',
+              }
+            : null,
+      };
     } else {
       throw new Error('Invalid payment method');
     }
@@ -72,6 +101,7 @@ export const StripeProvider: PaymentProvider = {
       amount: intent.amount,
       currency: intent.currency,
       clientSecret: intent.client_secret ?? null,
+      speiDetails: null,
     };
   },
 

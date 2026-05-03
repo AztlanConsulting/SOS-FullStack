@@ -1,11 +1,11 @@
 import type {
   PetImage,
   PetImageDto,
-  PetImages,
+  PetVectorRepository,
 } from '@domain/repositories/petImage.repository';
 import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
 
-export const petVector: PetImage = {
+export const petVector: PetVectorRepository = {
   /**
    * Upload image to vector database
    * @param petImage - Object containing image, species and mongoDB id
@@ -33,12 +33,12 @@ export const petVector: PetImage = {
    * Get images similar to the one requested
    * @param petImage - Object containing image, species and mongoDB id
    * @param offset - Manage pagination
-   * @returns result - Array of PetImages, contains image, species and refId
+   * @returns result - Array of PetImage, contains image, species and refId
    */
   getSimilarPets: async function (
     petImage: PetImageDto,
     offset: number,
-  ): Promise<PetImages[]> {
+  ): Promise<PetImage[]> {
     const image = petImage.image.toString('base64');
     const resImg = await vectorDB.graphql
       .get()
@@ -49,8 +49,24 @@ export const petVector: PetImage = {
       .withLimit(10)
       .do();
 
-    const result: PetImages[] = resImg.data.Get.Pet;
+    const result: PetImage[] = resImg.data.Get.Pet;
 
     return result;
+  },
+
+  getPetById: async function (refId: string): Promise<PetImage> {
+    const resImg = await vectorDB.graphql
+      .get()
+      .withClassName('Pet')
+      .withFields('image refId species')
+      .withWhere({
+        path: ['refId'],
+        operator: 'Equal',
+        valueString: refId,
+      })
+      .do();
+
+    const petImage: PetImage = resImg.data.Get.Pet;
+    return petImage;
   },
 };

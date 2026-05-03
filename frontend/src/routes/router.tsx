@@ -12,11 +12,13 @@ import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import { PurchasePage } from '@pages/PurchasePage';
+import routerClient from './client.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
 import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import ClientDashboard from '@/pages/ClientDashboard';
 
 export const router = createBrowserRouter([
   {
@@ -45,12 +47,26 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: (
-          <RoleProtectedRoute allowedRoles={['admin']}>
+          <RoleProtectedRoute allowedRoles={['ADMIN']}>
             <Dashboard />
           </RoleProtectedRoute>
         ),
       },
       {
+        path: '/inicio',
+        element: (
+          <RoleProtectedRoute allowedRoles={['CLIENT']}>
+            <ClientDashboard />
+          </RoleProtectedRoute>
+        ),
+        children: [...routerClient],
+      },
+      {
+        path: '/purchase',
+        element: <TempPurchasePage />,
+      },
+      {
+        path: '/credits',
         element: <CreditsPage />,
       },
       {

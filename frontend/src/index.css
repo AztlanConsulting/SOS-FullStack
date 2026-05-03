@@ -2,9 +2,10 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-secondary: #fef5da;
   --color-primary: #f9cd48;
   --radius-c: 20px;
+  --color-secondary: #fef5da;
+  --color-purple-primary: #9d7fad;
 }
 /* Hide scrollbars for all browsers */
 html,

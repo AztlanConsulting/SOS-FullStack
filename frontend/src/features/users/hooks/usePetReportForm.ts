@@ -137,8 +137,6 @@ export const usePetReportForm = (initialData?: Partial<PetReportData>) => {
   };
 
   const handleNext = () => {
-    console.log('phoneNumber raw:', JSON.stringify(formData.phoneNumber));
-    console.log('normalized:', normalizePhone(formData.phoneNumber));
     const newErrors: Record<string, string> = {};
 
     if (!formData.name) newErrors.name = 'Ingresa el nombre de tu mascota';

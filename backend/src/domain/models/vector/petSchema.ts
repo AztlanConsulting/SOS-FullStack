@@ -20,5 +20,13 @@ export const petConfig = {
       name: 'species',
       dataType: ['string'],
     },
+    {
+      name: 'location',
+      dataType: ['string'],
+    },
+    {
+      name: 'details',
+      dataType: ['string'],
+    },
   ],
 };

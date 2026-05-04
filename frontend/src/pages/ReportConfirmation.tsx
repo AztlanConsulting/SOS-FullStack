@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DataConfirmation } from '../features/users/components/DataConfirmation';
-import { usePetReport } from '../features/users/context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
+import { exportPosterAsFile } from '@/shared/services/posterExport.services';
 import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
-import { exportPosterAsFile } from '@/shared/services/posterExport.services';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
-  const { reportData, setReportData } = usePetReport();
+  const { lostPetReportData, setLostPetReportData } = usePetReport();
   const posterRef = useRef<HTMLDivElement>(null);
   // Reference to the preview container where the poster is displayed
   const posterPreviewRef = useRef<HTMLDivElement>(null);
@@ -20,10 +20,10 @@ export const ReportConfirmationPage: React.FC = () => {
   const [posterScale, setPosterScale] = useState(1);
 
   useEffect(() => {
-    if (!reportData) {
+    if (!lostPetReportData) {
       navigate('/');
     }
-  }, [reportData, navigate]);
+  }, [lostPetReportData, navigate]);
 
   useEffect(() => {
     // Get available width inside preview container
@@ -53,21 +53,23 @@ export const ReportConfirmationPage: React.FC = () => {
     };
   }, []);
 
-  const handleUpdateForm = async (newData: Partial<typeof reportData>) => {
-    if (!reportData) return;
-    if (reportData) {
+  const handleUpdateForm = async (
+    newData: Partial<typeof lostPetReportData>,
+  ) => {
+    if (!lostPetReportData) return;
+    if (lostPetReportData) {
       const posterFile = await exportPosterAsFile(
         posterRef.current,
-        `${reportData.name}-poster`,
+        `${lostPetReportData.name}-poster`,
       );
 
       if (posterFile) {
-        setReportData({
-          ...reportData,
-          images: [...reportData.images, posterFile],
+        setLostPetReportData({
+          ...lostPetReportData,
+          images: [...lostPetReportData.images, posterFile],
         });
       }
-      setReportData({ ...reportData, ...newData });
+      setLostPetReportData({ ...lostPetReportData, ...newData });
     }
   };
 
@@ -75,7 +77,7 @@ export const ReportConfirmationPage: React.FC = () => {
     navigate('/plans');
   };
 
-  if (!reportData) return null;
+  if (!lostPetReportData) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -89,7 +91,7 @@ export const ReportConfirmationPage: React.FC = () => {
         </div>
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto pt-12 lg:pt-10">
           <DataConfirmation
-            formData={reportData}
+            formData={lostPetReportData}
             updateForm={handleUpdateForm}
           />
 
@@ -109,7 +111,7 @@ export const ReportConfirmationPage: React.FC = () => {
                   transformOrigin: 'top center',
                 }}
               >
-                <Poster ref={posterRef} pet={reportData} />
+                <Poster ref={posterRef} pet={lostPetReportData} />
               </div>
 
               {/* Watermark to prevent exporting image */}

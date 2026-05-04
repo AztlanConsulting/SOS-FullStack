@@ -6,6 +6,7 @@ interface FileUploadProps {
   onChange?: (file: File | null) => void;
   error?: string;
   currentFileName?: string;
+  defaultDisplayName?: string;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -13,6 +14,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   onChange,
   error,
   currentFileName,
+  defaultDisplayName,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -34,7 +36,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         />
 
         <span className="truncate max-w-[70%]">
-          {currentFileName || `Subir foto ${index}`}
+          {currentFileName || defaultDisplayName || `Subir foto ${index}`}
         </span>
 
         <svg

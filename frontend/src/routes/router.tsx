@@ -4,13 +4,13 @@ import LandingPage from '../pages/LandingPage';
 import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import { ReportConfirmationPage } from '../pages/ReportConfirmation';
-import { PetReportProvider } from '../features/users/context/PetReportContext';
 import Plans from '../pages/Plans';
 import { PaymentPage } from '../features/payment/components/PaymentPage';
 import routerWorkshop from './workshop.routes';
 import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
+import routerLostPet from './foundPet.routes';
 import { PurchasePage } from '@pages/PurchasePage';
 import routerClient from './client.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
@@ -18,6 +18,7 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
 
 export const router = createBrowserRouter([
@@ -85,6 +86,7 @@ export const router = createBrowserRouter([
         path: '/payment',
         element: <PaymentPage />,
       },
+      ...routerLostPet,
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,

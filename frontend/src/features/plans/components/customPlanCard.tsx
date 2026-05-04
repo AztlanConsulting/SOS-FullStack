@@ -3,7 +3,7 @@ import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
 import { useCustomPlan } from '../hooks/useCustomPlan';
-import { usePetReport } from '@features/users/context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
 import { ALL_FEATURES } from '../hooks/useCustomPlan';
 import { useNavigate } from 'react-router';
 
@@ -32,7 +32,7 @@ const CustomPlanCard: React.FC = () => {
     'Cartel para imprimir',
   ];
 
-  const { reportData, setReportData } = usePetReport();
+  const { lostPetReportData, setLostPetReportData } = usePetReport();
 
   return (
     <div className="w-full max-w-sm rounded-2xl border-2 border-[#AFB1B6] bg-white overflow-hidden">
@@ -244,12 +244,12 @@ const CustomPlanCard: React.FC = () => {
             label="Confirmar plan"
             variant="plans"
             onClick={() => {
-              if (!reportData) return;
+              if (!lostPetReportData) return;
 
               const dynamicFeature = `Anuncio de ${days} días en un área de ${km} km a la redonda`;
 
               const updated = {
-                ...reportData,
+                ...lostPetReportData,
                 planName: 'Personalizado',
                 planDetails: {
                   days,
@@ -270,7 +270,7 @@ const CustomPlanCard: React.FC = () => {
                 },
               };
 
-              setReportData(updated);
+              setLostPetReportData(updated);
               navigate('/compra');
             }}
           />

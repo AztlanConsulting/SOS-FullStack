@@ -8,6 +8,7 @@ import { Sidebar } from '@/shared/components/layout/Sidebar';
 import { useState } from 'react';
 import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientDetailModal } from '@/shared/components/ui/Modal/ClientDetailModal';
+import { exportToCSV } from '@/shared/utils/exportCSV';
 
 export const ClientsPage = () => {
   const [selectedClient, setSelectedClient] = useState<ClientListItem | null>(
@@ -35,7 +36,25 @@ export const ClientsPage = () => {
           </Text>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
             <div className="flex items-center gap-2">
-              <Button variant="toolbar" label="Exportar" icon={HiDownload} />
+              <Button
+                variant="toolbar"
+                label="Exportar"
+                icon={HiDownload}
+                onClick={() =>
+                  exportToCSV(
+                    'clientes',
+                    clients.map((c) => ({
+                      Nombre: c.username,
+                      Email: c.email,
+                      Teléfono: c.phone,
+                      Mascota: c.pet?.name ?? '-',
+                      Plan: c.plan?.name ?? '-',
+                      Estatus: c.plan?.status ?? '-',
+                      Conversación: c.conversation ?? '-',
+                    })),
+                  )
+                }
+              />
             </div>
             <div className="flex items-center gap-2">
               <Button variant="toolbar" label="" icon={HiFilter} />

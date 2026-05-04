@@ -1,4 +1,4 @@
-import { HiDownload, HiFilter } from 'react-icons/hi';
+import { HiDownload } from 'react-icons/hi';
 import { Text } from '@/shared/components/ui/Text';
 import { ClientTable } from '@/features/clients/components/ClientTable';
 import { useClients } from '@/features/clients/hooks/useClients';
@@ -9,6 +9,7 @@ import { useState } from 'react';
 import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientDetailModal } from '@/shared/components/ui/Modal/ClientDetailModal';
 import { exportToCSV } from '@/shared/utils/exportCSV';
+import { FilterDropdown } from '@/features/clients/components/FilterDropdown';
 
 export const ClientsPage = () => {
   const [selectedClient, setSelectedClient] = useState<ClientListItem | null>(
@@ -24,6 +25,8 @@ export const ClientsPage = () => {
     search,
     setSearch,
     fetchClients,
+    filters,
+    setFilters,
   } = useClients();
 
   return (
@@ -57,7 +60,7 @@ export const ClientsPage = () => {
               />
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="toolbar" label="" icon={HiFilter} />
+              <FilterDropdown filters={filters} onChange={setFilters} />
               <ClientSearch value={search} onChange={setSearch} />
             </div>
           </div>

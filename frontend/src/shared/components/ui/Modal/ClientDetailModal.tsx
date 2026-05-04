@@ -81,6 +81,7 @@ export const ClientDetailModal = ({ client, onClose, onUpdate }: Props) => {
                     type="text"
                     value={conversationValue}
                     onChange={(e) => setConversationValue(e.target.value)}
+                    maxLength={150}
                     className="text-xs border border-gray-300 rounded px-2 py-1 flex-1 outline-none focus:border-yellow-400"
                     autoFocus
                   />
@@ -113,7 +114,7 @@ export const ClientDetailModal = ({ client, onClose, onUpdate }: Props) => {
                     href={conversationValue}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-blue-500 text-xs hover:underline truncate"
+                    className="text-blue-500 text-xs hover:underline truncate max-w-[180px] block"
                   >
                     {conversationValue || '—'}
                   </a>

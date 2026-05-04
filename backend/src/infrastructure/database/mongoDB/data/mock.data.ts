@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import { mongoDB } from '@infrastructure/database/mongoDB/mongoDB';
 import { Mock } from '@domain/models/mock.model';
 import { PlanModel } from '@domain/models/plan.model';
@@ -10,6 +11,8 @@ import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
 import initWorkshopDB from './workshops.data';
 import initManualDB from './manuals.data';
+
+dotenv.config();
 
 try {
   await mongoDB();

@@ -30,7 +30,7 @@ const FrecuentlyAsked = () => {
   };
 
   return (
-    <section className="bg-white overflow-hidden border-b border-border-gray py-8 lg:py-16">
+    <section className="bg-white overflow-hidden py-8 lg:py-16 color-grey-border-top">
       <div className="w-5/6 mx-auto">
         <div className="text-center mb-6 lg:mb-10">
           <Text as="h2" variant="h2" weight="medium">

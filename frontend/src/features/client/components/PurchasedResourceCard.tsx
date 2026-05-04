@@ -1,0 +1,56 @@
+import { Button } from '@/shared/components/ui/Button/Button';
+import { Text } from '@/shared/components/ui/Text/Text';
+import { useNavigate } from 'react-router';
+import type { PurchasedResourceResponse } from '@/features/graphs/types/dashboardMetrics';
+
+export const PurchasedResourceCard = ({
+  resource,
+}: {
+  resource: PurchasedResourceResponse;
+}) => {
+  const navigate = useNavigate();
+
+  const handleView = () => {
+    if (resource.type === 'manual') {
+      navigate(`/manuales/${resource.id}`);
+    } else {
+      navigate(`/talleres/${resource.id}`);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-shadow duration-200">
+      <div className="relative h-40 w-full">
+        <img
+          src={resource.imageUrl}
+          alt={resource.name}
+          className="w-full h-full object-cover"
+        />
+
+        <div className="absolute top-3 left-3 bg-white px-3 py-1 rounded-full text-xs font-bold text-gray-700 shadow-sm uppercase tracking-wide">
+          {resource.type === 'manual' ? 'Manual' : 'Taller'}
+        </div>
+      </div>
+
+      <div className="p-5 flex flex-col flex-grow">
+        <Text variant="body" weight="bold" className="mb-2 line-clamp-2">
+          {resource.name}
+        </Text>
+
+        {resource.description && (
+          <Text
+            variant="caption"
+            color="text-gray-500"
+            className="mb-4 line-clamp-2"
+          >
+            {resource.description}
+          </Text>
+        )}
+
+        <div className="mt-auto pt-2">
+          <Button label="Ver" variant="secondary" onClick={handleView} />
+        </div>
+      </div>
+    </div>
+  );
+};

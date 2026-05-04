@@ -10,10 +10,10 @@ const CreditsPage = () => {
       <Header />
       <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
-          bg="bg-white"
-          title={'Blog'}
+          bg="bg-secondary"
+          title={'¿Encontraste una mascota perdida?'}
           image={sadDog}
-          content={`En nuestro blog encontrarás información, consejos y recursos para prevenir y actuar ante la pérdida de una mascota.`}
+          content={`Si encontraste una mascota y no sabes qué hacer, estás en el lugar correcto. Ayuda a reunirla con su familia publicando la información aquí.`}
         />
         <PetReportForm initialData={{}} />
       </main>

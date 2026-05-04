@@ -126,16 +126,6 @@ export const UserInfoSection = ({
           maxLength={100}
         />
       )}
-
-      {reportType === 'found' && (
-        <div className="mt-2">
-          <FileUpload
-            index={1}
-            onChange={(file) => console.log('Archivo cargado:', file)}
-            defaultDisplayName="Subir foto"
-          />
-        </div>
-      )}
     </section>
   );
 };

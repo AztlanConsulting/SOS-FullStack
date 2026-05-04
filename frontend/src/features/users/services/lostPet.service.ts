@@ -1,5 +1,6 @@
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import axiosInstance from '@shared/utils/axios';
+import { exportPosterAsFile } from '@/shared/services/posterExport.services';
 
 /**
  * Sends a lost pet report with form data (info, images, and plan).
@@ -30,6 +31,10 @@ export const createLostPetReportRequest = async (
   reportData.images.forEach((file) => {
     formData.append('images', file);
   });
+  await exportPosterAsFile(
+    document.getElementById('poster'),
+    `${reportData.name}-poster`,
+  );
 
   const { data } = await axiosInstance.post('/clients/lost-pet', formData, {
     headers: {
@@ -37,5 +42,5 @@ export const createLostPetReportRequest = async (
     },
   });
 
-  return data;
+  return data.data;
 };

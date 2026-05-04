@@ -46,6 +46,7 @@ export default function PlansPage() {
     };
 
     setLostPetReportData(updated);
+    navigate('/compra', { replace: true, state: null });
   };
 
   /**

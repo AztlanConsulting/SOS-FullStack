@@ -1,10 +1,10 @@
 import type {
-  PetImage,
   PetImageDto,
+  PetVectorRepository,
 } from '@domain/repositories/petImage.repository';
 
 export async function createPetImage(
-  petVector: PetImage,
+  petVector: PetVectorRepository,
   petImage: PetImageDto,
 ) {
   const response = await petVector.createPetImage(petImage);

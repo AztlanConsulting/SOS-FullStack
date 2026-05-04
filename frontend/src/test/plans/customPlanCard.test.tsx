@@ -3,6 +3,8 @@ import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import CustomPlanCard from '@/features/plans/components/customPlanCard';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
+import { createMemoryRouter, RouterProvider } from 'react-router';
+import { PurchasePage } from '@/pages/PurchasePage';
 
 const setLostPetReportData = vi.hoisted(() => vi.fn());
 
@@ -19,9 +21,23 @@ vi.mock('@/shared/context/PetReportContext', async (importOriginal) => {
 });
 
 const renderWithProvider = () => {
+  const router = createMemoryRouter(
+    [
+      {
+        path: '/planes/personalizado',
+        element: <CustomPlanCard />,
+      },
+      {
+        path: '/compra',
+        element: <PurchasePage />,
+      },
+    ],
+    { initialEntries: ['/planes/personalizado'] },
+  );
+
   return render(
     <PetReportProvider>
-      <CustomPlanCard />
+      <RouterProvider router={router} />
     </PetReportProvider>,
   );
 };

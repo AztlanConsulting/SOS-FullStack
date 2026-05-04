@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DataConfirmation } from '../features/users/components/DataConfirmation';
+import { usePetReport } from '@/shared/context/PetReportContext';
+import { exportPosterAsFile } from '@/shared/services/posterExport.services';
 import Header from '@shared/components/layout/Header';
 import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
-import { usePetReport } from '@/shared/context/PetReportContext';
+import { Poster } from '@/features/poster/components/Poster.component';
+import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
   const { lostPetReportData, setLostPetReportData } = usePetReport();
+  const posterRef = useRef<HTMLDivElement>(null);
+  // Reference to the preview container where the poster is displayed
+  const posterPreviewRef = useRef<HTMLDivElement>(null);
+  // Scale factor used to shrink the full-size poster into the preview box
+  const [posterScale, setPosterScale] = useState(1);
 
   useEffect(() => {
     if (!lostPetReportData) {
@@ -17,8 +25,50 @@ export const ReportConfirmationPage: React.FC = () => {
     }
   }, [lostPetReportData, navigate]);
 
-  const handleUpdateForm = (newData: Partial<typeof lostPetReportData>) => {
+  useEffect(() => {
+    // Get available width inside preview container
+    const previewContainer = posterPreviewRef.current;
+    if (!previewContainer) return;
+
+    const updateScale = () => {
+      // Scale poster proportionally based on original width (1080px)
+      // Never scale larger than 1 (100%)
+      const availableWidth = previewContainer.clientWidth;
+      setPosterScale(Math.min(1, availableWidth / 1080));
+    };
+
+    // Run once when component mounts
+    updateScale();
+
+    // Watch for container resizing when available (jsdom may not provide it).
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver(updateScale);
+    resizeObserver.observe(previewContainer);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  const handleUpdateForm = async (
+    newData: Partial<typeof lostPetReportData>,
+  ) => {
+    if (!lostPetReportData) return;
     if (lostPetReportData) {
+      const posterFile = await exportPosterAsFile(
+        posterRef.current,
+        `${lostPetReportData.name}-poster`,
+      );
+
+      if (posterFile) {
+        setLostPetReportData({
+          ...lostPetReportData,
+          images: [...lostPetReportData.images, posterFile],
+        });
+      }
       setLostPetReportData({ ...lostPetReportData, ...newData });
     }
   };
@@ -44,6 +94,59 @@ export const ReportConfirmationPage: React.FC = () => {
             formData={lostPetReportData}
             updateForm={handleUpdateForm}
           />
+
+          <div
+            ref={posterPreviewRef}
+            className="w-full max-w-[512px] aspect-[4/5] mx-auto my-10 overflow-hidden color-grey-border"
+          >
+            <div className="relative w-full h-full">
+              <div
+                className="absolute top-0 left-1/2"
+                style={{
+                  width: '1080px',
+                  height: '1350px',
+                  // shrinks the full-size poster to fit in the preview container
+                  // and centers it horizontally
+                  transform: `translateX(-50%) scale(${posterScale})`,
+                  transformOrigin: 'top center',
+                }}
+              >
+                <Poster ref={posterRef} pet={lostPetReportData} />
+              </div>
+
+              {/* Watermark to prevent exporting image */}
+              {/* <div
+                className="absolute inset-0 pointer-events-none opacity-50"
+                style={{
+                  backgroundImage: `url(${whiteLogoSimple})`,
+                  backgroundRepeat: 'repeat',
+                  backgroundSize: '100px',
+                  transform: 'rotate(-30deg)',
+                }}
+              /> */}
+              <img
+                src={whiteLogoSimple}
+                alt="Watermark Logo"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 opacity-40 pointer-events-none"
+              />
+              {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span className="text-5xl font-bold text-black/20 text-center mt-20">
+                  Esta es una vista previa
+                </span>
+              </div> */}
+              {/* <div className="absolute bg-white/20 backdrop-blur-[2px] rounded-xl w-full p-4 bottom-0 h-1/2"></div> */}
+              {/* <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <img
+                  src={whiteLogoSimple}
+                  alt="Watermark Logo"
+                  className=" w-30 opacity-40 pointer-events-none"
+                />
+                <span className="text-4xl font-bold text-black/20 text-center">
+                  Esta es una vista previa
+                </span>
+              </div> */}
+            </div>
+          </div>
 
           <div className="max-w-lg mx-auto pb-8 mt-8 flex justify-center">
             <Button

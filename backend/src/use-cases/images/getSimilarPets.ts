@@ -1,10 +1,10 @@
 import type {
-  PetImage,
   PetImageDto,
+  PetVectorRepository,
 } from '@domain/repositories/petImage.repository';
 
 export default async function getSimilarPets(
-  petVector: PetImage,
+  petVector: PetVectorRepository,
   page: number,
   petImage: PetImageDto,
 ) {

@@ -5,6 +5,7 @@ import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
 import { useCustomPlan } from '../hooks/useCustomPlan';
 import { usePetReport } from '@/shared/context/PetReportContext';
 import { ALL_FEATURES } from '../hooks/useCustomPlan';
+import { useNavigate } from 'react-router';
 
 /**
  * CustomPlanCard Component.
@@ -23,6 +24,7 @@ const CustomPlanCard: React.FC = () => {
     setKm,
     toggleFeature,
   } = useCustomPlan();
+  const navigate = useNavigate();
 
   const BASE_FEATURES = [
     'Publicación en nuestras redes sociales',
@@ -269,6 +271,7 @@ const CustomPlanCard: React.FC = () => {
               };
 
               setLostPetReportData(updated);
+              navigate('/compra');
             }}
           />
         </div>

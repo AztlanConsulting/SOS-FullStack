@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useAuth } from '@features/auth/hooks/useAuth';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
 import { LuHouse } from 'react-icons/lu';
@@ -15,9 +14,14 @@ import { CiYoutube } from 'react-icons/ci';
 import { FaXTwitter } from 'react-icons/fa6';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import whiteIcon from '@assets/images/whiteIcon.png';
-import { HiOutlineUserCircle } from 'react-icons/hi';
+import type {
+  ExpandedProps,
+  NavLink,
+  SocialLink,
+} from '@/shared/types/header.types';
+import SignIn from '../ui/Button/SignIn';
 
-const navLinks = [
+const defaultNavLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
@@ -25,7 +29,7 @@ const navLinks = [
   { label: 'Mascotas', href: '/mascotas-encontradas', icon: <PiDogLight /> },
 ];
 
-export const socialLinks = [
+export const defaultSocialLinks = [
   {
     href: 'https://www.instagram.com/sos_encontrando_mascotas/',
     icon: <FaInstagram className="w-5 h-5" />,
@@ -48,13 +52,42 @@ export const socialLinks = [
   },
 ];
 
-const Header = () => {
+interface Props {
+  navLinks?: NavLink[];
+  socialLinks?: SocialLink[];
+  color?: string;
+  signBtn?: {
+    desktop: () => React.ReactNode;
+    mobile: ({ setIsMenuOpen }: ExpandedProps) => React.ReactNode;
+  };
+}
+
+const Header = ({
+  navLinks = defaultNavLinks,
+  socialLinks = defaultSocialLinks,
+  color = 'primary',
+  signBtn = SignIn,
+}: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, isAuthLoading } = useAuth();
-  const firstName = user?.username.trim().split(/\s+/)[0] ?? '';
+  const MobileSignIn = signBtn.mobile;
+
+  const textColors: Record<string, string> = {
+    primary: 'text-primary',
+    'purple-primary': 'text-purple-primary',
+  };
+
+  const bgColors: Record<string, string> = {
+    primary: 'bg-primary',
+    'purple-primary': 'bg-purple-primary',
+  };
+
+  const borderColors: Record<string, string> = {
+    primary: 'border-primary',
+    'purple-primary': 'border-purple-primary',
+  };
 
   return (
     <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
@@ -82,21 +115,23 @@ const Header = () => {
               </div>
             </div>
           ) : null}
-          <div
-            className="fixed right-0 z-[1000] shadow-xl rounded-lg"
-            style={{ bottom: '80px' }}
-          >
-            <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
-              <button
-                onClick={() => setIsSocialOpen((prev) => !prev)}
-                className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center cursor-pointer"
-              >
-                <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
-                  {isSocialOpen ? 'Cerrar' : 'Síguenos'}
-                </span>
-              </button>
+          {socialLinks.length > 0 && (
+            <div
+              className="fixed right-0 z-[1000] shadow-xl rounded-lg"
+              style={{ bottom: '80px' }}
+            >
+              <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
+                <button
+                  onClick={() => setIsSocialOpen((prev) => !prev)}
+                  className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center cursor-pointer"
+                >
+                  <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
+                    {isSocialOpen ? 'Cerrar' : 'Síguenos'}
+                  </span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
       <div className="pl-8 pr-3 lg:w-5/6 mx-auto flex items-center justify-between">
@@ -121,45 +156,21 @@ const Header = () => {
                 <div
                   key={link.label}
                   onClick={() => navigate(link.href)}
-                  className={`transition-colors cursor-pointer ${
-                    isActive
-                      ? 'border-b-2 border-[color:var(--color-primary)]'
-                      : ''
+                  className={`transition-colors cursor-pointer  ${
+                    isActive ? `border-b-2 ${borderColors[color]}` : ''
                   }`}
                 >
                   <Text
                     variant="body"
                     weight="medium"
-                    className="hover:text-[color:var(--color-primary)]"
+                    className={`hover:${textColors[color]}`}
                   >
                     {link.label}
                   </Text>
                 </div>
               );
             })}
-            <div
-              onClick={() => {
-                if (isAuthLoading) return;
-                navigate(user ? '/dashboard' : '/login');
-              }}
-              className={`group border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
-                user
-                  ? 'bg-[color:var(--color-primary)] hover:bg-white'
-                  : 'bg-white hover:bg-[color:var(--color-primary)]'
-              }`}
-            >
-              <Text
-                variant="body"
-                weight="medium"
-                className={`${
-                  user
-                    ? 'text-white group-hover:text-[color:var(--color-primary)]'
-                    : 'text-[color:var(--color-primary)] group-hover:text-white'
-                }`}
-              >
-                {user ? `Hola, ${firstName}` : 'Iniciar Sesión'}
-              </Text>
-            </div>
+            {signBtn.desktop()}
           </div>
         </nav>
 
@@ -180,7 +191,9 @@ const Header = () => {
           />
 
           {/* Drawer */}
-          <div className="w-2/3 max-w-xs color-primary-bg h-full flex flex-col justify-between">
+          <div
+            className={`w-2/3 max-w-xs ${bgColors[color]} h-full flex flex-col justify-between`}
+          >
             {/* Top */}
             <div className="p-8 border-b border-white flex justify-center">
               <img
@@ -213,7 +226,7 @@ const Header = () => {
                       <span
                         className={
                           isActive
-                            ? 'text-yellow-400 text-2xl'
+                            ? `${textColors[color]} text-2xl`
                             : 'text-white text-2xl'
                         }
                       >
@@ -222,7 +235,7 @@ const Header = () => {
                       <Text
                         variant="h3"
                         weight="medium"
-                        color={isActive ? 'text-yellow-400' : 'text-white'}
+                        color={isActive ? `${textColors[color]}` : 'text-white'}
                       >
                         {link.label}
                       </Text>
@@ -233,23 +246,7 @@ const Header = () => {
             </nav>
 
             {/* Bottom button */}
-            <div className="p-9 border-t border-white">
-              <button
-                onClick={() => {
-                  navigate(user ? '/dashboard' : '/login');
-                  setIsMenuOpen(false);
-                }}
-                className="w-full flex items-center justify-start gap-4"
-              >
-                <HiOutlineUserCircle
-                  strokeWidth={1}
-                  className="w-7 h-7 text-white "
-                />
-                <Text variant="h3" weight="medium" color="text-white">
-                  {user ? `Hola, ${firstName}` : 'Iniciar Sesión'}
-                </Text>
-              </button>
-            </div>
+            {<MobileSignIn setIsMenuOpen={setIsMenuOpen} />}
           </div>
         </div>
       )}

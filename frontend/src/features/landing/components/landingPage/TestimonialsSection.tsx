@@ -199,7 +199,7 @@ const TestimonialsSection = () => {
                         lg:w-10 lg:h-10 lg:-left-12 lg:translate-x-0 flex 
                         items-center justify-center transition-shadow cursor-pointer"
             >
-              <MdNavigateBefore className="w-10 h-10 lg:w-15 lg:h-15 text-61646B" />
+              <MdNavigateBefore className="w-10 h-10 lg:w-15 lg:h-15 text-[#61646B]" />
             </button>
 
             <button
@@ -208,7 +208,7 @@ const TestimonialsSection = () => {
               lg:w-10 lg:h-10 lg:-right-12 lg:translate-x-0 flex items-center 
               justify-center transition-shadow cursor-pointer"
             >
-              <MdNavigateNext className="w-10 h-10 lg:w-15 lg:h-15 text-61646B" />
+              <MdNavigateNext className="w-10 h-10 lg:w-15 lg:h-15 text-[#61646B]" />
             </button>
           </div>
         </div>

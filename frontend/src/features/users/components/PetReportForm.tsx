@@ -19,7 +19,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
     usePetReportForm(initialData);
 
   return (
-    <div id="report-section" className="min-h-screen pt-16 mb-10 bg-white">
+    <div id="report-section" className="min-h-screen pt-8 mb-10 bg-white">
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {/* Section 1: General pet data */}
         <div id="user-info-section">

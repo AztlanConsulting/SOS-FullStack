@@ -9,7 +9,7 @@ import { HiOutlineUserCircle } from 'react-icons/hi';
 const testimonials = [
   {
     id: 1,
-    name: 'Areceli cisneros',
+    name: 'Areceli Cisneros',
     text: 'Súper recomendable, siempre atentos y de respuesta rápida. En cuanto te comunicas con ellos, comienza a asesorarte. Estoy muy agradecida, mi perrito apareció en menos de 48 horas después de publicar en SOS encontrando mascotas. Muchas gracias!!! Son un excelente equipo!!',
   },
   {
@@ -20,7 +20,7 @@ const testimonials = [
   {
     id: 3,
     name: 'María González',
-    text: 'Gracias a SOS encontré a mi perrita después de 3 días de búsqueda. La publicación llegó a muchas personas y alguien la reconoció. Servicio increíble.',
+    text: 'Gracias a SOS, encontré a mi perrita después de 3 días de búsqueda. La publicación llegó a muchas personas y alguien la reconoció. Servicio increíble.',
   },
   {
     id: 4,

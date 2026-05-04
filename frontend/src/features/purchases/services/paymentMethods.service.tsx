@@ -13,29 +13,29 @@ import type {
 import type { PetReportData } from '@/features/users/types/petReport.types';
 
 const paymentMethods: PaymentMethod[] = [
-  {
-    method: 'Tarjeta de crédito / debito',
-    icons: [visa, mastercard, american],
-    element: (
-      data: Order,
-      purchaseDetails: PurchaseDetail,
-      success: () => void,
-    ) => (
-      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
-    ),
-  },
-  {
-    method: 'Transferencia SPEI',
-    description: 'Aprobación instantánea desde cualquier banca en línea',
-    icons: [bank],
-    element: (
-      data: Order,
-      purchaseDetails: PurchaseDetail,
-      success: () => void,
-    ) => (
-      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
-    ),
-  },
+  // {
+  //   method: 'Tarjeta de crédito / debito',
+  //   icons: [visa, mastercard, american],
+  //   element: (
+  //     data: Order,
+  //     purchaseDetails: PurchaseDetail,
+  //     success: () => void,
+  //   ) => (
+  //     <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+  //   ),
+  // },
+  // {
+  //   method: 'Transferencia SPEI',
+  //   description: 'Aprobación instantánea desde cualquier banca en línea',
+  //   icons: [bank],
+  //   element: (
+  //     data: Order,
+  //     purchaseDetails: PurchaseDetail,
+  //     success: () => void,
+  //   ) => (
+  //     <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+  //   ),
+  // },
   {
     method: 'Paypal',
     icons: [paypal],
@@ -47,17 +47,17 @@ const paymentMethods: PaymentMethod[] = [
       <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
     ),
   },
-  {
-    method: 'Oxoo',
-    icons: [oxxo],
-    element: (
-      data: Order,
-      purchaseDetails: PurchaseDetail,
-      success: () => void,
-    ) => (
-      <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
-    ),
-  },
+  // {
+  //   method: 'OXXO',
+  //   icons: [oxxo],
+  //   element: (
+  //     data: Order,
+  //     purchaseDetails: PurchaseDetail,
+  //     success: () => void,
+  //   ) => (
+  //     <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
+  //   ),
+  // },
 ];
 
 export default paymentMethods;

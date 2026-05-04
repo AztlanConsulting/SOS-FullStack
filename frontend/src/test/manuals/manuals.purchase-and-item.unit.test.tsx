@@ -5,6 +5,7 @@ import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import { ManualItem } from '@features/manuals/components/ManualItem';
+import wrapper from '../utils/wrapper.util';
 
 const navigateMock = vi.fn();
 
@@ -23,13 +24,15 @@ describe('usePurchaseProduct', () => {
   });
 
   it('shows validation error for invalid email', () => {
-    const { result } = renderHook(() =>
-      usePurchaseProduct({
-        _id: 'm1',
-        item: 'manual',
-        url: 'manual',
-        price: 250,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePurchaseProduct({
+          _id: 'm1',
+          item: 'manual',
+          url: 'manual',
+          price: 250,
+        }),
+      { wrapper },
     );
 
     act(() => {
@@ -45,13 +48,15 @@ describe('usePurchaseProduct', () => {
   });
 
   it('clears previous error when user edits email', () => {
-    const { result } = renderHook(() =>
-      usePurchaseProduct({
-        _id: 'm1',
-        item: 'manual',
-        url: 'manual',
-        price: 250,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePurchaseProduct({
+          _id: 'm1',
+          item: 'manual',
+          url: 'manual',
+          price: 250,
+        }),
+      { wrapper },
     );
 
     act(() => {
@@ -70,13 +75,15 @@ describe('usePurchaseProduct', () => {
   });
 
   it('navigates to purchase with trimmed email and manual payload', () => {
-    const { result } = renderHook(() =>
-      usePurchaseProduct({
-        _id: 'm9',
-        item: 'manual',
-        url: 'manual',
-        price: 399,
-      }),
+    const { result } = renderHook(
+      () =>
+        usePurchaseProduct({
+          _id: 'm9',
+          item: 'manual',
+          url: 'manual',
+          price: 399,
+        }),
+      { wrapper },
     );
 
     act(() => {
@@ -109,7 +116,7 @@ describe('ManualItem', () => {
       _id: 'manual-77',
       name: 'Manual de Prueba',
       price: 129,
-      content: 'Contenido',
+      content: [{ content: 'Contenido', type: 'text' }],
       imageUrl: 'https://example.com/manual.jpg',
     };
 

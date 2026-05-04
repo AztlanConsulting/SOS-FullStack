@@ -32,7 +32,7 @@ const PurchaseForm = ({
   }
 
   if (!Boolean(petReportData) && !Boolean(product)) {
-    return;
+    return null;
   }
 
   const orderDetails: Order = {
@@ -63,12 +63,8 @@ const PurchaseForm = ({
       <section className="w-full flex justify-center">
         <section className="grid grid-cols-1 gap-5 md:w-4/5 w-5/6">
           {paymentMethods.map((pM, idx) => (
-            <>
-              <PaymentMethodCard
-                key={idx}
-                paymentMethod={pM}
-                onChecked={handleChange}
-              />
+            <div key={idx}>
+              <PaymentMethodCard paymentMethod={pM} onChecked={handleChange} />
               <div
                 className={`grid transition-all duration-300 ease-in-out ${
                   selected == pM.method
@@ -80,7 +76,7 @@ const PurchaseForm = ({
                   {pM.element(orderDetails, purchaseDetail, success)}
                 </div>
               </div>
-            </>
+            </div>
           ))}
         </section>
       </section>

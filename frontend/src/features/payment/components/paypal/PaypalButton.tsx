@@ -13,7 +13,7 @@ import {
   PayPalOneTimePaymentButton,
   type OnApproveDataOneTimePayments,
 } from '@paypal/react-paypal-js/sdk-v6';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   data: Order;
@@ -21,53 +21,51 @@ interface Props {
   success: () => void;
 }
 
-// CheckoutPage: logic to handle payment logic
+// PaypalButton: logic to handle payment logic
 // When transaction starts and order is created
 // When the transaction is confirmed and finished
-const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
-  const [planId, setPlanId] = useState<string | null>(null);
-  console.log('PurchaseDetail', purchaseDetail);
-
+const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
+  const planIdRef = useRef<string | null>(null); // Use a ref to track the ID
   data.method = 'paypal';
-
-  let purchaseInfo = purchaseDetail;
-
-  if (Object.keys(purchaseDetail).length > 0) {
-    purchaseInfo = {
-      userEmail: data.plan!.email,
-      productId: planId!,
-      productType: 'plan',
-    };
-  }
-
-  console.log(purchaseInfo);
 
   return (
     <>
       <div className="mx-auto w-full">
         <PayPalOneTimePaymentButton
-          className="-z-20"
+          className="-z-20 w-full"
           presentationMode="auto"
           createOrder={async () => {
             console.log('Create order');
 
-            const response = await createPaypalPayment(data);
             if (data.plan) {
               const petResult: PurchasedPlanResponse =
                 await createLostPetReportRequest(data.plan);
 
-              setPlanId(petResult.plan._id);
+              console.log(petResult);
+              console.log(data.plan);
+              const newPetId = petResult.plan.petId;
+              planIdRef.current = newPetId;
             }
+            const response = await createPaypalPayment(data);
             const orderId = response.data.result.id;
             return { orderId };
           }}
           onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
             console.log('Approve order');
+            let purchaseInfo = purchaseDetail;
+            if (data.plan) {
+              purchaseInfo = {
+                userEmail: data.plan.email,
+                productId: planIdRef.current!,
+                productType: 'plan',
+              };
+            }
+            console.log(purchaseInfo);
 
             const response = await confirmPaypalPayment(
               orderId,
               purchaseInfo,
-              planId,
+              planIdRef.current,
             );
             if (response.status == 200) {
               console.log('Payment captured!');
@@ -83,4 +81,4 @@ const CheckoutPage = ({ data, purchaseDetail, success }: Props) => {
   );
 };
 
-export default CheckoutPage;
+export default PaypalButton;

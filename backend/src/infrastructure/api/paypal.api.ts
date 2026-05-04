@@ -11,17 +11,16 @@ import type {
 import 'crypto';
 import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
-import type Stripe from 'stripe';
 dotenv.config();
 
-const ENVIROMENT = process.env.ENVIROMENT;
+const ENVIRONMENT = process.env.ENVIRONMENT;
 const CLIENT_ID = process.env.PAYPAL_CLIENT;
 const CLIENT_SECRET = process.env.PAYPAL_SECRET;
 
 const ENDPOINT_URL =
-  ENVIROMENT === 'sandbox'
-    ? 'https://api-m.sandbox.paypal.com'
-    : 'https://api-m.paypal.com';
+  ENVIRONMENT === 'production'
+    ? 'https://api-m.paypal.com'
+    : 'https://api-m.sandbox.paypal.com';
 
 const PaypalProvider: PaypalApi = {
   // Get token to use paypal api

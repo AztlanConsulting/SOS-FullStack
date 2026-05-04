@@ -30,7 +30,7 @@ export default async function captureOrder(req: Request, res: Response) {
 
     let id: string | undefined = productId;
     if (!Boolean(productId)) {
-      id = '123'; // Register plan details and return id
+      id = planId!; // Register plan details and return id
     }
 
     await createPurchaseDB(PurchaseDataAccess, {

@@ -4,6 +4,8 @@ import { PaymentModel } from '@domain/models/payment.model';
 import type { PaymentIntentDTO } from '@/domain/ports/paymentProvider.port';
 import { PaymentIntentResult } from '@/domain/ports/paymentProvider.port';
 import orderCreator from '@/use-cases/payments/orderCreator';
+import { createOrder } from '@/use-cases/payments/createOrder';
+import captureOrder from '@/use-cases/payments/captureOrder';
 
 jest.mock('@domain/models/payment.model');
 
@@ -100,9 +102,17 @@ describe('PaymentDataAccess unit-test', () => {
     expect(item.unit_amount.currency_code).toBe('MXN');
   });
 
-  test('create and capture orders usecases', () => {
+  test('create and capture orders usecases', async () => {
     const productMock: PaymentIntentDTO = {
       amount: 50.0,
+      currency: 'MXN',
+      product: {
+        productName: 'Manual 1',
+        productId: '1234',
+      },
+    };
+    const badProductMock: PaymentIntentDTO = {
+      amount: -50,
       currency: 'MXN',
       product: {
         productName: 'Manual 1',
@@ -122,6 +132,17 @@ describe('PaymentDataAccess unit-test', () => {
       }),
       completeOrder: jest.fn().mockResolvedValue({ id: 'paymentSuccess' }),
     };
+
+    const response = await createOrder(api, productMock);
+    expect(response.id).toEqual('orderId');
+    expect(response.amount).toEqual(50);
+
+    await expect(createOrder(api, badProductMock)).rejects.toThrow(
+      "Amount can't be a negative number",
+    );
+
+    const capture = await captureOrder(api, response.id);
+    expect(capture.id).toEqual('paymentSuccess');
   });
 
   test('createPending - successfully creates a pending payment record', async () => {

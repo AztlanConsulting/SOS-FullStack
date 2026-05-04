@@ -18,7 +18,7 @@ export interface CreateLostPetReportInput {
   sex: string;
   color: string;
   size: string;
-  description: string;
+  description?: string;
   location: string;
   locationCoords: [number, number];
 

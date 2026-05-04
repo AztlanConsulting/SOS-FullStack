@@ -11,7 +11,7 @@ export interface Pet {
   sex: string;
   color: string;
   size: string;
-  description: string;
+  description?: string;
   photos: string[];
   placeMissing: string;
   createdAt: Date;
@@ -30,7 +30,7 @@ const PetSchema = new Schema<Pet>(
     sex: { type: String, required: true },
     color: { type: String, required: true },
     size: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     photos: [{ type: String }],
     placeMissing: { type: String },
   },

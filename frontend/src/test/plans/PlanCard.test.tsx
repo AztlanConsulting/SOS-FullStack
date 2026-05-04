@@ -3,7 +3,8 @@ import PlanCard from '@features/plans/components/PlanCard';
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import type * as ReactRouter from 'react-router';
-import type { PlanDetails } from '@features/plans/types/plan.types';
+import Plans from '@/pages/Plans';
+import wrapper from '../utils/wrapper.util';
 
 /**
  * Mock data representing the features included in a plan.
@@ -42,6 +43,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useNavigate: () => navigateMock,
+    useLocation: () => ({ state: null }),
   };
 });
 
@@ -86,27 +88,10 @@ describe('PlanCard Component', () => {
    * Simulates a user clicking the primary action button to ensure the callback triggers.
    */
   test('calls onSelect when "Seleccionar" button is clicked', async () => {
-    render(<PlanCard {...mockProps} />);
-    const planDetails: PlanDetails = {
-      _id: mockProps._id,
-      name: mockProps.name,
-      price: Number(mockProps.price),
-      duration: mockProps.duration,
-      radius: mockProps.radius,
-      features: mockProps.features
-        .filter((f) => f.included)
-        .map((f) => f.label),
-    };
+    render(<PlanCard {...mockProps} />, { wrapper });
+
     await userEvent.click(screen.getByText('Seleccionar'));
-    expect(navigateMock).toHaveBeenCalledWith('/compra', {
-      state: {
-        planDetails: {
-          ...planDetails,
-        },
-        productType: 'plan',
-        userEmail: 'test@mail.com',
-      },
-    });
+    expect(mockProps.onSelect).toHaveBeenCalled();
   });
 
   /**

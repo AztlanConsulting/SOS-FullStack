@@ -1,7 +1,7 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import PurchaseForm from '../features/purchases/components/PurchaseForm';
 import Header from '@shared/components/layout/Header';
-import PurchaseDetails from '../features/purchases/components/PurhcaseDetails';
+import PurchaseDetails from '../features/purchases/components/PurchaseDetails';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 import Footer from '@shared/components/layout/Footer';
 import type { PurchaseDetail } from '@features/payment/types/payment.types';
@@ -28,11 +28,13 @@ export const PurchasePage = () => {
   useEffect(() => {
     const p: Product | undefined = reportData ? undefined : data;
     setProduct(p);
+  }, [data, reportData]);
 
+  useEffect(() => {
     if (!Boolean(state) && !Boolean(reportData)) {
       navigate('/');
     }
-  }, [data, state]);
+  }, [state, reportData]);
 
   const purchaseDetail: PurchaseDetail = {
     userEmail,
@@ -47,7 +49,7 @@ export const PurchasePage = () => {
   return (
     <>
       <Header />
-      <main className="max-md:pt-24 pt-4">
+      <main className="max-md:pt-24 pt-4 min-h-screen">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
         {Boolean(product || reportData) && (

@@ -35,5 +35,5 @@ export const createLostPetReportRequest = async (reportData: PetReportData) => {
     },
   });
 
-  return data;
+  return data.data;
 };

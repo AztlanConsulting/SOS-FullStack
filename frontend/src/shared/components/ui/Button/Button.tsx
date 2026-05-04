@@ -21,7 +21,7 @@ export function Button({
   type = 'button',
 }: ButtonProps) {
   const base =
-    'flex items-center justify-center gap-2 px-3 py-2.5 rounded-full font-semibold text-base transition-colors duration-200';
+    'flex items-center justify-center gap-2 px-3 py-2 rounded-c font-semibold text-base transition-colors duration-200';
   const variants: Record<ButtonVariant, string> = {
     primary:
       'bg-yellow-400 text-white hover:bg-yellow-500 w-5/6 md:w-full md:max-w-lg mx-auto',

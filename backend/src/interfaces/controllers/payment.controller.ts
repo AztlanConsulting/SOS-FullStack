@@ -4,7 +4,7 @@ import { handleStripeWebhook } from '@use-cases/payments/handleStripeWebhook.use
 import { createPendingIntentDB } from '@use-cases/payments/createPendingIntentDB.usecase';
 import { markAsSucceededDB } from '@use-cases/payments/markAsSuccededDB.usecase';
 import { StripeProvider } from '@infrastructure/api/stripeProvider.api';
-import { PaymentDataAccess } from '@/infrastructure/data-access/payment.data-access';
+import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 import type Stripe from 'stripe';
 
 /**
@@ -29,9 +29,10 @@ export const makeCreatePaymentIntent = () => {
       });
 
       await createPendingIntentDB(PaymentDataAccess, {
-        stripeId: result.id,
+        orderId: result.id,
         amount: result.amount,
         currency: result.currency,
+        clientSecret: null,
       });
 
       return res.status(201).json({

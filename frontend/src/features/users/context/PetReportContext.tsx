@@ -16,10 +16,6 @@ export const PetReportProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [reportData, setReportData] = useState<PetReportData | null>(null);
 
-  useEffect(() => {
-    console.log('[PetReportContext] reportData updated:', reportData);
-  }, [reportData]);
-
   return (
     <PetReportContext.Provider value={{ reportData, setReportData }}>
       {children}

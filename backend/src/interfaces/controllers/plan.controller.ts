@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { getPlansDB } from '@use-cases/plans/getPlansDB.usecase';
-import { PlanDataAccess } from '../../infrastructure/data-access/plan.data-access';
+import { PlanDataAccess } from '@infrastructure/data-access/plan.data-access';
 
 /**
  * Express controller that handles fetching plans.

@@ -1,6 +1,6 @@
-import type { GetWorkshop } from './../../domain/repositories/workshop.repository';
+import type { GetWorkshop } from '@domain/repositories/workshop.repository';
 import { WorkshopModel } from '@domain/models/workshop.model';
-import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
+import { WorkshopDataAccess } from '@infrastructure/data-access/workshop.data-access';
 // Mock the Mongoose model to isolate the data access logic from the database.
 jest.mock('@domain/models/workshop.model');
 

@@ -16,15 +16,21 @@ export default function usePetGallery(
   // Pagination state
   const pageHook = useState(1);
   const [page, setPage] = pageHook;
-  const imgHook = useState<File | null>(null);
-  const [img] = imgHook;
+  const [img, setImage] = useState<File | null>(null);
+  const imgHook: [File | null, (f: File) => void] = [
+    img,
+    (img: File) => {
+      setImage(img);
+      setPage(1);
+    },
+  ];
 
   // Search Options
   const [searchTerm, setSearchTerm] = useState('');
 
   // Query
   const vectorImages = useQuery({
-    queryKey: [img, page],
+    queryKey: [img?.name, page],
     queryFn: () => img && queryFunction(img, page, searchTerm),
     enabled: Boolean(img),
   });

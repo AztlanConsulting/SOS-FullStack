@@ -24,6 +24,7 @@ export interface PlanFeature {
  * Includes visual styling flags (highlighted/badge) and service details.
  */
 export interface PlanCardProps {
+  _id: string;
   name: string;
   price: string;
   currency?: string;
@@ -54,6 +55,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
     title: string;
     description: string;
   } | null>(null);
+
   const included = features.filter((f) => f.included);
   const excluded = features.filter((f) => !f.included);
 

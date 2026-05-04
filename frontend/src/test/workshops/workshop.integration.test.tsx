@@ -5,6 +5,8 @@ import { createMemoryRouter, RouterProvider, useLocation } from 'react-router';
 import WorkshopCard from '@features/workshop/components/WorkshopCard';
 import type { Workshop } from '@features/workshop/types/workshop';
 import WorkshopContent from '@features/workshop/components/WorkshopContent';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
 
 const workshop: Workshop = {
   _id: 'w1',
@@ -20,6 +22,21 @@ const workshop: Workshop = {
   description: 'workshop description',
   category: ['1', '2', '3'],
 };
+
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false, // Prevents vitest from waiting for retries on failure
+      },
+    },
+  });
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <QueryClientProvider client={createTestQueryClient()}>
+    <PetReportProvider>{children}</PetReportProvider>
+  </QueryClientProvider>
+);
 
 function WorkshopDetailProbe() {
   // Probe component to assert location state after route navigation.
@@ -57,7 +74,7 @@ describe('workshops integration', () => {
       { initialEntries: ['/talleres'] },
     );
 
-    render(<RouterProvider router={router} />);
+    render(<RouterProvider router={router} />, { wrapper });
 
     fireEvent.click(screen.getByRole('button', { name: 'Ver' }));
 
@@ -74,14 +91,14 @@ describe('workshops integration', () => {
           element: <WorkshopContent workshop={workshop} />,
         },
         {
-          path: '/purchase',
+          path: '/compra',
           element: <PurchaseStateProbe />,
         },
       ],
       { initialEntries: ['/talleres/w1'] },
     );
 
-    render(<RouterProvider router={router} />);
+    render(<RouterProvider router={router} />, { wrapper });
 
     // First submit should fail with validation message.
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));

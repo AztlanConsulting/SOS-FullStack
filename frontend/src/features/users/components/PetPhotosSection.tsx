@@ -1,11 +1,11 @@
-import { FileUpload } from '../../../shared/components/ui/FileUpload/FileUpload';
+import { FileUpload } from '@shared/components/ui/FileUpload/FileUpload';
 import { PhotoDistributionPicker } from './PhotoDistributionPicker';
-import type { PetReportData } from '../types/petReport.types';
-import { usePetPhotos } from '../hooks/usePetPhotos';
+import { usePetPhotos } from '@shared/hooks/usePetPhotos';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 export interface PetPhotosSectionProps {
-  formData: Partial<PetReportData>;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: Partial<LostPetReportData>;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
   errors?: Record<string, string>;
 }
 

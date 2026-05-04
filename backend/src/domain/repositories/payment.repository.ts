@@ -1,9 +1,11 @@
 export interface PaymentDBDto {
-  stripeId: string;
+  orderId: string;
   amount: number;
   currency: string;
+  // change to clientId when registering client si finished
+  clientSecret: string | null;
 }
 export interface PaymentRepository {
   createPending(data: PaymentDBDto): Promise<void>;
-  markAsSucceeded(stripeId: string): Promise<string>;
+  markAsSucceeded(orderId: string): Promise<string>;
 }

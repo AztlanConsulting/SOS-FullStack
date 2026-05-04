@@ -8,9 +8,9 @@ import createOrder from '@interfaces/controllers/createOrder.controller';
 
 const router = Router();
 
-router.post('/payment-intent', makeCreatePaymentIntent());
+router.post('/payment-intent', makeCreatePaymentIntent);
 router.post('/webhook', makehandleStripeWebhook);
 router.post('/create-order', createOrder);
-router.get('/capture-order/:orderId', captureOrder);
+router.post('/capture-order/:orderId', captureOrder);
 
 export default router;

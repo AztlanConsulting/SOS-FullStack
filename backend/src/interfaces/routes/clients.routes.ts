@@ -8,7 +8,7 @@ router.post('/publish', clientsController.publishPet);
 
 router.post(
   '/lost-pet',
-  upload.array('images', 4),
+  upload.array('images', 5),
   clientsController.createLostPetReportController,
 );
 

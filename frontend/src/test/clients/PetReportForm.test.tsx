@@ -19,11 +19,11 @@ vi.mock('react-router', async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-const mockSetReportData = vi.fn();
-vi.mock('@features/users/context/PetReportContext', () => ({
+const mockSetLostPetReportData = vi.fn();
+vi.mock('@/shared/context/PetReportContext', () => ({
   usePetReport: () => ({
-    setReportData: mockSetReportData,
-    reportData: null,
+    setLostPetReportData: mockSetLostPetReportData,
+    lostPetReportData: null,
   }),
 }));
 
@@ -205,17 +205,17 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(mockSetReportData).toHaveBeenCalledTimes(1);
+    expect(mockSetLostPetReportData).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/report-confirmation');
   });
 
-  test('calls setReportData with the complete form data on success', async () => {
+  test('calls setLostPetReportData with the complete form data on success', async () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(mockSetReportData).toHaveBeenCalledWith(
+    expect(mockSetLostPetReportData).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Firulais',
         species: 'Perro',

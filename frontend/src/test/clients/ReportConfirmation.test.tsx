@@ -67,6 +67,7 @@ const MOCK_REPORT_DATA: PetReportData = {
   contactName: 'Juan Pérez',
   phoneNumber: '+52 442 123 4567',
   email: 'juan@example.com',
+  planName: 'Básico',
 };
 
 describe('ReportConfirmationPage', () => {

@@ -10,7 +10,7 @@ export interface ManualResult {
 export interface GetManual {
   page?: number;
   searchTerm?: string;
-  sortOption: string;
+  sortOption?: string;
 }
 
 export interface ManualRepository {

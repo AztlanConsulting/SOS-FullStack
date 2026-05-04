@@ -6,8 +6,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import WorkshopCard from '@features/workshop/components/WorkshopCard';
 import type { Workshop } from '@features/workshop/types/workshop';
+import { usePetReport } from '@/features/users/context/PetReportContext';
 
 const navigateMock = vi.fn();
+vi.mock('@/features/users/context/PetReportContext', () => ({
+  usePetReport: vi.fn(),
+}));
 
 // Replace useNavigate so we can assert route targets and payloads.
 vi.mock('react-router', async () => {
@@ -21,6 +25,10 @@ vi.mock('react-router', async () => {
 describe('usePurchaseProduct', () => {
   beforeEach(() => {
     navigateMock.mockReset();
+    vi.mocked(usePetReport).mockReturnValue({
+      reportData: null,
+      setReportData: vi.fn(),
+    });
   });
 
   it('shows validation error for invalid email', () => {
@@ -89,7 +97,7 @@ describe('usePurchaseProduct', () => {
       result.current.handleProceedToPayment();
     });
 
-    expect(navigateMock).toHaveBeenCalledWith('/purchase', {
+    expect(navigateMock).toHaveBeenCalledWith('/compra', {
       state: {
         userEmail: 'buyer@example.com',
         productId: 'w1',
@@ -110,7 +118,7 @@ describe('WorkshopCard', () => {
       _id: 'w1',
       name: 'Workshop de Prueba',
       price: 100,
-      content: 'Contenido de prueba',
+      content: [{ content: 'Hola', type: 'text' }],
       imageUrl: 'https://example.com/workshop.jpg',
       description: 'workshop description',
       category: ['1', '2', '3'],

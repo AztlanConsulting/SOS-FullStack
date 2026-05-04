@@ -7,10 +7,8 @@ import getProductImage from '@/features/purchases/services/getProductImage.servi
 import { useLocation } from 'react-router';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import wrapper from '../utils/wrapper.util';
-import type { PetReportData } from '@/features/users/types/petReport.types';
-import { usePetReport } from '@/features/users/context/PetReportContext';
-import { useEffect } from 'react';
 import TestComponent from '../utils/TestContextComponent';
+import { type LostPetReportData } from '@/shared/types/petReport.types';
 
 const navigateMock = vi.fn();
 // Replace useNavigate so we can assert route targets and payloads.
@@ -34,7 +32,7 @@ const mockStateManual = {
   price: '399',
 };
 
-const mockReportData: PetReportData = {
+const mockReportData: LostPetReportData = {
   name: 'Firulais',
   species: 'Perro',
   date: '2023-10-25',

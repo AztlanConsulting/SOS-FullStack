@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { usePetPhotos } from '@features/users/hooks/usePetPhotos';
+import { usePetPhotos } from '@/shared/hooks/usePetPhotos';
 import type { Mock } from 'vitest';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 

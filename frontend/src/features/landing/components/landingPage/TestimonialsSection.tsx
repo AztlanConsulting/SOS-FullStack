@@ -29,27 +29,9 @@ const testimonials = [
   },
 ];
 
-const TestimonialCard = ({
-  name,
-  text,
-  state,
-}: {
-  name: string;
-  text: string;
-  state: 'current' | 'enter-left' | 'enter-right' | 'exit-left' | 'exit-right';
-}) => {
-  const stateClasses = {
-    current: '',
-    'enter-left': 'animate-enter-left',
-    'enter-right': 'animate-enter-right',
-    'exit-left': 'animate-exit-left',
-    'exit-right': 'animate-exit-right',
-  };
-
+const TestimonialCard = ({ name, text }: { name: string; text: string }) => {
   return (
-    <div
-      className={`bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8 h-full absolute inset-0 ${stateClasses[state]}`}
-    >
+    <div className="bg-white rounded-lg shadow-[2px_3px_4px_#F9CD48] p-6 lg:p-8">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
           <HiOutlineUserCircle
@@ -62,104 +44,24 @@ const TestimonialCard = ({
         </Text>
       </div>
       <Text variant="body">{text}</Text>
-
-      <style>{`
-        @keyframes enterLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-100%);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes enterRight {
-          from {
-            opacity: 0;
-            transform: translateX(100%);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes exitLeft {
-          from {
-            opacity: 1;
-            transform: translateX(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateX(-100%);
-          }
-        }
-
-        @keyframes exitRight {
-          from {
-            opacity: 1;
-            transform: translateX(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateX(100%);
-          }
-        }
-
-        .animate-enter-left {
-          animation: enterLeft 0.6s ease-out forwards;
-        }
-
-        .animate-enter-right {
-          animation: enterRight 0.6s ease-out forwards;
-        }
-
-        .animate-exit-left {
-          animation: exitLeft 0.6s ease-out forwards;
-        }
-
-        .animate-exit-right {
-          animation: exitRight 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 };
 
 const TestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [direction, setDirection] = useState<'next' | 'prev'>('next');
 
   const totalSlides = testimonials.length;
 
   const nextSlide = () => {
-    if (isAnimating) return;
-    setDirection('next');
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % totalSlides);
-      setIsAnimating(false);
-    }, 600);
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
   };
 
   const prevSlide = () => {
-    if (isAnimating) return;
-    setDirection('prev');
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-      setIsAnimating(false);
-    }, 600);
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
   const currentTestimonial = testimonials[currentIndex];
-  const nextTestimonial =
-    direction === 'next'
-      ? testimonials[(currentIndex + 1) % totalSlides]
-      : testimonials[(currentIndex - 1 + totalSlides) % totalSlides];
 
   return (
     <section className="color-secondary-bg overflow-hidden py-8 lg:py-16">
@@ -171,27 +73,11 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 gap-6 w-full max-w-2xl relative h-96 sm:h-60">
-            {!isAnimating ? (
-              <TestimonialCard
-                name={currentTestimonial.name}
-                text={currentTestimonial.text}
-                state="current"
-              />
-            ) : (
-              <>
-                <TestimonialCard
-                  name={currentTestimonial.name}
-                  text={currentTestimonial.text}
-                  state={direction === 'next' ? 'exit-left' : 'exit-right'}
-                />
-                <TestimonialCard
-                  name={nextTestimonial.name}
-                  text={nextTestimonial.text}
-                  state={direction === 'next' ? 'enter-right' : 'enter-left'}
-                />
-              </>
-            )}
+          <div className="grid grid-cols-1 gap-6 w-full max-w-2xl relative">
+            <TestimonialCard
+              name={currentTestimonial.name}
+              text={currentTestimonial.text}
+            />
 
             <button
               onClick={prevSlide}

@@ -1,5 +1,5 @@
 import { AuthProvider } from '@/features/auth/hooks/AuthProvider';
-import { PetReportProvider } from '@/features/users/context/PetReportContext';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const createTestQueryClient = () =>

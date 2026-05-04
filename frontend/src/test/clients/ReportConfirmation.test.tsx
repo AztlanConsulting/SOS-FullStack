@@ -3,7 +3,7 @@ import { ReportConfirmationPage } from '@pages/ReportConfirmation';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
-import type { PetReportData } from '@features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 vi.mock('@features/auth/hooks/useAuth', () => ({
   useAuth: () => ({
@@ -17,8 +17,8 @@ vi.mock('@features/users/components/DataConfirmation', () => ({
     formData,
     updateForm,
   }: {
-    formData: PetReportData;
-    updateForm?: (d: Partial<PetReportData>) => void;
+    formData: LostPetReportData;
+    updateForm?: (d: Partial<LostPetReportData>) => void;
   }) => (
     <div data-testid="data-confirmation">
       {updateForm && (
@@ -37,20 +37,21 @@ vi.mock('react-router', async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-let mockReportData: PetReportData | null = null;
-const mockSetReportData = vi.fn();
+let mockLostPetReportData: LostPetReportData | null = null;
+const mockSetLostPetReportData = vi.fn();
 
-vi.mock('@features/users/context/PetReportContext', () => ({
+vi.mock('@shared/context/PetReportContext', () => ({
   usePetReport: () => ({
-    reportData: mockReportData,
-    setReportData: mockSetReportData,
+    lostPetReportData: mockLostPetReportData,
+    setLostPetReportData: mockSetLostPetReportData,
   }),
 }));
 
 const renderWithRouter = (ui: React.ReactElement) =>
   render(<BrowserRouter>{ui}</BrowserRouter>);
 
-const MOCK_REPORT_DATA: PetReportData = {
+// @ts-ignore
+const MOCK_REPORT_DATA: LostPetReportData = {
   name: 'Firulais',
   species: 'Perro',
   date: '2023-10-25',
@@ -73,29 +74,29 @@ const MOCK_REPORT_DATA: PetReportData = {
 describe('ReportConfirmationPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockReportData = null;
+    mockLostPetReportData = null;
   });
 
-  test('redirects to "/" when reportData is null (direct URL access)', () => {
-    mockReportData = null;
+  test('redirects to "/" when lostPetReportData is null (direct URL access)', () => {
+    mockLostPetReportData = null;
     renderWithRouter(<ReportConfirmationPage />);
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 
-  test('renders nothing (null) when reportData is null before redirect', () => {
-    mockReportData = null;
+  test('renders nothing (null) when lostPetReportData is null before redirect', () => {
+    mockLostPetReportData = null;
     const { container } = renderWithRouter(<ReportConfirmationPage />);
     expect(container.firstChild).toBeNull();
   });
 
-  test('renders the page title when reportData is available', () => {
-    mockReportData = MOCK_REPORT_DATA;
+  test('renders the page title when lostPetReportData is available', () => {
+    mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
     expect(screen.getByText('Confirmación de datos')).toBeDefined();
   });
 
   test('renders DataConfirmation component with the report data', () => {
-    mockReportData = MOCK_REPORT_DATA;
+    mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
 
     expect(screen.getByTestId('data-confirmation')).toBeDefined();
@@ -103,20 +104,20 @@ describe('ReportConfirmationPage', () => {
   });
 
   test('renders the "Proceder al pago" button', () => {
-    mockReportData = MOCK_REPORT_DATA;
+    mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
     expect(screen.getByText('Proceder al pago')).toBeDefined();
   });
 
-  test('does not redirect when reportData is available', () => {
-    mockReportData = MOCK_REPORT_DATA;
+  test('does not redirect when lostPetReportData is available', () => {
+    mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
   test('navigates to /plans when "Proceder al pago" is clicked', async () => {
     const user = userEvent.setup();
-    mockReportData = MOCK_REPORT_DATA;
+    mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
 
     await user.click(screen.getByText('Proceder al pago'));
@@ -124,8 +125,8 @@ describe('ReportConfirmationPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/plans');
   });
 
-  test('calls setReportData with merged data when handleUpdateForm is triggered', () => {
-    mockReportData = MOCK_REPORT_DATA;
+  test('calls setLostPetReportData with merged data when handleUpdateForm is triggered', () => {
+    mockLostPetReportData = MOCK_REPORT_DATA;
 
     renderWithRouter(<ReportConfirmationPage />);
     expect(screen.getByTestId('data-confirmation')).toBeDefined();

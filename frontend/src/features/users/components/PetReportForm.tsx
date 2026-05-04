@@ -1,15 +1,15 @@
 import React from 'react';
-import type { PetReportData } from '../types/petReport.types';
 import { UserInfoSection } from './UserInfoSection';
 import { PetPhotosSection } from './PetPhotosSection';
 import { PetLocationSection } from './PetLocationSection';
 import { ContactInfoSection } from './ContactInfoSection';
-import { usePetReportForm } from '../hooks/usePetReportForm';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
+import { usePetReportForm } from '../hooks/usePetReportForm';
 
 export interface PetReportFormProps {
-  initialData?: Partial<PetReportData>;
+  initialData?: Partial<LostPetReportData>;
 }
 
 export const PetReportForm: React.FC<PetReportFormProps> = ({
@@ -82,7 +82,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
           >
             Información de contacto
           </Text>
-          <ContactInfoSection
+          <ContactInfoSection<LostPetReportData>
             formData={formData}
             updateForm={updateFormData}
             errors={errors}

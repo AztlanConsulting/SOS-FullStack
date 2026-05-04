@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import type { PetReportData } from '../types/petReport.types';
 import { useGeocoding } from '../../map/hooks/useGeocoding';
 import { useMap } from '../../map/hooks/useMap';
 import { LeafletMapService } from '../../map/services/leafletMapService';
 import type { GeocodingResult } from '../../map/types/geocodingResult';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const DEFAULT_LOCATION_LABEL = 'Mexico City, Mexico';
 
 export const usePetLocation = (
   mapID: string,
-  formData: Partial<PetReportData>,
-  updateForm: (newData: Partial<PetReportData>) => void,
+  formData: Partial<LostPetReportData>,
+  updateForm: (newData: Partial<LostPetReportData>) => void,
 ) => {
   const { coords } = useMap(mapID);
 

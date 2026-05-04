@@ -9,6 +9,7 @@ import manualRoutes from './manuals.routes';
 import purchaseRoutes from './purchase.routes';
 import workshopRoutes from './workshops.routes';
 import planRoutes from './plans.routes';
+import foundPetRoutes from './foundPet.routes';
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.use('/workshop', workshopRoutes);
 router.use('/manuals', manualRoutes);
 router.use('/purchases', purchaseRoutes);
 router.use('/plans', planRoutes);
+router.use('/found-pets', foundPetRoutes);
 
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);

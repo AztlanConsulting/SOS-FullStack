@@ -1,10 +1,10 @@
 import { forwardRef } from 'react';
-import type { PetReportData } from '@features/poster/types/petReportData.types';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
 import phone from '@assets/images/phone.png';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
-export const Poster = forwardRef<HTMLDivElement, { pet: PetReportData }>(
+export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
   ({ pet }, ref) => {
     const renderImage = (file: File | undefined, className: string) => {
       if (!file) {

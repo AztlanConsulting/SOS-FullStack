@@ -1,7 +1,7 @@
-import type { PaymentApi } from '@domain/ports/paypal.port';
+import type { PaypalApi } from '@domain/ports/paypal.port';
 
 export default async function captureOrder(
-  paymentApi: PaymentApi,
+  paymentApi: PaypalApi,
   orderId: string,
 ) {
   const response = await paymentApi.completeOrder(orderId);

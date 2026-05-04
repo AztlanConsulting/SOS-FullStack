@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import type { PetReportData } from '../types/petReport.types';
 import { PhoneNumberUtil } from 'google-libphonenumber';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 
 export const useEditableField = (
   value: string,
-  field: keyof PetReportData,
-  updateForm: (newData: Partial<PetReportData>) => void,
+  field: keyof LostPetReportData,
+  updateForm: (newData: Partial<LostPetReportData>) => void,
 ) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);

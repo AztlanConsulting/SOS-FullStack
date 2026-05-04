@@ -1,9 +1,11 @@
 import type { PurchaseRequest } from '@shared/types/purchase.types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { usePetReport } from '@/shared/context/PetReportContext';
 
 export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
   const navigate = useNavigate();
+  const { setLostPetReportData } = usePetReport();
   const [userEmail, setUserEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
@@ -27,7 +29,9 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
     }
 
     setEmailError('');
-    navigate('/purchase', {
+    // @ts-ignore
+    setLostPetReportData(null);
+    navigate('/compra', {
       state: {
         userEmail: trimmedEmail,
         productId: purchaseRequest._id,

@@ -3,6 +3,7 @@ export default {
   preset: 'ts-jest',
   testMatch: ['**/*.test.ts'],
   testEnvironment: 'node',
+  setupFiles: ['<rootDir>/src/test/setup-env.ts'], // runs before any module is imported
   roots: ['<rootDir>/src'],
   forceExit: true, // Helps ensure Jest doesn't hang after closing the DB connection
 

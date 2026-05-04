@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../index';
+import app from '@/index';
 
 test('test server', async () => {
   const res = await request(app).get('/health');

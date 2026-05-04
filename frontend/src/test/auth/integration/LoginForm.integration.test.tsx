@@ -8,6 +8,7 @@ import { createElement, type ReactNode } from 'react';
 // Component under test
 import { LoginForm } from '@features/auth/components/LoginForm';
 import { AuthContext } from '@features/auth/hooks/AuthProvider';
+import type { User } from '@/features/auth/types/auth.types';
 
 // Mock only backend layer (login service behavior)
 const mockLogin = vi.fn();
@@ -22,6 +23,15 @@ const mockContextValue = {
   login: mockLogin,
   logout: vi.fn(),
 };
+
+const mockUser: User = {
+  id: '1234567',
+  username: 'User1',
+  email: 'test@mail.com',
+  role: 'CLIENT',
+  active: true,
+};
+const mockAdmin = { ...mockUser, role: 'ADMIN' };
 
 // Auth provider wrapper for integration testing
 const AuthWrapper = ({ children }: { children: ReactNode }) =>
@@ -42,6 +52,10 @@ const renderApp = () => {
       {
         path: '/dashboard',
         element: <h1>Dashboard</h1>,
+      },
+      {
+        path: '/inicio',
+        element: <h1>Client</h1>,
       },
     ],
     { initialEntries: ['/'] },
@@ -104,11 +118,36 @@ describe('LoginForm integration', () => {
     expect(mockLogin).not.toHaveBeenCalled();
   });
 
-  it('logs in and navigates to dashboard on success', async () => {
+  it('logs in and navigates to /inicio on success', async () => {
     const user = userEvent.setup();
 
     // Mock successful login response
-    mockLogin.mockResolvedValue(true);
+    mockLogin.mockResolvedValue(mockUser);
+
+    renderApp();
+
+    // Fill login form
+    await user.type(
+      screen.getByLabelText(/correo electrónico/i),
+      'test@mail.com',
+    );
+    await user.type(screen.getByLabelText(/contraseña/i), '123456');
+
+    // Submit form
+    await user.click(screen.getByRole('button', { name: /iniciar sesión/i }));
+
+    // Verify login called with correct data
+    expect(mockLogin).toHaveBeenCalledWith('test@mail.com', '123456', false);
+
+    // Verify navigation to dashboard
+    expect(await screen.findByText('Client')).toBeInTheDocument();
+  });
+
+  it('logs in and navigates to /dashboard on success', async () => {
+    const user = userEvent.setup();
+
+    // Mock successful login response
+    mockLogin.mockResolvedValue(mockAdmin);
 
     renderApp();
 

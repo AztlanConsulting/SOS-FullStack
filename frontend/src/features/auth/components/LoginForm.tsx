@@ -3,6 +3,8 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import { Text } from '@shared/components/ui/Text';
+import type { User } from '../types/auth.types';
+import roleNavigation from '@/shared/utils/roleNavigation';
 
 /**
  * LoginForm component
@@ -55,8 +57,8 @@ export const LoginForm = () => {
 
     const success = await login(email, password, remember);
 
-    if (success) {
-      navigate('/dashboard');
+    if (Boolean(success)) {
+      navigate(roleNavigation((success as User).role));
     }
   };
 

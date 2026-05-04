@@ -20,7 +20,7 @@ interface AuthContextType {
     email: string,
     password: string,
     remember: boolean,
-  ) => Promise<boolean>;
+  ) => Promise<User | boolean>;
   logout: () => Promise<void>;
 }
 
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(data.user);
       setAccessToken(data.accessToken);
 
-      return true;
+      return data.user;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status;

@@ -3,13 +3,17 @@ import { Select } from '@shared/components/ui/Select';
 import { TextArea } from '@shared/components/ui/TextArea';
 import { DateInput } from '@shared/components/ui/DateInput';
 import { FileUpload } from '@shared/components/ui/FileUpload';
-import type { PetReportData, ReportType } from '../types/petReport.types';
+import type {
+  LostPetReportData,
+  ReportType,
+} from '@shared/types/petReport.types';
 
 export interface UsuerInfoSectionProps {
-  formData: Partial<PetReportData>;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: Partial<LostPetReportData>;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
   reportType?: ReportType;
   errors: Record<string, string>;
+  hideNameInput?: boolean;
 }
 
 export const UserInfoSection = ({
@@ -17,6 +21,7 @@ export const UserInfoSection = ({
   updateForm,
   reportType = 'lost',
   errors,
+  hideNameInput = false,
 }: UsuerInfoSectionProps) => {
   const speciesOptions = [
     { value: 'Perro', label: 'Perro' },
@@ -44,7 +49,7 @@ export const UserInfoSection = ({
   return (
     <section className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4">
       {/* Name only applies when is a report for a lost pet. */}
-      {reportType === 'lost' && (
+      {reportType === 'lost' && !hideNameInput && (
         <Input
           id="petName"
           label="Nombre de la mascota"
@@ -120,15 +125,6 @@ export const UserInfoSection = ({
           onChange={(e) => updateForm({ description: e.target.value })}
           maxLength={100}
         />
-      )}
-
-      {reportType === 'found' && (
-        <div className="mt-2">
-          <FileUpload
-            index={1}
-            onChange={(file) => console.log('Archivo cargado:', file)}
-          />
-        </div>
       )}
     </section>
   );

@@ -62,10 +62,6 @@ export const router = createBrowserRouter([
         children: [...routerClient],
       },
       {
-        path: '/purchase',
-        element: <TempPurchasePage />,
-      },
-      {
         path: '/credits',
         element: <CreditsPage />,
       },

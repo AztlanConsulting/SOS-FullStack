@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicPetInfoSection } from './BasicPetInfoSection';
+import { BasicPetInfoSection } from './form/BasicPetInfoSection';
 import { LocationContextSection } from './LocationContextSection';
 import { BehaviorPersonalitySection } from './BehaviorPersonalitySection';
 import { SearchContextSection } from './SearchContextSection';

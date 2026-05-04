@@ -7,8 +7,13 @@ import MembersOnlyListSection from '../features/members-only/components/MembersO
 import HeroSection from '@shared/components/layout/HeroSection';
 import owner from '@assets/images/members.png';
 import { Text } from '@shared/components/ui/Text';
+import { Button } from '@shared/components/ui/Button';
+import { HiChevronRight } from 'react-icons/hi';
+import { useNavigate } from 'react-router';
 
 const MembersOnly = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -18,10 +23,18 @@ const MembersOnly = () => {
           title={'Portal exclusivo'}
           image={owner}
           content={
-            <Text>
-              En el portal exclusivo de SOS ofrecemos recursos con instrucciones
-              específicas de cómo afrontar este momento difícil.
-            </Text>
+            <>
+              <Text>
+                En el portal exclusivo de SOS ofrecemos recursos con
+                instrucciones específicas de cómo afrontar este momento difícil.
+              </Text>
+              <Button
+                label="Perdí mi mascota"
+                variant="purple"
+                icon={HiChevronRight}
+                onClick={() => navigate('/members-only/formulario')}
+              />
+            </>
           }
         />
         <MembersOnlyListSection />

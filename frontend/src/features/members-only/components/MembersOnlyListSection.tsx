@@ -93,7 +93,7 @@ No estás solo en este proceso. Existen muchas personas y organizaciones dispues
 
 const MembersOnlyListSection = () => {
   return (
-    <section className="color-light-purple-bg w-full flex flex-col items-center justify-center">
+    <section className="bg-white w-full flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
         <List<MembersOnlyContent>
           cards={membersOnlyCards}

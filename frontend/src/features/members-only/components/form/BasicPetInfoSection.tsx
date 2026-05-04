@@ -1,7 +1,7 @@
 import { Input } from '@shared/components/ui/Input';
 import { Select } from '@shared/components/ui/Select';
 import { Text } from '@shared/components/ui/Text';
-import type { SearchFormData } from '../types/searchForm.types';
+import type { SearchFormData } from '../../types/searchForm.types';
 
 export interface BasicPetInfoSectionProps {
   formData: Partial<SearchFormData>;

@@ -1,12 +1,17 @@
+import type { PetInfo } from '../types/petCollection.types';
 import PetCard from './PetCard';
 
-const PetList = () => {
-  const arr = new Array(10).fill(0);
+export interface Props {
+  pets: PetInfo[];
+}
+
+const PetList = ({ pets }: Props) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2 mt-4 h-10/12">
-      {arr.map((a) => (
-        <PetCard />
-      ))}
+      {pets.map((pet, idx) => {
+        console.log(pet);
+        return <PetCard img={pet.image} key={idx} />;
+      })}
     </div>
   );
 };

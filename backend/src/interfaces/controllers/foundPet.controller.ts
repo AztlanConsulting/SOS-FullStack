@@ -1,5 +1,5 @@
 import { petVector } from '@infrastructure/data-access/vectorDB/petVector.data-access';
-import { createPetImage } from '@use-cases/images/createPetImage';
+import { createPetImage } from '@/use-cases/images/createPetImage.usecase';
 import type { Request, Response } from 'express';
 
 export default async function foundPet(req: Request, res: Response) {
@@ -16,7 +16,6 @@ export default async function foundPet(req: Request, res: Response) {
     }
 
     const result = await createPetImage(petVector, {
-      refId: '123',
       image: image.buffer,
       species,
     });

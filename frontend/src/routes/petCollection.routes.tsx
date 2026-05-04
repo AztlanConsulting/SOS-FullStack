@@ -1,5 +1,5 @@
 import PetDetails from '@/features/petCollection/components/PetDetails';
-import SearchPets from '@/features/petCollection/components/SearchPets';
+import SearchPets from '@/features/petCollection/components/SearchPetsPage';
 import PetCollectionPage from '@/pages/PetCollectionPage';
 
 const router = [

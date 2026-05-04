@@ -1,6 +1,11 @@
 import axiosInstance from '@/shared/utils/axios';
+import type { PetInfo } from '../types/petCollection.types';
 
-async function uploadImage(file: File, page: number = 0, searchTerm?: string) {
+async function uploadImage(
+  file: File,
+  page: number = 0,
+  searchTerm?: string,
+): Promise<PetInfo[]> {
   const formData = new FormData();
   formData.append('image', file);
   console.log(file, page);
@@ -12,8 +17,8 @@ async function uploadImage(file: File, page: number = 0, searchTerm?: string) {
       headers: { 'Content-Type': 'multipart/form-data' },
     },
   );
-  console.log(vectorImages.data);
-  return { vectorImages, total: 5 };
+
+  return vectorImages.data;
 }
 
 export default uploadImage;

@@ -1,19 +1,17 @@
 import calculatePages from '@shared/utils/calculatePages';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-
-interface Props {
-  total: number;
-}
+import type { PetInfo } from '../types/petCollection.types';
 
 // Handle logic for searching
-export default function usePetGallery<T extends Props>(
+export default function usePetGallery(
   queryFunction: (
     img: File,
     page: number,
     searchTerm?: string,
     sortOption?: string,
-  ) => Promise<T>,
+  ) => Promise<PetInfo[]>,
+  pageQueryFunction: (img: File) => Promise<number>,
 ) {
   // Pagination state
   const pageHook = useState(1);
@@ -25,17 +23,21 @@ export default function usePetGallery<T extends Props>(
   const [searchTerm, setSearchTerm] = useState('');
 
   // Query
-  const query = useQuery({
+  const vectorImages = useQuery({
     queryKey: [img, page],
     queryFn: () => img && queryFunction(img, page, searchTerm),
     enabled: Boolean(img),
   });
-  const { data } = query;
+  const total = useQuery({
+    queryKey: [img],
+    queryFn: () => img && pageQueryFunction(img),
+    enabled: Boolean(img),
+  });
 
   // Pagination
   const [visiblePages, totalPages] = useMemo(() => {
-    return data ? calculatePages(data.total, page, 6) : [[], 0];
-  }, [data, page]);
+    return total.data ? calculatePages(total.data, page, 10) : [[], 0];
+  }, [total, page]);
 
   function handleSearch(value: string) {
     setSearchTerm(value);
@@ -45,5 +47,5 @@ export default function usePetGallery<T extends Props>(
   // Structure data
   const pages = { pageHook, visiblePages, totalPages };
 
-  return { handleSearch, imgHook, query, pages };
+  return { handleSearch, imgHook, vectorImages, pages };
 }

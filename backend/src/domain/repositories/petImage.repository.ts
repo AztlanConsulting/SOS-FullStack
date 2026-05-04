@@ -13,4 +13,5 @@ export interface PetVectorRepository {
   createPetImage(petImageDto: PetImageDto): Promise<boolean>;
   getSimilarPets(petImageDto: PetImageDto, offset: number): Promise<PetImage[]>;
   getPetById(refId: string): Promise<PetImage>;
+  countPetImages(petImageDto: PetImageDto): Promise<number>;
 }

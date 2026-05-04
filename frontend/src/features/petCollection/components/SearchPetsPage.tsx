@@ -3,9 +3,13 @@ import UploadPet from './UploadPet';
 import { type ChangeEvent } from 'react';
 import uploadImage from '../services/uploadImage.service';
 import usePetGallery from '../hooks/usePetGallery';
+import countPages from '../services/countPages.service';
 
-const SearchPets = () => {
-  const { imgHook, pages, handleSearch } = usePetGallery(uploadImage);
+const SearchPetsPage = () => {
+  const { imgHook, pages, handleSearch, vectorImages } = usePetGallery(
+    uploadImage,
+    countPages,
+  );
   const [img, setImg] = imgHook;
 
   async function uploadFile(
@@ -19,9 +23,13 @@ const SearchPets = () => {
   return (
     <div className="flex max-md:flex-col min-h-screen md:pt-0 pt-[80.67px] h-full">
       <UploadPet img={img} uploadFile={uploadFile} />
-      <PetGallery handleSearch={handleSearch} pages={pages} />
+      <PetGallery
+        handleSearch={handleSearch}
+        pages={pages}
+        vectorImages={vectorImages}
+      />
     </div>
   );
 };
 
-export default SearchPets;
+export default SearchPetsPage;

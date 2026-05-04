@@ -5,6 +5,8 @@ import type {
 } from '@domain/repositories/petImage.repository';
 import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
 
+const maxDistance = 0.18;
+
 export const petVector: PetVectorRepository = {
   /**
    * Upload image to vector database
@@ -44,7 +46,8 @@ export const petVector: PetVectorRepository = {
       .get()
       .withClassName('Pet')
       .withFields('image refId species')
-      .withNearImage({ image: image })
+      .withNearImage({ image: image, distance: maxDistance })
+      // .withNearImage({ image: image })
       .withOffset(offset)
       .withLimit(10)
       .do();
@@ -54,6 +57,11 @@ export const petVector: PetVectorRepository = {
     return result;
   },
 
+  /**
+   * Get a particular image
+   * @param refId - Get imageInformation by its id
+   * @returns petImage - The complete object
+   */
   getPetById: async function (refId: string): Promise<PetImage> {
     const resImg = await vectorDB.graphql
       .get()
@@ -68,5 +76,24 @@ export const petVector: PetVectorRepository = {
 
     const petImage: PetImage = resImg.data.Get.Pet;
     return petImage;
+  },
+
+  /**
+   * Get the total amount of images similar to the one requested
+   * @param petImage - Object containing image, species and mongoDB id
+   * @returns number - Amount of images
+   */
+  countPetImages: async function (petImage: PetImageDto): Promise<number> {
+    const image = petImage.image.toString('base64');
+
+    const imgCount = await vectorDB.graphql
+      .aggregate()
+      .withClassName('Pet')
+      .withNearImage({ image: image, distance: maxDistance })
+      // .withNearImage({ image: image })
+      .withFields('meta: { count }')
+      .do();
+
+    return imgCount.data.Aggregate.Pet[0].meta.count;
   },
 };

@@ -21,10 +21,7 @@ export default async function findSimilarPets(req: Request, res: Response) {
       species,
     });
 
-    res.status(200).json({
-      data: result,
-      status: 'success',
-    });
+    res.status(200).json(result);
   } catch (err: unknown) {
     console.log(err);
 

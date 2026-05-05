@@ -5,6 +5,8 @@ import routes from '@interfaces/routes/routes';
 import '@domain/models';
 import cors from 'cors';
 import path from 'path';
+import '@/queues/activatePlan.worker';
+import '@/queues/sendEmail.worker';
 
 const app = express();
 

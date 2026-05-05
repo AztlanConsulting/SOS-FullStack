@@ -10,6 +10,26 @@ export interface PurchasedPlan {
   radius: number; // km
   features: string[];
   active: boolean;
+  socialPosts?: {
+    facebook?: {
+      url: { type: String };
+      status: {
+        type: String;
+        enum: ['pending', 'posted', 'failed'];
+        default: 'pending';
+      };
+      postedAt: { type: Date };
+    };
+    instagram?: {
+      url: { type: String };
+      status: {
+        type: String;
+        enum: ['pending', 'posted', 'failed'];
+        default: 'pending';
+      };
+      postedAt: { type: Date };
+    };
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,6 +38,16 @@ export type PurchasedPlanCreateInput = Omit<
   PurchasedPlan,
   '_id' | 'createdAt' | 'updatedAt' | 'active'
 >;
+
+export type SocialPlatform = 'facebook' | 'instagram';
+
+export type SocialPost = {
+  url?: string;
+  status?: 'pending' | 'posted' | 'failed';
+  postedAt?: Date;
+};
+
+export type SocialPostsInput = Partial<Record<SocialPlatform, SocialPost>>;
 
 const PurchasedPlanSchema = new Schema<PurchasedPlan>(
   {
@@ -34,6 +64,27 @@ const PurchasedPlanSchema = new Schema<PurchasedPlan>(
     active: {
       type: Boolean,
       default: false,
+    },
+
+    socialPosts: {
+      facebook: {
+        url: { type: String },
+        status: {
+          type: String,
+          enum: ['pending', 'posted', 'failed'],
+          default: 'pending',
+        },
+        postedAt: { type: Date },
+      },
+      instagram: {
+        url: { type: String },
+        status: {
+          type: String,
+          enum: ['pending', 'posted', 'failed'],
+          default: 'pending',
+        },
+        postedAt: { type: Date },
+      },
     },
   },
   {

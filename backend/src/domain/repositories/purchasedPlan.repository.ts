@@ -7,4 +7,5 @@ export interface PurchasedPlanRepository {
   createPurchasedPlan(
     planData: PurchasedPlanCreateInput,
   ): Promise<PurchasedPlan>;
+  getActivePlanByPetId(petId: string): Promise<PurchasedPlan | null>;
 }

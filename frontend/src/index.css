@@ -2,10 +2,12 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-secondary: #fef5da;
   --color-primary: #f9cd48;
   --color-purple: #9D7FAD;
   --color-light-purple: #9D7FAD33;
+  --radius-c: 20px;
+  --color-secondary: #fef5da;
+  --color-purple-primary: #9d7fad;
 }
 /* Hide scrollbars for all browsers */
 html,

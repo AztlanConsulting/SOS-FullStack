@@ -133,3 +133,4 @@ DerivedData/
 storybook-static
 
 public/
+**/uploads

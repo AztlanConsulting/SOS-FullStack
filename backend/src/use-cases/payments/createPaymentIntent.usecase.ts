@@ -8,8 +8,5 @@ export const createPaymentIntent = async (
   paymentProvider: PaymentProvider,
   data: PaymentIntentDTO,
 ): Promise<PaymentIntentResult> => {
-  return await paymentProvider.createIntent({
-    amount: data.amount,
-    currency: data.currency,
-  });
+  return await paymentProvider.createIntent(data);
 };

@@ -17,7 +17,7 @@ export const ManualDataAccess: ManualRepository = {
 
   async getManuals({
     page = 0,
-    sortOption,
+    sortOption = 'Nombre (A-Z)',
     searchTerm,
   }: GetManual): Promise<ManualResult[]> {
     const sort: Record<string, { [key: string]: SortOrder }> = {

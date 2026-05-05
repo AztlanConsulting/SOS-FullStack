@@ -1,11 +1,14 @@
 import { LocationSearchInput } from '../../../shared/components/ui/LocationSearchInput/LocationSearchInput';
 import { MapDisplay } from '../../../shared/components/ui/MapDisplay/MapDisplay';
-import type { PetReportData, ReportType } from '../types/petReport.types';
+import type {
+  LostPetReportData,
+  ReportType,
+} from '@shared/types/petReport.types';
 import { usePetLocation } from '../hooks/usePetLocation';
 
 export interface PetLocationSectionProps {
-  formData: Partial<PetReportData>;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: Partial<LostPetReportData>;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
   reportType?: ReportType;
   mapID?: string;
   errors?: Record<string, string>;

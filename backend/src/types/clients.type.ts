@@ -26,7 +26,7 @@ export type CreatePetReportDTO = {
   sex: PetReportSex;
   color: string;
   size: PetReportSize;
-  description: string;
+  description?: string;
   location: string;
   locationCoords: [number, number];
   contactName: string;
@@ -57,7 +57,7 @@ export const createPetReportDTOSchema = z.object({
   sex: z.enum(PET_REPORT_SEX_VALUES),
   color: z.string().min(1, 'El color es requerido'),
   size: z.enum(PET_REPORT_SIZE_VALUES),
-  description: z.string().min(1, 'La descripción es requerida'),
+  description: z.string().optional(),
   location: z.string(),
   locationCoords: z.preprocess(
     (val) => (typeof val === 'string' ? JSON.parse(val) : val),
@@ -92,3 +92,22 @@ export const getCreatePetReportFieldErrors = (
     return acc;
   }, {});
 };
+
+export interface PurchasedResourceResponse {
+  id: string;
+  name: string;
+  type: 'manual' | 'workshop';
+  imageUrl: string;
+  description?: string;
+}
+
+export interface PlanProgressResult {
+  planName: string;
+  totalDays: number;
+  daysRemaining: number;
+}
+
+export interface DashboardResponse {
+  planProgress: PlanProgressResult | null;
+  resources: PurchasedResourceResponse[];
+}

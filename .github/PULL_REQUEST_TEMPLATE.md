@@ -38,10 +38,10 @@ Document any known issues, limitations, or pending concerns.
 
 ## Checklist
 
-- [] I reviewed spelling and grammar
-- [] I verified the links work correctly
-- [] I checked that images/files/resources load properly
-- [] I confirmed the content is clear and understandable
-- [] I tested the change locally
-- [] The change follows the project’s structure and style guidelines
-- [] I checked the defect log and the department checklist
+- [ ] I reviewed spelling and grammar
+- [ ] I verified the links work correctly
+- [ ] I checked that images/files/resources load properly
+- [ ] I confirmed the content is clear and understandable
+- [ ] I tested the change locally
+- [ ] The change follows the project’s structure and style guidelines
+- [ ] I checked the defect log and the department checklist

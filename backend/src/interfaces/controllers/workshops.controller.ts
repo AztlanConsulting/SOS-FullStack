@@ -1,5 +1,5 @@
 import type { Workshop } from '@domain/models/workshop.model';
-import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
+import { WorkshopDataAccess } from '@infrastructure/data-access/workshop.data-access';
 import { workshopBody, workshopQuery } from '@validation/workshop.types';
 import {
   getWorkshopById,
@@ -27,7 +27,7 @@ export async function getWorkshops(req: Request, res: Response) {
       }
 
       return res.status(200).json({
-        workshops: [ws],
+        workshops: ws,
         total: 1,
       });
     }

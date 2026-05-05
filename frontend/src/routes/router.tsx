@@ -10,7 +10,6 @@ import routerWorkshop from './workshop.routes';
 import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
-import routerPetCollection from './petCollection.routes';
 import routerLostPet from './foundPet.routes';
 import { PurchasePage } from '@pages/PurchasePage';
 import routerClient from './client.routes';
@@ -92,7 +91,6 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
-      ...routerPetCollection,
     ],
   },
 ]);

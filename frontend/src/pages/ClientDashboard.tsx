@@ -10,7 +10,11 @@ import { TbEdit } from 'react-icons/tb';
 
 const navLinks = [
   { label: 'Inicio', href: '/inicio', icon: <HiOutlineUserCircle /> },
-  { label: 'Mascotas', href: '/inicio/mascotas', icon: <PiDogLight /> },
+  {
+    label: 'Mascotas',
+    href: '/inicio/coleccion-mascotas',
+    icon: <PiDogLight />,
+  },
   { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },
   { label: 'Talleres', href: '/inicio/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/inicio/manuales', icon: <IoBookOutline /> },

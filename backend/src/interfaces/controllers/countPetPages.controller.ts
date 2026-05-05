@@ -11,13 +11,12 @@ async function countPetPages(req: Request, res: Response) {
       throw new Error('Missing image in body');
     }
 
-    const pages = await countPetImages(petVector, {
+    const total = await countPetImages(petVector, {
       image: image.buffer,
       species,
     });
 
-    console.log(pages);
-    return res.status(200).send(pages);
+    return res.status(200).send(total);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);

@@ -4,7 +4,7 @@ import PetCollectionPage from '@/pages/PetCollectionPage';
 
 const router = [
   {
-    path: '/coleccion-mascotas',
+    path: 'coleccion-mascotas',
     element: <PetCollectionPage />,
     children: [
       {

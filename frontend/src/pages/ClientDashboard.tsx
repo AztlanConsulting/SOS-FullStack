@@ -18,16 +18,19 @@ const navLinks = [
 
 const ClientDashboard = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header
         navLinks={navLinks}
         color={'purple-primary'}
         socialLinks={[]}
         signBtn={SignOut}
       />
-      <Outlet />
+      <div className="flex-grow">
+        <Outlet />
+      </div>
+
       <Footer />
-    </>
+    </div>
   );
 };
 

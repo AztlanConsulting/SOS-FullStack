@@ -105,6 +105,9 @@ export interface PlanProgressResult {
   planName: string;
   totalDays: number;
   daysRemaining: number;
+  petName: string;
+  petImage: string | null;
+  dateMissing: string | Date;
 }
 
 export interface DashboardResponse {

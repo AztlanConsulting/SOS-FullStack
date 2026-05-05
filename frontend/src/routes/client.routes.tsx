@@ -1,9 +1,9 @@
-import ClientDashboardContent from '@/features/client/components/ClientDashboardContent';
+import ClientDashboardOverview from '@/pages/ClientDashboardOverview';
 
 const router = [
   {
     path: '',
-    element: <ClientDashboardContent />,
+    element: <ClientDashboardOverview />,
   },
 ];
 

@@ -31,9 +31,14 @@ export const getPlanProgress = async (
   const daysElapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   const daysRemaining = Math.max(0, totalDays - daysElapsed);
 
+  const petImage = pet.photos.length > 0 ? pet.photos[0] : null;
+
   return {
     planName: plan.name,
     totalDays,
     daysRemaining,
+    petName: pet.name,
+    petImage,
+    dateMissing: pet.dateMissing,
   };
 };

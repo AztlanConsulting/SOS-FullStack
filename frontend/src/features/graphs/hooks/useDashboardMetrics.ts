@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from '@shared/utils/axios';
+import { getDashboardMetrics } from '../services/graphs.service';
 import type { DashboardResponse } from '../types/dashboardMetrics';
 
 export const useDashboardMetrics = () => {
@@ -11,8 +11,8 @@ export const useDashboardMetrics = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get<DashboardResponse>('clients/inicio');
-        setMetrics(response.data);
+        const data = await getDashboardMetrics();
+        setMetrics(data);
       } catch (err) {
         console.error(err);
         setError('Error al cargar la información del dashboard');

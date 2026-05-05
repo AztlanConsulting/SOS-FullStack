@@ -11,6 +11,7 @@ export const PurchasedResourceCard = ({
   const navigate = useNavigate();
 
   const handleView = () => {
+    console.log(resource);
     if (resource.type === 'manual') {
       navigate(`/manuales/${resource.id}`);
     } else {

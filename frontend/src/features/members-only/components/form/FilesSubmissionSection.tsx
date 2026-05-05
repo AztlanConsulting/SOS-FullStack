@@ -76,7 +76,7 @@ export const FilesSubmissionSection = ({
 
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto py-4">
         <div className="w-full flex justify-center [&>button]:w-full [&>button]:max-w-none [&>button]:whitespace-nowrap">
-          <Button onClick={onSubmit} label="Enviar" variant="plans" />
+          <Button onClick={onSubmit} label="Enviar" variant="purple" />
         </div>
       </div>
     </section>

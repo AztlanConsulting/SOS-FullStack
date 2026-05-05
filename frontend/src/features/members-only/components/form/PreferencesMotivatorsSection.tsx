@@ -1,6 +1,6 @@
 import { Input } from '@shared/components/ui/Input';
 import { TextArea } from '@shared/components/ui/TextArea';
-import type { SearchFormData } from '../types/searchForm.types';
+import type { SearchFormData } from '../../types/searchForm.types';
 
 export interface PreferencesMotivatorsSectionProps {
   formData: Partial<SearchFormData>;

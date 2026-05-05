@@ -7,7 +7,7 @@ import { FilesSubmissionSection } from './FilesSubmissionSection';
 import { useSearchForm } from '../../hooks/useSearchForm';
 import { Text } from '@shared/components/ui/Text';
 import type { SearchFormData } from '../../types/searchForm.types';
-import { PreferencesMotivatorsSection } from '../PreferencesMotivatorsSection';
+import { PreferencesMotivatorsSection } from './PreferencesMotivatorsSection';
 
 export interface SearchFormProps {
   initialData?: Partial<SearchFormData>;

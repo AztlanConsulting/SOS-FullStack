@@ -1,59 +1,53 @@
-import { useParams, useNavigate } from 'react-router';
-import Header from '../shared/components/layout/Header';
-import Footer from '../shared/components/layout/Footer';
-import { Button } from '@/shared/components/ui/Button/Button';
-import { HiChevronLeft } from 'react-icons/hi2';
-import { Text } from '@shared/components/ui/Text';
-import { membersOnlyCards } from '../features/members-only/components/MembersOnlyListSection';
+import MembersOnlyContent from '@features/members-only/components/MembersOnlyContent';
+import useGetMembersOnlyContent from '@features/members-only/hooks/useGetMembersOnlyContent';
+import queryMembersOnlyById from '@features/members-only/services/queryMembersOnlyById';
+import type { MembersOnly } from '@features/members-only/types/membersOnly.types';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const MembersOnlyPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const card = membersOnlyCards.find((c) => c.id === id);
+  const { membersOnly } =
+    useGetMembersOnlyContent<MembersOnly>(queryMembersOnlyById);
 
-  if (!card) {
-    return (
-      <div className="min-h-screen">
-        <Header />
-        <main className="pt-[80.67px] lg:pt-0 flex items-center justify-center">
-          <Text className="text-gray-700">Contenido no encontrado</Text>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setIsOpen(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    window.setTimeout(() => {
+      navigate(-1);
+    }, 280);
+  };
 
   return (
-    <div className="min-h-screen">
-      <Header />
-      <main className="pt-[80.67px] lg:pt-0">
-        <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto py-6">
-          <Button
-            label="Volver"
-            variant="purple"
-            icon={HiChevronLeft}
-            onClick={() => navigate('/members-only')}
-          />
-        </div>
-        <section className="bg-white overflow-hidden py-8 lg:py-16">
-          <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-6">
-            <Text as="h2" variant="h2" weight="medium">
-              {card.title}
-            </Text>
-            <img
-              src={card.imageUrl}
-              alt={card.title}
-              className="w-full h-64 object-cover rounded-lg"
-            />
-            <div className="flex flex-col gap-4">
-              {card.content.split('\n\n').map((paragraph, idx) => (
-                <Text key={idx}>{paragraph}</Text>
-              ))}
-            </div>
-          </div>
-        </section>
+    <div className="fixed inset-0 z-50 pointer-events-none">
+      <div
+        className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0'
+        }`}
+        onClick={handleClose}
+      />
+      <main
+        className={`absolute top-0 right-0 h-full w-full bg-white shadow-2xl overflow-y-auto pointer-events-auto transition-transform duration-300 ease-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        {membersOnly ? (
+          <MembersOnlyContent membersOnly={membersOnly} onBack={handleClose} />
+        ) : (
+          <div className="p-8">Contenido no encontrado</div>
+        )}
       </main>
-      <Footer />
     </div>
   );
 };

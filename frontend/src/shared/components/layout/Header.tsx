@@ -17,6 +17,12 @@ import yellowIcon from '@assets/images/yellowIcon.png';
 import whiteIcon from '@assets/images/whiteIcon.png';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 
+interface HeaderProps {
+  bg?: string;
+  accentBg?: string;
+  socialBg?: string;
+}
+
 const navLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
@@ -48,7 +54,12 @@ export const socialLinks = [
   },
 ];
 
-const Header = () => {
+const Header = ({
+  bg = 'bg-white',
+  accentBg = 'color-primary-bg',
+  socialBg,
+}: HeaderProps) => {
+  const resolvedSocialBg = socialBg || accentBg;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   const { pathname } = useLocation();
@@ -57,7 +68,12 @@ const Header = () => {
   const firstName = user?.username.trim().split(/\s+/)[0] ?? '';
 
   return (
-    <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
+    <header
+      className={
+        bg +
+        ' border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16'
+      }
+    >
       {!isMenuOpen && (
         <>
           {isSocialOpen ? (
@@ -86,10 +102,20 @@ const Header = () => {
             className="fixed right-0 z-[1000] shadow-xl rounded-lg"
             style={{ bottom: '80px' }}
           >
-            <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
+            <div
+              className={
+                'w-[30px] h-[104px] ' +
+                resolvedSocialBg +
+                ' rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2'
+              }
+            >
               <button
                 onClick={() => setIsSocialOpen((prev) => !prev)}
-                className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center cursor-pointer"
+                className={
+                  'w-[24px] h-[24px] ' +
+                  resolvedSocialBg +
+                  ' rounded-[4px] flex items-center justify-center cursor-pointer'
+                }
               >
                 <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
                   {isSocialOpen ? 'Cerrar' : 'Síguenos'}
@@ -180,7 +206,13 @@ const Header = () => {
           />
 
           {/* Drawer */}
-          <div className="w-2/3 max-w-xs color-primary-bg h-full flex flex-col justify-between">
+          <div
+            className={
+              'w-2/3 max-w-xs ' +
+              accentBg +
+              ' h-full flex flex-col justify-between'
+            }
+          >
             {/* Top */}
             <div className="p-8 border-b border-white flex justify-center">
               <img

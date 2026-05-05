@@ -16,7 +16,7 @@ const MembersOnly = () => {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header accentBg="color-purple-bg" />
       <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
           bg="bg-light-purple"
@@ -24,16 +24,19 @@ const MembersOnly = () => {
           image={owner}
           content={
             <>
-              <Text>
-                En el portal exclusivo de SOS ofrecemos recursos con
-                instrucciones específicas de cómo afrontar este momento difícil.
-              </Text>
-              <Button
-                label="Perdí mi mascota"
-                variant="purple"
-                icon={HiChevronRight}
-                onClick={() => navigate('/members-only/formulario')}
-              />
+              <div className="flex flex-col gap-4">
+                <Text>
+                  En el portal exclusivo de SOS ofrecemos recursos con
+                  instrucciones específicas de cómo afrontar este momento
+                  difícil.
+                </Text>
+                <Button
+                  label="Perdí mi mascota"
+                  variant="purple"
+                  icon={HiChevronRight}
+                  onClick={() => navigate('/portal-exclusivo/formulario')}
+                />
+              </div>
             </>
           }
         />
@@ -42,7 +45,7 @@ const MembersOnly = () => {
         <GoodToKnow />
         <FaqSection />
       </main>
-      <Footer />
+      <Footer bg="color-purple-bg" />
     </div>
   );
 };

@@ -1,16 +1,17 @@
 import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
 import { useNavigate } from 'react-router';
-import type { MembersOnlyContent } from '../types/membersOnly.types';
+import type { MembersOnly } from '../types/membersOnly.types';
+import dog2 from '@assets/images/dog2.png';
 
-const MembersOnlyCard = ({ card }: { card: MembersOnlyContent }) => {
+const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
   const navigate = useNavigate();
 
   return (
     <div className="bg-white rounded-lg border w-full flex flex-col h-full">
       <img
-        src={card.imageUrl}
-        alt={card.title}
+        src={dog2}
+        alt={card.name}
         className="rounded-t-lg w-full h-40 object-cover"
       />
       <Text
@@ -20,23 +21,29 @@ const MembersOnlyCard = ({ card }: { card: MembersOnlyContent }) => {
         color="text-black"
         className="pl-4 py-4 border-t border-purple flex-grow"
       >
-        {card.title}
+        {card.name}
       </Text>
       <Text
         as="p"
         variant="caption"
         weight="regular"
         color="text-black"
-        className="text-left pl-4 pb-4"
+        className="pl-4 pb-4"
       >
-        {card.description}
+        {new Date(card.createdAt).toLocaleDateString('es-MX', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        })}
       </Text>
-      <div className="flex flex-col items-center justify-center py-5 border-t border-purple px-10">
-        <Button
-          label="Ver"
-          variant="purple"
-          onClick={() => navigate(`/members-only/page/${card.id}`)}
-        />
+      <div className="flex flex-col items-center justify-center py-5 border-t border-purple ">
+        <div className="w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7">
+          <Button
+            label="Ver"
+            variant="purple"
+            onClick={() => navigate(`/portal-exclusivo/page/${card._id}`)}
+          />
+        </div>
       </div>
     </div>
   );

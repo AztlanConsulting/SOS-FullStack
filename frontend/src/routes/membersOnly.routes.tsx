@@ -1,18 +1,18 @@
-import SearchFormPage from '@/pages/SearchFormPAge';
+import SearchFormPage from '@/pages/SearchFormPage';
 import MembersOnly from '../pages/MembersOnly';
 import MembersOnlyPage from '../pages/MembersOnlyPage';
 
 const routes = [
   {
-    path: '/members-only',
+    path: '/portal-exclusivo',
     element: <MembersOnly />,
   },
   {
-    path: '/members-only/formulario',
+    path: '/portal-exclusivo/formulario',
     element: <SearchFormPage />,
   },
   {
-    path: '/members-only/page/:id',
+    path: '/portal-exclusivo/page/:id',
     element: <MembersOnlyPage />,
   },
 ];

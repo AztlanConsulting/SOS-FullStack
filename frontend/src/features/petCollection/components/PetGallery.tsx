@@ -1,6 +1,6 @@
 import Pagination from '@/shared/components/ui/Pagination';
 import SearchInput from '@/shared/components/ui/SearchInput';
-import { useEffect, type Dispatch, type SetStateAction } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
 import PetList from './PetList';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import { Text } from '@/shared/components/ui/Text';
@@ -21,7 +21,7 @@ interface PetGalleryProps extends Props {
 
 const PetGallery = ({ handleSearch, pages, vectorImages }: PetGalleryProps) => {
   return (
-    <div className="p-2 md:w-2/3 h-screen">
+    <div className="p-2 md:w-2/3 md:h-screen">
       <div className="md:w-1/3 md:ml-auto">
         <SearchInput handleSearch={handleSearch} />
       </div>

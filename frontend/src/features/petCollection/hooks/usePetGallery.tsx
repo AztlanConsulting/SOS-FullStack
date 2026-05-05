@@ -1,6 +1,6 @@
 import calculatePages from '@shared/utils/calculatePages';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { PetInfo } from '../types/petCollection.types';
 
 // Handle logic for searching
@@ -35,7 +35,7 @@ export default function usePetGallery(
     enabled: Boolean(img),
   });
   const total = useQuery({
-    queryKey: [img],
+    queryKey: [img?.name],
     queryFn: () => img && pageQueryFunction(img),
     enabled: Boolean(img),
   });

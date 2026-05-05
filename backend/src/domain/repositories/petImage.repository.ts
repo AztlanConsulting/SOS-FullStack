@@ -7,6 +7,9 @@ export interface PetImageDto {
 export interface PetImage {
   refId: string;
   image: Buffer;
+  species: string;
+  location: string;
+  details: string;
 }
 
 export interface PetVectorRepository {

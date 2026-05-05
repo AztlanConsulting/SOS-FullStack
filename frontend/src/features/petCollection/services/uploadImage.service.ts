@@ -8,7 +8,6 @@ async function uploadImage(
 ): Promise<PetInfo[]> {
   const formData = new FormData();
   formData.append('image', file);
-  console.log(file, page);
   const vectorImages = await axiosInstance.post(
     '/images/findSimilarPets',
     formData,

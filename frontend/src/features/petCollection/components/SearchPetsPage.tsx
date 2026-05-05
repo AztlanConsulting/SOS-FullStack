@@ -1,6 +1,6 @@
 import PetGallery from './PetGallery';
 import UploadPet from './UploadPet';
-import { useEffect, type ChangeEvent } from 'react';
+import { type ChangeEvent } from 'react';
 import uploadImage from '../services/uploadImage.service';
 import usePetGallery from '../hooks/usePetGallery';
 import countPages from '../services/countPages.service';
@@ -11,9 +11,6 @@ const SearchPetsPage = () => {
     countPages,
   );
   const [img, setImg] = imgHook;
-  useEffect(() => {
-    console.log(img);
-  }, [img]);
 
   async function uploadFile(
     event: ChangeEvent<HTMLInputElement, HTMLInputElement>,

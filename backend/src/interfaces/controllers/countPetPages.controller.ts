@@ -16,6 +16,7 @@ async function countPetPages(req: Request, res: Response) {
       species,
     });
 
+    console.log(pages);
     return res.status(200).send(pages);
   } catch (err) {
     console.error(err);

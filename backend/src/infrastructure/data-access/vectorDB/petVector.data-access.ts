@@ -45,10 +45,10 @@ export const petVector: PetVectorRepository = {
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species')
+      .withFields('image refId species location details')
       .withNearImage({ image: image, distance: maxDistance })
       // .withNearImage({ image: image })
-      .withOffset(offset)
+      .withOffset(offset * 10)
       .withLimit(10)
       .do();
 
@@ -87,13 +87,15 @@ export const petVector: PetVectorRepository = {
     const image = petImage.image.toString('base64');
 
     const imgCount = await vectorDB.graphql
-      .aggregate()
+      .get()
       .withClassName('Pet')
+      .withFields('image refId species location details')
       .withNearImage({ image: image, distance: maxDistance })
       // .withNearImage({ image: image })
-      .withFields('meta: { count }')
       .do();
 
-    return imgCount.data.Aggregate.Pet[0].meta.count;
+    const length = imgCount.data.Get.Pet.length;
+
+    return length;
   },
 };

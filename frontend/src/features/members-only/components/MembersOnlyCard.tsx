@@ -2,7 +2,7 @@ import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
 import { useNavigate } from 'react-router';
 import type { MembersOnly } from '../types/membersOnly.types';
-import dog2 from '@assets/images/dog2.png';
+import dog2 from '@assets/images/husky1.jpg';
 
 const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
   const navigate = useNavigate();

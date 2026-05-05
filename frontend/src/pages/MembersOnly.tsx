@@ -16,7 +16,7 @@ const MembersOnly = () => {
 
   return (
     <div className="min-h-screen">
-      <Header accentBg="color-purple-bg" />
+      <Header color="purple-primary" />
       <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
           bg="bg-light-purple"

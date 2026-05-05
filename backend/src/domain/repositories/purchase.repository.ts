@@ -7,4 +7,5 @@ export interface PurchaseDTO {
 
 export interface PurchaseRepository {
   createPurchase(purchaseData: PurchaseDTO): Promise<void>;
+  getPurchasesByUserEmail(email: string): Promise<PurchaseDTO[]>;
 }

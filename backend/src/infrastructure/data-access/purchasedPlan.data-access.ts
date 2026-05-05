@@ -19,4 +19,19 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
     const savedPlan = await newPlan.save();
     return savedPlan.toObject() as PurchasedPlan;
   },
+
+  /**
+   *
+   * @param petId The pet id from the user.
+   * @returns The plan for that pet.
+   */
+  getActivePlanByPetId: async function (
+    petId: string,
+  ): Promise<PurchasedPlan | null> {
+    const plan = await PurchasedPlanModel.findOne({
+      petId,
+      active: true,
+    }).lean();
+    return plan as PurchasedPlan | null;
+  },
 };

@@ -1,6 +1,6 @@
 import { Text } from '@shared/components/ui/Text';
 import { Button } from '@shared/components/ui/Button';
-import type { SearchFormData } from '../types/searchForm.types';
+import type { SearchFormData } from '../../types/searchForm.types';
 
 export interface FilesSubmissionSectionProps {
   formData: Partial<SearchFormData>;

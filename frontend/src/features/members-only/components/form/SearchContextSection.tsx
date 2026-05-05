@@ -1,6 +1,6 @@
 import { TextArea } from '@shared/components/ui/TextArea';
 import { Select } from '@shared/components/ui/Select';
-import type { SearchFormData } from '../types/searchForm.types';
+import type { SearchFormData } from '../../types/searchForm.types';
 
 export interface SearchContextSectionProps {
   formData: Partial<SearchFormData>;

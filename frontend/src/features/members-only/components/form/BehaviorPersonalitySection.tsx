@@ -2,7 +2,7 @@ import { Input } from '@shared/components/ui/Input';
 import { TextArea } from '@shared/components/ui/TextArea';
 import { Select } from '@shared/components/ui/Select';
 import { Text } from '@shared/components/ui/Text';
-import type { SearchFormData } from '../types/searchForm.types';
+import type { SearchFormData } from '../../types/searchForm.types';
 
 export interface BehaviorPersonalitySectionProps {
   formData: Partial<SearchFormData>;

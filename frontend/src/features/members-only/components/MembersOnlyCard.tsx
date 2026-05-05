@@ -7,7 +7,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnlyContent }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white rounded-lg border border-purple w-full flex flex-col h-full">
+    <div className="bg-white rounded-lg border w-full flex flex-col h-full">
       <img
         src={card.imageUrl}
         alt={card.title}
@@ -31,7 +31,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnlyContent }) => {
       >
         {card.description}
       </Text>
-      <div className="w-full flex flex-col items-center justify-center py-5 border-t border-purple">
+      <div className="flex flex-col items-center justify-center py-5 border-t border-purple px-10">
         <Button
           label="Ver"
           variant="purple"

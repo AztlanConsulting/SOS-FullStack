@@ -1,13 +1,13 @@
 import React from 'react';
-import { BasicPetInfoSection } from './form/BasicPetInfoSection';
+import { BasicPetInfoSection } from './BasicPetInfoSection';
 import { LocationContextSection } from './LocationContextSection';
 import { BehaviorPersonalitySection } from './BehaviorPersonalitySection';
 import { SearchContextSection } from './SearchContextSection';
-import { PreferencesMotivatorsSection } from './PreferencesMotivatorsSection';
 import { FilesSubmissionSection } from './FilesSubmissionSection';
-import { useSearchForm } from '../hooks/useSearchForm';
+import { useSearchForm } from '../../hooks/useSearchForm';
 import { Text } from '@shared/components/ui/Text';
-import type { SearchFormData } from '../types/searchForm.types';
+import type { SearchFormData } from '../../types/searchForm.types';
+import { PreferencesMotivatorsSection } from '../PreferencesMotivatorsSection';
 
 export interface SearchFormProps {
   initialData?: Partial<SearchFormData>;

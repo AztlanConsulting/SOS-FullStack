@@ -1,6 +1,6 @@
 import Header from '../shared/components/layout/Header';
 import Footer from '../shared/components/layout/Footer';
-import { SearchForm } from '@/features/members-only/components/SearchForm';
+import { SearchForm } from '@/features/members-only/components/form/SearchForm';
 
 const SearchFormPage = () => {
   return (

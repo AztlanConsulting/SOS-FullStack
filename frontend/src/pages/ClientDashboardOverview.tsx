@@ -41,11 +41,11 @@ const ClientDashboardOverview = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <Text variant="h3" weight="bold" className="text-gray-900">
+                <Text variant="h3" weight="medium">
                   {petData.petName}
                 </Text>
                 <Text variant="caption" color="text-gray-500" className="mt-1">
-                  Desde {formattedDate},<br className="sm:hidden" /> esperando
+                  Desde {formattedDate},<br className="sm:hidden" /> espera ndo
                   que vuelva a casa
                 </Text>
               </div>

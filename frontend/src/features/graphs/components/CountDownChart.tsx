@@ -1,11 +1,11 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import type { PlanSubscriptionProgress } from '@features/graphs/types/dashboardMetrics';
+import { Text } from '@/shared/components/ui/Text';
 
 interface CountdownChartProps {
   data?: PlanSubscriptionProgress;
 }
 
-// 2. Desestructuramos data
 export const CountdownChart = ({ data }: CountdownChartProps) => {
   if (!data) {
     return null;
@@ -21,31 +21,21 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
 
   return (
     <div style={{ position: 'relative', width: '100%', paddingTop: '10px' }}>
-      <div
-        style={{
-          position: 'absolute',
-          top: '-10px',
-          left: '0',
-          backgroundColor: '#FCFCD4',
-          border: '1px solid #D4E157',
-          borderRadius: '4px',
-          padding: '4px 12px',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          color: '#333',
-          zIndex: 10,
-        }}
+      <Text
+        as="div"
+        variant="caption"
+        weight="medium"
+        color="text-[#333]"
+        className="absolute -top-[10px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
       >
         Quedan {daysRemaining} días
-      </div>
+      </Text>
 
-      {/* Contenedor de la gráfica */}
       <div
         style={{
           position: 'relative',
           width: '100%',
-          height: '220px',
-          marginTop: '30px',
+          height: '150px',
         }}
       >
         <ResponsiveContainer
@@ -55,85 +45,70 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
           minHeight={1}
         >
           <PieChart>
-            {/* Anillo de fondo (Gris sólido) */}
             <Pie
               data={[{ value: 100 }]}
               cx="50%"
               cy="100%"
               startAngle={180}
               endAngle={0}
-              innerRadius={100}
-              outerRadius={120}
+              innerRadius={112}
+              outerRadius={125}
               dataKey="value"
               stroke="none"
               fill="#E0E0E0"
               cornerRadius={5}
             />
-            {/* Anillo de progreso (Verde/Amarillo) */}
             <Pie
               data={pieData}
               cx="50%"
               cy="100%"
               startAngle={180}
               endAngle={0}
-              innerRadius={100}
-              outerRadius={120}
+              innerRadius={112}
+              outerRadius={125}
               dataKey="value"
               stroke="none"
               cornerRadius={5}
             >
-              <Cell fill="#D4E157" />
+              <Cell fill="#DDEA25" />
               <Cell fill="transparent" />
             </Pie>
           </PieChart>
         </ResponsiveContainer>
 
-        {/* Texto centrado dentro de la media dona */}
         <div
           style={{
             position: 'absolute',
-            bottom: '20px',
+            bottom: '0px',
             left: '50%',
             transform: 'translateX(-50%)',
             textAlign: 'center',
             width: '100%',
           }}
         >
-          <div
-            style={{
-              fontSize: '20px',
-              color: 'inherit',
-              lineHeight: '1',
-              fontWeight: '500',
-            }}
-          >
+          <Text variant="h1" weight="regular" as="div" color="text-inherit">
             {daysUsed} días
-          </div>
-          <div
-            style={{
-              fontSize: '12px',
-              color: 'inherit',
-              marginTop: '8px',
-              fontWeight: 'bold',
-            }}
+          </Text>
+          <Text
+            variant="caption"
+            weight="medium"
+            as="div"
+            color="text-[#61646B]"
+            className="mt-2"
           >
             de {totalDays} días
-          </div>
+          </Text>
         </div>
       </div>
 
-      {/* Título del plan */}
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: '20px',
-          fontSize: '20px',
-          fontWeight: 'bold',
-          color: 'inherit',
-        }}
+      <Text
+        variant="body"
+        weight="medium"
+        as="div"
+        className="text-center mt-8"
       >
-        {planName}
-      </div>
+        Plan {planName}
+      </Text>
     </div>
   );
 };

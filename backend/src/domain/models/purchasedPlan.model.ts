@@ -6,8 +6,8 @@ export interface PurchasedPlan {
   petId: Types.ObjectId;
   name: string;
   price: number;
-  duration: number; // days
-  radius: number; // km
+  duration: number;
+  radius: number;
   features: string[];
   active: boolean;
   createdAt: Date;
@@ -28,8 +28,8 @@ const PurchasedPlanSchema = new Schema<PurchasedPlan>(
     },
     name: { type: String, required: true },
     price: { type: Number, required: true },
-    duration: { type: Number, required: true }, // days
-    radius: { type: Number, required: true }, // km
+    duration: { type: Number, required: true },
+    radius: { type: Number, required: true },
     features: [{ type: String, required: true }],
     active: {
       type: Boolean,

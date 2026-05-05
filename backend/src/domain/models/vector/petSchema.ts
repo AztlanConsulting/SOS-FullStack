@@ -19,14 +19,22 @@ export const petConfig = {
     {
       name: 'species',
       dataType: ['string'],
+      tokenization: 'word',
+    },
+    {
+      name: 'color',
+      dataType: ['string'],
+      tokenization: 'word',
     },
     {
       name: 'location',
       dataType: ['string'],
+      tokenization: 'word',
     },
     {
       name: 'details',
       dataType: ['string'],
+      tokenization: 'word',
     },
   ],
 };

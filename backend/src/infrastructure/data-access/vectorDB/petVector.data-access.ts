@@ -1,6 +1,7 @@
 import type {
   PetImage,
   PetImageDto,
+  PetImageSearch,
   PetVectorRepository,
 } from '@domain/repositories/petImage.repository';
 import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
@@ -38,19 +39,43 @@ export const petVector: PetVectorRepository = {
    * @returns result - Array of PetImage, contains image, species and refId
    */
   getSimilarPets: async function (
-    petImage: PetImageDto,
-    offset: number,
+    petImage: PetImageSearch,
   ): Promise<PetImage[]> {
     const image = petImage.image.toString('base64');
-    const resImg = await vectorDB.graphql
+    const { page, color, species, location } = petImage.query;
+
+    const operands: any[] = [];
+    if (species)
+      operands.push({
+        path: ['species'],
+        operator: 'Equal',
+        valueString: species,
+      });
+    if (color)
+      operands.push({ path: ['color'], operator: 'Equal', valueString: color });
+    if (location)
+      operands.push({
+        path: ['location'],
+        operator: 'Equal',
+        valueString: location,
+      });
+
+    let query = vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species location details')
+      .withFields('image refId species location color details')
       .withNearImage({ image: image, distance: maxDistance })
-      // .withNearImage({ image: image })
-      .withOffset(offset * 10)
-      .withLimit(10)
-      .do();
+      .withOffset(page! * 10)
+      .withLimit(10);
+
+    if (operands.length > 0) {
+      query = query.withWhere({
+        operator: 'And',
+        operands: operands,
+      });
+    }
+
+    const resImg = await query.do();
 
     const result: PetImage[] = resImg.data.Get.Pet;
 
@@ -66,7 +91,7 @@ export const petVector: PetVectorRepository = {
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species')
+      .withFields('image refId species location color details')
       .withWhere({
         path: ['refId'],
         operator: 'Equal',
@@ -83,17 +108,41 @@ export const petVector: PetVectorRepository = {
    * @param petImage - Object containing image, species and mongoDB id
    * @returns number - Amount of images
    */
-  countPetImages: async function (petImage: PetImageDto): Promise<number> {
+  countPetImages: async function (petImage: PetImageSearch): Promise<number> {
     const image = petImage.image.toString('base64');
+    const { color, species, location } = petImage.query;
 
-    const imgCount = await vectorDB.graphql
+    const operands: any[] = [];
+    if (species)
+      operands.push({
+        path: ['species'],
+        operator: 'Equal',
+        valueString: species,
+      });
+    if (color)
+      operands.push({ path: ['color'], operator: 'Equal', valueString: color });
+    if (location)
+      operands.push({
+        path: ['location'],
+        operator: 'Equal',
+        valueString: location,
+      });
+
+    let query = vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species location details')
-      .withNearImage({ image: image, distance: maxDistance })
-      // .withNearImage({ image: image })
-      .do();
+      .withFields('image refId species location color details')
+      .withNearImage({ image: image, distance: maxDistance });
+    // .withNearImage({ image: image }
 
+    if (operands.length > 0) {
+      query = query.withWhere({
+        operator: 'And',
+        operands: operands,
+      });
+    }
+
+    const imgCount = await query.do();
     const length = imgCount.data.Get.Pet.length;
 
     return length;

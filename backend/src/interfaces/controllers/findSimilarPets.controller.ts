@@ -1,11 +1,12 @@
+import { petCollectionParams } from '@/types/petCollection.types';
 import { petVector } from '@infrastructure/data-access/vectorDB/petVector.data-access';
 import getSimilarPets from '@use-cases/images/getSimilarPets';
 import type { Request, Response } from 'express';
 
 export default async function findSimilarPets(req: Request, res: Response) {
   try {
-    const { species } = req.body;
-    const { page } = req.query;
+    const query = petCollectionParams.safeParse(req.query);
+    if (query.error) throw query.error;
 
     const image = req.file;
 
@@ -16,9 +17,9 @@ export default async function findSimilarPets(req: Request, res: Response) {
       });
     }
 
-    const result = await getSimilarPets(petVector, Number(page), {
+    const result = await getSimilarPets(petVector, {
       image: image.buffer,
-      species,
+      query: query.data,
     });
 
     res.status(200).json(result);

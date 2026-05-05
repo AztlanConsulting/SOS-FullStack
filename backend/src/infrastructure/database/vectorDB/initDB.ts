@@ -63,6 +63,7 @@ async function startVectorDB() {
 
 const locations = ['Querétaro', 'CDMX', 'Chile', 'Argentina'];
 const details = ['pequeño', 'grande', 'gordito', 'cafe'];
+const colors = ['cafe', 'negro', 'blanco', 'blanco manchas negras', 'amarillo'];
 
 // ========= Insert images into vector DB =============
 async function insertImages(
@@ -80,6 +81,7 @@ async function insertImages(
       refId: `test_${baseName}_${idx}`,
       image: imgb64,
       species: baseName,
+      color: colors[Math.floor(Math.random() * colors.length)],
       location: locations[Math.floor(Math.random() * locations.length)],
       details: details[Math.floor(Math.random() * details.length)],
     })

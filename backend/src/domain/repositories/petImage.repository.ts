@@ -4,17 +4,32 @@ export interface PetImageDto {
   species: string;
 }
 
+export interface PetImageSearch {
+  refId?: string;
+  image: Buffer;
+  query: {
+    page?: number;
+    species: string;
+    location: string;
+    color: string;
+  };
+}
+
 export interface PetImage {
   refId: string;
   image: Buffer;
   species: string;
   location: string;
+  color: string;
   details: string;
 }
 
 export interface PetVectorRepository {
   createPetImage(petImageDto: PetImageDto): Promise<boolean>;
-  getSimilarPets(petImageDto: PetImageDto, offset: number): Promise<PetImage[]>;
+  getSimilarPets(
+    petImageDto: PetImageSearch,
+    offset: number,
+  ): Promise<PetImage[]>;
   getPetById(refId: string): Promise<PetImage>;
-  countPetImages(petImageDto: PetImageDto): Promise<number>;
+  countPetImages(petImageDto: PetImageSearch): Promise<number>;
 }

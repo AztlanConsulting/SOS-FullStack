@@ -1,11 +1,11 @@
 import type {
-  PetImageDto,
+  PetImageSearch,
   PetVectorRepository,
 } from '@/domain/repositories/petImage.repository';
 
 async function countPetImages(
   petVector: PetVectorRepository,
-  petImage: PetImageDto,
+  petImage: PetImageSearch,
 ): Promise<number> {
   const total = await petVector.countPetImages(petImage);
 

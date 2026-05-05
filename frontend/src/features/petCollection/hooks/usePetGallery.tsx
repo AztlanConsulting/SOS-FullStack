@@ -1,17 +1,16 @@
 import calculatePages from '@shared/utils/calculatePages';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
-import type { PetInfo } from '../types/petCollection.types';
+import { useMemo, useState } from 'react';
+import type { PetFilter, PetInfo } from '../types/petCollection.types';
 
 // Handle logic for searching
 export default function usePetGallery(
   queryFunction: (
     img: File,
     page: number,
-    searchTerm?: string,
-    sortOption?: string,
+    filters: PetFilter,
   ) => Promise<PetInfo[]>,
-  pageQueryFunction: (img: File) => Promise<number>,
+  pageQueryFunction: (img: File, filter: PetFilter) => Promise<number>,
 ) {
   // Pagination state
   const pageHook = useState(1);
@@ -26,17 +25,27 @@ export default function usePetGallery(
   ];
 
   // Search Options
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState<PetFilter>({
+    color: '',
+    location: '',
+    species: '',
+  });
 
   // Query
   const vectorImages = useQuery({
-    queryKey: [img?.name, page],
-    queryFn: () => img && queryFunction(img, page, searchTerm),
+    queryKey: [
+      img?.name,
+      page,
+      filters.color,
+      filters.location,
+      filters.species,
+    ],
+    queryFn: () => img && queryFunction(img, page, filters),
     enabled: Boolean(img),
   });
   const total = useQuery({
-    queryKey: [img?.name],
-    queryFn: () => img && pageQueryFunction(img),
+    queryKey: [img?.name, filters.color, filters.location, filters.species],
+    queryFn: () => img && pageQueryFunction(img, filters),
     enabled: Boolean(img),
   });
 
@@ -45,8 +54,11 @@ export default function usePetGallery(
     return total.data ? calculatePages(total.data, page, 10) : [[], 0];
   }, [total, page]);
 
-  function handleSearch(value: string) {
-    setSearchTerm(value);
+  function handleSearch(key: string, value: string) {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
     setPage(1);
   }
 

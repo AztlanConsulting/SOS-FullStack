@@ -8,6 +8,7 @@ describe('State management and components', () => {
       refId: '1234',
       image: 'base64str',
       species: 'Dog',
+      color: 'brown',
       location: 'City',
       details: 'brown',
     };

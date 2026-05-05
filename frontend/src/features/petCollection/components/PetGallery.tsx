@@ -1,10 +1,19 @@
 import Pagination from '@/shared/components/ui/Pagination';
 import SearchInput from '@/shared/components/ui/SearchInput';
-import { type Dispatch, type SetStateAction } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
 import PetList from './PetList';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import { Text } from '@/shared/components/ui/Text';
 import type { PetCollectionQuery } from '../types/petCollection.types';
+import { HiFilter, HiOutlineFilter } from 'react-icons/hi';
+import PetDropDown from './PetDropDown';
+import useClickOutside from '@/shared/hooks/useClickOutside';
 
 interface Props {
   pages: {
@@ -16,16 +25,33 @@ interface Props {
 }
 
 interface PetGalleryProps extends Props {
-  handleSearch: (s: string) => void;
+  handleSearch: (k: string, v: string) => void;
 }
 
 const PetGallery = ({ handleSearch, pages, vectorImages }: PetGalleryProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  // Ref for the dropdown menu to handle outside clicks
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useClickOutside(dropdownRef, setIsOpen);
+
   return (
     <div className="p-2 md:w-2/3 md:h-screen">
-      <div className="md:w-1/3 md:ml-auto">
-        <SearchInput handleSearch={handleSearch} />
+      <div className="relative flex justify-end w-full">
+        <div ref={dropdownRef}>
+          <button
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-secondary hover:text-gray-800 border-[1px] border-gray-600 hover:border-primary group"
+          >
+            <HiOutlineFilter
+              // color="black"
+              size="80%"
+              className="h-5"
+            />
+            <Text className="group-hover:text-gray-800">Filtro</Text>
+          </button>
+          <PetDropDown isOpen={isOpen} handleSearch={handleSearch} />
+        </div>
       </div>
-
       {vectorImages.isLoading && <LoadingSpinner />}
       {vectorImages.error && (
         <Text color="text-red-600" className="text-center">

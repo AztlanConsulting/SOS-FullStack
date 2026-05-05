@@ -1,11 +1,13 @@
 import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
+import { countPetCollectionParams } from '@/types/petCollection.types';
 import countPetImages from '@/use-cases/images/countPetImages.usecase';
 import type { Request, Response } from 'express';
 
 async function countPetPages(req: Request, res: Response) {
   try {
     const image = req.file;
-    const { species } = req.body;
+    const query = countPetCollectionParams.safeParse(req.query);
+    if (query.error) throw query.error;
 
     if (!image) {
       throw new Error('Missing image in body');
@@ -13,7 +15,7 @@ async function countPetPages(req: Request, res: Response) {
 
     const total = await countPetImages(petVector, {
       image: image.buffer,
-      species,
+      query: query.data,
     });
 
     return res.status(200).send(total);

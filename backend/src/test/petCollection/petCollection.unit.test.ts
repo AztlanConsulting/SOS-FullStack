@@ -1,3 +1,4 @@
+import type { PetImageSearch } from './../../domain/repositories/petImage.repository';
 import type {
   PetImage,
   PetVectorRepository,
@@ -8,9 +9,10 @@ import getSimilarPets from '@/use-cases/images/getSimilarPets';
 const mockPetImg: PetImage = {
   refId: 'refId',
   image: Buffer.from('ImageInformation'),
-  species: 'perro',
+  species: 'Dog',
   location: 'Qro',
-  details: 'cafe',
+  color: 'Brown',
+  details: 'Good boy',
 };
 
 const mockPetImages: PetImage[] = new Array(14).fill(mockPetImg);
@@ -24,10 +26,18 @@ const fakeRepo = {
 } as unknown as PetVectorRepository;
 
 describe('Pet vector database collection test (unit)', () => {
-  const mockSearch = { image: mockPetImages[0].image, species: 'dog' };
+  const mockSearch: PetImageSearch = {
+    image: mockPetImages[0].image,
+    query: {
+      page: 0,
+      species: 'dog',
+      location: 'queretaro',
+      color: 'brown',
+    },
+  };
 
   it('get pet images page 0 -> 10', async () => {
-    const response = await getSimilarPets(fakeRepo, 0, mockSearch);
+    const response = await getSimilarPets(fakeRepo, mockSearch);
 
     expect(fakeRepo.getSimilarPets).toHaveBeenCalledWith(mockSearch, 0);
     expect(response).toEqual(mockPetImages.slice(0, 10));
@@ -37,7 +47,8 @@ describe('Pet vector database collection test (unit)', () => {
   });
 
   it('get pet images page 1 -> 4', async () => {
-    const response = await getSimilarPets(fakeRepo, 1, mockSearch);
+    mockSearch.query.page = 1;
+    const response = await getSimilarPets(fakeRepo, mockSearch);
 
     expect(fakeRepo.getSimilarPets).toHaveBeenCalledWith(mockSearch, 1);
     console.log(response);

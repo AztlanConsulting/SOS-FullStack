@@ -1,7 +1,6 @@
 import type { FoundPetReport } from '@domain/models/foundPet.model';
 
 export interface FoundPetResult extends FoundPetReport {
-  _id: string;
   createdAt: Date;
   updatedAt: Date;
 }

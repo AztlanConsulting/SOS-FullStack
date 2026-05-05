@@ -40,6 +40,7 @@ const PetGallery = ({ handleSearch, pages, vectorImages }: PetGalleryProps) => {
         <div ref={dropdownRef}>
           <button
             onClick={() => setIsOpen((prev) => !prev)}
+            name={'petDropdown'}
             className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-secondary hover:text-gray-800 border-[1px] border-gray-600 hover:border-primary group"
           >
             <HiOutlineFilter

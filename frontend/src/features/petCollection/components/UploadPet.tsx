@@ -27,6 +27,7 @@ const UploadPet = ({ img, uploadFile }: Props) => {
           type="file"
           onChange={(e) => uploadFile(e)}
           className="hidden"
+          alt="Cambiar imagen"
           id="img-input"
         />
       </label>

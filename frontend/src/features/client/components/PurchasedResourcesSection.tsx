@@ -1,6 +1,7 @@
 import { Text } from '@/shared/components/ui/Text/Text';
 import { PurchasedResourceCard } from './PurchasedResourceCard';
 import { usePurchasedResources } from '../hooks/usePurchasedResources';
+import { FilterPill } from '@/shared/components/ui/FilterPill/FilterPill';
 import type { PurchasedResourceResponse } from '@/features/graphs/types/dashboardMetrics';
 
 interface PurchasedResourcesSectionProps {
@@ -56,39 +57,5 @@ export const PurchasedResourcesSection = ({
         </div>
       )}
     </div>
-  );
-};
-
-const FilterPill = ({
-  label,
-  count,
-  isActive,
-  onClick,
-}: {
-  label: string;
-  count: number;
-  isActive: boolean;
-  onClick: () => void;
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-1.5 rounded-full border text-sm font-medium transition-colors ${
-        isActive
-          ? 'bg-purple-100 border-purple-200 text-purple-800'
-          : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
-      }`}
-    >
-      {label}
-      <span
-        className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-          isActive
-            ? 'bg-white text-purple-700 shadow-sm'
-            : 'bg-gray-200 text-gray-500'
-        }`}
-      >
-        {count}
-      </span>
-    </button>
   );
 };

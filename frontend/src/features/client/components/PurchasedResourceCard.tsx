@@ -27,7 +27,7 @@ export const PurchasedResourceCard = ({
           alt={resource.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-3 left-3 bg-purple-100 px-3 py-1 rounded-lg text-sm font-medium text-purple-primary shadow-sm capitalize">
+        <div className="absolute top-3 left-3 bg-purple-200 px-3 py-1 rounded-lg text-sm font-medium text-purple-primary shadow-sm capitalize">
           {resource.type === 'manual' ? 'Manual' : 'Taller'}
         </div>
       </div>
@@ -53,7 +53,12 @@ export const PurchasedResourceCard = ({
       </div>
 
       <div className="p-4 border-t border-gray-100 mt-auto">
-        <Button label="Ver" variant="primary" onClick={handleView} />
+        <Button
+          label="Ver"
+          variant="primary"
+          onClick={handleView}
+          textColor="bg-purple-primary text-white hover:bg-[#866CA0] w-1/2"
+        />
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ const ClientDashboardOverview = () => {
                   {petData.petName}
                 </Text>
                 <Text variant="caption" color="text-gray-500" className="mt-1">
-                  Desde {formattedDate},<br className="sm:hidden" /> espera ndo
+                  Desde {formattedDate},<br className="sm:hidden" /> esperando
                   que vuelva a casa
                 </Text>
               </div>

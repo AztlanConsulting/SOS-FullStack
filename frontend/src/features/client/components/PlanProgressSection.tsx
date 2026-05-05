@@ -1,5 +1,6 @@
 import { CountdownChart } from '@/features/graphs/components/CountDownChart';
 import { Text } from '@/shared/components/ui/Text/Text';
+import { Button } from '@/shared/components/ui/Button/Button';
 import type { PlanSubscriptionProgress } from '@/features/graphs/types/dashboardMetrics';
 
 interface PlanProgressSectionProps {
@@ -18,21 +19,12 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
           <>
             <CountdownChart data={petData} />
             <div className="w-[250px] mt-4 mx-auto">
-              <button
-                type="button"
+              <Button
+                label="Extender plan"
                 onClick={() => console.log('Extender plan')}
-                className="flex items-center justify-center gap-2 px-3 py-2 w-full rounded-full font-semibold text-base transition-colors duration-200 bg-purple-primary text-white hover:bg-purple-primary"
-              >
-                <div className="flex justify-center items-center w-full cursor-pointer">
-                  <Text
-                    variant="caption"
-                    weight="medium"
-                    className="text-white"
-                  >
-                    Extender plan
-                  </Text>
-                </div>
-              </button>
+                variant="primary"
+                textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+              />
             </div>
           </>
         ) : (

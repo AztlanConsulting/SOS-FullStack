@@ -12,7 +12,7 @@ export const PhotonGeocoding = {
 
   async search(query: string): Promise<GeocodingResult[]> {
     const res = await fetch(
-      `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`,
+      `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lang=default`,
     );
 
     //Returns empty results if the network reuqest fails
@@ -43,7 +43,7 @@ export const PhotonGeocoding = {
     const [lat, lon] = coords;
 
     const res = await fetch(
-      `https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}`,
+      `https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}&lang=default`,
     );
 
     if (!res.ok) return null;

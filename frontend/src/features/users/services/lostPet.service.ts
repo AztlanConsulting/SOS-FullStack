@@ -44,3 +44,12 @@ export const createLostPetReportRequest = async (
 
   return data.data;
 };
+
+/**
+ * Obtains the lost pet report from an active user.
+ * @returns Report data.
+ */
+export const getActiveLostPetReportRequest = async () => {
+  const { data } = await axiosInstance.get('/clients/lost/');
+  return data.data;
+};

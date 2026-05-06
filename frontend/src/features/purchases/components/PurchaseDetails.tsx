@@ -4,10 +4,10 @@ import PlanDetail from './PlanDetail';
 import type { Product } from '@shared/types/purchase.types';
 import ConfirmPaymentModal from './ConfirmPaymentModal';
 import PendingPaymentModal from './PendingPaymentModal';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 interface Props {
-  reportData: PetReportData | null;
+  reportData: LostPetReportData | null;
   product?: Product;
   success: boolean;
   pending: boolean;

@@ -6,7 +6,7 @@ import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 import Footer from '@shared/components/layout/Footer';
 import type { PurchaseDetail } from '@features/payment/types/payment.types';
 import usePurchase from '@features/purchases/hooks/usePurchase';
-import { usePetReport } from '@/features/users/context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
 import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import type { Product } from '@/shared/types/purchase.types';
@@ -17,7 +17,7 @@ export const PurchasePage = () => {
   const pendingHook = useState(false);
   const [product, setProduct] = useState<Product | undefined>(undefined);
 
-  const { reportData } = usePetReport();
+  const { lostPetReportData } = usePetReport();
   const { state, query } = usePurchase();
   const navigate = useNavigate();
   const { productId, productType, userEmail } = state ?? {};
@@ -27,15 +27,15 @@ export const PurchasePage = () => {
   const { isLoading, error: queryError, data } = query;
 
   useEffect(() => {
-    const p: Product | undefined = reportData ? undefined : data;
+    const p: Product | undefined = lostPetReportData ? undefined : data;
     setProduct(p);
-  }, [data, reportData]);
+  }, [data, lostPetReportData]);
 
   useEffect(() => {
-    if (!Boolean(state) && !Boolean(reportData)) {
+    if (!Boolean(state) && !Boolean(lostPetReportData)) {
       navigate('/');
     }
-  }, [state, reportData]);
+  }, [state, lostPetReportData]);
 
   const purchaseDetail: PurchaseDetail = {
     userEmail,
@@ -57,11 +57,11 @@ export const PurchasePage = () => {
       <main className="max-md:pt-24 pt-4 min-h-screen">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
-        {Boolean(product || reportData) && (
+        {Boolean(product || lostPetReportData) && (
           <div className="sm:grid sm:grid-cols-2 mb-10">
             <PurchaseDetails
               product={product}
-              reportData={reportData}
+              reportData={lostPetReportData}
               success={success}
               pending={pending}
               onCloseSuccess={() => setSuccess(false)}
@@ -69,7 +69,7 @@ export const PurchasePage = () => {
             />
             <PurchaseForm
               product={product}
-              petReportData={reportData}
+              petReportData={lostPetReportData}
               success={processPayment}
               pending={handlePending}
               onMethodSelect={() => {

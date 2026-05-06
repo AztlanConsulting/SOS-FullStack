@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import WorkshopCard from '@features/workshop/components/WorkshopCard';
 import type { Workshop } from '@features/workshop/types/workshop';
-import { usePetReport } from '@/features/users/context/PetReportContext';
+import { usePetReport } from '@/shared/context/PetReportContext';
 
 const navigateMock = vi.fn();
 vi.mock('@/features/users/context/PetReportContext', () => ({
@@ -21,13 +21,15 @@ vi.mock('react-router', async () => {
     useNavigate: () => navigateMock,
   };
 });
-
+vi.mock('@/shared/context/PetReportContext');
 describe('usePurchaseProduct', () => {
   beforeEach(() => {
     navigateMock.mockReset();
     vi.mocked(usePetReport).mockReturnValue({
-      reportData: null,
-      setReportData: vi.fn(),
+      lostPetReportData: null,
+      setLostPetReportData: vi.fn(),
+      foundPetReportData: null,
+      setFoundPetReportData: vi.fn(),
     });
   });
 

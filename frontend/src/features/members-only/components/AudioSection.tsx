@@ -1,5 +1,5 @@
 import { Text } from '@shared/components/ui/Text';
-import meditacion from '@assets/videos/meditacion.mp4';
+import meditacion from '@assets/audio/meditacion.mp4';
 
 const AudioSection = () => {
   return (

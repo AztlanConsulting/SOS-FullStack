@@ -34,4 +34,6 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
     }).lean();
     return plan as PurchasedPlan | null;
   },
+
+  activatePurchasedPlan: async function (planId: string) {},
 };

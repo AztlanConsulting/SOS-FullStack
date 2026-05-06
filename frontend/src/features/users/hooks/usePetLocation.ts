@@ -5,7 +5,7 @@ import { LeafletMapService } from '../../map/services/leafletMapService';
 import type { GeocodingResult } from '../../map/types/geocodingResult';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
-const DEFAULT_LOCATION_LABEL = 'Mexico City, Mexico';
+const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
 
 export const usePetLocation = (
   mapID: string,

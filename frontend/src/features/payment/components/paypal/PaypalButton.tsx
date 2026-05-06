@@ -40,9 +40,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               const petResult: PurchasedPlanResponse =
                 await createLostPetReportRequest(data.plan);
 
-              console.log(petResult);
-              console.log(data.plan);
-              const newPetId = petResult.plan.petId;
+              const newPetId = petResult.plan._id;
               planIdRef.current = newPetId;
             }
             const response = await createPaypalPayment(data);

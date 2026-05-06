@@ -1,7 +1,23 @@
 import { useState } from 'react';
 import { useStripe, useElements } from '@stripe/react-stripe-js';
+import type { PurchaseDetail } from '../types/payment.types';
+import { createPurchase } from '@/features/purchases/services/createPurchase.service';
 
-export const useCheckout = () => {
+interface UseCheckoutProps {
+  paymentId?: string;
+  purchaseDetail?: PurchaseDetail;
+  paymentMethod?: string;
+  onSuccess?: () => void;
+  onPending?: () => void;
+}
+
+export const useCheckout = ({
+  paymentId,
+  purchaseDetail,
+  paymentMethod,
+  onSuccess,
+  onPending,
+}: UseCheckoutProps = {}) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -13,19 +29,49 @@ export const useCheckout = () => {
 
     setIsProcessing(true);
 
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/completion`,
-      },
-    });
+    // For card payments, try to complete without redirect
+    if (paymentMethod === 'card') {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        redirect: 'if_required',
+      });
 
-    if (error) {
-      if (error.type === 'card_error' || error.type === 'validation_error') {
-        setMessage(error.message ?? 'An unexpected error occurred.');
-      } else {
-        setMessage('An unexpected error occurred.');
+      if (error) {
+        if (error.type === 'card_error' || error.type === 'validation_error') {
+          setMessage(error.message ?? 'Ocurrió un error inesperado.');
+        } else {
+          setMessage('Ocurrió un error inesperado.');
+        }
+        setIsProcessing(false);
+        return;
       }
+
+      // If payment succeeded, create purchase immediately
+      if (
+        paymentIntent?.status === 'succeeded' &&
+        purchaseDetail &&
+        paymentId
+      ) {
+        try {
+          await createPurchase(
+            purchaseDetail.userEmail,
+            paymentId,
+            purchaseDetail.productId,
+            purchaseDetail.productType,
+          );
+          setMessage('Pago procesado exitosamente');
+        } catch (error) {
+          console.error('Error creating purchase:', error);
+          setMessage('Error al procesar la compra');
+          setIsProcessing(false);
+          return;
+        }
+
+        onSuccess?.();
+      }
+    } else {
+      // For OXXO/SPEI, just show pending modal without redirect
+      onPending?.();
     }
 
     setIsProcessing(false);

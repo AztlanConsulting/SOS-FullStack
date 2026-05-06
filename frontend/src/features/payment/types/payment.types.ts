@@ -5,6 +5,8 @@ export type Order = {
   currency: string;
   customerId?: string;
   method?: string;
+  name?: string;
+  email?: string;
   product?: {
     productName: string;
     productId: string;

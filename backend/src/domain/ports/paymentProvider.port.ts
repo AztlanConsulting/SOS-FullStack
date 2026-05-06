@@ -44,9 +44,9 @@ export interface PetReportData {
 export interface PaymentIntentDTO {
   amount: number;
   currency: string;
+  method?: string; // to seperate spei from the other methods
   name?: string; // for SPEI
   email?: string; // for SPEI
-  method?: string; // to seperate spei from the other methods
   product?: {
     productName: string;
     productId: string;
@@ -65,7 +65,7 @@ export interface PaymentIntentResult {
   amount: number;
   currency: string;
   clientSecret: string | null;
-  speiDetails: SpeiDetails | null;
+  speiDetails?: SpeiDetails | null;
 }
 
 export interface EventDTO {

@@ -13,6 +13,7 @@ interface Props {
   product?: Product;
   petReportData: PetReportData | null;
   success: () => void;
+  pending: () => void;
   purchaseDetail: PurchaseDetail;
 }
 
@@ -24,6 +25,7 @@ const PurchaseForm = ({
   petReportData,
   purchaseDetail,
   success,
+  pending,
 }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -73,7 +75,7 @@ const PurchaseForm = ({
                 }`}
               >
                 <div className="overflow-hidden">
-                  {pM.element(orderDetails, purchaseDetail, success)}
+                  {pM.element(orderDetails, purchaseDetail, success, pending)}
                 </div>
               </div>
             </div>

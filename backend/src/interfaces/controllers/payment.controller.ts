@@ -14,8 +14,8 @@ import type Stripe from 'stripe';
 export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
   try {
     const { amount, currency, method, name, email } = req.body as {
-      amount?: number;
-      currency?: string;
+      amount: number;
+      currency: string;
       method?: string;
       name?: string;
       email?: string;

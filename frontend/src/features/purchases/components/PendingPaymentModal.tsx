@@ -1,5 +1,4 @@
 import type { PetReportData } from '@/features/users/types/petReport.types';
-import type { PlanDetails } from '@features/plans/types/plan.types';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
@@ -11,7 +10,7 @@ interface Props {
   onClose?: () => void;
 }
 
-const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
+const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
   const navigate = useNavigate();
 
   function close() {
@@ -28,9 +27,8 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
       <div className="rounded-c bg-primary flex items-center h-68 ">
         <div className="bg-white h-56 flex flex-col gap-5 p-5">
           <Text variant="h1" className="text-center">
-            {plan
-              ? '¡Su anuncio será publicado en unos minutos!'
-              : '¡La compra ha sido exitosa!'}{' '}
+            En cuanto el pago se procese, le mandaremos un correo de
+            confirmación{' '}
           </Text>
           {plan && (
             <Text className="text-start">
@@ -54,4 +52,4 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
   );
 };
 
-export default ConfirmPaymentModal;
+export default PendingPaymentModal;

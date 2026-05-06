@@ -22,20 +22,30 @@ export const StripeProvider: PaymentProvider = {
 
     const stripe = new Stripe(key);
     const { amount, currency, method, name, email } = data;
+    const stripeAmount = Math.round(amount * 100);
+
+    if (!Number.isFinite(stripeAmount) || stripeAmount <= 0) {
+      throw new Error('Amount must be a positive number');
+    }
 
     let intent: Stripe.PaymentIntent;
 
-    // for card payments and OXXO pay
-    if (method === '') {
+    // for card payments
+    if (method === 'card') {
       intent = await stripe.paymentIntents.create({
-        amount,
+        amount: stripeAmount,
         currency,
-        automatic_payment_methods: { enabled: true },
+        payment_method_types: ['card'],
       });
-    }
-
-    // for SPEI bank transfers in Mexico
-    else if (method === 'spei') {
+      // for OXXO pay
+    } else if (method === 'oxxo') {
+      intent = await stripe.paymentIntents.create({
+        amount: stripeAmount,
+        currency,
+        payment_method_types: ['oxxo'],
+      });
+      // for spei bank transfer
+    } else if (method === 'spei') {
       if (name === undefined || name === null || name === '') {
         throw new Error('Name is required for SPEI payments');
       }
@@ -50,7 +60,7 @@ export const StripeProvider: PaymentProvider = {
       });
 
       intent = await stripe.paymentIntents.create({
-        amount,
+        amount: stripeAmount,
         currency: 'mxn', // SPEI requires MXN
         customer: customer.id,
         payment_method_types: ['customer_balance'],

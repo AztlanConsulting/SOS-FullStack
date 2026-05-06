@@ -14,6 +14,7 @@ import type { Product } from '@/shared/types/purchase.types';
 // Container for purchase information and purchase logic
 export const PurchasePage = () => {
   const successHook = useState(false);
+  const pendingHook = useState(false);
   const [product, setProduct] = useState<Product | undefined>(undefined);
 
   const { reportData } = usePetReport();
@@ -22,7 +23,7 @@ export const PurchasePage = () => {
   const { productId, productType, userEmail } = state ?? {};
 
   const [success, setSuccess] = successHook;
-
+  const [pending, setPending] = pendingHook;
   const { isLoading, error: queryError, data } = query;
 
   useEffect(() => {
@@ -46,6 +47,10 @@ export const PurchasePage = () => {
     setSuccess(true);
   }
 
+  function handlePending() {
+    setPending(true);
+  }
+
   return (
     <>
       <Header />
@@ -58,11 +63,15 @@ export const PurchasePage = () => {
               product={product}
               reportData={reportData}
               success={success}
+              pending={pending}
+              onCloseSuccess={() => setSuccess(false)}
+              onClosePending={() => setPending(false)}
             />
             <PurchaseForm
               product={product}
               petReportData={reportData}
               success={processPayment}
+              pending={handlePending}
               purchaseDetail={purchaseDetail}
             />
           </div>

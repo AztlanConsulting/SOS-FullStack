@@ -3,16 +3,27 @@ import ProductDetail from './ProductDetail';
 import PlanDetail from './PlanDetail';
 import type { Product } from '@shared/types/purchase.types';
 import ConfirmPaymentModal from './ConfirmPaymentModal';
+import PendingPaymentModal from './PendingPaymentModal';
 import type { PetReportData } from '@/features/users/types/petReport.types';
 
 interface Props {
   reportData: PetReportData | null;
   product?: Product;
   success: boolean;
+  pending: boolean;
+  onCloseSuccess?: () => void;
+  onClosePending?: () => void;
 }
 
 // Get all product details and display them to the user
-const PurchaseDetails = ({ reportData, product, success }: Props) => {
+const PurchaseDetails = ({
+  reportData,
+  product,
+  success,
+  pending,
+  onCloseSuccess,
+  onClosePending,
+}: Props) => {
   const plan = reportData?.planDetails ?? null;
 
   return (
@@ -42,7 +53,21 @@ const PurchaseDetails = ({ reportData, product, success }: Props) => {
         </Text>
       </div>
       {/* Modal to show success state */}
-      {success && <ConfirmPaymentModal plan={reportData} product={product} />}
+      {success && (
+        <ConfirmPaymentModal
+          plan={reportData}
+          product={product}
+          onClose={onCloseSuccess}
+        />
+      )}
+      {/* Modal to show pending state */}
+      {pending && (
+        <PendingPaymentModal
+          plan={reportData}
+          product={product}
+          onClose={onClosePending}
+        />
+      )}
     </div>
   );
 };

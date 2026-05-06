@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import { BasicPetInfoSection } from './BasicPetInfoSection';
 import { LocationContextSection } from './LocationContextSection';
 import { BehaviorPersonalitySection } from './BehaviorPersonalitySection';
@@ -8,14 +9,24 @@ import { useSearchForm } from '../../hooks/useSearchForm';
 import { Text } from '@shared/components/ui/Text';
 import type { SearchFormData } from '../../types/searchForm.types';
 import { PreferencesMotivatorsSection } from './PreferencesMotivatorsSection';
+import { Modal } from '@/shared/components/ui/Modal/Modal';
 
 export interface SearchFormProps {
   initialData?: Partial<SearchFormData>;
 }
 
 export const SearchForm: React.FC<SearchFormProps> = ({ initialData }) => {
-  const { formData, errors, updateFormData, handleSubmit } =
-    useSearchForm(initialData);
+  const navigate = useNavigate();
+  const {
+    formData,
+    errors,
+    updateFormData,
+    handleSubmit,
+    isSubmitting,
+    submitError,
+    submitSuccess,
+    resetForm,
+  } = useSearchForm(initialData);
 
   return (
     <div id="search-form-section" className="min-h-screen pt-8 bg-white">
@@ -116,6 +127,28 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialData }) => {
             onSubmit={handleSubmit}
           />
         </div>
+
+        {isSubmitting && (
+          <div className="text-center text-blue-600">
+            Enviando formulario...
+          </div>
+        )}
+
+        {submitError && (
+          <div className="text-center text-red-600">Error: {submitError}</div>
+        )}
+
+        {submitSuccess && (
+          <Modal
+            color="purple"
+            title="¡Reporte enviado!"
+            description="Gracias por reportar la mascota perdida."
+            onClose={() => {
+              resetForm();
+              navigate('/portal-exclusivo/formulario');
+            }}
+          />
+        )}
       </div>
     </div>
   );

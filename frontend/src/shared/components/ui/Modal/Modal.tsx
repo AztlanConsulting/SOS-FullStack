@@ -9,6 +9,7 @@ type ModalProps = {
   title: string;
   description: string;
   onClose: () => void;
+  color?: 'yellow' | 'purple';
 };
 
 /**
@@ -19,12 +20,16 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   description,
   onClose,
+  color = 'yellow',
 }) => {
+  const headerBg = color === 'purple' ? 'bg-[#9D7FAD]' : 'bg-[#F9CD48]';
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
       <div className="relative w-full max-w-lg rounded-lg overflow-hidden shadow-lg border-2 border-[#AFB1B6]">
-        <div className="bg-[#F9CD48] px-5 py-4 flex items-center justify-between border-b-2 border-[#AFB1B6]">
+        <div
+          className={`${headerBg} px-5 py-4 flex items-center justify-between border-b-2 border-[#AFB1B6]`}
+        >
           <Text
             variant="body"
             weight="medium"

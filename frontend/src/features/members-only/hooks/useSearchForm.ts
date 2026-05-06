@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SearchFormData } from '../types/searchForm.types';
 import { initialSearchFormData } from '../types/searchForm.types';
+import { createSearchForm } from '../services/searchForm.service';
 
 export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
   const [formData, setFormData] = useState<SearchFormData>({
@@ -9,6 +10,9 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const updateFormData = (newData: Partial<SearchFormData>) => {
     setFormData((prev) => ({ ...prev, ...newData }));
@@ -82,7 +86,16 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
     }
   };
 
-  const handleSubmit = () => {
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleSubmit = async () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.especie) newErrors.especie = 'Selecciona una especie';
@@ -137,10 +150,55 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log('Form submitted:', formData);
+      setIsSubmitting(true);
+      setSubmitError(null);
+      setSubmitSuccess(false);
+
+      try {
+        const payload = { ...formData };
+
+        // Convert cartillaVacunacion to base64 if it's a File
+        if (formData.cartillaVacunacion instanceof File) {
+          payload.cartillaVacunacion = await fileToBase64(
+            formData.cartillaVacunacion,
+          );
+        } else {
+          payload.cartillaVacunacion = ''; // Send empty string if no file
+        }
+
+        // Ensure required string fields are always sent
+        if (!payload.reaccionRuidosOtro) {
+          payload.reaccionRuidosOtro = '';
+        }
+        if (!payload.quePasoEscapado) {
+          payload.quePasoEscapado = '';
+        }
+
+        // Convert edadAproximada to number
+        if (typeof payload.edadAproximada === 'string') {
+          payload.edadAproximada = Number(payload.edadAproximada);
+        }
+
+        await createSearchForm(payload);
+        setSubmitSuccess(true);
+      } catch (err) {
+        setSubmitError(
+          err instanceof Error ? err.message : 'Error al enviar el formulario',
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     } else {
       scrollToFirstError(newErrors);
     }
+  };
+
+  const resetForm = () => {
+    setFormData({ ...initialSearchFormData });
+    setErrors({});
+    setSubmitSuccess(false);
+    setSubmitError(null);
+    setIsSubmitting(false);
   };
 
   return {
@@ -148,5 +206,9 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
     errors,
     updateFormData,
     handleSubmit,
+    isSubmitting,
+    submitError,
+    submitSuccess,
+    resetForm,
   };
 };

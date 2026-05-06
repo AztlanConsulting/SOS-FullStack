@@ -24,15 +24,15 @@ const PaymentMethodCard = ({ paymentMethod, onChecked }: Props) => {
             onChange={onChecked}
           />
           <div>
-            <Text className="text-sm md:text-base">{method}</Text>
+            <Text className="text-sm md:text-base mr-3">{method}</Text>
             <Text color="text-gray-500" className="text-[10px] md:text-sm">
               {description}
             </Text>
           </div>
         </div>
-        <div className="flex gap-2 items-center justify-center w-full">
+        <div className="flex gap-1 items-center justify-center w-full col-span-1">
           {icons.map((i, idx) => (
-            <img key={idx} src={i} className="h-6" />
+            <img key={idx} src={i} className="h-5" />
           ))}
         </div>
       </div>

@@ -68,7 +68,8 @@ export const useCheckout = ({
           newPetId,
           'plan',
         );
-        console.log(data);
+        console.log('data:', data);
+        console.log('purchaseDetail:', purchaseDetail);
         try {
           if (data.plan) {
             await createPurchase(
@@ -82,8 +83,8 @@ export const useCheckout = ({
             await createPurchase(
               data.email || '',
               paymentId,
-              newPetId || '',
-              'plan',
+              purchaseDetail.productId,
+              purchaseDetail.productType,
             );
             setMessage('Pago procesado exitosamente con producto');
           }

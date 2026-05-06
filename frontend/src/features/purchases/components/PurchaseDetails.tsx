@@ -27,7 +27,7 @@ const PurchaseDetails = ({
   const plan = reportData?.planDetails ?? null;
 
   return (
-    <div className="pt-4 md:p-2 w-10/12 mx-auto">
+    <div className="pt-4 md:p-0 w-10/12 mx-auto">
       <Text
         variant="h3"
         className="text-center  text-gray-700"
@@ -38,7 +38,7 @@ const PurchaseDetails = ({
       <div
         className={`mt-3 mb-3 md:mb-0 rounded-lg ${product ? 'bg-secondary' : 'bg-gray-100 border-2 border-gray-200'} p-4 py-6`}
       >
-        <div className="flex flex-col items-center md:gap-3 gap-1">
+        <div className="flex flex-col items-center md:gap-5 gap-1">
           {/* Different UI elements depending if its a plan or manual / workshop */}
           {reportData && <PlanDetail reportData={reportData} />}
           {product && <ProductDetail product={product} />}

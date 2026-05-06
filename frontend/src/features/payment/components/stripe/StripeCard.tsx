@@ -11,7 +11,9 @@ interface Props {
   pending: () => void;
 }
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY, {
+  locale: 'es',
+});
 
 /*
 * Stripe Card component
@@ -27,7 +29,16 @@ export const StripeCard = ({
   const { clientSecret, loading, paymentId } = useStripeHook(data, pending);
 
   const PaymentForm: React.FC = () => {
-    const { handleSubmit, isProcessing, message, isReady } = useCheckout({
+    const {
+      handleSubmit,
+      handleConfirmation,
+      isProcessing,
+      message,
+      isReady,
+      showConfirmation,
+      setShowConfirmation,
+    } = useCheckout({
+      data,
       paymentId,
       purchaseDetail,
       paymentMethod: data.method,
@@ -40,20 +51,69 @@ export const StripeCard = ({
       handleSubmit();
     };
 
+    const onConfirm = () => {
+      setShowConfirmation(false);
+      handleConfirmation();
+    };
+
     return (
-      <form onSubmit={onSubmit} id="payment-form" className="flex flex-col">
+      <form
+        onSubmit={onSubmit}
+        id="payment-form"
+        className="flex flex-col gap-4"
+      >
         <PaymentElement id="payment-element" />
 
-        <button
-          disabled={isProcessing || !isReady}
-          id="submit"
-          className="mt-6 bg-black py-3 rounded-sm"
-        >
-          <span id="button-text" className="text-white">
-            {isProcessing ? 'Procesando...' : 'Pagar'}
-          </span>
-        </button>
-        {message && <div id="payment-message">{message}</div>}
+        {!showConfirmation ? (
+          <>
+            <button
+              type="submit"
+              disabled={isProcessing || !isReady}
+              id="submit"
+              className="mt-6 bg-black py-3 rounded-sm"
+            >
+              <span id="button-text" className="text-white">
+                {isProcessing ? 'Procesando...' : 'Pagar'}
+              </span>
+            </button>
+            {message && (
+              <div id="payment-message" className="text-red-600 mt-2">
+                {message}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="p-4 bg-gray-50 rounded-sm border border-gray-200">
+              <p className="text-center font-medium mb-4">
+                {data.method === 'oxxo'
+                  ? 'Por favor confirma el pago en OXXO.'
+                  : 'Por favor confirma el pago por SPEI'}
+              </p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmation(false)}
+                  className="flex-1 bg-gray-300 py-3 rounded-sm text-gray-700 hover:bg-gray-400"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={onConfirm}
+                  className="flex-1 bg-black py-3 rounded-sm text-white hover:bg-gray-800"
+                >
+                  Confirmar
+                </button>
+              </div>
+            </div>
+            {message && (
+              <div id="payment-message" className="text-red-600 mt-2">
+                {message}
+              </div>
+            )}
+          </>
+        )}
       </form>
     );
   };

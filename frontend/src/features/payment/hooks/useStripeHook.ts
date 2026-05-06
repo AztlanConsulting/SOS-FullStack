@@ -34,11 +34,6 @@ export const useStripeHook = (data: Order, pending?: () => void) => {
           setClientSecret(res.clientSecret ?? undefined);
           setPaymentId(res.id ?? undefined);
         }
-
-        // Show pending modal for OXXO/SPEI
-        if (data.method === 'oxxo' || data.method === 'spei') {
-          pending?.();
-        }
       } catch (error) {
         console.error('Payment intent initialization failed:', error);
         if (mounted) {

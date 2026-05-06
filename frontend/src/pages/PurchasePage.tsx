@@ -72,6 +72,10 @@ export const PurchasePage = () => {
               petReportData={reportData}
               success={processPayment}
               pending={handlePending}
+              onMethodSelect={() => {
+                setSuccess(false);
+                setPending(false);
+              }}
               purchaseDetail={purchaseDetail}
             />
           </div>

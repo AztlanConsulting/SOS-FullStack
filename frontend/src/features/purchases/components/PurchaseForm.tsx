@@ -15,6 +15,7 @@ interface Props {
   success: () => void;
   pending: () => void;
   purchaseDetail: PurchaseDetail;
+  onMethodSelect?: () => void;
 }
 
 // Logic to handle payment method, display different cards for each payment
@@ -26,10 +27,12 @@ const PurchaseForm = ({
   purchaseDetail,
   success,
   pending,
+  onMethodSelect,
 }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
+    onMethodSelect?.();
     setSelected(e.target.value);
   }
 
@@ -40,6 +43,9 @@ const PurchaseForm = ({
   const orderDetails: Order = {
     amount: product?.price ?? petReportData?.planDetails!.totalPrice ?? 0,
     currency: 'MXN',
+    // include contact info when available (required for SPEI/OXXO)
+    name: petReportData?.contactName ?? undefined,
+    email: purchaseDetail.userEmail ?? petReportData?.email ?? undefined,
     ...(product && {
       product: {
         productId: product._id,
@@ -75,7 +81,8 @@ const PurchaseForm = ({
                 }`}
               >
                 <div className="overflow-hidden">
-                  {pM.element(orderDetails, purchaseDetail, success, pending)}
+                  {selected === pM.method &&
+                    pM.element(orderDetails, purchaseDetail, success, pending)}
                 </div>
               </div>
             </div>

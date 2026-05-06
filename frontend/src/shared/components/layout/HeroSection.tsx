@@ -6,9 +6,16 @@ interface Props {
   title: string;
   image: string;
   content: string | React.ReactNode;
+  shadowClass?: string;
 }
 
-const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
+const HeroSection = ({
+  bg = 'white',
+  title,
+  image,
+  content,
+  shadowClass = 'color-primary-shadow',
+}: Props) => {
   return (
     <section
       className={`${bg} w-full flex flex-col items-center justify-center`}
@@ -30,7 +37,7 @@ const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
           <img
             src={image}
             alt="Manuales"
-            className="w-full rounded-lg object-cover color-primary-shadow "
+            className={`w-full rounded-lg object-cover ${shadowClass}`}
           />
         </div>
 

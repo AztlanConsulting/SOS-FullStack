@@ -22,6 +22,7 @@ const MembersOnly = () => {
           bg="bg-light-purple"
           title={'Portal exclusivo'}
           image={owner}
+          shadowClass="color-light-purple-shadow"
           content={
             <>
               <div className="flex flex-col gap-4">
@@ -31,7 +32,7 @@ const MembersOnly = () => {
                   difícil.
                 </Text>
                 <Button
-                  label="Perdí mi mascota"
+                  label="Formulario de búsqueda"
                   variant="purple"
                   icon={HiChevronRight}
                   onClick={() => navigate('/portal-exclusivo/formulario')}

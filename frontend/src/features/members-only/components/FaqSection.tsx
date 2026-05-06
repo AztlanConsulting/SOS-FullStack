@@ -4,7 +4,7 @@ import { RiArrowDropDownLine } from 'react-icons/ri';
 
 const faqs = [
   {
-    question: '¿Radio de difusión?',
+    question: 'Radio de difusión',
     answer:
       'Es el área donde se mostrará el anuncio de tu mascota para que personas cercanas puedan verlo y ayudar en su localización.',
   },

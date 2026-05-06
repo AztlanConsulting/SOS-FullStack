@@ -58,6 +58,7 @@ input[type='search']::-webkit-search-cancel-button {
   --color-grey-text: #61646b;
   --color-light-grey-text: #afb1b6;
   --color-primary-shadow: 2px 4px 4px #f9cd48;
+  --color-light-purple-shadow: 2px 4px 4px #9D7FAD;
 }
 
 .color-primary-bg {
@@ -118,6 +119,10 @@ input[type='search']::-webkit-search-cancel-button {
 
 .color-primary-shadow {
   box-shadow: var(--color-primary-shadow);
+}
+
+.color-light-purple-shadow {
+  box-shadow: var(--color-light-purple-shadow);
 }
 
 /* Creates an outline-like border around the PNG marker shape. */

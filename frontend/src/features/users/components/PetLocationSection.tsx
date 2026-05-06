@@ -71,7 +71,7 @@ export const PetLocationSection = ({
         onGoToMyLocation={goToMyLocation}
       />
       <Text variant="caption" weight="semibold" as="div">
-        ¡Puedes arrastar la patita!
+        ¡Puedes arrastrar la patita!
       </Text>
     </section>
   );

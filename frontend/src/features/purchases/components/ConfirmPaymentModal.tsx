@@ -25,7 +25,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
       onClick={close}
       id="dialog"
     >
-      <div className="rounded-lg flex items-center w-5/6 md:w-1/2">
+      <div className="rounded-lg flex items-center w-5/6 md:w-4/5 lg:w-full lg:max-w-2xl xl:max-w-3xl md:w-1/2">
         <div className="rounded-lg bg-white flex flex-col w-full">
           <div className="rounded-t-lg bg-[#F9CD48] px-5 py-4 flex items-center justify-between border-b-2 border-[#AFB1B6]">
             <Text
@@ -70,7 +70,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
               </Text>
             )}
           </div>
-          <div className="w-full flex justify-center self-center py-5 ">
+          <div className="w-full flex justify-center self-center py-5 px-3 lg:px-0">
             <Button onClick={close} label={'Cerrar'} variant="primary" />
           </div>
         </div>

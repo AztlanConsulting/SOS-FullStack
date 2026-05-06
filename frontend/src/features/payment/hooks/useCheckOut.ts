@@ -70,13 +70,23 @@ export const useCheckout = ({
         );
         console.log(data);
         try {
-          await createPurchase(
-            data.email || '',
-            paymentId,
-            newPetId || '',
-            'plan',
-          );
-          setMessage('Pago procesado exitosamente');
+          if (data.plan) {
+            await createPurchase(
+              data.email || '',
+              paymentId,
+              newPetId || '',
+              'plan',
+            );
+            setMessage('Pago procesado exitosamente con plan');
+          } else {
+            await createPurchase(
+              data.email || '',
+              paymentId,
+              newPetId || '',
+              'plan',
+            );
+            setMessage('Pago procesado exitosamente con producto');
+          }
         } catch (error) {
           console.error('Error creating purchase:', error);
           setMessage('Error al procesar la compra');

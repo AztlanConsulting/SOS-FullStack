@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
 import { createPurchaseDB } from '@use-cases/purchases/createPurchaseDB.usecase';
 import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
+import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
+import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 
 /**
  * Factory function that returns a middleware to create a new purchase.
@@ -23,6 +25,14 @@ export const makeCreatePurchase = () => {
         productType === undefined
       ) {
         return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      if (productType === 'plan') {
+        const planActivation = await activateLostPetReport(
+          purchasedPlanDataAccess,
+          productId!,
+        );
+        if (!planActivation) console.error("Plan couldn't be activated");
       }
 
       await createPurchaseDB(PurchaseDataAccess, {

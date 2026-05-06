@@ -6,6 +6,8 @@ import { markAsSucceededDB } from '@/use-cases/payments/markAsSuccededDB.usecase
 import { createPurchaseDB } from '@/use-cases/purchases/createPurchaseDB.usecase';
 import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
 import { purchaseDetailsSchema } from '@validation/payment.types';
+import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
+import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
 
 export default async function captureOrder(req: Request, res: Response) {
   try {
@@ -16,13 +18,20 @@ export default async function captureOrder(req: Request, res: Response) {
 
     const { purchaseDetails, planId } = details.data;
     const { userEmail, productId, productType } = purchaseDetails;
-    console.log(purchaseDetails);
 
     const capturedOrder = await ucCaptureOrder(paypalApi, orderId as string);
 
     if (Boolean(capturedOrder.error)) throw capturedOrder.error;
 
     const result = await markAsSucceededDB(PaymentDataAccess, String(orderId));
+
+    if (productType === 'plan') {
+      const planActivation = await activateLostPetReport(
+        purchasedPlanDataAccess,
+        productId!,
+      );
+      if (!planActivation) console.error("Plan couldn't be activated");
+    }
 
     if (result === 'not_found' || result === 'already_updated') {
       console.warn('Payment not found in DB or already updated');

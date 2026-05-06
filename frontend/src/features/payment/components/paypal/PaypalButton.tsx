@@ -1,5 +1,4 @@
 import { createLostPetReportRequest } from '@/features/users/services/lostPet.service';
-import type { PetReportData } from '@/features/users/types/petReport.types';
 import type { PurchasedPlanResponse } from '@/shared/types/pet.types';
 import {
   createPaypalPayment,
@@ -13,7 +12,7 @@ import {
   PayPalOneTimePaymentButton,
   type OnApproveDataOneTimePayments,
 } from '@paypal/react-paypal-js/sdk-v6';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 interface Props {
   data: Order;

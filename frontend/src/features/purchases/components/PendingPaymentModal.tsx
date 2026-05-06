@@ -1,4 +1,4 @@
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import pending from '@assets/images/pending.png';
 
 interface Props {
-  plan: PetReportData | null;
+  plan: LostPetReportData | null;
   product?: Product;
   onClose?: () => void;
 }

@@ -3,7 +3,7 @@ import PurchaseDetails from '@/features/purchases/components/PurchaseDetails';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import wrapper from '../utils/wrapper.util';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const navigateMock = vi.fn();
 
@@ -25,7 +25,7 @@ describe('PurchaseDetails', () => {
     price: 399,
   };
 
-  const mockReportData: PetReportData = {
+  const mockReportData: LostPetReportData = {
     name: 'Firulais',
     species: 'Perro',
     date: '2023-10-25',
@@ -56,6 +56,7 @@ describe('PurchaseDetails', () => {
       <PurchaseDetails
         product={mockProduct}
         success={false}
+        pending={false}
         reportData={null}
       />,
       {
@@ -72,7 +73,11 @@ describe('PurchaseDetails', () => {
 
   it('renders plan details correctly when a plan is provided', () => {
     const { container } = render(
-      <PurchaseDetails reportData={mockReportData} success={false} />,
+      <PurchaseDetails
+        reportData={mockReportData}
+        success={false}
+        pending={false}
+      />,
       {
         wrapper,
       },
@@ -90,6 +95,7 @@ describe('PurchaseDetails', () => {
       <PurchaseDetails
         product={mockProduct}
         success={true}
+        pending={false}
         reportData={null}
       />,
       {
@@ -103,9 +109,16 @@ describe('PurchaseDetails', () => {
   });
 
   it('shows the ConfirmPaymentModal when success is true plan', () => {
-    render(<PurchaseDetails reportData={mockReportData} success={true} />, {
-      wrapper,
-    });
+    render(
+      <PurchaseDetails
+        reportData={mockReportData}
+        success={true}
+        pending={false}
+      />,
+      {
+        wrapper,
+      },
+    );
 
     expect(
       screen.getByText('¡Su anuncio será publicado en unos minutos!'),

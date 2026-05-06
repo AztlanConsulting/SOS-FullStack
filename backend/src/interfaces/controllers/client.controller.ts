@@ -4,9 +4,25 @@ import { getClientById } from '@/use-cases/clients/getClientById.usecase';
 import { getClients } from '@/use-cases/clients/getClients.usecase';
 import { updateClient } from '@/use-cases/clients/updateClient.usecase';
 
+/**
+ * Dependency Injection setup.
+ * Bridges the infrastructure layer (Data Access) with the application layer (Use Cases).
+ */
 const deps = { userRepository: userDataAccess };
 
+/**
+ *
+ * Handles incoming HTTP requests related to client management.
+ * Responsibilities include:
+ * - Extracting and validating request parameters/body.
+ * - Calling the appropriate Use Case.
+ * - Returning standardized JSON responses and HTTP status codes.
+ */
 export const ClientController = {
+  /**
+   * GET /clients
+   * Retrieves a paginated list of clients with optional search filtering.
+   */
   getClients: async (req: Request, res: Response): Promise<void> => {
     try {
       const page = parseInt(req.query.page as string) || 1;
@@ -18,6 +34,10 @@ export const ClientController = {
     }
   },
 
+  /**
+   * GET /clients/:id
+   * Fetches detailed information for a single client by their ID.
+   */
   getClientById: async (req: Request, res: Response): Promise<void> => {
     try {
       const id = Array.isArray(req.params.id)
@@ -34,6 +54,10 @@ export const ClientController = {
     }
   },
 
+  /**
+   * PATCH/PUT /clients/:id
+   * Updates specific client fields (currently focused on conversation notes).
+   */
   updateClient: async (req: Request, res: Response): Promise<void> => {
     try {
       const id = Array.isArray(req.params.id)

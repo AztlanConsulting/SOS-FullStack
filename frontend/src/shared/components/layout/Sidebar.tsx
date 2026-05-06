@@ -11,6 +11,10 @@ import { FaDog } from 'react-icons/fa6';
 import { Text } from '@/shared/components/ui/Text';
 import whiteIcon from '@/assets/images/whiteIcon.png';
 
+/**
+ * Configuration for the main navigation.
+ * Centralizing this list ensures consistency between desktop and mobile views.
+ */
 const NAV_ITEMS = [
   { label: 'Clientes', icon: HiUsers, path: '/clientes' },
   { label: 'Mascotas', icon: FaDog, path: '/pets' },
@@ -21,6 +25,12 @@ const NAV_ITEMS = [
   { label: 'Planes', icon: HiClipboardList, path: '/plans' },
 ];
 
+/**
+ * Sidebar Component.
+ * Implements a dual-view navigation system:
+ * 1. Desktop: A fixed-width vertical sidebar on the left.
+ * 2. Mobile: A fixed bottom navigation bar for thumb-friendly access.
+ */
 export const Sidebar = () => {
   return (
     <>

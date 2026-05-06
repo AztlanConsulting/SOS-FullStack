@@ -8,18 +8,32 @@ import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientService } from '@/features/clients/services/client.service';
 
 interface Props {
+  /** Summary data of the client from the list view. */
   client: ClientListItem;
+  /** Function to close the modal. */
   onClose: () => void;
+  /** Callback to notify the parent component that the conversation link has been updated. */
   onUpdate: (updateConversation: string) => void;
 }
 
+/**
+ *
+ * Displays a comprehensive view of a client's profile, including:
+ * - Contact information (Email, Phone, Facebook).
+ * - Editable "Conversation" link.
+ * - Pet information (Species, Breed, missing location, etc.).
+ * - Active plan details and current status.
+ */
 export const ClientDetailModal = ({ client, onClose, onUpdate }: Props) => {
+  // Fetch full details (pets, plans, etc.) using the custom hook
   const { client: detail, loading, error } = useClientDetail(client._id);
+  // State for the inline editing flow of the conversation link
   const [editingConversation, setEditingConversation] = useState(false);
   const [conversationValue, setConversationValue] = useState(
     detail?.conversation ?? '',
   );
 
+  // Sync internal input state when data is loaded from the hook
   useEffect(() => {
     if (detail?.conversation) {
       setConversationValue(detail.conversation);

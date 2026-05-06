@@ -2,6 +2,9 @@ import { Text } from '@/shared/components/ui/Text';
 import { PlanStatusBadge } from '@/shared/components/ui/StatusBadge/PlanStatus';
 import type { ClientListItem } from '../types/client.type';
 
+/**
+ * Standard headers for the client administration table.
+ */
 const HEADERS = [
   'Nombre',
   'ID Plan',
@@ -12,11 +15,26 @@ const HEADERS = [
 ];
 
 interface Props {
+  /** Array of client data objects to display */
   clients: ClientListItem[];
+  /** Loading state to display skeleton/spinner text */
   loading: boolean;
+  /** Optional callback triggered when a row (desktop) or card (mobile) is clicked */
   onRowClick?: (client: ClientListItem) => void;
 }
 
+/**
+ * ClientTable Component
+ *
+ * A responsive data display component that renders a traditional table on
+ * desktop screens (md and up) and a list of cards on mobile devices.
+ *
+ * Features:
+ * - Responsive design (Table vs Cards).
+ * - Empty and loading states.
+ * - Interactive rows with hover effects.
+ * - Managed event propagation for external links.
+ */
 export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
   return (
     <div>

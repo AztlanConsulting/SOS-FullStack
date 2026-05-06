@@ -142,6 +142,13 @@ export const userDataAccess: UserRepository = {
     return savedUser._id.toString();
   },
 
+  /**
+   * Fetches a paginated list of users, including their primary pet and most recent plan.
+   *
+   * Highlights:
+   * - Uses `$facet` to perform data retrieval and total count in a single database round-trip.
+   * - Uses a nested `$lookup` pipeline to find the single most recent plan associated with the user's pets.
+   */
   getUsersWithPets: async (
     page: number,
     search?: string,
@@ -202,6 +209,10 @@ export const userDataAccess: UserRepository = {
       totalPages: Math.ceil(total / LIMIT),
     };
   },
+  /**
+   * Retrieves full profile information for a specific client.
+   * Unlike the list view, this returns all associated pets and all historical plans.
+   */
   getClientDetail: async (id: string): Promise<ClientDetail | null> => {
     const [client] = await UserModel.aggregate([
       { $match: { _id: new Types.ObjectId(id) } },
@@ -230,6 +241,10 @@ export const userDataAccess: UserRepository = {
     return client ?? null;
   },
 
+  /**
+   * General purpose update method for user records.
+   * Primarily used for updating 'conversation' links or 'active' status.
+   */
   updateUser: async (id: string, data: Partial<User>): Promise<void> => {
     await UserModel.findByIdAndUpdate(id, { $set: data });
   },

@@ -1,6 +1,11 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
+/**
+ * Interface representing a Purchased Plan in the system.
+ * This represents the "snapshot" of a plan at the moment of purchase,
+ * including its configuration (days, radius) and active status.
+ */
 export interface PurchasedPlan {
   _id: Types.ObjectId;
   petId: Types.ObjectId;
@@ -14,11 +19,20 @@ export interface PurchasedPlan {
   updatedAt: Date;
 }
 
+/**
+ * Input type for creating a new Purchased Plan.
+ * Omits system-generated fields and the 'active' status (which defaults to false/pending).
+ */
 export type PurchasedPlanCreateInput = Omit<
   PurchasedPlan,
   '_id' | 'createdAt' | 'updatedAt' | 'active'
 >;
 
+/**
+ *
+ * Includes a reference to the 'Pets' model to link search efforts to a specific animal.
+ * Uses 'timestamps: true' to automatically manage 'createdAt' and 'updatedAt'.
+ */
 const PurchasedPlanSchema = new Schema<PurchasedPlan>(
   {
     petId: {
@@ -40,7 +54,10 @@ const PurchasedPlanSchema = new Schema<PurchasedPlan>(
     timestamps: true,
   },
 );
-
+/**
+ * Data model for PurchasedPlans.
+ * Collection name: 'purchasedplans' (auto-pluralized by Mongoose).
+ */
 export const PurchasedPlanModel = model<PurchasedPlan>(
   'PurchasedPlans',
   PurchasedPlanSchema,

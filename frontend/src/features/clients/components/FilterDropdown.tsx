@@ -3,16 +3,24 @@ import { HiFilter } from 'react-icons/hi';
 import { Text } from '@/shared/components/ui/Text';
 import type { PlanStatus } from '../types/client.type';
 
+/**
+ * Interface defining the available filtering criteria for the client list.
+ */
 export interface ClientFilter {
-  status?: PlanStatus;
-  conversation?: 'con' | 'sin';
+  status?: PlanStatus; // Filter by the lifecycle of the plan
+  conversation?: 'con' | 'sin'; // Filter by existence of a conversation link
 }
 
 interface Props {
+  /** The current active filter state. */
   filters: ClientFilter;
+  /** Callback function triggered when a filter is toggled or cleared. */
   onChange: (filters: ClientFilter) => void;
 }
 
+/**
+ * Hardcoded options for plan status filtering.
+ */
 const STATUS_OPTIONS: { label: string; value: PlanStatus }[] = [
   { label: 'Continua', value: 'continua' },
   { label: 'Casi expira', value: 'casi expira' },
@@ -20,9 +28,18 @@ const STATUS_OPTIONS: { label: string; value: PlanStatus }[] = [
   { label: 'RIP', value: 'RIP' },
 ];
 
+/**
+ *
+ * A toggleable popover that allows users to refine the client list.
+ * Features:
+ * - Visual badge indicating the number of active filters.
+ * - Multi-category filtering (Status and Conversation).
+ * - "Clear filters" action to reset all parameters.
+ */
 export const FilterDropdown = ({ filters, onChange }: Props) => {
   const [open, setOpen] = useState(false);
 
+  // Calculate how many filters are currently applied to show in the badge
   const activeCount = Object.values(filters).filter(Boolean).length;
 
   return (

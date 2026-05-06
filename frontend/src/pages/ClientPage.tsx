@@ -11,10 +11,20 @@ import { ClientDetailModal } from '@/shared/components/ui/Modal/ClientDetailModa
 import { exportToCSV } from '@/shared/utils/exportCSV';
 import { FilterDropdown } from '@/features/clients/components/FilterDropdown';
 
+/**
+ *
+ * The main administration view for managing clients. It provides:
+ * - A data table with server-side pagination.
+ * - Global search and advanced filtering by plan status.
+ * - CSV export functionality for reporting.
+ * - Detailed view of specific clients via a modal interface.
+ */
 export const ClientsPage = () => {
+  // State to track which client is currently being viewed in the detail modal
   const [selectedClient, setSelectedClient] = useState<ClientListItem | null>(
     null,
   );
+  // Custom hook managing the fetch logic, pagination state, and filter parameters
   const {
     clients,
     loading,

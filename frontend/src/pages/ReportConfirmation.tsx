@@ -124,27 +124,27 @@ export const ReportConfirmationPage: React.FC = () => {
                   transform: 'rotate(-30deg)',
                 }}
               /> */}
-              <img
+              {/* <img
                 src={whiteLogoSimple}
                 alt="Watermark Logo"
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 opacity-40 pointer-events-none"
-              />
+              /> */}
               {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <span className="text-5xl font-bold text-black/20 text-center mt-20">
                   Esta es una vista previa
                 </span>
               </div> */}
-              {/* <div className="absolute bg-white/20 backdrop-blur-[2px] rounded-xl w-full p-4 bottom-0 h-1/2"></div> */}
-              {/* <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <div className="absolute bg-white/20 backdrop-blur-[2px] w-full p-4 bottom-0 h-1/2" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <img
                   src={whiteLogoSimple}
                   alt="Watermark Logo"
-                  className=" w-30 opacity-40 pointer-events-none"
+                  className=" w-30 opacity-50 pointer-events-none"
                 />
-                <span className="text-4xl font-bold text-black/20 text-center">
+                <span className="text-4xl font-bold text-black/25 text-center">
                   Esta es una vista previa
                 </span>
-              </div> */}
+              </div>
             </div>
           </div>
 

@@ -43,8 +43,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
 
               console.log(petResult);
               console.log(data.plan);
-              const newPetId = petResult.plan.petId;
-              planIdRef.current = newPetId;
+              planIdRef.current = petResult.plan._id;
             }
             const response = await createPaypalPayment(data);
             const orderId = response.data.result.id;

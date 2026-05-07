@@ -5,9 +5,11 @@ import routes from '@interfaces/routes/routes';
 import '@domain/models';
 import cors from 'cors';
 import path from 'path';
-import '@/queues/activatePlan.worker';
-import '@/queues/sendEmail.worker';
 
+if (process.env.NODE_ENV !== 'test') {
+  require('@/queues/activatePlan.worker');
+  require('@/queues/sendEmail.worker');
+}
 const app = express();
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));

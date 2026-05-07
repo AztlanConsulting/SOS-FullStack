@@ -1,15 +1,17 @@
 import * as L from 'leaflet';
-import markerIcon from '@assets/images/markerIcon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerIcon from '@assets/images/markerIconV2.1.png';
+// import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 //The default Leaflet marker icons.
 const defaultIcon = L.icon({
   iconUrl: markerIcon,
-  shadowUrl: markerShadow,
+  // shadowUrl: markerShadow, // Desactivar si es V2
   className: 'custom-pin-border',
-  iconSize: [35, 50],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+  // iconSize: [47.5, 62.5], // Para V1
+  // iconAnchor: [23.75, 62.5],
+  iconSize: [65, 65], // Para V2
+  iconAnchor: [32.5, 65],
+  popupAnchor: [0, -50],
   shadowSize: [41, 41],
 });
 

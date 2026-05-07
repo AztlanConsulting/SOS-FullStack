@@ -8,5 +8,5 @@ export interface PurchasedPlanRepository {
     planData: PurchasedPlanCreateInput,
   ): Promise<PurchasedPlan>;
   getActivePlanByPetId(petId: string): Promise<PurchasedPlan | null>;
-  activatePurchasedPlan(planId: string): void;
+  activatePurchasedPlan(planId: string): Promise<boolean>;
 }

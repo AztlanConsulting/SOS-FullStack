@@ -139,9 +139,9 @@ export const userDataAccess: UserRepository = {
     return savedUser._id.toString();
   },
 
-  activateUser: async function (id: string): Promise<void> {
-    await UserModel.findByIdAndUpdate(
-      id,
+  activateUser: async function (email: string): Promise<void> {
+    await UserModel.findOneAndUpdate(
+      { email },
       { $set: { active: true } },
       { runValidators: true },
     ).exec();

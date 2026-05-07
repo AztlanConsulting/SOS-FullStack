@@ -1,6 +1,7 @@
 import { PetModel } from '@domain/models/pet.model';
 import type { Pet, PetCreateInput } from '@domain/models/pet.model';
 import type { PetRepository } from '@domain/repositories/pet.repository';
+import { Types } from 'mongoose';
 
 export const petDataAccess: PetRepository = {
   /**
@@ -13,5 +14,21 @@ export const petDataAccess: PetRepository = {
     const newPet = new PetModel(petData);
     const savedPet = await newPet.save();
     return savedPet.toObject() as Pet;
+  },
+
+  /**
+   * Gets a pet by its ID
+   *
+   * @param petId - The ID of the pet
+   * @returns The pet if found, otherwise null
+   */
+  async getPetById(petId: string): Promise<Pet | null> {
+    if (!Types.ObjectId.isValid(petId)) {
+      return null;
+    }
+
+    const pet = await PetModel.findById(petId);
+
+    return pet ? (pet.toObject() as Pet) : null;
   },
 };

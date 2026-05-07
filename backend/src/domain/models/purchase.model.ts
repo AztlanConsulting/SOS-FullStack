@@ -13,7 +13,7 @@ export interface IPurchase extends Document {
 const purchaseSchema = new Schema<IPurchase>(
   {
     userEmail: { type: String, required: true },
-    paymentId: { type: String, required: true },
+    paymentId: { type: String, required: true, unique: true, index: true },
     productId: { type: String, required: true },
     productType: { type: String, required: true },
   },

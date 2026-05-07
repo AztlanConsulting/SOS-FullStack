@@ -23,7 +23,25 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
   },
 
   /**
+   * Retrieves a purchased plan by its ID.
+   *
+   * @param planId - Unique identifier of the purchased plan
+   * @returns The purchased plan if found, otherwise null
+   */
+  async getPurchasedPlanById(planId: string): Promise<PurchasedPlan | null> {
+    const plan = await PurchasedPlanModel.findById(planId).lean();
+
+    if (!plan) {
+      return null;
+    }
+
+    return plan as PurchasedPlan;
+  },
+
+  /**
    * Activates a purchased plan.
+   *
+   * @param planId - Unique identifier of the purchased plan to activate
    */
   activatePurchasedPlan: async function (planId: string): Promise<void> {
     await PurchasedPlanModel.findByIdAndUpdate(
@@ -34,7 +52,10 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
   },
 
   /**
-   * Updates social posts (facebook / instagram / future platforms).
+   * Updates social media post information for a purchased plan.
+   *
+   * @param planId - Unique identifier of the purchased plan
+   * @param data - Social platform post data to update
    */
   updatePurchasedPlanSocialPosts: async function (
     planId: string,
@@ -61,6 +82,31 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
     }
 
     if (Object.keys(update).length === 0) return;
+
+    await PurchasedPlanModel.findByIdAndUpdate(
+      planId,
+      { $set: update },
+      { runValidators: true },
+    ).exec();
+  },
+
+  /**
+   * Updates the email delivery status for a purchased plan.
+   *
+   * @param planId - Unique identifier of the purchased plan
+   * @param status - Current email delivery status
+   */
+  updateEmailStatus: async function (
+    planId: string,
+    status: 'pending' | 'sent' | 'failed',
+  ): Promise<void> {
+    const update: Record<string, unknown> = {
+      emailStatus: status,
+    };
+
+    if (status === 'sent') {
+      update.emailSentAt = new Date();
+    }
 
     await PurchasedPlanModel.findByIdAndUpdate(
       planId,

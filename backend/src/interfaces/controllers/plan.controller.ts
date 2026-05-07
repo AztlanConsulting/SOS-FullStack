@@ -1,9 +1,6 @@
 import type { Request, Response } from 'express';
 import { getPlansDB } from '@use-cases/plans/getPlansDB.usecase';
 import { PlanDataAccess } from '../../infrastructure/data-access/plan.data-access';
-import { activatePlan } from '@use-cases/plans/activatePlan.usecase';
-import { userDataAccess } from '@infrastructure/data-access/user.data-access';
-import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 
 /**
  * Express controller that handles fetching plans.
@@ -27,21 +24,4 @@ export const getPlans = async (_req: Request, res: Response): Promise<void> => {
       error instanceof Error ? error.message : 'Failed to fetch plans';
     res.status(500).json({ error: message });
   }
-};
-
-export const activatePlanController = async (req: Request, res: Response) => {
-  const { userId, planId } = req.body;
-
-  await activatePlan(
-    {
-      userRepository: userDataAccess,
-      purchasedPlanRepository: purchasedPlanDataAccess,
-    },
-    userId,
-    planId,
-  );
-
-  res.json({
-    message: 'Pago confirmado',
-  });
 };

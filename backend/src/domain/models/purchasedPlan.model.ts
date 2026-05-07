@@ -1,6 +1,12 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
+export interface SocialPost {
+  url?: string;
+  status?: 'pending' | 'posted' | 'failed';
+  postedAt?: Date;
+}
+
 export interface PurchasedPlan {
   _id: Types.ObjectId;
   petId: Types.ObjectId;
@@ -11,25 +17,11 @@ export interface PurchasedPlan {
   features: string[];
   active: boolean;
   socialPosts?: {
-    facebook?: {
-      url: { type: String };
-      status: {
-        type: String;
-        enum: ['pending', 'posted', 'failed'];
-        default: 'pending';
-      };
-      postedAt: { type: Date };
-    };
-    instagram?: {
-      url: { type: String };
-      status: {
-        type: String;
-        enum: ['pending', 'posted', 'failed'];
-        default: 'pending';
-      };
-      postedAt: { type: Date };
-    };
+    facebook?: SocialPost;
+    instagram?: SocialPost;
   };
+  emailStatus?: 'pending' | 'sent' | 'failed';
+  emailSentAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,13 +33,20 @@ export type PurchasedPlanCreateInput = Omit<
 
 export type SocialPlatform = 'facebook' | 'instagram';
 
-export type SocialPost = {
-  url?: string;
-  status?: 'pending' | 'posted' | 'failed';
-  postedAt?: Date;
-};
-
 export type SocialPostsInput = Partial<Record<SocialPlatform, SocialPost>>;
+
+const SocialPostSchema = new Schema<SocialPost>(
+  {
+    url: { type: String },
+    status: {
+      type: String,
+      enum: ['pending', 'posted', 'failed'],
+      default: 'pending',
+    },
+    postedAt: { type: Date },
+  },
+  { _id: false },
+);
 
 const PurchasedPlanSchema = new Schema<PurchasedPlan>(
   {
@@ -61,31 +60,17 @@ const PurchasedPlanSchema = new Schema<PurchasedPlan>(
     duration: { type: Number, required: true }, // days
     radius: { type: Number, required: true }, // km
     features: [{ type: String, required: true }],
-    active: {
-      type: Boolean,
-      default: false,
-    },
-
+    active: { type: Boolean, default: false },
     socialPosts: {
-      facebook: {
-        url: { type: String },
-        status: {
-          type: String,
-          enum: ['pending', 'posted', 'failed'],
-          default: 'pending',
-        },
-        postedAt: { type: Date },
-      },
-      instagram: {
-        url: { type: String },
-        status: {
-          type: String,
-          enum: ['pending', 'posted', 'failed'],
-          default: 'pending',
-        },
-        postedAt: { type: Date },
-      },
+      facebook: SocialPostSchema,
+      instagram: SocialPostSchema,
     },
+    emailStatus: {
+      type: String,
+      enum: ['pending', 'sent', 'failed'],
+      default: 'pending',
+    },
+    emailSentAt: { type: Date },
   },
   {
     timestamps: true,

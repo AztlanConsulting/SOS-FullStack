@@ -12,4 +12,26 @@ export const PurchaseDataAccess: PurchaseRepository = {
       ...data,
     });
   },
+
+  /**
+   * Get a purchase by its payment ID.
+   * @param paymentId - Unique payment identifier associated with the purchase
+   * @returns The purchase data if found, otherwise null
+   */
+  async getByPaymentId(paymentId: string): Promise<PurchaseDTO | null> {
+    const purchase = await PurchaseModel.findOne({
+      paymentId,
+    }).lean();
+
+    if (!purchase) {
+      return null;
+    }
+
+    return {
+      userEmail: purchase.userEmail,
+      paymentId: purchase.paymentId,
+      productId: purchase.productId,
+      productType: purchase.productType,
+    };
+  },
 };

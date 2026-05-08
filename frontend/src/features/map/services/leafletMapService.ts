@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import markerIcon from '@assets/images/markerIconV2.1.png';
+import markerIcon from '@assets/images/markerIcon.png';
 // import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 //The default Leaflet marker icons.

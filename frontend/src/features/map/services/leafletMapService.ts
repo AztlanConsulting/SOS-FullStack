@@ -1,6 +1,7 @@
 import * as L from 'leaflet';
 import markerIcon from '@assets/images/markerIcon.png';
 
+//The default Leaflet marker icons.
 const defaultIcon = L.icon({
   iconUrl: markerIcon,
   className: 'custom-pin-border',

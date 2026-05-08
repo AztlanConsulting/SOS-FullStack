@@ -1,8 +1,6 @@
-// frontend/src/features/client/components/AdProgressSection.tsx
 import React from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
-import { usePosterDownload } from '../hooks/usePosterDownload';
 
 interface AdProgressSectionProps {
   posterUrl: string | null;
@@ -11,8 +9,13 @@ interface AdProgressSectionProps {
 export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   posterUrl,
 }) => {
-  const { handleDownloadColor, handleDownloadBW } =
-    usePosterDownload(posterUrl);
+  const handleDownloadColor = () => {
+    console.log('Descargar poster color');
+  };
+
+  const handleDownloadBW = () => {
+    console.log('Descargar poster blanco y negro');
+  };
 
   if (!posterUrl) {
     return null;

@@ -1,7 +1,5 @@
 import type { Request, Response } from 'express';
 import { createLostPetReport } from '@use-cases/clients/createLostPetReport.usecase';
-import { publishLostPet } from '@use-cases/clients/publishLostPet.usecase';
-import { metaPublisher } from '@infrastructure/api/meta.api';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { petDataAccess } from '@infrastructure/data-access/pet.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
@@ -10,31 +8,6 @@ import {
   createPetReportDTOSchema,
   getCreatePetReportFieldErrors,
 } from '../../types/clients.type';
-
-const publishPet = async (req: Request, res: Response) => {
-  try {
-    const { caption, mediaUrl } = req.body;
-
-    const result = await publishLostPet(metaPublisher, {
-      imageUrl: mediaUrl,
-      caption,
-    });
-
-    res.json({
-      message: 'Successfully published to Facebook and Instagram',
-      data: result,
-    });
-  } catch (err: unknown) {
-    console.error(err);
-
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-
-    res.status(500).json({
-      error: 'Error publishing to social media',
-      details: errorMessage,
-    });
-  }
-};
 
 const createLostPetReportController = async (req: Request, res: Response) => {
   try {
@@ -84,7 +57,4 @@ const createLostPetReportController = async (req: Request, res: Response) => {
   }
 };
 
-export default {
-  publishPet,
-  createLostPetReportController,
-};
+export default { createLostPetReportController };

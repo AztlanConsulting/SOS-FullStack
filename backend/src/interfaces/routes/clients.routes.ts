@@ -4,8 +4,6 @@ import { upload } from '@interfaces/middleware/upload.middleware';
 
 const router = express.Router();
 
-router.post('/publish', clientsController.publishPet);
-
 router.post(
   '/lost-pet',
   upload.array('images', 5),

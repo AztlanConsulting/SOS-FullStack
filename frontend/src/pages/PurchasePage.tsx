@@ -20,7 +20,7 @@ export const PurchasePage = () => {
   const { lostPetReportData } = usePetReport();
   const { state, query } = usePurchase();
   const navigate = useNavigate();
-  const { productId, productType, userEmail } = state ?? {};
+  const { productId, productType, userEmail, userName } = state ?? {};
 
   const [success, setSuccess] = successHook;
   const [pending, setPending] = pendingHook;
@@ -38,6 +38,7 @@ export const PurchasePage = () => {
   }, [state, lostPetReportData]);
 
   const purchaseDetail: PurchaseDetail = {
+    userName,
     userEmail,
     productId,
     productType,

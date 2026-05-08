@@ -15,6 +15,7 @@ export type Order = {
 };
 
 export type PurchaseDetail = {
+  userName?: string;
   userEmail: string;
   productId: string;
   productType: string;

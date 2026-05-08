@@ -7,7 +7,10 @@ interface PurchaseData {
   purchaseData: {
     userEmail: string;
     emailError: string;
+    userName: string;
+    nameError: string;
     handleEmailChange: (email: string) => void;
+    handleNameChange: (name: string) => void;
     handleProceedToPayment: () => void;
   };
   product: Product;
@@ -16,7 +19,10 @@ interface PurchaseData {
 const ProductSale = ({ purchaseData, product }: PurchaseData) => {
   const userEmail = purchaseData.userEmail;
   const emailError = purchaseData.emailError;
+  const userName = purchaseData.userName;
+  const nameError = purchaseData.nameError;
   const handleEmailChange = purchaseData.handleEmailChange;
+  const handleNameChange = purchaseData.handleNameChange;
   const handleProceedToPayment = purchaseData.handleProceedToPayment;
 
   return (
@@ -60,7 +66,17 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
           Te enviaremos los detalles de tu compra por correo electrónico después
           de completar el pago.
         </Text>
-        <div className="relative w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6 color-secondary-bg rounded-lg">
+        <div className="relative flex flex-col gap-3 w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6 color-secondary-bg rounded-lg">
+          <Input
+            type="name"
+            id="name"
+            label="Nombre"
+            placeholder=" "
+            hasLength={false}
+            error={nameError}
+            value={userName}
+            onChange={(event) => handleNameChange(event.target.value)}
+          />
           <Input
             type="email"
             id="email"
@@ -72,7 +88,7 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
             onChange={(event) => handleEmailChange(event.target.value)}
           />
         </div>
-        <div className="w-full flex justify-center items-center md:justify-start mt-6 mb-8">
+        <div className="flex justify-center items-center md:justify-start mt-6 mb-8 w-5/6 md:w-full md:max-w-lg mx-auto">
           <Button
             label="Proceder al pago"
             variant="primary"

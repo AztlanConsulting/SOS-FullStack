@@ -44,7 +44,7 @@ const PurchaseForm = ({
     amount: product?.price ?? petReportData?.planDetails!.totalPrice ?? 0,
     currency: 'MXN',
     // include contact info when available (required for SPEI/OXXO)
-    name: petReportData?.contactName ?? undefined,
+    name: purchaseDetail.userName ?? petReportData?.contactName ?? undefined,
     email: purchaseDetail.userEmail ?? petReportData?.email ?? undefined,
     ...(product && {
       product: {

@@ -1,6 +1,8 @@
+// frontend/src/features/client/components/AdProgressSection.tsx
 import React from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
+import { usePosterDownload } from '../hooks/usePosterDownload';
 
 interface AdProgressSectionProps {
   posterUrl: string | null;
@@ -9,8 +11,11 @@ interface AdProgressSectionProps {
 export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   posterUrl,
 }) => {
+  const { handleDownloadColor, handleDownloadBW } =
+    usePosterDownload(posterUrl);
+
   if (!posterUrl) {
-    return null; // Si no hay póster, no renderizamos nada
+    return null;
   }
 
   return (
@@ -27,21 +32,20 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
         />
       </div>
 
-      <div className="w-[250px] mx-auto">
-        <a
-          href={posterUrl}
-          download="poster_mascota.png"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full block"
-        >
-          <Button
-            label="Descargar Póster"
-            variant="primary"
-            onClick={() => {}}
-            textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
-          />
-        </a>
+      <div className="w-full max-w-[280px] flex flex-col gap-3 mx-auto">
+        <Button
+          label="Descargar a Color"
+          variant="primary"
+          textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+          onClick={handleDownloadColor}
+        />
+
+        <Button
+          label="Descargar en B/N"
+          textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+          variant="primary"
+          onClick={handleDownloadBW}
+        />
       </div>
     </div>
   );

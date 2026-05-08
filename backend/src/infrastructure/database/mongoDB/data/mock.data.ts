@@ -111,9 +111,9 @@ try {
     description: 'Perrito amigable, llevaba un collar rojo cuando se perdió.',
     photos: [
       `${baseUrl}/uploads/pug_chistoso.jpg`,
-      `${baseUrl}/uploads/1778208831678-pug_chistoso.jpg`,
+      `${baseUrl}/uploads/poster-pug_chistoso.jpg`,
     ],
-    placeMissing: 'Mexico City, Mexico',
+    placeMissing: 'Ciudad de México, México.',
   });
 
   const plans = await PlanModel.find();

@@ -134,3 +134,4 @@ storybook-static
 
 public/
 **/uploads
+vectorDatabase/

@@ -2,12 +2,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import type { PlanDistributionMetric } from '@features/graphs/types/dashboardMetrics';
 
 const PLAN_COLORS = [
-  '#6B5B2E',
-  '#C2A34F',
-  '#E8B159',
-  '#F4D466',
-  '#A3B14B',
-  '#D4E157',
+  '#fce579',
+  '#f9cd48',
+  '#f0b800',
+  '#e6a800',
+  '#c98f00',
+  '#8c5e00',
 ];
 
 interface ActivePlanChartProps {
@@ -28,12 +28,18 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
         alignItems: 'center',
         width: '100%',
         height: '250px',
+        border: 'none',
+        outline: 'none',
       }}
     >
       {/* Gráfica */}
       <div style={{ position: 'relative', width: '50%', height: '100%' }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          style={{ border: 'none', outline: 'none' }}
+        >
+          <PieChart tabIndex={-1}>
             <Pie
               data={data}
               cx="50%"
@@ -42,6 +48,7 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
               outerRadius="85%"
               dataKey="value"
               stroke="none"
+              focusable={false}
             >
               {data.map((entry, index) => {
                 const cellColor =
@@ -71,7 +78,7 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
           >
             {total}
           </div>
-          <div style={{ fontSize: '12px', color: '#A0AEC0', marginTop: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#000000', marginTop: '4px' }}>
             Total
           </div>
         </div>
@@ -79,6 +86,7 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
 
       {/* Leyenda */}
       <div
+        className="-translate-x-4 md:translate-x-0"
         style={{
           width: '50%',
           paddingLeft: '30px',
@@ -103,9 +111,16 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
                   height: '18px',
                   borderRadius: '50%',
                   backgroundColor: dotColor,
+                  flexShrink: 0,
                 }}
               />
-              <span style={{ fontSize: '16px', color: 'inherit' }}>
+              <span
+                style={{
+                  fontSize: '16px',
+                  color: 'inherit',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {entry.name} - {entry.value}
               </span>
             </div>

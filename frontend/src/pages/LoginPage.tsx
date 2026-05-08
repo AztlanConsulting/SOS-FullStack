@@ -8,7 +8,7 @@ const LoginPage = () => {
   if (isAuthLoading) return <p>Loading...</p>;
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/clientes" replace />;
   }
 
   return (

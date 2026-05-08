@@ -10,6 +10,7 @@ import purchaseRoutes from './purchase.routes';
 import workshopRoutes from './workshops.routes';
 import planRoutes from './plans.routes';
 import clientRoutes from './client.routes';
+import metricsRoutes from './metrics.routes';
 
 const router = express.Router();
 
@@ -29,5 +30,6 @@ router.use('/plans', planRoutes);
 router.use('/api/clients', clientRoutes);
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);
+router.use('/metrics', metricsRoutes);
 
 export default router;

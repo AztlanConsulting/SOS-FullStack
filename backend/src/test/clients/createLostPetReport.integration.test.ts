@@ -32,7 +32,7 @@ describe('createLostPetReport (integration)', () => {
     size: 'Mediana: 11 a 25 kg',
     description: 'Perrito amigable con collar azul.',
     location: 'Querétaro',
-    locationCoords: [20.5888, -100.3899] as [number, number],
+    locationCoords: [19.43376836020933, -99.12842362266052] as [number, number],
     contactName: 'Juan Pérez',
     phoneNumber: '5551234567',
     email,
@@ -68,6 +68,7 @@ describe('createLostPetReport (integration)', () => {
   test('reuses existing user if email already exists', async () => {
     const email = `existing-${Date.now()}@example.com`;
 
+    const input = createInput(email);
     await createLostPetReport(
       {
         userRepository: userDataAccess,
@@ -75,7 +76,7 @@ describe('createLostPetReport (integration)', () => {
         purchasedPlanRepository: purchasedPlanDataAccess,
         roleRepository: roleDataAccess,
       },
-      createInput(email),
+      input,
     );
 
     const second = await createLostPetReport(

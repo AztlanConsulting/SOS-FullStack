@@ -3,6 +3,11 @@ import type { Stripe } from 'stripe';
 export interface GeocodingResult {
   coords: [number, number];
   displayName: string; // Contains the name of the location
+  properties: {
+    city: string;
+    country: string;
+    state: string;
+  };
 }
 
 export interface PetReportData {

@@ -107,6 +107,7 @@ export interface PlanProgressResult {
   daysRemaining: number;
   petName: string;
   petImage: string | null;
+  posterImage: string | null;
   dateMissing: string | Date;
 }
 

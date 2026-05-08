@@ -32,6 +32,8 @@ export const getPlanProgress = async (
   const daysRemaining = Math.max(0, totalDays - daysElapsed);
 
   const petImage = pet.photos.length > 0 ? pet.photos[0] : null;
+  const posterImage =
+    pet.photos.length > 1 ? pet.photos[pet.photos.length - 1] : null;
 
   return {
     planName: plan.name,
@@ -39,6 +41,7 @@ export const getPlanProgress = async (
     daysRemaining,
     petName: pet.name,
     petImage,
+    posterImage,
     dateMissing: pet.dateMissing,
   };
 };

@@ -5,6 +5,7 @@ import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 export const useActivePetReport = () => {
   const [petData, setPetData] = useState<LostPetReportData | null>(null);
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,11 +17,25 @@ export const useActivePetReport = () => {
       try {
         const rawReport = await getActiveLostPetReportRequest();
 
-        if (rawReport && rawReport.pet) {
+        if (
+          rawReport &&
+          rawReport.pet &&
+          rawReport.pet.photos &&
+          rawReport.pet.photos.length > 0
+        ) {
           const baseUrl =
             import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-          const filePromises = rawReport.pet.photos.map(
+          const photosArray = [...rawReport.pet.photos];
+          const rawPosterUrl = photosArray.pop();
+
+          const finalPosterUrl = rawPosterUrl?.startsWith('http')
+            ? rawPosterUrl
+            : `${baseUrl}${rawPosterUrl}`;
+
+          setPosterUrl(finalPosterUrl || null);
+
+          const filePromises = photosArray.map(
             async (photoPath: string, index: number) => {
               const fullUrl = photoPath.startsWith('http')
                 ? photoPath
@@ -71,5 +86,5 @@ export const useActivePetReport = () => {
     fetchAndMapPetData();
   }, []);
 
-  return { petData, isLoading, error };
+  return { petData, posterUrl, isLoading, error };
 };

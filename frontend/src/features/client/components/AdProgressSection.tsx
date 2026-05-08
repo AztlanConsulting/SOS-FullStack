@@ -1,50 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
-import { getActiveLostPetReportRequest } from '@/features/users/services/lostPet.service';
 
-export const AdProgressSection = () => {
-  const [posterUrl, setPosterUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+interface AdProgressSectionProps {
+  posterUrl: string | null;
+}
 
-  useEffect(() => {
-    const fetchPoster = async () => {
-      try {
-        const report = await getActiveLostPetReportRequest();
-        if (report && report.posterImageUrl) {
-          setPosterUrl(
-            `${import.meta.env.VITE_API_URL}${report.posterImageUrl}`,
-          );
-        }
-      } catch (error) {
-        console.error('Error al obtener el póster:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPoster();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <Text variant="body" className="text-center mt-4">
-        Cargando póster...
-      </Text>
-    );
-  }
-
+export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
+  posterUrl,
+}) => {
   if (!posterUrl) {
-    return null;
+    return null; // Si no hay póster, no renderizamos nada
   }
 
   return (
-    <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
-      <Text variant="body" weight="bold" className="text-2xl mb-4">
+    <div className="flex flex-col items-center bg-white p-6 rounded-3xl shadow-sm border border-gray-100 w-full h-full justify-center">
+      <Text variant="h3" weight="medium" className="text-center w-full mb-6">
         Póster de tu Mascota
       </Text>
 
-      <div className="w-full max-w-md overflow-hidden rounded-lg shadow-md bg-[#F9F1DE] mb-6">
+      <div className="w-full max-w-[280px] overflow-hidden rounded-lg shadow-md bg-[#F9F1DE] mb-6 mx-auto">
         <img
           src={posterUrl}
           alt="Póster de mascota perdida"
@@ -52,14 +27,22 @@ export const AdProgressSection = () => {
         />
       </div>
 
-      <a
-        href={posterUrl}
-        download="poster_mascota.jpg"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <Button label="Descargar Póster" variant="primary" onClick={() => {}} />
-      </a>
+      <div className="w-[250px] mx-auto">
+        <a
+          href={posterUrl}
+          download="poster_mascota.png"
+          target="_blank"
+          rel="noreferrer"
+          className="w-full block"
+        >
+          <Button
+            label="Descargar Póster"
+            variant="primary"
+            onClick={() => {}}
+            textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+          />
+        </a>
+      </div>
     </div>
   );
 };

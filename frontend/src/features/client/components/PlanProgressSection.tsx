@@ -10,7 +10,11 @@ interface PlanProgressSectionProps {
 const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
   return (
     <div className="flex flex-col gap-5">
-      <Text variant="h3" weight="medium" className="text-center">
+      <Text
+        variant="h3"
+        weight="medium"
+        className="text-center lg:text-left w-full"
+      >
         Progreso del plan
       </Text>
 

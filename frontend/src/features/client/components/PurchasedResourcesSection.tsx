@@ -16,8 +16,12 @@ export const PurchasedResourcesSection = ({
 
   return (
     <div className="flex flex-col gap-6 h-full">
-      <div className="flex flex-col items-center md:items-start gap-4">
-        <Text variant="h3" weight="medium">
+      <div className="flex flex-col items-center md:items-start gap-4 w-full">
+        <Text
+          variant="h3"
+          weight="medium"
+          className="text-center md:text-left w-full"
+        >
           Recursos comprados
         </Text>
 

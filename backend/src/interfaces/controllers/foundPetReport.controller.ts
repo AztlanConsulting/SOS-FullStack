@@ -68,6 +68,11 @@ export async function postFoundPetReport(req: Request, res: Response) {
         refId: imageIds[i],
         image: imageBuffers[i] as Buffer,
         species,
+        color,
+        location:
+          location?.properties.city ??
+          location?.properties.country ??
+          'No identificado',
       };
 
       await petVector.createPetImage(petImageDto);

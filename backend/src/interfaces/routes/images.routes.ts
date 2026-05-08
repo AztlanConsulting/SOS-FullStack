@@ -10,7 +10,7 @@ const upload = multer({ storage: storage });
 
 router.post(
   '/findSimilarPets',
-  authMiddleware,
+  // authMiddleware,
   upload.single('image'),
   findSimilarPets,
 );

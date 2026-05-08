@@ -73,13 +73,6 @@ const ClientDashboardOverview = () => {
 
             <div className="lg:col-span-6">
               <div className="flex flex-col gap-5 h-full">
-                <Text
-                  variant="h3"
-                  weight="medium"
-                  className="text-center lg:text-left w-full opacity-0 hidden lg:block"
-                >
-                  .
-                </Text>
                 <AdProgressSection posterUrl={posterUrl} />
               </div>
             </div>

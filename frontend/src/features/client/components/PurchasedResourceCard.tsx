@@ -2,6 +2,7 @@ import { Button } from '@/shared/components/ui/Button/Button';
 import { Text } from '@/shared/components/ui/Text/Text';
 import { useNavigate } from 'react-router';
 import type { PurchasedResourceResponse } from '@/features/graphs/types/dashboardMetrics';
+import axiosInstance from '@/shared/utils/axios';
 
 export const PurchasedResourceCard = ({
   resource,
@@ -10,10 +11,12 @@ export const PurchasedResourceCard = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleView = () => {
-    console.log(resource);
+  const handleView = async () => {
     if (resource.type === 'manual') {
-      navigate(`/manuales/${resource.id}`);
+      const { data: manual } = await axiosInstance.get(
+        `/manuals/${resource.id}`,
+      );
+      navigate(`/manuales/${resource.id}`, { state: { manual } });
     } else {
       navigate(`/talleres/${resource.id}`);
     }

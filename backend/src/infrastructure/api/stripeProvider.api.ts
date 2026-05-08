@@ -23,13 +23,12 @@ export const StripeProvider: PaymentProvider = {
     const stripe = new Stripe(key);
     const { amount, currency, method, name, email } = data;
     const stripeAmount = Math.round(amount * 100);
-
+    console.log('name and email:', name, email);
     if (!Number.isFinite(stripeAmount) || stripeAmount <= 0) {
       throw new Error('Amount must be a positive number');
     }
 
     let intent: Stripe.PaymentIntent;
-
     // for card payments
     if (method === 'card') {
       intent = await stripe.paymentIntents.create({
@@ -39,12 +38,42 @@ export const StripeProvider: PaymentProvider = {
       });
       // for OXXO pay
     } else if (method === 'oxxo') {
+      // Format name to have both first and last name for Stripe
+      let formattedName = name || '';
+      const nameParts = formattedName.trim().split(/\s+/);
+      if (nameParts.length === 1 && nameParts[0]) {
+        // If only first name provided, add "Unknown" as last name
+        formattedName = `${nameParts[0]} N/A`;
+      }
+
       intent = await stripe.paymentIntents.create({
         amount: stripeAmount,
         currency,
         payment_method_types: ['oxxo'],
+        confirm: true,
+        payment_method_data: {
+          type: 'oxxo',
+          billing_details: {
+            name: formattedName,
+            email,
+          },
+        },
       });
-      // for spei bank transfer
+
+      const oxxoDetails = intent.next_action?.oxxo_display_details;
+      return {
+        id: intent.id,
+        amount: intent.amount,
+        currency: intent.currency,
+        clientSecret: intent.client_secret ?? null,
+        oxxoDetails: oxxoDetails
+          ? {
+              number: oxxoDetails.number,
+              expiresAfter: oxxoDetails.expires_after,
+              voucherUrl: oxxoDetails.hosted_voucher_url,
+            }
+          : null,
+      };
     } else if (method === 'spei') {
       if (name === undefined || name === null || name === '') {
         throw new Error('Name is required for SPEI payments');
@@ -54,9 +83,17 @@ export const StripeProvider: PaymentProvider = {
         throw new Error('Email is required for SPEI payments');
       }
 
+      // Format name to have both first and last name for Stripe
+      let formattedName = name.trim();
+      const nameParts = formattedName.split(/\s+/);
+      if (nameParts.length === 1) {
+        // If only first name provided, add "Unknown" as last name
+        formattedName = `${nameParts[0]} N/A`;
+      }
+
       const customer = await stripe.customers.create({
         email: email,
-        name: name,
+        name: formattedName,
       });
 
       intent = await stripe.paymentIntents.create({
@@ -112,6 +149,7 @@ export const StripeProvider: PaymentProvider = {
       currency: intent.currency,
       clientSecret: intent.client_secret ?? null,
       speiDetails: null,
+      oxxoDetails: null,
     };
   },
 

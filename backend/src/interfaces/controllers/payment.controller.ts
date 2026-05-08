@@ -36,6 +36,7 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
     await createPendingIntentDB(PaymentDataAccess, {
       orderId: result.id,
       amount: result.amount,
+      method: method ?? 'unknown',
       currency: result.currency,
       clientSecret: null,
     });

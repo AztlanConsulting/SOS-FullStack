@@ -2,6 +2,7 @@ export interface PaymentDBDto {
   orderId: string;
   amount: number;
   currency: string;
+  method: string;
   // change to clientId when registering client si finished
   clientSecret: string | null;
 }

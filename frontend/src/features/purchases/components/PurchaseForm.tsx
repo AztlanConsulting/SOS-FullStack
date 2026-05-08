@@ -62,8 +62,8 @@ const PurchaseForm = ({
   return (
     <div>
       <Text
-        className="text-center mb-4 text-gray-700"
-        variant="h3"
+        className="text-center mb-4 text-black"
+        variant="body"
         weight="semibold"
       >
         Método de pago

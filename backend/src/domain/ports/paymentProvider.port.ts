@@ -60,12 +60,19 @@ export interface SpeiDetails {
   reference: string;
 }
 
+export interface OxxoDetails {
+  number: string | null;
+  expiresAfter: number | null;
+  voucherUrl: string | null;
+}
+
 export interface PaymentIntentResult {
   id: string;
   amount: number;
   currency: string;
   clientSecret: string | null;
   speiDetails?: SpeiDetails | null;
+  oxxoDetails?: OxxoDetails | null;
 }
 
 export interface EventDTO {

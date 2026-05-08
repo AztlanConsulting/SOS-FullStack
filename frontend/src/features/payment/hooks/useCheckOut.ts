@@ -38,6 +38,7 @@ export const useCheckout = ({
       elements,
       redirect: 'if_required',
     });
+    console.log('Stripe confirmPayment result:', { error, paymentIntent });
 
     if (error) {
       if (error.type === 'card_error' || error.type === 'validation_error') {

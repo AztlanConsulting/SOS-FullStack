@@ -29,8 +29,8 @@ const PurchaseDetails = ({
   return (
     <div className="pt-4 md:p-0 w-10/12 mx-auto">
       <Text
-        variant="h3"
-        className="text-center  text-gray-700"
+        className="text-center  text-black"
+        variant="body"
         weight="semibold"
       >
         Detalles de la compra
@@ -45,10 +45,10 @@ const PurchaseDetails = ({
         </div>
       </div>
       <div className="flex justify-between mt-4">
-        <Text weight="semibold" color="text-gray-600">
+        <Text variant="body" weight="regular" color="text-black">
           Total a pagar:
         </Text>
-        <Text variant="h1" color="text-gray-600">
+        <Text variant="h1" weight="regular" color="text-black">
           ${product?.price ?? plan?.totalPrice}
         </Text>
       </div>

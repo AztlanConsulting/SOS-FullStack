@@ -18,27 +18,27 @@ export const FilterPill = ({
       onClick={onClick}
       className={`flex items-center gap-2 px-2 py-1 rounded-lg border transition-colors ${
         isActive
-          ? 'bg-purple-200 border-purple-400'
-          : 'bg-white border-gray-300 hover:bg-gray-50'
+          ? 'bg-[#dbd2e2] border-[#9880aa] shadow-sm'
+          : 'bg-white border-[#cecece] hover:border-gray-300'
       }`}
     >
       <Text
         variant="caption"
         weight="medium"
-        color={isActive ? 'text-purple-primary' : 'text-gray-600'}
+        className={isActive ? 'text-[#9880aa]' : 'text-gray-600'}
       >
         {label}
       </Text>
 
       <span
-        className={`flex items-center justify-center px-2 py-0.5 rounded-lg shadow-sm ${
-          isActive ? 'bg-white' : 'bg-gray-200'
+        className={`flex items-center justify-center px-3 py-0.5 rounded-full ${
+          isActive ? 'bg-white shadow-sm' : 'bg-[#cecece]'
         }`}
       >
         <Text
           variant="small"
           weight="bold"
-          color={isActive ? 'text-purple-primary' : 'text-gray-500'}
+          className={isActive ? 'text-purple-primary' : 'text-gray-500'}
         >
           {count}
         </Text>

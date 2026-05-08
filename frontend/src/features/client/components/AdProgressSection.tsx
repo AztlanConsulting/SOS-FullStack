@@ -30,7 +30,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       >
         Poster de tu mascota
       </Text>
-      <div className=" bg-white rounded-3xl shadow-sm border border-gray-100 pb-8 flex flex-col items-center justify-center">
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col items-center gap-6">
         <div className="w-full max-w-[280px]">
           <img
             src={posterUrl}

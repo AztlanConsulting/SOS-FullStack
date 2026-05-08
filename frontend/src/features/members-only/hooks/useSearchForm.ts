@@ -129,7 +129,10 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
 
     const MAX_SIZE = 15 * 1024 * 1024;
 
-    if (formData.cartillaVacunacion) {
+    if (
+      formData.cartillaVacunacion &&
+      formData.cartillaVacunacion instanceof File
+    ) {
       if (formData.cartillaVacunacion.size > MAX_SIZE) {
         newErrors.cartillaVacunacion = 'El archivo no debe superar los 15MB';
       }
@@ -142,7 +145,10 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
         'image/webp',
       ];
 
-      if (!allowedTypes.includes(formData.cartillaVacunacion.type)) {
+      if (
+        formData.cartillaVacunacion instanceof File &&
+        !allowedTypes.includes(formData.cartillaVacunacion.type)
+      ) {
         newErrors.cartillaVacunacion = 'Solo se aceptan PDF o imágenes';
       }
     }

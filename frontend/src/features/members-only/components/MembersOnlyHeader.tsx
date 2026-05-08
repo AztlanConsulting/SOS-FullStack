@@ -2,6 +2,9 @@ import { Text } from '@shared/components/ui/Text';
 import ProductPageHero from '@shared/components/layout/ProductPageHero';
 import { formatDateEsShort } from '@shared/utils/dateUtils';
 import yellowIcon from '@assets/images/yellowIcon.png';
+import huskyHero from '@assets/images/sadDog.png';
+import { Button } from '@shared/components/ui/Button';
+import { FileDown } from 'lucide-react';
 import type { MembersOnly } from '../types/membersOnly.types';
 
 interface Props {
@@ -13,7 +16,7 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
   const updatedAtLabel = formatDateEsShort(membersOnly.updatedAt);
 
   const heroProduct = {
-    imageUrl: membersOnly.imageUrl,
+    imageUrl: huskyHero,
     name: membersOnly.name,
     content: membersOnly.content,
     price: 0,
@@ -60,6 +63,12 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
             Actualizado: {updatedAtLabel}
           </Text>
         </div>
+
+        <Button
+          label="Descargar manual de búsqueda"
+          variant="purple"
+          icon={FileDown}
+        />
       </div>
     </div>
   );

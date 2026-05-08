@@ -34,7 +34,7 @@ export interface SearchFormData {
   queHaceVolver: string;
   lugarFavorito: string;
 
-  cartillaVacunacion: File | null;
+  cartillaVacunacion: string | File | null;
 }
 
 export const initialSearchFormData: SearchFormData = {

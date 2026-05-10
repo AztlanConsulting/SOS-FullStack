@@ -4,6 +4,7 @@ export const createPaymentIntent = async (
   method?: string,
   name?: string,
   email?: string,
+  idempotencyKey?: string,
 ) => {
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;
@@ -13,10 +14,14 @@ export const createPaymentIntent = async (
       method,
       name,
       email,
+      idempotencyKey,
     });
     const res = await fetch(`${base_url}/payments/payment-intent`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-idempotency-key': idempotencyKey ?? '',
+      },
       body: JSON.stringify({ amount, currency, method, name, email }),
     });
     const data = await res.json();

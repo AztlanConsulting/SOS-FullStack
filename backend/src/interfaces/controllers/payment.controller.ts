@@ -21,6 +21,8 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       email?: string;
     };
 
+    const idempotencyKey = req.headers['x-idempotency-key'];
+    console.log('HEADER KEY:', idempotencyKey);
     if (amount === undefined || currency === undefined) {
       return res.status(400).json({ error: 'Missing amount or currency' });
     }
@@ -31,6 +33,7 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       method,
       name,
       email,
+      idempotencyKey: String(idempotencyKey),
     });
 
     await createPendingIntentDB(PaymentDataAccess, {
@@ -38,7 +41,7 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       amount: result.amount,
       method: method ?? 'unknown',
       currency: result.currency,
-      clientSecret: null,
+      clientSecret: result.clientSecret ?? null,
     });
 
     return res.status(201).json({

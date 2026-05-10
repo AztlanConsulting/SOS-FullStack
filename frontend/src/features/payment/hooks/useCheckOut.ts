@@ -34,6 +34,13 @@ export const useCheckout = ({
 
     setIsProcessing(true);
 
+    // For OXXO and SPEI, backend already confirmed the intent, so skip confirmPayment
+    if (paymentMethod === 'oxxo' || paymentMethod === 'spei') {
+      setShowConfirmation(true);
+      setIsProcessing(false);
+      return;
+    }
+
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',

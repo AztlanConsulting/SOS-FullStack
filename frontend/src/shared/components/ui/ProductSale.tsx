@@ -66,7 +66,7 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
           Te enviaremos los detalles de tu compra por correo electrónico después
           de completar el pago.
         </Text>
-        <div className="relative flex flex-col gap-3 w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6 color-secondary-bg rounded-lg">
+        <div className="relative flex flex-col gap-3 w-5/6 md:w-full md:max-w-lg mx-auto md:place-self-start mt-6 lg:color-secondary-bg rounded-lg">
           <Input
             type="name"
             id="name"

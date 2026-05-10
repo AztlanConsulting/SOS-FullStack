@@ -1,68 +1,62 @@
 import { useEffect, useState } from 'react';
 import { createPaymentIntent } from '@/features/payment/services/stripe.service';
-import type { Order } from '@/features/payment/types/payment.types';
+import type {
+  Order,
+  OxxoDetails,
+  SpeiDetails,
+} from '@/features/payment/types/payment.types';
 
-export const useStripeHook = (data: Order) => {
+export const useStripeHook = (data: Order, idempotencyKey: string) => {
   const [clientSecret, setClientSecret] = useState<string | undefined>();
   const [paymentId, setPaymentId] = useState<string | undefined>();
   const [loading, setLoading] = useState(true);
-  const [oxxoData, setOxxoData] = useState<{
-    number: string;
-    expiresAfter: number;
-    voucherUrl: string;
-  } | null>(null);
+  const [oxxoData, setOxxoData] = useState<OxxoDetails | null>(null);
+  const [speiData, setSpeiData] = useState<SpeiDetails | null>(null);
 
   useEffect(() => {
-    let mounted = true;
+    let cancelled = false;
+    console.log('IDEMPOTENCY KEY SENT:', idempotencyKey);
     const init = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
         const res = await createPaymentIntent(
           data.amount,
           data.currency,
           data.method,
           data.name,
           data.email,
+          idempotencyKey,
         );
 
-        if (!res) {
-          console.error('createPaymentIntent returned no result');
-          if (mounted) {
-            setClientSecret(undefined);
-            setPaymentId(undefined);
-            setLoading(false);
-          }
-          return;
-        }
+        console.log('HOLA STRIPE HOOK Payment intent creation response:', res);
 
-        if (mounted) {
-          setClientSecret(res.clientSecret ?? undefined);
-          setPaymentId(res.id ?? undefined);
-          setOxxoData(res.oxxoDetails ?? null);
-        }
+        if (cancelled) return;
+
+        setClientSecret(res.clientSecret ?? undefined);
+        setPaymentId(res.id ?? undefined);
+        setOxxoData(res.oxxoDetails ?? null);
+        setSpeiData(res.speiDetails ?? null);
       } catch (error) {
-        console.error('Payment intent initialization failed:', error);
-        if (mounted) {
-          setClientSecret(undefined);
-          setPaymentId(undefined);
+        console.error(error);
+      } finally {
+        if (!cancelled) {
           setLoading(false);
         }
-      } finally {
-        if (mounted) setLoading(false);
       }
     };
 
     init();
 
     return () => {
-      mounted = false;
+      cancelled = true;
     };
-  }, [data.amount, data.currency, data.method, data.name, data.email]);
+  }, []);
 
   return {
     clientSecret,
     loading,
     paymentId,
     oxxoData,
+    speiData,
   };
 };

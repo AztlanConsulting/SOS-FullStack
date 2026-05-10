@@ -52,12 +52,16 @@ export interface PaymentIntentDTO {
     productId: string;
   };
   plan?: PetReportData;
+  idempotencyKey?: string;
 }
 
 export interface SpeiDetails {
   clabe: string;
   bankName: string;
   reference: string;
+  bankCode?: string;
+  holderName?: string;
+  holderAddress?: Stripe.Address;
 }
 
 export interface OxxoDetails {

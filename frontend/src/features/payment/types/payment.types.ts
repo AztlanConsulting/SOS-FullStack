@@ -1,4 +1,5 @@
 import type { LostPetReportData } from '@/shared/types/petReport.types';
+import type { Address } from '@stripe/stripe-js';
 
 export type Order = {
   amount: number;
@@ -20,3 +21,18 @@ export type PurchaseDetail = {
   productId: string;
   productType: string;
 };
+
+export interface SpeiDetails {
+  clabe: string;
+  bankName: string;
+  reference: string;
+  bankCode?: string;
+  holderName?: string;
+  holderAddress?: Address;
+}
+
+export interface OxxoDetails {
+  number: string | null;
+  expiresAfter: number | null;
+  voucherUrl: string | null;
+}

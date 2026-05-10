@@ -29,7 +29,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
 
   return (
     <>
-      <div className="mx-auto w-full">
+      <div className="mx-auto w-full flex justify-center">
         <PayPalOneTimePaymentButton
           className="-z-20 w-full"
           presentationMode="auto"

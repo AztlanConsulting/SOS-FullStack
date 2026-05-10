@@ -7,6 +7,7 @@ export interface MembersOnly {
   duration: number;
   content: string;
   imageUrl: string;
+  pdfUrl: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +18,7 @@ const MembersOnlySchema = new Schema<MembersOnly>(
     duration: { type: Number, required: true },
     content: { type: String, required: true },
     imageUrl: { type: String, required: true },
+    pdfUrl: { type: String, required: true },
   },
   { timestamps: true },
 );

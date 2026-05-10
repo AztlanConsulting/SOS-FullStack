@@ -1,19 +1,26 @@
 import SearchFormPage from '@/pages/SearchFormPage';
 import MembersOnly from '../pages/MembersOnly';
 import MembersOnlyPage from '../pages/MembersOnlyPage';
+import { Outlet } from 'react-router';
 
 const routes = [
   {
-    path: '/portal-exclusivo',
-    element: <MembersOnly />,
-  },
-  {
-    path: '/portal-exclusivo/formulario',
-    element: <SearchFormPage />,
-  },
-  {
-    path: '/portal-exclusivo/page/:id',
-    element: <MembersOnlyPage />,
+    path: '/contenido-exclusivo',
+    element: <Outlet />,
+    children: [
+      {
+        index: true,
+        element: <MembersOnly />,
+      },
+      {
+        path: 'formulario',
+        element: <SearchFormPage />,
+      },
+      {
+        path: 'page/:id',
+        element: <MembersOnlyPage />,
+      },
+    ],
   },
 ];
 

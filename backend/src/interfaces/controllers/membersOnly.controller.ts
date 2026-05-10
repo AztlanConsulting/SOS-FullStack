@@ -8,7 +8,10 @@ import {
   getMembersOnlyList,
   getMembersOnlyById,
   createMembersOnly,
+  getMemberFilePath,
 } from '@use-cases/members-only/getMembersOnly.usecase';
+import fs from 'fs';
+import path from 'path';
 
 export async function getMembersOnly(req: Request, res: Response) {
   try {
@@ -62,4 +65,22 @@ export async function postMembersOnly(req: Request, res: Response) {
   }
 }
 
-export default { getMembersOnly, postMembersOnly };
+export async function getMemberFile(req: Request, res: Response) {
+  try {
+    const { filename } = req.params;
+    if (typeof filename !== 'string') {
+      return res.status(400).send('Invalid filename');
+    }
+    const filePath = getMemberFilePath(filename);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send('File not found');
+    }
+
+    return res.sendFile(filePath);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+}
+
+export default { getMembersOnly, postMembersOnly, getMemberFile };

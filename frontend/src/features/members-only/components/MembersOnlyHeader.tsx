@@ -2,7 +2,6 @@ import { Text } from '@shared/components/ui/Text';
 import ProductPageHero from '@shared/components/layout/ProductPageHero';
 import { formatDateEsShort } from '@shared/utils/dateUtils';
 import yellowIcon from '@assets/images/yellowIcon.png';
-import huskyHero from '@assets/images/sadDog.png';
 import { Button } from '@shared/components/ui/Button';
 import { FileDown } from 'lucide-react';
 import type { MembersOnly } from '../types/membersOnly.types';
@@ -14,12 +13,18 @@ interface Props {
 const MembersOnlyHeader = ({ membersOnly }: Props) => {
   const createdAtLabel = formatDateEsShort(membersOnly.createdAt);
   const updatedAtLabel = formatDateEsShort(membersOnly.updatedAt);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const heroProduct = {
-    imageUrl: huskyHero,
+    _id: membersOnly._id,
+    imageUrl: `${apiBaseUrl}${membersOnly.imageUrl}`,
     name: membersOnly.name,
     content: membersOnly.content,
     price: 0,
+  };
+
+  const handleDownload = () => {
+    window.open(`${apiBaseUrl}${membersOnly.pdfUrl}`, '_blank');
   };
 
   return (
@@ -68,6 +73,7 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
           label="Descargar manual de búsqueda"
           variant="purple"
           icon={FileDown}
+          onClick={handleDownload}
         />
       </div>
     </div>

@@ -4,6 +4,7 @@ export type MembersOnly = {
   duration: number;
   content: string;
   imageUrl: string;
+  pdfUrl: string;
   createdAt: string;
   updatedAt: string;
 };

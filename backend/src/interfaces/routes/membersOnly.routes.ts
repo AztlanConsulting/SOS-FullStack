@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get('/', membersOnlyController.getMembersOnly);
 router.post('/', membersOnlyController.postMembersOnly);
+router.get('/file/:filename', membersOnlyController.getMemberFile);
 
 export default router;

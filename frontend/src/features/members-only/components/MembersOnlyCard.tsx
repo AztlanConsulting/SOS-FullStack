@@ -2,15 +2,15 @@ import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
 import { useNavigate } from 'react-router';
 import type { MembersOnly } from '../types/membersOnly.types';
-import dog2 from '@assets/images/husky1.jpg';
 
 const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
   const navigate = useNavigate();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   return (
     <div className="bg-white rounded-lg border w-full flex flex-col h-full">
       <img
-        src={dog2}
+        src={`${apiBaseUrl}${card.imageUrl}`}
         alt={card.name}
         className="rounded-t-lg w-full h-40 object-cover"
       />
@@ -41,7 +41,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
           <Button
             label="Ver"
             variant="purple"
-            onClick={() => navigate(`/portal-exclusivo/page/${card._id}`)}
+            onClick={() => navigate(`/contenido-exclusivo/page/${card._id}`)}
           />
         </div>
       </div>

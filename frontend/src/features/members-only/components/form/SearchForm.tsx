@@ -145,7 +145,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialData }) => {
             description="Gracias por reportar la mascota perdida."
             onClose={() => {
               resetForm();
-              navigate('/portal-exclusivo/formulario');
+              navigate('/contenido-exclusivo/formulario');
             }}
           />
         )}

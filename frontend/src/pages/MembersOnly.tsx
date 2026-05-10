@@ -35,7 +35,7 @@ const MembersOnly = () => {
                   label="Formulario de búsqueda"
                   variant="purple"
                   icon={HiChevronRight}
-                  onClick={() => navigate('/portal-exclusivo/formulario')}
+                  onClick={() => navigate('/contenido-exclusivo/formulario')}
                 />
               </div>
             </>

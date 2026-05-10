@@ -8,7 +8,6 @@ interface Props {
 
 const PetCard = ({ petInfo }: Props) => {
   const image = `data:image/png;base64,${petInfo.image}`;
-  console.log(petInfo);
 
   return (
     <Link

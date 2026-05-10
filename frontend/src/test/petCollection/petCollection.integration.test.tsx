@@ -9,6 +9,7 @@ import {
 import axiosInstance from '@/shared/utils/axios';
 import SearchPetsPage from '@/features/petCollection/components/SearchPetsPage';
 import wrapper from '../utils/wrapper.util';
+import { MemoryRouter } from 'react-router';
 
 vi.mock('@/shared/utils/axios', () => ({
   default: {
@@ -44,7 +45,12 @@ describe('SearchPetsPage Integration', () => {
 
     (axiosInstance.post as any).mockResolvedValue({ data: mockPets });
 
-    render(<SearchPetsPage />, { wrapper });
+    render(
+      <MemoryRouter>
+        <SearchPetsPage />
+      </MemoryRouter>,
+      { wrapper },
+    );
 
     const file = new File(['hello'], 'dog.png', { type: 'image/png' });
 
@@ -82,7 +88,12 @@ describe('SearchPetsPage Integration', () => {
 
     (axiosInstance.post as any).mockResolvedValue({ data: mockPets });
 
-    render(<SearchPetsPage />, { wrapper });
+    render(
+      <MemoryRouter>
+        <SearchPetsPage />
+      </MemoryRouter>,
+      { wrapper },
+    );
 
     const file = new File(['hello'], 'dog.png', { type: 'image/png' });
 

@@ -1,5 +1,6 @@
 import PetCard from '@/features/petCollection/components/PetCard';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { describe, expect, test } from 'vitest';
 
 describe('State management and components', () => {
@@ -12,7 +13,11 @@ describe('State management and components', () => {
       location: 'City',
       details: 'brown',
     };
-    render(<PetCard petInfo={pet} />);
+    render(
+      <MemoryRouter>
+        <PetCard petInfo={pet} />
+      </MemoryRouter>,
+    );
     expect(screen.getByText('Dog')).toBeDefined();
     expect(screen.getByText('City')).toBeDefined();
   });

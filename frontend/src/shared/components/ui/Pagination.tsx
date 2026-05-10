@@ -3,6 +3,7 @@ import type React from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
 
 interface Props {
+  variant?: 'primary' | 'purple';
   pages: {
     visiblePages: number[];
     totalPages: number;
@@ -13,10 +14,20 @@ interface Props {
   };
 }
 
-const Pagination = ({ pages }: Props) => {
+const Pagination = ({ pages, variant = 'primary' }: Props) => {
   const page = pages.pageHook[0];
   const setPage = pages.pageHook[1];
   const totalPages = pages.totalPages;
+
+  const activeStyles = {
+    primary: 'color-primary-bg text-black',
+    purple: 'bg-[#9D7FAD] text-white',
+  };
+
+  const textColor =
+    variant === 'purple' && page === pages.visiblePages.find((p) => p === page)
+      ? 'text-white'
+      : 'text-black';
 
   return (
     <div className="flex justify-center items-center gap-2 mt-6 pb-8">
@@ -28,19 +39,29 @@ const Pagination = ({ pages }: Props) => {
         <HiChevronLeft size="100%" className="h-5" />
       </button>
 
-      {pages.visiblePages.map((p) => (
-        <button
-          key={p}
-          onClick={() => setPage(p)}
-          className={`h-8 aspect-square border rounded cursor-pointer ${
-            page === p ? 'color-primary-bg text-black' : 'bg-white text-black'
-          }`}
-        >
-          <Text as="p" variant="body" weight="regular" color="text-black">
-            {p}
-          </Text>
-        </button>
-      ))}
+      {pages.visiblePages.map((p) => {
+        const isActive = page === p;
+        return (
+          <button
+            key={p}
+            onClick={() => setPage(p)}
+            className={`h-8 aspect-square border rounded cursor-pointer ${
+              isActive ? activeStyles[variant] : 'bg-white text-black'
+            }`}
+          >
+            <Text
+              as="p"
+              variant="body"
+              weight="regular"
+              color={
+                isActive && variant === 'purple' ? 'text-white' : 'text-black'
+              }
+            >
+              {p}
+            </Text>
+          </button>
+        );
+      })}
 
       <button
         onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}

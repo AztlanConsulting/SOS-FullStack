@@ -61,7 +61,7 @@ export const router = createBrowserRouter([
             <ClientDashboard />
           </RoleProtectedRoute>
         ),
-        children: [...routerClient],
+        children: [...routerClient, ...routerMembersOnly],
       },
       {
         path: '/credits',
@@ -92,7 +92,6 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
-      ...routerMembersOnly,
     ],
   },
 ]);

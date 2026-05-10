@@ -5,7 +5,7 @@ import { Outlet } from 'react-router';
 
 const routes = [
   {
-    path: '/contenido-exclusivo',
+    path: 'contenido-exclusivo',
     element: <Outlet />,
     children: [
       {

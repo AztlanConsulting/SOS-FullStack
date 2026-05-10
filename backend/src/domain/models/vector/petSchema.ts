@@ -31,10 +31,5 @@ export const petConfig = {
       dataType: ['string'],
       tokenization: 'word',
     },
-    {
-      name: 'details',
-      dataType: ['string'],
-      tokenization: 'word',
-    },
   ],
 };

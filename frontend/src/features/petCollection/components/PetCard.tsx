@@ -1,5 +1,6 @@
 import { Text } from '@/shared/components/ui/Text';
 import type { PetInfo } from '../types/petCollection.types';
+import { Link } from 'react-router';
 
 interface Props {
   petInfo: PetInfo;
@@ -7,25 +8,29 @@ interface Props {
 
 const PetCard = ({ petInfo }: Props) => {
   const image = `data:image/png;base64,${petInfo.image}`;
+  console.log(petInfo);
 
   return (
-    <div className="w-full rounded-xl flex flex-col relative border-2 border-gray-400 overflow-hidden md:max-h-96">
-      <div className="relative h-64 w-full">
+    <Link
+      className="w-full rounded-xl flex flex-col relative border-2 border-gray-400 overflow-hidden cursor-pointer"
+      to={`/inicio/coleccion-mascotas/${petInfo.refId}`}
+    >
+      <div className="relative h-56 w-full">
         <img
           alt="Mascota encontrada"
           src={image}
           className="w-full md:max-h-56 h-full object-cover"
         />
-        <div className="absolute bottom-4 left-2 border-2 border-green-400 bg-green-100 p-0.5 rounded-sm">
-          <Text variant="small" color="green-400">
+        <div className="absolute bottom-4 left-2 border-2 border-green-500 bg-green-100 p-0.5 rounded-sm">
+          <Text variant="small" color="text-green-500">
             Encontrado
           </Text>
         </div>
       </div>
 
       <section className="w-full bg-white divide-y-2 divide-gray-400">
-        <div className="flex flex-col px-2 py-1">
-          <Text variant="h2" weight="semibold">
+        <div className="flex flex-col p-2">
+          <Text variant="h2" weight="medium">
             {petInfo.species}
           </Text>
         </div>
@@ -33,7 +38,7 @@ const PetCard = ({ petInfo }: Props) => {
           <Text className="text-gray-500">{petInfo.location}</Text>
         </div>
       </section>
-    </div>
+    </Link>
   );
 };
 

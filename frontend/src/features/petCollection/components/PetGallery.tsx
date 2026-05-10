@@ -11,7 +11,7 @@ import PetList from './PetList';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import { Text } from '@/shared/components/ui/Text';
 import type { PetCollectionQuery } from '../types/petCollection.types';
-import { HiFilter, HiOutlineFilter } from 'react-icons/hi';
+import { HiOutlineFilter } from 'react-icons/hi';
 import PetDropDown from './PetDropDown';
 import useClickOutside from '@/shared/hooks/useClickOutside';
 
@@ -22,13 +22,19 @@ interface Props {
     totalPages: number;
   };
   vectorImages: PetCollectionQuery;
+  img: File | null;
 }
 
 interface PetGalleryProps extends Props {
   handleSearch: (k: string, v: string) => void;
 }
 
-const PetGallery = ({ handleSearch, pages, vectorImages }: PetGalleryProps) => {
+const PetGallery = ({
+  handleSearch,
+  pages,
+  vectorImages,
+  img,
+}: PetGalleryProps) => {
   const [isOpen, setIsOpen] = useState(false);
   // Ref for the dropdown menu to handle outside clicks
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -61,13 +67,13 @@ const PetGallery = ({ handleSearch, pages, vectorImages }: PetGalleryProps) => {
       )}
 
       {!vectorImages.isLoading && !vectorImages.error && (
-        <GalleryContent vectorImages={vectorImages} pages={pages} />
+        <GalleryContent vectorImages={vectorImages} pages={pages} img={img} />
       )}
     </div>
   );
 };
 
-const GalleryContent = ({ vectorImages, pages }: Props) => {
+const GalleryContent = ({ vectorImages, pages, img }: Props) => {
   return (
     <>
       {vectorImages.data && vectorImages.data.length > 0 ? (
@@ -84,7 +90,9 @@ const GalleryContent = ({ vectorImages, pages }: Props) => {
             color="text-grey-500"
             className="max-md:text-center"
           >
-            Sube una imagen primero para poder buscar a tu mascota
+            {img
+              ? 'No se encontraron resultados'
+              : 'Sube una imagen primero para poder buscar a tu mascota'}
           </Text>
         </div>
       )}

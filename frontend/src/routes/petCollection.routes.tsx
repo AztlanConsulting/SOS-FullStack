@@ -12,7 +12,7 @@ const router = [
         element: <SearchPets />,
       },
       {
-        path: 'detalles/:id',
+        path: ':id',
         element: <PetDetails />,
       },
     ],

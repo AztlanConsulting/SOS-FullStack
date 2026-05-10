@@ -44,42 +44,39 @@ export const petVector: PetVectorRepository = {
     const image = petImage.image.toString('base64');
     const { page, color, species, location } = petImage.query;
 
-    const operands: any[] = [];
-    if (species)
-      operands.push({
-        path: ['species'],
-        operator: 'Equal',
-        valueString: species,
-      });
-    if (color)
-      operands.push({ path: ['color'], operator: 'Equal', valueString: color });
-    if (location)
-      operands.push({
-        path: ['location'],
-        operator: 'Equal',
-        valueString: location,
-      });
-
     let query = vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species location color details')
+      .withFields('image refId species location color')
       .withNearImage({ image: image, distance: maxDistance })
-      .withOffset(page! * 10)
-      .withLimit(10);
-
-    if (operands.length > 0) {
-      query = query.withWhere({
-        operator: 'And',
-        operands: operands,
-      });
-    }
+      .withOffset(0)
+      .withLimit(100);
 
     const resImg = await query.do();
 
-    const result: PetImage[] = resImg.data.Get.Pet;
+    const allResults: PetImage[] = resImg.data.Get.Pet ?? [];
+    allResults.forEach((x) => console.log(x.color));
 
-    return result;
+    const normalize = (str?: string) =>
+      str
+        ?.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim() ?? '';
+
+    const filtered = allResults.filter((pet) => {
+      const matchesSpecies =
+        !species || normalize(pet.species).includes(normalize(species));
+      const matchesColor =
+        !color || normalize(pet.color).includes(normalize(color));
+      const matchesLocation =
+        !location || normalize(pet.location).includes(normalize(location));
+
+      return matchesSpecies && matchesColor && matchesLocation;
+    });
+
+    const pageNum = page ?? 0;
+    return filtered.slice(pageNum * 10, (pageNum + 1) * 10);
   },
 
   /**
@@ -91,7 +88,7 @@ export const petVector: PetVectorRepository = {
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species location color details')
+      .withFields('image refId species location color')
       .withWhere({
         path: ['refId'],
         operator: 'Equal',
@@ -112,39 +109,34 @@ export const petVector: PetVectorRepository = {
     const image = petImage.image.toString('base64');
     const { color, species, location } = petImage.query;
 
-    const operands: any[] = [];
-    if (species)
-      operands.push({
-        path: ['species'],
-        operator: 'Equal',
-        valueString: species,
-      });
-    if (color)
-      operands.push({ path: ['color'], operator: 'Equal', valueString: color });
-    if (location)
-      operands.push({
-        path: ['location'],
-        operator: 'Equal',
-        valueString: location,
-      });
-
     let query = vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species location color details')
+      .withFields('image refId species location color')
       .withNearImage({ image: image, distance: maxDistance });
-    // .withNearImage({ image: image }
-
-    if (operands.length > 0) {
-      query = query.withWhere({
-        operator: 'And',
-        operands: operands,
-      });
-    }
 
     const imgCount = await query.do();
-    const length = imgCount.data.Get.Pet.length;
 
-    return length;
+    const allResults: PetImage[] = imgCount.data.Get.Pet ?? [];
+
+    const normalize = (str?: string) =>
+      str
+        ?.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim() ?? '';
+
+    const filtered = allResults.filter((pet) => {
+      const matchesSpecies =
+        !species || normalize(pet.species).includes(normalize(species));
+      const matchesColor =
+        !color || normalize(pet.color).includes(normalize(color));
+      const matchesLocation =
+        !location || normalize(pet.location).includes(normalize(location));
+
+      return matchesSpecies && matchesColor && matchesLocation;
+    });
+
+    return filtered.length;
   },
 };

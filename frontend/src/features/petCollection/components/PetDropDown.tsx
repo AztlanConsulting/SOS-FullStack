@@ -1,6 +1,6 @@
 import { Button } from '@/shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
-import { useState, type RefObject } from 'react';
+import { useState } from 'react';
 
 interface Props {
   isOpen: boolean;
@@ -32,7 +32,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             <Text
               variant="h3"
               weight="semibold"
-              color="text-primary"
+              color="text-purple-primary"
               className="text-center"
             >
               Color
@@ -50,7 +50,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             <Text
               variant="h3"
               weight="semibold"
-              color="text-primary"
+              color="text-purple-primary"
               className="text-center"
             >
               Lugar
@@ -68,7 +68,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             <Text
               variant="h3"
               weight="semibold"
-              color="text-primary"
+              color="text-purple-primary"
               className="text-center"
             >
               Tipo
@@ -83,16 +83,24 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             onChange={(e) => setSpecies(e.target.value)}
           />
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 h-10">
           <button
             onClick={clean}
-            className="rounded-full bg-white border-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
+            className="rounded-full bg-white border-purple-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
           >
             <Text variant="caption" weight="medium" className="text-inherit">
               Borrar
             </Text>
           </button>
-          <Button label={'Buscar'} onClick={search} />
+          <button
+            onClick={search}
+            className="rounded-full bg-purple-primary border-purple-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
+            type="submit"
+          >
+            <Text variant="caption" weight="medium" className="text-inherit">
+              Buscar
+            </Text>
+          </button>
         </div>
       </div>
     )

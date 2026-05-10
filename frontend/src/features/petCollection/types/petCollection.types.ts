@@ -9,6 +9,11 @@ export interface PetInfo {
   details: string;
 }
 
+export interface PetInfoDetailed extends PetInfo {
+  rescuer: string;
+  email: string;
+}
+
 export interface PetFilter {
   color: string;
   location: string;

@@ -27,6 +27,7 @@ const SearchPetsPage = () => {
         handleSearch={handleSearch}
         pages={pages}
         vectorImages={vectorImages}
+        img={img}
       />
     </div>
   );

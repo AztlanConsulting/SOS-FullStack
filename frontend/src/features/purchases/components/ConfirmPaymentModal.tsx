@@ -21,58 +21,95 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
 
   return (
     <section
-      className="fixed top-14 lg:top-16 left-0 h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-4rem)] w-screen bg-gray-800/50 flex items-center justify-center z-10"
+      className="fixed inset-0 bg-gray-900/60 flex items-center justify-center z-50 p-4"
       onClick={close}
-      id="dialog"
     >
-      <div className="rounded-lg flex items-center w-5/6 md:w-4/5 lg:w-full lg:max-w-2xl xl:max-w-3xl md:w-1/2">
-        <div className="rounded-lg bg-white flex flex-col w-full">
-          <div className="rounded-t-lg bg-[#F9CD48] px-5 py-4 flex items-center justify-between border-b-2 border-[#AFB1B6]">
+      <div
+        className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[95vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header - Compact */}
+        <div className="bg-[#F9CD48] px-5 py-3 border-b border-black/10 shrink-0">
+          <Text
+            variant="body"
+            weight="regular"
+            className="text-white text-center tracking-tight"
+          >
+            Pago confirmado
+          </Text>
+        </div>
+
+        {/* Scrollable Content Area */}
+        <div className="p-6 overflow-y-auto flex flex-col items-center">
+          <img src={success} alt="Success" className="w-14 mb-4" />
+
+          <Text
+            variant="h3"
+            weight="bold"
+            className="text-center text-gray-900 mb-2"
+          >
+            {plan ? '¡Todo listo!' : '¡Compra exitosa!'}
+          </Text>
+
+          <Text
+            variant="body"
+            className="text-gray-600 text-center mb-4 text-sm leading-snug"
+          >
+            {plan
+              ? 'Tu anuncio será publicado en unos minutos.'
+              : 'Hemos procesado tu pedido correctamente.'}
+          </Text>
+
+          {/* Details Card - Thinner Padding */}
+          <div className="w-full bg-green-50/50 rounded-lg p-4 border border-green-100 mb-6 text-sm">
             <Text
-              variant="body"
-              weight="medium"
-              className="text-white flex-1 text-center"
+              variant="small"
+              weight="bold"
+              className="text-green-800 uppercase text-[10px] tracking-widest mb-2 block"
             >
-              ¡Gracias por tu compra!
+              Resumen de orden
             </Text>
-          </div>
-          <div className="flex flex-col gap-3 w-full px-5">
-            <img
-              src={success}
-              alt="Success"
-              className="w-1/7 mt-5 self-center"
-            />
-            <Text
-              variant="body"
-              className="text-gray-700 leading-relaxed color-grey-border-bottom pb-5 text-center"
-            >
-              {plan
-                ? '¡Tu anuncio será publicado en unos minutos!'
-                : '¡La compra ha sido exitosa!'}{' '}
-            </Text>
+
             {plan && (
-              <>
-                <Text variant="body" className="text-gray-700 leading-relaxed">
-                  Tipo de plan: {plan.planName}
-                </Text>
-                <Text variant="body" className="text-gray-700 leading-relaxed">
-                  Duración: {plan.planDetails!.days}
-                </Text>
-                <Text variant="body" className="text-gray-700 leading-relaxed">
-                  Distancia: {plan.planDetails!.km}
-                </Text>
-              </>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Plan</span>
+                  <span className="font-semibold text-gray-900">
+                    {plan.planName}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Cobertura</span>
+                  <span className="font-semibold text-gray-900">
+                    {plan.planDetails!.km} km
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Vigencia</span>
+                  <span className="font-semibold text-gray-900">
+                    {plan.planDetails!.days} días
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Precio</span>
+                  <span className="font-semibold text-gray-900">
+                    ${plan.planDetails!.totalPrice.toFixed(2)}
+                  </span>
+                </div>
+              </div>
             )}
+
             {product && (
-              <Text variant="body" className="text-gray-700 leading-relaxed">
-                Producto: {product.name} <br />
-                Precio: ${product.price}
-              </Text>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500">Producto</span>
+                <span className="font-semibold text-gray-900">
+                  {product.name} (${product.price})
+                </span>
+              </div>
             )}
           </div>
-          <div className="w-full flex justify-center self-center py-5 px-3 lg:px-0">
-            <Button onClick={close} label={'Cerrar'} variant="primary" />
-          </div>
+
+          <Button onClick={close} label="Ir al Inicio" variant="primary" />
         </div>
       </div>
     </section>

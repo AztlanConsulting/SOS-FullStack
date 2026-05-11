@@ -362,24 +362,19 @@ export const StripeCard = ({
                 variant="caption"
                 as="p"
                 weight="medium"
-                className="text-center leading-relaxed py-1 mb-4 text-gray-700"
+                className="leading-relaxed py-1 mb-4 text-gray-700"
               >
                 {data.method === 'oxxo'
-                  ? 'Por favor confirma el pago en OXXO. Te mandaremos un correo de la información de tu pago y el voucher.'
-                  : 'Por favor confirma el pago por SPEI. Te enviaremos por correo los detalles de tu pago.'}
+                  ? '¿Ya guardaste tu número de voucher? Al finalizar, te enviaremos una copia a tu correo para que puedas pagar en caja.'
+                  : 'Asegúrate de copiar la CLABE y referencia. Al finalizar, te enviaremos estos detalles por correo para tu seguimiento.'}
               </Text>
+
               <div className="flex flex-col gap-3">
-                <Button
-                  type="button"
-                  onClick={() => setShowConfirmation(false)}
-                  variant="secondary"
-                  label="Cancelar"
-                />
                 <Button
                   type="button"
                   onClick={onConfirm}
                   variant="primary"
-                  label="Confirmar"
+                  label="Entendido, finalizar"
                 />
               </div>
             </div>

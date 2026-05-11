@@ -21,56 +21,91 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
 
   return (
     <section
-      className="fixed top-14 lg:top-16 left-0 h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-4rem)] w-screen bg-gray-800/50 flex items-center justify-center z-10"
+      className="fixed inset-0 bg-gray-900/60 flex items-center justify-center z-50 p-4"
       onClick={close}
-      id="dialog"
     >
-      <div className="rounded-lg flex items-center w-5/6 md:w-1/2">
-        <div className="rounded-lg bg-white flex flex-col w-full">
-          <div className="rounded-t-lg bg-[#F9CD48] px-5 py-4 flex items-center justify-between border-b-2 border-[#AFB1B6]">
-            <Text
-              variant="body"
-              weight="medium"
-              className="text-white flex-1 text-center"
-            >
-              Compra pendiente
-            </Text>
-          </div>
-          <div className="flex flex-col gap-3 w-full px-5">
-            <img
-              src={pending}
-              alt="pending"
-              className="w-1/7 mt-5 self-center"
-            />
-            <Text
-              variant="body"
-              className="text-gray-700 leading-relaxed color-grey-border-bottom pb-5 text-center"
-            >
-              Te enviaremos instrucciones por correo al confirmar tu pago.
-            </Text>
+      <div
+        className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[95vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header - Shrink-0 prevents squashing */}
+        <div className="bg-[#F9CD48] px-5 py-3 border-b border-black/10 shrink-0">
+          <Text
+            variant="body"
+            weight="regular"
+            className="text-white text-center tracking-tight"
+          >
+            Trámite en proceso
+          </Text>
+        </div>
+
+        {/* Content area with internal scroll if height is restricted */}
+        <div className="p-6 overflow-y-auto flex flex-col items-center">
+          <img src={pending} alt="pending" className="w-14 mb-4" />
+
+          <Text
+            variant="h3"
+            weight="bold"
+            className="text-center text-gray-900 mb-2"
+          >
+            ¡Ya casi está listo!
+          </Text>
+
+          <Text
+            variant="body"
+            className="text-gray-600 text-center mb-4 text-sm leading-snug"
+          >
+            Tu orden ha sido registrada.{' '}
+            <strong>Ya puedes cerrar esta ventana.</strong> Te enviamos los
+            detalles a tu correo.
+          </Text>
+
+          {/* Summary Box - Condensed spacing */}
+          <div className="w-full bg-gray-50 rounded-lg p-4 border border-gray-100 mb-6 text-sm">
             {plan && (
-              <>
-                <Text variant="body" className="text-gray-700 leading-relaxed">
-                  Tipo de plan: {plan.planName}
-                </Text>
-                <Text variant="body" className="text-gray-700 leading-relaxed">
-                  Duración: {plan.planDetails!.days}
-                </Text>
-                <Text variant="body" className="text-gray-700 leading-relaxed">
-                  Distancia: {plan.planDetails!.km}
-                </Text>
-              </>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 text-xs uppercase font-medium">
+                    Plan
+                  </span>
+                  <span className="font-semibold text-gray-900">
+                    {plan.planName}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Cobertura</span>
+                  <span className="font-semibold text-gray-900">
+                    {plan.planDetails!.km} km
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Vigencia</span>
+                  <span className="font-semibold text-gray-900">
+                    {plan.planDetails!.days} días
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500">Precio</span>
+                  <span className="font-semibold text-gray-900">
+                    ${plan.planDetails!.totalPrice.toFixed(2)}
+                  </span>
+                </div>
+              </div>
             )}
+
             {product && (
-              <Text variant="body" className="text-gray-700 leading-relaxed">
-                Producto: {product.name} <br />
-                Precio: ${product.price}
-              </Text>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500 text-xs uppercase font-medium">
+                  Producto
+                </span>
+                <span className="font-semibold text-gray-900 text-right">
+                  {product.name} (${product.price})
+                </span>
+              </div>
             )}
           </div>
-          <div className="w-full flex justify-center self-center py-5 ">
-            <Button onClick={close} label={'Cerrar'} variant="primary" />
-          </div>
+
+          <Button onClick={close} label="Entendido" variant="primary" />
         </div>
       </div>
     </section>

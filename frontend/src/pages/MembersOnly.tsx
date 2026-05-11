@@ -20,14 +20,14 @@ const MembersOnly = () => {
       <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
           bg="bg-light-purple"
-          title={'Portal exclusivo'}
+          title={'Contenido Exclusivo'}
           image={owner}
           shadowClass="color-light-purple-shadow"
           content={
             <>
               <div className="flex flex-col gap-4">
                 <Text>
-                  En el portal exclusivo de SOS ofrecemos recursos con
+                  En contenido exclusivo de SOS ofrecemos recursos con
                   instrucciones específicas de cómo afrontar este momento
                   difícil.
                 </Text>

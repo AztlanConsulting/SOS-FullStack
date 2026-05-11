@@ -16,7 +16,6 @@ const MembersOnly = () => {
 
   return (
     <div className="min-h-screen">
-      <Header color="purple-primary" />
       <main className="pt-[80.67px] lg:pt-0">
         <HeroSection
           bg="bg-light-purple"
@@ -48,7 +47,6 @@ const MembersOnly = () => {
         <GoodToKnow />
         <FaqSection />
       </main>
-      <Footer bg="color-purple-bg" />
     </div>
   );
 };

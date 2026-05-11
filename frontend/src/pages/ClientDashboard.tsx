@@ -26,7 +26,7 @@ const ClientDashboard = () => {
         signBtn={SignOut}
       />
       <Outlet />
-      <Footer />
+      <Footer bg="color-purple-bg" />
     </>
   );
 };

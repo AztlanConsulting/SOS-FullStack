@@ -8,8 +8,8 @@ export interface SearchFormReport {
   tamano: 'Pequeno' | 'Mediano' | 'Grande';
   edadAproximada: number;
   sexo: 'Macho' | 'Hembra';
-  esterilizado: boolean;
-  collarPlaca: boolean;
+  esterilizado: 'Si' | 'No';
+  collarPlaca: 'Si' | 'No';
   condicionFisica: string;
 
   referenciasVisuales: string;
@@ -21,8 +21,8 @@ export interface SearchFormReport {
   reaccionRuidos: 'Se asusta' | 'Huye' | 'Ignora' | 'Otro';
   reaccionRuidosOtro: string;
   respondeNombre: 'Si' | 'No' | 'A veces';
-  acostumbradoSalir: boolean;
-  haEscapadoAntes: boolean;
+  acostumbradoSalir: 'Si' | 'No';
+  haEscapadoAntes: 'Si' | 'No';
   quePasoEscapado: string;
   tieneMiedo: string;
   leFacilSocializar: 'Si' | 'No';
@@ -62,8 +62,8 @@ const searchFormSchema = new Schema<ISearchForm>(
       required: true,
       enum: ['Macho', 'Hembra'],
     },
-    esterilizado: { type: Boolean, required: true },
-    collarPlaca: { type: Boolean, required: true },
+    esterilizado: { type: String, required: true, enum: ['Si', 'No'] },
+    collarPlaca: { type: String, required: true, enum: ['Si', 'No'] },
     condicionFisica: { type: String, required: true },
 
     referenciasVisuales: { type: String, required: true },
@@ -91,8 +91,8 @@ const searchFormSchema = new Schema<ISearchForm>(
       required: true,
       enum: ['Si', 'No', 'A veces'],
     },
-    acostumbradoSalir: { type: Boolean, required: true },
-    haEscapadoAntes: { type: Boolean, required: true },
+    acostumbradoSalir: { type: String, required: true, enum: ['Si', 'No'] },
+    haEscapadoAntes: { type: String, required: true, enum: ['Si', 'No'] },
     quePasoEscapado: { type: String, required: true },
     tieneMiedo: { type: String, required: true },
     leFacilSocializar: {

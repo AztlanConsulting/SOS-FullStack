@@ -3,8 +3,8 @@ export interface SearchFormData {
   tamano: '' | 'Pequeno' | 'Mediano' | 'Grande';
   edadAproximada: number | '';
   sexo: '' | 'Macho' | 'Hembra';
-  esterilizado: boolean;
-  collarPlaca: boolean;
+  esterilizado: '' | 'Si' | 'No';
+  collarPlaca: '' | 'Si' | 'No';
   condicionFisica: string;
 
   referenciasVisuales: string;
@@ -16,8 +16,8 @@ export interface SearchFormData {
   reaccionRuidos: '' | 'Se asusta' | 'Huye' | 'Ignora' | 'Otro';
   reaccionRuidosOtro: string;
   respondeNombre: '' | 'Si' | 'No' | 'A veces';
-  acostumbradoSalir: boolean;
-  haEscapadoAntes: boolean;
+  acostumbradoSalir: '' | 'Si' | 'No';
+  haEscapadoAntes: '' | 'Si' | 'No';
   quePasoEscapado: string;
   tieneMiedo: string;
   leFacilSocializar: '' | 'Si' | 'No';
@@ -42,8 +42,8 @@ export const initialSearchFormData: SearchFormData = {
   tamano: '',
   edadAproximada: '',
   sexo: '',
-  esterilizado: false,
-  collarPlaca: false,
+  esterilizado: '',
+  collarPlaca: '',
   condicionFisica: '',
 
   referenciasVisuales: '',
@@ -55,8 +55,8 @@ export const initialSearchFormData: SearchFormData = {
   reaccionRuidos: '',
   reaccionRuidosOtro: '',
   respondeNombre: '',
-  acostumbradoSalir: false,
-  haEscapadoAntes: false,
+  acostumbradoSalir: '',
+  haEscapadoAntes: '',
   quePasoEscapado: '',
   tieneMiedo: '',
   leFacilSocializar: '',

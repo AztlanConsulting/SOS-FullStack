@@ -123,7 +123,7 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
       newErrors.reaccionRuidosOtro = 'Describe la reacción';
     }
 
-    if (formData.haEscapadoAntes && !formData.quePasoEscapado) {
+    if (formData.haEscapadoAntes === 'Si' && !formData.quePasoEscapado) {
       newErrors.quePasoEscapado = 'Describe qué pasó';
     }
 

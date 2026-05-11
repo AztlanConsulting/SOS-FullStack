@@ -1,7 +1,6 @@
 import { Input } from '@shared/components/ui/Input';
 import { TextArea } from '@shared/components/ui/TextArea';
 import { Select } from '@shared/components/ui/Select';
-import { Text } from '@shared/components/ui/Text';
 import type { SearchFormData } from '../../types/searchForm.types';
 
 export interface BehaviorPersonalitySectionProps {
@@ -9,45 +8,6 @@ export interface BehaviorPersonalitySectionProps {
   updateForm: (newData: Partial<SearchFormData>) => void;
   errors: Record<string, string>;
 }
-
-const ToggleSwitch = ({
-  label,
-  checked,
-  onChange,
-  id,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-  id: string;
-}) => (
-  <div className="flex flex-col w-full">
-    <Text variant="caption" weight="medium" className="text-gray-700 mb-2">
-      {label}
-    </Text>
-    <div className="flex items-center gap-3 p-3 border border-gray-400 rounded-lg">
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        id={id}
-        onClick={() => onChange(!checked)}
-        className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
-          checked ? 'bg-yellow-400' : 'bg-gray-300'
-        }`}
-      >
-        <span
-          className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${
-            checked ? 'translate-x-5' : 'translate-x-0'
-          }`}
-        />
-      </button>
-      <Text variant="caption" weight="regular" className="text-gray-700">
-        {checked ? 'Sí' : 'No'}
-      </Text>
-    </div>
-  </div>
-);
 
 export const BehaviorPersonalitySection = ({
   formData,
@@ -147,20 +107,38 @@ export const BehaviorPersonalitySection = ({
       </div>
 
       <div id="acostumbrado-salir">
-        <ToggleSwitch
+        <Select
           id="acostumbrado-salir"
           label="¿Está acostumbrado a salir?"
-          checked={formData.acostumbradoSalir || false}
-          onChange={(val) => updateForm({ acostumbradoSalir: val })}
+          value={formData.acostumbradoSalir}
+          onChange={(e) =>
+            updateForm({
+              acostumbradoSalir: e.target
+                .value as SearchFormData['acostumbradoSalir'],
+            })
+          }
+          options={[
+            { value: 'Si', label: 'Sí' },
+            { value: 'No', label: 'No' },
+          ]}
         />
       </div>
 
       <div id="ha-escapado">
-        <ToggleSwitch
+        <Select
           id="ha-escapado"
           label="¿Ha escapado antes?"
-          checked={formData.haEscapadoAntes || false}
-          onChange={(val) => updateForm({ haEscapadoAntes: val })}
+          value={formData.haEscapadoAntes}
+          onChange={(e) =>
+            updateForm({
+              haEscapadoAntes: e.target
+                .value as SearchFormData['haEscapadoAntes'],
+            })
+          }
+          options={[
+            { value: 'Si', label: 'Sí' },
+            { value: 'No', label: 'No' },
+          ]}
         />
       </div>
 

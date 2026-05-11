@@ -9,4 +9,5 @@ export interface PaymentDBDto {
 export interface PaymentRepository {
   createPending(data: PaymentDBDto): Promise<void>;
   markAsSucceeded(orderId: string): Promise<string>;
+  findPaymentByOrderId(orderId: string): Promise<boolean>;
 }

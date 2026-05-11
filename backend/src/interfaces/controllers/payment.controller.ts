@@ -6,6 +6,9 @@ import { markAsSucceededDB } from '@use-cases/payments/markAsSuccededDB.usecase'
 import { StripeProvider } from '@infrastructure/api/stripeProvider.api';
 import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 import type Stripe from 'stripe';
+import { sendPaymentEmail } from '@/use-cases/emails/sendPaymentEmail.usecase';
+import { emailService } from '@/infrastructure/service/email.service';
+import { findPaymentByOrderIdDB } from '@/use-cases/payments/findPaymentByOrderIdDB.usecase';
 
 /**
  * middleware to create a Stripe payment intent.
@@ -36,18 +39,62 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       idempotencyKey: String(idempotencyKey),
     });
 
-    await createPendingIntentDB(PaymentDataAccess, {
-      orderId: result.id,
-      amount: result.amount,
-      method: method ?? 'unknown',
-      currency: result.currency,
-      clientSecret: result.clientSecret ?? null,
-    });
+    console.log('Payment intent result:', result);
 
-    return res.status(201).json({
-      message: 'Payment intent created successfully',
-      result: result,
-    });
+    try {
+      const paymentExists = await findPaymentByOrderIdDB(
+        PaymentDataAccess,
+        result.id,
+      );
+      if (paymentExists) {
+        console.log('Payment intent already exists');
+        return res.status(200).json({
+          message: 'Payment intent already exists',
+          result: result,
+        });
+      }
+      await createPendingIntentDB(PaymentDataAccess, {
+        orderId: result.id,
+        amount: result.amount / 100,
+        method: method ?? 'unknown',
+        currency: result.currency,
+        clientSecret: result.clientSecret ?? null,
+      });
+      /** * Send email for OXXO */
+      if (method === 'oxxo' && email && result.oxxoDetails) {
+        await sendPaymentEmail(emailService, {
+          to: email,
+          name: name ?? 'Usuario',
+          method: 'oxxo',
+          amount: result.amount / 100,
+          oxxoNumber: result.oxxoDetails?.number ?? undefined,
+          voucherUrl: result.oxxoDetails?.voucherUrl ?? undefined,
+          expiresAfter: result.oxxoDetails?.expiresAfter ?? undefined,
+        });
+      }
+      /** * Send email for SPEI */
+      if (method === 'spei' && email && result.speiDetails) {
+        await sendPaymentEmail(emailService, {
+          to: email,
+          name: name ?? 'Usuario',
+          method: 'spei',
+          amount: result.amount / 100,
+          clabe: result.speiDetails?.clabe ?? undefined,
+          reference: result.speiDetails?.reference ?? undefined,
+          bankName: result.speiDetails?.bankName ?? undefined,
+          bankCode: result.speiDetails?.bankCode ?? undefined,
+          holderName: result.speiDetails?.holderName ?? undefined,
+          holderAddress: result.speiDetails?.holderAddress ?? undefined,
+        });
+      }
+
+      return res.status(201).json({
+        message: 'Payment intent created successfully',
+        result: result,
+      });
+    } catch (error: any) {
+      throw error;
+    }
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : 'Payment failed';

@@ -81,6 +81,7 @@ export const router = createBrowserRouter([
         path: '/plans',
         element: <Plans />,
       },
+      ...routerLostPet,
       ...routerWorkshop,
       ...routerPlans,
       ...routerManuals,

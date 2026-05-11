@@ -5,7 +5,7 @@ import HeroSection from '@shared/components/layout/HeroSection';
 import { PetReportForm } from '@features/found-pet/components/PetReportForm';
 import sadDog from '@assets/images/sadDog.png';
 
-const CreditsPage = () => {
+const FoundPet = () => {
   const navigate = useNavigate();
 
   const handleScrollToReport = () => {
@@ -38,4 +38,4 @@ const CreditsPage = () => {
   );
 };
 
-export default CreditsPage;
+export default FoundPet;

@@ -44,25 +44,25 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   }
 
   transporterPromise = (async () => {
-    const isDevelopment = process.env.ENV !== 'production';
+    // const isDevelopment = process.env.ENV !== 'production';
 
-    if (isDevelopment) {
-      const testAccount = await nodemailer.createTestAccount();
+    // if (isDevelopment) {
+    //   const testAccount = await nodemailer.createTestAccount();
 
-      console.log('Ethereal test account created:');
-      console.log('User:', testAccount.user);
-      console.log('Pass:', testAccount.pass);
+    //   console.log('Ethereal test account created:');
+    //   console.log('User:', testAccount.user);
+    //   console.log('Pass:', testAccount.pass);
 
-      return nodemailer.createTransport({
-        host: testAccount.smtp.host,
-        port: testAccount.smtp.port,
-        secure: testAccount.smtp.secure,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
-        },
-      });
-    }
+    //   return nodemailer.createTransport({
+    //     host: testAccount.smtp.host,
+    //     port: testAccount.smtp.port,
+    //     secure: testAccount.smtp.secure,
+    //     auth: {
+    //       user: testAccount.user,
+    //       pass: testAccount.pass,
+    //     },
+    //   });
+    // }
 
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -109,13 +109,13 @@ export const emailService: EmailService = {
                   </tr>
 
                   <tr>
-                    <td style="padding:0 48px 40px 48px;color:#444444;line-height:1.6;">
+                    <td style="padding:0 30px 40px 30px;color:#444444;line-height:1.6;">
                       <p style="font-size:16px;margin-bottom:12px;">Hola <strong>${data.name}</strong>,</p>
                       <p style="font-size:15px;color:#666;margin-bottom:32px;">
-                        Gracias por tu apoyo. A continuación encontrarás los detalles para completar tu pago:
+                        Gracias por elegir nuestros servicios. Para completar tu solicitud y obtener los beneficios de tu compra, es necesario realizar el pago. Sigue las instrucciones a continuación:
                       </p>
 
-                      <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:12px;padding:32px;text-align:center;">
+                      <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:12px;padding:20px;text-align:center;">
                         <p style="margin:0 0 8px 0;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;">Total a pagar</p>
                         <h2 style="margin:0 0 24px 0;font-size:36px;color:#1a1a1a;">$${data.amount} <span style="font-size:18px;font-weight:normal;color:#888;">MXN</span></h2>
 
@@ -123,11 +123,20 @@ export const emailService: EmailService = {
                           data.method === 'oxxo'
                             ? `
                           <div style="border-top:1px solid #eee;margin-top:20px;padding-top:20px;">
-                            <div style="margin-bottom:15px;">
-                              <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.oxxoNumber}&includetext&scale=2&height=15" 
-                                  alt="Código de Barras" 
-                                  style="max-width:100%; height:auto; display:block; margin: 0 auto;">
-                            </div>
+                              <div style="margin-bottom:12px; background-color: #f9cd48; padding: 20px; border-radius: 8px;">
+                                <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.oxxoNumber}&includetext&scale=2&height=15" 
+                                    alt="Código de Barras" 
+                                    style="max-width:100%; height:auto; display:block; margin: 0 auto; mix-blend-mode: multiply;">
+                              </div>
+
+                              <div style="margin-bottom:25px; text-align:center;">
+                                <p style="margin:0 0 4px 0; font-size:12px; color:#999; line-height:1.4;">
+                                  ¿No se puede escanear? Intenta aumentando el brillo de tu celular o usa el link de abajo:
+                                </p>
+                                <a href="${data.voucherUrl}" target="_blank" style="font-size:14px; color:#f9cd48; text-decoration:underline; font-weight:bold;">
+                                    Ver voucher con código de barras
+                                </a>
+                              </div>
                             
                             <p style="border-top:1px solid #eee;margin-top:20px;padding-top:20px;margin:0; font-size:12px; color:#999; text-transform:uppercase;">Número de referencia</p>
                             <div style="font-size:18px; font-weight:bold; color:#1a1a1a; margin-bottom:20px; letter-spacing:1px;">
@@ -141,19 +150,23 @@ export const emailService: EmailService = {
                                 <li>El pago debe ser en <strong>efectivo</strong>.</li>
                                 <li>OXXO cobrará una pequeña comisión al momento de pagar.</li>
                               </ul>
-                            </div>
-
-                            <div style="margin-top:20px;">
-                              <a href="${data.voucherUrl}" target="_blank" style="font-size:13px; color:#f9cd48; text-decoration:underline; font-weight:bold;">
-                                  Ver voucher
-                              </a>
-                            </div>
-                            
+                            </div>                            
                             <p style="font-size:11px; color:#bbb; margin-top:15px;">Vence el: ${formatExpirationTime(data.expiresAfter ?? null)}</p>
                           </div>
                         `
                             : `
                           <div style="border-top:1px solid #eee; margin-top:20px; padding-top:20px; text-align:left;">
+                            <div style="background:#fff9e6; border-radius:10px; padding:18px; margin-bottom:12px; border:1px solid #ffeeba;">
+                              <p style="margin:0 0 10px 0; font-size:13px; font-weight:bold; color:#856404; display:flex; align-items:center;">
+                                ⚠️ Instrucciones importantes:
+                              </p>
+                              <p style="margin:0; font-size:13px; color:#856404; line-height:1.6;">
+                                Para que tu pago se valide automáticamente, es <strong>obligatorio</strong> capturar:
+                                <br/>• La <strong>CLABE</strong> correctamente.
+                                <br/>• El <strong>monto exacto</strong> de $${data.amount}.
+                                <br/>• La <strong>referencia</strong> indicada arriba.
+                              </p>
+                            </div>
                             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:15px; border-collapse:collapse;">
                               <tr>
                                 <td style="padding:10px 0; border-bottom:1px solid #f8f8f8; font-size:14px; color:#888;">CLABE</td>
@@ -194,18 +207,6 @@ export const emailService: EmailService = {
                             `
                                 : ''
                             }
-
-                            <div style="background:#fff9e6; border-radius:10px; padding:18px; border:1px solid #ffeeba;">
-                              <p style="margin:0 0 10px 0; font-size:13px; font-weight:bold; color:#856404; display:flex; align-items:center;">
-                                ⚠️ Instrucciones importantes:
-                              </p>
-                              <p style="margin:0; font-size:13px; color:#856404; line-height:1.6;">
-                                Para que tu pago se valide automáticamente, es <strong>obligatorio</strong> capturar:
-                                <br/>• La <strong>CLABE</strong> correctamente.
-                                <br/>• El <strong>monto exacto</strong> de $${data.amount}.
-                                <br/>• La <strong>referencia</strong> indicada arriba.
-                              </p>
-                            </div>
                           </div>
                         `
                         }
@@ -217,7 +218,7 @@ export const emailService: EmailService = {
                     <td align="center" style="padding:32px;background-color:#fafafa;border-top:1px solid #f0f0f0;">
                       <p style="margin:0;font-size:13px;color:#777;">
                         ¿Tienes dudas sobre tu pago? <br/>
-                        <a href="mailto:support@sosencontrandomascotas.com" style="color:#f9cd48;text-decoration:none;font-weight:bold;">Contáctanos aquí</a>
+                        <a href="mailto:hola@sosencontrandomascotas.com" style="color:#f9cd48;text-decoration:none;font-weight:bold;">Contáctanos aquí</a>
                       </p>
                     </td>
                   </tr>

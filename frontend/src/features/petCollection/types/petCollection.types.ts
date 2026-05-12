@@ -10,7 +10,20 @@ export interface PetInfo {
 }
 
 export interface PetInfoDetailed extends PetInfo {
-  rescuer: string;
+  date: string;
+  sex: '' | 'Macho' | 'Hembra' | 'Desconocido';
+  color: string;
+  size:
+    | ''
+    | 'Mini: 1 a 4 kg'
+    | 'Pequeña: 5 a 10 kg'
+    | 'Mediana: 11 a 25 kg'
+    | 'Grande: 26 a 45 kg'
+    | 'Gigante: más de 45 kg';
+  image: string;
+
+  contactName: string;
+  phoneNumber: string;
   email: string;
 }
 

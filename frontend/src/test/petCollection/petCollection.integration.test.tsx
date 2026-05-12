@@ -10,6 +10,7 @@ import axiosInstance from '@/shared/utils/axios';
 import SearchPetsPage from '@/features/petCollection/components/SearchPetsPage';
 import wrapper from '../utils/wrapper.util';
 import { MemoryRouter } from 'react-router';
+import { PetGalleryProvider } from '@/features/petCollection/context/PetCollectionProvider';
 
 vi.mock('@/shared/utils/axios', () => ({
   default: {
@@ -19,13 +20,19 @@ vi.mock('@/shared/utils/axios', () => ({
 
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
+const Container = () => (
+  <PetGalleryProvider>
+    <SearchPetsPage />
+  </PetGalleryProvider>
+);
+
 describe('SearchPetsPage Integration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test('shows empty state initially', () => {
-    render(<SearchPetsPage />, { wrapper });
+    render(<Container />, { wrapper });
     expect(screen.getByText(/Sube una imagen primero/i)).toBeDefined();
     expect(
       screen.queryByRole('img', { name: 'Mascota encontrada' }),
@@ -47,7 +54,7 @@ describe('SearchPetsPage Integration', () => {
 
     render(
       <MemoryRouter>
-        <SearchPetsPage />
+        <Container />
       </MemoryRouter>,
       { wrapper },
     );
@@ -90,7 +97,7 @@ describe('SearchPetsPage Integration', () => {
 
     render(
       <MemoryRouter>
-        <SearchPetsPage />
+        <Container />
       </MemoryRouter>,
       { wrapper },
     );
@@ -119,7 +126,7 @@ describe('SearchPetsPage Integration', () => {
   test('displays error message when API fails', async () => {
     (axiosInstance.post as any).mockRejectedValue(new Error('Network Error'));
 
-    render(<SearchPetsPage />, { wrapper });
+    render(<Container />, { wrapper });
 
     const file = new File([''], 'dog.png', { type: 'image/png' });
 

@@ -2,6 +2,8 @@ export interface PetImageDto {
   refId?: string;
   image: Buffer;
   species: string;
+  location: string;
+  color: string;
 }
 
 export interface PetImageSearch {

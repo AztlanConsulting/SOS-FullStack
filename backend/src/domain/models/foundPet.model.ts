@@ -1,5 +1,6 @@
 import type { Document, Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
+import type { GeocodingResult } from '../ports/paymentProvider.port';
 
 export interface FoundPetReport {
   _id: Types.ObjectId;
@@ -15,8 +16,7 @@ export interface FoundPetReport {
     | 'Grande: 26 a 45 kg'
     | 'Gigante: más de 45 kg';
   description?: string;
-  location?: string;
-  locationCoords?: [number, number];
+  location: GeocodingResult;
   contactName: string;
   phoneNumber: string;
   email: string;
@@ -48,8 +48,15 @@ const foundPetSchema = new Schema<IFoundPet>(
       ],
     },
     description: { type: String },
-    location: { type: String },
-    locationCoords: { type: [Number] },
+    location: {
+      coords: { type: [Number], required: true },
+      displayName: { type: String, required: true },
+      properties: {
+        city: { type: String, required: true },
+        country: { type: String, required: true },
+        state: { type: String, required: true },
+      },
+    },
     contactName: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     email: { type: String, required: true },

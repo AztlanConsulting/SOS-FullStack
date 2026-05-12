@@ -19,8 +19,14 @@ async function getPetDetails(
 
   const image = vectorPet![0].image.toString();
 
-  // TODO: Pending, missing integration with location interface change
-  const location = dbPetDetails!.location!;
+  const locationProperties = dbPetDetails!.location!.properties;
+  const location = [
+    locationProperties.city,
+    locationProperties.state,
+    locationProperties.country,
+  ]
+    .filter((x) => Boolean(x))
+    .join(', ');
   const petInfo = dbPetDetails!;
 
   const petDetails: PetInfoDetailed = {

@@ -18,9 +18,9 @@ const LandingPage = () => {
         <PublicationSection />
         <PlansSection />
         <ServicesSection />
+        <PetReportForm />
         <TestimonialsSection />
         <PetInfoSection />
-        <PetReportForm />
         <FrecuentlyAsked />
       </main>
       <Footer />

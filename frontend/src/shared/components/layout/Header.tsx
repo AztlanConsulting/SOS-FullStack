@@ -23,10 +23,10 @@ import SignIn from '../ui/Button/SignIn';
 
 const defaultNavLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
+  { label: 'Mascotas', href: '/mascotas-encontradas', icon: <PiDogLight /> },
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
-  { label: 'Mascotas', href: '/mascotas-encontradas', icon: <PiDogLight /> },
 ];
 
 export const defaultSocialLinks = [

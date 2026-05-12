@@ -7,8 +7,8 @@ import cors from 'cors';
 import path from 'path';
 
 if (process.env.NODE_ENV !== 'test') {
-  require('@/queues/activatePlan.worker');
-  require('@/queues/sendEmail.worker');
+  await import('@/queues/activatePlan.worker');
+  await import('@/queues/sendEmail.worker');
 }
 const app = express();
 

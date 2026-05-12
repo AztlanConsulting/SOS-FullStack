@@ -8,44 +8,6 @@ import { sendEmailQueue } from './sendEmail.queue';
 import type { Pet } from '@/domain/models/pet.model';
 
 /**
- * Builds the social media caption used for Facebook and Instagram posts.
- *
- * @param pet - Missing pet information
- * @param phone - Contact phone number
- * @returns Formatted caption string
- */
-function buildPetPostCaption(pet: Pet, phone: string): string {
-  let speciesEmoji: string;
-
-  switch (pet.species.toLowerCase()) {
-    case 'perro':
-      speciesEmoji = '🐕';
-      break;
-    case 'gato':
-      speciesEmoji = '🐈';
-      break;
-    case 'ave':
-      speciesEmoji = '🐦';
-      break;
-    default:
-      speciesEmoji = '🐾';
-      break;
-  }
-
-  const date = new Date(pet.dateMissing);
-
-  const formattedDate = date.toLocaleDateString('es-MX', {
-    day: 'numeric',
-    month: 'long',
-  });
-
-  return `🐾 Responde al nombre de ${pet.name.toUpperCase()}
-📍 Se extravió el ${formattedDate} en ${pet.placeMissing}
-${speciesEmoji} ${pet.description} 
-☎️ Si le ven favor de resguardar y llamar al ${phone}`;
-}
-
-/**
  * Worker responsible for:
  * - Validating payment-related resources
  * - Publishing posts to Facebook and Instagram
@@ -99,7 +61,7 @@ new Worker(
       const caption = buildPetPostCaption(pet, user.phone);
       const imageUrl = isProduction
         ? (pet.photos?.at(-1) ?? '')
-        : 'https://thumbs.dreamstime.com/b/perro-gordo-del-barro-amasado-66449678.jpg';
+        : 'https://picsum.photos/id/237/1200/1200.jpg';
 
       if (!facebookAlreadyPosted) {
         try {
@@ -203,3 +165,41 @@ new Worker(
     connection: redis,
   },
 );
+
+/**
+ * Builds the social media caption used for Facebook and Instagram posts.
+ *
+ * @param pet - Missing pet information
+ * @param phone - Contact phone number
+ * @returns Formatted caption string
+ */
+function buildPetPostCaption(pet: Pet, phone: string): string {
+  let speciesEmoji: string;
+
+  switch (pet.species.toLowerCase()) {
+    case 'perro':
+      speciesEmoji = '🐕';
+      break;
+    case 'gato':
+      speciesEmoji = '🐈';
+      break;
+    case 'ave':
+      speciesEmoji = '🐦';
+      break;
+    default:
+      speciesEmoji = '🐾';
+      break;
+  }
+
+  const date = new Date(pet.dateMissing);
+
+  const formattedDate = date.toLocaleDateString('es-MX', {
+    day: 'numeric',
+    month: 'long',
+  });
+
+  return `🐾 Responde al nombre de ${pet.name.toUpperCase()}
+📍 Se extravió el ${formattedDate} en ${pet.placeMissing}
+${speciesEmoji} ${pet.description} 
+☎️ Si le ven favor de resguardar y llamar al ${phone}`;
+}

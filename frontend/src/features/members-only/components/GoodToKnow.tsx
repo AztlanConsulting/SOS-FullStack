@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { Text } from '../../../shared/components/ui/Text';
-import { Button } from '../../../shared/components/ui/Button';
-import { CiShare1 } from 'react-icons/ci';
 import { MdNavigateNext } from 'react-icons/md';
 import { MdNavigateBefore } from 'react-icons/md';
 
@@ -9,17 +7,17 @@ const testimonials = [
   {
     id: 1,
     name: '¿Publicación, anuncio y geolocalización?',
-    text: 'Una publicación es un post normal sin alcance masivo. Un anuncio es publicidad pagada que se muestra a un público específico. La geolocalización permite dirigir ese anuncio a personas cercanas a la zona donde se perdió la mascota.',
+    text: 'Una publicación normal depende del alcance orgánico de las redes sociales. Un anuncio utiliza publicidad pagada para mostrar la búsqueda de tu mascota a personas específicas cerca de la zona donde se perdió. La geolocalización nos ayuda a llegar estratégicamente a personas cercanas que podrían verla o brindar información.',
   },
   {
     id: 2,
-    name: 'Actividades 100% digitales',
-    text: 'El servicio se realiza completamente en línea e incluye una publicación con anuncio programado. El éxito depende también de seguir las recomendaciones de búsqueda.',
+    name: '¿Cómo revisar tu anuncio?',
+    text: 'Puedes revisar que tu anuncio esté activo directamente desde la biblioteca de anuncios de Facebook, dentro de la sección de transparencia de nuestra página. Esto te permite verificar que tu difusión se encuentra funcionando correctamente',
   },
   {
     id: 3,
-    name: '¿Cómo revisar tu anuncio?',
-    text: 'Puedes verificarlo en la sección “Transparencia de la página” dentro de la biblioteca de anuncios de Facebook.',
+    name: 'Actividades 100% digitales',
+    text: 'El servicio se realiza de forma digital para comenzar la difusión lo más rápido posible. Incluye publicaciones, anuncios geolocalizados y acompañamiento durante la búsqueda. El éxito también depende de actuar rápido y seguir las recomendaciones de búsqueda.',
   },
 ];
 

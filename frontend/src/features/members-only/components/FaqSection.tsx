@@ -6,17 +6,17 @@ const faqs = [
   {
     question: 'Radio de difusión',
     answer:
-      'Es el área donde se mostrará el anuncio de tu mascota para que personas cercanas puedan verlo y ayudar en su localización.',
+      'Es la zona geográfica donde difundimos el anuncio de tu mascota para que personas cercanas puedan verlo, compartirlo y ayudarte en su localización. Mientras más estratégico sea el alcance, mayores serán las posibilidades de recibir reportes útiles.',
   },
   {
     question: 'Asesor de búsqueda',
     answer:
-      'Es la persona que te acompaña durante el proceso, resuelve tus dudas, te informa avances y busca coincidencias con mascotas encontradas.',
+      'Tu asesor de búsqueda te acompaña durante todo el proceso, resolviendo dudas, compartiendo recomendaciones y ayudándote a dar seguimiento a posibles reportes o coincidencias. No tendrás que enfrentar la búsqueda solo.',
   },
   {
     question: 'Garantía',
     answer:
-      'No podemos garantizar el hallazgo, pero sí aumentar considerablemente las probabilidades gracias a la difusión y estrategias de búsqueda.',
+      'Aunque ningún servicio puede garantizar el hallazgo de una mascota, nuestras estrategias de difusión, alcance geolocalizado y experiencia en búsqueda ayudan a aumentar considerablemente las probabilidades de encontrarla.',
   },
 ];
 

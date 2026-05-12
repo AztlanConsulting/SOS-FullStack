@@ -27,7 +27,7 @@ const defaultNavLinks = [
     label: 'Mascotas',
     icon: <PiDogLight />,
     children: [
-      { label: 'Perdida', href: '/' },
+      { label: 'Perdida', href: '/#report-section' },
       { label: 'Encontrada', href: '/mascotas-encontradas' },
     ],
   },
@@ -84,6 +84,7 @@ const Header = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
+        !isMenuOpen &&
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
@@ -92,9 +93,23 @@ const Header = ({
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [isMenuOpen]);
   const navigate = useNavigate();
   const MobileSignIn = signBtn.mobile;
+
+  const handleHashNav = (href: string) => {
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      const targetPath = path || '/';
+      if (pathname === targetPath) {
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        navigate(`${targetPath}?scrollTo=${hash}`);
+      }
+    } else {
+      navigate(href);
+    }
+  };
 
   const textColors: Record<string, string> = {
     primary: 'text-primary',
@@ -218,18 +233,7 @@ const Header = ({
                           <button
                             key={child.label}
                             onClick={() => {
-                              if (child.href === '/' && pathname === '/') {
-                                document
-                                  .getElementById('report-section')
-                                  ?.scrollIntoView({ behavior: 'smooth' });
-                              } else {
-                                navigate(
-                                  child.href,
-                                  child.href === '/'
-                                    ? { state: { scrollToReport: true } }
-                                    : undefined,
-                                );
-                              }
+                              handleHashNav(child.href);
                               setOpenDropdown(null);
                             }}
                             className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors"
@@ -343,18 +347,7 @@ const Header = ({
                             <div
                               key={child.label}
                               onClick={() => {
-                                if (child.href === '/' && pathname === '/') {
-                                  document
-                                    .getElementById('report-section')
-                                    ?.scrollIntoView({ behavior: 'smooth' });
-                                } else {
-                                  navigate(
-                                    child.href,
-                                    child.href === '/'
-                                      ? { state: { scrollToReport: true } }
-                                      : undefined,
-                                  );
-                                }
+                                handleHashNav(child.href);
                                 setIsMenuOpen(false);
                                 setOpenDropdown(null);
                               }}

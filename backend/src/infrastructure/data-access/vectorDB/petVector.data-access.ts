@@ -83,7 +83,7 @@ export const petVector: PetVectorRepository = {
    * @param refId - Get imageInformation by its id
    * @returns petImage - The complete object
    */
-  getPetById: async function (refId: string): Promise<PetImage> {
+  getPetById: async function (refId: string): Promise<PetImage | null> {
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')

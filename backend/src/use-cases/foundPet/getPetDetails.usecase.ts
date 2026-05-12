@@ -17,7 +17,7 @@ async function getPetDetails(
   if (vectorPet === undefined)
     throw Error('Could not find pet by ID in vector DB');
 
-  const image = 'image'; //vectorPet!.image.toString();
+  const image = vectorPet![0].image.toString();
 
   // TODO: Pending, missing integration with location interface change
   const location = dbPetDetails!.location!;

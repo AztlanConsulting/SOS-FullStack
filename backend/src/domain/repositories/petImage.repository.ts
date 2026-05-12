@@ -30,6 +30,6 @@ export interface PetVectorRepository {
     petImageDto: PetImageSearch,
     offset: number,
   ): Promise<PetImage[]>;
-  getPetById(refId: string): Promise<PetImage | null>;
+  getPetById(refId: string): Promise<PetImage[] | null>;
   countPetImages(petImageDto: PetImageSearch): Promise<number>;
 }

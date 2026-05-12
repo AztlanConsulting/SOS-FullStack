@@ -83,19 +83,20 @@ export const petVector: PetVectorRepository = {
    * @param refId - Get imageInformation by its id
    * @returns petImage - The complete object
    */
-  getPetById: async function (refId: string): Promise<PetImage | null> {
+  getPetById: async function (refId: string): Promise<PetImage[] | null> {
+    console.log(refId);
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')
       .withFields('image refId species location color')
       .withWhere({
         path: ['refId'],
-        operator: 'Equal',
-        valueString: refId,
+        operator: 'Like',
+        valueString: `*${refId}*`,
       })
       .do();
 
-    const petImage: PetImage = resImg.data.Get.Pet;
+    const petImage: PetImage[] = resImg.data.Get.Pet;
     return petImage;
   },
 

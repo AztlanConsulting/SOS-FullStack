@@ -6,8 +6,6 @@
     "moduleResolution": "bundler",
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "outDir": "./dist",
-    "rootDir": ".",
     "paths": {
       "@db/*": ["./src/infrastructure/database/*"],
       "@repo/*": ["./src/infrastructure/repository/*"],
@@ -22,5 +20,9 @@
       "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/**/*",
+    "jest-mongodb-config.ts",
+    "../frontend/src/features/payment/components/CheckoutForm.tsx"
+  ]
 }

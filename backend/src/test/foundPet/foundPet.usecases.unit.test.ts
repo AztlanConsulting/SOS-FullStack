@@ -25,7 +25,7 @@ describe('foundPet createFoundPet (unit)', () => {
   test('createFoundPet returns result from repository', async () => {
     const mockResult: FoundPetResult = {
       ...validFoundPetData,
-      _id: new Types.ObjectId(),
+      _id: 'mock-id-123',
       createdAt: new Date(),
       updatedAt: new Date(),
     };

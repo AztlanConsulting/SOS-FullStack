@@ -7,7 +7,7 @@ import { getAccessToken, setAccessToken } from '@shared/utils/tokenStorage';
  * - Automatically attaches access token if available.
  */
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 8000,
   withCredentials: true,
   headers: {

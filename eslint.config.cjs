@@ -23,7 +23,6 @@ module.exports = [
       'prettier.config.cjs',
       'commitlint.config.cjs',
       'backend/jest.config.js',
-      'ecosystem.config.js',
     ],
   },
 

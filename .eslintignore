@@ -3,4 +3,3 @@ dist
 build
 coverage
 backend/jest-mongodb-config.ts
-./ecosystem.config.js

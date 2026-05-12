@@ -158,13 +158,13 @@ export const emailService: EmailService = {
                           <div style="border-top:1px solid #eee; margin-top:20px; padding-top:20px; text-align:left;">
                             <div style="background:#fff9e6; border-radius:10px; padding:18px; margin-bottom:12px; border:1px solid #ffeeba;">
                               <p style="margin:0 0 10px 0; font-size:13px; font-weight:bold; color:#856404; display:flex; align-items:center;">
-                                ⚠️ Instrucciones importantes:
+                                ⚠️  Instrucciones importantes:
                               </p>
                               <p style="margin:0; font-size:13px; color:#856404; line-height:1.6;">
                                 Para que tu pago se valide automáticamente, es <strong>obligatorio</strong> capturar:
                                 <br/>• La <strong>CLABE</strong> correctamente.
                                 <br/>• El <strong>monto exacto</strong> de $${data.amount}.
-                                <br/>• La <strong>referencia</strong> indicada arriba.
+                                <br/>• La <strong>referencia</strong> indicada abajo.
                               </p>
                             </div>
                             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:15px; border-collapse:collapse;">

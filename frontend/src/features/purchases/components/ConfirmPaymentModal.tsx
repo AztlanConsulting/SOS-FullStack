@@ -16,6 +16,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
 
   function close() {
     if (onClose) onClose();
+    window.scrollTo(0, 0);
     navigate('/');
   }
 
@@ -46,18 +47,25 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
           <Text
             variant="h3"
             weight="bold"
-            className="text-center text-gray-900 mb-2"
+            className="text-center text-gray-900 mb-8"
           >
             {plan ? '¡Todo listo!' : '¡Compra exitosa!'}
           </Text>
 
           <Text
             variant="body"
-            className="text-gray-600 text-center mb-4 text-sm leading-snug"
+            className="text-gray-600 mb-6 text-sm leading-snug"
           >
-            {plan
-              ? 'Tu anuncio será publicado en unos minutos.'
-              : 'Hemos procesado tu pedido correctamente.'}
+            {plan ? (
+              'Tu anuncio será publicado en unos minutos.'
+            ) : (
+              <>
+                Gracias por tu compra.{' '}
+                <strong>
+                  Los detalles de la compra se han enviado a tu correo.
+                </strong>
+              </>
+            )}
           </Text>
 
           {/* Details Card - Thinner Padding */}

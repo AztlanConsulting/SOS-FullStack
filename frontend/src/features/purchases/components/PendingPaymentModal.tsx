@@ -16,6 +16,7 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
 
   function close() {
     if (onClose) onClose();
+    window.scrollTo(0, 0);
     navigate('/');
   }
 
@@ -46,18 +47,19 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
           <Text
             variant="h3"
             weight="bold"
-            className="text-center text-gray-900 mb-2"
+            className="text-center text-gray-900 mb-8"
           >
             ¡Ya casi está listo!
           </Text>
 
           <Text
             variant="body"
-            className="text-gray-600 text-center mb-4 text-sm leading-snug"
+            className="text-gray-600 mb-6 text-sm leading-snug"
           >
-            Tu orden ha sido registrada.{' '}
-            <strong>Ya puedes cerrar esta ventana.</strong> Te enviamos los
-            detalles a tu correo.
+            Tu orden ha sido registrada. Para completar tu solicitud y obtener
+            los beneficios de tu compra, es necesario realizar el pago.
+            <strong> Te enviamos los detalles a tu correo.</strong> Ya puedes
+            cerrar esta ventana.
           </Text>
 
           {/* Summary Box - Condensed spacing */}

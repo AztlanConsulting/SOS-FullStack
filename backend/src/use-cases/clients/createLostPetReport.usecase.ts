@@ -9,6 +9,9 @@ import type {
   PurchasedPlan,
   PurchasedPlanCreateInput,
 } from '@domain/models/purchasedPlan.model';
+import { isNonNullType } from 'graphql';
+import { GeocodingResult } from '@/types/pet.types';
+import getLocation from '@/utils/getLocation.mapper';
 
 export interface CreateLostPetReportInput {
   name: string;
@@ -94,7 +97,7 @@ export const createLostPetReport = async (
   const petData = mapToPet(input, userId);
   const planData = mapToPurchasedPlan(input);
 
-  const pet = await petRepository.createPet(petData);
+  const pet = await petRepository.createPet(await petData);
 
   const plan = await purchasedPlanRepository.createPurchasedPlan({
     ...planData,
@@ -111,14 +114,19 @@ export const createLostPetReport = async (
  * @param userId - Owner user ID
  * @returns PetCreateInput ready for persistence
  */
-const mapToPet = (
+const mapToPet = async (
   input: CreateLostPetReportInput,
   userId: string,
-): PetCreateInput => {
+): Promise<PetCreateInput> => {
   const date = new Date(input.date);
 
   if (isNaN(date.getTime())) {
     throw new Error('Invalid date');
+  }
+
+  const location = await getLocation(input.locationCoords);
+  if (!location === null) {
+    throw Error('Failed to get location of lost pet');
   }
 
   return {
@@ -132,7 +140,7 @@ const mapToPet = (
     size: input.size,
     description: input.description,
     photos: input.images,
-    placeMissing: input.location,
+    location: location!,
   };
 };
 

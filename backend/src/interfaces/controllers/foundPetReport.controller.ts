@@ -6,6 +6,7 @@ import { parseBase64Image } from '@use-cases/foundPet/parseBase64Image.usecase';
 import type { Request, Response } from 'express';
 import { FoundPetDataAccess } from '@/infrastructure/data-access/foundPet.data-access';
 import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
+import getLocation from '@/utils/getLocation.mapper';
 
 export async function postFoundPetReport(req: Request, res: Response) {
   try {
@@ -17,7 +18,6 @@ export async function postFoundPetReport(req: Request, res: Response) {
       color,
       size,
       description,
-      location,
       locationCoords,
       contactName,
       phoneNumber,
@@ -44,6 +44,9 @@ export async function postFoundPetReport(req: Request, res: Response) {
     const customId = new Types.ObjectId();
     const imageIds = imageBuffers.map((_, i) => `${customId}_img_${i}`);
 
+    const location = await getLocation(locationCoords);
+    if (!Boolean(location)) throw Error("Couldn't get location");
+
     const foundPetData: FoundPetReport = {
       _id: customId,
       species,
@@ -53,8 +56,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
       color,
       size,
       description,
-      location,
-      locationCoords,
+      location: location!,
       contactName,
       phoneNumber,
       email,
@@ -66,6 +68,11 @@ export async function postFoundPetReport(req: Request, res: Response) {
         refId: imageIds[i],
         image: imageBuffers[i] as Buffer,
         species,
+        color,
+        location:
+          location?.properties.city ??
+          location?.properties.country ??
+          'No identificado',
       };
 
       await petVector.createPetImage(petImageDto);

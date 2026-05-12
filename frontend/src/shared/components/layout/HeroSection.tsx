@@ -1,13 +1,24 @@
 import { Text } from '@shared/components/ui/Text/Text';
+import { Button } from '@shared/components/ui/Button';
+import { HiChevronRight } from 'react-icons/hi';
 
 interface Props {
   bg?: string;
   title: string;
   image: string;
   content: string;
+  buttonText?: string;
+  onClick?: () => void;
 }
 
-const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
+const HeroSection = ({
+  bg = 'white',
+  title,
+  image,
+  content,
+  buttonText,
+  onClick,
+}: Props) => {
   return (
     <section
       className={`${bg} w-full flex flex-col items-center justify-center`}
@@ -33,15 +44,23 @@ const HeroSection = ({ bg = 'white', title, image, content }: Props) => {
           />
         </div>
 
-        <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3">
+        <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3 py-6">
           <Text
             as="p"
             variant="body"
             color="color-grey-text"
-            className="text-left"
+            className="text-left mb-6"
           >
             {content}
           </Text>
+          {buttonText && (
+            <Button
+              label={buttonText}
+              variant="primary"
+              icon={HiChevronRight}
+              onClick={onClick}
+            />
+          )}
         </div>
       </div>
     </section>

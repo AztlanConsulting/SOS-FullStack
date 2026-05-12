@@ -34,6 +34,7 @@ const defaultNavLinks = [
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
+  { label: 'Registrar', href: '/mascotas-encontradas', icon: <PiDogLight /> },
 ];
 
 export const defaultSocialLinks = [

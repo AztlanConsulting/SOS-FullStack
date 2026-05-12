@@ -83,14 +83,18 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </div>
 
         <div className="flex flex-col items-center pt-5 pb-4">
-          <Text variant="h2" weight="medium" className="text-gray-900">
-            {currency} {price}
-          </Text>
+          <div className="flex items-baseline gap-1.5">
+            <Text variant="h2" weight="medium" className="text-gray-900">
+              $ {price}
+            </Text>
+            <Text variant="small" className="text-gray-400">
+              {currency}
+            </Text>
+          </div>
           <Text variant="body" className="text-gray-500 mt-1">
             {duration} / {radius}
           </Text>
         </div>
-
         <ul className="px-5 pb-5 flex flex-col gap-4 md:flex-1">
           {included.map((feature, i) => (
             <FeatureRow

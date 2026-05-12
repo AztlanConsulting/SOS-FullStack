@@ -13,6 +13,7 @@ export interface PetInfoDetailed extends PetInfo {
   date: string;
   sex: '' | 'Macho' | 'Hembra' | 'Desconocido';
   color: string;
+  breed: string;
   size:
     | ''
     | 'Mini: 1 a 4 kg'

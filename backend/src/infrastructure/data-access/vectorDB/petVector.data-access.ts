@@ -55,7 +55,6 @@ export const petVector: PetVectorRepository = {
     const resImg = await query.do();
 
     const allResults: PetImage[] = resImg.data.Get.Pet ?? [];
-    allResults.forEach((x) => console.log(x.color));
 
     const normalize = (str?: string) =>
       str

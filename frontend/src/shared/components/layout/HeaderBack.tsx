@@ -12,6 +12,7 @@ export const HeaderBack = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
+    console.log('handleBack');
     if (onBack) {
       onBack();
       return;
@@ -24,7 +25,7 @@ export const HeaderBack = ({
     <div className="w-full px-4 py-4 lg:py-[17px] flex items-center justify-start bg-white color-grey-border-bottom sticky top-0 z-50">
       <button
         onClick={handleBack}
-        className="bg-white rounded-lg aspect-square flex flex-row justify-center items-center h-10 w-7"
+        className="bg-white rounded-lg aspect-square flex flex-row justify-center items-center h-10 w-7 cursor-pointer"
       >
         <HiChevronLeft color="black" size="100%" className="aspect-square" />
       </button>

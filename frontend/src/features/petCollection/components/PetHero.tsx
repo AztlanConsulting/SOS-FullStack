@@ -17,9 +17,17 @@ const PetHero = ({ petInfo }: Props) => {
             variant="h1"
             weight="medium"
             color="text-black"
-            className="text-center md:text-left"
+            className="text-left"
           >
             {petInfo.species}
+          </Text>
+          <Text
+            as="h2"
+            variant="h2"
+            color="text-gray-600"
+            className="text-left"
+          >
+            {petInfo.breed}
           </Text>
         </div>
 

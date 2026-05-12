@@ -13,7 +13,8 @@ async function getFoundPetDetails(id: string): Promise<PetInfoDetailed> {
 async function tempFoundPetDetails(id: string): Promise<PetInfoDetailed> {
   const petDetails: PetInfoDetailed = {
     refId: id,
-    species: 'Huskey',
+    species: 'Dog',
+    breed: 'Huskey',
     date: new Date().toISOString(),
     sex: 'Macho',
     color: 'Blanco y negro',

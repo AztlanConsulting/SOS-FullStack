@@ -1,15 +1,10 @@
 import PetGallery from './PetGallery';
 import UploadPet from './UploadPet';
 import { type ChangeEvent } from 'react';
-import uploadImage from '../services/uploadImage.service';
-import usePetGallery from '../hooks/usePetGallery';
-import countPages from '../services/countPages.service';
+import { useSharedGallery } from '../context/PetCollectionProvider';
 
 const SearchPetsPage = () => {
-  const { imgHook, pages, handleSearch, vectorImages } = usePetGallery(
-    uploadImage,
-    countPages,
-  );
+  const { imgHook, pages, handleSearch, vectorImages } = useSharedGallery();
   const [img, setImg] = imgHook;
 
   async function uploadFile(

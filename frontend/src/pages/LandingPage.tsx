@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router';
 import Header from '../shared/components/layout/Header';
 import HeroSection from '../features/landing/components/landingPage/HeroSection';
 import ServicesSection from '../features/landing/components/landingPage/ServicesSection';
@@ -10,6 +12,17 @@ import FrecuentlyAsked from '@features/landing/components/landingPage/Frecuently
 import { PetReportForm } from '@features/users/components/PetReportForm';
 
 const LandingPage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollToReport) {
+      document
+        .getElementById('report-section')
+        ?.scrollIntoView({ behavior: 'smooth' });
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   return (
     <div className="min-h-screen">
       <Header />

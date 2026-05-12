@@ -41,12 +41,10 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
    * @returns The created purchased plan as a plain JavaScript object
    */
   activatePurchasedPlan: async function (planId: string): Promise<boolean> {
-    console.log(planId);
     const updated = await PurchasedPlanModel.updateOne(
       { _id: planId },
       { active: true },
     );
-    console.log(updated);
     return Boolean(updated);
   },
 };

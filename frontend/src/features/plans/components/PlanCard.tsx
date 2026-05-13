@@ -7,6 +7,8 @@ import {
 } from 'react-icons/hi';
 import { Text } from '@shared/components/ui/Text';
 import { Modal } from '@shared/components/ui/Modal/Modal';
+import { useLocationContext } from '@shared/context/Location.context';
+import { formatCurrency } from '@/shared/utils/formatCurrency';
 
 /**
  * Represents an individual feature or service within a plan.
@@ -43,7 +45,7 @@ export interface PlanCardProps {
 const PlanCard: React.FC<PlanCardProps> = ({
   name,
   price,
-  currency = '$',
+  currency,
   duration,
   radius,
   features,
@@ -56,6 +58,8 @@ const PlanCard: React.FC<PlanCardProps> = ({
     description: string;
   } | null>(null);
 
+  const locationContext = useLocationContext();
+  const displayCurrency = currency ?? locationContext.currencyCode ?? 'USD';
   const included = features.filter((f) => f.included);
   const excluded = features.filter((f) => !f.included);
 
@@ -85,7 +89,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
         <div className="flex flex-col items-center pt-5 pb-4">
           <div className="flex items-baseline gap-1.5">
             <Text variant="h2" weight="medium" className="text-gray-900">
-              $ {price}
+              {formatCurrency(Number(price), displayCurrency)}
             </Text>
             <Text variant="small" className="text-gray-400">
               {currency}

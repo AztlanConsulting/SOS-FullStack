@@ -14,10 +14,10 @@ export const formatCurrency = (
     return new Intl.NumberFormat(undefined, {
       style: 'currency',
       currency: currencyCode,
-      minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(amount);
   } catch {
-    return `${currencyCode} ${amount % 1 === 0 ? amount : amount.toFixed(2)}`;
+    return `${currencyCode} ${Math.round(amount)}`;
   }
 };

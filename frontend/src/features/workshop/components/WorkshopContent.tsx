@@ -23,6 +23,7 @@ const WorkshopContent = ({ workshop, onBack }: Props) => {
     item: 'taller',
     price: workshop.price,
     url: 'workshop',
+    name: workshop.name,
   });
 
   return (

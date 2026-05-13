@@ -23,6 +23,7 @@ export const ManualContent = ({
     item: 'manual',
     price: manual.price,
     url: 'manual',
+    name: manual.name,
   });
 
   return (

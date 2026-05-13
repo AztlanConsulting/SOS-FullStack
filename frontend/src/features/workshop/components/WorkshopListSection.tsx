@@ -10,26 +10,6 @@ import queryWorkshop from '../services/queryWorkshops';
 import { useLocationContext } from '@shared/context/Location.context';
 import { vi } from 'vitest';
 
-// Mocks the LocationContext to provide default USD pricing values.
-// Required because components using useLocationContext need a LocationProvider
-// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
-// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
-vi.mock('@shared/context/Location.context', () => ({
-  useLocationContext: () => ({
-    currencyCode: 'USD',
-    exchangeRate: 1,
-    plans: [],
-    manuals: [],
-    workshops: [],
-    country: null,
-    loading: false,
-    error: null,
-  }),
-  LocationProvider: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-}));
-
 const WorkshopListSection = () => {
   const { searchHook, query, pages } = useProduct<WorkshopResult>(
     queryWorkshop,

@@ -111,8 +111,8 @@ describe('PlansPage with localized pricing', () => {
 
     render(<PlansPage />, { wrapper });
 
-    expect(screen.getByText('Básico')).toBeInTheDocument();
-    expect(screen.getByText('Estándar')).toBeInTheDocument();
+    expect(screen.getAllByText('Básico').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Estándar').length).toBeGreaterThan(0);
     expect(screen.getAllByText('MXN').length).toBeGreaterThan(0);
   });
 

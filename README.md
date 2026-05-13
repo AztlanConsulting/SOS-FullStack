@@ -2,18 +2,6 @@
 
 # Manual de instalación
 
-## Clonar el repositorio
-
-El primer paso es descargar el proyecto para tener acceso a sus componentes y dependencias en todo momento.
-Este primer paso es importante para la configuración de docker.
-
-```bash
-git clone https://github.com/AztlanConsulting/SOS-FullStack.git
-cd SOS-Fullstack
-```
-
-Esto nos deja descargar el proyecto en una carpeta llamada SOS-Fullstack y entrar en ella.
-
 ## Configuración previa del servidor.
 
 _Si ya cuenta con docker instalado y ya tiene una configuración de nginx customizada se puede saltar hasta la sección de configuración de la aplicación_
@@ -103,5 +91,19 @@ sudo systemctl status nginx
    Si en el paso anterior nginx tiene un estado de apagado es necesario activarlo manualmente
 
 ```bash
-sudo systemctl start
+sudo systemctl start nginx
 ```
+
+---
+
+## Clonar el repositorio
+
+El primer paso es descargar el proyecto para tener acceso a sus componentes y dependencias en todo momento.
+Este primer paso es importante para la configuración de docker.
+
+```bash
+git clone https://github.com/AztlanConsulting/SOS-FullStack.git
+cd SOS-Fullstack
+```
+
+Esto nos deja descargar el proyecto en una carpeta llamada SOS-Fullstack y entrar en ella.

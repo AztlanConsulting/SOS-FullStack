@@ -7,6 +7,7 @@ import WorkshopCard from './WorkshopCard';
 import { type WorkshopResult, type Workshop } from '../types/workshop';
 import useProduct from '@shared/hooks/useProduct';
 import queryWorkshop from '../services/queryWorkshops';
+import { useLocationContext } from '@shared/context/Location.context';
 
 const WorkshopListSection = () => {
   const { searchHook, query, pages } = useProduct<WorkshopResult>(
@@ -14,6 +15,12 @@ const WorkshopListSection = () => {
     'workshops',
   );
   const { isLoading, error, data } = query;
+  const { workshops: localizedWorkshops, currencyCode } = useLocationContext();
+
+  const getLocalizedPrice = (name: string, fallback: number): number => {
+    const found = localizedWorkshops.find((w) => w.name === name);
+    return found?.localizedPrice ?? fallback;
+  };
 
   return (
     <section className="bg-white w-full flex flex-col items-center justify-center">
@@ -35,7 +42,12 @@ const WorkshopListSection = () => {
           <List<Workshop>
             cards={data.workshops}
             component={(card, idx) => (
-              <WorkshopCard workshop={card} key={idx} />
+              <WorkshopCard
+                workshop={card}
+                localizedPrice={getLocalizedPrice(card.name, card.price)}
+                currencyCode={currencyCode}
+                key={idx}
+              />
             )}
           />
         )}

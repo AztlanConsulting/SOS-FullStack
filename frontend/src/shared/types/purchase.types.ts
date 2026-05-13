@@ -5,6 +5,7 @@ export type PurchaseRequest = {
   item: string;
   price: number;
   url: string;
+  name?: string;
 };
 
 export type Product = {

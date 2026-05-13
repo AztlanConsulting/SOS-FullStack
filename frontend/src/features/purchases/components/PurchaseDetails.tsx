@@ -3,10 +3,12 @@ import ProductDetail from './ProductDetail';
 import PlanDetail from './PlanDetail';
 import type { Product } from '@shared/types/purchase.types';
 import ConfirmPaymentModal from './ConfirmPaymentModal';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
+import { formatCurrency } from '@shared/utils/formatCurrency';
+import { useLocationContext } from '@/shared/context/Location.context';
 
 interface Props {
-  reportData: PetReportData | null;
+  reportData: LostPetReportData | null;
   product?: Product;
   success: boolean;
 }
@@ -14,7 +16,10 @@ interface Props {
 // Get all product details and display them to the user
 const PurchaseDetails = ({ reportData, product, success }: Props) => {
   const plan = reportData?.planDetails ?? null;
+  const { currencyCode, exchangeRate } = useLocationContext();
 
+  const rawPrice = product?.price ?? plan?.totalPrice ?? 0;
+  const localizedPrice = Math.round(rawPrice * exchangeRate * 100) / 100;
   return (
     <div className="pt-4 md:p-2 w-10/12 mx-auto">
       <Text
@@ -38,7 +43,7 @@ const PurchaseDetails = ({ reportData, product, success }: Props) => {
           Total a pagar:
         </Text>
         <Text variant="h1" color="text-gray-600">
-          ${product?.price ?? plan?.totalPrice}
+          {formatCurrency(localizedPrice, currencyCode)} {currencyCode}
         </Text>
       </div>
       {/* Modal to show success state */}

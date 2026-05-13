@@ -24,6 +24,7 @@ module.exports = [
       'commitlint.config.cjs',
       'backend/jest.config.js',
       'backend/__mocks__/**/*',
+      'ecosystem.config.js',
     ],
   },
 

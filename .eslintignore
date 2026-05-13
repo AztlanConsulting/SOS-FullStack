@@ -4,3 +4,4 @@ build
 coverage
 backend/jest-mongodb-config.ts 
 backend/__mocks__/uuid.js
+./ecosystem.config.js

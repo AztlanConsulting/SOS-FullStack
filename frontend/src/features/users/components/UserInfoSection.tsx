@@ -2,7 +2,6 @@ import { Input } from '@shared/components/ui/Input';
 import { Select } from '@shared/components/ui/Select';
 import { TextArea } from '@shared/components/ui/TextArea';
 import { DateInput } from '@shared/components/ui/DateInput';
-import { FileUpload } from '@shared/components/ui/FileUpload';
 import type {
   LostPetReportData,
   ReportType,

@@ -70,6 +70,11 @@ describe('PaymentDataAccess unit-test', () => {
         location: {
           coords: [19.434063867321765, -99.13269035300812],
           displayName: 'Metropolitan Tabernacle, Calle Moneda, Mexico',
+          properties: {
+            country: 'Mexico',
+            city: 'Queretaro',
+            state: 'Queretaro',
+          },
         },
         locationCoords: [19.434063867321765, -99.13269035300812],
         contactName: 'hgroipjskfd',

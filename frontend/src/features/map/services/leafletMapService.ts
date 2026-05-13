@@ -1,15 +1,13 @@
 import * as L from 'leaflet';
 import markerIcon from '@assets/images/markerIcon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 //The default Leaflet marker icons.
 const defaultIcon = L.icon({
   iconUrl: markerIcon,
-  shadowUrl: markerShadow,
   className: 'custom-pin-border',
-  iconSize: [35, 50],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+  iconSize: [65, 65],
+  iconAnchor: [32.5, 65],
+  popupAnchor: [0, -50],
   shadowSize: [41, 41],
 });
 
@@ -142,21 +140,6 @@ export const LeafletMapService = {
     }
     marker = null;
     markerMoveListeners.clear();
-    const container = L.DomUtil.get(mapID);
-    if (container) {
-      (container as HTMLElement & { _leaflet_id?: null })._leaflet_id = null;
-    }
-  },
-
-  /**
-   * Destroy the actual instance of the map and clears the memory
-   * @param mapID ID of the HTML container.
-   */
-  destroyMap(mapID: string) {
-    if (map) {
-      map.remove();
-      map = null;
-    }
     const container = L.DomUtil.get(mapID);
     if (container) {
       (container as HTMLElement & { _leaflet_id?: null })._leaflet_id = null;

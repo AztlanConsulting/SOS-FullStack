@@ -58,12 +58,12 @@ export const Footer = ({ bg = 'color-primary-bg' }: FooterProps) => {
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              <a href="/therms">Terminos y condiciones</a>
+              <a href="/therms">Términos y condiciones</a>
             </Text>
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              <a href="/credits">Creditos de imagenes</a>
+              <a href="/credits">Créditos de imágenes</a>
             </Text>
           </div>
           <div className="text-center">

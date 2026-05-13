@@ -117,12 +117,12 @@ describe('Footer component', () => {
 
   test('renders Terminos y condiciones', () => {
     render(<Footer />);
-    expect(screen.getByText(/Terminos y condiciones/)).toBeInTheDocument();
+    expect(screen.getByText(/Términos y condiciones/)).toBeInTheDocument();
   });
 
   test('renders image credits link', () => {
     render(<Footer />);
-    const creditsLink = screen.getByText('Creditos de imagenes').closest('a');
+    const creditsLink = screen.getByText('Créditos de imágenes').closest('a');
     expect(creditsLink).toHaveAttribute('href', '/credits');
   });
 });

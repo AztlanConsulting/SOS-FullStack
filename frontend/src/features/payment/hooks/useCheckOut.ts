@@ -45,7 +45,6 @@ export const useCheckout = ({
       elements,
       redirect: 'if_required',
     });
-    console.log('Stripe confirmPayment result:', { error, paymentIntent });
 
     if (error) {
       if (error.type === 'card_error' || error.type === 'validation_error') {
@@ -60,30 +59,18 @@ export const useCheckout = ({
     // For card payments, if succeeded immediately, complete the purchase
     if (paymentIntent?.status === 'succeeded' && paymentMethod === 'card') {
       if (purchaseDetail && paymentId) {
-        let newPetId;
+        let newPurchasedPlanId;
         if (data.plan) {
           const petResult: PurchasedPlanResponse =
             await createLostPetReportRequest(data.plan);
-
-          console.log(petResult);
-          console.log(data.plan);
-          newPetId = petResult.plan.petId;
+          newPurchasedPlanId = petResult.plan._id;
         }
-        console.log(
-          'Creating purchase with:',
-          data.email || '',
-          paymentId,
-          newPetId,
-          'plan',
-        );
-        console.log('data:', data);
-        console.log('purchaseDetail:', purchaseDetail);
         try {
           if (data.plan) {
             await createPurchase(
               data.email || '',
               paymentId,
-              newPetId || '',
+              newPurchasedPlanId || '',
               'plan',
             );
             setMessage('Pago procesado exitosamente con plan');
@@ -115,30 +102,18 @@ export const useCheckout = ({
 
   const handleConfirmation = async () => {
     if (purchaseDetail && paymentId) {
-      let newPetId;
+      let newPurchasedPlanId;
       if (data.plan) {
         const petResult: PurchasedPlanResponse =
           await createLostPetReportRequest(data.plan);
-
-        console.log(petResult);
-        console.log(data.plan);
-        newPetId = petResult.plan.petId;
+        newPurchasedPlanId = petResult.plan._id;
       }
-      console.log(
-        'Creating purchase with:',
-        data.email || '',
-        paymentId,
-        newPetId,
-        'plan',
-      );
-      console.log('data:', data);
-      console.log('purchaseDetail:', purchaseDetail);
       try {
         if (data.plan) {
           await createPurchase(
             data.email || '',
             paymentId,
-            newPetId || '',
+            newPurchasedPlanId || '',
             'plan',
           );
           setMessage('Pago procesado exitosamente con plan');

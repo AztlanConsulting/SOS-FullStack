@@ -21,14 +21,12 @@ export const StripeProvider: PaymentProvider = {
     }
 
     const stripe = new Stripe(key);
-    console.log('HOLA SOY STRIEPPROVIDER API Y THIS IS DATA:', data);
     const { amount, currency, method, name, email, idempotencyKey } = data;
 
     const paymentIntentKey = `${idempotencyKey}-payment-intent`;
     const confirmKey = `${idempotencyKey}-confirm`;
 
     const stripeAmount = Math.round(amount * 100);
-    console.log('name and email and method:', name, email, method);
     if (!Number.isFinite(stripeAmount) || stripeAmount <= 0) {
       throw new Error('Amount must be a positive number');
     }
@@ -69,8 +67,6 @@ export const StripeProvider: PaymentProvider = {
           idempotencyKey: paymentIntentKey,
         },
       );
-      console.log('Hola tarjeta');
-      console.log('PAYMENT INTENT CREATED:', intent.id);
       // for OXXO pay
     } else if (method === 'oxxo') {
       // Format name to have both first and last name for Stripe
@@ -160,8 +156,6 @@ export const StripeProvider: PaymentProvider = {
           idempotencyKey: paymentIntentKey,
         },
       );
-
-      console.log('PAYMENT INTENT CREATED:', intent.id);
 
       // Confirm the intent to generate bank transfer instructions
       const confirmedIntent = await stripe.paymentIntents.confirm(

@@ -29,7 +29,6 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
     };
 
     const idempotencyKey = req.headers['x-idempotency-key'];
-    console.log('HEADER KEY:', idempotencyKey);
     if (amount === undefined || currency === undefined) {
       return res.status(400).json({ error: 'Missing amount or currency' });
     }
@@ -43,15 +42,12 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       idempotencyKey: String(idempotencyKey),
     });
 
-    console.log('Payment intent result:', result);
-
     try {
       const paymentExists = await findPaymentByOrderIdDB(
         PaymentDataAccess,
         result.id,
       );
       if (paymentExists) {
-        console.log('Payment intent already exists');
         return res.status(200).json({
           message: 'Payment intent already exists',
           result: result,
@@ -140,8 +136,6 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       secret: webhookSecret,
     });
 
-    console.log(`Webhook received: ${event.type}`);
-
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
@@ -157,19 +151,36 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       if (result === 'already_updated') {
         console.log('Webhook already processed (idempotent)');
       }
-      console.log(
-        `Payment ${paymentIntent.id} succeeded. Updated status: ${result}`,
-      );
 
-      const purchase = await getPurchasesByPaymentIdDB(
-        PurchaseDataAccess,
-        paymentIntent.id,
-      );
+      // Retry mechanism to wait for purchase creation (up to 5 seconds)
+      // Due to the asynchronous nature of webhooks and database operations,
+      // we may receive the webhook before the purchase record is created.
+      let purchase = null;
+      for (let i = 0; i < 10; i++) {
+        const purchases = await getPurchasesByPaymentIdDB(
+          PurchaseDataAccess,
+          paymentIntent.id,
+        );
+        if (purchases && purchases.length > 0) {
+          purchase = purchases[0];
+          break;
+        }
+        // Wait 500ms before retrying
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
 
-      if (purchase[0].productType === 'plan') {
+      if (!purchase) {
+        // console.warn(
+        //   `No purchase found for payment ${paymentIntent.id} after retries`,
+        // );
+        res.json({ received: true });
+        return;
+      }
+
+      if (purchase.productType === 'plan') {
         const planActivation = await activateLostPetReport(
           purchasedPlanDataAccess,
-          purchase[0].productId!,
+          purchase.productId,
         );
         if (!planActivation) console.error("Plan couldn't be activated");
       }

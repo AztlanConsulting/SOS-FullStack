@@ -15,7 +15,6 @@ export const useStripeHook = (data: Order, idempotencyKey: string) => {
 
   useEffect(() => {
     let cancelled = false;
-    console.log('IDEMPOTENCY KEY SENT:', idempotencyKey);
     const init = async () => {
       try {
         setLoading(true);
@@ -27,8 +26,6 @@ export const useStripeHook = (data: Order, idempotencyKey: string) => {
           data.email,
           idempotencyKey,
         );
-
-        console.log('HOLA STRIPE HOOK Payment intent creation response:', res);
 
         if (cancelled) return;
 

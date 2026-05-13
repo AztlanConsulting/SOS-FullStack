@@ -8,14 +8,6 @@ export const createPaymentIntent = async (
 ) => {
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;
-    console.log('Creating payment intent with:', {
-      amount,
-      currency,
-      method,
-      name,
-      email,
-      idempotencyKey,
-    });
     const res = await fetch(`${base_url}/payments/payment-intent`, {
       method: 'POST',
       headers: {

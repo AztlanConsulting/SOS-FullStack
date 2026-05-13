@@ -27,14 +27,6 @@ export const makeCreatePurchase = () => {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
-      if (productType === 'plan') {
-        const planActivation = await activateLostPetReport(
-          purchasedPlanDataAccess,
-          productId!,
-        );
-        if (!planActivation) console.error("Plan couldn't be activated");
-      }
-
       await createPurchaseDB(PurchaseDataAccess, {
         userEmail,
         paymentId,

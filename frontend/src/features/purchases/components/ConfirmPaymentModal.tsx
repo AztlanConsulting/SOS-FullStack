@@ -67,8 +67,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                 publicaciones en nuestras redes sociales.
               </Text>
 
-              {/* Credenciales con mejor diseño */}
-              <div className="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-3 text-left">
+              <div className="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4 text-left">
                 <Text
                   variant="small"
                   className="text-gray-400 uppercase text-[10px] font-bold mb-2 block"
@@ -103,7 +102,6 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
             </Text>
           )}
 
-          {/* Details Card - Thinner Padding */}
           <div className="w-full bg-green-50/50 rounded-lg p-4 border border-green-100 mb-6 text-sm">
             <Text
               variant="small"

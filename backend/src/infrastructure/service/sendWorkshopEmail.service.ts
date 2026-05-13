@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer';
 
 import type {
-  ManualEmailService,
-  SendManualEmailDTO,
+  WorkshopEmailService,
+  SendWorkshopEmailDTO,
 } from '@domain/ports/emailService.port';
 
 let transporterPromise: Promise<nodemailer.Transporter> | null = null;
@@ -52,14 +52,14 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   return transporterPromise;
 };
 
-export const sendManualEmailService: ManualEmailService = {
-  async sendManualEmail(data: SendManualEmailDTO): Promise<void> {
+export const sendWorkshopEmailService: WorkshopEmailService = {
+  async sendWorkshopEmail(data: SendWorkshopEmailDTO): Promise<void> {
     const transporter = await getTransporter();
 
     const info = await transporter.sendMail({
       from: `"SOS Encontrando Mascotas" <${process.env.SMTP_USER ?? 'test@sospets.local'}>`,
       to: data.to,
-      subject: `Información sobre tu compra: ${data.manualName}`,
+      subject: `Información sobre tu compra: ${data.workshopName}`,
       html: `
        <div style="margin:0;padding:0;background-color:#f8f9fa;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa;padding:40px 10px;">
@@ -83,30 +83,30 @@ export const sendManualEmailService: ManualEmailService = {
                   <td style="padding:0 40px 40px 40px;color:#444444;line-height:1.6;">
                     <p style="font-size:16px;margin-bottom:12px;">Hola,</p>
                     <p style="font-size:15px;color:#666;margin-bottom:32px;">
-                      ¡Gracias por tu compra! Aquí tienes el material que solicitaste para ayudar a tu mejor amigo.
+                      ¡Gracias por tu compra! Aquí tienes el acceso al material que solicitaste. Esperamos sinceramente que este contenido te brinde las herramientas, el apoyo y la guía que buscas en este momento.
                     </p>
 
                     <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:30px;text-align:center;">
                       
-                      <img src="${data.imageUrl}" alt="${data.manualName}" style="width:180px; height:auto; border-radius:8px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); margin-bottom:20px;">
+                      <img src="${data.imageUrl}" alt="${data.workshopName}" style="width:180px; height:auto; border-radius:8px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); margin-bottom:20px;">
                       
-                      <h2 style="margin:0 0 8px 0;font-size:20px;color:#1a1a1a;">${data.manualName}</h2>
+                      <h2 style="margin:0 0 8px 0;font-size:20px;color:#1a1a1a;">${data.workshopName}</h2>
 
                       ${
-                        data.pdfUrl
+                        data.videoUrl
                           ? `
                         <div style="margin-top:20px;">
-                          <a href="${data.pdfUrl}" target="_blank" style="background-color:#f9cd48; color:#1a1a1a; padding:14px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px; display:inline-block; transition: background-color 0.3s ease;">
-                            Descargar Manual (PDF)
+                          <a href="${data.videoUrl}" target="_blank" style="background-color:#f9cd48; color:#1a1a1a; padding:14px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px; display:inline-block; transition: background-color 0.3s ease;">
+                            Ver Video
                           </a>
                         </div>
                         <p style="font-size:12px; color:#aaa; margin-top:15px;">
                           Si el botón no funciona, copia y pega este link: <br/>
-                          <span style="color:#f9cd48;">${data.pdfUrl}</span>
+                          <span style="color:#f9cd48;">${data.videoUrl}</span>
                         </p>
                       `
                           : `
-                        <p style="color:#d9534f; font-weight:bold;">Hubo un problema con la descarga del manual. <br/> Por favor, contáctanos <a href="mailto:hola@sosencontrandomascotas.com" style="text-decoration:underline;">aquí</a>.</p>
+                        <p style="color:#d9534f; font-weight:bold;">Hubo un problema al cargar el video. <br/> Por favor, contáctanos <a href="mailto:hola@sosencontrandomascotas.com" style="text-decoration:underline;">aquí</a>.</p>
                       `
                       }
                       ${
@@ -130,7 +130,7 @@ export const sendManualEmailService: ManualEmailService = {
                 <tr>
                   <td align="center" style="padding:32px;background-color:#fafafa;border-top:1px solid #f0f0f0;">
                     <p style="margin:0;font-size:13px;color:#777;">
-                      ¿Tienes problemas con la descarga? <br/>
+                      ¿Tienes problemas con el video? <br/>
                       <a href="mailto:hola@sosencontrandomascotas.com" style="color:#f9cd48;text-decoration:none;font-weight:bold;">Contáctanos aquí</a>
                     </p>
                   </td>

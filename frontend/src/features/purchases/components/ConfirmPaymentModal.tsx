@@ -142,7 +142,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
 
             {product && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-500">Producto</span>
+                <span className="text-gray-500 pr-20">Producto</span>
                 <span className="font-semibold text-gray-900">
                   {product.name} (${product.price})
                 </span>

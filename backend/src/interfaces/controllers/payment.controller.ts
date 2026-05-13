@@ -17,6 +17,10 @@ import { sendManualEmail } from '@/use-cases/emails/sendManualEmail.usecase';
 import { sendManualEmailService } from '@/infrastructure/service/sendManualEmail.service';
 import { getManualByIdDB } from '@/use-cases/manuals/getManualsDB.usecase';
 import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
+import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
+import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
+import { sendWorkshopEmail } from '@/use-cases/emails/sendWorkshopEmail.usecase';
+import { sendWorkshopEmailService } from '@/infrastructure/service/sendWorkshopEmail.service';
 
 /**
  * middleware to create a Stripe payment intent.
@@ -195,12 +199,30 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
           purchase.productId,
         );
         if (manualData) {
-          const { name, imageUrl, pdfUrl } = manualData;
+          const { name, imageUrl, pdfUrl, emailContent } = manualData;
           await sendManualEmail(sendManualEmailService, {
             to: purchase.userEmail,
             manualName: name,
             imageUrl,
             pdfUrl,
+            emailContent,
+          });
+        }
+      }
+
+      if (purchase.productType === 'taller') {
+        const workshopData = await getWorkshopById(
+          WorkshopDataAccess,
+          purchase.productId,
+        );
+        if (workshopData) {
+          const { name, imageUrl, videoUrl, emailContent } = workshopData;
+          await sendWorkshopEmail(sendWorkshopEmailService, {
+            to: purchase.userEmail,
+            workshopName: name,
+            imageUrl: imageUrl ?? '',
+            videoUrl: videoUrl ?? '',
+            emailContent: emailContent ?? '',
           });
         }
       }

@@ -23,6 +23,15 @@ export interface SendManualEmailDTO {
   manualName: string;
   imageUrl: string;
   pdfUrl?: string;
+  emailContent?: string;
+}
+
+export interface SendWorkshopEmailDTO {
+  to: string;
+  workshopName: string;
+  imageUrl: string;
+  videoUrl?: string;
+  emailContent?: string;
 }
 
 export interface StripeEmailService {
@@ -31,4 +40,8 @@ export interface StripeEmailService {
 
 export interface ManualEmailService {
   sendManualEmail(data: SendManualEmailDTO): Promise<void>;
+}
+
+export interface WorkshopEmailService {
+  sendWorkshopEmail(data: SendWorkshopEmailDTO): Promise<void>;
 }

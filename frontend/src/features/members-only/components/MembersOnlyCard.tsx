@@ -34,6 +34,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
           day: '2-digit',
           month: 'short',
           year: 'numeric',
+          timeZone: 'America/Mexico_City',
         })}
       </Text>
       <div className="flex flex-col items-center justify-center py-5 border-t border-purple ">

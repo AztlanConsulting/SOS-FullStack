@@ -103,10 +103,10 @@ describe('ReportConfirmationPage', () => {
     expect(screen.getByText('Firulais')).toBeDefined();
   });
 
-  test('renders the "Proceder al pago" button', () => {
+  test('renders the "Continuar" button', () => {
     mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
-    expect(screen.getByText('Proceder al pago')).toBeDefined();
+    expect(screen.getByText('Continuar')).toBeDefined();
   });
 
   test('does not redirect when lostPetReportData is available', () => {
@@ -115,12 +115,12 @@ describe('ReportConfirmationPage', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  test('navigates to /plans when "Proceder al pago" is clicked', async () => {
+  test('navigates to /plans when "Continuar" is clicked', async () => {
     const user = userEvent.setup();
     mockLostPetReportData = MOCK_REPORT_DATA;
     renderWithRouter(<ReportConfirmationPage />);
 
-    await user.click(screen.getByText('Proceder al pago'));
+    await user.click(screen.getByText('Continuar'));
 
     expect(mockNavigate).toHaveBeenCalledWith('/plans');
   });

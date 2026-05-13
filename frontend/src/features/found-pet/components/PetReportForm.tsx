@@ -30,7 +30,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
+    <div id="report-section" className="min-h-screen pb-8 pt-8 bg-white">
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {/* Section 1: General pet data */}
         <div id="user-info-section">

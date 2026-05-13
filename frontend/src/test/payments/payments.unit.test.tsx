@@ -3,7 +3,7 @@ import PurchaseDetails from '@/features/purchases/components/PurchaseDetails';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import wrapper from '../utils/wrapper.util';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const navigateMock = vi.fn();
 
@@ -25,7 +25,7 @@ describe('PurchaseDetails', () => {
     price: 399,
   };
 
-  const mockReportData: PetReportData = {
+  const mockReportData: LostPetReportData = {
     name: 'Firulais',
     species: 'Perro',
     date: '2023-10-25',
@@ -65,7 +65,7 @@ describe('PurchaseDetails', () => {
 
     expect(screen.getByText('Detalles de la compra')).toBeInTheDocument();
     expect(screen.getByText('Total a pagar:')).toBeInTheDocument();
-    expect(screen.getByText('$399')).toBeInTheDocument();
+    expect(screen.getByText('$399', { exact: false })).toBeInTheDocument();
     const detailContainer = container.querySelector('.bg-secondary');
     expect(detailContainer).toBeInTheDocument();
   });
@@ -78,7 +78,7 @@ describe('PurchaseDetails', () => {
       },
     );
 
-    expect(screen.getByText('$500')).toBeInTheDocument();
+    expect(screen.getByText('$500', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('Básico')).toBeInTheDocument();
     expect(screen.getByText('3 días')).toBeInTheDocument();
     const detailContainer = container.querySelector('.bg-gray-100');

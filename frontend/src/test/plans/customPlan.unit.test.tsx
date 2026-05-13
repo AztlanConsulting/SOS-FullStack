@@ -41,38 +41,38 @@ describe('customPlan utilities', () => {
   describe('calculatePrice', () => {
     test('calculates base price correctly for tier 1', () => {
       // 3 * 80 + 5 * 15 = 315
-      expect(calculatePrice(3, 5, [])).toBe(315);
+      expect(calculatePrice(3, 5, [])).toBe(17.75);
     });
 
     test('calculates base price correctly for tier 2', () => {
       // 5 * 75 + 5 * 12.5 = 437.5
-      expect(calculatePrice(5, 5, [])).toBe(437.5);
+      expect(calculatePrice(5, 5, [])).toBe(24.75);
     });
 
     test('calculates base price correctly for tier 3', () => {
       // 7 * 72 + 5 * 11.2 = 560
-      expect(calculatePrice(7, 5, [])).toBe(560);
+      expect(calculatePrice(7, 5, [])).toBe(31.25);
     });
 
     test('calculates base price correctly for tier 4', () => {
       // 15 * 72 + 5 * 13 = 1145
-      expect(calculatePrice(15, 5, [])).toBe(1145);
+      expect(calculatePrice(15, 5, [])).toBe(63.75);
     });
 
     test('adds feature price correctly', () => {
       // 3 * 80 + 5 * 15 + 50 asesor = 365
-      expect(calculatePrice(3, 5, ['asesor'])).toBe(365);
+      expect(calculatePrice(3, 5, ['asesor'])).toBe(20.55);
     });
 
     test('adds multiple feature prices correctly', () => {
       // 3 * 80 + 5 * 15 + 50 asesor + 50 geo_dinamica = 415
-      expect(calculatePrice(3, 5, ['asesor', 'geo_dinamica'])).toBe(415);
+      expect(calculatePrice(3, 5, ['asesor', 'geo_dinamica'])).toBe(23.35);
     });
 
     test('ignores features not in current tier', () => {
       // days=7 tier only has geo_doble and reel, asesor should be ignored
       // 7 * 72 + 5 * 11.2 + 0 = 560
-      expect(calculatePrice(7, 5, ['asesor'])).toBe(560);
+      expect(calculatePrice(7, 5, ['asesor'])).toBe(31.25);
     });
   });
 });

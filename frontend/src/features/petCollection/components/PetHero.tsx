@@ -6,6 +6,7 @@ interface Props {
 }
 
 const PetHero = ({ petInfo }: Props) => {
+  const image = `data:image/png;base64,${petInfo.image}`;
   return (
     <section
       className={`bg-secondary w-full flex flex-col items-center justify-center`}
@@ -33,7 +34,7 @@ const PetHero = ({ petInfo }: Props) => {
 
         <div className="order-2 md:order-1 md:row-span-2 my-3 md:my-0">
           <img
-            src={petInfo.image}
+            src={image}
             alt="Manuales"
             className="w-full rounded-lg object-cover color-primary-shadow "
           />

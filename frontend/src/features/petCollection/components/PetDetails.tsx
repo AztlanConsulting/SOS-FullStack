@@ -2,17 +2,18 @@ import { HeaderBack } from '@/shared/components/layout/HeaderBack';
 import PetHero from './PetHero';
 import PetContent from './PetContent';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import getFoundPetDetails from '../services/getFoundPetDetails.service';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import { Text } from '@/shared/components/ui/Text';
 
 const PetDetails = () => {
-  const { pathname } = useLocation();
+  const params = useParams();
   const navigate = useNavigate();
   const { isLoading, error, data } = useQuery({
-    queryKey: [pathname],
-    queryFn: async () => await getFoundPetDetails(pathname),
+    queryKey: [params.id],
+    queryFn: async () => params.id && (await getFoundPetDetails(params.id)),
+    enabled: Boolean(params.id),
   });
 
   return (

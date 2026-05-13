@@ -13,7 +13,7 @@ async function getFoundPetDetails(req: Request, res: Response) {
       throw Error("Coudln't parse ID from params");
     }
 
-    const { id } = params.data;
+    const id = params.data.id.split('_')[0];
 
     const petDetails = await getPetDetails(
       {

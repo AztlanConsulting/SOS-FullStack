@@ -359,18 +359,20 @@ const EditablePhotos = ({
 
           {imageUrls.length > 0 ? (
             <div className="flex flex-col gap-2 w-full px-1">
-              {imageUrls.map((url, index) => (
-                <div
-                  key={index}
-                  className="w-full bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
-                >
-                  <img
-                    src={url}
-                    alt={`Mascota ${index + 1}`}
-                    className="w-full h-auto object-contain block"
-                  />
-                </div>
-              ))}
+              {imageUrls
+                .slice(0, parseInt(formData.imageLayout || '1'))
+                .map((url, index) => (
+                  <div
+                    key={index}
+                    className="w-full bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
+                  >
+                    <img
+                      src={url}
+                      alt={`Mascota ${index + 1}`}
+                      className="w-full h-auto object-contain block"
+                    />
+                  </div>
+                ))}
             </div>
           ) : (
             <span className="text-sm text-gray-500">No se subieron fotos.</span>

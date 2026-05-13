@@ -23,6 +23,7 @@ module.exports = [
       'prettier.config.cjs',
       'commitlint.config.cjs',
       'backend/jest.config.js',
+      'backend/__mocks__/**/*',
     ],
   },
 

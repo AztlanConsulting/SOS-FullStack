@@ -1,8 +1,8 @@
 import PlanProgressSection from '@/features/client/components/PlanProgressSection';
-import { PurchasedResourcesSection } from '@/features/client/components/PurchasedResourcesSection';
 import { AdProgressSection } from '@/features/client/components/AdProgressSection';
 import { useDashboardMetrics } from '@/features/graphs/hooks/useDashboardMetrics';
 import { Text } from '@/shared/components/ui/Text/Text';
+import { Button } from '@/shared/components/ui/Button';
 
 const ClientDashboardOverview = () => {
   const { metrics, loading, error } = useDashboardMetrics();
@@ -22,6 +22,10 @@ const ClientDashboardOverview = () => {
       ? petData.posterImage
       : `${baseUrl}${petData.posterImage}`
     : null;
+
+  const handleResourcesPage = () => {
+    console.log('handleResourcesPage');
+  };
 
   return (
     <main className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto pt-28 lg:pt-10 pb-10">
@@ -46,22 +50,36 @@ const ClientDashboardOverview = () => {
           </div>
 
           {petData && (
-            <div className="flex items-center gap-4 border-b border-gray-200 pb-6 w-full">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
-                <img
-                  src={petData.petImage || 'pet.jpg'}
-                  alt={petData.petName}
-                  className="w-full h-full object-cover"
-                />
+            <div className="flex flex-col gap-4 border-b border-gray-200 pb-8 w-full">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
+                  <img
+                    src={petData.petImage || 'pet.jpg'}
+                    alt={petData.petName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <Text variant="h3" weight="medium" as="div">
+                    {petData.petName}
+                  </Text>
+                  <Text
+                    variant="caption"
+                    color="text-gray-500"
+                    className="mt-1"
+                  >
+                    Desde {formattedDate}, esperando que vuelva a casa
+                  </Text>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <Text variant="h3" weight="medium" as="div">
-                  {petData.petName}
-                </Text>
-                <Text variant="caption" color="text-gray-500" className="mt-1">
-                  Desde {formattedDate},<br className="sm:hidden" /> esperando
-                  que vuelva a casa
-                </Text>
+
+              <div className="flex justify-center md:justify-start">
+                <Button
+                  label="Visita nuestros recursos exclusivos"
+                  variant="primary"
+                  textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-fit px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                  onClick={handleResourcesPage}
+                />
               </div>
             </div>
           )}
@@ -76,10 +94,6 @@ const ClientDashboardOverview = () => {
                 <AdProgressSection posterUrl={posterUrl} />
               </div>
             </div>
-          </div>
-
-          <div className="mt-6">
-            <PurchasedResourcesSection resources={metrics.resources} />
           </div>
         </div>
       )}

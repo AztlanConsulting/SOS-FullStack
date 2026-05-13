@@ -5,6 +5,8 @@ import type { Product } from '@shared/types/purchase.types';
 import ConfirmPaymentModal from './ConfirmPaymentModal';
 import PendingPaymentModal from './PendingPaymentModal';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
+import { formatCurrency } from '@shared/utils/formatCurrency';
+import { useLocationContext } from '@/shared/context/Location.context';
 
 interface Props {
   reportData: LostPetReportData | null;
@@ -25,7 +27,10 @@ const PurchaseDetails = ({
   onClosePending,
 }: Props) => {
   const plan = reportData?.planDetails ?? null;
+  const { currencyCode, exchangeRate } = useLocationContext();
 
+  const rawPrice = product?.price ?? plan?.totalPrice ?? 0;
+  const localizedPrice = Math.round(rawPrice * exchangeRate * 100) / 100;
   return (
     <div className="pt-4 md:p-0 w-10/12 mx-auto">
       <Text
@@ -48,8 +53,8 @@ const PurchaseDetails = ({
         <Text variant="body" weight="regular" color="text-black">
           Total a pagar:
         </Text>
-        <Text variant="h1" weight="regular" color="text-black">
-          ${product?.price ?? plan?.totalPrice}
+        <Text variant="h1" color="text-gray-600">
+          {formatCurrency(localizedPrice, currencyCode)} {currencyCode}
         </Text>
       </div>
       {/* Modal to show success state */}

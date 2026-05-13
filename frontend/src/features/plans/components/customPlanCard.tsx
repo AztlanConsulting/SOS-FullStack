@@ -19,7 +19,9 @@ const CustomPlanCard: React.FC = () => {
     km,
     tier,
     selectedFeatures,
-    totalPrice,
+    localizedTotalPrice,
+    currencyCode,
+    localize,
     handleDaysChange,
     setKm,
     toggleFeature,
@@ -189,7 +191,9 @@ const CustomPlanCard: React.FC = () => {
                   variant="small"
                   className={isAvailable ? 'text-gray-500' : 'text-gray-400'}
                 >
-                  {isAvailable ? `+${tierFeature?.price}` : 'No disponible'}
+                  {isAvailable
+                    ? `+${currencyCode} ${localize(tierFeature!.price).toFixed(2)}`
+                    : 'No disponible'}
                 </Text>
               </label>
             );
@@ -201,18 +205,20 @@ const CustomPlanCard: React.FC = () => {
         <div className="flex flex-col gap-0.5">
           <div className="flex justify-between">
             <Text variant="small" className="text-gray-500">
-              Días ({days} x ${tier.pricePerDay.toFixed(2)})
+              Días ({days} x {currencyCode}{' '}
+              {localize(tier.pricePerDay).toFixed(2)})
             </Text>
             <Text variant="small" className="text-gray-700">
-              ${(days * tier.pricePerDay).toFixed(2)}
+              {currencyCode} {localize(days * tier.pricePerDay).toFixed(2)}
             </Text>
           </div>
           <div className="flex justify-between">
             <Text variant="small" className="text-gray-500">
-              Radio ({km} km x ${tier.pricePerKm.toFixed(2)})
+              Radio ({km} km x {currencyCode}{' '}
+              {localize(tier.pricePerKm).toFixed(2)})
             </Text>
             <Text variant="small" className="text-gray-700">
-              ${(km * tier.pricePerKm).toFixed(2)}
+              {currencyCode} {localize(km * tier.pricePerKm).toFixed(2)}
             </Text>
           </div>
           {selectedFeatures.map((key) => {
@@ -224,7 +230,7 @@ const CustomPlanCard: React.FC = () => {
                   {feature.label}
                 </Text>
                 <Text variant="small" className="text-gray-700">
-                  +${feature.price}
+                  +{currencyCode} {localize(feature.price).toFixed(2)}
                 </Text>
               </div>
             );
@@ -234,7 +240,7 @@ const CustomPlanCard: React.FC = () => {
               Total
             </Text>
             <Text variant="body" weight="bold" className="text-gray-900">
-              ${totalPrice.toFixed(2)}
+              {currencyCode} {localizedTotalPrice.toFixed(2)}
             </Text>
           </div>
         </div>
@@ -266,7 +272,7 @@ const CustomPlanCard: React.FC = () => {
                       }),
                     ]),
                   ),
-                  totalPrice,
+                  totalPrice: localizedTotalPrice,
                 },
               };
 

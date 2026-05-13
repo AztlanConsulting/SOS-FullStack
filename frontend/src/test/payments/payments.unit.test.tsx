@@ -66,7 +66,7 @@ describe('PurchaseDetails', () => {
 
     expect(screen.getByText('Detalles de la compra')).toBeInTheDocument();
     expect(screen.getByText('Total a pagar:')).toBeInTheDocument();
-    expect(screen.getByText('$399')).toBeInTheDocument();
+    expect(screen.getByText('$399', { exact: false })).toBeInTheDocument();
     const detailContainer = container.querySelector('.bg-secondary');
     expect(detailContainer).toBeInTheDocument();
   });
@@ -83,7 +83,7 @@ describe('PurchaseDetails', () => {
       },
     );
 
-    expect(screen.getByText('$500')).toBeInTheDocument();
+    expect(screen.getByText('$500', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('Básico')).toBeInTheDocument();
     expect(screen.getByText('3 días')).toBeInTheDocument();
     const detailContainer = container.querySelector('.bg-gray-100');

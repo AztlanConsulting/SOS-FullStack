@@ -1,11 +1,9 @@
-import Header from '../shared/components/layout/Header';
-import Footer from '../shared/components/layout/Footer';
 import FaqSection from '../features/members-only/components/FaqSection';
 import AudioSection from '../features/members-only/components/AudioSection';
 import GoodToKnow from '../features/members-only/components/GoodToKnow';
 import MembersOnlyListSection from '../features/members-only/components/MembersOnlyListSection';
 import HeroSection from '@shared/components/layout/HeroSection';
-import owner from '@assets/images/members.png';
+import owner from '@assets/images/PortalExclusivo.png';
 import { Text } from '@shared/components/ui/Text';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';

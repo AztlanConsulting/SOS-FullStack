@@ -1,11 +1,11 @@
 import type {
-  EmailService,
+  StripeEmailService,
   SendStripePaymentEmailDTO,
 } from '@domain/ports/emailService.port';
 
 export const sendPaymentEmail = async (
-  emailService: EmailService,
+  stripeEmailService: StripeEmailService,
   data: SendStripePaymentEmailDTO,
 ): Promise<void> => {
-  return await emailService.sendStripePaymentEmail(data);
+  return await stripeEmailService.sendStripePaymentEmail(data);
 };

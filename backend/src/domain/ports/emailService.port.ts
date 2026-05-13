@@ -18,6 +18,17 @@ export interface SendStripePaymentEmailDTO {
   holderAddress?: Stripe.Address;
 }
 
-export interface EmailService {
+export interface SendManualEmailDTO {
+  to: string;
+  manualName: string;
+  imageUrl: string;
+  pdfUrl?: string;
+}
+
+export interface StripeEmailService {
   sendStripePaymentEmail(data: SendStripePaymentEmailDTO): Promise<void>;
+}
+
+export interface ManualEmailService {
+  sendManualEmail(data: SendManualEmailDTO): Promise<void>;
 }

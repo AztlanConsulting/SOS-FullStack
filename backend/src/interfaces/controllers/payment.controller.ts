@@ -7,12 +7,16 @@ import { StripeProvider } from '@infrastructure/api/stripeProvider.api';
 import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
 import type Stripe from 'stripe';
 import { sendPaymentEmail } from '@/use-cases/emails/sendPaymentEmail.usecase';
-import { emailService } from '@/infrastructure/service/email.service';
+import { pendingPaymentEmailService } from '@/infrastructure/service/pendingPaymentEmail.service';
 import { findPaymentByOrderIdDB } from '@/use-cases/payments/findPaymentByOrderIdDB.usecase';
 import { getPurchasesByPaymentIdDB } from '@/use-cases/purchases/getPurchasesByPaymentIdDB.usecase';
 import { PurchaseDataAccess } from '@/infrastructure/data-access/purchase.data-access';
 import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
+import { sendManualEmail } from '@/use-cases/emails/sendManualEmail.usecase';
+import { sendManualEmailService } from '@/infrastructure/service/sendManualEmail.service';
+import { getManualByIdDB } from '@/use-cases/manuals/getManualsDB.usecase';
+import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
 
 /**
  * middleware to create a Stripe payment intent.
@@ -62,7 +66,7 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       });
       /** * Send email for OXXO */
       if (method === 'oxxo' && email && result.oxxoDetails) {
-        await sendPaymentEmail(emailService, {
+        await sendPaymentEmail(pendingPaymentEmailService, {
           to: email,
           name: name ?? 'Usuario',
           method: 'oxxo',
@@ -74,7 +78,7 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       }
       /** * Send email for SPEI */
       if (method === 'spei' && email && result.speiDetails) {
-        await sendPaymentEmail(emailService, {
+        await sendPaymentEmail(pendingPaymentEmailService, {
           to: email,
           name: name ?? 'Usuario',
           method: 'spei',
@@ -183,6 +187,22 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
           purchase.productId,
         );
         if (!planActivation) console.error("Plan couldn't be activated");
+      }
+
+      if (purchase.productType === 'manual') {
+        const manualData = await getManualByIdDB(
+          ManualDataAccess,
+          purchase.productId,
+        );
+        if (manualData) {
+          const { name, imageUrl, pdfUrl } = manualData;
+          await sendManualEmail(sendManualEmailService, {
+            to: purchase.userEmail,
+            manualName: name,
+            imageUrl,
+            pdfUrl,
+          });
+        }
       }
     }
 

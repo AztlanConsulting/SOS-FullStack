@@ -1,12 +1,18 @@
-# SOS-Full Stack
-
-# Manual de instalación
+# SOS-Full Stack - Manual de instalación
 
 ## Configuración previa del servidor.
 
 _Si ya cuenta con docker instalado y ya tiene una configuración de nginx customizada se puede saltar hasta la sección de configuración de la aplicación_
 
-## 1. Instalación de docker
+### 0. Instalar curl
+
+Necesario para las demás
+
+```bash
+sudo apt install curl
+```
+
+### 1. Instalación de docker
 
 _Este paso puede variar dependiendo del ambiente de producción y sistema operativo. A continuación se explica la instalación de la aplicación y componentes en el ambiente de Ubuntu 24.04_
 
@@ -55,7 +61,7 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin dock
 sudo docker run hello-world
 ```
 
-## 2. Instalación y configuración de NGINX
+### 2. Instalación y configuración de NGINX
 
 - [Documentación oficial](https://nginx.org/en/linux_packages.html#Ubuntu)
 
@@ -94,16 +100,97 @@ sudo systemctl status nginx
 sudo systemctl start nginx
 ```
 
+### 3. Instalación de Node
+
+- [Documentación oficial](https://www.geeksforgeeks.org/linux-unix/how-to-install-nvm-on-ubuntu-22-04/)
+
+NVM es un paquete que nos ayudará a instalar la versión de node que utilizaremos para el proyecto, ya que este corre en JavaScript
+
+1. **Instalar nvm**
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+```
+
+2. **Verificar instalación**
+
+```bash
+nvm --version
+```
+
+**Debe dar una respuesta como 1.2.2**
+
+3. **Instalar la versión 25.9 de node**
+
+```bash
+nvm install 25.9
+```
+
+4. **Ver versiones instaladas**
+
+```bash
+nvm ls
+```
+
+En la lista debería aparecer la versión que se instaló en el paso anterior
+
+5. **Seleccionarla como versión predefinida**
+
+```bash
+nvm use 25.9
+```
+
+### 4. Instalación de MongoDB
+
+- [Documentación oficial](https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-ubuntu/)
+
+1. **Instalar mongo**
+
 ---
 
-## Clonar el repositorio
+## Configuración de la aplicación
 
-El primer paso es descargar el proyecto para tener acceso a sus componentes y dependencias en todo momento.
-Este primer paso es importante para la configuración de docker.
+### 1. Clonar el repositorio y acceder a este
 
 ```bash
 git clone https://github.com/AztlanConsulting/SOS-FullStack.git
 cd SOS-Fullstack
 ```
 
-Esto nos deja descargar el proyecto en una carpeta llamada SOS-Fullstack y entrar en ella.
+### 2. Iniciar base de datos vectorial
+
+La configuración de la base de datos vectorial se encuentra en el archivo docker-compose.yml, en este se puede cambiar la configuración si se quiere modificar algo como los puertos. Pero la configuración establecida es necesaria para el correcto funcionamiento de la aplicación
+
+1. **Levantar el contenedor**
+
+La base de datos vectorial es utilizada para la función de mascotas encontradas.
+Es necesario generar la imagen de docker y levantarla para que funcione
+
+```bash
+docker compose up
+```
+
+Si la configuración de docker fue correcta, este debería ejecutar el archivo dentro del proyecto docker-compose.yml para instalar weaviate e iniciar el contenedor.
+
+2. **Verificar que el proceso corre de manera correcta**
+
+```bash
+docker ps
+```
+
+Debería mostrar los contenedores corriendo por el momento (pythonVector)
+
+### 3. Preparar entornos
+
+1. **Correr npm install en los diferentes entornos**
+
+```bash
+npm run install:all
+```
+
+2. **Popular la base de datos con la información pre-definida**
+
+```bash
+cd backend
+npm run init:mongoDB
+```

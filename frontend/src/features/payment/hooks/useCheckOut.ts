@@ -113,7 +113,51 @@ export const useCheckout = ({
     setIsProcessing(false);
   };
 
-  const handleConfirmation = () => {
+  const handleConfirmation = async () => {
+    if (purchaseDetail && paymentId) {
+      let newPetId;
+      if (data.plan) {
+        const petResult: PurchasedPlanResponse =
+          await createLostPetReportRequest(data.plan);
+
+        console.log(petResult);
+        console.log(data.plan);
+        newPetId = petResult.plan.petId;
+      }
+      console.log(
+        'Creating purchase with:',
+        data.email || '',
+        paymentId,
+        newPetId,
+        'plan',
+      );
+      console.log('data:', data);
+      console.log('purchaseDetail:', purchaseDetail);
+      try {
+        if (data.plan) {
+          await createPurchase(
+            data.email || '',
+            paymentId,
+            newPetId || '',
+            'plan',
+          );
+          setMessage('Pago procesado exitosamente con plan');
+        } else {
+          await createPurchase(
+            data.email || '',
+            paymentId,
+            purchaseDetail.productId,
+            purchaseDetail.productType,
+          );
+          setMessage('Pago procesado exitosamente con producto');
+        }
+      } catch (error) {
+        console.error('Error creating purchase:', error);
+        setMessage('Error al procesar la compra');
+        setIsProcessing(false);
+        return;
+      }
+    }
     onPending?.();
   };
 

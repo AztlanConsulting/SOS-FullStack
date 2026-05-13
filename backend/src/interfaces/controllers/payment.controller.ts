@@ -9,6 +9,10 @@ import type Stripe from 'stripe';
 import { sendPaymentEmail } from '@/use-cases/emails/sendPaymentEmail.usecase';
 import { emailService } from '@/infrastructure/service/email.service';
 import { findPaymentByOrderIdDB } from '@/use-cases/payments/findPaymentByOrderIdDB.usecase';
+import { getPurchasesByPaymentIdDB } from '@/use-cases/purchases/getPurchasesByPaymentIdDB.usecase';
+import { PurchaseDataAccess } from '@/infrastructure/data-access/purchase.data-access';
+import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
+import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 
 /**
  * middleware to create a Stripe payment intent.
@@ -136,7 +140,7 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       secret: webhookSecret,
     });
 
-    console.log(`ethod,Webhook received: ${event.type}`);
+    console.log(`Webhook received: ${event.type}`);
 
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
@@ -156,6 +160,19 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       console.log(
         `Payment ${paymentIntent.id} succeeded. Updated status: ${result}`,
       );
+
+      const purchase = await getPurchasesByPaymentIdDB(
+        PurchaseDataAccess,
+        paymentIntent.id,
+      );
+
+      if (purchase[0].productType === 'plan') {
+        const planActivation = await activateLostPetReport(
+          purchasedPlanDataAccess,
+          purchase[0].productId!,
+        );
+        if (!planActivation) console.error("Plan couldn't be activated");
+      }
     }
 
     res.json({ received: true });

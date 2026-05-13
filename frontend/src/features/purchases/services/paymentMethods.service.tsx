@@ -61,6 +61,7 @@ const paymentMethods: PaymentMethod[] = [
   },
   {
     method: 'OXXO',
+    description: 'Paga en efectivo en un OXXO. Aprobación en 1 día hábil',
     icons: [oxxo],
     element: (
       data: Order,

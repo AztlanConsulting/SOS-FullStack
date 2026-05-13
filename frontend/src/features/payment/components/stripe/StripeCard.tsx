@@ -6,6 +6,7 @@ import { useStripeHook } from '@/features/payment/hooks/useStripeHook';
 import { useCheckout } from '@/features/payment/hooks/useCheckOut';
 import { Text } from '@/shared/components/ui/Text';
 import { Button } from '@/shared/components/ui/Button/Button';
+import { CopyButton } from '@/shared/components/ui/CopyButton';
 
 interface Props {
   data: Order;
@@ -174,9 +175,15 @@ export const StripeCard = ({
                       Número de voucher
                     </Text>
 
-                    <Text variant="caption" className="text-gray-900">
-                      {oxxoData.number}
-                    </Text>
+                    <div className="flex items-center gap-2">
+                      <Text variant="caption" className="text-gray-900">
+                        {oxxoData.number}
+                      </Text>
+                      <CopyButton
+                        text={oxxoData.number || ''}
+                        label="Copiar número de voucher"
+                      />
+                    </div>
                   </div>
                   <div>
                     <Text
@@ -234,13 +241,19 @@ export const StripeCard = ({
                       Monto a pagar
                     </Text>
 
-                    <Text
-                      variant="body"
-                      weight="semibold"
-                      className="break-all text-gray-900"
-                    >
-                      ${data.amount}
-                    </Text>
+                    <div className="flex items-center gap-2">
+                      <Text
+                        variant="body"
+                        weight="semibold"
+                        className="break-all text-gray-900"
+                      >
+                        ${data.amount}
+                      </Text>
+                      <CopyButton
+                        text={`$${data.amount}`}
+                        label="Copiar monto"
+                      />
+                    </div>
                   </div>
                   <div>
                     <Text
@@ -251,13 +264,16 @@ export const StripeCard = ({
                       CLABE
                     </Text>
 
-                    <Text
-                      variant="body"
-                      weight="semibold"
-                      className="break-all text-gray-900"
-                    >
-                      {speiData.clabe}
-                    </Text>
+                    <div className="flex items-center gap-2">
+                      <Text
+                        variant="body"
+                        weight="semibold"
+                        className="break-all text-gray-900"
+                      >
+                        {speiData.clabe}
+                      </Text>
+                      <CopyButton text={speiData.clabe} label="Copiar CLABE" />
+                    </div>
                   </div>
 
                   <div>
@@ -269,42 +285,18 @@ export const StripeCard = ({
                       Referencia
                     </Text>
 
-                    <Text
-                      variant="body"
-                      weight="semibold"
-                      className="break-all text-gray-900"
-                    >
-                      {speiData.reference}
-                    </Text>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
+                    <div className="flex items-center gap-2">
                       <Text
-                        variant="small"
-                        weight="medium"
-                        className="uppercase tracking-wide text-gray-400"
+                        variant="body"
+                        weight="semibold"
+                        className="break-all text-gray-900"
                       >
-                        Banco
+                        {speiData.reference}
                       </Text>
-
-                      <Text variant="caption" className="text-gray-900">
-                        {speiData.bankName}
-                      </Text>
-                    </div>
-
-                    <div>
-                      <Text
-                        variant="small"
-                        weight="medium"
-                        className="uppercase tracking-wide text-gray-400"
-                      >
-                        Código del banco
-                      </Text>
-
-                      <Text variant="caption" className="text-gray-900">
-                        {speiData.bankCode}
-                      </Text>
+                      <CopyButton
+                        text={speiData.reference}
+                        label="Copiar referencia"
+                      />
                     </div>
                   </div>
 
@@ -317,9 +309,49 @@ export const StripeCard = ({
                       Titular
                     </Text>
 
-                    <Text variant="caption" className="text-gray-900">
-                      {speiData.holderName}
-                    </Text>
+                    <div className="flex items-center gap-2">
+                      <Text variant="caption" className="text-gray-900">
+                        {speiData.holderName}
+                      </Text>
+                      <CopyButton
+                        text={speiData.holderName || ''}
+                        label="Copiar titular"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <Text
+                        variant="small"
+                        weight="medium"
+                        className="uppercase tracking-wide text-gray-400"
+                      >
+                        Banco
+                      </Text>
+
+                      <div className="flex items-center gap-2">
+                        <Text variant="caption" className="text-gray-900">
+                          {speiData.bankName}
+                        </Text>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Text
+                        variant="small"
+                        weight="medium"
+                        className="uppercase tracking-wide text-gray-400"
+                      >
+                        Código del banco
+                      </Text>
+
+                      <div className="flex items-center gap-2">
+                        <Text variant="caption" className="text-gray-900">
+                          {speiData.bankCode}
+                        </Text>
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -331,21 +363,23 @@ export const StripeCard = ({
                       Dirección
                     </Text>
 
-                    <Text
-                      variant="caption"
-                      className="leading-relaxed text-gray-900"
-                    >
-                      {[
-                        speiData.holderAddress?.line1,
-                        speiData.holderAddress?.line2,
-                        speiData.holderAddress?.postal_code,
-                        speiData.holderAddress?.city,
-                        speiData.holderAddress?.state,
-                        speiData.holderAddress?.country,
-                      ]
-                        .filter(Boolean)
-                        .join(', ')}
-                    </Text>
+                    <div className="flex items-start gap-2">
+                      <Text
+                        variant="caption"
+                        className="leading-relaxed text-gray-900"
+                      >
+                        {[
+                          speiData.holderAddress?.line1,
+                          speiData.holderAddress?.line2,
+                          speiData.holderAddress?.postal_code,
+                          speiData.holderAddress?.city,
+                          speiData.holderAddress?.state,
+                          speiData.holderAddress?.country,
+                        ]
+                          .filter(Boolean)
+                          .join(', ')}
+                      </Text>
+                    </div>
                   </div>
 
                   <div className="rounded-lg color-grey-bg px-3 py-3">

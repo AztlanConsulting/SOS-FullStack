@@ -43,7 +43,7 @@ const ExpandedSignIn = ({ setIsMenuOpen }: ExpandedProps) => {
   const firstName = user?.username.trim().split(/\s+/)[0] ?? '';
 
   return (
-    <div className="p-9 border-t border-white">
+    <div className="pl-6 py-5 border-t border-white">
       <button
         onClick={() => {
           navigate(user ? roleNavigation(user.role) : '/login');

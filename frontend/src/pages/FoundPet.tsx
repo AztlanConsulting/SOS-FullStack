@@ -26,8 +26,6 @@ const FoundPet = () => {
           title={'¿Encontraste una mascota perdida?'}
           image={sadDog}
           content={`Si encontraste una mascota y no sabes qué hacer, estás en el lugar correcto. Ayuda a reunirla con su familia publicando la información aquí.`}
-          buttonText={'Perdí mi mascota'}
-          onClick={handleScrollToReport}
         />
         <div id="found-pet-form">
           <PetReportForm initialData={{}} />

@@ -12,8 +12,11 @@ const navLinks = [
   { label: 'Inicio', href: '/inicio', icon: <HiOutlineUserCircle /> },
   {
     label: 'Mascotas',
-    href: '/inicio/coleccion-mascotas',
     icon: <PiDogLight />,
+    children: [
+      { label: 'Perdida', href: '/lost-pet' },
+      { label: 'Mascotas encontradas', href: '/inicio/coleccion-mascotas' },
+    ],
   },
   { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },
   { label: 'Talleres', href: '/inicio/talleres', icon: <LiaToolsSolid /> },

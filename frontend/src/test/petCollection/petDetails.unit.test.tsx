@@ -1,13 +1,12 @@
 import PetDetails from '@/features/petCollection/components/PetDetails';
-import type { PetInfoDetailed } from '@/features/petCollection/types/petCollection.types';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { describe, expect, test, vi } from 'vitest';
 import wrapper from '../utils/wrapper.util';
 
-async function tempFoundPetDetails(id: string): Promise<PetInfoDetailed> {
-  const petDetails: PetInfoDetailed = {
-    refId: id,
+vi.mock('@/features/petCollection/services/getFoundPetDetails.service', () => ({
+  default: vi.fn().mockResolvedValue({
+    refId: '123',
     species: 'Dog',
     breed: 'Huskey',
     date: new Date().toISOString(),
@@ -20,15 +19,8 @@ async function tempFoundPetDetails(id: string): Promise<PetInfoDetailed> {
     phoneNumber: '+52 555 555 5555',
     email: 'PowerRanger Rojo',
     details: 'Ojo izquierdo color gris y derecho color café',
-  };
-  return petDetails;
-}
-vi.mock(
-  '@/features/petCollection/services/getFoundPetDetails.service',
-  async () => {
-    return tempFoundPetDetails;
-  },
-);
+  }),
+}));
 
 const navigateMock = vi.fn();
 vi.mock('react-router', async () => {
@@ -42,23 +34,32 @@ vi.mock('react-router', async () => {
 describe('Load pet details', () => {
   test('Load pet details', async () => {
     render(
-      <MemoryRouter>
-        <PetDetails />
+      <MemoryRouter initialEntries={['/inicio/coleccion-mascotas/123']}>
+        <Routes>
+          <Route
+            path="/inicio/coleccion-mascotas/:id"
+            element={<PetDetails />}
+          />
+        </Routes>
       </MemoryRouter>,
       { wrapper },
     );
 
-    expect(screen.getByText('Dog')).toBeInTheDocument();
-    expect(screen.getByText('Huskey')).toBeInTheDocument();
-    expect(screen.getByText('Macho')).toBeInTheDocument();
-    expect(screen.getByText('Blanco y negro')).toBeInTheDocument();
-    expect(screen.getByText('Mini: 1 a 4 kg')).toBeInTheDocument();
-    expect(screen.getByText('Querétaro México')).toBeInTheDocument();
-    expect(screen.getByText('Juan Caballero')).toBeInTheDocument();
-    expect(screen.getByText('+52 555 555 5555')).toBeInTheDocument();
-    expect(screen.getByText('PowerRanger Rojo')).toBeInTheDocument();
+    expect(await screen.findByText('Dog')).toBeDefined();
+    expect(screen.findByText('Huskey')).toBeDefined();
+    expect(screen.findByText('Macho')).toBeDefined();
+    expect(screen.findByText('Blanco y negro')).toBeDefined();
+    expect(screen.findByText('Mini: 1 a 4 kg')).toBeDefined();
+    expect(screen.findByText('Querétaro México')).toBeDefined();
+    expect(screen.findByText('Juan Caballero')).toBeDefined();
+    expect(screen.findByText('+52 555 555 5555')).toBeDefined();
+    expect(screen.findByText('PowerRanger Rojo')).toBeDefined();
     expect(
-      screen.getByText('Ojo izquierdo color gris y derecho color café'),
-    ).toBeInTheDocument();
+      screen.findByText('Ojo izquierdo color gris y derecho color café'),
+    ).toBeDefined();
+
+    const backButton = screen.getByRole('button');
+    fireEvent.click(backButton);
+    expect(navigateMock).toHaveBeenCalledWith(-1);
   });
 });

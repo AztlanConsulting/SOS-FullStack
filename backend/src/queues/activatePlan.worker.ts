@@ -85,6 +85,33 @@ new Worker(
         } catch (error) {
           console.error('Facebook publish error:', error);
 
+          const existingPost = await metaPublisher.findFacebookPostByPlanId(
+            pet.description,
+          );
+
+          if (existingPost) {
+            console.log('Facebook post found after error');
+
+            await purchasedPlanDataAccess.updatePurchasedPlanSocialPosts(
+              planId,
+              {
+                facebook: {
+                  url: existingPost.url,
+                  status: 'posted',
+                  postedAt: new Date(),
+                },
+              },
+            );
+
+            return;
+          }
+
+          await purchasedPlanDataAccess.updatePurchasedPlanSocialPosts(planId, {
+            facebook: {
+              status: 'failed',
+            },
+          });
+
           throw error;
         }
       }

@@ -11,4 +11,5 @@ export interface PublishResult {
 export interface SocialPublisher {
   publishToFacebook(data: PublishDTO): Promise<PublishResult>;
   publishToInstagram(data: PublishDTO): Promise<PublishResult>;
+  findFacebookPostByPlanId(planId: string): Promise<PublishResult | null>;
 }

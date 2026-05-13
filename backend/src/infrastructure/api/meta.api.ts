@@ -117,4 +117,45 @@ export const metaPublisher: SocialPublisher = {
       url: mediaInfo.data.permalink, // Direct link to Instagram post
     };
   },
+
+  /**
+   * Search for an existing Facebook post that contains a specific description.
+   * Useful to prevent duplicate publications by checking recently published posts.
+   *
+   * @param description - Unique text to search for inside post messages
+   * @returns PublishResult with the post ID and permalink if found, otherwise null
+   */
+  async findFacebookPostByPlanId(
+    description: string,
+  ): Promise<PublishResult | null> {
+    const ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
+    const PAGE_ID = process.env.FB_PAGE_ID;
+
+    const response = await axios.get<{
+      data: Array<{
+        id: string;
+        message?: string;
+        permalink_url: string;
+      }>;
+    }>(`${BASE_URL}/${PAGE_ID}/posts`, {
+      params: {
+        fields: 'message,permalink_url',
+        limit: 10,
+        access_token: ACCESS_TOKEN,
+      },
+    });
+
+    const existingPost = response.data.data.find((post) =>
+      post.message?.includes(description),
+    );
+
+    if (!existingPost) {
+      return null;
+    }
+
+    return {
+      id: existingPost.id,
+      url: existingPost.permalink_url,
+    };
+  },
 };

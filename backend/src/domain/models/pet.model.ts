@@ -11,7 +11,7 @@ export interface Pet {
   sex: string;
   color: string;
   size: string;
-  description?: string;
+  description: string;
   photos: string[];
   placeMissing: string;
   createdAt: Date;

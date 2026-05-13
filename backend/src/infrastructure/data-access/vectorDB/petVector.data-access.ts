@@ -21,9 +21,8 @@ export const petVector: PetVectorRepository = {
       .creator()
       .withClassName('Pet')
       .withProperties({
-        refId: petImage.refId,
+        ...petImage,
         image: b64,
-        species: petImage.species,
       })
       .do();
 

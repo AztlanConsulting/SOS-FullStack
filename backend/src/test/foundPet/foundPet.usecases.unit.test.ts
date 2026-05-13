@@ -15,8 +15,15 @@ describe('foundPet createFoundPet (unit)', () => {
     color: 'Dorado',
     size: 'Mediana: 11 a 25 kg' as const,
     description: 'Perro amigable con collar rojo',
-    location: 'Parque Central',
-    locationCoords: [-99.1332, 19.4326] as [number, number],
+    location: {
+      coords: [-99.1332, 19.4326] as [number, number],
+      displayName: 'Querétaro, Querétaro',
+      properties: {
+        city: 'Querétaro',
+        country: 'Mexico',
+        state: 'Querétaro',
+      },
+    },
     contactName: 'Juan Perez',
     phoneNumber: '+521234567890',
     email: 'juan@example.com',

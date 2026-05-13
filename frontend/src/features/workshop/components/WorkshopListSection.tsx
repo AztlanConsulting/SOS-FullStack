@@ -8,7 +8,6 @@ import { type WorkshopResult, type Workshop } from '../types/workshop';
 import useProduct from '@shared/hooks/useProduct';
 import queryWorkshop from '../services/queryWorkshops';
 import { useLocationContext } from '@shared/context/Location.context';
-import { vi } from 'vitest';
 
 const WorkshopListSection = () => {
   const { searchHook, query, pages } = useProduct<WorkshopResult>(

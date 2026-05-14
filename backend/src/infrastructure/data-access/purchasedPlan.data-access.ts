@@ -34,4 +34,17 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
     }).lean();
     return plan as PurchasedPlan | null;
   },
+  /**
+   * Creates a new purchased plan associated with a pet.
+   *
+   * @param planId - Purchased plan
+   * @returns The created purchased plan as a plain JavaScript object
+   */
+  activatePurchasedPlan: async function (planId: string): Promise<boolean> {
+    const updated = await PurchasedPlanModel.updateOne(
+      { _id: planId },
+      { active: true },
+    );
+    return Boolean(updated);
+  },
 };

@@ -1,5 +1,6 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
+import type { GeocodingResult } from '../ports/paymentProvider.port';
 
 export interface Pet {
   _id: Types.ObjectId;
@@ -13,7 +14,7 @@ export interface Pet {
   size: string;
   description?: string;
   photos: string[];
-  placeMissing: string;
+  location: GeocodingResult;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,7 +33,15 @@ const PetSchema = new Schema<Pet>(
     size: { type: String, required: true },
     description: { type: String },
     photos: [{ type: String }],
-    placeMissing: { type: String },
+    location: {
+      coords: { type: [Number], required: true },
+      displayName: { type: String, required: true },
+      properties: {
+        city: { type: String, required: true },
+        country: { type: String, required: true },
+        state: { type: String, required: true },
+      },
+    },
   },
   { timestamps: true },
 );

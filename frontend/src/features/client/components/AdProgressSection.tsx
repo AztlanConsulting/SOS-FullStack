@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
+import {
+  exportPosterAsPdfColor,
+  exportPosterAsPdfBlackAndWhite,
+} from '@/shared/services/posterExport.services';
 
 interface AdProgressSectionProps {
   posterUrl: string | null;
@@ -9,12 +13,18 @@ interface AdProgressSectionProps {
 export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   posterUrl,
 }) => {
+  const posterRef = useRef<HTMLImageElement>(null);
+
   const handleDownloadColor = () => {
-    console.log('Descargar poster color');
+    if (posterRef.current) {
+      exportPosterAsPdfColor(posterRef.current, 'poster-mascota-color');
+    }
   };
 
   const handleDownloadBW = () => {
-    console.log('Descargar poster blanco y negro');
+    if (posterRef.current) {
+      exportPosterAsPdfBlackAndWhite(posterRef.current, 'poster-mascota-bn');
+    }
   };
 
   if (!posterUrl) {
@@ -33,9 +43,11 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col items-center gap-6">
         <div className="w-full max-w-[280px]">
           <img
+            ref={posterRef}
             src={posterUrl}
             alt="Póster de mascota perdida"
             className="w-full h-auto object-cover"
+            crossOrigin="anonymous"
           />
         </div>
 

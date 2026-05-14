@@ -41,12 +41,8 @@ export type CreatePetReportDTO = {
   };
 };
 
-export type LostPetReport = Omit<
-  CreatePetReportDTO,
-  'locationCoords' | 'location'
-> & {
+export type LostPetReport = Omit<CreatePetReportDTO, 'location'> & {
   location?: string;
-  locationCoords?: [number, number];
 };
 
 export const createPetReportDTOSchema = z.object({

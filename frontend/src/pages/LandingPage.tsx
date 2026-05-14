@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router';
 import Header from '../shared/components/layout/Header';
 import HeroSection from '../features/landing/components/landingPage/HeroSection';
 import ServicesSection from '../features/landing/components/landingPage/ServicesSection';
@@ -10,6 +12,18 @@ import FrecuentlyAsked from '@features/landing/components/landingPage/Frecuently
 import { PetReportForm } from '@features/users/components/PetReportForm';
 
 const LandingPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const scrollTo = searchParams.get('scrollTo');
+
+  useEffect(() => {
+    if (scrollTo === 'report-section') {
+      document
+        .getElementById('report-section')
+        ?.scrollIntoView({ behavior: 'smooth' });
+      setSearchParams({}, { replace: true });
+    }
+  }, [scrollTo]);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -18,9 +32,9 @@ const LandingPage = () => {
         <PublicationSection />
         <PlansSection />
         <ServicesSection />
-        <TestimonialsSection />
         <PetInfoSection />
         <PetReportForm />
+        <TestimonialsSection />
         <FrecuentlyAsked />
       </main>
       <Footer />

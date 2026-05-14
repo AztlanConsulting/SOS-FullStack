@@ -49,8 +49,8 @@ const ClientDashboardOverview = () => {
             </Text>
           </div>
 
-          {petData && (
-            <div className="flex flex-col gap-4 border-b border-gray-200 pb-8 w-full">
+          <div className="flex flex-col gap-4 border-b border-gray-200 pb-8 w-full">
+            {petData && (
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
                   <img
@@ -72,17 +72,16 @@ const ClientDashboardOverview = () => {
                   </Text>
                 </div>
               </div>
-
-              <div className="flex justify-center md:justify-start">
-                <Button
-                  label="Visita nuestros recursos exclusivos"
-                  variant="primary"
-                  textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-fit px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
-                  onClick={handleResourcesPage}
-                />
-              </div>
+            )}
+            <div className="flex justify-center md:justify-start">
+              <Button
+                label="Visita nuestro contenido exclusivo"
+                variant="primary"
+                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-fit px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                onClick={handleResourcesPage}
+              />
             </div>
-          )}
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-6">

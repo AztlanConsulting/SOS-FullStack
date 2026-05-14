@@ -9,21 +9,41 @@ import { HiOutlineUserCircle } from 'react-icons/hi';
 const testimonials = [
   {
     id: 1,
+    name: 'Javier Franco',
+    text: 'Muchas gracias por sus servicios! Fueron de mucha avuda en difundir en redes. Y gracias por el acompañamiento en la tristeza y preocupación de quienes perdemos a nuestros angelitos',
+  },
+  {
+    id: 2,
+    name: 'Jessy Peralta',
+    text: 'Sastifecha con la atención en SOS, estuvieron pendientes en todo momento, hubo muchísima difusión del anuncio lo que facilitó qué gente más allá del radar de la búsqueda estuvieran atentos a perros parecidos que encontraban. Agradecida!!',
+  },
+  {
+    id: 3,
+    name: 'Frida Vargas',
+    text: 'Su servicio nos fue de mucha ayuda para difundir a nuestra pequeña! Gracias de corazón la encontramos en menos de 24 horas! Estamos muy agradecidos por su apoyo',
+  },
+  {
+    id: 4,
+    name: 'Sebastian García',
+    text: 'La verdad el servicio me gustó muchísimo ya que me ayudó a encontrar a KIARA! En verdad lo recomiendo, te ayudan mucho en la difusión de la información de tu lomito para que tengas más probabilidad de encontrarlo. Agradezco también el asesoramiento ya que ellos me apoyaron a no caer con estafadores que se aprovechan de la sensibilidad que tenemos al perder a un integrante de la familia!! Gracias por el apoyo y en verdad recomiendo el servicio, valetotalmente la pena.',
+  },
+  {
+    id: 5,
     name: 'Areceli Cisneros',
     text: 'Súper recomendable, siempre atentos y de respuesta rápida. En cuanto te comunicas con ellos, comienza a asesorarte. Estoy muy agradecida, mi perrito apareció en menos de 48 horas después de publicar en SOS encontrando mascotas. Muchas gracias!!! Son un excelente equipo!!',
   },
   {
-    id: 2,
+    id: 6,
     name: 'Juan Pérez',
     text: 'Excelente servicio, me ayudaron a encontrar a mi gato en menos de 24 horas. El equipo es muy profesional y siempre están disponibles para guiarte. Totalmente recomendado.',
   },
   {
-    id: 3,
+    id: 7,
     name: 'María González',
     text: 'Gracias a SOS, encontré a mi perrita después de 3 días de búsqueda. La publicación llegó a muchas personas y alguien la reconoció. Servicio increíble.',
   },
   {
-    id: 4,
+    id: 8,
     name: 'Carlos Rodríguez',
     text: 'Muy profesionales, me guiaron en todo el proceso de búsqueda. Mi perro fue encontrado gracias a la difusión. Recommiendo 100%.',
   },

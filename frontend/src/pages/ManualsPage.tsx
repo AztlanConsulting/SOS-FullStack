@@ -3,7 +3,7 @@ import Header from '@/shared/components/layout/Header';
 import { ManualsListSection } from '@features/manuals/components/ManualsListSection';
 import { Outlet } from 'react-router';
 import HeroSection from '@shared/components/layout/HeroSection';
-import manualHero from '@/assets/images/manual-hero.jpg';
+import manualHero from '@/assets/images/manual-hero-2.png';
 
 export const ManualsPage = () => {
   return (

@@ -1,12 +1,5 @@
 import Pagination from '@/shared/components/ui/Pagination';
-import SearchInput from '@/shared/components/ui/SearchInput';
-import {
-  useEffect,
-  useRef,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from 'react';
+import { useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import PetList from './PetList';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import { Text } from '@/shared/components/ui/Text';
@@ -47,14 +40,14 @@ const PetGallery = ({
           <button
             onClick={() => setIsOpen((prev) => !prev)}
             name={'petDropdown'}
-            className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-secondary hover:text-gray-800 border-[1px] border-gray-600 hover:border-primary group"
+            className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-purple-secondary text-dark-purple border-[1px] border-dark-purple hover:border-purple-primary group"
           >
             <HiOutlineFilter
               // color="black"
               size="80%"
               className="h-5"
             />
-            <Text className="group-hover:text-gray-800">Filtro</Text>
+            <Text className="text-dark-purple">Filtro</Text>
           </button>
           <PetDropDown isOpen={isOpen} handleSearch={handleSearch} />
         </div>
@@ -80,11 +73,13 @@ const GalleryContent = ({ vectorImages, pages, img }: Props) => {
         <>
           <PetList pets={vectorImages.data} />
           <div className="w-full flex justify-center">
-            {pages.totalPages > 0 && <Pagination pages={pages} />}
+            {pages.totalPages > 0 && (
+              <Pagination pages={pages} color="bg-purple-primary" />
+            )}
           </div>
         </>
       ) : (
-        <div className="flex items-center justify-center mt-5 md:mt-0 md:h-1/2">
+        <div className="flex items-center justify-center md:-mt-10 md:h-full">
           <Text
             variant="h2"
             color="text-grey-500"

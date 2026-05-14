@@ -108,7 +108,15 @@ try {
     size: 'Mediano',
     description: 'Perrito amigable, llevaba un collar rojo cuando se perdió.',
     photos: [],
-    placeMissing: 'Mexico City, Mexico',
+    location: {
+      coords: [19, -96],
+      displayName: 'Querétaro, Querétaro',
+      properties: {
+        city: 'a',
+        country: 'a',
+        state: 'a',
+      },
+    },
   });
 
   const plans = await PlanModel.find();

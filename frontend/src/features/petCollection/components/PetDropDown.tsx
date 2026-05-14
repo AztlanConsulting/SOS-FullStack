@@ -83,28 +83,31 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             onChange={(e) => setSpecies(e.target.value)}
           />
         </div>
-        <div className="grid grid-cols-2 gap-2 h-10">
-          <button
-            onClick={clean}
-            className="rounded-full bg-white border-purple-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
-          >
-            <Text variant="caption" weight="medium" className="text-inherit">
-              Borrar
-            </Text>
-          </button>
-          <button
-            onClick={search}
-            className="rounded-full bg-purple-primary border-purple-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
-            type="submit"
-          >
-            <Text variant="caption" weight="medium" className="text-inherit">
-              Buscar
-            </Text>
-          </button>
+        <div className="grid grid-cols-2 gap-8 h-7">
+          <FilterButton onClick={clean} content="Borrar" cancel />
+          <FilterButton onClick={search} content="Buscar" />
         </div>
       </div>
     )
   );
 };
+
+interface ButtonProps {
+  onClick: () => void;
+  content: string;
+  cancel?: boolean;
+}
+function FilterButton({ onClick, content, cancel }: ButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-full ${cancel ? 'bg-white border-purple-primary hover:bg-purple-secondary text-purple-primary' : 'bg-purple-primary border-purple-primary hover:bg-purple-secondary text-white hover:text-purple-primary'} border-[1px]  items-center w-full cursor-pointer`}
+    >
+      <Text variant="caption" weight="medium" className="text-inherit">
+        {content}
+      </Text>
+    </button>
+  );
+}
 
 export default PetDropDown;

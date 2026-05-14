@@ -33,7 +33,7 @@ const ClientDashboard = () => {
         signBtn={SignOut}
       />
       <Outlet />
-      <Footer />
+      <Footer bg={'bg-purple-primary'} />
     </>
   );
 };

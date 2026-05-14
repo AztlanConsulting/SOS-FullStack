@@ -45,6 +45,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
     const imageIds = imageBuffers.map((_, i) => `${customId}_img_${i}`);
 
     const location = await getLocation(locationCoords);
+    console.log(location);
     if (!Boolean(location)) throw Error("Couldn't get location");
 
     const foundPetData: FoundPetReport = {
@@ -69,10 +70,13 @@ export async function postFoundPetReport(req: Request, res: Response) {
         image: imageBuffers[i] as Buffer,
         species,
         color,
-        location:
-          location?.properties.city ??
-          location?.properties.country ??
-          'No identificado',
+        location: [
+          location?.properties.city ?? location?.properties.state,
+          // location?.properties.state,
+          location?.properties.country,
+        ]
+          .filter((loc) => loc)
+          .join(', '),
       };
 
       await petVector.createPetImage(petImageDto);

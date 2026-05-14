@@ -2,8 +2,6 @@ import type { Document, Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 export interface SearchFormReport {
-  _id: Types.ObjectId;
-
   species: 'Dog' | 'Cat' | 'Other';
   size: 'Small' | 'Medium' | 'Large';
   approximateAge: number;
@@ -19,11 +17,11 @@ export interface SearchFormReport {
   personality: string;
   canBeCaught: 'Yes' | 'No' | 'Depends';
   noiseReaction: 'Scared' | 'Flees' | 'Ignores' | 'Other';
-  noiseReactionOther: string;
+  noiseReactionOther?: string;
   respondsToName: 'Yes' | 'No' | 'Sometimes';
   usedToGoingOut: 'Yes' | 'No';
   hasEscapedBefore: 'Yes' | 'No';
-  whatHappenedWhenEscaped: string;
+  whatHappenedWhenEscaped?: string;
   fears: string;
   easilySocializes: 'Yes' | 'No';
 

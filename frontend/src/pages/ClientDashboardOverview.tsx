@@ -1,11 +1,13 @@
 import PlanProgressSection from '@/features/client/components/PlanProgressSection';
 import { AdProgressSection } from '@/features/client/components/AdProgressSection';
 import { useDashboardMetrics } from '@/features/graphs/hooks/useDashboardMetrics';
+import { useNavigate } from 'react-router';
 import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button';
 
 const ClientDashboardOverview = () => {
   const { metrics, loading, error } = useDashboardMetrics();
+  const navigate = useNavigate();
 
   const petData = metrics?.planProgress;
   const formattedDate = petData?.dateMissing
@@ -24,35 +26,41 @@ const ClientDashboardOverview = () => {
     : null;
 
   const handleResourcesPage = () => {
-    console.log('handleResourcesPage');
+    navigate('/portal-exclusivo');
   };
 
+  if (loading) {
+    return (
+      <div className="w-full h-[60vh] flex items-center justify-center">
+        <Text variant="h3" color="text-gray-400">
+          Cargando la información...
+        </Text>
+      </div>
+    );
+  }
+
+  if (error || !metrics) {
+    return (
+      <div className="w-full h-[60vh] flex items-center justify-center">
+        <Text variant="h3" color="text-red-500">
+          {error || 'No se encontraron datos'}
+        </Text>
+      </div>
+    );
+  }
+
   return (
-    <main className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto pt-28 lg:pt-10 pb-10">
-      {loading ? (
-        <div className="w-full h-[60vh] flex items-center justify-center">
-          <Text variant="h3" color="text-gray-400">
-            Cargando la información...
-          </Text>
-        </div>
-      ) : error || !metrics ? (
-        <div className="w-full h-[60vh] flex items-center justify-center">
-          <Text variant="h3" color="text-red-500">
-            {error || 'No se encontraron datos'}
-          </Text>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-col items-center border-b border-gray-200 pb-10 w-full">
+    <main className="w-full pb-10">
+      <div className="flex flex-col gap-10">
+        <section className="w-full bg-light-purple border-b border-gray-200 pt-28 lg:pt-10">
+          <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto py-8 flex flex-col gap-4 items-center">
             <Text variant="h2" weight="medium" as="div">
               Portal exclusivo
             </Text>
-          </div>
 
-          <div className="flex flex-col gap-4 border-b border-gray-200 pb-8 w-full">
             {petData && (
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
+              <div className="flex items-center gap-4 mt-10">
+                <div className="w-30 h-30 md:w-35 md:h-35 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
                   <img
                     src={petData.petImage || 'pet.jpg'}
                     alt={petData.petName}
@@ -65,14 +73,15 @@ const ClientDashboardOverview = () => {
                   </Text>
                   <Text
                     variant="caption"
-                    color="text-gray-500"
+                    color="text-gray-600"
                     className="mt-1"
                   >
-                    Desde {formattedDate}, esperando que vuelva a casa
+                    Desde {formattedDate}, <br /> esperando que vuelva a casa
                   </Text>
                 </div>
               </div>
             )}
+
             <div className="flex justify-center md:justify-start">
               <Button
                 label="Visita nuestro contenido exclusivo"
@@ -82,12 +91,13 @@ const ClientDashboardOverview = () => {
               />
             </div>
           </div>
+        </section>
 
+        <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-6">
               <PlanProgressSection petData={metrics.planProgress} />
             </div>
-
             <div className="lg:col-span-6">
               <div className="flex flex-col gap-5 h-full">
                 <AdProgressSection posterUrl={posterUrl} />
@@ -95,7 +105,7 @@ const ClientDashboardOverview = () => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </main>
   );
 };

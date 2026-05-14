@@ -2,12 +2,19 @@ import { CountdownChart } from '@/features/graphs/components/CountDownChart';
 import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button/Button';
 import type { PlanSubscriptionProgress } from '@/features/graphs/types/dashboardMetrics';
+import { useNavigate } from 'react-router';
 
 interface PlanProgressSectionProps {
   petData: PlanSubscriptionProgress | null;
 }
 
 const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
+  const navigate = useNavigate();
+
+  const handlePlanExtension = () => {
+    navigate('/extender-plan');
+  };
+
   return (
     <div className="flex flex-col gap-5">
       <Text
@@ -25,7 +32,7 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
             <div className="w-[250px] mt-4 mx-auto">
               <Button
                 label="Extender plan"
-                onClick={() => console.log('Extender plan')}
+                onClick={handlePlanExtension}
                 variant="primary"
                 textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
               />
@@ -39,8 +46,6 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
           </div>
         )}
       </div>
-      {/* Check with the team if the divisor line will be implemented */}
-      {/* <hr className="border-t border-gray-200 my-8 w-full" /> */}
     </div>
   );
 };

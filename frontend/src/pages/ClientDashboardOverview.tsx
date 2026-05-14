@@ -82,7 +82,7 @@ const ClientDashboardOverview = () => {
               </div>
             )}
 
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-center md:justify-start mt-6">
               <Button
                 label="Visita nuestro contenido exclusivo"
                 variant="primary"

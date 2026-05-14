@@ -15,7 +15,7 @@ const navLinks = [
     icon: <PiDogLight />,
     children: [
       { label: 'Perdida', href: '/lost-pet' },
-      { label: 'Encontrada', href: '/mascotas-encontradas' },
+      { label: 'Mascotas encontradas', href: '/inicio/coleccion-mascotas' },
     ],
   },
   { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },

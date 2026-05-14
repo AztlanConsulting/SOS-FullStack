@@ -84,17 +84,22 @@ describe('usePurchaseProduct', () => {
     act(() => {
       // Trigger initial validation error.
       result.current.handleNameChange('Buyer Name');
+    });
+
+    act(() => {
       result.current.handleProceedToPayment();
     });
-    expect(result.current.emailError).toBe('');
-    expect(result.current.nameError).toBe(
-      'Ingresa nombre y apellido para contactarte',
+
+    expect(result.current.emailError).toBe(
+      'Ingresa un correo electrónico válido.',
     );
+    expect(result.current.nameError).toBe('');
 
     act(() => {
       // Editing input should clear the previous error message.
       result.current.handleEmailChange('nuevo@email.com');
     });
+
     expect(result.current.emailError).toBe('');
   });
 

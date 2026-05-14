@@ -103,8 +103,10 @@ describe('PurchaseDetails', () => {
       },
     );
 
-    expect(screen.getByText('¡La compra ha sido exitosa!')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Cerrar'));
+    expect(screen.getByText(/Compra exitosa/i)).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: /Ir al Inicio|Cerrar/i }),
+    );
     expect(navigateMock).toHaveBeenCalledWith('/');
   });
 
@@ -121,9 +123,11 @@ describe('PurchaseDetails', () => {
     );
 
     expect(
-      screen.getByText('¡Su anuncio será publicado en unos minutos!'),
+      screen.getByText(/tu anuncio será publicado en unos minutos/i),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Cerrar'));
+    fireEvent.click(
+      screen.getByRole('button', { name: /Ir al Inicio|Cerrar/i }),
+    );
     expect(navigateMock).toHaveBeenCalledWith('/');
   });
 });

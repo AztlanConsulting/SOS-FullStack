@@ -86,4 +86,20 @@ describe('Payments integration tests', () => {
     expect(updated).toBeDefined();
     expect(updated?.status).toBe('succeeded');
   });
+
+  test('POST /payments/webhook with invalid signature returns 400', async () => {
+    const badRaw = JSON.stringify({ id: 'pi_invalid_sig' });
+
+    (StripeProvider.constructEvent as jest.Mock).mockImplementation(() => {
+      throw new Error('Invalid signature');
+    });
+
+    const res = await request(app)
+      .post('/payments/webhook')
+      .set('stripe-signature', 'bad_sig')
+      .send(badRaw);
+
+    expect(res.status).toBe(400);
+    expect(res.text).toMatch(/Webhook Error/i);
+  });
 });

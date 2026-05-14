@@ -7,11 +7,12 @@ import type {
   PurchaseDetail,
 } from '@features/payment/types/payment.types';
 import paymentMethods from '../services/paymentMethods.service';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
+import { useLocationContext } from '@/shared/context/Location.context';
 
 interface Props {
   product?: Product;
-  petReportData: PetReportData | null;
+  petReportData: LostPetReportData | null;
   success: () => void;
   purchaseDetail: PurchaseDetail;
 }
@@ -26,6 +27,7 @@ const PurchaseForm = ({
   success,
 }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
+  const { currencyCode } = useLocationContext();
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
     setSelected(e.target.value);
@@ -36,8 +38,10 @@ const PurchaseForm = ({
   }
 
   const orderDetails: Order = {
-    amount: product?.price ?? petReportData?.planDetails!.totalPrice ?? 0,
-    currency: 'MXN',
+    amount: Number(
+      product?.price ?? petReportData?.planDetails!.totalPrice ?? 0,
+    ),
+    currency: currencyCode,
     ...(product && {
       product: {
         productId: product._id,

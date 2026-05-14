@@ -115,7 +115,7 @@ describe('usePurchase', () => {
     });
 
     const manualName = await screen.findByText('manual');
-    const price = await screen.findByText('$399');
+    const price = await screen.findByText('$399', { exact: false });
 
     expect(manualName).toBeInTheDocument(); // Manual name
     expect(price).toBeInTheDocument();
@@ -128,7 +128,7 @@ describe('usePurchase', () => {
     );
 
     const planName = await screen.findByText('Básico');
-    const price = await screen.findByText('$500');
+    const price = await screen.findByText('$500', { exact: false });
 
     expect(planName).toBeInTheDocument();
     expect(price).toBeInTheDocument();

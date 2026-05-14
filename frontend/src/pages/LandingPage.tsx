@@ -32,9 +32,9 @@ const LandingPage = () => {
         <PublicationSection />
         <PlansSection />
         <ServicesSection />
+        <PetInfoSection />
         <PetReportForm />
         <TestimonialsSection />
-        <PetInfoSection />
         <FrecuentlyAsked />
       </main>
       <Footer />

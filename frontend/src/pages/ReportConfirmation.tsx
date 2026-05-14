@@ -151,7 +151,7 @@ export const ReportConfirmationPage: React.FC = () => {
           <div className="max-w-lg mx-auto pb-8 mt-8 flex justify-center">
             <Button
               onClick={handleProceedToPayment}
-              label="Proceder al pago"
+              label="Continuar"
               variant="primary"
             />
           </div>

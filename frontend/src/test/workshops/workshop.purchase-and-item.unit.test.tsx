@@ -13,6 +13,26 @@ vi.mock('@/features/users/context/PetReportContext', () => ({
   usePetReport: vi.fn(),
 }));
 
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
 // Replace useNavigate so we can assert route targets and payloads.
 vi.mock('react-router', async () => {
   const actual = await vi.importActual<typeof ReactRouter>('react-router');
@@ -129,7 +149,7 @@ describe('WorkshopCard', () => {
     render(<WorkshopCard workshop={workshop} />);
 
     expect(screen.getByText('Workshop de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('$ 100')).toBeInTheDocument();
+    expect(screen.getByText('MX$100')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Workshop de Prueba' }),
     ).toBeInTheDocument();

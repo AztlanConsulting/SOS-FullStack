@@ -7,6 +7,7 @@ import useProduct from '@shared/hooks/useProduct';
 import Search from '@shared/components/ui/Search';
 import List from '@shared/components/ui/List';
 import Pagination from '@shared/components/ui/Pagination';
+import { useLocationContext } from '@/shared/context/Location.context';
 
 export const ManualsListSection = () => {
   const { searchHook, query, pages } = useProduct<ManualResult>(
@@ -14,6 +15,11 @@ export const ManualsListSection = () => {
     'manuals',
   );
   const { isLoading, error, data } = query;
+  const { manuals: localizedManuals, currencyCode } = useLocationContext();
+  const getlocalizedPrice = (name: string, fallback: number): number => {
+    const found = localizedManuals.find((m) => m.name === name);
+    return found?.localizedPrice ?? fallback;
+  };
 
   return (
     <section className="bg-secondary w-full flex flex-col items-center justify-center">
@@ -31,7 +37,14 @@ export const ManualsListSection = () => {
         {!isLoading && !error && data && (
           <List<Manual>
             cards={data.manuals}
-            component={(card, idx) => <ManualItem manual={card} key={idx} />}
+            component={(card, idx) => (
+              <ManualItem
+                manual={card}
+                localizedPrice={getlocalizedPrice(card.name, card.price)}
+                currencyCode={currencyCode}
+                key={idx}
+              />
+            )}
           />
         )}
 

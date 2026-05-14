@@ -3,9 +3,27 @@ import PlanCard from '@features/plans/components/PlanCard';
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import type * as ReactRouter from 'react-router';
-import Plans from '@/pages/Plans';
 import wrapper from '../utils/wrapper.util';
 
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
 /**
  * Mock data representing the features included in a plan.
  * Used to verify conditional rendering of labels and tooltips.

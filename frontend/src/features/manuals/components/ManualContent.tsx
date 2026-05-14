@@ -4,6 +4,7 @@ import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import ProductPageHero from '@shared/components/layout/ProductPageHero';
 import ProductSale from '@shared/components/ui/ProductSale';
 import type { Manual } from '../types/Manual.type';
+import { useLocationContext } from '@/shared/context/Location.context';
 
 export const ManualContent = ({
   manual,
@@ -12,11 +13,17 @@ export const ManualContent = ({
   manual: Manual;
   onBack?: () => void;
 }) => {
+  const { manuals: localizedManuals, currencyCode } = useLocationContext();
+  const localizedPrice =
+    localizedManuals.find((m) => m.name === manual.name)?.localizedPrice ??
+    manual.price;
+
   const purchaseData = usePurchaseProduct({
     _id: manual._id,
     item: 'manual',
     price: manual.price,
     url: 'manual',
+    name: manual.name,
   });
 
   return (
@@ -25,7 +32,12 @@ export const ManualContent = ({
       <div className="color-secondary-bg w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16 items-center md:py-8 color-secondary-bg w-full md:mx-auto md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
           <ProductPageHero product={manual} />
-          <ProductSale purchaseData={purchaseData} product={manual} />
+          <ProductSale
+            purchaseData={purchaseData}
+            product={manual}
+            localizedPrice={localizedPrice}
+            currencyCode={currencyCode}
+          />
         </div>
       </div>
       <div className="w-full p py-10 bg-white flex items-center justify-center">

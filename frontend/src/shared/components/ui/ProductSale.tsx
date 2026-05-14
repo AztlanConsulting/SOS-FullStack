@@ -2,6 +2,7 @@ import type { Product } from '@shared/types/purchase.types';
 import { Button } from './Button/Button';
 import { Text } from './Text';
 import { Input } from './Input/Input';
+import { formatCurrency } from '@shared/utils/formatCurrency';
 
 interface PurchaseData {
   purchaseData: {
@@ -11,13 +12,23 @@ interface PurchaseData {
     handleProceedToPayment: () => void;
   };
   product: Product;
+  localizedPrice?: number;
+  currencyCode?: string;
 }
 
-const ProductSale = ({ purchaseData, product }: PurchaseData) => {
+const ProductSale = ({
+  purchaseData,
+  product,
+  localizedPrice,
+  currencyCode,
+}: PurchaseData) => {
   const userEmail = purchaseData.userEmail;
   const emailError = purchaseData.emailError;
   const handleEmailChange = purchaseData.handleEmailChange;
   const handleProceedToPayment = purchaseData.handleProceedToPayment;
+
+  const displayPrice = localizedPrice ?? product.price;
+  const displayCurrency = currencyCode ?? 'MXN';
 
   return (
     <>
@@ -31,9 +42,17 @@ const ProductSale = ({ purchaseData, product }: PurchaseData) => {
         >
           {product.name}
         </Text>
-        <div className="w-full flex justify-start items-center">
+        <div className="w-full flex justify-start items-baseline gap-1.5">
           <Text as="h1" variant="h1" weight="medium" color="text-black">
-            $ {product.price}
+            {formatCurrency(displayPrice, displayCurrency)}
+          </Text>
+          <Text
+            as="p"
+            variant="small"
+            color="text-black"
+            className="text-gray-800"
+          >
+            {displayCurrency}
           </Text>
         </div>
       </div>

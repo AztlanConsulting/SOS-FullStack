@@ -37,6 +37,7 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
         productId: purchaseRequest._id,
         productType: purchaseRequest.item,
         price: purchaseRequest.price,
+        productName: purchaseRequest.name,
       },
     });
   };

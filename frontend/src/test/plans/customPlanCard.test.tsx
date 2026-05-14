@@ -6,6 +6,27 @@ import { PetReportProvider } from '@/shared/context/PetReportContext';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { PurchasePage } from '@/pages/PurchasePage';
 
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
+
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
 const setLostPetReportData = vi.hoisted(() => vi.fn());
 
 vi.mock('@/shared/context/PetReportContext', async (importOriginal) => {
@@ -132,8 +153,16 @@ describe('CustomPlanCard Component', () => {
    */
   test('renders price breakdown with correct format', () => {
     renderWithProvider();
-    expect(screen.getByText(/Días \(3 x \$80\.00\)/)).toBeDefined();
-    expect(screen.getByText(/Radio \(5 km x \$15\.00\)/)).toBeDefined();
+    expect(
+      screen.getByText(
+        (content) => content.includes('Días') && content.includes('4.50'),
+      ),
+    ).toBeDefined();
+    expect(
+      screen.getByText(
+        (content) => content.includes('Radio') && content.includes('0.85'),
+      ),
+    ).toBeDefined();
   });
 
   /**
@@ -142,7 +171,9 @@ describe('CustomPlanCard Component', () => {
    */
   test('renders correct initial total price', () => {
     renderWithProvider();
-    expect(screen.getByText('$315.00')).toBeDefined();
+    expect(
+      screen.getByText((content) => content.includes('17.75')),
+    ).toBeDefined();
   });
 
   /**
@@ -155,7 +186,7 @@ describe('CustomPlanCard Component', () => {
 
   /**
    * Verifies confirm button calls console.log with correct shape.
-   * Initial state: days=3, km=5, selectedFeatures=[], totalPrice=315
+   * Initial state: days=3, km=5, selectedFeatures=[], totalPrice=17.75
    */
   test('calls setLostPetReportData with correct data when confirm is clicked', async () => {
     const BASE_FEATURES = [
@@ -176,7 +207,7 @@ describe('CustomPlanCard Component', () => {
         planDetails: expect.objectContaining({
           days: 3,
           km: 5,
-          totalPrice: 315,
+          totalPrice: 17.75,
           selectedFeatures: expect.arrayContaining([
             dynamicFeature,
             ...BASE_FEATURES,

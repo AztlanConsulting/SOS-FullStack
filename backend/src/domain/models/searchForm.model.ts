@@ -4,132 +4,132 @@ import { Schema, model } from 'mongoose';
 export interface SearchFormReport {
   _id: Types.ObjectId;
 
-  especie: 'Perro' | 'Gato' | 'Otro';
-  tamano: 'Pequeno' | 'Mediano' | 'Grande';
-  edadAproximada: number;
-  sexo: 'Macho' | 'Hembra';
-  esterilizado: 'Si' | 'No';
-  collarPlaca: 'Si' | 'No';
-  condicionFisica: string;
+  species: 'Dog' | 'Cat' | 'Other';
+  size: 'Small' | 'Medium' | 'Large';
+  approximateAge: number;
+  sex: 'Male' | 'Female';
+  sterilized: 'Yes' | 'No';
+  collarTag: 'Yes' | 'No';
+  physicalCondition: string;
 
-  referenciasVisuales: string;
-  tipoZona: 'Residencial' | 'Rural' | 'Ciudad' | 'Carretera';
-  circunstanciasAdicionales: string;
+  visualReferences: string;
+  zoneType: 'Residential' | 'Rural' | 'City' | 'Highway';
+  additionalCircumstances: string;
 
-  personalidad: string;
-  seDejaAgarrar: 'Si' | 'No' | 'Depende';
-  reaccionRuidos: 'Se asusta' | 'Huye' | 'Ignora' | 'Otro';
-  reaccionRuidosOtro: string;
-  respondeNombre: 'Si' | 'No' | 'A veces';
-  acostumbradoSalir: 'Si' | 'No';
-  haEscapadoAntes: 'Si' | 'No';
-  quePasoEscapado: string;
-  tieneMiedo: string;
-  leFacilSocializar: 'Si' | 'No';
+  personality: string;
+  canBeCaught: 'Yes' | 'No' | 'Depends';
+  noiseReaction: 'Scared' | 'Flees' | 'Ignores' | 'Other';
+  noiseReactionOther: string;
+  respondsToName: 'Yes' | 'No' | 'Sometimes';
+  usedToGoingOut: 'Yes' | 'No';
+  hasEscapedBefore: 'Yes' | 'No';
+  whatHappenedWhenEscaped: string;
+  fears: string;
+  easilySocializes: 'Yes' | 'No';
 
-  cuentaAyuda: 'Varias personas' | '1-2 personas' | 'Solo';
-  queHayCerca: string;
-  animalesCallejeros: 'Muchos' | 'Pocos' | 'Ninguno' | 'No se';
-  nivelTrafico: 'Alto' | 'Medio' | 'Bajo';
-  familiaridadZona: 'Muy familiar' | 'Poco' | 'Nada';
+  helpCount: 'Several people' | '1-2 people' | 'Alone';
+  nearbyFeatures: string;
+  streetAnimals: 'Many' | 'Few' | 'None' | 'Unknown';
+  trafficLevel: 'High' | 'Medium' | 'Low';
+  zoneFamiliarity: 'Very familiar' | 'Somewhat' | 'Not at all';
 
-  apedidoA: string;
-  jugueteManta: string;
-  comidaFavorita: string;
-  queHaceVolver: string;
-  lugarFavorito: string;
+  attachedTo: string;
+  toyBlanket: string;
+  favoriteFood: string;
+  whatBringsBack: string;
+  favoritePlace: string;
 
-  cartillaVacunacion: string;
+  vaccinationCard: string;
 }
 
 export interface ISearchForm extends SearchFormReport, Document {}
 
 const searchFormSchema = new Schema<ISearchForm>(
   {
-    especie: {
+    species: {
       type: String,
       required: true,
-      enum: ['Perro', 'Gato', 'Otro'],
+      enum: ['Dog', 'Cat', 'Other'],
     },
-    tamano: {
+    size: {
       type: String,
       required: true,
-      enum: ['Pequeno', 'Mediano', 'Grande'],
+      enum: ['Small', 'Medium', 'Large'],
     },
-    edadAproximada: { type: Number, required: true },
-    sexo: {
+    approximateAge: { type: Number, required: true },
+    sex: {
       type: String,
       required: true,
-      enum: ['Macho', 'Hembra'],
+      enum: ['Male', 'Female'],
     },
-    esterilizado: { type: String, required: true, enum: ['Si', 'No'] },
-    collarPlaca: { type: String, required: true, enum: ['Si', 'No'] },
-    condicionFisica: { type: String, required: true },
+    sterilized: { type: String, required: true, enum: ['Yes', 'No'] },
+    collarTag: { type: String, required: true, enum: ['Yes', 'No'] },
+    physicalCondition: { type: String, required: true },
 
-    referenciasVisuales: { type: String, required: true },
-    tipoZona: {
+    visualReferences: { type: String, required: true },
+    zoneType: {
       type: String,
       required: true,
-      enum: ['Residencial', 'Rural', 'Ciudad', 'Carretera'],
+      enum: ['Residential', 'Rural', 'City', 'Highway'],
     },
-    circunstanciasAdicionales: { type: String, required: true },
+    additionalCircumstances: { type: String, required: true },
 
-    personalidad: { type: String, required: true },
-    seDejaAgarrar: {
+    personality: { type: String, required: true },
+    canBeCaught: {
       type: String,
       required: true,
-      enum: ['Si', 'No', 'Depende'],
+      enum: ['Yes', 'No', 'Depends'],
     },
-    reaccionRuidos: {
+    noiseReaction: {
       type: String,
       required: true,
-      enum: ['Se asusta', 'Huye', 'Ignora', 'Otro'],
+      enum: ['Scared', 'Flees', 'Ignores', 'Other'],
     },
-    reaccionRuidosOtro: { type: String, required: false },
-    respondeNombre: {
+    noiseReactionOther: { type: String, required: false },
+    respondsToName: {
       type: String,
       required: true,
-      enum: ['Si', 'No', 'A veces'],
+      enum: ['Yes', 'No', 'Sometimes'],
     },
-    acostumbradoSalir: { type: String, required: true, enum: ['Si', 'No'] },
-    haEscapadoAntes: { type: String, required: true, enum: ['Si', 'No'] },
-    quePasoEscapado: { type: String, required: true },
-    tieneMiedo: { type: String, required: true },
-    leFacilSocializar: {
+    usedToGoingOut: { type: String, required: true, enum: ['Yes', 'No'] },
+    hasEscapedBefore: { type: String, required: true, enum: ['Yes', 'No'] },
+    whatHappenedWhenEscaped: { type: String, required: false },
+    fears: { type: String, required: true },
+    easilySocializes: {
       type: String,
       required: true,
-      enum: ['Si', 'No'],
-    },
-
-    cuentaAyuda: {
-      type: String,
-      required: true,
-      enum: ['Varias personas', '1-2 personas', 'Solo'],
-    },
-    queHayCerca: { type: String, required: true },
-    animalesCallejeros: {
-      type: String,
-      required: true,
-      enum: ['Muchos', 'Pocos', 'Ninguno', 'No se'],
-    },
-    nivelTrafico: {
-      type: String,
-      required: true,
-      enum: ['Alto', 'Medio', 'Bajo'],
-    },
-    familiaridadZona: {
-      type: String,
-      required: true,
-      enum: ['Muy familiar', 'Poco', 'Nada'],
+      enum: ['Yes', 'No'],
     },
 
-    apedidoA: { type: String, required: true },
-    jugueteManta: { type: String, required: true },
-    comidaFavorita: { type: String, required: true },
-    queHaceVolver: { type: String, required: true },
-    lugarFavorito: { type: String, required: true },
+    helpCount: {
+      type: String,
+      required: true,
+      enum: ['Several people', '1-2 people', 'Alone'],
+    },
+    nearbyFeatures: { type: String, required: true },
+    streetAnimals: {
+      type: String,
+      required: true,
+      enum: ['Many', 'Few', 'None', 'Unknown'],
+    },
+    trafficLevel: {
+      type: String,
+      required: true,
+      enum: ['High', 'Medium', 'Low'],
+    },
+    zoneFamiliarity: {
+      type: String,
+      required: true,
+      enum: ['Very familiar', 'Somewhat', 'Not at all'],
+    },
 
-    cartillaVacunacion: { type: String, required: true },
+    attachedTo: { type: String, required: true },
+    toyBlanket: { type: String, required: true },
+    favoriteFood: { type: String, required: true },
+    whatBringsBack: { type: String, required: true },
+    favoritePlace: { type: String, required: true },
+
+    vaccinationCard: { type: String, required: true },
   },
   { timestamps: true },
 );

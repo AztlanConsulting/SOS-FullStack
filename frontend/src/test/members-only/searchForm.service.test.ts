@@ -11,7 +11,7 @@ vi.mock('@shared/utils/axios', () => ({
   },
 }));
 
-const FORM_DATA = { especie: 'Perro', tamano: 'Mediano' };
+const FORM_DATA = { species: 'Dog', size: 'Medium' };
 
 const MOCK_RESPONSE = { message: 'Form submitted', data: { id: '1' } };
 

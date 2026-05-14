@@ -43,7 +43,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
             label="Ver"
             variant="purple"
             onClick={() =>
-              navigate(`/inicio/contenido-exclusivo/page/${card._id}`)
+              navigate(`/inicio/contenido-exclusivo/pagina/${card._id}`)
             }
           />
         </div>

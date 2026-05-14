@@ -33,7 +33,7 @@ export function Button({
       'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-full md:max-w-lg mx-auto border-1 border-[#61646B]',
     plans:
       'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
-    purple: 'bg-[#9D7FAD] text-white hover:bg-[#9D7FAD] w-full',
+    purple: 'bg-purple-primary text-white hover:bg-purple-primary w-full',
   };
   return (
     <button

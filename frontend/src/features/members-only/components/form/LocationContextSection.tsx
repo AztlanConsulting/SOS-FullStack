@@ -18,49 +18,49 @@ export const LocationContextSection = ({
       id="location-context-section"
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4"
     >
-      <div id="referencias-visuales">
+      <div id="visual-references">
         <TextArea
-          id="referencias-visuales"
+          id="visual-references"
           label="Referencias visuales del lugar"
           placeholder="Describe puntos de referencia, colores de edificios, negocios cercanos..."
-          value={formData.referenciasVisuales || ''}
+          value={formData.visualReferences || ''}
           maxLength={200}
-          onChange={(e) => updateForm({ referenciasVisuales: e.target.value })}
-          error={errors.referenciasVisuales}
+          onChange={(e) => updateForm({ visualReferences: e.target.value })}
+          error={errors.visualReferences}
         />
       </div>
 
-      <div id="tipo-zona">
+      <div id="zone-type">
         <Select
-          id="tipo-zona"
+          id="zone-type"
           label="Tipo de zona"
-          value={formData.tipoZona || ''}
+          value={formData.zoneType || ''}
           onChange={(e) =>
             updateForm({
-              tipoZona: e.target.value as SearchFormData['tipoZona'],
+              zoneType: e.target.value as SearchFormData['zoneType'],
             })
           }
           options={[
-            { value: 'Residencial', label: 'Residencial' },
+            { value: 'Residential', label: 'Residencial' },
             { value: 'Rural', label: 'Rural' },
-            { value: 'Ciudad', label: 'Ciudad' },
-            { value: 'Carretera', label: 'Carretera' },
+            { value: 'City', label: 'Ciudad' },
+            { value: 'Highway', label: 'Carretera' },
           ]}
-          error={errors.tipoZona}
+          error={errors.zoneType}
         />
       </div>
 
-      <div id="circunstancias">
+      <div id="additional-circumstances">
         <TextArea
-          id="circunstancias"
+          id="additional-circumstances"
           label="¿Hay circunstancias adicionales?"
           placeholder="Obras en la zona, eventos recientes, cambios en el entorno..."
-          value={formData.circunstanciasAdicionales || ''}
+          value={formData.additionalCircumstances || ''}
           maxLength={300}
           onChange={(e) =>
-            updateForm({ circunstanciasAdicionales: e.target.value })
+            updateForm({ additionalCircumstances: e.target.value })
           }
-          error={errors.circunstanciasAdicionales}
+          error={errors.additionalCircumstances}
         />
       </div>
     </section>

@@ -18,63 +18,63 @@ export const PreferencesMotivatorsSection = ({
       id="preferences-motivators-section"
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4"
     >
-      <div id="apegado-a">
+      <div id="attached-to">
         <Input
-          id="apegado-a"
+          id="attached-to"
           label="¿A quién está más apegado?"
-          value={formData.apedidoA || ''}
+          value={formData.attachedTo || ''}
           maxLength={100}
-          onChange={(e) => updateForm({ apedidoA: e.target.value })}
+          onChange={(e) => updateForm({ attachedTo: e.target.value })}
           hasLength={false}
-          error={errors.apedidoA}
+          error={errors.attachedTo}
         />
       </div>
 
-      <div id="juguete-manta">
+      <div id="toy-blanket">
         <Input
-          id="juguete-manta"
+          id="toy-blanket"
           label="¿Tiene juguete/manta especial?"
-          value={formData.jugueteManta || ''}
+          value={formData.toyBlanket || ''}
           maxLength={100}
-          onChange={(e) => updateForm({ jugueteManta: e.target.value })}
+          onChange={(e) => updateForm({ toyBlanket: e.target.value })}
           hasLength={false}
-          error={errors.jugueteManta}
+          error={errors.toyBlanket}
         />
       </div>
 
-      <div id="comida-favorita">
+      <div id="favorite-food">
         <Input
-          id="comida-favorita"
+          id="favorite-food"
           label="Comida o snack favorito"
-          value={formData.comidaFavorita || ''}
+          value={formData.favoriteFood || ''}
           maxLength={100}
-          onChange={(e) => updateForm({ comidaFavorita: e.target.value })}
+          onChange={(e) => updateForm({ favoriteFood: e.target.value })}
           hasLength={false}
-          error={errors.comidaFavorita}
+          error={errors.favoriteFood}
         />
       </div>
 
-      <div id="que-hace-volver">
+      <div id="what-brings-back">
         <TextArea
-          id="que-hace-volver"
+          id="what-brings-back"
           label="¿Qué lo hace volver?"
           placeholder="Sonidos, personas, rutinas, olores..."
-          value={formData.queHaceVolver || ''}
+          value={formData.whatBringsBack || ''}
           maxLength={200}
-          onChange={(e) => updateForm({ queHaceVolver: e.target.value })}
-          error={errors.queHaceVolver}
+          onChange={(e) => updateForm({ whatBringsBack: e.target.value })}
+          error={errors.whatBringsBack}
         />
       </div>
 
-      <div id="lugar-favorito">
+      <div id="favorite-place">
         <Input
-          id="lugar-favorito"
+          id="favorite-place"
           label="¿Lugar favorito?"
-          value={formData.lugarFavorito || ''}
+          value={formData.favoritePlace || ''}
           maxLength={100}
-          onChange={(e) => updateForm({ lugarFavorito: e.target.value })}
+          onChange={(e) => updateForm({ favoritePlace: e.target.value })}
           hasLength={false}
-          error={errors.lugarFavorito}
+          error={errors.favoritePlace}
         />
       </div>
     </section>

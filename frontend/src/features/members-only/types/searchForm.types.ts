@@ -1,77 +1,77 @@
 export interface SearchFormData {
-  especie: '' | 'Perro' | 'Gato' | 'Otro';
-  tamano: '' | 'Pequeno' | 'Mediano' | 'Grande';
-  edadAproximada: number | '';
-  sexo: '' | 'Macho' | 'Hembra';
-  esterilizado: '' | 'Si' | 'No';
-  collarPlaca: '' | 'Si' | 'No';
-  condicionFisica: string;
+  species: '' | 'Dog' | 'Cat' | 'Other';
+  size: '' | 'Small' | 'Medium' | 'Large';
+  approximateAge: number | '';
+  sex: '' | 'Male' | 'Female';
+  sterilized: '' | 'Yes' | 'No';
+  collarTag: '' | 'Yes' | 'No';
+  physicalCondition: string;
 
-  referenciasVisuales: string;
-  tipoZona: '' | 'Residencial' | 'Rural' | 'Ciudad' | 'Carretera';
-  circunstanciasAdicionales: string;
+  visualReferences: string;
+  zoneType: '' | 'Residential' | 'Rural' | 'City' | 'Highway';
+  additionalCircumstances: string;
 
-  personalidad: string;
-  seDejaAgarrar: '' | 'Si' | 'No' | 'Depende';
-  reaccionRuidos: '' | 'Se asusta' | 'Huye' | 'Ignora' | 'Otro';
-  reaccionRuidosOtro: string;
-  respondeNombre: '' | 'Si' | 'No' | 'A veces';
-  acostumbradoSalir: '' | 'Si' | 'No';
-  haEscapadoAntes: '' | 'Si' | 'No';
-  quePasoEscapado: string;
-  tieneMiedo: string;
-  leFacilSocializar: '' | 'Si' | 'No';
+  personality: string;
+  canBeCaught: '' | 'Yes' | 'No' | 'Depends';
+  noiseReaction: '' | 'Scared' | 'Flees' | 'Ignores' | 'Other';
+  noiseReactionOther: string;
+  respondsToName: '' | 'Yes' | 'No' | 'Sometimes';
+  usedToGoingOut: '' | 'Yes' | 'No';
+  hasEscapedBefore: '' | 'Yes' | 'No';
+  whatHappenedWhenEscaped: string;
+  fears: string;
+  easilySocializes: '' | 'Yes' | 'No';
 
-  cuentaAyuda: '' | 'Varias personas' | '1-2 personas' | 'Solo';
-  queHayCerca: string;
-  animalesCallejeros: '' | 'Muchos' | 'Pocos' | 'Ninguno' | 'No se';
-  nivelTrafico: '' | 'Alto' | 'Medio' | 'Bajo';
-  familiaridadZona: '' | 'Muy familiar' | 'Poco' | 'Nada';
+  helpCount: '' | 'Several people' | '1-2 people' | 'Alone';
+  nearbyFeatures: string;
+  streetAnimals: '' | 'Many' | 'Few' | 'None' | 'Unknown';
+  trafficLevel: '' | 'High' | 'Medium' | 'Low';
+  zoneFamiliarity: '' | 'Very familiar' | 'Somewhat' | 'Not at all';
 
-  apedidoA: string;
-  jugueteManta: string;
-  comidaFavorita: string;
-  queHaceVolver: string;
-  lugarFavorito: string;
+  attachedTo: string;
+  toyBlanket: string;
+  favoriteFood: string;
+  whatBringsBack: string;
+  favoritePlace: string;
 
-  cartillaVacunacion: string | File | null;
+  vaccinationCard: string | File | null;
 }
 
 export const initialSearchFormData: SearchFormData = {
-  especie: '',
-  tamano: '',
-  edadAproximada: '',
-  sexo: '',
-  esterilizado: '',
-  collarPlaca: '',
-  condicionFisica: '',
+  species: '',
+  size: '',
+  approximateAge: '',
+  sex: '',
+  sterilized: '',
+  collarTag: '',
+  physicalCondition: '',
 
-  referenciasVisuales: '',
-  tipoZona: '',
-  circunstanciasAdicionales: '',
+  visualReferences: '',
+  zoneType: '',
+  additionalCircumstances: '',
 
-  personalidad: '',
-  seDejaAgarrar: '',
-  reaccionRuidos: '',
-  reaccionRuidosOtro: '',
-  respondeNombre: '',
-  acostumbradoSalir: '',
-  haEscapadoAntes: '',
-  quePasoEscapado: '',
-  tieneMiedo: '',
-  leFacilSocializar: '',
+  personality: '',
+  canBeCaught: '',
+  noiseReaction: '',
+  noiseReactionOther: '',
+  respondsToName: '',
+  usedToGoingOut: '',
+  hasEscapedBefore: '',
+  whatHappenedWhenEscaped: '',
+  fears: '',
+  easilySocializes: '',
 
-  cuentaAyuda: '',
-  queHayCerca: '',
-  animalesCallejeros: '',
-  nivelTrafico: '',
-  familiaridadZona: '',
+  helpCount: '',
+  nearbyFeatures: '',
+  streetAnimals: '',
+  trafficLevel: '',
+  zoneFamiliarity: '',
 
-  apedidoA: '',
-  jugueteManta: '',
-  comidaFavorita: '',
-  queHaceVolver: '',
-  lugarFavorito: '',
+  attachedTo: '',
+  toyBlanket: '',
+  favoriteFood: '',
+  whatBringsBack: '',
+  favoritePlace: '',
 
-  cartillaVacunacion: null,
+  vaccinationCard: null,
 };

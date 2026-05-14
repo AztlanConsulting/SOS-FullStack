@@ -6,7 +6,6 @@ export default {
   setupFiles: ['<rootDir>/src/test/setup-env.ts'], // runs before any module is imported
   roots: ['<rootDir>/src'],
   forceExit: true, // Helps ensure Jest doesn't hang after closing the DB connection
-  transformIgnorePatterns: ['node_modules/(?!(uuid)/)'],
 
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -21,6 +20,5 @@ export default {
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
     '^@vectorDB$':
       '<rootDir>/src/infrastructure/database/vectorDB/vectorDatabase.ts',
-    '^uuid$': '<rootDir>/__mocks__/uuid.js',
   },
 };

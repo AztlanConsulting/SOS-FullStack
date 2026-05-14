@@ -19,171 +19,172 @@ export const BehaviorPersonalitySection = ({
       id="behavior-personality-section"
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4"
     >
-      <div id="personalidad">
+      <div id="personality">
         <TextArea
-          id="personalidad"
+          id="personality"
           label="¿Cómo describirías su personalidad?"
           placeholder="Ej: Tímido, juguetón, independiente..."
-          value={formData.personalidad || ''}
+          value={formData.personality || ''}
           maxLength={200}
-          onChange={(e) => updateForm({ personalidad: e.target.value })}
-          error={errors.personalidad}
+          onChange={(e) => updateForm({ personality: e.target.value })}
+          error={errors.personality}
         />
       </div>
 
-      <div id="deja-agarrar">
+      <div id="can-be-caught">
         <Select
-          id="deja-agarrar"
+          id="can-be-caught"
           label="¿Se deja agarrar por desconocidos?"
-          value={formData.seDejaAgarrar || ''}
+          value={formData.canBeCaught || ''}
           onChange={(e) =>
             updateForm({
-              seDejaAgarrar: e.target.value as SearchFormData['seDejaAgarrar'],
+              canBeCaught: e.target.value as SearchFormData['canBeCaught'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
-            { value: 'Depende', label: 'Depende' },
+            { value: 'Depends', label: 'Depende' },
           ]}
-          error={errors.seDejaAgarrar}
+          error={errors.canBeCaught}
         />
       </div>
 
-      <div id="reaccion-ruidos">
+      <div id="noise-reaction">
         <Select
-          id="reaccion-ruidos"
+          id="noise-reaction"
           label="Reacción ante ruidos fuertes"
-          value={formData.reaccionRuidos || ''}
+          value={formData.noiseReaction || ''}
           onChange={(e) =>
             updateForm({
-              reaccionRuidos: e.target
-                .value as SearchFormData['reaccionRuidos'],
+              noiseReaction: e.target.value as SearchFormData['noiseReaction'],
             })
           }
           options={[
-            { value: 'Se asusta', label: 'Se asusta' },
-            { value: 'Huye', label: 'Huye' },
-            { value: 'Ignora', label: 'Ignora' },
-            { value: 'Otro', label: 'Otro' },
+            { value: 'Scared', label: 'Se asusta' },
+            { value: 'Flees', label: 'Huye' },
+            { value: 'Ignores', label: 'Ignora' },
+            { value: 'Other', label: 'Otro' },
           ]}
-          error={errors.reaccionRuidos}
+          error={errors.noiseReaction}
         />
-        {formData.reaccionRuidos === 'Otro' && (
+        {formData.noiseReaction === 'Other' && (
           <div className="mt-2">
             <Input
-              id="reaccion-ruidos-otro"
+              id="noise-reaction-other"
               label="Describe la reacción"
-              value={formData.reaccionRuidosOtro || ''}
+              value={formData.noiseReactionOther || ''}
               maxLength={100}
               onChange={(e) =>
-                updateForm({ reaccionRuidosOtro: e.target.value })
+                updateForm({ noiseReactionOther: e.target.value })
               }
               hasLength={false}
-              error={errors.reaccionRuidosOtro}
+              error={errors.noiseReactionOther}
             />
           </div>
         )}
       </div>
 
-      <div id="responde-nombre">
+      <div id="responds-to-name">
         <Select
-          id="responde-nombre"
+          id="responds-to-name"
           label="¿Responde a su nombre?"
-          value={formData.respondeNombre || ''}
+          value={formData.respondsToName || ''}
           onChange={(e) =>
             updateForm({
-              respondeNombre: e.target
-                .value as SearchFormData['respondeNombre'],
+              respondsToName: e.target
+                .value as SearchFormData['respondsToName'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
-            { value: 'A veces', label: 'A veces' },
+            { value: 'Sometimes', label: 'A veces' },
           ]}
-          error={errors.respondeNombre}
+          error={errors.respondsToName}
         />
       </div>
 
-      <div id="acostumbrado-salir">
+      <div id="used-to-going-out">
         <Select
-          id="acostumbrado-salir"
+          id="used-to-going-out"
           label="¿Está acostumbrado a salir?"
-          value={formData.acostumbradoSalir}
+          value={formData.usedToGoingOut}
           onChange={(e) =>
             updateForm({
-              acostumbradoSalir: e.target
-                .value as SearchFormData['acostumbradoSalir'],
+              usedToGoingOut: e.target
+                .value as SearchFormData['usedToGoingOut'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
           ]}
         />
       </div>
 
-      <div id="ha-escapado">
+      <div id="has-escaped-before">
         <Select
-          id="ha-escapado"
+          id="has-escaped-before"
           label="¿Ha escapado antes?"
-          value={formData.haEscapadoAntes}
+          value={formData.hasEscapedBefore}
           onChange={(e) =>
             updateForm({
-              haEscapadoAntes: e.target
-                .value as SearchFormData['haEscapadoAntes'],
+              hasEscapedBefore: e.target
+                .value as SearchFormData['hasEscapedBefore'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
           ]}
         />
       </div>
 
-      {formData.haEscapadoAntes && (
-        <div id="que-paso-escapado">
+      {formData.hasEscapedBefore && (
+        <div id="what-happened-when-escaped">
           <TextArea
-            id="que-paso-escapado"
+            id="what-happened-when-escaped"
             label="Si sí, ¿qué pasó?"
             placeholder="Describe cómo escapó anteriormente y cómo lo encontraron..."
-            value={formData.quePasoEscapado || ''}
+            value={formData.whatHappenedWhenEscaped || ''}
             maxLength={300}
-            onChange={(e) => updateForm({ quePasoEscapado: e.target.value })}
-            error={errors.quePasoEscapado}
+            onChange={(e) =>
+              updateForm({ whatHappenedWhenEscaped: e.target.value })
+            }
+            error={errors.whatHappenedWhenEscaped}
           />
         </div>
       )}
 
-      <div id="tiene-miedo">
+      <div id="fears">
         <Input
-          id="tiene-miedo"
+          id="fears"
           label="¿Tiene miedo a algo?"
-          value={formData.tieneMiedo || ''}
+          value={formData.fears || ''}
           maxLength={100}
-          onChange={(e) => updateForm({ tieneMiedo: e.target.value })}
+          onChange={(e) => updateForm({ fears: e.target.value })}
           hasLength={false}
-          error={errors.tieneMiedo}
+          error={errors.fears}
         />
       </div>
 
-      <div id="facil-socializar">
+      <div id="easily-socializes">
         <Select
-          id="facil-socializar"
+          id="easily-socializes"
           label="¿Le es fácil socializar?"
-          value={formData.leFacilSocializar || ''}
+          value={formData.easilySocializes || ''}
           onChange={(e) =>
             updateForm({
-              leFacilSocializar: e.target
-                .value as SearchFormData['leFacilSocializar'],
+              easilySocializes: e.target
+                .value as SearchFormData['easilySocializes'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
           ]}
-          error={errors.leFacilSocializar}
+          error={errors.easilySocializes}
         />
       </div>
     </section>

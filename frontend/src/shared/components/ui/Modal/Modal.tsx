@@ -22,7 +22,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   color = 'yellow',
 }) => {
-  const headerBg = color === 'purple' ? 'bg-[#9D7FAD]' : 'bg-[#F9CD48]';
+  const headerBg = color === 'purple' ? 'bg-purple-primary' : 'bg-primary';
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />

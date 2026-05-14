@@ -12,37 +12,37 @@ vi.mock('@features/members-only/services/searchForm.service', () => ({
 }));
 
 const VALID_FORM_DATA: SearchFormData = {
-  especie: 'Perro',
-  tamano: 'Mediano',
-  edadAproximada: 3,
-  sexo: 'Macho',
-  esterilizado: 'Si',
-  collarPlaca: 'Si',
-  condicionFisica: 'Buena',
-  referenciasVisuales: 'Mancha en ojo',
-  tipoZona: 'Residencial',
-  circunstanciasAdicionales: 'Salió corriendo',
-  personalidad: 'Juguetón',
-  seDejaAgarrar: 'Si',
-  reaccionRuidos: 'Se asusta',
-  reaccionRuidosOtro: '',
-  respondeNombre: 'Si',
-  acostumbradoSalir: 'Si',
-  haEscapadoAntes: 'No',
-  quePasoEscapado: '',
-  tieneMiedo: 'A los coches',
-  leFacilSocializar: 'Si',
-  cuentaAyuda: 'Varias personas',
-  queHayCerca: 'Parque',
-  animalesCallejeros: 'Pocos',
-  nivelTrafico: 'Bajo',
-  familiaridadZona: 'Muy familiar',
-  apedidoA: 'Dueño',
-  jugueteManta: 'Pelota',
-  comidaFavorita: 'Croquetas',
-  queHaceVolver: 'Silbido',
-  lugarFavorito: 'Sillón',
-  cartillaVacunacion: null,
+  species: 'Dog',
+  size: 'Medium',
+  approximateAge: 3,
+  sex: 'Male',
+  sterilized: 'Yes',
+  collarTag: 'Yes',
+  physicalCondition: 'Good',
+  visualReferences: 'Spot on eye',
+  zoneType: 'Residential',
+  additionalCircumstances: 'Ran away',
+  personality: 'Playful',
+  canBeCaught: 'Yes',
+  noiseReaction: 'Scared',
+  noiseReactionOther: '',
+  respondsToName: 'Yes',
+  usedToGoingOut: 'Yes',
+  hasEscapedBefore: 'No',
+  whatHappenedWhenEscaped: '',
+  fears: 'Cars',
+  easilySocializes: 'Yes',
+  helpCount: 'Several people',
+  nearbyFeatures: 'Park',
+  streetAnimals: 'Few',
+  trafficLevel: 'Low',
+  zoneFamiliarity: 'Very familiar',
+  attachedTo: 'Owner',
+  toyBlanket: 'Ball',
+  favoriteFood: 'Kibble',
+  whatBringsBack: 'Whistle',
+  favoritePlace: 'Couch',
+  vaccinationCard: null,
 };
 
 describe('useSearchForm', () => {
@@ -54,9 +54,9 @@ describe('useSearchForm', () => {
   test('initializes with default SearchFormData', () => {
     const { result } = renderHook(() => useSearchForm());
 
-    expect(result.current.formData.especie).toBe('');
-    expect(result.current.formData.tamano).toBe('');
-    expect(result.current.formData.cartillaVacunacion).toBeNull();
+    expect(result.current.formData.species).toBe('');
+    expect(result.current.formData.size).toBe('');
+    expect(result.current.formData.vaccinationCard).toBeNull();
     expect(result.current.errors).toEqual({});
     expect(result.current.isSubmitting).toBe(false);
     expect(result.current.submitError).toBeNull();
@@ -64,21 +64,21 @@ describe('useSearchForm', () => {
   });
 
   test('merges initialData with defaults', () => {
-    const { result } = renderHook(() => useSearchForm({ especie: 'Perro' }));
+    const { result } = renderHook(() => useSearchForm({ species: 'Dog' }));
 
-    expect(result.current.formData.especie).toBe('Perro');
-    expect(result.current.formData.tamano).toBe('');
+    expect(result.current.formData.species).toBe('Dog');
+    expect(result.current.formData.size).toBe('');
   });
 
   test('updateFormData merges partial data', () => {
     const { result } = renderHook(() => useSearchForm());
 
     act(() => {
-      result.current.updateFormData({ especie: 'Gato', tamano: 'Grande' });
+      result.current.updateFormData({ species: 'Cat', size: 'Large' });
     });
 
-    expect(result.current.formData.especie).toBe('Gato');
-    expect(result.current.formData.tamano).toBe('Grande');
+    expect(result.current.formData.species).toBe('Cat');
+    expect(result.current.formData.size).toBe('Large');
   });
 
   test('updateFormData clears errors for the updated field', async () => {
@@ -88,13 +88,13 @@ describe('useSearchForm', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.especie).toBe('Selecciona una especie');
+    expect(result.current.errors.species).toBe('Selecciona una especie');
 
     act(() => {
-      result.current.updateFormData({ especie: 'Perro' });
+      result.current.updateFormData({ species: 'Dog' });
     });
 
-    expect(result.current.errors.especie).toBeUndefined();
+    expect(result.current.errors.species).toBeUndefined();
   });
 
   test('returns validation errors for all empty required fields on submit', async () => {
@@ -104,37 +104,31 @@ describe('useSearchForm', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.especie).toBe('Selecciona una especie');
-    expect(result.current.errors.tamano).toBe('Selecciona un tamaño');
-    expect(result.current.errors.edadAproximada).toBe(
+    expect(result.current.errors.species).toBe('Selecciona una especie');
+    expect(result.current.errors.size).toBe('Selecciona un tamaño');
+    expect(result.current.errors.approximateAge).toBe(
       'Ingresa una edad aproximada',
     );
-    expect(result.current.errors.sexo).toBe('Selecciona el sexo');
-    expect(result.current.errors.tipoZona).toBe('Selecciona un tipo de zona');
-    expect(result.current.errors.seDejaAgarrar).toBe('Selecciona una opción');
-    expect(result.current.errors.reaccionRuidos).toBe(
-      'Selecciona una reacción',
-    );
-    expect(result.current.errors.respondeNombre).toBe('Selecciona una opción');
-    expect(result.current.errors.leFacilSocializar).toBe(
+    expect(result.current.errors.sex).toBe('Selecciona el sexo');
+    expect(result.current.errors.zoneType).toBe('Selecciona un tipo de zona');
+    expect(result.current.errors.canBeCaught).toBe('Selecciona una opción');
+    expect(result.current.errors.noiseReaction).toBe('Selecciona una reacción');
+    expect(result.current.errors.respondsToName).toBe('Selecciona una opción');
+    expect(result.current.errors.easilySocializes).toBe(
       'Selecciona una opción',
     );
-    expect(result.current.errors.cuentaAyuda).toBe('Selecciona una opción');
-    expect(result.current.errors.animalesCallejeros).toBe(
-      'Selecciona una opción',
-    );
-    expect(result.current.errors.nivelTrafico).toBe('Selecciona un nivel');
-    expect(result.current.errors.familiaridadZona).toBe(
-      'Selecciona una opción',
-    );
+    expect(result.current.errors.helpCount).toBe('Selecciona una opción');
+    expect(result.current.errors.streetAnimals).toBe('Selecciona una opción');
+    expect(result.current.errors.trafficLevel).toBe('Selecciona un nivel');
+    expect(result.current.errors.zoneFamiliarity).toBe('Selecciona una opción');
   });
 
-  test('sets error when reaccionRuidos=Otro and reaccionRuidosOtro is empty', async () => {
+  test('sets error when noiseReaction=Other and noiseReactionOther is empty', async () => {
     const { result } = renderHook(() =>
       useSearchForm({
         ...VALID_FORM_DATA,
-        reaccionRuidos: 'Otro',
-        reaccionRuidosOtro: '',
+        noiseReaction: 'Other',
+        noiseReactionOther: '',
       }),
     );
 
@@ -142,29 +136,29 @@ describe('useSearchForm', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.reaccionRuidosOtro).toBe(
+    expect(result.current.errors.noiseReactionOther).toBe(
       'Describe la reacción',
     );
   });
 
-  test('no error for reaccionRuidosOtro when reaccionRuidos is not Otro', async () => {
+  test('no error for noiseReactionOther when noiseReaction is not Other', async () => {
     const { result } = renderHook(() =>
-      useSearchForm({ ...VALID_FORM_DATA, reaccionRuidos: 'Huye' }),
+      useSearchForm({ ...VALID_FORM_DATA, noiseReaction: 'Flees' }),
     );
 
     await act(async () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.reaccionRuidosOtro).toBeUndefined();
+    expect(result.current.errors.noiseReactionOther).toBeUndefined();
   });
 
-  test('sets error when haEscapadoAntes=Si and quePasoEscapado is empty', async () => {
+  test('sets error when hasEscapedBefore=Yes and whatHappenedWhenEscaped is empty', async () => {
     const { result } = renderHook(() =>
       useSearchForm({
         ...VALID_FORM_DATA,
-        haEscapadoAntes: 'Si',
-        quePasoEscapado: '',
+        hasEscapedBefore: 'Yes',
+        whatHappenedWhenEscaped: '',
       }),
     );
 
@@ -172,17 +166,19 @@ describe('useSearchForm', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.quePasoEscapado).toBe('Describe qué pasó');
+    expect(result.current.errors.whatHappenedWhenEscaped).toBe(
+      'Describe qué pasó',
+    );
   });
 
-  test('no error for quePasoEscapado when haEscapadoAntes is No', async () => {
+  test('no error for whatHappenedWhenEscaped when hasEscapedBefore is No', async () => {
     const { result } = renderHook(() => useSearchForm(VALID_FORM_DATA));
 
     await act(async () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.quePasoEscapado).toBeUndefined();
+    expect(result.current.errors.whatHappenedWhenEscaped).toBeUndefined();
   });
 
   test('returns error when file exceeds 15MB', async () => {
@@ -192,14 +188,14 @@ describe('useSearchForm', () => {
     const { result } = renderHook(() => useSearchForm());
 
     act(() => {
-      result.current.updateFormData({ cartillaVacunacion: largeFile });
+      result.current.updateFormData({ vaccinationCard: largeFile });
     });
 
     await act(async () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.cartillaVacunacion).toBe(
+    expect(result.current.errors.vaccinationCard).toBe(
       'El archivo no debe superar los 15MB',
     );
   });
@@ -211,14 +207,14 @@ describe('useSearchForm', () => {
     const { result } = renderHook(() => useSearchForm());
 
     act(() => {
-      result.current.updateFormData({ cartillaVacunacion: wrongTypeFile });
+      result.current.updateFormData({ vaccinationCard: wrongTypeFile });
     });
 
     await act(async () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.cartillaVacunacion).toBe(
+    expect(result.current.errors.vaccinationCard).toBe(
       'Solo se aceptan PDF o imágenes',
     );
   });
@@ -230,7 +226,7 @@ describe('useSearchForm', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.errors.cartillaVacunacion).toBeUndefined();
+    expect(result.current.errors.vaccinationCard).toBeUndefined();
   });
 
   test('calls createSearchForm on valid form and sets submitSuccess', async () => {
@@ -246,14 +242,14 @@ describe('useSearchForm', () => {
     expect(result.current.isSubmitting).toBe(false);
   });
 
-  test('converts edadAproximada from string to number on submit', async () => {
+  test('converts approximateAge from string to number on submit', async () => {
     mockCreateSearchForm.mockResolvedValue({ message: 'ok', data: {} });
     const { result } = renderHook(() =>
-      useSearchForm({ ...VALID_FORM_DATA, edadAproximada: '' }),
+      useSearchForm({ ...VALID_FORM_DATA, approximateAge: '' }),
     );
 
     act(() => {
-      result.current.updateFormData({ edadAproximada: '5' });
+      result.current.updateFormData({ approximateAge: '5' });
     });
 
     await act(async () => {
@@ -261,7 +257,7 @@ describe('useSearchForm', () => {
     });
 
     expect(mockCreateSearchForm).toHaveBeenCalledWith(
-      expect.objectContaining({ edadAproximada: 5 }),
+      expect.objectContaining({ approximateAge: 5 }),
     );
   });
 
@@ -279,19 +275,19 @@ describe('useSearchForm', () => {
   });
 
   test('resetForm restores initial state', () => {
-    const { result } = renderHook(() => useSearchForm({ especie: 'Perro' }));
+    const { result } = renderHook(() => useSearchForm({ species: 'Dog' }));
 
     act(() => {
-      result.current.updateFormData({ especie: 'Gato' });
+      result.current.updateFormData({ species: 'Cat' });
     });
 
-    expect(result.current.formData.especie).toBe('Gato');
+    expect(result.current.formData.species).toBe('Cat');
 
     act(() => {
       result.current.resetForm();
     });
 
-    expect(result.current.formData.especie).toBe('');
+    expect(result.current.formData.species).toBe('');
     expect(result.current.errors).toEqual({});
     expect(result.current.submitSuccess).toBe(false);
     expect(result.current.submitError).toBeNull();

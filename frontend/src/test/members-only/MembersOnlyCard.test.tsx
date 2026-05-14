@@ -63,7 +63,7 @@ describe('MembersOnlyCard', () => {
     await user.click(screen.getByText('Ver'));
 
     expect(mockNavigate).toHaveBeenCalledWith(
-      '/inicio/contenido-exclusivo/page/abc123',
+      '/inicio/contenido-exclusivo/pagina/abc123',
     );
   });
 });

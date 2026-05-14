@@ -18,119 +18,119 @@ export const BasicPetInfoSection = ({
       id="basic-pet-info-section"
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4"
     >
-      <div id="especie-section">
+      <div id="species-section">
         <Select
-          id="especie-section"
+          id="species-section"
           label="Especie"
-          value={formData.especie || ''}
+          value={formData.species || ''}
           onChange={(e) =>
-            updateForm({ especie: e.target.value as SearchFormData['especie'] })
+            updateForm({ species: e.target.value as SearchFormData['species'] })
           }
           options={[
-            { value: 'Perro', label: 'Perro' },
-            { value: 'Gato', label: 'Gato' },
-            { value: 'Otro', label: 'Otro' },
+            { value: 'Dog', label: 'Perro' },
+            { value: 'Cat', label: 'Gato' },
+            { value: 'Other', label: 'Otro' },
           ]}
-          error={errors.especie}
+          error={errors.species}
         />
       </div>
 
-      <div id="tamano-section">
+      <div id="size-section">
         <Select
-          id="tamano-section"
+          id="size-section"
           label="Tamaño"
-          value={formData.tamano || ''}
+          value={formData.size || ''}
           onChange={(e) =>
-            updateForm({ tamano: e.target.value as SearchFormData['tamano'] })
+            updateForm({ size: e.target.value as SearchFormData['size'] })
           }
           options={[
-            { value: 'Pequeno', label: 'Pequeño' },
-            { value: 'Mediano', label: 'Mediano' },
-            { value: 'Grande', label: 'Grande' },
+            { value: 'Small', label: 'Pequeño' },
+            { value: 'Medium', label: 'Mediano' },
+            { value: 'Large', label: 'Grande' },
           ]}
-          error={errors.tamano}
+          error={errors.size}
         />
       </div>
 
-      <div id="edad-section">
+      <div id="approximate-age-section">
         <Input
-          id="edad-section"
+          id="approximate-age-section"
           label="Edad aproximada (años)"
           type="number"
           value={
-            formData.edadAproximada === ''
+            formData.approximateAge === ''
               ? ''
-              : String(formData.edadAproximada)
+              : String(formData.approximateAge)
           }
           onChange={(e) => {
             const val = e.target.value;
             updateForm({
-              edadAproximada: val === '' ? '' : Math.max(0, parseInt(val)),
+              approximateAge: val === '' ? '' : Math.max(0, parseInt(val)),
             });
           }}
           hasLength={false}
-          error={errors.edadAproximada}
+          error={errors.approximateAge}
         />
       </div>
 
-      <div id="sexo-section">
+      <div id="sex-section">
         <Select
-          id="sexo-section"
+          id="sex-section"
           label="Sexo"
-          value={formData.sexo || ''}
+          value={formData.sex || ''}
           onChange={(e) =>
-            updateForm({ sexo: e.target.value as SearchFormData['sexo'] })
+            updateForm({ sex: e.target.value as SearchFormData['sex'] })
           }
           options={[
-            { value: 'Macho', label: 'Macho' },
-            { value: 'Hembra', label: 'Hembra' },
+            { value: 'Male', label: 'Macho' },
+            { value: 'Female', label: 'Hembra' },
           ]}
-          error={errors.sexo}
+          error={errors.sex}
         />
       </div>
 
-      <div id="esterilizado-section">
+      <div id="sterilized-section">
         <Select
-          id="esterilizado-section"
+          id="sterilized-section"
           label="¿Está esterilizado?"
-          value={formData.esterilizado}
+          value={formData.sterilized}
           onChange={(e) =>
             updateForm({
-              esterilizado: e.target.value as SearchFormData['esterilizado'],
+              sterilized: e.target.value as SearchFormData['sterilized'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
           ]}
         />
       </div>
 
-      <div id="collar-section">
+      <div id="collar-tag-section">
         <Select
-          id="collar-section"
+          id="collar-tag-section"
           label="¿Tiene collar o placa identificadora?"
-          value={formData.collarPlaca}
+          value={formData.collarTag}
           onChange={(e) =>
             updateForm({
-              collarPlaca: e.target.value as SearchFormData['collarPlaca'],
+              collarTag: e.target.value as SearchFormData['collarTag'],
             })
           }
           options={[
-            { value: 'Si', label: 'Sí' },
+            { value: 'Yes', label: 'Sí' },
             { value: 'No', label: 'No' },
           ]}
         />
       </div>
 
-      <div id="condicion-fisica">
+      <div id="physical-condition">
         <Input
-          id="condicion-fisica"
+          id="physical-condition"
           label="¿Tiene alguna condición física visible?"
-          value={formData.condicionFisica || ''}
+          value={formData.physicalCondition || ''}
           maxLength={100}
-          onChange={(e) => updateForm({ condicionFisica: e.target.value })}
-          error={errors.condicionFisica}
+          onChange={(e) => updateForm({ physicalCondition: e.target.value })}
+          error={errors.physicalCondition}
         />
       </div>
     </section>

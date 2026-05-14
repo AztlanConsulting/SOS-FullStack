@@ -15,12 +15,12 @@ export const FilesSubmissionSection = ({
   errors,
   onSubmit,
 }: FilesSubmissionSectionProps) => {
-  const hasError = Boolean(errors.cartillaVacunacion);
-  const fileName = formData.cartillaVacunacion?.name;
+  const hasError = Boolean(errors.vaccinationCard);
+  const fileName = formData.vaccinationCard?.name;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    updateForm({ cartillaVacunacion: file });
+    updateForm({ vaccinationCard: file });
   };
 
   return (
@@ -28,7 +28,7 @@ export const FilesSubmissionSection = ({
       id="files-submission-section"
       className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col gap-5 py-4"
     >
-      <div id="cartilla-upload" className="flex flex-col w-full">
+      <div id="vaccination-card-upload" className="flex flex-col w-full">
         <Text variant="caption" weight="medium" className="text-gray-700 mb-2">
           Cartilla de vacunación (PDF o imagen, máx 15MB)
         </Text>
@@ -62,14 +62,14 @@ export const FilesSubmissionSection = ({
             <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
         </label>
-        {errors.cartillaVacunacion && (
+        {errors.vaccinationCard && (
           <Text
             variant="small"
             as="small"
             weight="regular"
             className="color-danger ml-1 italic mt-1"
           >
-            {errors.cartillaVacunacion}
+            {errors.vaccinationCard}
           </Text>
         )}
       </div>

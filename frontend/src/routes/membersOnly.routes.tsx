@@ -17,7 +17,7 @@ const routes = [
         element: <SearchFormPage />,
       },
       {
-        path: 'page/:id',
+        path: 'pagina/:id',
         element: <MembersOnlyPage />,
       },
     ],

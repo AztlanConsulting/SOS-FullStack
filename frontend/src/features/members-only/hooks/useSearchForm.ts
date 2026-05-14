@@ -33,36 +33,36 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
 
   const scrollToFirstError = (formErrors: Record<string, string>) => {
     const fieldMap: Record<string, string> = {
-      especie: 'especie-section',
-      tamano: 'tamano-section',
-      edadAproximada: 'edad-section',
-      sexo: 'sexo-section',
-      esterilizado: 'esterilizado-section',
-      collarPlaca: 'collar-section',
-      condicionFisica: 'condicion-fisica',
-      referenciasVisuales: 'referencias-visuales',
-      tipoZona: 'tipo-zona',
-      circunstanciasAdicionales: 'circunstancias',
-      personalidad: 'personalidad',
-      seDejaAgarrar: 'deja-agarrar',
-      reaccionRuidos: 'reaccion-ruidos',
-      respondeNombre: 'responde-nombre',
-      acostumbradoSalir: 'acostumbrado-salir',
-      haEscapadoAntes: 'ha-escapado',
-      quePasoEscapado: 'que-paso-escapado',
-      tieneMiedo: 'tiene-miedo',
-      leFacilSocializar: 'facil-socializar',
-      cuentaAyuda: 'cuenta-ayuda',
-      queHayCerca: 'que-hay-cerca',
-      animalesCallejeros: 'animales-callejeros',
-      nivelTrafico: 'nivel-trafico',
-      familiaridadZona: 'familiaridad-zona',
-      apedidoA: 'apegado-a',
-      jugueteManta: 'juguete-manta',
-      comidaFavorita: 'comida-favorita',
-      queHaceVolver: 'que-hace-volver',
-      lugarFavorito: 'lugar-favorito',
-      cartillaVacunacion: 'cartilla-upload',
+      species: 'species-section',
+      size: 'size-section',
+      approximateAge: 'approximate-age-section',
+      sex: 'sex-section',
+      sterilized: 'sterilized-section',
+      collarTag: 'collar-tag-section',
+      physicalCondition: 'physical-condition',
+      visualReferences: 'visual-references',
+      zoneType: 'zone-type',
+      additionalCircumstances: 'additional-circumstances',
+      personality: 'personality',
+      canBeCaught: 'can-be-caught',
+      noiseReaction: 'noise-reaction',
+      respondsToName: 'responds-to-name',
+      usedToGoingOut: 'used-to-going-out',
+      hasEscapedBefore: 'has-escaped-before',
+      whatHappenedWhenEscaped: 'what-happened-when-escaped',
+      fears: 'fears',
+      easilySocializes: 'easily-socializes',
+      helpCount: 'help-count',
+      nearbyFeatures: 'nearby-features',
+      streetAnimals: 'street-animals',
+      trafficLevel: 'traffic-level',
+      zoneFamiliarity: 'zone-familiarity',
+      attachedTo: 'attached-to',
+      toyBlanket: 'toy-blanket',
+      favoriteFood: 'favorite-food',
+      whatBringsBack: 'what-brings-back',
+      favoritePlace: 'favorite-place',
+      vaccinationCard: 'vaccination-card-upload',
     };
 
     const firstErrorField = Object.keys(formErrors)[0];
@@ -98,43 +98,42 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
   const handleSubmit = async () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.especie) newErrors.especie = 'Selecciona una especie';
-    if (!formData.tamano) newErrors.tamano = 'Selecciona un tamaño';
-    if (formData.edadAproximada === '')
-      newErrors.edadAproximada = 'Ingresa una edad aproximada';
-    if (!formData.sexo) newErrors.sexo = 'Selecciona el sexo';
-    if (!formData.tipoZona) newErrors.tipoZona = 'Selecciona un tipo de zona';
-    if (!formData.seDejaAgarrar)
-      newErrors.seDejaAgarrar = 'Selecciona una opción';
-    if (!formData.reaccionRuidos)
-      newErrors.reaccionRuidos = 'Selecciona una reacción';
-    if (!formData.respondeNombre)
-      newErrors.respondeNombre = 'Selecciona una opción';
-    if (!formData.leFacilSocializar)
-      newErrors.leFacilSocializar = 'Selecciona una opción';
-    if (!formData.cuentaAyuda) newErrors.cuentaAyuda = 'Selecciona una opción';
-    if (!formData.animalesCallejeros)
-      newErrors.animalesCallejeros = 'Selecciona una opción';
-    if (!formData.nivelTrafico) newErrors.nivelTrafico = 'Selecciona un nivel';
-    if (!formData.familiaridadZona)
-      newErrors.familiaridadZona = 'Selecciona una opción';
+    if (!formData.species) newErrors.species = 'Selecciona una especie';
+    if (!formData.size) newErrors.size = 'Selecciona un tamaño';
+    if (formData.approximateAge === '')
+      newErrors.approximateAge = 'Ingresa una edad aproximada';
+    if (!formData.sex) newErrors.sex = 'Selecciona el sexo';
+    if (!formData.zoneType) newErrors.zoneType = 'Selecciona un tipo de zona';
+    if (!formData.canBeCaught) newErrors.canBeCaught = 'Selecciona una opción';
+    if (!formData.noiseReaction)
+      newErrors.noiseReaction = 'Selecciona una reacción';
+    if (!formData.respondsToName)
+      newErrors.respondsToName = 'Selecciona una opción';
+    if (!formData.easilySocializes)
+      newErrors.easilySocializes = 'Selecciona una opción';
+    if (!formData.helpCount) newErrors.helpCount = 'Selecciona una opción';
+    if (!formData.streetAnimals)
+      newErrors.streetAnimals = 'Selecciona una opción';
+    if (!formData.trafficLevel) newErrors.trafficLevel = 'Selecciona un nivel';
+    if (!formData.zoneFamiliarity)
+      newErrors.zoneFamiliarity = 'Selecciona una opción';
 
-    if (formData.reaccionRuidos === 'Otro' && !formData.reaccionRuidosOtro) {
-      newErrors.reaccionRuidosOtro = 'Describe la reacción';
+    if (formData.noiseReaction === 'Other' && !formData.noiseReactionOther) {
+      newErrors.noiseReactionOther = 'Describe la reacción';
     }
 
-    if (formData.haEscapadoAntes === 'Si' && !formData.quePasoEscapado) {
-      newErrors.quePasoEscapado = 'Describe qué pasó';
+    if (
+      formData.hasEscapedBefore === 'Yes' &&
+      !formData.whatHappenedWhenEscaped
+    ) {
+      newErrors.whatHappenedWhenEscaped = 'Describe qué pasó';
     }
 
     const MAX_SIZE = 15 * 1024 * 1024;
 
-    if (
-      formData.cartillaVacunacion &&
-      formData.cartillaVacunacion instanceof File
-    ) {
-      if (formData.cartillaVacunacion.size > MAX_SIZE) {
-        newErrors.cartillaVacunacion = 'El archivo no debe superar los 15MB';
+    if (formData.vaccinationCard && formData.vaccinationCard instanceof File) {
+      if (formData.vaccinationCard.size > MAX_SIZE) {
+        newErrors.vaccinationCard = 'El archivo no debe superar los 15MB';
       }
 
       const allowedTypes = [
@@ -146,10 +145,10 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
       ];
 
       if (
-        formData.cartillaVacunacion instanceof File &&
-        !allowedTypes.includes(formData.cartillaVacunacion.type)
+        formData.vaccinationCard instanceof File &&
+        !allowedTypes.includes(formData.vaccinationCard.type)
       ) {
-        newErrors.cartillaVacunacion = 'Solo se aceptan PDF o imágenes';
+        newErrors.vaccinationCard = 'Solo se aceptan PDF o imágenes';
       }
     }
 
@@ -163,26 +162,23 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
       try {
         const payload = { ...formData };
 
-        // Convert cartillaVacunacion to base64 if it's a File
-        if (formData.cartillaVacunacion instanceof File) {
-          payload.cartillaVacunacion = await fileToBase64(
-            formData.cartillaVacunacion,
+        if (formData.vaccinationCard instanceof File) {
+          payload.vaccinationCard = await fileToBase64(
+            formData.vaccinationCard,
           );
         } else {
-          payload.cartillaVacunacion = ''; // Send empty string if no file
+          payload.vaccinationCard = '';
         }
 
-        // Ensure required string fields are always sent
-        if (!payload.reaccionRuidosOtro) {
-          payload.reaccionRuidosOtro = '';
+        if (!payload.noiseReactionOther) {
+          payload.noiseReactionOther = '';
         }
-        if (!payload.quePasoEscapado) {
-          payload.quePasoEscapado = '';
+        if (!payload.whatHappenedWhenEscaped) {
+          payload.whatHappenedWhenEscaped = '';
         }
 
-        // Convert edadAproximada to number
-        if (typeof payload.edadAproximada === 'string') {
-          payload.edadAproximada = Number(payload.edadAproximada);
+        if (typeof payload.approximateAge === 'string') {
+          payload.approximateAge = Number(payload.approximateAge);
         }
 
         await createSearchForm(payload);

@@ -5,7 +5,7 @@ import type {
 } from '@domain/repositories/membersOnly.repository';
 import fs from 'fs';
 import path from 'path';
-import { v7 as uuidv7 } from 'uuid';
+import { Types } from 'mongoose';
 
 async function uploadBase64File(
   base64Data: string,
@@ -13,7 +13,7 @@ async function uploadBase64File(
 ): Promise<string> {
   const [header, data] = base64Data.split(',');
   const extension = header.match(/\/(.*?);/)?.[1] || 'bin';
-  const fileName = `${uuidv7()}.${extension}`;
+  const fileName = `${new Types.ObjectId().toHexString()}.${extension}`;
   const uploadsDir = path.join(process.cwd(), 'uploads', folder);
 
   if (!fs.existsSync(uploadsDir)) {

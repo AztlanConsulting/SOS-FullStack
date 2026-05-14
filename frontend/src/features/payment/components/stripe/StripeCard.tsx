@@ -172,6 +172,25 @@ export const StripeCard = ({
                       weight="medium"
                       className="uppercase tracking-wide text-gray-400"
                     >
+                      Monto a pagar
+                    </Text>
+
+                    <div className="flex items-center gap-2">
+                      <Text variant="caption" className="text-gray-900">
+                        {data.amount}
+                      </Text>
+                      <CopyButton
+                        text={oxxoData.number || ''}
+                        label="Copiar monoto a pagar"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Text
+                      variant="small"
+                      weight="medium"
+                      className="uppercase tracking-wide text-gray-400"
+                    >
                       Número de voucher
                     </Text>
 

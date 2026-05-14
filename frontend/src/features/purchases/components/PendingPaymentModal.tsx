@@ -97,7 +97,7 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
 
             {product && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-xs uppercase font-medium">
+                <span className="text-gray-500 text-xs pr-20 uppercase font-medium">
                   Producto
                 </span>
                 <span className="font-semibold text-gray-900 text-right">

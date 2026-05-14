@@ -19,25 +19,25 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   }
 
   transporterPromise = (async () => {
-    const isDevelopment = process.env.ENV !== 'production';
+    // const isDevelopment = process.env.ENV !== 'production';
 
-    if (isDevelopment) {
-      const testAccount = await nodemailer.createTestAccount();
+    // if (isDevelopment) {
+    //   const testAccount = await nodemailer.createTestAccount();
 
-      console.log('Ethereal test account created:');
-      console.log('User:', testAccount.user);
-      console.log('Pass:', testAccount.pass);
+    //   console.log('Ethereal test account created:');
+    //   console.log('User:', testAccount.user);
+    //   console.log('Pass:', testAccount.pass);
 
-      return nodemailer.createTransport({
-        host: testAccount.smtp.host,
-        port: testAccount.smtp.port,
-        secure: testAccount.smtp.secure,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
-        },
-      });
-    }
+    //   return nodemailer.createTransport({
+    //     host: testAccount.smtp.host,
+    //     port: testAccount.smtp.port,
+    //     secure: testAccount.smtp.secure,
+    //     auth: {
+    //       user: testAccount.user,
+    //       pass: testAccount.pass,
+    //     },
+    //   });
+    // }
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),

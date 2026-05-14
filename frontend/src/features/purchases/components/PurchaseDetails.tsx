@@ -49,11 +49,11 @@ const PurchaseDetails = ({
           {product && <ProductDetail product={product} />}
         </div>
       </div>
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between my-6">
         <Text variant="body" weight="regular" color="text-black">
           Total a pagar:
         </Text>
-        <Text variant="h1" color="text-gray-600">
+        <Text variant="h2" weight="semibold" color="text-gray-800">
           {formatCurrency(localizedPrice, currencyCode)} {currencyCode}
         </Text>
       </div>

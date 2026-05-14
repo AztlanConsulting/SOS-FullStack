@@ -19,25 +19,25 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   }
 
   transporterPromise = (async () => {
-    const isDevelopment = process.env.ENV !== 'production';
+    // const isDevelopment = process.env.ENV !== 'production';
 
-    if (isDevelopment) {
-      const testAccount = await nodemailer.createTestAccount();
+    // if (isDevelopment) {
+    //   const testAccount = await nodemailer.createTestAccount();
 
-      console.log('Ethereal test account created:');
-      console.log('User:', testAccount.user);
-      console.log('Pass:', testAccount.pass);
+    //   console.log('Ethereal test account created:');
+    //   console.log('User:', testAccount.user);
+    //   console.log('Pass:', testAccount.pass);
 
-      return nodemailer.createTransport({
-        host: testAccount.smtp.host,
-        port: testAccount.smtp.port,
-        secure: testAccount.smtp.secure,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
-        },
-      });
-    }
+    //   return nodemailer.createTransport({
+    //     host: testAccount.smtp.host,
+    //     port: testAccount.smtp.port,
+    //     secure: testAccount.smtp.secure,
+    //     auth: {
+    //       user: testAccount.user,
+    //       pass: testAccount.pass,
+    //     },
+    //   });
+    // }
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
@@ -80,13 +80,13 @@ export const sendManualEmailService: ManualEmailService = {
                 </tr>
 
                 <tr>
-                  <td style="padding:0 40px 40px 40px;color:#444444;line-height:1.6;">
+                  <td style="padding:0 30px 40px 30px;color:#444444;line-height:1.6;">
                     <p style="font-size:16px;margin-bottom:12px;">Hola,</p>
                     <p style="font-size:15px;color:#666;margin-bottom:32px;">
                       ¡Gracias por tu compra! Aquí tienes el material que solicitaste para ayudar a tu mejor amigo.
                     </p>
 
-                    <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:30px;text-align:center;">
+                    <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:20px;text-align:center;">
                       
                       <img src="${data.imageUrl}" alt="${data.manualName}" style="width:180px; height:auto; border-radius:8px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); margin-bottom:20px;">
                       

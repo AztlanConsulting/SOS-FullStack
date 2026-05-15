@@ -15,6 +15,14 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
     navigate('/extender-plan');
   };
 
+  const handleContactAdviser = () => {
+    window.open(
+      'https://www.facebook.com/messages/t/USERNAMESOSencontrandomascotas',
+      '_blank',
+      'noopener,noreferrer',
+    );
+  };
+
   return (
     <div className="flex flex-col gap-5">
       <Text
@@ -29,10 +37,16 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
         {petData ? (
           <>
             <CountdownChart data={petData} />
-            <div className="w-[250px] mt-4 mx-auto">
+            <div className="w-[250px] flex flex-col mt-4 gap-3 mx-auto">
               <Button
                 label="Extender plan"
                 onClick={handlePlanExtension}
+                variant="primary"
+                textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+              />
+              <Button
+                label="Contacta con tu asesor"
+                onClick={handleContactAdviser}
                 variant="primary"
                 textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
               />

@@ -20,20 +20,14 @@ app.use(
 
 app.set('trust proxy', 1);
 
-app.use((req, res, next) => {
-  if (req.path === '/payments/webhook') {
-    let rawBody = Buffer.alloc(0);
-    req.on('data', (chunk) => {
-      rawBody = Buffer.concat([rawBody, chunk]);
-    });
-    req.on('end', () => {
-      (req as any).rawBody = rawBody;
-      next();
-    });
-  } else {
+app.post(
+  '/payments/webhook',
+  bodyparser.raw({ type: 'application/json' }),
+  (req, res, next) => {
+    (req as any).rawBody = req.body;
     next();
-  }
-});
+  },
+);
 
 app.use(bodyparser.json({ limit: '20mb' }));
 app.set('trust proxy', true);

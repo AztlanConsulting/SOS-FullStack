@@ -29,6 +29,10 @@ const ClientDashboardOverview = () => {
     navigate('/portal-exclusivo');
   };
 
+  const handlePetCollection = () => {
+    navigate('/coleccion-mascotas');
+  };
+
   if (loading) {
     return (
       <div className="w-full h-[60vh] flex items-center justify-center">
@@ -82,12 +86,18 @@ const ClientDashboardOverview = () => {
               </div>
             )}
 
-            <div className="flex justify-center md:justify-start mt-6">
+            <div className="flex flex-col justify-center md:justify-start mt-6 gap-3">
               <Button
                 label="Visita nuestro contenido exclusivo"
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-fit px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-[300px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
                 onClick={handleResourcesPage}
+              />
+              <Button
+                label="Colección de mascotas"
+                variant="primary"
+                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-[300px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                onClick={handlePetCollection}
               />
             </div>
           </div>

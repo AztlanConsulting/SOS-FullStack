@@ -27,7 +27,6 @@ export const RoleProtectedRoute = ({
   }
 
   // Unauthorized role → forbidden page
-  console.log(location.pathname, user, user.role);
   if (!allowedRoles.includes(user.role)) {
     return <Navigate to="/forbidden" replace />;
   }

@@ -17,7 +17,7 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
 
   const handleContactAdviser = () => {
     window.open(
-      'https://www.facebook.com/messages/t/USERNAMESOSencontrandomascotas',
+      'https://www.facebook.com/messages/t/SOSencontrandomascotas',
       '_blank',
       'noopener,noreferrer',
     );

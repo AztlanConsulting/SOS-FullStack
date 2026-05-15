@@ -15,7 +15,7 @@ const navLinks = [
     icon: <PiDogLight />,
     children: [
       { label: 'Perdida', href: '/lost-pet' },
-      { label: 'Encontrada', href: '/mascotas-encontradas' },
+      { label: 'Mascotas encontradas', href: '/inicio/coleccion-mascotas' },
     ],
   },
   { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },
@@ -32,11 +32,8 @@ const ClientDashboard = () => {
         socialLinks={[]}
         signBtn={SignOut}
       />
-      <div className="flex-grow">
-        <Outlet />
-      </div>
-
-      <Footer />
+      <Outlet />
+      <Footer bg={'bg-purple-primary'} />
     </div>
   );
 };

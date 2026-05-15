@@ -2,7 +2,7 @@ import BlogListSection from '@features/blog/components/BlogsListSection';
 import Footer from '@shared/components/layout/Footer';
 import Header from '@shared/components/layout/Header';
 import HeroSection from '@shared/components/layout/HeroSection';
-import blogHero from '@assets/images/blog-hero.jpg';
+import blogHero from '@assets/images/blog-hero-2.png';
 
 const BlogsPage = () => {
   return (

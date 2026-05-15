@@ -45,6 +45,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
     const imageIds = imageBuffers.map((_, i) => `${customId}_img_${i}`);
 
     const location = await getLocation(locationCoords);
+    console.log(location);
     if (!Boolean(location)) throw Error("Couldn't get location");
 
     const foundPetData: FoundPetReport = {
@@ -69,10 +70,13 @@ export async function postFoundPetReport(req: Request, res: Response) {
         image: imageBuffers[i] as Buffer,
         species,
         color,
-        location:
-          location?.properties.city ??
-          location?.properties.country ??
-          'No identificado',
+        location: [
+          location?.properties.city ?? location?.properties.state,
+          // location?.properties.state,
+          location?.properties.country,
+        ]
+          .filter((loc) => loc)
+          .join(', '),
       };
 
       await petVector.createPetImage(petImageDto);
@@ -87,8 +91,8 @@ export async function postFoundPetReport(req: Request, res: Response) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      error: 'Error creating found pet report',
-      details: error instanceof Error ? error.message : 'Unknown error',
+      error:
+        'Ocurrió un error inesperado. Vuelva a intentarlo en unos minutos.',
     });
   }
 }

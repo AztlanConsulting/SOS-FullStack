@@ -7,6 +7,7 @@ import { ResourcesModel } from '@domain/models/resource.model';
 import { RoleModel } from '@domain/models/role.model';
 import { UserModel } from '@domain/models/user.model';
 import { PermissionModel } from '@domain/models/permission.model';
+import type { Pet } from '@/domain/models/pet.model';
 import { PetModel } from '@/domain/models/pet.model';
 import { PurchasedPlanModel } from '@domain/models/purchasedPlan.model';
 import { ManualModel } from '@domain/models/manual.model';
@@ -113,7 +114,15 @@ try {
       `${baseUrl}/uploads/pug_chistoso.jpg`,
       `${baseUrl}/uploads/poster-pug_chistoso.jpg`,
     ],
-    placeMissing: 'Ciudad de México, México.',
+    location: {
+      coords: [19.4337, -99.1284],
+      displayName: 'Querétaro, México',
+      properties: {
+        city: 'Querétaro',
+        country: 'México',
+        state: 'Querétaro',
+      },
+    },
   });
 
   const plans = await PlanModel.find();

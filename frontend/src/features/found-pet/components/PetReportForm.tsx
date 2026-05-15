@@ -113,7 +113,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
       {success && (
         <Modal
           title="¡Mascota reportada!"
-          description="Gracias por reportar la mascota perdida."
+          description="Gracias por reportar la mascota encontrada."
           onClose={() => {
             navigate('/mascotas-encontradas');
             handleClean();

@@ -29,75 +29,83 @@ const ClientDashboardOverview = () => {
     navigate('/portal-exclusivo');
   };
 
+  if (loading) {
+    return (
+      <div className="w-full h-[60vh] flex items-center justify-center">
+        <Text variant="h3" color="text-gray-400">
+          Cargando la información...
+        </Text>
+      </div>
+    );
+  }
+
+  if (error || !metrics) {
+    return (
+      <div className="w-full h-[60vh] flex items-center justify-center">
+        <Text variant="h3" color="text-red-500">
+          {error || 'No se encontraron datos'}
+        </Text>
+      </div>
+    );
+  }
+
   return (
-    <main className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto pt-28 lg:pt-10 pb-10">
-      {loading ? (
-        <div className="w-full h-[60vh] flex items-center justify-center">
-          <Text variant="h3" color="text-gray-400">
-            Cargando la información...
-          </Text>
-        </div>
-      ) : error || !metrics ? (
-        <div className="w-full h-[60vh] flex items-center justify-center">
-          <Text variant="h3" color="text-red-500">
-            {error || 'No se encontraron datos'}
-          </Text>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-col items-center border-b border-gray-200 pb-10 w-full">
+    <main className="w-full pb-10">
+      <div className="flex flex-col gap-10">
+        <section className="w-full bg-light-purple border-b border-gray-200 pt-28 lg:pt-10">
+          <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto py-8 flex flex-col gap-4 items-center">
             <Text variant="h2" weight="medium" as="div">
               Portal exclusivo
             </Text>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 w-full">
-            <div className="flex flex-col gap-4">
-              {petData && (
-                <div className="flex items-center lg:items-start gap-4">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
-                    <img
-                      src={petData.petImage || 'pet.jpg'}
-                      alt={petData.petName}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <Text variant="h3" weight="medium" as="div">
-                      {petData.petName}
-                    </Text>
-                    <Text
-                      variant="caption"
-                      color="text-gray-500"
-                      className="mt-1"
-                    >
-                      Desde {formattedDate}, esperando que vuelva a casa
-                    </Text>
-                  </div>
+            {petData && (
+              <div className="flex items-center gap-4 mt-10">
+                <div className="w-30 h-30 md:w-35 md:h-35 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
+                  <img
+                    src={petData.petImage || 'pet.jpg'}
+                    alt={petData.petName}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              )}
-              <div className="flex justify-center lg:justify-start mt-2">
-                <Button
-                  label="Visita nuestro contenido exclusivo"
-                  variant="primary"
-                  textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-fit px-6 py-2 text-sm whitespace-nowrap"
-                  onClick={handleResourcesPage}
-                />
+                <div className="flex flex-col">
+                  <Text variant="h3" weight="medium" as="div">
+                    {petData.petName}
+                  </Text>
+                  <Text
+                    variant="caption"
+                    color="text-gray-600"
+                    className="mt-1"
+                  >
+                    Desde {formattedDate}, <br /> esperando que vuelva a casa
+                  </Text>
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="w-full">
+            <div className="flex justify-center md:justify-start mt-6">
+              <Button
+                label="Visita nuestro contenido exclusivo"
+                variant="primary"
+                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-fit px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                onClick={handleResourcesPage}
+              />
+            </div>
+          </div>
+        </section>
+
+        <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-6">
               <PlanProgressSection petData={metrics.planProgress} />
             </div>
-
-            <div className="w-full">
+            <div className="lg:col-span-6">
               <div className="flex flex-col gap-5 h-full">
                 <AdProgressSection posterUrl={posterUrl} />
               </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </main>
   );
 };

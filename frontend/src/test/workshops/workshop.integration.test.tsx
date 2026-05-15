@@ -130,7 +130,7 @@ describe('workshops integration', () => {
     fireEvent.change(screen.getByLabelText('Correo electrónico'), {
       target: { value: '  buyer@example.com  ' },
     });
-    fireEvent.change(screen.getByLabelText('Nombre'), {
+    fireEvent.change(screen.getByLabelText(/Nombre/i), {
       target: { value: 'Buyer Name' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));

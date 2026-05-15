@@ -79,6 +79,7 @@ describe('Paypal integration tests', () => {
         orderId: mockOrderId,
         amount: 25.0,
         currency: 'MXN',
+        method: 'paypal',
         clientSecret: 'temp_secret',
         status: 'pending',
       });

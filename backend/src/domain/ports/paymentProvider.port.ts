@@ -49,13 +49,30 @@ export interface PetReportData {
 export interface PaymentIntentDTO {
   amount: number;
   currency: string;
-  customerId?: string; // for SPEI
   method?: string; // to seperate spei from the other methods
+  name?: string; // for SPEI
+  email?: string; // for SPEI
   product?: {
     productName: string;
     productId: string;
   };
   plan?: PetReportData;
+  idempotencyKey?: string;
+}
+
+export interface SpeiDetails {
+  clabe: string;
+  bankName: string;
+  reference: string;
+  bankCode?: string;
+  holderName?: string;
+  holderAddress?: Stripe.Address;
+}
+
+export interface OxxoDetails {
+  number: string | null;
+  expiresAfter: number | null;
+  voucherUrl: string | null;
 }
 
 export interface PaymentIntentResult {
@@ -63,6 +80,8 @@ export interface PaymentIntentResult {
   amount: number;
   currency: string;
   clientSecret: string | null;
+  speiDetails?: SpeiDetails | null;
+  oxxoDetails?: OxxoDetails | null;
 }
 
 export interface EventDTO {

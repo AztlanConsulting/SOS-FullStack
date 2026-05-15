@@ -1,7 +1,7 @@
 import axiosInstance from '@shared/utils/axios';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
-export const reportFoundPet = async (data: PetReportData) => {
+export const reportFoundPet = async (data: LostPetReportData) => {
   const imagesBase64 = await Promise.all(
     data.images.map((file: File) => {
       return new Promise<string>((resolve, reject) => {

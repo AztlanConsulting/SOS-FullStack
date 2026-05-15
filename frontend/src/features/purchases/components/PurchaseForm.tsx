@@ -14,7 +14,9 @@ interface Props {
   product?: Product;
   petReportData: LostPetReportData | null;
   success: () => void;
+  pending: () => void;
   purchaseDetail: PurchaseDetail;
+  onMethodSelect?: () => void;
 }
 
 // Logic to handle payment method, display different cards for each payment
@@ -25,23 +27,28 @@ const PurchaseForm = ({
   petReportData,
   purchaseDetail,
   success,
+  pending,
+  onMethodSelect,
 }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
-  const { currencyCode } = useLocationContext();
+  const { currencyCode, exchangeRate } = useLocationContext();
 
   function handleChange(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
+    onMethodSelect?.();
     setSelected(e.target.value);
   }
 
   if (!Boolean(petReportData) && !Boolean(product)) {
     return null;
   }
-
+  // Math.round(rawPrice * exchangeRate * 100) / 100
   const orderDetails: Order = {
-    amount: Number(
-      product?.price ?? petReportData?.planDetails!.totalPrice ?? 0,
-    ),
+    amount: petReportData
+      ? Math.round(petReportData?.planDetails!.totalPrice)
+      : Math.round((product?.price ?? 0) * exchangeRate),
     currency: currencyCode,
+    name: purchaseDetail.userName ?? petReportData?.contactName ?? undefined,
+    email: purchaseDetail.userEmail ?? petReportData?.email ?? undefined,
     ...(product && {
       product: {
         productId: product._id,
@@ -58,30 +65,49 @@ const PurchaseForm = ({
   return (
     <div>
       <Text
-        className="text-center mb-4 text-gray-700"
-        variant="h3"
+        className="text-center py-6 text-black border-t border-gray-400 lg:border-none"
+        variant="body"
         weight="semibold"
       >
         Método de pago
       </Text>
       <section className="w-full flex justify-center">
         <section className="grid grid-cols-1 gap-5 md:w-4/5 w-5/6">
-          {paymentMethods.map((pM, idx) => (
-            <div key={idx}>
-              <PaymentMethodCard paymentMethod={pM} onChecked={handleChange} />
-              <div
-                className={`grid transition-all duration-300 ease-in-out ${
-                  selected == pM.method
-                    ? 'grid-rows-[1fr] opacity-100'
-                    : 'grid-rows-[0fr] opacity-0'
-                }`}
-              >
-                <div className="overflow-hidden">
-                  {pM.element(orderDetails, purchaseDetail, success)}
+          {paymentMethods
+            .filter((pM) => {
+              if (
+                (pM.method === 'Transferencia SPEI' || pM.method === 'OXXO') &&
+                currencyCode !== 'MXN'
+              ) {
+                return false;
+              }
+              return true;
+            })
+            .map((pM, idx) => (
+              <div key={idx}>
+                <PaymentMethodCard
+                  paymentMethod={pM}
+                  onChecked={handleChange}
+                />
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    selected == pM.method
+                      ? 'grid-rows-[1fr] opacity-100'
+                      : 'grid-rows-[0fr] opacity-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    {selected === pM.method &&
+                      pM.element(
+                        orderDetails,
+                        purchaseDetail,
+                        success,
+                        pending,
+                      )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </section>
       </section>
     </div>

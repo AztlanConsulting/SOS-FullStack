@@ -45,7 +45,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
       {maxLength && (
         <Text
           variant="caption"
-          as="caption"
+          as="span"
           weight="medium"
           className="text-right text-emerald-700"
         >

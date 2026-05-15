@@ -1,40 +1,148 @@
 import { useState } from 'react';
 import { useStripe, useElements } from '@stripe/react-stripe-js';
+import type { Order, PurchaseDetail } from '../types/payment.types';
+import { createPurchase } from '@/features/purchases/services/createPurchase.service';
+import { createLostPetReportRequest } from '@/features/users/services/lostPet.service';
+import type { PurchasedPlanResponse } from '@/shared/types/pet.types';
 
-export const useCheckout = () => {
+interface UseCheckoutProps {
+  data: Order;
+  paymentId?: string;
+  purchaseDetail?: PurchaseDetail;
+  paymentMethod?: string;
+  onSuccess?: () => void;
+  onPending?: () => void;
+}
+
+export const useCheckout = ({
+  data,
+  paymentId,
+  purchaseDetail,
+  paymentMethod,
+  onSuccess,
+  onPending,
+}: UseCheckoutProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
   const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleSubmit = async () => {
     if (!stripe || !elements) return;
 
     setIsProcessing(true);
 
-    const { error } = await stripe.confirmPayment({
+    // For OXXO and SPEI, backend already confirmed the intent, so skip confirmPayment
+    if (paymentMethod === 'oxxo' || paymentMethod === 'spei') {
+      setShowConfirmation(true);
+      setIsProcessing(false);
+      return;
+    }
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/completion`,
-      },
+      redirect: 'if_required',
     });
 
     if (error) {
       if (error.type === 'card_error' || error.type === 'validation_error') {
-        setMessage(error.message ?? 'An unexpected error occurred.');
+        setMessage(error.message ?? 'Ocurrió un error inesperado.');
       } else {
-        setMessage('An unexpected error occurred.');
+        setMessage('Ocurrió un error inesperado.');
       }
+      setIsProcessing(false);
+      return;
+    }
+
+    // For card payments, if succeeded immediately, complete the purchase
+    if (paymentIntent?.status === 'succeeded' && paymentMethod === 'card') {
+      if (purchaseDetail && paymentId) {
+        let newPurchasedPlanId;
+        if (data.plan) {
+          const petResult: PurchasedPlanResponse =
+            await createLostPetReportRequest(data.plan);
+          newPurchasedPlanId = petResult.plan._id;
+        }
+        try {
+          if (data.plan) {
+            await createPurchase(
+              data.email || '',
+              paymentId,
+              newPurchasedPlanId || '',
+              'plan',
+            );
+            setMessage('Pago procesado exitosamente con plan');
+          } else {
+            await createPurchase(
+              data.email || '',
+              paymentId,
+              purchaseDetail.productId,
+              purchaseDetail.productType,
+            );
+            setMessage('Pago procesado exitosamente con producto');
+          }
+        } catch (error) {
+          console.error('Error creating purchase:', error);
+          setMessage('Error al procesar la compra');
+          setIsProcessing(false);
+          return;
+        }
+
+        onSuccess?.();
+      }
+    } else if (paymentIntent?.status === 'requires_action') {
+      // For OXXO/SPEI, show confirmation step
+      setShowConfirmation(true);
     }
 
     setIsProcessing(false);
   };
 
+  const handleConfirmation = async () => {
+    if (purchaseDetail && paymentId) {
+      let newPurchasedPlanId;
+      if (data.plan) {
+        const petResult: PurchasedPlanResponse =
+          await createLostPetReportRequest(data.plan);
+        newPurchasedPlanId = petResult.plan._id;
+      }
+      try {
+        if (data.plan) {
+          await createPurchase(
+            data.email || '',
+            paymentId,
+            newPurchasedPlanId || '',
+            'plan',
+          );
+          setMessage('Pago procesado exitosamente con plan');
+        } else {
+          await createPurchase(
+            data.email || '',
+            paymentId,
+            purchaseDetail.productId,
+            purchaseDetail.productType,
+          );
+          setMessage('Pago procesado exitosamente con producto');
+        }
+      } catch (error) {
+        console.error('Error creating purchase:', error);
+        setMessage('Error al procesar la compra');
+        setIsProcessing(false);
+        return;
+      }
+    }
+    onPending?.();
+  };
+
   return {
     handleSubmit,
+    handleConfirmation,
     isProcessing,
     message,
     isReady: !!stripe && !!elements,
+    showConfirmation,
+    setShowConfirmation,
   };
 };

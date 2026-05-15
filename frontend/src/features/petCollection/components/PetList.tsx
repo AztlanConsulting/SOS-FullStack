@@ -7,7 +7,7 @@ export interface Props {
 
 const PetList = ({ pets }: Props) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 mt-4 md:h-10/12">
+    <div className="grid grid-cols-2 md:grid-cols-3 md:gap-4 gap-2 md:w-11/12 mx-auto mt-4 md:h-10/12 ">
       {pets.map((pet, idx) => {
         return <PetCard petInfo={pet} key={idx} />;
       })}

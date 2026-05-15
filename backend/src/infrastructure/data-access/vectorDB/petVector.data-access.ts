@@ -73,8 +73,9 @@ export const petVector: PetVectorRepository = {
       return matchesSpecies && matchesColor && matchesLocation;
     });
 
+    const pagination = 6;
     const pageNum = page ?? 0;
-    return filtered.slice(pageNum * 8, (pageNum + 1) * 8);
+    return filtered.slice(pageNum * pagination, (pageNum + 1) * pagination);
   },
 
   /**

@@ -1,7 +1,15 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-type Variant = 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'small';
+type Variant =
+  | 'display'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'body'
+  | 'caption'
+  | 'small';
 type Weight = 'regular' | 'medium' | 'semibold' | 'bold';
 
 type TextProps = {
@@ -18,6 +26,7 @@ const variantStyles: Record<Variant, string> = {
   h1: 'text-2xl lg:text-3xl leading-tight',
   h2: 'text-xl lg:text-2xl font-semibold leading-snug',
   h3: 'text-lg lg:text-xl font-semibold leading-snug',
+  h4: 'text-lg font-semibold leading-snug',
   body: 'text-base leading-relaxed',
   caption: 'text-sm leading-normal',
   small: 'text-xs leading-normal',

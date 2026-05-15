@@ -12,7 +12,10 @@ export async function confirmPaypalPayment(
     purchaseDetails,
   });
 }
-export async function createPaypalPayment(data: Order) {
-  console.log(data);
-  return await axiosInstance.post('/payments/create-order', { ...data });
+export async function createPaypalPayment(data: Order, exchangeRate: number) {
+  const dataToSend = { ...data };
+  dataToSend.amount = Math.round(dataToSend.amount / exchangeRate);
+  dataToSend.currency = 'USD';
+  console.log('Data to send:', dataToSend);
+  return await axiosInstance.post('/payments/create-order', dataToSend);
 }

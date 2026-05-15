@@ -14,7 +14,7 @@ export const PetPhotosSection = ({
   errors = {},
 }: PetPhotosSectionProps) => {
   const { handleFileUpload } = usePetPhotos(formData, updateForm);
-  console.log(errors);
+
   return (
     <section id="photo-upload-section" className="w-full mx-auto">
       <div className="w-5/6 lg:w-full  mx-auto flex flex-col gap-3">

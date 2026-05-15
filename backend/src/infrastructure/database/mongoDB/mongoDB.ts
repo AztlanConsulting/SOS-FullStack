@@ -11,7 +11,9 @@ export const mongoDB = async (enviroment?: string) => {
 
     if (enviroment === 'test') {
       mongoose.set('strictQuery', false);
-      mongoServer = await MongoMemoryServer.create();
+      mongoServer = await MongoMemoryServer.create({
+        instance: { launchTimeout: 60000 },
+      });
 
       uri = mongoServer.getUri();
 

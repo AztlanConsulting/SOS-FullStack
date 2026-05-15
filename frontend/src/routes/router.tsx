@@ -5,7 +5,6 @@ import CreditsPage from '../pages/CreditsPage';
 import Therms from '../pages/Therms';
 import { ReportConfirmationPage } from '../pages/ReportConfirmation';
 import Plans from '../pages/Plans';
-import { PaymentPage } from '../features/payment/components/PaymentPage';
 import routerWorkshop from './workshop.routes';
 import routerBlogs from './blog.routes';
 import routerPlans from './plan.routes';
@@ -82,10 +81,6 @@ export const router = createBrowserRouter([
       {
         path: '/plans',
         element: <Plans />,
-      },
-      {
-        path: '/payment',
-        element: <PaymentPage />,
       },
       ...routerLostPet,
       ...routerWorkshop,

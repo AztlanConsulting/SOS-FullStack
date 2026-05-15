@@ -12,9 +12,10 @@ interface Props {
       setPage: React.Dispatch<React.SetStateAction<number>>,
     ];
   };
+  color?: string;
 }
 
-const Pagination = ({ pages, variant = 'primary' }: Props) => {
+const Pagination = ({ pages, color = 'bg-primary' }: Props) => {
   const page = pages.pageHook[0];
   const setPage = pages.pageHook[1];
   const totalPages = pages.totalPages;
@@ -39,29 +40,19 @@ const Pagination = ({ pages, variant = 'primary' }: Props) => {
         <HiChevronLeft size="100%" className="h-5" />
       </button>
 
-      {pages.visiblePages.map((p) => {
-        const isActive = page === p;
-        return (
-          <button
-            key={p}
-            onClick={() => setPage(p)}
-            className={`h-8 aspect-square border rounded cursor-pointer ${
-              isActive ? activeStyles[variant] : 'bg-white text-black'
-            }`}
-          >
-            <Text
-              as="p"
-              variant="body"
-              weight="regular"
-              color={
-                isActive && variant === 'purple' ? 'text-white' : 'text-black'
-              }
-            >
-              {p}
-            </Text>
-          </button>
-        );
-      })}
+      {pages.visiblePages.map((p) => (
+        <button
+          key={p}
+          onClick={() => setPage(p)}
+          className={`h-8 aspect-square border rounded cursor-pointer ${
+            page === p ? `${color} text-black` : 'bg-white text-black'
+          }`}
+        >
+          <Text as="p" variant="body" weight="regular" color="text-black">
+            {p}
+          </Text>
+        </button>
+      ))}
 
       <button
         onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}

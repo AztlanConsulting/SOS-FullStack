@@ -94,14 +94,19 @@ describe('manuals integration', () => {
       screen.getByText('Ingresa un correo electrónico válido.'),
     ).toBeInTheDocument();
 
-    // Second submit with valid email should route to purchase state.
+    // Second submit with valid email (and name) should route to purchase state.
     fireEvent.change(screen.getByLabelText('Correo electrónico'), {
       target: { value: '  buyer@example.com  ' },
+    });
+    fireEvent.change(screen.getByLabelText('Nombre'), {
+      target: { value: 'Buyer Name' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));
 
     await waitFor(() => {
-      expect(screen.getByText('email:buyer@example.com')).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes('buyer@example.com')),
+      ).toBeInTheDocument();
     });
     expect(screen.getByText('productId:m-42')).toBeInTheDocument();
     expect(screen.getByText('productType:manual')).toBeInTheDocument();

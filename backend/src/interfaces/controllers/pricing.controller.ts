@@ -25,12 +25,17 @@ export const PricingController = {
    */
   async handle(req: Request, res: Response) {
     // Standardize IP address
-    const ipV6 = req.socket.remoteAddress ?? '8.8.8.8';
-    const ip = ipV6.replace('::ffff:', '');
+    const ipV6 =
+      (req.headers['x-forwarded-for'] as string) ??
+      req.socket.remoteAddress ??
+      '8.8.8.8';
+    const ip = ipV6.split(',')[0].trim().replace('::ffff:', '');
     // Ensure we don't query local interface addresses (uses Google DNS IP as fallback)
     const safeIp = ip === '127.0.0.1' || ip === '::1' ? '8.8.8.8' : ip;
-    //const safeIp = '187.190.0.1';
-    //const safeIp = '61.74.0.1';
+    // const safeIp = '187.190.0.1';
+    // const safeIp = '61.74.0.1';
+    // const safeIp = '181.129.54.12';
+    // const safeIp = '146.70.231.210';
 
     // 1. Identify User Location & Currency
     const location = await GetLocationByIp(safeIp, IpApiService);

@@ -8,6 +8,7 @@ export interface IManual extends Document {
   price: number;
   content: ContentBlock[];
   imageUrl: string;
+  pdfUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,6 +19,7 @@ const manualSchema = new Schema<IManual>(
     price: { type: Number, required: true },
     content: { type: [ContentBlockSchema], required: true, default: [] },
     imageUrl: { type: String, required: true },
+    pdfUrl: { type: String },
   },
   { timestamps: true },
 );

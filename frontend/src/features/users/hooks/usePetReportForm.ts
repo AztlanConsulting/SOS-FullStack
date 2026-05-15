@@ -116,7 +116,9 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
     };
 
     const firstErrorField = Object.keys(errors)[0];
-    const elementId = fieldMap[firstErrorField];
+    const elementId = firstErrorField.startsWith('images_')
+      ? 'photo-upload-section'
+      : fieldMap[firstErrorField];
 
     if (!elementId) return;
 

@@ -5,6 +5,8 @@ export interface ManualResult {
   price: number;
   content: ContentBlock[];
   imageUrl: string;
+  pdfUrl?: string;
+  emailContent?: string;
 }
 
 export interface GetManual {

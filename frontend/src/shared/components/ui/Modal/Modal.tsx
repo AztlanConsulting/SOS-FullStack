@@ -7,9 +7,10 @@ import { Text } from '../Text';
  */
 type ModalProps = {
   title: string;
-  description: string;
+  description?: string;
   onClose: () => void;
   color?: 'yellow' | 'purple';
+  children?: React.ReactNode;
 };
 
 /**
@@ -21,6 +22,7 @@ export const Modal: React.FC<ModalProps> = ({
   description,
   onClose,
   color = 'yellow',
+  children,
 }) => {
   const headerBg = color === 'purple' ? 'bg-purple-primary' : 'bg-primary';
   return (
@@ -44,7 +46,7 @@ export const Modal: React.FC<ModalProps> = ({
 
         <div className="bg-white px-5 py-5">
           <Text variant="body" className="text-gray-700 leading-relaxed">
-            {description}
+            {description ?? children}
           </Text>
         </div>
       </div>

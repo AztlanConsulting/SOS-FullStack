@@ -1,0 +1,22 @@
+import PetDetails from '@/features/petCollection/components/PetDetails';
+import SearchPets from '@/features/petCollection/components/SearchPetsPage';
+import PetCollectionPage from '@/pages/PetCollectionPage';
+
+const router = [
+  {
+    path: 'coleccion-mascotas',
+    element: <PetCollectionPage />,
+    children: [
+      {
+        index: true,
+        element: <SearchPets />,
+      },
+      {
+        path: ':id',
+        element: <PetDetails />,
+      },
+    ],
+  },
+];
+
+export default router;

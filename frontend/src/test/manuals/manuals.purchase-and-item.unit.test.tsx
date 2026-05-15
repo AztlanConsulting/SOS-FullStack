@@ -58,6 +58,7 @@ describe('usePurchaseProduct', () => {
 
     act(() => {
       // Simulate submit with invalid email format.
+      result.current.handleNameChange('Buyer Name');
       result.current.handleEmailChange('correo-invalido');
       result.current.handleProceedToPayment();
     });
@@ -82,16 +83,23 @@ describe('usePurchaseProduct', () => {
 
     act(() => {
       // Trigger initial validation error.
+      result.current.handleNameChange('Buyer Name');
+    });
+
+    act(() => {
       result.current.handleProceedToPayment();
     });
+
     expect(result.current.emailError).toBe(
       'Ingresa un correo electrónico válido.',
     );
+    expect(result.current.nameError).toBe('');
 
     act(() => {
       // Editing input should clear the previous error message.
       result.current.handleEmailChange('nuevo@email.com');
     });
+
     expect(result.current.emailError).toBe('');
   });
 
@@ -108,6 +116,7 @@ describe('usePurchaseProduct', () => {
     );
 
     act(() => {
+      result.current.handleNameChange('Buyer Name');
       result.current.handleEmailChange('  buyer@example.com  ');
     });
 
@@ -118,12 +127,37 @@ describe('usePurchaseProduct', () => {
 
     expect(navigateMock).toHaveBeenCalledWith('/compra', {
       state: {
+        userName: 'Buyer Name',
         userEmail: 'buyer@example.com',
         productId: 'm9',
         productType: 'manual',
         price: 399,
       },
     });
+  });
+
+  it('shows validation error when lastname is missing', () => {
+    const { result } = renderHook(
+      () =>
+        usePurchaseProduct({
+          _id: 'm1',
+          item: 'manual',
+          url: 'manual',
+          price: 250,
+        }),
+      { wrapper },
+    );
+
+    act(() => {
+      result.current.handleNameChange('Buyer');
+      result.current.handleEmailChange('buyer@example.com');
+      result.current.handleProceedToPayment();
+    });
+
+    expect(result.current.nameError).toBe(
+      'Ingresa nombre y apellido para contactarte',
+    );
+    expect(navigateMock).not.toHaveBeenCalled();
   });
 });
 

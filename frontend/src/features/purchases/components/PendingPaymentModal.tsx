@@ -89,7 +89,7 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">Precio</span>
                   <span className="font-semibold text-gray-900">
-                    ${Math.round(plan.planDetails!.totalPrice)}
+                    MX${Math.round(plan.planDetails!.totalPrice)} MXN
                   </span>
                 </div>
               </div>
@@ -101,7 +101,7 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
                   Producto
                 </span>
                 <span className="font-semibold text-gray-900 text-right">
-                  {product.name} (${product.price})
+                  {product.name} (MX${product.price} MXN)
                 </span>
               </div>
             )}

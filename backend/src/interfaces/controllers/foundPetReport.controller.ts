@@ -87,8 +87,8 @@ export async function postFoundPetReport(req: Request, res: Response) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      error: 'Error creating found pet report',
-      details: error instanceof Error ? error.message : 'Unknown error',
+      error:
+        'Ocurrió un error inesperado. Vuelva a intentarlo en unos minutos.',
     });
   }
 }

@@ -66,7 +66,7 @@ export const Input: React.FC<InputProps> = ({
         {hasLength && (
           <Text
             variant="caption"
-            as="caption"
+            as="span"
             weight="medium"
             className="text-right text-emerald-700"
           >

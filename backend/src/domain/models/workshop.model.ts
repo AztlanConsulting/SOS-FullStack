@@ -15,6 +15,8 @@ export interface Workshop {
     contentType: string;
   };
   imageUrl?: string;
+  videoUrl?: string;
+  emailContent?: string;
 }
 
 const WorkshopSchema = new Schema<Workshop>({
@@ -28,6 +30,8 @@ const WorkshopSchema = new Schema<Workshop>({
     contentType: { type: String },
   },
   imageUrl: { type: String, required: true },
+  videoUrl: { type: String },
+  emailContent: { type: String },
 });
 
 export const WorkshopModel = model<Workshop>('Workshop', WorkshopSchema);

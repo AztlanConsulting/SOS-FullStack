@@ -27,13 +27,13 @@ _Este paso puede variar dependiendo del ambiente de producción y sistema operat
 
 Usar la línea de comandos para las ejecutar las siguientes líneas
 
-1. **Asegurarse que no haya versiones anteriores instaladas**
+1.1 **Asegurarse que no haya versiones anteriores instaladas**
 
 ```bash
 sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
 ```
 
-2. **Instalar repositorio de docker**
+1.2 **Instalar repositorio de docker**
 
 ```bash
 # Add Docker's official GPG key:
@@ -56,13 +56,13 @@ EOF
 sudo apt update
 ```
 
-3. **Instalar docker y sus componentes**
+1.3 **Instalar docker y sus componentes**
 
 ```bash
 sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-4. **Verificar instalación**
+1.4 **Verificar instalación**
 
 ```bash
 sudo docker run hello-world
@@ -72,7 +72,7 @@ sudo docker run hello-world
 
 - [Documentación oficial](https://nginx.org/en/linux_packages.html#Ubuntu)
 
-1. **Instalar prerrequisitos y nginx**
+  2.1 **Instalar prerrequisitos y nginx**
 
 ```bash
 sudo apt install curl gnupg2 ca-certificates lsb-release ubuntu-keyring
@@ -93,15 +93,15 @@ sudo apt update
 sudo apt install nginx
 ```
 
-2. **Verifica que la instalación fue correcta con:**
+2.2 **Verifica que la instalación fue correcta con:**
 
 ```bash
 sudo nginx -t
 sudo systemctl status nginx
 ```
 
-3. **Activar el servicio**
-   Si en el paso anterior nginx tiene un estado de apagado es necesario activarlo manualmente
+2.3 **Activar el servicio**
+Si en el paso anterior nginx tiene un estado de apagado es necesario activarlo manualmente
 
 ```bash
 sudo systemctl start nginx
@@ -113,13 +113,13 @@ sudo systemctl start nginx
 
 NVM es un paquete que nos ayudará a instalar la versión de node que utilizaremos para el proyecto, ya que este corre en JavaScript
 
-1. **Instalar nvm**
+3.1 **Instalar nvm**
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 ```
 
-2. **Verificar instalación**
+3.2 **Verificar instalación**
 
 ```bash
 nvm --version
@@ -127,13 +127,13 @@ nvm --version
 
 **Debe dar una respuesta como 1.2.2**
 
-3. **Instalar la versión 25.9 de node**
+3.3. **Instalar la versión 25.9 de node**
 
 ```bash
 nvm install 25.9
 ```
 
-4. **Ver versiones instaladas**
+3.4 **Ver versiones instaladas**
 
 ```bash
 nvm ls
@@ -141,20 +141,20 @@ nvm ls
 
 En la lista debería aparecer la versión que se instaló en el paso anterior
 
-5. **Seleccionarla como versión predefinida**
+3.5 **Seleccionarla como versión predefinida**
 
 ```bash
 nvm use 25.9
 ```
 
-6. **Verifica la instalación de los programas**
+3.6 **Verifica la instalación de los programas**
 
 ```bash
 node --version
 npm --version
 ```
 
-### 6. Instalación de PM2
+### 4. Instalación de PM2
 
 ```bash
 npm install -g pm2
@@ -164,7 +164,7 @@ npm install -g pm2
 
 - [Documentación oficial](https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-ubuntu/)
 
-1. **Instalar pre-requisitos**
+  5.1 **Instalar pre-requisitos**
 
 ```bash
 sudo apt-get install gnupg curl
@@ -173,7 +173,7 @@ curl -fsSL https://pgp.mongodb.com/server-8.0.asc | \
    --dearmor
 ```
 
-2. **Instalar mongoDB**
+5.2 **Instalar mongoDB**
 
 ```bash
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
@@ -181,13 +181,13 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 ```
 
-3. **Iniciar servicio**
+5.3 **Iniciar servicio**
 
 ```bash
 sudo systemctl start mongod
 ```
 
-4. **Verificar que esté corriendo correctamente**
+5.4 **Verificar que esté corriendo correctamente**
 
 ```bash
 sudo systemctl status mongod
@@ -201,14 +201,14 @@ sudo systemctl status mongod
 
 ```bash
 git clone https://github.com/AztlanConsulting/SOS-FullStack.git
-cd SOS-Fullstack
+cd SOS-FullStack
 ```
 
 ### 2. Iniciar base de datos vectorial
 
 La configuración de la base de datos vectorial se encuentra en el archivo docker-compose.yml, en este se puede cambiar la configuración si se quiere modificar algo como los puertos. Pero la configuración establecida es necesaria para el correcto funcionamiento de la aplicación
 
-1. **Levantar el contenedor**
+2.1 **Levantar el contenedor**
 
 La base de datos vectorial es utilizada para la función de mascotas encontradas.
 Es necesario generar la imagen de docker y levantarla para que funcione
@@ -219,7 +219,7 @@ docker compose up
 
 Si la configuración de docker fue correcta, este debería ejecutar el archivo dentro del proyecto docker-compose.yml para instalar weaviate e iniciar el contenedor.
 
-2. **Verificar que el proceso corre de manera correcta**
+2.2 **Verificar que el proceso corre de manera correcta**
 
 ```bash
 docker ps
@@ -229,20 +229,20 @@ Debería mostrar los contenedores corriendo por el momento (pythonVector)
 
 ### 3. Preparar entornos
 
-1. **Correr npm install en los diferentes entornos**
+3.1 **Correr npm install en los diferentes entornos**
 
 ```bash
 npm run install:all
 ```
 
-2. **Popular la base de datos con la información pre-definida**
+3.2 **Popular la base de datos con la información pre-definida**
 
 ```bash
 cd backend
 npm run init:mongoDB
 ```
 
-3. **En caso de querer probar el software o correrlo en modo de desarrollo**
+3.3 **En caso de querer probar el software o correrlo en modo de desarrollo**
 
 - Iniciar el backend con:
 
@@ -256,7 +256,7 @@ npm run dev
 npm run init:vectorDB
 ```
 
-4. **Variables de entorno**
+3.4 **Variables de entorno**
 
 Volver a la ruta del proyecto de caso de ser necesario con `cd`
 
@@ -289,7 +289,7 @@ VITE_PAYPAL_SECRET={paypal-secret}
 VITE_STRIPE_PUBLISHABLE_KEY={stripe-public-key}' > ./frontend/.env
 ```
 
-5. **Configurar variables de entorno con claves reales**
+3.5 **Configurar variables de entorno con claves reales**
 
 En los diferentes archivos .env se manejan diferentes valores para servicios externos, encriptación o de configuración.
 En este caso, aquellos envueltos en llaves son las variables que se tienen que asignar manualmente para el correcto funcionamiento de la aplicación
@@ -312,16 +312,18 @@ npm run dev --prefix backend
 ### 5. Estructura del proyecto
 
 /backend: lógica de la aplicación - enlace entre el funcionamiento de la aplicación y la información con el cliente
+
 /frontend: Interface de la aplicación
 
 ### 6. Guía de despliegue (Producción)
 
-1. **Acceder al servidor:** `ssh usuario@ip`
-2. **Configuración de servicios**
-   - Servidor web: Nginx
-   - Proxy reverso: Si
-   - Puertos utilizados: 443, 8080, 3000
-3. Configuración de nginx
+6.1 **Acceder al servidor:** `ssh usuario@ip`
+6.2 **Configuración de servicios**
+
+- Servidor web: Nginx
+- Proxy reverso: Si
+- Puertos utilizados: 443, 8080, 3000
+  6.3 Configuración de nginx
 
 ```bash
 mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
@@ -358,7 +360,7 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-4. Construir programa para producción
+6.4 Construir programa para producción
 
 ```bash
 npm run build
@@ -367,7 +369,7 @@ sudo rm -rf /var/www/html/*
 sudo cp -r frontend/dist/* /var/www/html/
 ```
 
-5. Correr el proyecto en producción
+6.5 Correr el proyecto en producción
 
 ```bash
 pm2 start ecosystem.config.js
@@ -382,9 +384,10 @@ pm2 start ecosystem.config.js
 
 ### 8. Persistencia y ejecución en servidor
 
-1. Herramientas de gestión de procesos:
-   - PM2 para el servidor
-   - Docker para la galería de mascotas encontradas
+8.1 Herramientas de gestión de procesos:
+
+- PM2 para el servidor
+- Docker para la galería de mascotas encontradas
 
 ### 9. Flujo de actualización
 

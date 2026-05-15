@@ -16,14 +16,14 @@ const HeroSection = () => {
               as="h1"
               variant="h1"
               weight="medium"
-              className="mb-4 lg:mb-6 w-5/6 md:w-4/5 lg:w-full mx-auto"
+              className="mb-4 lg:mb-6 w-full md:w-4/5 lg:w-full"
             >
               ¿Perdiste a tu mascota? Nosotros sabemos cómo encontrarla.
             </Text>
             <Text
               variant="body"
               weight="regular"
-              className="mb-8 lg:mb-1 w-5/6 md:w-4/5 lg:w-full mx-auto"
+              className="mb-8 lg:mb-1 w-full md:w-4/5 lg:w-full"
             >
               Cada minuto cuenta y no estás solo. Actuamos rápido y
               estratégicamente para que puedas volver a abrazar a tu mascota.

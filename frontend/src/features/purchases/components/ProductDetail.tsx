@@ -8,8 +8,11 @@ interface Props {
 const ProductDetail = ({ product }: Props) => {
   return (
     <>
-      <img src={product.imageUrl} className="rounded-c" />
-      <Text variant="h3" weight="semibold">
+      <img
+        src={product.imageUrl}
+        className="rounded-lg w-full h-60 object-cover"
+      />
+      <Text variant="body" weight="regular" className="w-full">
         {product?.name}
       </Text>
     </>

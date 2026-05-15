@@ -17,18 +17,23 @@ export const petVector: PetVectorRepository = {
   createPetImage: async function (petImage: PetImageDto) {
     const b64 = petImage.image.toString('base64');
 
-    const result = await vectorDB.data
-      .creator()
-      .withClassName('Pet')
-      .withProperties({
-        ...petImage,
-        image: b64,
-      })
-      .do();
+    try {
+      const result = await vectorDB.data
+        .creator()
+        .withClassName('Pet')
+        .withProperties({
+          ...petImage,
+          image: b64,
+        })
+        .do();
 
-    if (result == undefined) return false;
+      if (result == undefined) return false;
 
-    return true;
+      return true;
+    } catch (error) {
+      console.error(error);
+      throw Error('Docker is not initialized');
+    }
   },
 
   /**
@@ -73,8 +78,9 @@ export const petVector: PetVectorRepository = {
       return matchesSpecies && matchesColor && matchesLocation;
     });
 
+    const pagination = 6;
     const pageNum = page ?? 0;
-    return filtered.slice(pageNum * 10, (pageNum + 1) * 10);
+    return filtered.slice(pageNum * pagination, (pageNum + 1) * pagination);
   },
 
   /**

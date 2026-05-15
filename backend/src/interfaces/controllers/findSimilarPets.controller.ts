@@ -7,7 +7,6 @@ export default async function findSimilarPets(req: Request, res: Response) {
   try {
     const query = petCollectionParams.safeParse(req.query);
     if (query.error) throw query.error;
-
     console.log(query.data);
     const image = req.file;
 
@@ -26,7 +25,6 @@ export default async function findSimilarPets(req: Request, res: Response) {
     res.status(200).json(result);
   } catch (err: unknown) {
     // console.log(err);
-    console.log('Error');
 
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
 

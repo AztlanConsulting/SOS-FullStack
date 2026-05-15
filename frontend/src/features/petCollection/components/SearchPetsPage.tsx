@@ -2,6 +2,7 @@ import PetGallery from './PetGallery';
 import UploadPet from './UploadPet';
 import { type ChangeEvent } from 'react';
 import { useSharedGallery } from '../context/PetCollectionProvider';
+import HowToUse from './HowToUse';
 
 const SearchPetsPage = () => {
   const { imgHook, pages, handleSearch, vectorImages } = useSharedGallery();
@@ -16,14 +17,17 @@ const SearchPetsPage = () => {
   }
 
   return (
-    <div className="flex max-md:flex-col min-h-screen md:pt-0 pt-[80.67px] h-full">
-      <UploadPet img={img} uploadFile={uploadFile} />
-      <PetGallery
-        handleSearch={handleSearch}
-        pages={pages}
-        vectorImages={vectorImages}
-        img={img}
-      />
+    <div className="min-h-screen md:pt-0 pt-[80.67px] h-full">
+      <HowToUse />
+      <div className="flex max-md:flex-col">
+        <UploadPet img={img} uploadFile={uploadFile} />
+        <PetGallery
+          handleSearch={handleSearch}
+          pages={pages}
+          vectorImages={vectorImages}
+          img={img}
+        />
+      </div>
     </div>
   );
 };

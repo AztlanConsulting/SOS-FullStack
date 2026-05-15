@@ -26,85 +26,73 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
 
   return (
     isOpen && (
-      <div className="absolute top-12 p-2 right-0 bg-white border rounded-lg shadow-md w-80 z-50">
-        <div className="grid grid-rows-3 grid-cols-3 gap-2 py-2">
+      <div className="absolute top-12 p-2 pb-4 right-7 md:right-10 bg-white border rounded-lg shadow-md w-72 md:w-96 px-5 z-50">
+        <div className="gap-2 py-2">
           <label htmlFor="color">
-            <Text
-              variant="h3"
-              weight="semibold"
-              color="text-purple-primary"
-              className="text-center"
-            >
+            <Text color="text-dark-purple" weight="medium">
               Color
             </Text>
           </label>
           <input
             type="text"
             id="color"
-            className="border-[1px] p-1 rounded-lg border-gray-600 col-span-2"
-            placeholder="Cafe..."
+            className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
+            placeholder="Ej. Café"
             value={color}
             onChange={(e) => setColor(e.target.value)}
           />
           <label htmlFor="location">
-            <Text
-              variant="h3"
-              weight="semibold"
-              color="text-purple-primary"
-              className="text-center"
-            >
+            <Text color="text-dark-purple" weight="medium">
               Lugar
             </Text>
           </label>
           <input
             type="text"
             id="location"
-            className="border-[1px] p-1 rounded-lg border-gray-600 col-span-2"
-            placeholder="México..."
+            className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
+            placeholder="Ej. México"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
           <label htmlFor="location">
-            <Text
-              variant="h3"
-              weight="semibold"
-              color="text-purple-primary"
-              className="text-center"
-            >
+            <Text color="text-dark-purple" weight="medium">
               Tipo
             </Text>
           </label>
           <input
             type="text"
             id="species"
-            className="border-[1px] p-1 rounded-lg border-gray-600 col-span-2"
-            placeholder="Pug..."
+            className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
+            placeholder="Ej. Golden Retriever"
             value={species}
             onChange={(e) => setSpecies(e.target.value)}
           />
         </div>
-        <div className="grid grid-cols-2 gap-2 h-10">
-          <button
-            onClick={clean}
-            className="rounded-full bg-white border-purple-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
-          >
-            <Text variant="caption" weight="medium" className="text-inherit">
-              Borrar
-            </Text>
-          </button>
-          <button
-            onClick={search}
-            className="rounded-full bg-purple-primary border-purple-primary border-[1px] hover:bg-secondary items-center w-full cursor-pointer"
-            type="submit"
-          >
-            <Text variant="caption" weight="medium" className="text-inherit">
-              Buscar
-            </Text>
-          </button>
+        <div className="grid grid-cols-2 gap-8 h-7">
+          <FilterButton onClick={clean} content="Borrar" cancel />
+          <FilterButton onClick={search} content="Buscar" />
         </div>
       </div>
     )
   );
 };
+
+interface ButtonProps {
+  onClick: () => void;
+  content: string;
+  cancel?: boolean;
+}
+function FilterButton({ onClick, content, cancel }: ButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-full ${cancel ? 'bg-white border-purple-primary hover:bg-purple-secondary text-purple-primary' : 'bg-purple-primary border-purple-primary hover:bg-purple-secondary text-white hover:text-purple-primary'} border-[1px]  items-center w-full cursor-pointer`}
+    >
+      <Text variant="caption" weight="medium" className="text-inherit">
+        {content}
+      </Text>
+    </button>
+  );
+}
 
 export default PetDropDown;

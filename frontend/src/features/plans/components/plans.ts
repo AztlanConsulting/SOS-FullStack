@@ -10,8 +10,9 @@ export const PLANS: PlanCardProps[] = [
    * Entry-level plan offering essential search tools for a limited time and radius.
    */
   {
+    _id: '1',
     name: 'Básico',
-    price: '390',
+    price: '22.70',
     duration: '3 días',
     radius: '10 km',
     features: [
@@ -54,8 +55,9 @@ export const PLANS: PlanCardProps[] = [
    */
 
   {
+    _id: '2',
     name: 'Estándar',
-    price: '840',
+    price: '48.89',
     duration: '7 días',
     radius: '30 km',
     highlighted: true,
@@ -100,8 +102,9 @@ export const PLANS: PlanCardProps[] = [
    */
 
   {
+    _id: '3',
     name: 'Premium',
-    price: '1600',
+    price: '93.12',
     duration: '15 días',
     radius: '40 km',
     features: [

@@ -4,13 +4,13 @@ export default async function getLocation(
   coords: [number, number],
 ): Promise<GeocodingResult | null> {
   const [lat, lon] = coords;
+  return null;
   const url = `https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}&lang=default`;
 
   const res = await fetch(url);
 
   if (!res.ok) {
-    console.log(res.status);
-    console.log('Error in resopnse getting location');
+    console.log('Error in response getting location');
     return null;
   }
 
@@ -37,6 +37,8 @@ export default async function getLocation(
       state: props.state,
     },
   };
+
+  if (location) console.log('Photon success');
 
   return location || null;
 }

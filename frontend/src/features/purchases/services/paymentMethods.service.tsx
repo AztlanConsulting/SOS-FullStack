@@ -10,32 +10,44 @@ import type {
   Order,
   PurchaseDetail,
 } from '@features/payment/types/payment.types';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import StripeCard from '@/features/payment/components/stripe/StripeCard';
 
 const paymentMethods: PaymentMethod[] = [
-  // {
-  //   method: 'Tarjeta de crédito / debito',
-  //   icons: [visa, mastercard, american],
-  //   element: (
-  //     data: Order,
-  //     purchaseDetails: PurchaseDetail,
-  //     success: () => void,
-  //   ) => (
-  //     <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
-  //   ),
-  // },
-  // {
-  //   method: 'Transferencia SPEI',
-  //   description: 'Aprobación instantánea desde cualquier banca en línea',
-  //   icons: [bank],
-  //   element: (
-  //     data: Order,
-  //     purchaseDetails: PurchaseDetail,
-  //     success: () => void,
-  //   ) => (
-  //     <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
-  //   ),
-  // },
+  {
+    method: 'Tarjeta de crédito / débito',
+    icons: [visa, mastercard, american],
+    element: (
+      data: Order,
+      purchaseDetails: PurchaseDetail,
+      success: () => void,
+      pending: () => void,
+    ) => (
+      <StripeCard
+        data={{ ...data, method: 'card' }}
+        success={success}
+        pending={pending}
+        purchaseDetail={purchaseDetails}
+      />
+    ),
+  },
+  {
+    method: 'Transferencia SPEI',
+    description: 'Aprobación instantánea desde cualquier banca en línea',
+    icons: [bank],
+    element: (
+      data: Order,
+      purchaseDetails: PurchaseDetail,
+      success: () => void,
+      pending: () => void,
+    ) => (
+      <StripeCard
+        data={{ ...data, method: 'spei' }}
+        success={success}
+        pending={pending}
+        purchaseDetail={purchaseDetails}
+      />
+    ),
+  },
   {
     method: 'Paypal',
     icons: [paypal],
@@ -47,17 +59,24 @@ const paymentMethods: PaymentMethod[] = [
       <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
     ),
   },
-  // {
-  //   method: 'OXXO',
-  //   icons: [oxxo],
-  //   element: (
-  //     data: Order,
-  //     purchaseDetails: PurchaseDetail,
-  //     success: () => void,
-  //   ) => (
-  //     <Paypal data={data} success={success} purchaseDetail={purchaseDetails} />
-  //   ),
-  // },
+  {
+    method: 'OXXO',
+    description: 'Paga en efectivo en un OXXO. Aprobación en 1 día hábil',
+    icons: [oxxo],
+    element: (
+      data: Order,
+      purchaseDetails: PurchaseDetail,
+      success: () => void,
+      pending: () => void,
+    ) => (
+      <StripeCard
+        data={{ ...data, method: 'oxxo' }}
+        success={success}
+        pending={pending}
+        purchaseDetail={purchaseDetails}
+      />
+    ),
+  },
 ];
 
 export default paymentMethods;

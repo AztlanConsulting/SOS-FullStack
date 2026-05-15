@@ -156,6 +156,7 @@ describe('PaymentDataAccess unit-test', () => {
       amount: 100,
       currency: 'MXN',
       clientSecret: 'secret_123',
+      method: 'paypal',
     };
 
     (PaymentModel.create as jest.Mock).mockResolvedValue(mockPaymentData);

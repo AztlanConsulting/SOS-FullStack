@@ -2,9 +2,20 @@ import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
 import { useNavigate } from 'react-router';
 import type { Manual } from '../types/Manual.type';
+import { formatCurrency } from '@shared/utils/formatCurrency';
 
-export const ManualItem = ({ manual }: { manual: Manual }) => {
+export const ManualItem = ({
+  manual,
+  localizedPrice,
+  currencyCode,
+}: {
+  manual: Manual;
+  localizedPrice?: number;
+  currencyCode?: string;
+}) => {
   const navigate = useNavigate();
+  const displayPrice = localizedPrice ?? manual.price;
+  const displayCurrency = currencyCode ?? 'USD';
   return (
     <div
       key={manual._id}
@@ -34,15 +45,19 @@ export const ManualItem = ({ manual }: { manual: Manual }) => {
         >
           Precio
         </Text>
-        <Text
-          as="p"
-          variant="body"
-          weight="regular"
-          color="text-black"
-          className="text-right pr-4 pb-4"
-        >
-          $ {manual.price}
-        </Text>
+        <div className="flex items-baseline gap-1.5 pr-4 pb-4">
+          <Text as="p" variant="body" weight="regular" color="text-black">
+            {formatCurrency(displayPrice, displayCurrency)}
+          </Text>
+          <Text
+            as="p"
+            variant="small"
+            color="text-black"
+            className="text-gray-800"
+          >
+            {displayCurrency}
+          </Text>
+        </div>
       </div>
       <div className="w-full flex flex-col items-center justify-center py-5 color-grey-border-top">
         <Button

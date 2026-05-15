@@ -7,6 +7,7 @@ import type { Request, Response } from 'express';
 import { FoundPetDataAccess } from '@/infrastructure/data-access/foundPet.data-access';
 import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 import getLocation from '@/utils/getLocation.mapper';
+import type { GeocodingResult } from '@/types/pet.types';
 
 export async function postFoundPetReport(req: Request, res: Response) {
   try {
@@ -18,14 +19,13 @@ export async function postFoundPetReport(req: Request, res: Response) {
       color,
       size,
       description,
+      location,
       locationCoords,
       contactName,
       phoneNumber,
       email,
       images,
     } = req.body;
-
-    let location = req.body.defaultLocation;
 
     if (!images || !Array.isArray(images) || images.length === 0) {
       return res.status(400).json({
@@ -46,10 +46,12 @@ export async function postFoundPetReport(req: Request, res: Response) {
     const customId = new Types.ObjectId();
     const imageIds = imageBuffers.map((_, i) => `${customId}_img_${i}`);
 
-    if (!Boolean(location)) {
-      location = await getLocation(locationCoords);
-      if (!Boolean(location)) throw Error("Couldn't get location");
-    }
+    const requestLocation: GeocodingResult =
+      (process.env.ENV === 'develop' && req.body.defaultLocation) ??
+      (await getLocation(locationCoords)) ??
+      getOpenStreetMapLocation(location, locationCoords);
+
+    if (!Boolean(requestLocation)) throw Error("Couldn't get location");
 
     const foundPetData: FoundPetReport = {
       _id: customId,
@@ -60,7 +62,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
       color,
       size,
       description,
-      location: location!,
+      location: requestLocation,
       contactName,
       phoneNumber,
       email,
@@ -73,10 +75,13 @@ export async function postFoundPetReport(req: Request, res: Response) {
         image: imageBuffers[i] as Buffer,
         species,
         color,
-        location:
-          location?.properties.city ??
-          location?.properties.country ??
-          'No identificado',
+        location: [
+          requestLocation?.properties.city ?? requestLocation?.properties.state,
+          requestLocation?.properties.state,
+          requestLocation?.properties.country,
+        ]
+          .filter((loc) => loc)
+          .join(', '),
       };
 
       await petVector.createPetImage(petImageDto);
@@ -91,8 +96,24 @@ export async function postFoundPetReport(req: Request, res: Response) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      error: 'Error creating found pet report',
-      details: error instanceof Error ? error.message : 'Unknown error',
+      error:
+        'Ocurrió un error inesperado. Vuelva a intentarlo en unos minutos.',
     });
   }
 }
+
+const getOpenStreetMapLocation = (
+  location: string,
+  locationCoords: [number, number],
+) => {
+  const locationArray = location.split(',');
+  return {
+    coords: locationCoords,
+    displayName: location,
+    properties: {
+      city: locationArray[0],
+      state: locationArray.length < 3 ? locationArray[0] : locationArray[1],
+      country: locationArray.length < 3 ? locationArray[1] : locationArray[2],
+    },
+  };
+};

@@ -323,16 +323,27 @@ npm run dev --prefix backend
 - Servidor web: Nginx
 - Proxy reverso: Si
 - Puertos utilizados: 443, 8080, 3000
-  6.3 Configuración de nginx
+  6.3 **Claves de seguridad**
+
+Cambiar {dominio} por el dominio de la aplicación
+
+```bash
+sudo apt install openssl
+sudo openssl genpkey -algorithm RSA -out /etc/ssl/private/{dominio}.key
+sudo openssl req -new -key /etc/ssl/private/{dominio}.key -out /etc/ssl/certs/{dominio}.csr
+sudo openssl x509 -req -in /etc/ssl/certs/{dominio}.csr -signkey /etc/ssl/private/{dominio}.key -out /etc/ssl/certs/{dominio}.crt -days 365
+```
+
+6.4 **Configuración de nginx**
 
 ```bash
 mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
 
 echo 'server {
     listen              443 ssl;
-    server_name         dominio;
-    ssl_certificate     /etc/letsencrypt/live/dominio/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/dominio/privkey.pem;
+    server_name         {dominio};
+    ssl_certificate     /etc/letsencrypt/live/{dominio}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{dominio}/privkey.pem;
     ssl_protocols       TLSv1.2 TLSv1.3;
     ssl_ciphers         HIGH:!aNULL:!MD5;
 
@@ -415,3 +426,6 @@ sudo systemctl restart nginx
 El servidor debe tener el puerto 443 abierto al público para funcionar
 
 ### 11. TroubleShooting
+
+11.1 Si ocurre un error donde dice que el archivo o ruta es inexistente:
+`sudo mkdir -p {ruta/que/se/quiere/usar}`

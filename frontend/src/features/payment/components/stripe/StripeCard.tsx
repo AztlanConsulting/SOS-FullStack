@@ -176,8 +176,12 @@ export const StripeCard = ({
                     </Text>
 
                     <div className="flex items-center gap-2">
-                      <Text variant="caption" className="text-gray-900">
-                        {data.amount}
+                      <Text
+                        variant="caption"
+                        weight="semibold"
+                        className="text-gray-900"
+                      >
+                        ${data.amount} MXN
                       </Text>
                       <CopyButton
                         text={oxxoData.number || ''}
@@ -195,7 +199,11 @@ export const StripeCard = ({
                     </Text>
 
                     <div className="flex items-center gap-2">
-                      <Text variant="caption" className="text-gray-900">
+                      <Text
+                        variant="caption"
+                        weight="semibold"
+                        className="text-gray-900"
+                      >
                         {oxxoData.number}
                       </Text>
                       <CopyButton
@@ -266,7 +274,7 @@ export const StripeCard = ({
                         weight="semibold"
                         className="break-all text-gray-900"
                       >
-                        ${data.amount}
+                        ${data.amount} MXN
                       </Text>
                       <CopyButton
                         text={`$${data.amount}`}
@@ -329,7 +337,11 @@ export const StripeCard = ({
                     </Text>
 
                     <div className="flex items-center gap-2">
-                      <Text variant="caption" className="text-gray-900">
+                      <Text
+                        variant="caption"
+                        weight="semibold"
+                        className="text-gray-900"
+                      >
                         {speiData.holderName}
                       </Text>
                       <CopyButton

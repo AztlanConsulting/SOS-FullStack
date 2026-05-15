@@ -1,4 +1,5 @@
 import { createLostPetReportRequest } from '@/features/users/services/lostPet.service';
+import { useLocationContext } from '@/shared/context/Location.context';
 import type { PurchasedPlanResponse } from '@/shared/types/pet.types';
 import {
   createPaypalPayment,
@@ -26,6 +27,7 @@ interface Props {
 const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
   const planIdRef = useRef<string | null>(null); // Use a ref to track the ID
   data.method = 'paypal';
+  const { exchangeRate } = useLocationContext();
 
   return (
     <>
@@ -43,7 +45,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               const newPetId = petResult.plan._id;
               planIdRef.current = newPetId;
             }
-            const response = await createPaypalPayment(data);
+            const response = await createPaypalPayment(data, exchangeRate);
             const orderId = response.data.result.id;
             return { orderId };
           }}

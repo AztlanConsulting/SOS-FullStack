@@ -41,14 +41,11 @@ const PurchaseForm = ({
   if (!Boolean(petReportData) && !Boolean(product)) {
     return null;
   }
-
+  // Math.round(rawPrice * exchangeRate * 100) / 100
   const orderDetails: Order = {
-    amount:
-      Math.round(
-        (product?.price ?? petReportData?.planDetails!.totalPrice ?? 0) *
-          exchangeRate *
-          100,
-      ) / 100,
+    amount: petReportData
+      ? Math.round(petReportData?.planDetails!.totalPrice)
+      : Math.round((product?.price ?? 0) * exchangeRate),
     currency: currencyCode,
     name: purchaseDetail.userName ?? petReportData?.contactName ?? undefined,
     email: purchaseDetail.userEmail ?? petReportData?.email ?? undefined,

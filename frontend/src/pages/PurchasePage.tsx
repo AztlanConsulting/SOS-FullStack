@@ -55,7 +55,7 @@ export const PurchasePage = () => {
   return (
     <>
       <Header />
-      <main className="max-lg:pt-24 pt-4 min-h-screen">
+      <main className="max-lg:pt-20 min-h-screen">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
         {Boolean(product || lostPetReportData) && (

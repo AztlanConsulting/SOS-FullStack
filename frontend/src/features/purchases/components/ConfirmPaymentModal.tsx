@@ -76,7 +76,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                 </Text>
                 <div className="flex flex-col gap-1">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Email:</span>
+                    <span className="text-gray-500">Correo electrónico:</span>
                     <span className="font-mono font-medium text-gray-800">
                       {plan.email}
                     </span>
@@ -134,7 +134,10 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">Precio</span>
                   <span className="font-semibold text-gray-900">
-                    ${plan.planDetails!.totalPrice.toFixed(2)}
+                    $
+                    {Math.round(
+                      Number(plan.planDetails!.totalPrice.toFixed(2)),
+                    )}
                   </span>
                 </div>
               </div>

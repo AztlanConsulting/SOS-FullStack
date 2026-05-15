@@ -15,20 +15,19 @@ interface Props {
   color?: string;
 }
 
-const Pagination = ({ pages, color = 'bg-primary' }: Props) => {
+const Pagination = ({
+  pages,
+  color = 'bg-primary',
+  variant = 'primary',
+}: Props) => {
   const page = pages.pageHook[0];
   const setPage = pages.pageHook[1];
   const totalPages = pages.totalPages;
 
-  const activeStyles = {
-    primary: 'color-primary-bg text-black',
-    purple: 'bg-[#9D7FAD] text-white',
-  };
-
-  const textColor =
-    variant === 'purple' && page === pages.visiblePages.find((p) => p === page)
-      ? 'text-white'
-      : 'text-black';
+  const activeColor =
+    variant === 'purple'
+      ? 'bg-purple-primary text-white'
+      : `${color} text-black`;
 
   return (
     <div className="flex justify-center items-center gap-2 mt-6 pb-8">
@@ -45,7 +44,7 @@ const Pagination = ({ pages, color = 'bg-primary' }: Props) => {
           key={p}
           onClick={() => setPage(p)}
           className={`h-8 aspect-square border rounded cursor-pointer ${
-            page === p ? `${color} text-black` : 'bg-white text-black'
+            page === p ? activeColor : 'bg-white text-black'
           }`}
         >
           <Text as="p" variant="body" weight="regular" color="text-black">

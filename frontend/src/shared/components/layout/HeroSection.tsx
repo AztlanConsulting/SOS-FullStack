@@ -6,9 +6,10 @@ import { HiChevronRight } from 'react-icons/hi';
 interface Props {
   bg?: string;
   shadow?: string;
+  shadowClass?: string;
   title: string;
   image: string;
-  content: string;
+  content: React.ReactNode;
   buttonText?: string;
   onClick?: () => void;
 }
@@ -16,10 +17,10 @@ interface Props {
 const HeroSection = ({
   bg = 'white',
   shadow = 'shadow-primary',
+  shadowClass = 'color-primary-shadow',
   title,
   image,
   content,
-  shadowClass = 'color-primary-shadow',
   buttonText,
   onClick,
 }: Props) => {
@@ -44,26 +45,32 @@ const HeroSection = ({
           <img
             src={image}
             alt="Manuales"
-            className={`w-full rounded-lg object-cover ${shadow} shadow-lg`}
+            className={`w-full rounded-lg object-cover ${shadowClass} shadow-lg`}
           />
         </div>
 
         <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3 py-6">
-          <Text
-            as="p"
-            variant="body"
-            color="color-grey-text"
-            className="text-left mb-6"
-          >
-            {content}
-          </Text>
-          {buttonText && (
-            <Button
-              label={buttonText}
-              variant="primary"
-              icon={HiChevronRight}
-              onClick={onClick}
-            />
+          {typeof content === 'string' ? (
+            <>
+              <Text
+                as="p"
+                variant="body"
+                color="color-grey-text"
+                className="text-left mb-6"
+              >
+                {content}
+              </Text>
+              {buttonText && (
+                <Button
+                  label={buttonText}
+                  variant="primary"
+                  icon={HiChevronRight}
+                  onClick={onClick}
+                />
+              )}
+            </>
+          ) : (
+            content
           )}
         </div>
       </div>

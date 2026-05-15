@@ -30,7 +30,7 @@ const ClientDashboardOverview = () => {
   };
 
   const handlePetCollection = () => {
-    navigate('/coleccion-mascotas');
+    navigate('/inicio/coleccion-mascotas');
   };
 
   if (loading) {

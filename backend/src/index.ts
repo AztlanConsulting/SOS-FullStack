@@ -20,14 +20,19 @@ app.use(
 
 app.set('trust proxy', 1);
 
-app.post(
-  '/payments/webhook',
-  bodyparser.raw({ type: 'application/json' }),
-  (req, res, next) => {
+// Webhook must receive raw body for Stripe signature verification
+// This middleware must run before the standard JSON parser
+app.use('/payments/webhook', bodyparser.raw({ type: 'application/json' }));
+app.use('/payments/webhook', (req, res, next) => {
+  // req.body is a Buffer from bodyparser.raw(), store it as rawBody
+  if (Buffer.isBuffer(req.body)) {
     (req as any).rawBody = req.body;
-    next();
-  },
-);
+  } else if (typeof req.body === 'string') {
+    // In case body is a string (shouldn't happen with bodyparser.raw), convert it
+    (req as any).rawBody = Buffer.from(req.body);
+  }
+  next();
+});
 
 app.use(bodyparser.json({ limit: '20mb' }));
 app.set('trust proxy', true);

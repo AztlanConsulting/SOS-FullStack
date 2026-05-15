@@ -13,7 +13,7 @@ const UploadPet = ({ img, uploadFile }: Props) => {
         <img
           alt="Previsualización"
           src={URL.createObjectURL(img)}
-          className="rounded-full border-2 border-purple-primary size-80 md:size-96 object-fill"
+          className="rounded-full border-2 border-purple-primary size-80 md:size-96 object-cover"
         />
       )}
 

@@ -74,7 +74,7 @@ export const petVector: PetVectorRepository = {
     });
 
     const pageNum = page ?? 0;
-    return filtered.slice(pageNum * 10, (pageNum + 1) * 10);
+    return filtered.slice(pageNum * 8, (pageNum + 1) * 8);
   },
 
   /**

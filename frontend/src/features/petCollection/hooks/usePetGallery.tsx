@@ -51,7 +51,7 @@ export default function usePetGallery(
 
   // Pagination
   const [visiblePages, totalPages] = useMemo(() => {
-    return total.data ? calculatePages(total.data, page, 10) : [[], 0];
+    return total.data ? calculatePages(total.data, page, 8) : [[], 0];
   }, [total, page]);
 
   function handleSearch(key: string, value: string) {

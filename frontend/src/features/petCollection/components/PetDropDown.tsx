@@ -26,55 +26,43 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
 
   return (
     isOpen && (
-      <div className="absolute top-12 p-2 right-0 bg-white border rounded-lg shadow-md w-80 z-50">
+      <div className="absolute top-12 p-2 right-0 bg-white border rounded-lg shadow-md w-96 px-5 z-50">
         <div className="gap-2 py-2">
           <label htmlFor="color">
-            <Text
-              variant="h3"
-              color="text-purple-primary"
-              className="text-center"
-            >
+            <Text variant="h3" color="text-purple-primary">
               Color
             </Text>
           </label>
           <input
             type="text"
             id="color"
-            className="border-[1px] p-1 rounded-lg border-gray-600 col-span-2"
+            className="border-[1px] p-1 rounded-lg border-gray-600 w-full mb-2"
             placeholder="Cafe..."
             value={color}
             onChange={(e) => setColor(e.target.value)}
           />
           <label htmlFor="location">
-            <Text
-              variant="h3"
-              color="text-purple-primary"
-              className="text-center"
-            >
+            <Text variant="h3" color="text-purple-primary">
               Lugar
             </Text>
           </label>
           <input
             type="text"
             id="location"
-            className="border-[1px] p-1 rounded-lg border-gray-600 col-span-2"
+            className="border-[1px] p-1 rounded-lg border-gray-600 w-full mb-2"
             placeholder="México..."
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
           <label htmlFor="location">
-            <Text
-              variant="h3"
-              color="text-purple-primary"
-              className="text-center"
-            >
+            <Text variant="h3" color="text-purple-primary">
               Tipo
             </Text>
           </label>
           <input
             type="text"
             id="species"
-            className="border-[1px] p-1 rounded-lg border-gray-600 col-span-2"
+            className="border-[1px] p-1 rounded-lg border-gray-600 w-full mb-2"
             placeholder="Pug..."
             value={species}
             onChange={(e) => setSpecies(e.target.value)}

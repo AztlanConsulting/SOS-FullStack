@@ -63,6 +63,7 @@ describe('Payments integration tests', () => {
       orderId: hookOrderId,
       amount: 100,
       currency: 'MXN',
+      method: 'stripe',
       clientSecret: 'x',
       status: 'pending',
     });

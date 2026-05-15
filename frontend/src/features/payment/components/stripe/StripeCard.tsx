@@ -157,6 +157,7 @@ export const StripeCard = ({
 
                   <Text
                     variant="caption"
+                    as="p"
                     color="color-grey-text"
                     className="mt-1"
                   >
@@ -178,6 +179,7 @@ export const StripeCard = ({
                     <div className="flex items-center gap-2">
                       <Text
                         variant="caption"
+                        as="p"
                         weight="semibold"
                         className="text-gray-900"
                       >
@@ -201,6 +203,7 @@ export const StripeCard = ({
                     <div className="flex items-center gap-2">
                       <Text
                         variant="caption"
+                        as="p"
                         weight="semibold"
                         className="text-gray-900"
                       >
@@ -221,7 +224,7 @@ export const StripeCard = ({
                       Válido por
                     </Text>
 
-                    <Text variant="caption" className="text-gray-900">
+                    <Text variant="caption" as="p" className="text-gray-900">
                       {formatExpirationTime(oxxoData.expiresAfter)}
                     </Text>
                   </div>
@@ -232,7 +235,7 @@ export const StripeCard = ({
                     bgColor="bg-black hover:bg-gray-800 border-2 border-black"
                   />
                   <div className="rounded-lg color-grey-bg px-3 py-3">
-                    <Text variant="caption" className="text-gray-600">
+                    <Text variant="caption" as="p" className="text-gray-600">
                       La confirmación del pago puede tardar algunos minutos
                       después de realizar el pago en caja.
                     </Text>
@@ -249,6 +252,7 @@ export const StripeCard = ({
 
                   <Text
                     variant="caption"
+                    as="p"
                     color="color-grey-text"
                     className="mt-1"
                   >
@@ -339,6 +343,7 @@ export const StripeCard = ({
                     <div className="flex items-center gap-2">
                       <Text
                         variant="caption"
+                        as="p"
                         weight="semibold"
                         className="text-gray-900"
                       >
@@ -362,7 +367,11 @@ export const StripeCard = ({
                       </Text>
 
                       <div className="flex items-center gap-2">
-                        <Text variant="caption" className="text-gray-900">
+                        <Text
+                          variant="caption"
+                          as="p"
+                          className="text-gray-900"
+                        >
                           {speiData.bankName}
                         </Text>
                       </div>
@@ -378,7 +387,11 @@ export const StripeCard = ({
                       </Text>
 
                       <div className="flex items-center gap-2">
-                        <Text variant="caption" className="text-gray-900">
+                        <Text
+                          variant="caption"
+                          as="p"
+                          className="text-gray-900"
+                        >
                           {speiData.bankCode}
                         </Text>
                       </div>
@@ -397,6 +410,7 @@ export const StripeCard = ({
                     <div className="flex items-start gap-2">
                       <Text
                         variant="caption"
+                        as="p"
                         className="leading-relaxed text-gray-900"
                       >
                         {[
@@ -414,7 +428,7 @@ export const StripeCard = ({
                   </div>
 
                   <div className="rounded-lg color-grey-bg px-3 py-3">
-                    <Text variant="caption" className="text-gray-600">
+                    <Text variant="caption" as="p" className="text-gray-600">
                       La confirmación del pago puede tardar algunos minutos
                       dependiendo de tu banco.
                     </Text>

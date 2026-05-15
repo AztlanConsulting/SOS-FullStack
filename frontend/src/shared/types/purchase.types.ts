@@ -9,7 +9,7 @@ export type PurchaseRequest = {
 };
 
 export type Product = {
-  _id: string;
+  _id?: string;
   imageUrl: string;
   name: string;
   content: ContentBlock[];

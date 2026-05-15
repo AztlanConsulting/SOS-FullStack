@@ -26,7 +26,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
 
   return (
     isOpen && (
-      <div className="absolute top-12 p-2 pb-4 right-10 bg-white border rounded-lg shadow-md w-96 px-5 z-50">
+      <div className="absolute top-12 p-2 pb-4 right-7 md:right-10 bg-white border rounded-lg shadow-md w-72 md:w-96 px-5 z-50">
         <div className="gap-2 py-2">
           <label htmlFor="color">
             <Text color="text-dark-purple" weight="medium">
@@ -50,7 +50,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             type="text"
             id="location"
             className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
-            placeholder="México..."
+            placeholder="Ej. México"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
@@ -63,7 +63,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             type="text"
             id="species"
             className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
-            placeholder="Pug..."
+            placeholder="Ej. Golden Retriever"
             value={species}
             onChange={(e) => setSpecies(e.target.value)}
           />

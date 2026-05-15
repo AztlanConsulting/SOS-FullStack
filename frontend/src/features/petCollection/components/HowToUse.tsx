@@ -28,11 +28,11 @@ const HowToUse = () => {
             <img
               src={SelectImage}
               alt="Publicación"
-              className="md:w-1/2 h-auto rounded-lg"
+              className="w-4/5 md:w-1/2 h-auto rounded-lg"
             />
             <div className="flex-1 max-w-xl lg:max-w-2xl text-center md:text-left lg:text-left order-1 lg:order-2">
               <Text
-                as="h2"
+                as="h3"
                 variant="h3"
                 weight="medium"
                 className="mb-4 lg:mb-6"
@@ -53,11 +53,11 @@ const HowToUse = () => {
             <img
               src={Gallery}
               alt="Publicación"
-              className="md:w-1/3 h-auto rounded-lg"
+              className="w-4/5 md:w-1/3 h-auto rounded-lg"
             />
             <div className="flex-1 max-w-xl lg:max-w-2xl text-center md:text-left lg:text-left order-1 lg:order-2">
               <Text
-                as="h2"
+                as="h3"
                 variant="h3"
                 weight="medium"
                 className="mb-4 lg:mb-6"
@@ -78,11 +78,11 @@ const HowToUse = () => {
             <img
               src={Filter}
               alt="Publicación"
-              className="md:w-1/3 h-auto rounded-lg"
+              className="w-4/5 md:w-1/3 h-auto rounded-lg"
             />
             <div className="flex-1 max-w-xl lg:max-w-2xl text-center md:text-left lg:text-left order-1 lg:order-2">
               <Text
-                as="h2"
+                as="h3"
                 variant="h3"
                 weight="medium"
                 className="mb-4 lg:mb-6"

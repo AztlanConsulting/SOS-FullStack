@@ -40,7 +40,7 @@ const PetGallery = ({
           <button
             onClick={() => setIsOpen((prev) => !prev)}
             name={'petDropdown'}
-            className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-purple-secondary text-dark-purple border-[1px] border-dark-purple hover:border-purple-primary group mr-10"
+            className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-purple-secondary text-dark-purple border-[1px] border-dark-purple hover:border-purple-primary group mr-7 md:mr-10"
           >
             <HiOutlineFilter
               // color="black"

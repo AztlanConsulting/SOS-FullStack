@@ -8,6 +8,14 @@ import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-ac
 import { purchaseDetailsSchema } from '@validation/payment.types';
 import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
 import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
+import { getManualByIdDB } from '@/use-cases/manuals/getManualsDB.usecase';
+import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
+import { sendManualEmailService } from '@/infrastructure/service/sendManualEmail.service';
+import { sendManualEmail } from '@/use-cases/emails/sendManualEmail.usecase';
+import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
+import { sendWorkshopEmailService } from '@/infrastructure/service/sendWorkshopEmail.service';
+import { sendWorkshopEmail } from '@/use-cases/emails/sendWorkshopEmail.usecase';
+import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
 
 export default async function captureOrder(req: Request, res: Response) {
   try {
@@ -31,6 +39,40 @@ export default async function captureOrder(req: Request, res: Response) {
         productId!,
       );
       if (!planActivation) console.error("Plan couldn't be activated");
+    }
+
+    if (productType === 'manual') {
+      const manualData = await getManualByIdDB(
+        ManualDataAccess,
+        productId as string,
+      );
+      if (manualData) {
+        const { name, imageUrl, pdfUrl, emailContent } = manualData;
+        await sendManualEmail(sendManualEmailService, {
+          to: userEmail,
+          manualName: name,
+          imageUrl,
+          pdfUrl,
+          emailContent,
+        });
+      }
+    }
+
+    if (productType === 'taller') {
+      const workshopData = await getWorkshopById(
+        WorkshopDataAccess,
+        productId as string,
+      );
+      if (workshopData) {
+        const { name, imageUrl, videoUrl, emailContent } = workshopData;
+        await sendWorkshopEmail(sendWorkshopEmailService, {
+          to: userEmail,
+          workshopName: name,
+          imageUrl: imageUrl ?? '',
+          videoUrl: videoUrl ?? '',
+          emailContent: emailContent ?? '',
+        });
+      }
     }
 
     if (result === 'not_found' || result === 'already_updated') {

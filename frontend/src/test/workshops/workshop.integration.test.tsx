@@ -1,12 +1,32 @@
 import '@testing-library/jest-dom/vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createMemoryRouter, RouterProvider, useLocation } from 'react-router';
 import WorkshopCard from '@features/workshop/components/WorkshopCard';
 import type { Workshop } from '@features/workshop/types/workshop';
 import WorkshopContent from '@features/workshop/components/WorkshopContent';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
+
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
 
 const workshop: Workshop = {
   _id: 'w1',
@@ -106,14 +126,19 @@ describe('workshops integration', () => {
       screen.getByText('Ingresa un correo electrónico válido.'),
     ).toBeInTheDocument();
 
-    // Second submit with valid email should route to purchase state.
+    // Second submit with valid email and name should route to purchase state.
     fireEvent.change(screen.getByLabelText('Correo electrónico'), {
       target: { value: '  buyer@example.com  ' },
+    });
+    fireEvent.change(screen.getByLabelText('Nombre'), {
+      target: { value: 'Buyer Name' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));
 
     await waitFor(() => {
-      expect(screen.getByText('email:buyer@example.com')).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes('buyer@example.com')),
+      ).toBeInTheDocument();
     });
     expect(screen.getByText('productId:w1')).toBeInTheDocument();
     expect(screen.getByText('productType:taller')).toBeInTheDocument();

@@ -3,7 +3,7 @@ import PurchaseDetails from '@/features/purchases/components/PurchaseDetails';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import wrapper from '../utils/wrapper.util';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const navigateMock = vi.fn();
 
@@ -25,7 +25,7 @@ describe('PurchaseDetails', () => {
     price: 399,
   };
 
-  const mockReportData: PetReportData = {
+  const mockReportData: LostPetReportData = {
     name: 'Firulais',
     species: 'Perro',
     date: '2023-10-25',
@@ -56,6 +56,7 @@ describe('PurchaseDetails', () => {
       <PurchaseDetails
         product={mockProduct}
         success={false}
+        pending={false}
         reportData={null}
       />,
       {
@@ -65,20 +66,24 @@ describe('PurchaseDetails', () => {
 
     expect(screen.getByText('Detalles de la compra')).toBeInTheDocument();
     expect(screen.getByText('Total a pagar:')).toBeInTheDocument();
-    expect(screen.getByText('$399')).toBeInTheDocument();
+    expect(screen.getByText('$399', { exact: false })).toBeInTheDocument();
     const detailContainer = container.querySelector('.bg-secondary');
     expect(detailContainer).toBeInTheDocument();
   });
 
   it('renders plan details correctly when a plan is provided', () => {
     const { container } = render(
-      <PurchaseDetails reportData={mockReportData} success={false} />,
+      <PurchaseDetails
+        reportData={mockReportData}
+        success={false}
+        pending={false}
+      />,
       {
         wrapper,
       },
     );
 
-    expect(screen.getByText('$500')).toBeInTheDocument();
+    expect(screen.getByText('$500', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('Básico')).toBeInTheDocument();
     expect(screen.getByText('3 días')).toBeInTheDocument();
     const detailContainer = container.querySelector('.bg-gray-100');
@@ -90,6 +95,7 @@ describe('PurchaseDetails', () => {
       <PurchaseDetails
         product={mockProduct}
         success={true}
+        pending={false}
         reportData={null}
       />,
       {
@@ -97,20 +103,31 @@ describe('PurchaseDetails', () => {
       },
     );
 
-    expect(screen.getByText('¡La compra ha sido exitosa!')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Cerrar'));
+    expect(screen.getByText(/Compra exitosa/i)).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: /Ir al Inicio|Cerrar/i }),
+    );
     expect(navigateMock).toHaveBeenCalledWith('/');
   });
 
   it('shows the ConfirmPaymentModal when success is true plan', () => {
-    render(<PurchaseDetails reportData={mockReportData} success={true} />, {
-      wrapper,
-    });
+    render(
+      <PurchaseDetails
+        reportData={mockReportData}
+        success={true}
+        pending={false}
+      />,
+      {
+        wrapper,
+      },
+    );
 
     expect(
-      screen.getByText('¡Su anuncio será publicado en unos minutos!'),
+      screen.getByText(/tu anuncio será publicado en unos minutos/i),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Cerrar'));
+    fireEvent.click(
+      screen.getByRole('button', { name: /Ir al Inicio|Cerrar/i }),
+    );
     expect(navigateMock).toHaveBeenCalledWith('/');
   });
 });

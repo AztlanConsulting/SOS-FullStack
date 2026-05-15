@@ -2,7 +2,7 @@ import WorkshopListSection from '@features/workshop/components/WorkshopListSecti
 import Footer from '@shared/components/layout/Footer';
 import Header from '@/shared/components/layout/Header';
 import HeroSection from '@shared/components/layout/HeroSection';
-import tallerHero from '@assets/images/taller-hero.jpg';
+import tallerHero from '@assets/images/taller-hero-2.png';
 
 const WorkshopPage = () => {
   return (

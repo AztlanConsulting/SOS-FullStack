@@ -11,5 +11,6 @@ export interface PaymentMethod {
     data: Order,
     purchaseDetail: PurchaseDetail,
     success: () => void,
+    pending: () => void,
   ) => React.ReactNode;
 }

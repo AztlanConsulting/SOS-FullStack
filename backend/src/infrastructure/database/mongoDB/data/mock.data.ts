@@ -7,6 +7,7 @@ import { ResourcesModel } from '@domain/models/resource.model';
 import { RoleModel } from '@domain/models/role.model';
 import { UserModel } from '@domain/models/user.model';
 import { PermissionModel } from '@domain/models/permission.model';
+import type { Pet } from '@/domain/models/pet.model';
 import { PetModel } from '@/domain/models/pet.model';
 import { PurchasedPlanModel } from '@domain/models/purchasedPlan.model';
 import { ManualModel } from '@domain/models/manual.model';
@@ -97,7 +98,7 @@ try {
 
   const testUser = createdUsers[1];
 
-  const testPet = await PetModel.create({
+  const testPet: Pet = await PetModel.create({
     userId: testUser._id,
     name: 'Firulais',
     species: 'Perro',
@@ -109,12 +110,12 @@ try {
     description: 'Perrito amigable, llevaba un collar rojo cuando se perdió.',
     photos: [],
     location: {
-      coords: [19, -96],
-      displayName: 'Querétaro, Querétaro',
+      coords: [19.4337, -99.1284],
+      displayName: 'Querétaro, México',
       properties: {
-        city: 'a',
-        country: 'a',
-        state: 'a',
+        city: 'Querétaro',
+        country: 'México',
+        state: 'Querétaro',
       },
     },
   });

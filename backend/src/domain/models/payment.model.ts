@@ -5,6 +5,7 @@ export interface IPayment extends Document {
   orderId: string;
   amount: number;
   currency: string;
+  method: string;
   status: string;
   clientSecret: string;
   createdAt: Date;
@@ -16,6 +17,7 @@ const paymentSchema = new Schema<IPayment>(
     orderId: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
+    method: { type: String, required: true },
     status: { type: String, required: true },
     clientSecret: { type: String, required: true },
   },

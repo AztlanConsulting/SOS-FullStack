@@ -27,11 +27,10 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
   return (
     isOpen && (
       <div className="absolute top-12 p-2 right-0 bg-white border rounded-lg shadow-md w-80 z-50">
-        <div className="grid grid-rows-3 grid-cols-3 gap-2 py-2">
+        <div className="gap-2 py-2">
           <label htmlFor="color">
             <Text
               variant="h3"
-              weight="semibold"
               color="text-purple-primary"
               className="text-center"
             >
@@ -49,7 +48,6 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
           <label htmlFor="location">
             <Text
               variant="h3"
-              weight="semibold"
               color="text-purple-primary"
               className="text-center"
             >
@@ -67,7 +65,6 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
           <label htmlFor="location">
             <Text
               variant="h3"
-              weight="semibold"
               color="text-purple-primary"
               className="text-center"
             >

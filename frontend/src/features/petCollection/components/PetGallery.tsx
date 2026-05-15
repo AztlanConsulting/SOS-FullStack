@@ -79,7 +79,7 @@ const GalleryContent = ({ vectorImages, pages, img }: Props) => {
           </div>
         </>
       ) : (
-        <div className="flex items-center justify-center md:-mt-10 md:h-full">
+        <div className="flex items-center justify-center md:-mt-10 min-h-96 md:h-full">
           <Text
             variant="h2"
             color="text-grey-500"

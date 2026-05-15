@@ -8,7 +8,6 @@ export default async function findSimilarPets(req: Request, res: Response) {
     const query = petCollectionParams.safeParse(req.query);
     if (query.error) throw query.error;
 
-    console.log(query.data);
     const image = req.file;
 
     if (!image) {

@@ -4,6 +4,7 @@ import { type ChangeEvent } from 'react';
 import uploadImage from '../services/uploadImage.service';
 import usePetGallery from '../hooks/usePetGallery';
 import countPages from '../services/countPages.service';
+import HowToUse from './HowToUse';
 
 const SearchPetsPage = () => {
   const { imgHook, pages, handleSearch, vectorImages } = usePetGallery(
@@ -21,14 +22,17 @@ const SearchPetsPage = () => {
   }
 
   return (
-    <div className="flex max-md:flex-col min-h-screen md:pt-0 pt-[80.67px] h-full">
-      <UploadPet img={img} uploadFile={uploadFile} />
-      <PetGallery
-        handleSearch={handleSearch}
-        pages={pages}
-        vectorImages={vectorImages}
-        img={img}
-      />
+    <div className="min-h-screen md:pt-0 pt-[80.67px] h-full">
+      <HowToUse />
+      <div className="flex max-md:flex-col">
+        <UploadPet img={img} uploadFile={uploadFile} />
+        <PetGallery
+          handleSearch={handleSearch}
+          pages={pages}
+          vectorImages={vectorImages}
+          img={img}
+        />
+      </div>
     </div>
   );
 };

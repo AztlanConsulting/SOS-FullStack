@@ -4,6 +4,8 @@ import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
 import { useNavigate } from 'react-router';
 import success from '@assets/images/success.png';
+import { useLocationContext } from '@/shared/context/Location.context';
+import { formatCurrency } from '@shared/utils/formatCurrency';
 
 interface Props {
   plan: LostPetReportData | null;
@@ -13,6 +15,7 @@ interface Props {
 
 const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
   const navigate = useNavigate();
+  const { currencyCode, exchangeRate } = useLocationContext();
 
   function close() {
     if (onClose) onClose();
@@ -134,10 +137,13 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">Precio</span>
                   <span className="font-semibold text-gray-900">
-                    $
-                    {Math.round(
-                      Number(plan.planDetails!.totalPrice.toFixed(2)),
-                    )}
+                    {formatCurrency(
+                      Math.round(
+                        Number(plan.planDetails!.totalPrice.toFixed(2)),
+                      ),
+                      currencyCode,
+                    )}{' '}
+                    {currencyCode}
                   </span>
                 </div>
               </div>
@@ -146,8 +152,13 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
             {product && (
               <div className="flex justify-between items-center">
                 <span className="text-gray-500 pr-20">Producto</span>
-                <span className="font-semibold text-gray-900">
-                  {product.name} (${product.price})
+                <span className="font-semibold text-gray-900 text-right">
+                  {product.name} (
+                  {formatCurrency(
+                    Math.round(Number(product.price * exchangeRate)),
+                    currencyCode,
+                  )}{' '}
+                  {currencyCode})
                 </span>
               </div>
             )}

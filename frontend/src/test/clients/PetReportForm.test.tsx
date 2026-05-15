@@ -112,6 +112,34 @@ describe('PetReportForm Component', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
+  test('scrolls to the photo section when an uploaded image exceeds 5MB', async () => {
+    const user = userEvent.setup();
+    const oversizedImage = new File(
+      ['x'.repeat(5 * 1024 * 1024 + 1)],
+      'oversized.jpg',
+      {
+        type: 'image/jpeg',
+      },
+    );
+
+    const getElementByIdSpy = vi.spyOn(document, 'getElementById');
+
+    renderWithRouter(
+      <PetReportForm
+        initialData={{
+          ...VALID_INITIAL_DATA,
+          images: [oversizedImage],
+        }}
+      />,
+    );
+
+    await user.click(screen.getByText('Contratar el servicio'));
+
+    expect(getElementByIdSpy).toHaveBeenCalledWith('photo-upload-section');
+    expect(screen.getByText('La imagen no debe superar los 5MB')).toBeDefined();
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
   test('shows invalid email format error when email is malformed', async () => {
     const user = userEvent.setup();
     renderWithRouter(

@@ -50,4 +50,20 @@ export const PurchaseDataAccess: PurchaseRepository = {
       productType: p.productType,
     }));
   },
+
+  /**
+   *
+   * @param paymentId - To search all the associated purchases for this payment ID.
+   * @returns The mapped DTO.
+   */
+  async getPurchasesByPaymentId(paymentId: string): Promise<PurchaseDTO[]> {
+    const purchases = await PurchaseModel.find({ paymentId }).lean();
+
+    return purchases.map((p) => ({
+      userEmail: p.userEmail,
+      paymentId: p.paymentId,
+      productId: p.productId,
+      productType: p.productType,
+    }));
+  },
 };

@@ -1,14 +1,17 @@
 import type {
-  PetImageDto,
+  PetImage,
+  PetImageSearch,
   PetVectorRepository,
 } from '@domain/repositories/petImage.repository';
 
 export default async function getSimilarPets(
   petVector: PetVectorRepository,
-  page: number,
-  petImage: Partial<PetImageDto>,
-) {
-  const response = await petVector.getSimilarPets(petImage, page);
+  petImage: PetImageSearch,
+): Promise<PetImage[]> {
+  const response = await petVector.getSimilarPets(
+    petImage,
+    petImage.query.page!,
+  );
 
   return response;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Text } from '../ui/Text';
@@ -23,10 +23,17 @@ import SignIn from '../ui/Button/SignIn';
 
 const defaultNavLinks = [
   { label: 'Inicio', href: '/', icon: <LuHouse /> },
+  {
+    label: 'Registrar',
+    icon: <PiDogLight />,
+    children: [
+      { label: 'Perdí mi mascota', href: '/#report-section' },
+      { label: 'Encontré una mascota', href: '/mascotas-encontradas' },
+    ],
+  },
   { label: 'Blog', href: '/blog', icon: <TfiWrite /> },
   { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
-  { label: 'Registrar', href: '/mascotas-encontradas', icon: <PiDogLight /> },
 ];
 
 export const defaultSocialLinks = [
@@ -70,9 +77,40 @@ const Header = ({
 }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        !isMenuOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
   const navigate = useNavigate();
   const MobileSignIn = signBtn.mobile;
+
+  const handleHashNav = (href: string) => {
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      const targetPath = path || '/';
+      if (pathname === targetPath) {
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        navigate(`${targetPath}?scrollTo=${hash}`);
+      }
+    } else {
+      window.scrollTo(0, 0);
+      navigate(href);
+    }
+  };
 
   const textColors: Record<string, string> = {
     primary: 'text-primary',
@@ -139,7 +177,10 @@ const Header = ({
           src={yellowIcon}
           alt="Logo"
           className="w-12 h-12 lg:hidden cursor-pointer"
-          onClick={() => navigate('/')}
+          onClick={() => {
+            window.scrollTo(0, 0);
+            navigate('/');
+          }}
         />
 
         <nav className="hidden lg:fixed lg:top-0 lg:left-0 lg:right-0 lg:flex items-center justify-between px-12 lg:px-8 z-40 bg-white py-2 border-b border-[color:var(--color-grey-border)]">
@@ -147,15 +188,81 @@ const Header = ({
             src={yellowIcon}
             alt="Logo"
             className="w-12 h-12 lg:w-14 lg:h-14 cursor-pointer"
-            onClick={() => navigate('/')}
+            onClick={() => {
+              window.scrollTo(0, 0);
+              navigate('/');
+            }}
           />
-          <div className="flex items-center gap-8">
+          <div ref={dropdownRef} className="flex items-center gap-8">
             {navLinks.map((link) => {
+              if (link.children) {
+                const isActive = link.children.some(
+                  (child) => pathname === child.href,
+                );
+                return (
+                  <div key={link.label} className="relative">
+                    <button
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === link.label ? null : link.label,
+                        )
+                      }
+                      className={`flex items-center gap-1 transition-colors cursor-pointer py-2 ${
+                        isActive ? `border-b-2 ${borderColors[color]}` : ''
+                      }`}
+                    >
+                      <Text
+                        variant="body"
+                        weight="medium"
+                        className={`hover:${textColors[color]}`}
+                      >
+                        {link.label}
+                      </Text>
+                      <svg
+                        className={`w-4 h-4 transition-transform ${
+                          openDropdown === link.label ? 'rotate-180' : ''
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    {openDropdown === link.label && (
+                      <div className="absolute top-full left-0 mt-3 bg-white border border-[color:var(--color-grey-border)] rounded-lg shadow-lg py-1 min-w-[220px] z-50">
+                        {link.children.map((child) => (
+                          <button
+                            key={child.label}
+                            onClick={() => {
+                              handleHashNav(child.href);
+                              setOpenDropdown(null);
+                            }}
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors cursor-pointer"
+                          >
+                            <Text variant="body" weight="regular">
+                              {child.label}
+                            </Text>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
               const isActive = pathname === link.href;
               return (
                 <div
                   key={link.label}
-                  onClick={() => navigate(link.href)}
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                    navigate(link.href!);
+                  }}
                   className={`transition-colors cursor-pointer  ${
                     isActive ? `border-b-2 ${borderColors[color]}` : ''
                   }`}
@@ -201,6 +308,7 @@ const Header = ({
                 alt="Logo"
                 className="w-14 h-14 cursor-pointer"
                 onClick={() => {
+                  window.scrollTo(0, 0);
                   navigate('/');
                   setIsMenuOpen(false);
                 }}
@@ -208,35 +316,89 @@ const Header = ({
             </div>
 
             {/* Links */}
-            <nav className="flex flex-col gap-6 py-6 pl-4 flex-1 pr-0">
+            <nav className="flex flex-col gap-2 py-6 flex-1 pr-0">
               {navLinks.map((link) => {
+                if (link.children) {
+                  const isExpanded = openDropdown === link.label;
+                  return (
+                    <div key={link.label}>
+                      <div
+                        onClick={() =>
+                          setOpenDropdown(isExpanded ? null : link.label)
+                        }
+                        className="flex gap-4 items-center py-5 px-6 transition-all cursor-pointer justify-between"
+                      >
+                        <div className="flex gap-4 items-center">
+                          <span className="text-white text-2xl">
+                            {link.icon}
+                          </span>
+                          <Text variant="h3" weight="medium" color="text-white">
+                            {link.label}
+                          </Text>
+                        </div>
+                        <svg
+                          className={`w-5 h-5 text-white transition-transform ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                      {isExpanded && (
+                        <div>
+                          {link.children.map((child) => {
+                            const childIsActive = pathname === child.href;
+                            return (
+                              <div
+                                key={child.label}
+                                onClick={() => {
+                                  handleHashNav(child.href);
+                                  setIsMenuOpen(false);
+                                  setOpenDropdown(null);
+                                }}
+                                className={`flex gap-4 items-center py-5 pl-16 pr-3 transition-all cursor-pointer ${
+                                  childIsActive ? 'bg-[#FAD25A]' : ''
+                                }`}
+                              >
+                                <Text
+                                  variant="body"
+                                  weight="regular"
+                                  color="text-white/80"
+                                >
+                                  {child.label}
+                                </Text>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
                 const isActive = pathname === link.href;
                 return (
                   <div
                     key={link.label}
                     onClick={() => {
-                      navigate(link.href);
+                      window.scrollTo(0, 0);
+                      navigate(link.href!);
                       setIsMenuOpen(false);
                     }}
-                    className={`flex gap-4 items-center py-3 pl-4 transition-all cursor-pointer ${
-                      isActive ? 'bg-white rounded-l-[40px] shadow-lg' : ''
+                    className={`flex gap-4 items-center py-5 pl-6 transition-all cursor-pointer ${
+                      isActive ? 'bg-[#FAD25A]' : ''
                     }`}
                   >
                     <div className="flex gap-4 items-center box-shad">
-                      <span
-                        className={
-                          isActive
-                            ? `${textColors[color]} text-2xl`
-                            : 'text-white text-2xl'
-                        }
-                      >
-                        {link.icon}
-                      </span>
-                      <Text
-                        variant="h3"
-                        weight="medium"
-                        color={isActive ? `${textColors[color]}` : 'text-white'}
-                      >
+                      <span className="text-white text-2xl">{link.icon}</span>
+                      <Text variant="h3" weight="medium" color="text-white">
                         {link.label}
                       </Text>
                     </div>

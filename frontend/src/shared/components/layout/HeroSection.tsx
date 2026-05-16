@@ -4,6 +4,7 @@ import { HiChevronRight } from 'react-icons/hi';
 
 interface Props {
   bg?: string;
+  shadow?: string;
   title: string;
   image: string;
   content: string;
@@ -13,6 +14,7 @@ interface Props {
 
 const HeroSection = ({
   bg = 'white',
+  shadow = 'shadow-primary',
   title,
   image,
   content,
@@ -40,7 +42,7 @@ const HeroSection = ({
           <img
             src={image}
             alt="Manuales"
-            className="w-full rounded-lg object-cover color-primary-shadow "
+            className={`w-full rounded-lg object-cover ${shadow} shadow-lg`}
           />
         </div>
 

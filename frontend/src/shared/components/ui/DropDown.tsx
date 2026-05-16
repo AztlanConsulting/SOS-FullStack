@@ -37,7 +37,7 @@ const DropDown = ({ isOpen, sortHook, onlyAlphabetic }: Props) => {
               }}
             />
             <Text
-              as="caption"
+              as="span"
               variant="caption"
               weight="regular"
               color="text-black"

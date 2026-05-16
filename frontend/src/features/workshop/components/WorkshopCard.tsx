@@ -2,9 +2,21 @@ import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
 import { useNavigate } from 'react-router';
 import type { Workshop } from '../types/workshop';
+import { formatCurrency } from '@shared/utils/formatCurrency';
 
-const WorkshopCard = ({ workshop }: { workshop: Workshop }) => {
+const WorkshopCard = ({
+  workshop,
+  localizedPrice,
+  currencyCode,
+}: {
+  workshop: Workshop;
+  localizedPrice?: number;
+  currencyCode?: string;
+}) => {
   const navigate = useNavigate();
+  const displayPrice = localizedPrice ?? workshop.price;
+  const displayCurrency = currencyCode ?? 'MXN';
+
   return (
     <div
       key={workshop._id}
@@ -34,15 +46,19 @@ const WorkshopCard = ({ workshop }: { workshop: Workshop }) => {
         >
           Precio
         </Text>
-        <Text
-          as="p"
-          variant="body"
-          weight="regular"
-          color="text-black"
-          className="text-right pr-4 pb-4"
-        >
-          $ {workshop.price}
-        </Text>
+        <div className="flex items-baseline gap-1.5 pr-4 pb-4">
+          <Text as="p" variant="body" weight="regular" color="text-black">
+            {formatCurrency(displayPrice, displayCurrency)}
+          </Text>
+          <Text
+            as="p"
+            variant="small"
+            color="text-black"
+            className="text-gray-800"
+          >
+            {displayCurrency}
+          </Text>
+        </div>
       </div>
       <div className="w-full flex flex-col items-center justify-center py-5 color-grey-border-top">
         <Button

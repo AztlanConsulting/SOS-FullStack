@@ -1,6 +1,7 @@
 import { PayPalProvider } from '@paypal/react-paypal-js/sdk-v6';
 import PaypalButton from './PaypalButton';
 import type { Order, PurchaseDetail } from '../../types/payment.types';
+import { LocationProvider } from '@/shared/context/Location.context';
 
 interface Props {
   data: Order;
@@ -21,11 +22,13 @@ const Paypal = ({ data, purchaseDetail, success }: Props) => {
         components={['paypal-payments']}
         pageType="checkout"
       >
-        <PaypalButton
-          data={data}
-          purchaseDetail={purchaseDetail}
-          success={success}
-        />
+        <LocationProvider>
+          <PaypalButton
+            data={data}
+            purchaseDetail={purchaseDetail}
+            success={success}
+          />
+        </LocationProvider>
       </PayPalProvider>
     </>
   );

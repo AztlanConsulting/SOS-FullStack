@@ -9,6 +9,27 @@ import wrapper from '../utils/wrapper.util';
 
 const navigateMock = vi.fn();
 
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
+
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
 // Replace useNavigate so we can assert route targets and payloads.
 vi.mock('react-router', async () => {
   const actual = await vi.importActual<typeof ReactRouter>('react-router');
@@ -37,6 +58,7 @@ describe('usePurchaseProduct', () => {
 
     act(() => {
       // Simulate submit with invalid email format.
+      result.current.handleNameChange('Buyer Name');
       result.current.handleEmailChange('correo-invalido');
       result.current.handleProceedToPayment();
     });
@@ -61,16 +83,23 @@ describe('usePurchaseProduct', () => {
 
     act(() => {
       // Trigger initial validation error.
+      result.current.handleNameChange('Buyer Name');
+    });
+
+    act(() => {
       result.current.handleProceedToPayment();
     });
+
     expect(result.current.emailError).toBe(
       'Ingresa un correo electrónico válido.',
     );
+    expect(result.current.nameError).toBe('');
 
     act(() => {
       // Editing input should clear the previous error message.
       result.current.handleEmailChange('nuevo@email.com');
     });
+
     expect(result.current.emailError).toBe('');
   });
 
@@ -87,6 +116,7 @@ describe('usePurchaseProduct', () => {
     );
 
     act(() => {
+      result.current.handleNameChange('Buyer Name');
       result.current.handleEmailChange('  buyer@example.com  ');
     });
 
@@ -97,12 +127,37 @@ describe('usePurchaseProduct', () => {
 
     expect(navigateMock).toHaveBeenCalledWith('/compra', {
       state: {
+        userName: 'Buyer Name',
         userEmail: 'buyer@example.com',
         productId: 'm9',
         productType: 'manual',
         price: 399,
       },
     });
+  });
+
+  it('shows validation error when lastname is missing', () => {
+    const { result } = renderHook(
+      () =>
+        usePurchaseProduct({
+          _id: 'm1',
+          item: 'manual',
+          url: 'manual',
+          price: 250,
+        }),
+      { wrapper },
+    );
+
+    act(() => {
+      result.current.handleNameChange('Buyer');
+      result.current.handleEmailChange('buyer@example.com');
+      result.current.handleProceedToPayment();
+    });
+
+    expect(result.current.nameError).toBe(
+      'Ingresa nombre y apellido para contactarte',
+    );
+    expect(navigateMock).not.toHaveBeenCalled();
   });
 });
 
@@ -123,7 +178,7 @@ describe('ManualItem', () => {
     render(<ManualItem manual={manual} />);
 
     expect(screen.getByText('Manual de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('$ 129')).toBeInTheDocument();
+    expect(screen.getByText('$129')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Manual de Prueba' }),
     ).toBeInTheDocument();

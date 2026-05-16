@@ -156,7 +156,7 @@ export const LoginForm = () => {
                     )}
                   </div>
 
-                  <Text variant="caption" className="color-grey-text">
+                  <Text variant="caption" as="p" className="color-grey-text">
                     Recuérdame
                   </Text>
                 </label>
@@ -173,13 +173,13 @@ export const LoginForm = () => {
 
               {/* ERROR MESSAGE */}
               {error && (
-                <Text variant="caption" className="color-danger mt-1">
+                <Text variant="caption" as="p" className="color-danger mt-1">
                   {error}
                 </Text>
               )}
 
               {/* FORGOT PASSWORD */}
-              <Text variant="caption" className="color-grey-text mt-1">
+              <Text variant="caption" as="p" className="color-grey-text mt-1">
                 ¿Olvidaste tu contraseña?{' '}
                 <span className="whitespace-nowrap underline cursor-pointer hover:text-black">
                   Recuperar Contraseña

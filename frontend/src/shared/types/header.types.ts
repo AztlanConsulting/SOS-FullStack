@@ -1,7 +1,8 @@
 export type NavLink = {
   label: string;
-  href: string;
+  href?: string;
   icon: React.ReactNode;
+  children?: { label: string; href: string }[];
 };
 
 export type SocialLink = {

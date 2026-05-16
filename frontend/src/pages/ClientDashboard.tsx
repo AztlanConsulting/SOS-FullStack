@@ -10,7 +10,14 @@ import { TbEdit } from 'react-icons/tb';
 
 const navLinks = [
   { label: 'Inicio', href: '/inicio', icon: <HiOutlineUserCircle /> },
-  { label: 'Mascotas', href: '/inicio/mascotas', icon: <PiDogLight /> },
+  {
+    label: 'Mascotas',
+    icon: <PiDogLight />,
+    children: [
+      { label: 'Perdida', href: '/lost-pet' },
+      { label: 'Mascotas encontradas', href: '/inicio/coleccion-mascotas' },
+    ],
+  },
   { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },
   { label: 'Talleres', href: '/inicio/talleres', icon: <LiaToolsSolid /> },
   { label: 'Manuales', href: '/inicio/manuales', icon: <IoBookOutline /> },
@@ -26,7 +33,7 @@ const ClientDashboard = () => {
         signBtn={SignOut}
       />
       <Outlet />
-      <Footer />
+      <Footer bg={'bg-purple-primary'} />
     </>
   );
 };

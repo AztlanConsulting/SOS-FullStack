@@ -29,4 +29,12 @@ export const PaymentDataAccess: PaymentRepository = {
     if (result.modifiedCount === 0) return 'already_updated';
     return 'updated';
   },
+
+  async findPaymentByOrderId(orderId: string): Promise<boolean> {
+    const payment = await PaymentModel.findOne({
+      orderId: orderId,
+      status: 'pending',
+    });
+    return payment !== null;
+  },
 };

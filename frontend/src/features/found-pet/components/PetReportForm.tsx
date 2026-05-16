@@ -30,7 +30,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div id="report-section" className="min-h-screen pb-24 pt-8 bg-white">
+    <div id="report-section" className="min-h-screen pb-8 pt-8 bg-white">
       <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
         {/* Section 1: General pet data */}
         <div id="user-info-section">
@@ -113,12 +113,25 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
       {success && (
         <Modal
           title="¡Mascota reportada!"
-          description="Gracias por reportar la mascota perdida."
           onClose={() => {
             navigate('/mascotas-encontradas');
             handleClean();
           }}
-        />
+        >
+          <div className="flex flex-col gap-5">
+            <Text>💛 ¡Gracias por ayudar a una mascota perdida! </Text>
+            <Text>
+              Tu reporte fue enviado correctamente. Con esta acción estás
+              aumentando las posibilidades de que vuelva con su familia. 🐾
+            </Text>
+            <Text>
+              Te recomendamos mantenerte atento a mensajes o llamadas de
+              posibles dueños y, si es posible, resguardar a la mascota en un
+              lugar seguro mientras aparece su familia.
+            </Text>
+            <Text>Gracias por ser parte de esta red de ayuda. ✨</Text>
+          </div>
+        </Modal>
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import type { FeatureInfo, PricingTier } from '../types/customPlan';
-
+import { useLocationContext } from '@shared/context/Location.context';
 /**
  * List of all possible features available across the custom plans.
  */
@@ -19,45 +19,45 @@ const getPricingTiers = (): PricingTier[] => [
   {
     minDays: 1,
     maxDays: 4,
-    pricePerDay: 80,
-    pricePerKm: 15,
+    pricePerDay: 4.5,
+    pricePerKm: 0.85,
     features: [
-      { key: 'asesor', label: 'Asesor de búsqueda', price: 50 },
-      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 50 },
-      { key: 'geo_doble', label: 'Geolocalización doble', price: 50 },
-      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 50 },
+      { key: 'asesor', label: 'Asesor de búsqueda', price: 2.8 },
+      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 2.8 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 2.8 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.8 },
     ],
   },
   {
     minDays: 5,
     maxDays: 6,
-    pricePerDay: 75,
-    pricePerKm: 12.5,
+    pricePerDay: 4.25,
+    pricePerKm: 0.7,
     features: [
-      { key: 'asesor', label: 'Asesor de búsqueda', price: 80 },
-      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 80 },
-      { key: 'geo_doble', label: 'Geolocalización doble', price: 80 },
-      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 80 },
+      { key: 'asesor', label: 'Asesor de búsqueda', price: 4.5 },
+      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 4.5 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 4.5 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 4.5 },
     ],
   },
   {
     minDays: 7,
     maxDays: 14,
-    pricePerDay: 72,
-    pricePerKm: 11.2,
+    pricePerDay: 4.0,
+    pricePerKm: 0.65,
     features: [
-      { key: 'geo_doble', label: 'Geolocalización doble', price: 100 },
-      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 50 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 5.6 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.8 },
     ],
   },
   {
     minDays: 15,
     maxDays: 30,
-    pricePerDay: 72,
-    pricePerKm: 13,
+    pricePerDay: 4.0,
+    pricePerKm: 0.75,
     features: [
-      { key: 'geo_doble', label: 'Geolocalización doble', price: 100 },
-      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 50 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 5.6 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.8 },
     ],
   },
 ];
@@ -105,6 +105,7 @@ export const useCustomPlan = () => {
   const [days, setDays] = useState(3);
   const [km, setKm] = useState(5);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const { exchangeRate, currencyCode } = useLocationContext();
 
   /**
    * Memoized tier information.
@@ -147,6 +148,14 @@ export const useCustomPlan = () => {
     [days, km, selectedFeatures],
   );
 
+  const localizedTotalPrice = useMemo(
+    () => Math.round(totalPrice * exchangeRate * 100) / 100,
+    [totalPrice, exchangeRate],
+  );
+
+  const localize = (usdPrice: number) =>
+    Math.round(usdPrice * exchangeRate * 100) / 100;
+
   return {
     days,
     km,
@@ -156,5 +165,8 @@ export const useCustomPlan = () => {
     handleDaysChange,
     setKm,
     toggleFeature,
+    localizedTotalPrice,
+    currencyCode,
+    localize,
   };
 };

@@ -9,9 +9,9 @@ const PetHero = ({ petInfo }: Props) => {
   const image = `data:image/png;base64,${petInfo.image}`;
   return (
     <section
-      className={`bg-secondary w-full flex flex-col items-center justify-center`}
+      className={`bg-purple-secondary w-full flex flex-col items-center justify-center`}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-x-16 my-4 md:my-8 w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-x-16 my-4 md:my-8 w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl ">
         <div className="order-1 md:order-2 md:place-self-end md:justify-self-start mb-3">
           <Text
             as="h1"
@@ -32,15 +32,15 @@ const PetHero = ({ petInfo }: Props) => {
           </Text>
         </div>
 
-        <div className="order-2 md:order-1 md:row-span-2 my-3 md:my-0">
+        <div className="order-2 md:order-1 md:row-span-2 my-3 md:my-0 flex items-center justify-center">
           <img
             src={image}
             alt="Manuales"
-            className="w-full rounded-lg object-cover color-primary-shadow "
+            className="rounded-lg object-contain color-primary-shadow max-h-96 "
           />
         </div>
       </div>
-      <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3" />
+      {/* <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3" /> */}
     </section>
   );
 };

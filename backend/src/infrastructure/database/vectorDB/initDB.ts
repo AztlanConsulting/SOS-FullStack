@@ -5,6 +5,7 @@ import path, { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import axios from 'axios';
+import startVectorDB from './uitl';
 
 // ========= Configuration =============
 const __filename = fileURLToPath(import.meta.url);
@@ -49,16 +50,6 @@ async function readDirectory(
       else await fn(directoryPath, thisPath, idx);
     });
   });
-}
-
-// ========= VectorDB init =============
-async function startVectorDB() {
-  await vectorDB.schema.deleteAll();
-
-  await vectorDB.schema.classCreator().withClass(petConfig).do();
-
-  const schemaRes = await vectorDB.schema.getter().do();
-  console.log(schemaRes);
 }
 
 const locations = ['Querétaro', 'CDMX', 'Chile', 'Argentina'];

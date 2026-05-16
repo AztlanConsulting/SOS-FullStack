@@ -27,6 +27,7 @@ export const FoundPetDataAccess: FoundPetRepository = {
    * @returns The found report as FoundPetResult, or null if not found.
    */
   async getFoundPetById(id: string): Promise<FoundPetResult | null> {
+    console.log(id);
     const found = await FoundPetModel.findById(id);
     return found?.toObject() as unknown as FoundPetResult | null;
   },

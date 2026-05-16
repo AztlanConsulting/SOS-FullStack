@@ -231,8 +231,24 @@ function buildPetPostCaption(pet: Pet, phone: string): string {
     month: 'long',
   });
 
+  const city = pet.location.properties.city.trim();
+  const state = pet.location.properties.state.trim();
+
+  const hashtags =
+    city.toLowerCase() === state.toLowerCase()
+      ? `#${toHashtag(city)}`
+      : `#${toHashtag(city)} #${toHashtag(state)}`;
+
   return `🐾 Responde al nombre de ${pet.name.toUpperCase()}
-📍 Se extravió el ${formattedDate} en ${pet.location}
+📍 Se extravió el ${formattedDate} en #${hashtags}
 ${speciesEmoji} ${pet.description} 
 ☎️ Si le ven favor de resguardar y llamar al ${phone}`;
+}
+
+/**
+ * Converts a location string into a hashtag-friendly format.
+ * Example: "Ciudad de México" -> "CiudadDeMéxico"
+ */
+function toHashtag(value: string): string {
+  return value.replace(/\s+/g, '');
 }

@@ -18,9 +18,8 @@ export const petVector: PetVectorRepository = {
       .creator()
       .withClassName('Pet')
       .withProperties({
-        refId: petImage.refId,
+        ...petImage,
         image: b64,
-        species: petImage.species,
       })
       .do();
 
@@ -36,15 +35,15 @@ export const petVector: PetVectorRepository = {
    * @returns result - Array of PetImage, contains image, species and refId
    */
   getSimilarPets: async function (
-    petImage: PetImageDto,
+    petImage: Partial<PetImageDto>,
     offset: number,
   ): Promise<PetImage[]> {
-    const image = petImage.image.toString('base64');
+    const image = petImage.image!.toString('base64');
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species')
-      .withNearImage({ image: image })
+      .withFields('image refId species color location')
+      // .withNearImage({ image: image })
       .withOffset(offset)
       .withLimit(10)
       .do();

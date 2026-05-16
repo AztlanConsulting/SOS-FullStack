@@ -19,7 +19,6 @@ export default async function captureOrder(req: Request, res: Response) {
 
     const { purchaseDetails, planId } = details.data;
     const { userEmail, productId, productType } = purchaseDetails;
-    console.log(purchaseDetails);
 
     const capturedOrder = await ucCaptureOrder(paypalApi, orderId as string);
 

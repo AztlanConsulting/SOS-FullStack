@@ -6,7 +6,7 @@ import WorkshopCard from '@features/workshop/components/WorkshopCard';
 import type { Workshop } from '@features/workshop/types/workshop';
 import WorkshopContent from '@features/workshop/components/WorkshopContent';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { PetReportProvider } from '@/features/users/context/PetReportContext';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
 
 const workshop: Workshop = {
   _id: 'w1',

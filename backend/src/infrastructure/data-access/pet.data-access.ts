@@ -31,4 +31,15 @@ export const petDataAccess: PetRepository = {
 
     return pet ? (pet.toObject() as Pet) : null;
   },
+
+  /**
+   * Get the pet of an user by his id.
+   *
+   * @param userId - The user ID.
+   * @returns The pet of the user.
+   */
+  getPetByUserId: async function (userId: string): Promise<Pet | null> {
+    const pet = await PetModel.findOne({ userId }).lean();
+    return pet as Pet | null;
+  },
 };

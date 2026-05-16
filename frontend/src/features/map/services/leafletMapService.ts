@@ -1,15 +1,13 @@
 import * as L from 'leaflet';
 import markerIcon from '@assets/images/markerIcon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 //The default Leaflet marker icons.
 const defaultIcon = L.icon({
   iconUrl: markerIcon,
-  shadowUrl: markerShadow,
   className: 'custom-pin-border',
-  iconSize: [35, 50],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+  iconSize: [65, 65],
+  iconAnchor: [32.5, 65],
+  popupAnchor: [0, -50],
   shadowSize: [41, 41],
 });
 
@@ -37,6 +35,7 @@ export const LeafletMapService = {
     coords: [number, number],
     elementId: string,
     onMove?: (lat: number, lng: number) => void,
+    onClick?: (lat: number, lng: number) => void,
   ) {
     if (map) return;
 

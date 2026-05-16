@@ -1,20 +1,20 @@
-import { usePetReport } from '@/features/users/context/PetReportContext';
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import { usePetReport } from '@/shared/context/PetReportContext';
 import { useEffect } from 'react';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const TestComponent = ({
   mockRData,
   component,
 }: {
-  mockRData: PetReportData | null;
+  mockRData: LostPetReportData | null;
   component: React.ReactNode;
 }) => {
-  const { setReportData } = usePetReport();
+  const { setLostPetReportData } = usePetReport();
 
   // Use an effect to set the data before the child component renders logic
   useEffect(() => {
     // @ts-ignore
-    setReportData(mockRData);
+    setLostPetReportData(mockRData);
   }, []);
 
   return component;

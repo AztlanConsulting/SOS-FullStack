@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Poster } from '@features/poster/components/Poster.component';
-import type { PetReportData } from '@features/poster/types/petReportData.types';
 import dog1 from '@assets/images/dog1.png';
 import dog2 from '@assets/images/dog2.png';
 import husky1 from '@assets/images/husky1.jpg';
 import husky2 from '@assets/images/husky2.jpg';
 import husky3 from '@assets/images/husky3.jpg';
 import husky4 from '@assets/images/husky4.jpg';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {
   const res = await fetch(url);
@@ -21,7 +21,7 @@ const file4 = await urlToFile(husky2, 'husky2.jpg');
 const file5 = await urlToFile(husky3, 'husky3.jpg');
 const file6 = await urlToFile(husky4, 'husky4.jpg');
 
-const mockPetReportData: PetReportData = {
+const mockPetReportData: LostPetReportData = {
   name: 'Travieso',
   species: 'Perro',
   date: '2026-04-23',
@@ -43,6 +43,7 @@ const mockPetReportData: PetReportData = {
   contactName: 'Juan Pérez',
   phoneNumber: '+52 442 123 4567',
   email: 'juan.perez@email.com',
+  planName: 'Plan Básico',
 };
 
 const meta: Meta<typeof Poster> = {

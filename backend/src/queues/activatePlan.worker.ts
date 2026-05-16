@@ -85,6 +85,11 @@ new Worker(
         } catch (error) {
           console.error('Facebook publish error:', error);
 
+          // Facebook may publish successfully but fail before the DB checkpoint
+          // is saved (timeout, crash, network error, etc.).
+          //
+          // When BullMQ retries the job, this prevents creating duplicate posts
+          // by checking if the Facebook post already exists and recovering it.
           const existingPost = await metaPublisher.findFacebookPostByPlanId(
             pet.description,
           );
@@ -102,15 +107,16 @@ new Worker(
                 },
               },
             );
-
-            return;
+          } else {
+            await purchasedPlanDataAccess.updatePurchasedPlanSocialPosts(
+              planId,
+              {
+                facebook: {
+                  status: 'failed',
+                },
+              },
+            );
           }
-
-          await purchasedPlanDataAccess.updatePurchasedPlanSocialPosts(planId, {
-            facebook: {
-              status: 'failed',
-            },
-          });
 
           throw error;
         }
@@ -226,7 +232,7 @@ function buildPetPostCaption(pet: Pet, phone: string): string {
   });
 
   return `🐾 Responde al nombre de ${pet.name.toUpperCase()}
-📍 Se extravió el ${formattedDate} en ${pet.placeMissing}
+📍 Se extravió el ${formattedDate} en ${pet.location}
 ${speciesEmoji} ${pet.description} 
 ☎️ Si le ven favor de resguardar y llamar al ${phone}`;
 }

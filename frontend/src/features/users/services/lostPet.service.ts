@@ -1,5 +1,5 @@
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 import axiosInstance from '@shared/utils/axios';
-import type { PetReportData } from '@features/users/types/petReport.types';
 import { exportPosterAsFile } from '@/shared/services/posterExport.services';
 
 /**
@@ -8,7 +8,9 @@ import { exportPosterAsFile } from '@/shared/services/posterExport.services';
  * @param reportData - Pet report information including images and plan details.
  * @returns Backend response after creating the report.
  */
-export const createLostPetReportRequest = async (reportData: PetReportData) => {
+export const createLostPetReportRequest = async (
+  reportData: LostPetReportData,
+) => {
   const formData = new FormData();
 
   formData.append('name', reportData.name || '');

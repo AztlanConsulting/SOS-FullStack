@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { PetReportData } from '../types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 import { Input } from '@shared/components/ui/Input/Input';
 import { Select } from '@shared/components/ui/Select/Select';
@@ -15,8 +15,8 @@ import { PetPhotosSection } from './PetPhotosSection';
 import { useEditableField } from '../hooks/useEditableField';
 
 export interface DataConfirmationProps {
-  formData: PetReportData;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: LostPetReportData;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
 }
 
 /** Editable field generic for text, selects, dates, texareas and phones */
@@ -32,12 +32,12 @@ const EditableField = ({
 }: {
   label: string;
   value: string;
-  field: keyof PetReportData;
+  field: keyof LostPetReportData;
   type?: 'text' | 'select' | 'date' | 'textarea' | 'phone';
   options?: { value: string; label: string }[];
   maxLength?: number;
   hasLength?: boolean;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
 }) => {
   const {
     isEditing,
@@ -146,8 +146,8 @@ const EditableLocation = ({
   formData,
   updateForm,
 }: {
-  formData: PetReportData;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: LostPetReportData;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -231,8 +231,8 @@ const EditablePhotos = ({
   formData,
   updateForm,
 }: {
-  formData: PetReportData;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: LostPetReportData;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -277,7 +277,7 @@ const EditablePhotos = ({
     setIsEditing(false);
   };
 
-  const handlePhotosUpdate = (newData: Partial<PetReportData>) => {
+  const handlePhotosUpdate = (newData: Partial<LostPetReportData>) => {
     if ('imageLayout' in newData) {
       // Reset errors immediately on first layout click.
       setSlotErrors({});

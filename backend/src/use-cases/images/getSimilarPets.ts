@@ -6,7 +6,7 @@ import type {
 export default async function getSimilarPets(
   petVector: PetVectorRepository,
   page: number,
-  petImage: PetImageDto,
+  petImage: Partial<PetImageDto>,
 ) {
   const response = await petVector.getSimilarPets(petImage, page);
 

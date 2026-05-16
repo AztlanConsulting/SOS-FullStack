@@ -16,7 +16,7 @@ const navigateMock = vi.fn();
 
 vi.mock('@shared/context/Location.context', () => ({
   useLocationContext: () => ({
-    currencyCode: 'USD',
+    currencyCode: 'MXN',
     exchangeRate: 1,
     plans: [],
     manuals: [],
@@ -175,10 +175,12 @@ describe('ManualItem', () => {
       imageUrl: 'https://example.com/manual.jpg',
     };
 
-    render(<ManualItem manual={manual} />);
+    render(<ManualItem manual={manual} currencyCode="MXN" />);
 
     expect(screen.getByText('Manual de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('$129')).toBeInTheDocument();
+    expect(
+      screen.getByText((text) => text.includes('$129')),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Manual de Prueba' }),
     ).toBeInTheDocument();

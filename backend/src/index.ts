@@ -6,6 +6,15 @@ import '@domain/models';
 import cors from 'cors';
 import path from 'path';
 
+async function loadWorkers() {
+  if (process.env.NODE_ENV !== 'test') {
+    await import('@/queues/activatePlan.worker');
+    await import('@/queues/sendEmail.worker');
+  }
+}
+
+void loadWorkers();
+
 const app = express();
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));

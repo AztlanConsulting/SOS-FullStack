@@ -11,7 +11,6 @@ import { pendingPaymentEmailService } from '@/infrastructure/service/pendingPaym
 import { findPaymentByOrderIdDB } from '@/use-cases/payments/findPaymentByOrderIdDB.usecase';
 import { getPurchasesByPaymentIdDB } from '@/use-cases/purchases/getPurchasesByPaymentIdDB.usecase';
 import { PurchaseDataAccess } from '@/infrastructure/data-access/purchase.data-access';
-import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 import { sendManualEmail } from '@/use-cases/emails/sendManualEmail.usecase';
 import { sendManualEmailService } from '@/infrastructure/service/sendManualEmail.service';
@@ -21,6 +20,8 @@ import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-a
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
 import { sendWorkshopEmail } from '@/use-cases/emails/sendWorkshopEmail.usecase';
 import { sendWorkshopEmailService } from '@/infrastructure/service/sendWorkshopEmail.service';
+import { activatePlan } from '@/use-cases/plans/activatePlan.usecase';
+import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 
 /**
  * middleware to create a Stripe payment intent.
@@ -189,11 +190,12 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       }
 
       if (purchase.productType === 'plan') {
-        const planActivation = await activateLostPetReport(
+        await activatePlan(
+          userDataAccess,
           purchasedPlanDataAccess,
+          purchase.userEmail,
           purchase.productId,
         );
-        if (!planActivation) console.error("Plan couldn't be activated");
       }
 
       if (purchase.productType === 'manual') {

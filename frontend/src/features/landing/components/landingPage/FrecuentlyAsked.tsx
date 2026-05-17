@@ -6,17 +6,32 @@ const faqs = [
   {
     question: '¿Cómo trabajamos?',
     answer:
-      'Recopilamos la información de tu mascota y utilizamos herramientas para ayudar a encontrar coincidencias y difundirla.',
+      'Recopilamos los datos de tu mascota y la difundimos de forma masiva y estratégica en redes sociales, grupos comunitarios y nuestra red de contactos para maximizar las posibilidades de encontrarla.',
   },
   {
     question: '¿Por qué cobramos?',
     answer:
-      'El costo ayuda a mantener la plataforma, mejorar la visibilidad de las publicaciones y optimizar la búsqueda.',
+      'Invertimos en publicidad pagada, alcance masivo y herramientas profesionales para que tu búsqueda llegue a miles de personas. Un servicio serio requiere recursos reales.',
   },
   {
-    question: '¿Solo es para perros o gatos?',
+    question: '¿Funciona para perros, gatos u otras especies?',
     answer:
-      'No, puedes registrar cualquier tipo de mascota perdida o encontrada.',
+      'Sí. Adaptamos las estrategias dependiendo de la especie, personalidad de la mascota y circunstancias de la pérdida. También podemos ayudarte en casos de aves, conejos y otras mascotas, ajustando la difusión y las recomendaciones según cada situación.',
+  },
+  {
+    question: '¿En cuánto tiempo pueden encontrar a mi mascota?',
+    answer:
+      'Cada caso es diferente, por lo que no existe un tiempo exacto para localizar a una mascota. Algunas aparecen en pocas horas y otras pueden tomar más tiempo. Lo importante es actuar rápido, mantener una búsqueda constante y aumentar la difusión desde el inicio para mejorar las probabilidades de encontrarla.',
+  },
+  {
+    question: '¿En qué ciudades operan?',
+    answer:
+      'Nuestro servicio es completamente digital, por lo que podemos ayudarte en distintas ciudades y países. La difusión se adapta estratégicamente a la zona donde se perdió tu mascota mediante anuncios geolocalizados y redes sociales.',
+  },
+  {
+    question: '¿Pueden garantizar que encontrarán a mi mascota?',
+    answer:
+      'No podemos garantizar el hallazgo, ya que cada caso depende de muchos factores. Sin embargo, nuestras estrategias ayudan a aumentar considerablemente las probabilidades de localización.',
   },
 ];
 
@@ -30,7 +45,7 @@ const FrecuentlyAsked = () => {
   };
 
   return (
-    <section className="bg-white overflow-hidden border-b border-border-gray py-8 lg:py-16">
+    <section className="bg-white overflow-hidden py-8 lg:py-16 ">
       <div className="w-5/6 mx-auto">
         <div className="text-center mb-6 lg:mb-10">
           <Text as="h2" variant="h2" weight="medium">

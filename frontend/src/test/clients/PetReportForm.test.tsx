@@ -19,11 +19,11 @@ vi.mock('react-router', async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-const mockSetReportData = vi.fn();
-vi.mock('@features/users/context/PetReportContext', () => ({
+const mockSetLostPetReportData = vi.fn();
+vi.mock('@/shared/context/PetReportContext', () => ({
   usePetReport: () => ({
-    setReportData: mockSetReportData,
-    reportData: null,
+    setLostPetReportData: mockSetLostPetReportData,
+    lostPetReportData: null,
   }),
 }));
 
@@ -109,6 +109,34 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  test('scrolls to the photo section when an uploaded image exceeds 5MB', async () => {
+    const user = userEvent.setup();
+    const oversizedImage = new File(
+      ['x'.repeat(5 * 1024 * 1024 + 1)],
+      'oversized.jpg',
+      {
+        type: 'image/jpeg',
+      },
+    );
+
+    const getElementByIdSpy = vi.spyOn(document, 'getElementById');
+
+    renderWithRouter(
+      <PetReportForm
+        initialData={{
+          ...VALID_INITIAL_DATA,
+          images: [oversizedImage],
+        }}
+      />,
+    );
+
+    await user.click(screen.getByText('Contratar el servicio'));
+
+    expect(getElementByIdSpy).toHaveBeenCalledWith('photo-upload-section');
+    expect(screen.getByText('La imagen no debe superar los 5MB')).toBeDefined();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
@@ -205,17 +233,17 @@ describe('PetReportForm Component', () => {
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(mockSetReportData).toHaveBeenCalledTimes(1);
+    expect(mockSetLostPetReportData).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith('/report-confirmation');
   });
 
-  test('calls setReportData with the complete form data on success', async () => {
+  test('calls setLostPetReportData with the complete form data on success', async () => {
     const user = userEvent.setup();
     renderWithRouter(<PetReportForm initialData={VALID_INITIAL_DATA} />);
 
     await user.click(screen.getByText('Contratar el servicio'));
 
-    expect(mockSetReportData).toHaveBeenCalledWith(
+    expect(mockSetLostPetReportData).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Firulais',
         species: 'Perro',

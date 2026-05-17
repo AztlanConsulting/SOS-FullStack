@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PetReportForm } from './PetReportForm';
-import type { PetReportData } from '../types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const meta: Meta<typeof PetReportForm> = {
   title: 'Features/Users/PetReportFlow',
@@ -18,14 +18,14 @@ export default meta;
 type Story = StoryObj<typeof PetReportForm>;
 
 // --- MOCK DATA ---
-const mockDataConfirmacion: Partial<PetReportData> = {
+const mockDataConfirmacion: Partial<LostPetReportData> = {
   name: 'Chiqui',
   species: 'Perro',
   date: '24/02/2026',
   breed: 'Husky',
   sex: 'Macho',
   color: 'Café y blanco',
-  size: 'Grande',
+  size: 'Grande: 26 a 45 kg',
   description:
     'Su ojo izquierdo es blanco y el derecho es café. Sus patas son de color rosa.',
   images: [],

@@ -40,11 +40,17 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
 
         <div className="bg-white px-5 py-5">
+<<<<<<< HEAD
           {children ?? (
             <Text variant="body" className="text-gray-700 leading-relaxed">
               {description}
             </Text>
           )}
+=======
+          <Text variant="body" className="text-gray-700 leading-relaxed">
+            {description ?? children}
+          </Text>
+>>>>>>> f8193bbcb3386dcd51f79fd079f7ed6a5b68e0d7
         </div>
       </div>
     </div>

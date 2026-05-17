@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { createMemoryRouter, RouterProvider, useLocation } from 'react-router';
 import { ManualItem } from '@features/manuals/components/ManualItem';
 import { ManualContent } from '@features/manuals/components/ManualContent';
+import wrapper from '../utils/wrapper.util';
+import TestComponent from '../utils/TestContextComponent';
 
 const manual = {
   _id: 'm-42',
@@ -71,14 +73,20 @@ describe('manuals integration', () => {
           element: <ManualContent manual={manual} />,
         },
         {
-          path: '/purchase',
+          path: '/compra',
           element: <PurchaseStateProbe />,
         },
       ],
       { initialEntries: ['/manuales/m-42'] },
     );
 
-    render(<RouterProvider router={router} />);
+    render(
+      <TestComponent
+        mockRData={null}
+        component={<RouterProvider router={router} />}
+      />,
+      { wrapper },
+    );
 
     // First submit should fail with validation message.
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));
@@ -86,14 +94,19 @@ describe('manuals integration', () => {
       screen.getByText('Ingresa un correo electrónico válido.'),
     ).toBeInTheDocument();
 
-    // Second submit with valid email should route to purchase state.
+    // Second submit with valid email (and name) should route to purchase state.
     fireEvent.change(screen.getByLabelText('Correo electrónico'), {
       target: { value: '  buyer@example.com  ' },
+    });
+    fireEvent.change(screen.getByLabelText(/Nombre/i), {
+      target: { value: 'Buyer Name' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Proceder al pago' }));
 
     await waitFor(() => {
-      expect(screen.getByText('email:buyer@example.com')).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes('buyer@example.com')),
+      ).toBeInTheDocument();
     });
     expect(screen.getByText('productId:m-42')).toBeInTheDocument();
     expect(screen.getByText('productType:manual')).toBeInTheDocument();

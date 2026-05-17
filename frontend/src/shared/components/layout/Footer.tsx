@@ -5,9 +5,13 @@ import { PiTiktokLogoLight } from 'react-icons/pi';
 import { CiYoutube } from 'react-icons/ci';
 import { FaXTwitter } from 'react-icons/fa6';
 
-export const Footer = () => {
+interface FooterProps {
+  bg?: string;
+}
+
+export const Footer = ({ bg = 'color-primary-bg' }: FooterProps) => {
   return (
-    <footer className="color-primary-bg py-8 lg:py-12">
+    <footer className={`${bg} py-8 lg:py-12`}>
       <div className="w-5/6 mx-auto">
         <div className="flex flex-col items-center  gap-5">
           <div className="flex justify-center gap-8 mb-5">
@@ -54,12 +58,12 @@ export const Footer = () => {
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              <a href="/therms">Terminos y condiciones</a>
+              <a href="/therms">Términos y condiciones</a>
             </Text>
           </div>
           <div className="text-center">
             <Text variant="body" className="underline">
-              <a href="/credits">Creditos de imagenes</a>
+              <a href="/credits">Créditos de imágenes</a>
             </Text>
           </div>
           <div className="text-center">

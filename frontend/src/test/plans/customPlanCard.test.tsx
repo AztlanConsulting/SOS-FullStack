@@ -2,26 +2,63 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import CustomPlanCard from '@/features/plans/components/customPlanCard';
-import { PetReportProvider } from '@/features/users/context/PetReportContext';
+import { PetReportProvider } from '@/shared/context/PetReportContext';
+import { createMemoryRouter, RouterProvider } from 'react-router';
+import { PurchasePage } from '@/pages/PurchasePage';
 
-const setReportData = vi.hoisted(() => vi.fn());
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
 
-vi.mock('@features/users/context/PetReportContext', async (importOriginal) => {
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
+const setLostPetReportData = vi.hoisted(() => vi.fn());
+
+vi.mock('@/shared/context/PetReportContext', async (importOriginal) => {
   const actual = await importOriginal();
 
   return {
     ...(actual as Record<string, unknown>),
     usePetReport: () => ({
-      reportData: {},
-      setReportData,
+      lostPetReportData: {},
+      setLostPetReportData,
     }),
   };
 });
 
 const renderWithProvider = () => {
+  const router = createMemoryRouter(
+    [
+      {
+        path: '/planes/personalizado',
+        element: <CustomPlanCard />,
+      },
+      {
+        path: '/compra',
+        element: <PurchasePage />,
+      },
+    ],
+    { initialEntries: ['/planes/personalizado'] },
+  );
+
   return render(
     <PetReportProvider>
-      <CustomPlanCard />
+      <RouterProvider router={router} />
     </PetReportProvider>,
   );
 };
@@ -116,8 +153,16 @@ describe('CustomPlanCard Component', () => {
    */
   test('renders price breakdown with correct format', () => {
     renderWithProvider();
-    expect(screen.getByText(/Días \(3 x \$80\.00\)/)).toBeDefined();
-    expect(screen.getByText(/Radio \(5 km x \$15\.00\)/)).toBeDefined();
+    expect(
+      screen.getByText(
+        (content) => content.includes('Días') && content.includes('4.50'),
+      ),
+    ).toBeDefined();
+    expect(
+      screen.getByText(
+        (content) => content.includes('Radio') && content.includes('0.85'),
+      ),
+    ).toBeDefined();
   });
 
   /**
@@ -126,7 +171,9 @@ describe('CustomPlanCard Component', () => {
    */
   test('renders correct initial total price', () => {
     renderWithProvider();
-    expect(screen.getByText('$315.00')).toBeDefined();
+    expect(
+      screen.getByText((content) => content.includes('17.75')),
+    ).toBeDefined();
   });
 
   /**
@@ -139,9 +186,9 @@ describe('CustomPlanCard Component', () => {
 
   /**
    * Verifies confirm button calls console.log with correct shape.
-   * Initial state: days=3, km=5, selectedFeatures=[], totalPrice=315
+   * Initial state: days=3, km=5, selectedFeatures=[], totalPrice=17.75
    */
-  test('calls setReportData with correct data when confirm is clicked', async () => {
+  test('calls setLostPetReportData with correct data when confirm is clicked', async () => {
     const BASE_FEATURES = [
       'Publicación en nuestras redes sociales',
       'Video y lista de consejos de búsqueda',
@@ -154,13 +201,13 @@ describe('CustomPlanCard Component', () => {
 
     await userEvent.click(screen.getByText('Confirmar plan'));
 
-    expect(setReportData).toHaveBeenCalledWith(
+    expect(setLostPetReportData).toHaveBeenCalledWith(
       expect.objectContaining({
         planName: 'Personalizado',
         planDetails: expect.objectContaining({
           days: 3,
           km: 5,
-          totalPrice: 315,
+          totalPrice: 17.75,
           selectedFeatures: expect.arrayContaining([
             dynamicFeature,
             ...BASE_FEATURES,

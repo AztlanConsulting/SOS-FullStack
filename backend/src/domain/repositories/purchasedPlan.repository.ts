@@ -19,4 +19,6 @@ export interface PurchasedPlanRepository {
     planData: PurchasedPlanCreateInput,
   ): Promise<PurchasedPlan>;
   getPlanDistribution(): Promise<PlanDistributionMetric[]>;
+  getActivePlanByPetId(petId: string): Promise<PurchasedPlan | null>;
+  activatePurchasedPlan(planId: string): Promise<boolean>;
 }

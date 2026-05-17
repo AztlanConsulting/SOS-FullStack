@@ -12,7 +12,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.FRONT_END_URL ?? 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   }),
@@ -20,22 +20,22 @@ app.use(
 
 app.set('trust proxy', 1);
 
-app.use((req, res, next) => {
-  if (req.path === '/payments/webhook') {
-    let rawBody = Buffer.alloc(0);
-    req.on('data', (chunk) => {
-      rawBody = Buffer.concat([rawBody, chunk]);
-    });
-    req.on('end', () => {
-      (req as any).rawBody = rawBody;
-      next();
-    });
-  } else {
-    next();
+// Webhook must receive raw body for Stripe signature verification
+// This middleware must run before the standard JSON parser
+app.use('/payments/webhook', bodyparser.raw({ type: 'application/json' }));
+app.use('/payments/webhook', (req, res, next) => {
+  // req.body is a Buffer from bodyparser.raw(), store it as rawBody
+  if (Buffer.isBuffer(req.body)) {
+    (req as any).rawBody = req.body;
+  } else if (typeof req.body === 'string') {
+    // In case body is a string (shouldn't happen with bodyparser.raw), convert it
+    (req as any).rawBody = Buffer.from(req.body);
   }
+  next();
 });
 
-app.use(bodyparser.json());
+app.use(bodyparser.json({ limit: '20mb' }));
+app.set('trust proxy', true);
 app.use(cookieParser());
 
 // Routes

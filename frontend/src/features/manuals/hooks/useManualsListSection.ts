@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getManuals } from '../services/manual.service';
 import type { Manual } from '../types/Manual.type';
+import { useLocationContext } from '@shared/context/Location.context';
 
 export const useManualsListSection = () => {
   const [manuals, setManuals] = useState<Manual[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const { manuals: localizedManuals, currencyCode } = useLocationContext();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +31,21 @@ export const useManualsListSection = () => {
 
     fetchManuals();
   }, []);
+
+  /**
+   *
+   * It attempts to match a manual from the local state/database against a
+   * list of localized items (which contain converted currency data).
+   * If a match is found, it returns the localized price; otherwise,
+   * it falls back to the manual's original base price.
+   *
+   * @param manual - The original Manual object from the primary data source.
+   * @returns {number} The converted price if available, or the original price as a fallback.
+   */
+  const getLocalizedPrice = (manual: Manual): number => {
+    const localized = localizedManuals.find((m) => m.name === manual.name);
+    return localized?.localizedPrice ?? manual.price;
+  };
 
   const handleSearchChange = (searchTerm: string) => {
     setSearchTerm(searchTerm);
@@ -108,5 +125,7 @@ export const useManualsListSection = () => {
     currentManuals,
     totalPages,
     visiblePages,
+    currencyCode,
+    getLocalizedPrice,
   };
 };

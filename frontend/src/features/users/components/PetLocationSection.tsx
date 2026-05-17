@@ -1,11 +1,16 @@
 import { LocationSearchInput } from '../../../shared/components/ui/LocationSearchInput/LocationSearchInput';
 import { MapDisplay } from '../../../shared/components/ui/MapDisplay/MapDisplay';
-import type { PetReportData, ReportType } from '../types/petReport.types';
+import { useGeolocation } from '@features/map/hooks/useGeolocation';
+import { Text } from '@/shared/components/ui/Text';
+import type {
+  LostPetReportData,
+  ReportType,
+} from '@shared/types/petReport.types';
 import { usePetLocation } from '../hooks/usePetLocation';
 
 export interface PetLocationSectionProps {
-  formData: Partial<PetReportData>;
-  updateForm: (newData: Partial<PetReportData>) => void;
+  formData: Partial<LostPetReportData>;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
   reportType?: ReportType;
   mapID?: string;
   errors?: Record<string, string>;
@@ -23,6 +28,7 @@ export const PetLocationSection = ({
   const inputLabel =
     reportType === 'lost' ? 'Lugar de extravío' : 'Lugar de encuentro';
   const placeholderText = 'Ej: Parque Central, Centro Histórico';
+  const { isLocating, goToMyLocation } = useGeolocation();
 
   const {
     results,
@@ -59,7 +65,14 @@ export const PetLocationSection = ({
         error={errors.address}
       />
 
-      <MapDisplay mapID={mapID} />
+      <MapDisplay
+        mapID={mapID}
+        isLocating={isLocating}
+        onGoToMyLocation={goToMyLocation}
+      />
+      <Text variant="caption" weight="semibold" as="div">
+        ¡Puedes arrastrar la patita!
+      </Text>
     </section>
   );
 };

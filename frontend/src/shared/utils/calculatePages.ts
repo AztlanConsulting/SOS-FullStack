@@ -19,8 +19,6 @@ function calculatePages(
     .fill(0)
     .map((_, idx) => idx + startPage);
 
-  console.log(visiblePages);
-
   return [visiblePages, totalPages];
 }
 

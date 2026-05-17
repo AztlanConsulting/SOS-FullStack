@@ -9,8 +9,13 @@ import manualRoutes from './manuals.routes';
 import purchaseRoutes from './purchase.routes';
 import workshopRoutes from './workshops.routes';
 import planRoutes from './plans.routes';
+<<<<<<< HEAD
 import clientRoutes from './client.routes';
 import metricsRoutes from './metrics.routes';
+=======
+import foundPetRoutes from './foundPet.routes';
+import pricingRoutes from './pricing.routes';
+>>>>>>> f8193bbcb3386dcd51f79fd079f7ed6a5b68e0d7
 
 const router = express.Router();
 
@@ -27,7 +32,13 @@ router.use('/workshop', workshopRoutes);
 router.use('/manuals', manualRoutes);
 router.use('/purchases', purchaseRoutes);
 router.use('/plans', planRoutes);
+<<<<<<< HEAD
 router.use('/api/clients', clientRoutes);
+=======
+router.use('/found-pets', foundPetRoutes);
+router.use('/', pricingRoutes);
+
+>>>>>>> f8193bbcb3386dcd51f79fd079f7ed6a5b68e0d7
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);
 router.use('/metrics', metricsRoutes);

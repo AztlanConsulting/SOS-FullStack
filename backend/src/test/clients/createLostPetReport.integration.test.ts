@@ -1,4 +1,5 @@
 import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
+import type { CreateLostPetReportInput } from '@/use-cases/clients/createLostPetReport.usecase';
 import { createLostPetReport } from '@/use-cases/clients/createLostPetReport.usecase';
 import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { petDataAccess } from '@/infrastructure/data-access/pet.data-access';
@@ -6,6 +7,12 @@ import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedP
 import { roleDataAccess } from '@/infrastructure/data-access/role.data-access';
 import { RoleModel } from '@/domain/models/role.model';
 import type { RoleRepository } from '@/domain/repositories/role.repository';
+import getLocation from '@/utils/getLocation.mapper';
+
+jest.mock('@/utils/getLocation.mapper');
+const mockedGetLocation = getLocation as jest.MockedFunction<
+  typeof getLocation
+>;
 
 describe('createLostPetReport (integration)', () => {
   beforeAll(async () => {
@@ -22,7 +29,9 @@ describe('createLostPetReport (integration)', () => {
     await closeDatabase();
   });
 
-  const createInput = (email: string) => ({
+  const createInput: (email: string) => CreateLostPetReportInput = (
+    email: string,
+  ) => ({
     name: 'Firulais',
     species: 'Perro',
     date: '2024-03-09',
@@ -32,7 +41,7 @@ describe('createLostPetReport (integration)', () => {
     size: 'Mediana: 11 a 25 kg',
     description: 'Perrito amigable con collar azul.',
     location: 'Querétaro',
-    locationCoords: [20.5888, -100.3899] as [number, number],
+    locationCoords: [19.43376836020933, -99.12842362266052] as [number, number],
     contactName: 'Juan Pérez',
     phoneNumber: '5551234567',
     email,
@@ -48,6 +57,16 @@ describe('createLostPetReport (integration)', () => {
 
   test('creates pet, plan and user in MongoDB', async () => {
     const email = `test-${Date.now()}@example.com`;
+
+    mockedGetLocation.mockResolvedValue({
+      coords: [19.4337, -99.1284],
+      displayName: 'Querétaro, México',
+      properties: {
+        city: 'Querétaro',
+        country: 'México',
+        state: 'Querétaro',
+      },
+    });
 
     const result = await createLostPetReport(
       {
@@ -68,6 +87,17 @@ describe('createLostPetReport (integration)', () => {
   test('reuses existing user if email already exists', async () => {
     const email = `existing-${Date.now()}@example.com`;
 
+    mockedGetLocation.mockResolvedValue({
+      coords: [19.4337, -99.1284],
+      displayName: 'Querétaro, México',
+      properties: {
+        city: 'Querétaro',
+        country: 'México',
+        state: 'Querétaro',
+      },
+    });
+
+    const input = createInput(email);
     await createLostPetReport(
       {
         userRepository: userDataAccess,
@@ -75,7 +105,7 @@ describe('createLostPetReport (integration)', () => {
         purchasedPlanRepository: purchasedPlanDataAccess,
         roleRepository: roleDataAccess,
       },
-      createInput(email),
+      input,
     );
 
     const second = await createLostPetReport(

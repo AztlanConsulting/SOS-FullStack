@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
 import { createPurchaseDB } from '@use-cases/purchases/createPurchaseDB.usecase';
-import { PurchaseDataAccess } from '@/infrastructure/data-access/purchase.data-access';
+import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
+import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
+import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 
 /**
  * Factory function that returns a middleware to create a new purchase.

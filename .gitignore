@@ -133,3 +133,6 @@ DerivedData/
 storybook-static
 
 public/
+**/uploads
+
+vectorDatabase

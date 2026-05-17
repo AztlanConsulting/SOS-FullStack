@@ -5,12 +5,14 @@ export interface ManualResult {
   price: number;
   content: ContentBlock[];
   imageUrl: string;
+  pdfUrl?: string;
+  emailContent?: string;
 }
 
 export interface GetManual {
   page?: number;
   searchTerm?: string;
-  sortOption: string;
+  sortOption?: string;
 }
 
 export interface ManualRepository {

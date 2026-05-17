@@ -1,11 +1,14 @@
 import type {
   PetImage,
   PetImageDto,
-  PetImages,
+  PetImageSearch,
+  PetVectorRepository,
 } from '@domain/repositories/petImage.repository';
 import vectorDB from '@infrastructure/database/vectorDB/vectorDatabase';
 
-export const petVector: PetImage = {
+const maxDistance = 0.18;
+
+export const petVector: PetVectorRepository = {
   /**
    * Upload image to vector database
    * @param petImage - Object containing image, species and mongoDB id
@@ -18,9 +21,8 @@ export const petVector: PetImage = {
       .creator()
       .withClassName('Pet')
       .withProperties({
-        refId: petImage.refId,
+        ...petImage,
         image: b64,
-        species: petImage.species,
       })
       .do();
 
@@ -33,24 +35,107 @@ export const petVector: PetImage = {
    * Get images similar to the one requested
    * @param petImage - Object containing image, species and mongoDB id
    * @param offset - Manage pagination
-   * @returns result - Array of PetImages, contains image, species and refId
+   * @returns result - Array of PetImage, contains image, species and refId
    */
   getSimilarPets: async function (
-    petImage: PetImageDto,
-    offset: number,
-  ): Promise<PetImages[]> {
+    petImage: PetImageSearch,
+  ): Promise<PetImage[]> {
     const image = petImage.image.toString('base64');
+    const { page, color, species, location } = petImage.query;
+
+    let query = vectorDB.graphql
+      .get()
+      .withClassName('Pet')
+      .withFields('image refId species location color')
+      .withNearImage({ image: image, distance: maxDistance })
+      .withOffset(0)
+      .withLimit(100);
+
+    const resImg = await query.do();
+
+    const allResults: PetImage[] = resImg.data.Get.Pet ?? [];
+
+    const normalize = (str?: string) =>
+      str
+        ?.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim() ?? '';
+
+    const filtered = allResults.filter((pet) => {
+      const matchesSpecies =
+        !species || normalize(pet.species).includes(normalize(species));
+      const matchesColor =
+        !color || normalize(pet.color).includes(normalize(color));
+      const matchesLocation =
+        !location || normalize(pet.location).includes(normalize(location));
+
+      return matchesSpecies && matchesColor && matchesLocation;
+    });
+
+    const pagination = 6;
+    const pageNum = page ?? 0;
+    return filtered.slice(pageNum * pagination, (pageNum + 1) * pagination);
+  },
+
+  /**
+   * Get a particular image
+   * @param refId - Get imageInformation by its id
+   * @returns petImage - The complete object
+   */
+  getPetById: async function (refId: string): Promise<PetImage> {
     const resImg = await vectorDB.graphql
       .get()
       .withClassName('Pet')
-      .withFields('image refId species')
-      .withNearImage({ image: image })
-      .withOffset(offset)
-      .withLimit(10)
+      .withFields('image refId species location color')
+      .withWhere({
+        path: ['refId'],
+        operator: 'Equal',
+        valueString: refId,
+      })
       .do();
 
-    const result: PetImages[] = resImg.data.Get.Pet;
+    const petImage: PetImage = resImg.data.Get.Pet;
+    return petImage;
+  },
 
-    return result;
+  /**
+   * Get the total amount of images similar to the one requested
+   * @param petImage - Object containing image, species and mongoDB id
+   * @returns number - Amount of images
+   */
+  countPetImages: async function (petImage: PetImageSearch): Promise<number> {
+    const image = petImage.image.toString('base64');
+    const { color, species, location } = petImage.query;
+
+    let query = vectorDB.graphql
+      .get()
+      .withClassName('Pet')
+      .withFields('image refId species location color')
+      .withNearImage({ image: image, distance: maxDistance });
+
+    const imgCount = await query.do();
+
+    const allResults: PetImage[] = imgCount.data.Get.Pet ?? [];
+
+    const normalize = (str?: string) =>
+      str
+        ?.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim() ?? '';
+
+    const filtered = allResults.filter((pet) => {
+      const matchesSpecies =
+        !species || normalize(pet.species).includes(normalize(species));
+      const matchesColor =
+        !color || normalize(pet.color).includes(normalize(color));
+      const matchesLocation =
+        !location || normalize(pet.location).includes(normalize(location));
+
+      return matchesSpecies && matchesColor && matchesLocation;
+    });
+
+    return filtered.length;
   },
 };

@@ -1,10 +1,78 @@
 import type { Stripe } from 'stripe';
 
+export interface GeocodingResult {
+  coords: [number, number];
+  displayName: string; // Contains the name of the location
+  properties: {
+    city: string;
+    country: string;
+    state: string;
+  };
+}
+
+export interface PetReportData {
+  name: string;
+  species: string;
+  date: string;
+  breed: string;
+  sex: '' | 'Macho' | 'Hembra' | 'Desconocido';
+  color: string;
+  size?:
+    | ''
+    | 'Mini: 1 a 4 kg'
+    | 'Pequeña: 5 a 10 kg'
+    | 'Mediana: 11 a 25 kg'
+    | 'Grande: 26 a 45 kg'
+    | 'Gigante: más de 45 kg';
+  description?: string;
+
+  // images: File[];
+  imageLayout: string;
+
+  address: string;
+  location: GeocodingResult | null;
+  locationCoords?: [number, number];
+
+  contactName: string;
+  phoneNumber: string;
+  email: string;
+
+  planName: string;
+  planDetails?: {
+    days: number;
+    km: number;
+    selectedFeatures: string[];
+    totalPrice: number;
+  };
+}
+
 export interface PaymentIntentDTO {
   amount: number;
   currency: string;
-  customerId?: string; // for SPEI
   method?: string; // to seperate spei from the other methods
+  name?: string; // for SPEI
+  email?: string; // for SPEI
+  product?: {
+    productName: string;
+    productId: string;
+  };
+  plan?: PetReportData;
+  idempotencyKey?: string;
+}
+
+export interface SpeiDetails {
+  clabe: string;
+  bankName: string;
+  reference: string;
+  bankCode?: string;
+  holderName?: string;
+  holderAddress?: Stripe.Address;
+}
+
+export interface OxxoDetails {
+  number: string | null;
+  expiresAfter: number | null;
+  voucherUrl: string | null;
 }
 
 export interface PaymentIntentResult {
@@ -12,6 +80,8 @@ export interface PaymentIntentResult {
   amount: number;
   currency: string;
   clientSecret: string | null;
+  speiDetails?: SpeiDetails | null;
+  oxxoDetails?: OxxoDetails | null;
 }
 
 export interface EventDTO {

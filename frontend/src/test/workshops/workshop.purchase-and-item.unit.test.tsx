@@ -6,8 +6,32 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import WorkshopCard from '@features/workshop/components/WorkshopCard';
 import type { Workshop } from '@features/workshop/types/workshop';
+import { usePetReport } from '@/shared/context/PetReportContext';
 
 const navigateMock = vi.fn();
+vi.mock('@/features/users/context/PetReportContext', () => ({
+  usePetReport: vi.fn(),
+}));
+
+// Mocks the LocationContext to provide default USD pricing values.
+// Required because components using useLocationContext need a LocationProvider
+// in scope — without this mock they throw "useLocation must be used within a LocationProvider".
+// Uses USD defaults (exchangeRate: 1) so price assertions remain predictable across tests.
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'USD',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
 
 // Replace useNavigate so we can assert route targets and payloads.
 vi.mock('react-router', async () => {
@@ -17,10 +41,16 @@ vi.mock('react-router', async () => {
     useNavigate: () => navigateMock,
   };
 });
-
+vi.mock('@/shared/context/PetReportContext');
 describe('usePurchaseProduct', () => {
   beforeEach(() => {
     navigateMock.mockReset();
+    vi.mocked(usePetReport).mockReturnValue({
+      lostPetReportData: null,
+      setLostPetReportData: vi.fn(),
+      foundPetReportData: null,
+      setFoundPetReportData: vi.fn(),
+    });
   });
 
   it('shows validation error for invalid email', () => {
@@ -35,6 +65,7 @@ describe('usePurchaseProduct', () => {
 
     act(() => {
       // Simulate submit with invalid email format.
+      result.current.handleNameChange('Buyer Name');
       result.current.handleEmailChange('correo-invalido');
       result.current.handleProceedToPayment();
     });
@@ -56,12 +87,18 @@ describe('usePurchaseProduct', () => {
     );
 
     act(() => {
-      // Trigger initial validation error.
+      // Trigger initial validation error: set name first, then proceed
+      result.current.handleNameChange('Buyer Name');
+    });
+
+    act(() => {
       result.current.handleProceedToPayment();
     });
+
     expect(result.current.emailError).toBe(
       'Ingresa un correo electrónico válido.',
     );
+    expect(result.current.nameError).toBe('');
 
     act(() => {
       // Editing input should clear the previous error message.
@@ -81,6 +118,7 @@ describe('usePurchaseProduct', () => {
     );
 
     act(() => {
+      result.current.handleNameChange('Buyer Name');
       result.current.handleEmailChange('  buyer@example.com  ');
     });
 
@@ -89,14 +127,37 @@ describe('usePurchaseProduct', () => {
       result.current.handleProceedToPayment();
     });
 
-    expect(navigateMock).toHaveBeenCalledWith('/purchase', {
+    expect(navigateMock).toHaveBeenCalledWith('/compra', {
       state: {
+        userName: 'Buyer Name',
         userEmail: 'buyer@example.com',
         productId: 'w1',
         productType: 'taller',
         price: 300,
       },
     });
+  });
+
+  it('shows validation error when lastname is missing', () => {
+    const { result } = renderHook(() =>
+      usePurchaseProduct({
+        _id: 'w1',
+        item: 'taller',
+        price: 300,
+        url: '/workshop',
+      }),
+    );
+
+    act(() => {
+      result.current.handleNameChange('Buyer');
+      result.current.handleEmailChange('buyer@example.com');
+      result.current.handleProceedToPayment();
+    });
+
+    expect(result.current.nameError).toBe(
+      'Ingresa nombre y apellido para contactarte',
+    );
+    expect(navigateMock).not.toHaveBeenCalled();
   });
 });
 
@@ -110,7 +171,7 @@ describe('WorkshopCard', () => {
       _id: 'w1',
       name: 'Workshop de Prueba',
       price: 100,
-      content: 'Contenido de prueba',
+      content: [{ content: 'Hola', type: 'text' }],
       imageUrl: 'https://example.com/workshop.jpg',
       description: 'workshop description',
       category: ['1', '2', '3'],
@@ -119,7 +180,7 @@ describe('WorkshopCard', () => {
     render(<WorkshopCard workshop={workshop} />);
 
     expect(screen.getByText('Workshop de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('$ 100')).toBeInTheDocument();
+    expect(screen.getByText('MX$100')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Workshop de Prueba' }),
     ).toBeInTheDocument();

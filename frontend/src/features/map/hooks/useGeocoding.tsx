@@ -3,7 +3,7 @@ import { LeafletMapService } from '../services/leafletMapService';
 import { PhotonGeocoding } from '@features/map/services/photonGeocodingService';
 import type { GeocodingResult } from '@features/map/types/geocodingResult';
 
-const DEFAULT_LOCATION_LABEL = 'Mexico City, Mexico';
+const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
 
 type MarkerAddressPayload = {
   coords: [number, number];

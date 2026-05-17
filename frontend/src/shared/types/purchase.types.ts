@@ -5,9 +5,11 @@ export type PurchaseRequest = {
   item: string;
   price: number;
   url: string;
+  name?: string;
 };
 
 export type Product = {
+  _id?: string;
   imageUrl: string;
   name: string;
   content: ContentBlock[];

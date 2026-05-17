@@ -13,7 +13,7 @@ jest.mock(
   }),
 );
 
-jest.mock('@use-cases/images/createPetImage', () => ({
+jest.mock('@use-cases/images/createPetImage.usecase', () => ({
   createPetImage: jest.fn().mockResolvedValue(true),
 }));
 

@@ -10,6 +10,7 @@ type ButtonProps = {
   isLoading?: boolean;
   icon?: ComponentType<{ size?: number }>;
   textColor?: string;
+  bgColor?: string;
   type?: 'button' | 'submit' | 'reset';
 };
 export function Button({
@@ -20,6 +21,7 @@ export function Button({
   isLoading = false,
   icon: Icon,
   textColor = '',
+  bgColor = '',
   type = 'button',
 }: ButtonProps) {
   const base =
@@ -45,6 +47,7 @@ export function Button({
         'relative flex justify-center',
         (disabled || isLoading) && 'opacity-50 cursor-not-allowed',
         textColor,
+        bgColor,
       )}
     >
       <div
@@ -52,7 +55,7 @@ export function Button({
       >
         {Icon ? <div className="w-[33px]" /> : <></>}
 
-        <Text variant="caption" weight="medium" className="text-inherit">
+        <Text variant="caption" as="p" weight="medium" className="text-inherit">
           {isLoading ? 'Guardando...' : label}
         </Text>
 

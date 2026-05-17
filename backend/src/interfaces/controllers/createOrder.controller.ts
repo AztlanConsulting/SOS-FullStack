@@ -25,6 +25,7 @@ export default async function createOrder(req: Request, res: Response) {
       orderId: result.id,
       amount: result.amount,
       currency: result.currency,
+      method: paymentDetail.data.method ?? 'unknown',
       clientSecret: result.clientSecret ?? null,
     });
 

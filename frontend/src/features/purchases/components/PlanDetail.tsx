@@ -1,8 +1,8 @@
-import type { PetReportData } from '@/features/users/types/petReport.types';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { Text } from '@shared/components/ui/Text';
 
 interface Props {
-  reportData: PetReportData;
+  reportData: LostPetReportData;
 }
 
 const PlanDetail = ({ reportData }: Props) => {

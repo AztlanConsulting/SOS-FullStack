@@ -9,6 +9,21 @@ import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
+
+const isGeneratedPosterFile = (file: File) =>
+  file.type === 'image/png' && file.name.endsWith('-poster.png');
+
+const appendPosterAsLastImage = (
+  reportData: LostPetReportData,
+  posterFile: File,
+): LostPetReportData => ({
+  ...reportData,
+  images: [
+    ...reportData.images.filter((file) => !isGeneratedPosterFile(file)),
+    posterFile,
+  ],
+});
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -53,27 +68,25 @@ export const ReportConfirmationPage: React.FC = () => {
     };
   }, []);
 
-  const handleUpdateForm = async (
-    newData: Partial<typeof lostPetReportData>,
-  ) => {
+  const handleUpdateForm = (newData: Partial<LostPetReportData>) => {
     if (!lostPetReportData) return;
-    if (lostPetReportData) {
-      const posterFile = await exportPosterAsFile(
-        posterRef.current,
-        `${lostPetReportData.name}-poster`,
-      );
-
-      if (posterFile) {
-        setLostPetReportData({
-          ...lostPetReportData,
-          images: [...lostPetReportData.images, posterFile],
-        });
-      }
-      setLostPetReportData({ ...lostPetReportData, ...newData });
-    }
+    setLostPetReportData({ ...lostPetReportData, ...newData });
   };
 
-  const handleProceedToPayment = () => {
+  const handleProceedToPayment = async () => {
+    if (!lostPetReportData) return;
+
+    const posterFile = await exportPosterAsFile(
+      posterRef.current,
+      `${lostPetReportData.name}-poster`,
+    );
+
+    if (posterFile) {
+      setLostPetReportData(
+        appendPosterAsLastImage(lostPetReportData, posterFile),
+      );
+    }
+
     navigate('/plans');
   };
 

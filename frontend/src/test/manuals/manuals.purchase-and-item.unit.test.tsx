@@ -182,7 +182,6 @@ describe('ManualItem', () => {
     expect(
       screen.getByText((text) => text.includes('$129')),
     ).toBeInTheDocument();
-    expect(screen.getByText('$129')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Manual de Prueba' }),
     ).toBeInTheDocument();

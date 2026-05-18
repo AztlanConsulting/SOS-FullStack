@@ -45,7 +45,7 @@ describe('Load pet details', () => {
       { wrapper },
     );
 
-    expect(await screen.findByText('Dog')).toBeDefined();
+    expect(await screen.findAllByText('Dog')).toHaveLength(2);
     expect(screen.findByText('Huskey')).toBeDefined();
     expect(screen.findByText('Macho')).toBeDefined();
     expect(screen.findByText('Blanco y negro')).toBeDefined();

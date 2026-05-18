@@ -12,7 +12,7 @@ const PetContent = ({ petInfo }: Props) => {
         <Segment
           important
           label={'Especie de la mascota'}
-          content={petInfo.breed}
+          content={petInfo.species}
         />
         <Segment label={'Fecha de encuentro'} content={petInfo.date} />
         <Segment label={'Lugar de encuentro'} content={petInfo.location} />

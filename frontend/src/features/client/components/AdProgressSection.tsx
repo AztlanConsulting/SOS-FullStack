@@ -41,7 +41,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
         Poster de tu mascota
       </Text>
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col items-center gap-6">
-        <div className="w-full max-w-[280px]">
+        <div className="w-full max-w-[212px]">
           <img
             ref={posterRef}
             src={posterUrl}
@@ -55,13 +55,13 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
           <Button
             label="Descargar a Color"
             variant="primary"
-            textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+            textColor="bg-purple-primary text-white hover:bg-dark-purple"
             onClick={handleDownloadColor}
           />
 
           <Button
             label="Descargar en B/N"
-            textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+            textColor="bg-purple-primary text-white hover:bg-dark-purple"
             variant="primary"
             onClick={handleDownloadBW}
           />

@@ -3,6 +3,16 @@ export type PurchasedPlanResponse = {
   plan: PurchasedPlan;
 };
 
+export interface PetLocation {
+  coords: [number, number];
+  displayName: string;
+  properties: {
+    city: string;
+    country: string;
+    state: string;
+  };
+}
+
 export interface Pet {
   _id: string;
   userId: string;
@@ -15,7 +25,7 @@ export interface Pet {
   size: string;
   description: string;
   photos: string[];
-  placeMissing: string;
+  location: PetLocation;
   createdAt: Date;
   updatedAt: Date;
 }

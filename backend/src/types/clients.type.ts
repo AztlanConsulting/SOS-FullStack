@@ -105,6 +105,7 @@ export interface PlanProgressResult {
   petImage: string | null;
   posterImage: string | null;
   dateMissing: string | Date;
+  location: string;
 }
 
 export interface DashboardResponse {

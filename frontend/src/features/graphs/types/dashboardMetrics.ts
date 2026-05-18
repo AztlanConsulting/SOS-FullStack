@@ -6,6 +6,7 @@ export interface PlanSubscriptionProgress {
   petImage: string | null;
   posterImage: string | null;
   dateMissing: string;
+  location: string;
 }
 
 export interface PlanDistributionMetric {

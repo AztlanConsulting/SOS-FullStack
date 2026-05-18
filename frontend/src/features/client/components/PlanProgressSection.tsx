@@ -42,13 +42,13 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
                 label="Extender plan"
                 onClick={handlePlanExtension}
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+                textColor="bg-purple-primary text-white hover:bg-dark-purple"
               />
               <Button
                 label="Contacta con tu asesor"
                 onClick={handleContactAdviser}
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-[#866CA0]"
+                textColor="bg-purple-primary text-white hover:bg-dark-purple"
               />
             </div>
           </>

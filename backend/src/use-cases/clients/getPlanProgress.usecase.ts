@@ -35,6 +35,8 @@ export const getPlanProgress = async (
   const posterImage =
     pet.photos.length > 1 ? pet.photos[pet.photos.length - 1] : null;
 
+  const location = pet.location?.displayName ?? '';
+
   return {
     planName: plan.name,
     totalDays,
@@ -43,5 +45,6 @@ export const getPlanProgress = async (
     petImage,
     posterImage,
     dateMissing: pet.dateMissing,
+    location,
   };
 };

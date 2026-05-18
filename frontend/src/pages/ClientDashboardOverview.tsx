@@ -10,6 +10,7 @@ const ClientDashboardOverview = () => {
   const navigate = useNavigate();
 
   const petData = metrics?.planProgress;
+  const lostLocation = petData?.location?.trim();
   const formattedDate = petData?.dateMissing
     ? new Date(petData.dateMissing).toLocaleDateString('es-ES', {
         day: '2-digit',
@@ -80,7 +81,8 @@ const ClientDashboardOverview = () => {
                     color="text-gray-600"
                     className="mt-1"
                   >
-                    Desde {formattedDate}, <br /> esperando que vuelva a casa
+                    Desde {formattedDate}, <br /> se perdió en{' '}
+                    {lostLocation || 'ubicación no disponible'}
                   </Text>
                 </div>
               </div>

@@ -1,15 +1,17 @@
-import type { UseQueryResult } from '@tanstack/react-query';
+import type { FoundPetRepository } from '@/domain/repositories/foundPet.repository';
+import type { PetVectorRepository } from '@/domain/repositories/petImage.repository';
 
-export interface PetInfo {
+export interface GetPetRepositories {
+  foundPetRepository: FoundPetRepository;
+  petVector: PetVectorRepository;
+}
+
+export interface PetInfoDetailed {
   refId: string;
   image: string;
   species: string;
-  color: string;
   location: string;
   details: string;
-}
-
-export interface PetInfoDetailed extends PetInfo {
   date: string;
   sex: '' | 'Macho' | 'Hembra' | 'Desconocido';
   color: string;
@@ -21,17 +23,8 @@ export interface PetInfoDetailed extends PetInfo {
     | 'Mediana: 11 a 25 kg'
     | 'Grande: 26 a 45 kg'
     | 'Gigante: más de 45 kg';
-  image: string;
 
   contactName: string;
   phoneNumber: string;
   email: string;
 }
-
-export interface PetFilter {
-  color: string;
-  location: string;
-  species: string;
-}
-
-export type PetCollectionQuery = UseQueryResult<PetInfo[] | null, Error>;

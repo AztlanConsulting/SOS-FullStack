@@ -84,17 +84,17 @@ const ClientDashboardOverview = () => {
               </div>
             )}
 
-            <div className="flex flex-row justify-center md:justify-start mt-6 gap-3">
+            <div className="flex flex-col md:flex-row justify-center md:justify-start mt-6 gap-3">
               <Button
                 label="Visita nuestro contenido exclusivo"
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:mx-0"
                 onClick={handleResourcesPage}
               />
               <Button
                 label="Colección de mascotas"
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:mx-0"
                 onClick={handlePetCollection}
               />
             </div>

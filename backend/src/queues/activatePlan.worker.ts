@@ -240,7 +240,7 @@ function buildPetPostCaption(pet: Pet, phone: string): string {
       : `#${toHashtag(city)} #${toHashtag(state)}`;
 
   return `🐾 Responde al nombre de ${pet.name.toUpperCase()}
-📍 Se extravió el ${formattedDate} en #${hashtags}
+📍 Se extravió el ${formattedDate} en ${pet.location.displayName}, ${hashtags}
 ${speciesEmoji} ${pet.description} 
 ☎️ Si le ven favor de resguardar y llamar al ${phone}`;
 }

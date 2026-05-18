@@ -122,12 +122,17 @@ const mapToPet = async (
     throw new Error('Invalid date');
   }
 
-  const location = await getLocation(input.locationCoords);
-  if (location === null) {
+  const displayName = input.location.trim();
+  const location = await getLostPetLocation(input.locationCoords);
+  if (location === null && displayName === '') {
     throw Error('Failed to get location of lost pet');
   }
 
-  const displayName = input.location.trim() || location.displayName;
+  const petLocation = location ?? {
+    coords: input.locationCoords,
+    displayName,
+    properties: getFallbackLocationProperties(displayName),
+  };
 
   return {
     userId: new Types.ObjectId(userId),
@@ -141,10 +146,31 @@ const mapToPet = async (
     description: input.description,
     photos: input.images,
     location: {
-      ...location,
-      displayName,
+      ...petLocation,
+      displayName: displayName || petLocation.displayName,
     },
   };
+};
+
+const getFallbackLocationProperties = (displayName: string) => {
+  const [city, state, country] = displayName
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  return {
+    city: city ?? displayName,
+    state: state ?? city ?? displayName,
+    country: country ?? state ?? city ?? displayName,
+  };
+};
+
+const getLostPetLocation = async (coords: [number, number]) => {
+  try {
+    return await getLocation(coords);
+  } catch {
+    return null;
+  }
 };
 
 /**

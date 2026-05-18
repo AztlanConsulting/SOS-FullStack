@@ -64,8 +64,8 @@ const ClientDashboardOverview = () => {
             </Text>
 
             {petData && (
-              <div className="flex items-center gap-4 mt-10">
-                <div className="w-30 h-30 md:w-35 md:h-35 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
+              <div className="flex items-center gap-10 mt-10">
+                <div className="w-30 h-30 md:w-50 md:h-50 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
                   <img
                     src={petData.petImage || 'pet.jpg'}
                     alt={petData.petName}
@@ -76,29 +76,25 @@ const ClientDashboardOverview = () => {
                   <Text variant="h3" weight="medium" as="div">
                     {petData.petName}
                   </Text>
-                  <Text
-                    variant="caption"
-                    color="text-gray-600"
-                    className="mt-1"
-                  >
+                  <Text variant="body" color="text-gray-600" className="mt-1">
                     Desde {formattedDate}, <br /> se perdió en{' '}
-                    {lostLocation || 'ubicación no disponible'}
+                    {lostLocation || 'ubicación no disponible'}.
                   </Text>
                 </div>
               </div>
             )}
 
-            <div className="flex flex-col justify-center md:justify-start mt-6 gap-3">
+            <div className="flex flex-row justify-center md:justify-start mt-6 gap-3">
               <Button
                 label="Visita nuestro contenido exclusivo"
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-[300px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
                 onClick={handleResourcesPage}
               />
               <Button
                 label="Colección de mascotas"
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-[#866CA0] rounded-full w-[300px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
+                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:ml-0 md:mr-auto"
                 onClick={handlePetCollection}
               />
             </div>

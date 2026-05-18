@@ -32,7 +32,10 @@ const PetCard = ({ petInfo }: Props) => {
           <Text variant="h4">{petInfo.species}</Text>
         </div>
         <div className="px-2 py-1">
-          <Text className="text-gray-500">{petInfo.location}</Text>
+          <Text className="text-gray-500">
+            {petInfo.location}
+            {petInfo.location}
+          </Text>
         </div>
       </section>
     </Link>

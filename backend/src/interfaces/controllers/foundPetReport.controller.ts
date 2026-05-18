@@ -47,9 +47,11 @@ export async function postFoundPetReport(req: Request, res: Response) {
     const imageIds = imageBuffers.map((_, i) => `${customId}_img_${i}`);
 
     const requestLocation: GeocodingResult =
-      (process.env.ENV === 'develop' && req.body.defaultLocation) ??
-      (await getLocation(locationCoords)) ??
+      (process.env.ENV === 'develop' && req.body.defaultLocation) ||
+      (await getLocation(locationCoords)) ||
       getOpenStreetMapLocation(location, locationCoords);
+
+    console.log(requestLocation);
 
     if (!Boolean(requestLocation)) throw Error("Couldn't get location");
 

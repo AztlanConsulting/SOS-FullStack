@@ -280,7 +280,11 @@ JWT_REFRESH_SECRET={your_refresh_secret}
 JWT_ACCESS_EXPIRATION=15m
 JWT_REFRESH_EXPIRATION=7d
 BCRYPT_SALT_ROUNDS=12
-CORS_ORIGIN=http://localhost:5173' > ./backend/.env
+CORS_ORIGIN=http://localhost:5173
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=hola@sosencontrandomascotas.com
+SMTP_PASS={password}' > ./backend/.env
 
 echo    'VITE_API_BASE_URL="http://localhost:3000"
 VITE_ENVIROMENT="sandbox"
@@ -360,7 +364,14 @@ echo 'server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_cache_bypass $http_upgrade;
+    }
+
+    location /weaviate/ {
+        proxy_pass http://127.0.0.1:8080/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
 }
 '> /etc/nginx/sites-available/default

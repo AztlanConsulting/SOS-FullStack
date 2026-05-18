@@ -4,7 +4,7 @@ export default async function getLocation(
   coords: [number, number],
 ): Promise<GeocodingResult | null> {
   const [lat, lon] = coords;
-  return null;
+  // console.log(lat, lon);
   const url = `https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}&lang=default`;
 
   const res = await fetch(url);

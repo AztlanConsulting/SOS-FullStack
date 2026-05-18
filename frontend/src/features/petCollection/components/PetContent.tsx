@@ -52,8 +52,8 @@ interface SegmentProps {
 const Segment = ({ important = false, label, content }: SegmentProps) => {
   const Details = () => {
     return important ? (
-      <div className="bg-secondary border-[1px] border-primary px-4 rounded-sm w-fit">
-        <Text color="text-primary">{content}</Text>
+      <div className="bg-purple-secondary border-[1px] border-purple-primary px-4 rounded-sm w-fit">
+        <Text color="text-dark-purple">{content}</Text>
       </div>
     ) : (
       <div>

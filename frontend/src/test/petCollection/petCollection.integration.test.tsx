@@ -81,15 +81,17 @@ describe('SearchPetsPage Integration', () => {
     });
 
     expect(screen.getByAltText('Previsualización')).toBeDefined();
-    expect(await screen.findByText('Golden Retriever')).toBeDefined();
-    expect(await screen.findByText('Husky')).toBeDefined();
-    expect(await screen.findByText('Madrid')).toBeDefined();
 
     await act(async () => {
       await fireEvent.click(screen.getByText('Filtro'));
       await fireEvent.click(screen.getByText('Buscar'));
     });
+
     expect(axiosInstance.post).toHaveBeenCalled();
+
+    expect(await screen.findByText('Golden Retriever')).toBeDefined();
+    expect(await screen.findByText('Husky')).toBeDefined();
+    expect(await screen.findByText('Madrid')).toBeDefined();
 
     const petCards = screen.getAllByAltText('Mascota encontrada');
     expect(petCards).toHaveLength(2);
@@ -121,6 +123,11 @@ describe('SearchPetsPage Integration', () => {
 
     await act(async () => {
       fireEvent.change(input, { target: { files: [file] } });
+    });
+
+    await act(async () => {
+      await fireEvent.click(screen.getByText('Filtro'));
+      await fireEvent.click(screen.getByText('Buscar'));
     });
 
     await waitFor(() => {
@@ -225,6 +232,11 @@ describe('SearchPetsPage Integration', () => {
     // FIX: "Subir imagen" is the label text before upload, consistent with DOM
     fireEvent.change(screen.getByAltText('Cambiar imagen'), {
       target: { files: [file] },
+    });
+
+    await act(async () => {
+      await fireEvent.click(screen.getByText('Filtro'));
+      await fireEvent.click(screen.getByText('Buscar'));
     });
 
     await waitFor(() => {

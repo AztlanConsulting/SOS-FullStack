@@ -98,7 +98,9 @@ try {
 
   const testUser = createdUsers[1];
 
-  const testPet: Pet = await PetModel.create({
+  const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000';
+
+  const testPet = await PetModel.create({
     userId: testUser._id,
     name: 'Firulais',
     species: 'Perro',
@@ -108,7 +110,10 @@ try {
     color: 'Café',
     size: 'Mediano',
     description: 'Perrito amigable, llevaba un collar rojo cuando se perdió.',
-    photos: [],
+    photos: [
+      `${baseUrl}/uploads/pug_chistoso.jpg`,
+      `${baseUrl}/uploads/poster-pug_chistoso.jpg`,
+    ],
     location: {
       coords: [19.4337, -99.1284],
       displayName: 'Querétaro, México',

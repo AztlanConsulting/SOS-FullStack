@@ -1,10 +1,10 @@
-import ClientDashboardContent from '@/features/client/components/ClientDashboardContent';
+import ClientDashboardOverview from '@/pages/ClientDashboardOverview';
 import routerPetCollection from './petCollection.routes';
 
 const router = [
   {
     path: '',
-    element: <ClientDashboardContent />,
+    element: <ClientDashboardOverview />,
   },
   ...routerPetCollection,
 ];

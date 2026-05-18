@@ -25,7 +25,7 @@ const navLinks = [
 
 const ClientDashboard = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header
         navLinks={navLinks}
         color={'purple-primary'}
@@ -34,7 +34,7 @@ const ClientDashboard = () => {
       />
       <Outlet />
       <Footer bg={'bg-purple-primary'} />
-    </>
+    </div>
   );
 };
 

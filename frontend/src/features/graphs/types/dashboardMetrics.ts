@@ -2,6 +2,11 @@ export interface PlanSubscriptionProgress {
   planName: string;
   totalDays: number;
   daysRemaining: number;
+  petName: string;
+  petImage: string | null;
+  posterImage: string | null;
+  dateMissing: string;
+  location: string;
 }
 
 export interface PlanDistributionMetric {
@@ -25,4 +30,17 @@ export interface DashboardStats {
   sales: CountryStatsMetric[];
   plan: PlanSubscriptionProgress;
   distribution: PlanDistributionMetric[];
+}
+
+export interface PurchasedResourceResponse {
+  id: string;
+  name: string;
+  type: 'manual' | 'workshop';
+  imageUrl: string;
+  description?: string;
+}
+
+export interface DashboardResponse {
+  planProgress: PlanSubscriptionProgress | null;
+  resources: PurchasedResourceResponse[];
 }

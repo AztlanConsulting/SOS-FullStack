@@ -3,6 +3,8 @@
 
 @theme {
   --color-primary: #f9cd48;
+  --color-purple: #9d7fad;
+  --color-light-purple: #9d7fad33;
   --radius-c: 20px;
   --color-secondary: #fef5da;
   --color-purple-primary: #9d7fad;
@@ -14,7 +16,6 @@ html,
 body {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  scroll-behavior: smooth;
 }
 
 html::-webkit-scrollbar,
@@ -47,7 +48,12 @@ input[type='search']::-webkit-search-cancel-button {
 
   --color-primary: #f9cd48;
   --color-secondary: #fef5da;
+  --color-purple: #9d7fad;
+  --color-light-purple: #9d7fad33;
   --color-success: #198754;
+  --color-status-ok: #27a300;
+  --color-status-warning: #e3e36a;
+  --color-status-danger: #ba0c0c;
   --color-success-bg: #d1e7dd;
   --color-warning: #ff9500;
   --color-danger: #ff3333;
@@ -70,6 +76,14 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: var(--color-secondary);
 }
 
+.color-purple-bg {
+  background-color: var(--color-purple);
+}
+
+.color-light-purple-bg {
+  background-color: var(--color-light-purple);
+}
+
 .color-success {
   color: var(--color-success);
 }
@@ -84,6 +98,10 @@ input[type='search']::-webkit-search-cancel-button {
 
 .color-danger-bg {
   background-color: var(--color-danger-bg);
+}
+
+.color-warning-bg {
+  background-color: var(--color-warning);
 }
 
 .color-grey-bg {

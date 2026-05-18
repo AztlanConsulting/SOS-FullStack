@@ -101,6 +101,11 @@ export interface PlanProgressResult {
   planName: string;
   totalDays: number;
   daysRemaining: number;
+  petName: string;
+  petImage: string | null;
+  posterImage: string | null;
+  dateMissing: string | Date;
+  location: string;
 }
 
 export interface DashboardResponse {

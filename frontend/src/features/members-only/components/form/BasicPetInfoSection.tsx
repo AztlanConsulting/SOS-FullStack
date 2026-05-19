@@ -44,9 +44,11 @@ export const BasicPetInfoSection = ({
             updateForm({ size: e.target.value as SearchFormData['size'] })
           }
           options={[
-            { value: 'Small', label: 'Pequeño' },
-            { value: 'Medium', label: 'Mediano' },
-            { value: 'Large', label: 'Grande' },
+            { value: 'Mini', label: 'Mini: 1 a 4 kg' },
+            { value: 'Small', label: 'Pequeño: 5 a 10 kg' },
+            { value: 'Medium', label: 'Mediano: 11 a 25 kg' },
+            { value: 'Large', label: 'Grande: 25 a 45 kg' },
+            { value: 'Giant', label: 'Gigante: más de 45 kg' },
           ]}
           error={errors.size}
         />

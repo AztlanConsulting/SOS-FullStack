@@ -24,18 +24,27 @@ const MembersOnly = () => {
             <>
               <div className="flex flex-col gap-4">
                 <Text>
-                  En contenido exclusivo de SOS ofrecemos recursos con
-                  instrucciones específicas de cómo afrontar este momento
-                  difícil.
+                  En este espacio encontrarás contenido creado para ayudarte
+                  durante la búsqueda. Reunimos guías, recomendaciones,
+                  estrategias y recursos pensados para acompañarte en este
+                  proceso y ayudarte a tomar decisiones más informadas y
+                  efectivas. Sabemos que cada caso es único, por eso queremos
+                  brindarte herramientas que puedan darte claridad, apoyo y
+                  dirección en este momento.
                 </Text>
                 <Button
-                  label="Formulario de búsqueda"
+                  label="Completar Perfil de Búsqueda"
                   variant="purple"
                   icon={HiChevronRight}
                   onClick={() =>
                     navigate('/inicio/contenido-exclusivo/formulario')
                   }
                 />
+                <Text>
+                  Cada mascota reacciona diferente al perderse. Conocer su
+                  comportamiento nos ayuda a darte estrategias y recomendaciones
+                  más precisas para enfocar mejor la búsqueda.
+                </Text>
               </div>
             </>
           }

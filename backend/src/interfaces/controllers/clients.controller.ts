@@ -19,6 +19,7 @@ import {
 } from '../../types/clients.type';
 import { getPlanProgress } from '@/use-cases/clients/getPlanProgress.usecase';
 import { getPurchasedResources } from '@/use-cases/clients/getPurchasedResources.usecase';
+import { getUploadUrl } from '@/utils/uploadUrl.utils';
 
 const publishPet = async (req: Request, res: Response) => {
   try {
@@ -62,9 +63,7 @@ const createLostPetReportController = async (req: Request, res: Response) => {
       });
     }
 
-    const imageUrls = images.map((file) => {
-      return `${process.env.BASE_URL}/uploads/${file.filename}`;
-    });
+    const imageUrls = images.map((file) => getUploadUrl(req, file.filename));
 
     const result = await createLostPetReport(
       {

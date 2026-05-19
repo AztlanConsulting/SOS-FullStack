@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 
 export interface SearchFormReport {
   species: 'Dog' | 'Cat' | 'Other';
-  size: 'Small' | 'Medium' | 'Large';
+  size: 'Mini' | 'Small' | 'Medium' | 'Large' | 'Giant';
   approximateAge: number;
   sex: 'Male' | 'Female';
   sterilized: 'Yes' | 'No';
@@ -52,7 +52,7 @@ const searchFormSchema = new Schema<ISearchForm>(
     size: {
       type: String,
       required: true,
-      enum: ['Small', 'Medium', 'Large'],
+      enum: ['Mini', 'Small', 'Medium', 'Large', 'Giant'],
     },
     approximateAge: { type: Number, required: true },
     sex: {

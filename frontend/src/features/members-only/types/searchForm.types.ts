@@ -1,6 +1,6 @@
 export interface SearchFormData {
   species: '' | 'Dog' | 'Cat' | 'Other';
-  size: '' | 'Small' | 'Medium' | 'Large';
+  size: '' | 'Mini' | 'Small' | 'Medium' | 'Large' | 'Giant';
   approximateAge: number | '';
   sex: '' | 'Male' | 'Female';
   sterilized: '' | 'Yes' | 'No';

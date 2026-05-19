@@ -7,12 +7,34 @@ import fs from 'fs';
 import path from 'path';
 import { Types } from 'mongoose';
 
+const ALLOWED_MIME_TYPES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'image/webp': 'webp',
+  'application/pdf': 'pdf',
+};
+
 async function uploadBase64File(
   base64Data: string,
   folder: string,
 ): Promise<string> {
-  const [header, data] = base64Data.split(',');
-  const extension = header.match(/\/(.*?);/)?.[1] || 'bin';
+  const commaIndex = base64Data.indexOf(',');
+  if (commaIndex === -1) throw new Error('Invalid base64 format');
+
+  const header = base64Data.slice(0, commaIndex);
+  const data = base64Data.slice(commaIndex + 1);
+
+  const mimeMatch = header.match(/^data:([\w/+]+);base64$/);
+  if (!mimeMatch) throw new Error('Invalid base64 header');
+
+  const mimeType = mimeMatch[1];
+  const extension = ALLOWED_MIME_TYPES[mimeType];
+  if (!extension) throw new Error(`Unsupported file type: ${mimeType}`);
+
+  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(data))
+    throw new Error('Invalid base64 data');
+
   const fileName = `${new Types.ObjectId().toHexString()}.${extension}`;
   const uploadsDir = path.join(process.cwd(), 'uploads', folder);
 

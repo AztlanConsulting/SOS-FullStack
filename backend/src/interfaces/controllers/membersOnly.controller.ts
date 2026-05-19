@@ -71,7 +71,13 @@ export async function getMemberFile(req: Request, res: Response) {
     if (typeof filename !== 'string') {
       return res.status(400).send('Invalid filename');
     }
-    const filePath = getMemberFilePath(filename);
+
+    const uploadsDir = path.resolve(process.cwd(), 'uploads', 'members-only');
+    const filePath = path.resolve(uploadsDir, path.basename(filename));
+
+    if (!filePath.startsWith(uploadsDir + path.sep)) {
+      return res.status(400).send('Invalid filename');
+    }
 
     if (!fs.existsSync(filePath)) {
       return res.status(404).send('File not found');

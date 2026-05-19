@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const searchFormSchema = z.object({
   species: z.enum(['Dog', 'Cat', 'Other']),
-  size: z.enum(['Small', 'Medium', 'Large']),
+  size: z.enum(['Mini', 'Small', 'Medium', 'Large', 'Giant']),
   approximateAge: z.number(),
   sex: z.enum(['Male', 'Female']),
   sterilized: z.enum(['Yes', 'No']),

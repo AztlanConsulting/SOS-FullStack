@@ -4,6 +4,10 @@ import request from 'supertest';
 import initMembersOnlyDB from '@db/mongoDB/data/membersOnly.data';
 import { MembersOnlyModel } from '@domain/models/membersOnly.model';
 
+jest.mock('@interfaces/middleware/auth.middleware', () => ({
+  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
+}));
+
 // Minimal valid base64 payloads for POST tests
 const VALID_IMAGE_B64 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';

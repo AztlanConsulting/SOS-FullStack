@@ -10,6 +10,10 @@ interface AdProgressSectionProps {
   posterUrl: string | null;
 }
 
+const mediaContentClass = 'w-full max-w-xs md:max-w-sm lg:max-w-md';
+const actionsClass =
+  'flex w-full max-w-xs flex-col gap-3 md:max-w-md md:flex-row md:gap-4 md:text-nowrap';
+
 export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   posterUrl,
 }) => {
@@ -32,7 +36,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex h-full flex-col gap-5">
       <Text
         variant="h3"
         weight="medium"
@@ -40,8 +44,8 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       >
         Poster de tu mascota
       </Text>
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col items-center gap-6">
-        <div className="w-full max-w-[212px]">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center gap-6">
+        <div className={mediaContentClass}>
           <img
             ref={posterRef}
             src={posterUrl}
@@ -51,7 +55,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
           />
         </div>
 
-        <div className="w-full max-w-[280px] flex flex-col gap-3 mx-auto">
+        <div className={actionsClass}>
           <Button
             label="Descargar a Color"
             variant="primary"
@@ -61,7 +65,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
 
           <Button
             label="Descargar en B/N"
-            textColor="bg-purple-primary text-white hover:bg-dark-purple"
+            textColor="bg-purple-secondary text-black hover:bg-dark-purple hover:text-white"
             variant="primary"
             onClick={handleDownloadBW}
           />

@@ -5,6 +5,7 @@ import { Text } from '@/shared/components/ui/Text';
 
 interface CountdownChartProps {
   data?: PlanSubscriptionProgress;
+  size?: 'default' | 'large';
 }
 
 const getProgressColor = (progressPercentage: number) => {
@@ -19,7 +20,10 @@ const getProgressColor = (progressPercentage: number) => {
   return 'var(--color-status-ok)';
 };
 
-export const CountdownChart = ({ data }: CountdownChartProps) => {
+export const CountdownChart = ({
+  data,
+  size = 'default',
+}: CountdownChartProps) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [chartSize, setChartSize] = useState({
     width: 0,
@@ -47,7 +51,7 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
     return () => {
       resizeObserver.disconnect();
     };
-  }, []);
+  }, [data]);
 
   const { innerRadius, outerRadius } = useMemo(() => {
     if (chartSize.width === 0 || chartSize.height === 0) {
@@ -81,6 +85,19 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
   const progressPercentage = (daysRemaining * 100) / totalDays;
 
   const progressColor = getProgressColor(progressPercentage);
+  const chartFrameStyle =
+    size === 'large'
+      ? {
+          aspectRatio: '2 / 1',
+          maxHeight: '360px',
+          minHeight: '180px',
+        }
+      : { height: 'clamp(145px, 42vw, 220px)' };
+  const chartTopPadding = size === 'large' ? '24px' : '10px';
+  const summaryPositionStyle =
+    size === 'large'
+      ? { top: '70%', transform: 'translate(-50%, -50%)' }
+      : { bottom: '0px', transform: 'translateX(-50%)' };
 
   const pieData = [
     { name: 'Transcurrido', value: daysRemaining },
@@ -88,7 +105,13 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
   ];
 
   return (
-    <div style={{ position: 'relative', width: '100%', paddingTop: '10px' }}>
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        paddingTop: chartTopPadding,
+      }}
+    >
       <Text
         as="div"
         variant="caption"
@@ -100,10 +123,11 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
       </Text>
 
       <div
+        ref={chartContainerRef}
         style={{
           position: 'relative',
           width: '100%',
-          height: 'clamp(145px, 42vw, 220px)',
+          ...chartFrameStyle,
         }}
       >
         <ResponsiveContainer
@@ -147,11 +171,10 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
         <div
           style={{
             position: 'absolute',
-            bottom: '0px',
             left: '50%',
-            transform: 'translateX(-50%)',
             textAlign: 'center',
             width: '100%',
+            ...summaryPositionStyle,
           }}
         >
           <Text variant="h1" weight="regular" as="div" color="text-inherit">
@@ -169,12 +192,7 @@ export const CountdownChart = ({ data }: CountdownChartProps) => {
         </div>
       </div>
 
-      <Text
-        variant="body"
-        weight="medium"
-        as="div"
-        className="text-center mt-8"
-      >
+      <Text variant="body" weight="medium" as="div" className="text-center">
         Plan {planName}
       </Text>
     </div>

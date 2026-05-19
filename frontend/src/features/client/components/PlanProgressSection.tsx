@@ -4,6 +4,10 @@ import { Button } from '@/shared/components/ui/Button/Button';
 import type { PlanSubscriptionProgress } from '@/features/graphs/types/dashboardMetrics';
 import { useNavigate } from 'react-router';
 
+const mediaContentClass = 'w-full max-w-xs md:max-w-sm lg:max-w-md';
+const actionsClass =
+  'mt-4 flex w-full max-w-xs flex-col gap-3 md:max-w-md md:flex-row md:gap-4 md:text-nowrap';
+
 interface PlanProgressSectionProps {
   petData: PlanSubscriptionProgress | null;
 }
@@ -24,7 +28,7 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex h-full flex-col gap-5">
       <Text
         variant="h3"
         weight="medium"
@@ -33,11 +37,13 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
         Progreso del plan
       </Text>
 
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center">
         {petData ? (
           <>
-            <CountdownChart data={petData} />
-            <div className="w-[250px] flex flex-col mt-4 gap-3 mx-auto">
+            <div className={mediaContentClass}>
+              <CountdownChart data={petData} size="large" />
+            </div>
+            <div className={actionsClass}>
               <Button
                 label="Extender plan"
                 onClick={handlePlanExtension}
@@ -48,7 +54,7 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
                 label="Contacta con tu asesor"
                 onClick={handleContactAdviser}
                 variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-dark-purple"
+                textColor="bg-purple-secondary text-black hover:bg-dark-purple hover:text-white"
               />
             </div>
           </>

@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router';
 import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button';
 
+const dashboardContainerClass =
+  'w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto';
+
 const ClientDashboardOverview = () => {
   const { metrics, loading, error } = useDashboardMetrics();
   const navigate = useNavigate();
@@ -55,58 +58,72 @@ const ClientDashboardOverview = () => {
   }
 
   return (
-    <main className="w-full pb-10">
+    <main className="w-full pt-20 pb-10 lg:pt-0">
       <div className="flex flex-col gap-10">
-        <section className="w-full bg-light-purple border-b border-gray-200 pt-28 lg:pt-10">
-          <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto py-8 flex flex-col gap-4 items-center">
-            <Text variant="h2" weight="medium" as="div">
-              Portal exclusivo
-            </Text>
+        <div className="w-full border-b border-gray-200">
+          <section className="w-full bg-dark-purple">
+            <div
+              className={`${dashboardContainerClass} flex h-14 items-center justify-center md:h-16 lg:h-14`}
+            >
+              <Text
+                variant="h2"
+                weight="medium"
+                as="div"
+                color="text-white"
+                className="leading-none"
+              >
+                Portal exclusivo
+              </Text>
+            </div>
+          </section>
 
-            {petData && (
-              <div className="flex items-center gap-10 mt-10">
-                <div className="w-30 h-30 md:w-50 md:h-50 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
-                  <img
-                    src={petData.petImage || 'pet.jpg'}
-                    alt={petData.petName}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <Text variant="h3" weight="medium" as="div">
-                    {petData.petName}
-                  </Text>
-                  <Text variant="body" color="text-gray-600" className="mt-1">
-                    Desde {formattedDate}, <br /> se perdió en{' '}
-                    {lostLocation || 'ubicación no disponible'}.
-                  </Text>
+          {petData && (
+            <section className="w-full bg-light-purple">
+              <div className={`${dashboardContainerClass} py-8 lg:py-10`}>
+                <div className="flex w-full flex-col items-center gap-6 md:flex-row md:justify-center md:gap-10">
+                  <div className="w-40 h-40 md:w-50 md:h-50 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
+                    <img
+                      src={petData.petImage || 'pet.jpg'}
+                      alt={petData.petName}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="flex w-full max-w-md flex-col items-center gap-2 text-center md:items-start md:text-left">
+                    <Text variant="h3" weight="medium" as="div">
+                      {petData.petName}
+                    </Text>
+                    <Text variant="body" color="text-gray-600" className="mt-1">
+                      Desde {formattedDate}, <br /> se perdió en{' '}
+                      {lostLocation || 'ubicación no disponible'}.
+                    </Text>
+                    <div className="mt-2 flex w-full max-w-xs flex-col gap-3 md:max-w-md lg:max-w-xl lg:flex-row lg:gap-4 lg:text-nowrap">
+                      <Button
+                        label="Visita nuestro contenido exclusivo"
+                        variant="primary"
+                        textColor="bg-purple-primary text-white hover:bg-dark-purple"
+                        onClick={handleResourcesPage}
+                      />
+                      <Button
+                        label="Galería de mascotas"
+                        variant="primary"
+                        textColor="bg-white text-black hover:bg-dark-purple hover:text-white"
+                        onClick={handlePetCollection}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
+            </section>
+          )}
+        </div>
 
-            <div className="flex flex-col md:flex-row justify-center md:justify-start mt-6 gap-3">
-              <Button
-                label="Visita nuestro contenido exclusivo"
-                variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:mx-0"
-                onClick={handleResourcesPage}
-              />
-              <Button
-                label="Colección de mascotas"
-                variant="primary"
-                textColor="bg-purple-primary text-white hover:bg-dark-purple rounded-full w-[270px] px-6 py-2 text-sm whitespace-nowrap mx-auto md:mx-0"
-                onClick={handlePetCollection}
-              />
-            </div>
-          </div>
-        </section>
-
-        <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-6">
+        <div className={dashboardContainerClass}>
+          <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12">
+            <div className="h-full lg:col-span-6">
               <PlanProgressSection petData={metrics.planProgress} />
             </div>
-            <div className="lg:col-span-6">
+            <div className="h-full lg:col-span-6">
               <div className="flex flex-col gap-5 h-full">
                 <AdProgressSection posterUrl={posterUrl} />
               </div>

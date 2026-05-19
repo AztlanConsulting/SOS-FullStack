@@ -3,7 +3,7 @@ import AudioSection from '../features/members-only/components/AudioSection';
 import GoodToKnow from '../features/members-only/components/GoodToKnow';
 import MembersOnlyListSection from '../features/members-only/components/MembersOnlyListSection';
 import HeroSection from '@shared/components/layout/HeroSection';
-import owner from '@assets/images/PortalExclusivo.png';
+import owner from '@assets/images/PortalExclusivo.webp';
 import { Text } from '@shared/components/ui/Text';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
@@ -24,13 +24,12 @@ const MembersOnly = () => {
             <>
               <div className="flex flex-col gap-4">
                 <Text>
-                  En este espacio encontrarás contenido creado para ayudarte
-                  durante la búsqueda. Reunimos guías, recomendaciones,
-                  estrategias y recursos pensados para acompañarte en este
-                  proceso y ayudarte a tomar decisiones más informadas y
-                  efectivas. Sabemos que cada caso es único, por eso queremos
-                  brindarte herramientas que puedan darte claridad, apoyo y
-                  dirección en este momento.
+                  Aquí encontrarás guías, estrategias y recursos diseñados para
+                  apoyarte en la búsqueda y ayudarte a tomar decisiones más
+                  claras y efectivas. Completa el perfil de búsqueda a
+                  continuación para poderte ofrecer recomendaciones
+                  personalizadas según el comportamiento de tu mascota para
+                  enfocar mejor la búsqueda.
                 </Text>
                 <Button
                   label="Completar Perfil de Búsqueda"
@@ -40,11 +39,6 @@ const MembersOnly = () => {
                     navigate('/inicio/contenido-exclusivo/formulario')
                   }
                 />
-                <Text>
-                  Cada mascota reacciona diferente al perderse. Conocer su
-                  comportamiento nos ayuda a darte estrategias y recomendaciones
-                  más precisas para enfocar mejor la búsqueda.
-                </Text>
               </div>
             </>
           }

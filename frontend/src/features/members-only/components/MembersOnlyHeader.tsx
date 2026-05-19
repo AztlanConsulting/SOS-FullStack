@@ -4,6 +4,8 @@ import { formatDateEsShort } from '@shared/utils/dateUtils';
 import yellowIcon from '@assets/images/yellowIcon.png';
 import { Button } from '@shared/components/ui/Button';
 import { FileDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { getAccessToken } from '@shared/utils/tokenStorage';
 import type { MembersOnly } from '../types/membersOnly.types';
 
 interface Props {
@@ -14,17 +16,42 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
   const createdAtLabel = formatDateEsShort(membersOnly.createdAt);
   const updatedAtLabel = formatDateEsShort(membersOnly.updatedAt);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const [imageSrc, setImageSrc] = useState<string>('');
+
+  useEffect(() => {
+    let objectUrl: string;
+    fetch(`${apiBaseUrl}${membersOnly.imageUrl}`, {
+      headers: { Authorization: `Bearer ${getAccessToken()}` },
+    })
+      .then((res) => res.blob())
+      .then((blob) => {
+        objectUrl = URL.createObjectURL(blob);
+        setImageSrc(objectUrl);
+      });
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [apiBaseUrl, membersOnly.imageUrl]);
 
   const heroProduct = {
     _id: membersOnly._id,
-    imageUrl: `${apiBaseUrl}${membersOnly.imageUrl}`,
+    imageUrl: imageSrc,
     name: membersOnly.name,
     content: membersOnly.content,
     price: 0,
   };
 
-  const handleDownload = () => {
-    window.open(`${apiBaseUrl}${membersOnly.pdfUrl}`, '_blank');
+  const handleDownload = async () => {
+    const res = await fetch(`${apiBaseUrl}${membersOnly.pdfUrl}`, {
+      headers: { Authorization: `Bearer ${getAccessToken()}` },
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${membersOnly.name}.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (

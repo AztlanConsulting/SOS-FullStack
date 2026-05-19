@@ -1,16 +1,34 @@
 import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text';
 import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { getAccessToken } from '@shared/utils/tokenStorage';
 import type { MembersOnly } from '../types/membersOnly.types';
 
 const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
   const navigate = useNavigate();
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const [imageSrc, setImageSrc] = useState<string>('');
+
+  useEffect(() => {
+    let objectUrl: string;
+    fetch(`${apiBaseUrl}${card.imageUrl}`, {
+      headers: { Authorization: `Bearer ${getAccessToken()}` },
+    })
+      .then((res) => res.blob())
+      .then((blob) => {
+        objectUrl = URL.createObjectURL(blob);
+        setImageSrc(objectUrl);
+      });
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [apiBaseUrl, card.imageUrl]);
 
   return (
     <div className="bg-white rounded-lg border w-full flex flex-col h-full">
       <img
-        src={`${apiBaseUrl}${card.imageUrl}`}
+        src={imageSrc}
         alt={card.name}
         className="rounded-t-lg w-full h-40 object-cover"
       />

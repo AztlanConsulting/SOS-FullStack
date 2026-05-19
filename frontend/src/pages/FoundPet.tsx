@@ -3,7 +3,7 @@ import Header from '../shared/components/layout/Header';
 import Footer from '../shared/components/layout/Footer';
 import HeroSection from '@shared/components/layout/HeroSection';
 import { PetReportForm } from '@features/found-pet/components/PetReportForm';
-import sadDog from '@assets/images/sadDog.png';
+import sadDog from '@assets/images/sadDog.webp';
 
 const FoundPet = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { Text } from '../../../../shared/components/ui/Text';
-import acompanamiento from '@assets/images/acompanamiento.png';
+import acompanamiento from '@assets/images/acompanamiento.webp';
 
 const PublicationSection = () => {
   return (

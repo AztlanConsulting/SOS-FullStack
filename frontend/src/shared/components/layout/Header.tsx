@@ -12,8 +12,8 @@ import { FaInstagram } from 'react-icons/fa';
 import { PiTiktokLogoLight } from 'react-icons/pi';
 import { CiYoutube } from 'react-icons/ci';
 import { FaXTwitter } from 'react-icons/fa6';
-import yellowIcon from '@assets/images/yellowIcon.png';
-import whiteIcon from '@assets/images/whiteIcon.png';
+import yellowIcon from '@assets/images/yellowIcon.webp';
+import whiteIcon from '@assets/images/whiteIcon.webp';
 import type {
   ExpandedProps,
   NavLink,

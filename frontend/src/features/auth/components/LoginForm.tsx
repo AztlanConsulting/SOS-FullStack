@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router';
-import yellowIcon from '@assets/images/yellowIcon.png';
+import yellowIcon from '@assets/images/yellowIcon.webp';
 import { Text } from '@shared/components/ui/Text';
 import type { User } from '../types/auth.types';
 import roleNavigation from '@/shared/utils/roleNavigation';

@@ -1,5 +1,5 @@
 import { Text } from '../../../../shared/components/ui/Text';
-import Localizacion from '@assets/images/Localizacion.png';
+import Localizacion from '@assets/images/Localizacion.webp';
 
 const ServicesSection = () => {
   return (

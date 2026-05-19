@@ -8,7 +8,7 @@ import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
-import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
+import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();

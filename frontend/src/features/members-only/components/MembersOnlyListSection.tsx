@@ -19,7 +19,7 @@ const MembersOnlyListSection = () => {
   const cards: MembersOnly[] = data?.membersOnly ?? [];
 
   return (
-    <section className="bg-white overflow-hidden py-8 lg:py-16 color-grey-border-top flex flex-col items-center justify-center">
+    <section className="w-full min-h-screen bg-white overflow-hidden py-8 lg:py-16 color-grey-border-top flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
         {isLoading && <LoadingSpinner />}
         {error && (

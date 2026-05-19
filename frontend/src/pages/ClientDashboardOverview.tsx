@@ -119,14 +119,12 @@ const ClientDashboardOverview = () => {
         </div>
 
         <div className={dashboardContainerClass}>
-          <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12">
-            <div className="h-full lg:col-span-6">
+          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-6">
               <PlanProgressSection petData={metrics.planProgress} />
             </div>
-            <div className="h-full lg:col-span-6">
-              <div className="flex flex-col gap-5 h-full">
-                <AdProgressSection posterUrl={posterUrl} />
-              </div>
+            <div className="lg:col-span-6">
+              <AdProgressSection posterUrl={posterUrl} />
             </div>
           </div>
         </div>

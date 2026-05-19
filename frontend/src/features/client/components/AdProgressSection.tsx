@@ -36,7 +36,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   }
 
   return (
-    <div className="flex h-full flex-col gap-5">
+    <div className="flex flex-col gap-5">
       <Text
         variant="h3"
         weight="medium"
@@ -44,7 +44,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       >
         Poster de tu mascota
       </Text>
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center gap-6">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-col items-center justify-center gap-6">
         <div className={mediaContentClass}>
           <img
             ref={posterRef}

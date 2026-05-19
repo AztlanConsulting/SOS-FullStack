@@ -89,14 +89,14 @@ export const CountdownChart = ({
     size === 'large'
       ? {
           aspectRatio: '2 / 1',
-          maxHeight: '360px',
-          minHeight: '180px',
+          maxHeight: '260px',
+          minHeight: '170px',
         }
       : { height: 'clamp(145px, 42vw, 220px)' };
-  const chartTopPadding = size === 'large' ? '24px' : '10px';
+  const chartTopPadding = size === 'large' ? '18px' : '10px';
   const summaryPositionStyle =
     size === 'large'
-      ? { top: '70%', transform: 'translate(-50%, -50%)' }
+      ? { top: '68%', transform: 'translate(-50%, -50%)' }
       : { bottom: '0px', transform: 'translateX(-50%)' };
 
   const pieData = [

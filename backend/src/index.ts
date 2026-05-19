@@ -21,7 +21,7 @@ app.use(
   }),
 );
 
-app.set('trust proxy', process.env.FRONT_END_URL ?? 1);
+app.set('trust proxy', 'loopback');
 
 app.use((req, res, next) => {
   if (req.path === '/payments/webhook') {

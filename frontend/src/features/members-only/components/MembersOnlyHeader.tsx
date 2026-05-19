@@ -19,6 +19,7 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
   const [imageSrc, setImageSrc] = useState<string>('');
 
   useEffect(() => {
+    if (!apiBaseUrl || !membersOnly.imageUrl) return;
     let objectUrl: string;
     fetch(`${apiBaseUrl}${membersOnly.imageUrl}`, {
       headers: { Authorization: `Bearer ${getAccessToken()}` },

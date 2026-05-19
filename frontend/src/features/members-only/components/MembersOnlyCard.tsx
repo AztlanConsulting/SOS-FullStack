@@ -11,6 +11,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
   const [imageSrc, setImageSrc] = useState<string>('');
 
   useEffect(() => {
+    if (!apiBaseUrl || !card.imageUrl) return;
     let objectUrl: string;
     fetch(`${apiBaseUrl}${card.imageUrl}`, {
       headers: { Authorization: `Bearer ${getAccessToken()}` },

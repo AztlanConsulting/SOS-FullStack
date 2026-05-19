@@ -3,6 +3,7 @@ import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
 import phone from '@assets/images/phone.png';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
+import { AutoTextSize } from 'auto-text-size';
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
   ({ pet }, ref) => {
@@ -84,7 +85,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
       >
         <div className="color-primary-bg h-[104px] w-[1080px] flex items-center justify-evenly">
           <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
-          <Text
+          {/* <Text
             variant="body"
             weight="bold"
             color="black"
@@ -92,7 +93,18 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
           >
             SE BUSCA A{' '}
             <span className="underline">{pet.name.toUpperCase()}</span>
-          </Text>
+          </Text> */}
+          <div className="w-[700px] flex justify-center items-center">
+            <AutoTextSize
+              as="p"
+              mode="multiline"
+              minFontSizePx={36}
+              maxFontSizePx={64}
+              className="font-bold text-center"
+            >
+              {`SE BUSCA A ${pet.name.toUpperCase()}`}
+            </AutoTextSize>
+          </div>
           <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
         </div>
 

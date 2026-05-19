@@ -12,7 +12,7 @@ export interface Pet {
   sex: string;
   color: string;
   size: string;
-  description?: string;
+  description: string;
   photos: string[];
   location: GeocodingResult;
   createdAt: Date;

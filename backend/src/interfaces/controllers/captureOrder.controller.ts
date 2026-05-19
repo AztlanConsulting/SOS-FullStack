@@ -6,7 +6,8 @@ import { markAsSucceededDB } from '@/use-cases/payments/markAsSuccededDB.usecase
 import { createPurchaseDB } from '@/use-cases/purchases/createPurchaseDB.usecase';
 import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
 import { purchaseDetailsSchema } from '@validation/payment.types';
-import activateLostPetReport from '@/use-cases/clients/activateLostPetReport.usecase';
+import { activatePlan } from '@/use-cases/plans/activatePlan.usecase';
+import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
 import { getManualByIdDB } from '@/use-cases/manuals/getManualsDB.usecase';
 import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
@@ -34,11 +35,12 @@ export default async function captureOrder(req: Request, res: Response) {
     const result = await markAsSucceededDB(PaymentDataAccess, String(orderId));
 
     if (productType === 'plan') {
-      const planActivation = await activateLostPetReport(
+      await activatePlan(
+        userDataAccess,
         purchasedPlanDataAccess,
-        productId!,
+        userEmail,
+        planId!,
       );
-      if (!planActivation) console.error("Plan couldn't be activated");
     }
 
     if (productType === 'manual') {

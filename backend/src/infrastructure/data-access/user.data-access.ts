@@ -138,4 +138,17 @@ export const userDataAccess: UserRepository = {
 
     return savedUser._id.toString();
   },
+
+  /**
+   * Activates a user account.
+   *
+   * @param email - Email of the user to activate
+   */
+  activateUser: async function (email: string): Promise<void> {
+    await UserModel.findOneAndUpdate(
+      { email },
+      { $set: { active: true } },
+      { runValidators: true },
+    ).exec();
+  },
 };

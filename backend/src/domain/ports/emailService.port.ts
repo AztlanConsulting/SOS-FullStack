@@ -34,6 +34,14 @@ export interface SendWorkshopEmailDTO {
   emailContent?: string;
 }
 
+export interface SendActivatePlanEmailDTO {
+  to: string;
+  username: string;
+  password: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+}
+
 export interface StripeEmailService {
   sendStripePaymentEmail(data: SendStripePaymentEmailDTO): Promise<void>;
 }
@@ -44,4 +52,8 @@ export interface ManualEmailService {
 
 export interface WorkshopEmailService {
   sendWorkshopEmail(data: SendWorkshopEmailDTO): Promise<void>;
+}
+
+export interface EmailService {
+  sendActivatePlanEmail(data: SendActivatePlanEmailDTO): Promise<void>;
 }

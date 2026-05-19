@@ -180,7 +180,8 @@ describe('WorkshopCard', () => {
     render(<WorkshopCard workshop={workshop} />);
 
     expect(screen.getByText('Workshop de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('MX$100')).toBeInTheDocument();
+    expect(screen.getByText(/\$100/)).toBeInTheDocument();
+    expect(screen.getByText('MXN')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Workshop de Prueba' }),
     ).toBeInTheDocument();

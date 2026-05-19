@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import { ManualItem } from '@features/manuals/components/ManualItem';
 import wrapper from '../utils/wrapper.util';
+import { MemoryRouter } from 'react-router';
 
 const navigateMock = vi.fn();
 
@@ -16,7 +17,7 @@ const navigateMock = vi.fn();
 
 vi.mock('@shared/context/Location.context', () => ({
   useLocationContext: () => ({
-    currencyCode: 'USD',
+    currencyCode: 'MXN',
     exchangeRate: 1,
     plans: [],
     manuals: [],
@@ -175,10 +176,12 @@ describe('ManualItem', () => {
       imageUrl: 'https://example.com/manual.jpg',
     };
 
-    render(<ManualItem manual={manual} />);
+    render(<ManualItem manual={manual} currencyCode="MXN" />, { wrapper });
 
     expect(screen.getByText('Manual de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('$129')).toBeInTheDocument();
+    expect(
+      screen.getByText((text) => text.includes('$129')),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'Manual de Prueba' }),
     ).toBeInTheDocument();

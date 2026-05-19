@@ -102,7 +102,8 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
               maxFontSizePx={64}
               className="font-bold text-center"
             >
-              {`SE BUSCA A ${pet.name.toUpperCase()}`}
+              SE BUSCA A{' '}
+              <span className="underline">{pet.name.toUpperCase()}</span>
             </AutoTextSize>
           </div>
           <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />

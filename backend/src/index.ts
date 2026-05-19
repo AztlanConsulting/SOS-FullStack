@@ -7,7 +7,7 @@ import cors from 'cors';
 import path from 'path';
 
 async function loadWorkers() {
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.ENV !== 'test') {
     await import('@/queues/activatePlan.worker');
     await import('@/queues/sendEmail.worker');
   }

@@ -1,6 +1,7 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
+import type { ReactNode } from 'react';
 
 interface Props {
   bg?: string;
@@ -10,6 +11,7 @@ interface Props {
   content: string;
   buttonText?: string;
   onClick?: () => void;
+  children?: ReactNode;
 }
 
 const HeroSection = ({
@@ -20,6 +22,7 @@ const HeroSection = ({
   content,
   buttonText,
   onClick,
+  children,
 }: Props) => {
   return (
     <section
@@ -53,7 +56,7 @@ const HeroSection = ({
             color="color-grey-text"
             className="text-left mb-6"
           >
-            {content}
+            {children ?? content}
           </Text>
           {buttonText && (
             <Button

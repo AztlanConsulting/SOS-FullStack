@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import usePurchaseProduct from '@shared/hooks/usePurchaseProduct';
 import { ManualItem } from '@features/manuals/components/ManualItem';
 import wrapper from '../utils/wrapper.util';
+import { MemoryRouter } from 'react-router';
 
 const navigateMock = vi.fn();
 
@@ -175,7 +176,7 @@ describe('ManualItem', () => {
       imageUrl: 'https://example.com/manual.jpg',
     };
 
-    render(<ManualItem manual={manual} currencyCode="MXN" />);
+    render(<ManualItem manual={manual} currencyCode="MXN" />, { wrapper });
 
     expect(screen.getByText('Manual de Prueba')).toBeInTheDocument();
     expect(

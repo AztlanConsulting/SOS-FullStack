@@ -14,9 +14,9 @@ const PetHero = ({ petInfo }: Props) => {
     <section className={`flex flex-col items-center justify-center`}>
       <button
         onClick={() => navigate('/inicio/coleccion-mascotas')}
-        className="fixed top-1 right-108 bg-gray-800/90 rounded-full p-2 text-gray-200 hover:bg-gray-700/90 hover:shadow-sm hover:shadow-gray-400"
+        className="fixed top-3 md:top-1 left-3 md:right-108 bg-gray-800/90 rounded-full p-2 text-gray-200 hover:bg-gray-700/90 hover:shadow-sm hover:shadow-gray-400 size-9"
       >
-        <IoMdClose />
+        <IoMdClose className="mx-auto" />
       </button>
       <img src={image} alt="Manuales" className="object-contain  w-full " />
     </section>

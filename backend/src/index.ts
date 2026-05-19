@@ -5,10 +5,13 @@ import routes from '@interfaces/routes/routes';
 import '@domain/models';
 import cors from 'cors';
 import path from 'path';
+import helmet from 'helmet';
 
 const app = express();
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
+app.use(helmet());
 
 app.use(
   cors({
@@ -18,7 +21,7 @@ app.use(
   }),
 );
 
-app.set('trust proxy', 1);
+app.set('trust proxy', process.env.FRONT_END_URL ?? 1);
 
 app.use((req, res, next) => {
   if (req.path === '/payments/webhook') {

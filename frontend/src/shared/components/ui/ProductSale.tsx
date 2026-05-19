@@ -89,7 +89,7 @@ const ProductSale = ({
           <Input
             type="name"
             id="name"
-            label="Nombre"
+            label="Nombre y apellido"
             placeholder=" "
             hasLength={false}
             error={nameError}

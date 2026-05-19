@@ -88,7 +88,7 @@ function FilterButton({ onClick, content, cancel }: ButtonProps) {
       onClick={onClick}
       className={`rounded-full ${cancel ? 'bg-white border-purple-primary hover:bg-purple-secondary text-purple-primary' : 'bg-purple-primary border-purple-primary hover:bg-purple-secondary text-white hover:text-purple-primary'} border-[1px]  items-center w-full cursor-pointer`}
     >
-      <Text variant="caption" weight="medium" className="text-inherit">
+      <Text variant="caption" as="p" weight="medium" className="text-inherit">
         {content}
       </Text>
     </button>

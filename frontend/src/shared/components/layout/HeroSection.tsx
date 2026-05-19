@@ -2,6 +2,7 @@ import { Text } from '@shared/components/ui/Text/Text';
 import type React from 'react';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
+import type { ReactNode } from 'react';
 
 interface Props {
   bg?: string;
@@ -12,6 +13,7 @@ interface Props {
   content: React.ReactNode;
   buttonText?: string;
   onClick?: () => void;
+  children?: ReactNode;
 }
 
 const HeroSection = ({
@@ -23,6 +25,7 @@ const HeroSection = ({
   content,
   buttonText,
   onClick,
+  children,
 }: Props) => {
   return (
     <section
@@ -50,27 +53,21 @@ const HeroSection = ({
         </div>
 
         <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3 py-6">
-          {typeof content === 'string' ? (
-            <>
-              <Text
-                as="p"
-                variant="body"
-                color="color-grey-text"
-                className="text-left mb-6"
-              >
-                {content}
-              </Text>
-              {buttonText && (
-                <Button
-                  label={buttonText}
-                  variant="primary"
-                  icon={HiChevronRight}
-                  onClick={onClick}
-                />
-              )}
-            </>
-          ) : (
-            content
+          <Text
+            as="p"
+            variant="body"
+            color="color-grey-text"
+            className="text-left mb-6"
+          >
+            {children ?? content}
+          </Text>
+          {buttonText && (
+            <Button
+              label={buttonText}
+              variant="primary"
+              icon={HiChevronRight}
+              onClick={onClick}
+            />
           )}
         </div>
       </div>

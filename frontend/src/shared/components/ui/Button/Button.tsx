@@ -56,7 +56,7 @@ export function Button({
       >
         {Icon ? <div className="w-[33px]" /> : <></>}
 
-        <Text variant="caption" weight="medium" className="text-inherit">
+        <Text variant="caption" as="p" weight="medium" className="text-inherit">
           {isLoading ? 'Guardando...' : label}
         </Text>
 

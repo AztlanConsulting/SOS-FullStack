@@ -1,5 +1,5 @@
 import { Text } from '../../../../shared/components/ui/Text';
-import experiencia from '@assets/images/experiencia.png';
+import experiencia from '@assets/images/experiencia.webp';
 
 const PlansSection = () => {
   return (

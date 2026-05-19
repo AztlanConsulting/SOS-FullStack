@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Poster } from '@features/poster/components/Poster.component';
-import dog1 from '@assets/images/dog1.png';
-import dog2 from '@assets/images/dog2.png';
-import husky1 from '@assets/images/husky1.jpg';
-import husky2 from '@assets/images/husky2.jpg';
-import husky3 from '@assets/images/husky3.jpg';
-import husky4 from '@assets/images/husky4.jpg';
+import dog1 from '@assets/images/dog1.webp';
+import dog2 from '@assets/images/dog2.webp';
+import husky1 from '@assets/images/husky1.webp';
+import husky2 from '@assets/images/husky2.webp';
+import husky3 from '@assets/images/husky3.webp';
+import husky4 from '@assets/images/husky4.webp';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {

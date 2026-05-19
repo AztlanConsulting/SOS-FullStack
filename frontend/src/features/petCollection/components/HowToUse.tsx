@@ -1,8 +1,8 @@
 import { Text } from '@/shared/components/ui/Text';
-import lostDogs from '@/assets/images/lost-dogs.jpg';
-import SelectImage from '@/assets/images/SelectImage.png';
-import Gallery from '@/assets/images/Gallery.png';
-import Filter from '@/assets/images/Filter.png';
+import lostDogs from '@/assets/images/lost-dogs.webp';
+import SelectImage from '@/assets/images/SelectImage.webp';
+import Gallery from '@/assets/images/Gallery.webp';
+import Filter from '@/assets/images/Filter.webp';
 import HeroSection from '@/shared/components/layout/HeroSection';
 
 const HowToUse = () => {

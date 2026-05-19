@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import markerIcon from '@assets/images/markerIcon.png';
+import markerIcon from '@assets/images/markerIcon.webp';
 
 //The default Leaflet marker icons.
 const defaultIcon = L.icon({

@@ -1,5 +1,5 @@
 import { Text } from '@shared/components/ui/Text';
-import petAndOwners from '@assets/images/petAndOwners.png';
+import petAndOwners from '@assets/images/petAndOwners.webp';
 
 const PublicationSection = () => {
   return (

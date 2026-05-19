@@ -1,5 +1,4 @@
 import PetDetails from '@/features/petCollection/components/PetDetails';
-import SearchPets from '@/features/petCollection/components/SearchPetsPage';
 import { PetGalleryProvider } from '@/features/petCollection/context/PetCollectionProvider';
 import PetCollectionPage from '@/pages/PetCollectionPage';
 
@@ -12,10 +11,6 @@ const router = [
       </PetGalleryProvider>
     ),
     children: [
-      {
-        index: true,
-        element: <SearchPets />,
-      },
       {
         path: ':id',
         element: <PetDetails />,

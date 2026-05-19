@@ -1,4 +1,3 @@
-import { HeaderBack } from '@/shared/components/layout/HeaderBack';
 import PetHero from './PetHero';
 import PetContent from './PetContent';
 import { useQuery } from '@tanstack/react-query';
@@ -17,23 +16,28 @@ const PetDetails = () => {
   });
 
   return (
-    <div className="pt-[80.67px] md:pt-0">
-      <HeaderBack name={'Mascotas'} onBack={() => navigate(-1)} />
-      <main className="flex max-md:flex-col">
-        {isLoading && <LoadingSpinner size="lg" />}
-        {error && (
-          <Text color="text-red-600">
-            Error cargando la información de búsqueda
-          </Text>
-        )}
-        {data && Object.keys(data).length > 0 && (
-          <div className="w-full flex justify-center flex-col">
-            <PetHero petInfo={data} />
-            <PetContent petInfo={data} />
-          </div>
-        )}
-      </main>
-    </div>
+    <>
+      <div
+        className="fixed inset-0 z-40"
+        onClick={() => navigate('/inicio/coleccion-mascotas')}
+      />
+      <div className="fixed top-18 h-screen right-0 z-50 overflow-scroll overscroll-none slide-in">
+        <main className="flex max-md:flex-col bg-white w-120">
+          {isLoading && <LoadingSpinner size="lg" />}
+          {error && (
+            <Text color="text-red-600">
+              Error cargando la información de búsqueda
+            </Text>
+          )}
+          {data && Object.keys(data).length > 0 && (
+            <div className="w-full flex justify-center flex-col gap-4 mb-20">
+              <PetHero petInfo={data} />
+              <PetContent petInfo={data} />
+            </div>
+          )}
+        </main>
+      </div>
+    </>
   );
 };
 

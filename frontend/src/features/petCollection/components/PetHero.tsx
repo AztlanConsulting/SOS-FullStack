@@ -1,46 +1,24 @@
+import { useNavigate } from 'react-router';
 import type { PetInfoDetailed } from '../types/petCollection.types';
-import { Text } from '@/shared/components/ui/Text';
+import { IoMdClose } from 'react-icons/io';
 
 interface Props {
   petInfo: PetInfoDetailed;
 }
 
 const PetHero = ({ petInfo }: Props) => {
+  const navigate = useNavigate();
   const image = `data:image/png;base64,${petInfo.image}`;
-  return (
-    <section
-      className={`bg-purple-secondary w-full flex flex-col items-center justify-center`}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-x-16 my-4 md:my-8 w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl ">
-        <div className="order-1 md:order-2 md:place-self-end md:justify-self-start mb-3">
-          <Text
-            as="h1"
-            variant="h1"
-            weight="medium"
-            color="text-black"
-            className="text-left"
-          >
-            {petInfo.species}
-          </Text>
-          <Text
-            as="h2"
-            variant="h2"
-            color="text-gray-600"
-            className="text-left"
-          >
-            {petInfo.breed}
-          </Text>
-        </div>
 
-        <div className="order-2 md:order-1 md:row-span-2 my-3 md:my-0 flex items-center justify-center">
-          <img
-            src={image}
-            alt="Manuales"
-            className="rounded-lg object-contain color-primary-shadow max-h-96 "
-          />
-        </div>
-      </div>
-      {/* <div className="order-3 md:order-3 md:place-self-start md:justify-self-start mt-3" /> */}
+  return (
+    <section className={`flex flex-col items-center justify-center`}>
+      <button
+        onClick={() => navigate('/inicio/coleccion-mascotas')}
+        className="fixed top-1 right-108 bg-gray-800/90 rounded-full p-2 text-gray-200 hover:bg-gray-700/90 hover:shadow-sm hover:shadow-gray-400"
+      >
+        <IoMdClose />
+      </button>
+      <img src={image} alt="Manuales" className="object-contain  w-full " />
     </section>
   );
 };

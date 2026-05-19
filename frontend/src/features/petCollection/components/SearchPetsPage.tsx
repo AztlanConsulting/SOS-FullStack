@@ -4,7 +4,7 @@ import { type ChangeEvent } from 'react';
 import { useSharedGallery } from '../context/PetCollectionProvider';
 import HowToUse from './HowToUse';
 
-const SearchPetsPage = () => {
+const SearchPets = () => {
   const { imgHook, pages, handleSearch, vectorImages } = useSharedGallery();
   const [img, setImg] = imgHook;
 
@@ -32,4 +32,4 @@ const SearchPetsPage = () => {
   );
 };
 
-export default SearchPetsPage;
+export default SearchPets;

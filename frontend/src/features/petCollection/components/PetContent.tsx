@@ -7,7 +7,7 @@ interface Props {
 
 const PetContent = ({ petInfo }: Props) => {
   return (
-    <div className="w-10/12 md:w-1/2 mx-auto h-full flex flex-col gap-3 mb-10">
+    <div className="w-5/6 mx-auto h-full flex flex-col gap-3 mb-10">
       <div>
         <Segment
           important

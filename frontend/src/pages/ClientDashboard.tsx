@@ -18,9 +18,9 @@ const navLinks = [
       { label: 'Mascotas encontradas', href: '/inicio/coleccion-mascotas' },
     ],
   },
-  { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },
-  { label: 'Talleres', href: '/inicio/talleres', icon: <LiaToolsSolid /> },
-  { label: 'Manuales', href: '/inicio/manuales', icon: <IoBookOutline /> },
+  { label: 'Blog', href: '/blog', icon: <TbEdit /> },
+  { label: 'Talleres', href: '/talleres', icon: <LiaToolsSolid /> },
+  { label: 'Manuales', href: '/manuales', icon: <IoBookOutline /> },
 ];
 
 const ClientDashboard = () => {

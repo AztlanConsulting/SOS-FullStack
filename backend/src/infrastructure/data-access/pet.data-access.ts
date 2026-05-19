@@ -16,13 +16,13 @@ export const petDataAccess: PetRepository = {
   },
 
   /**
-   * Get the pet of an user by his id.
+   * Get the pets of a user by id, newest first.
    *
    * @param userId - The user ID.
-   * @returns The pet of the user.
+   * @returns The pets of the user.
    */
-  getPetByUserId: async function (userId: string): Promise<Pet | null> {
-    const pet = await PetModel.findOne({ userId }).lean();
-    return pet as Pet | null;
+  getPetsByUserId: async function (userId: string): Promise<Pet[]> {
+    const pets = await PetModel.find({ userId }).sort({ createdAt: -1 }).lean();
+    return pets as Pet[];
   },
 };

@@ -48,13 +48,13 @@ const planProgress = {
 
 const dashboardMetrics: DashboardResponse = {
   planProgress,
-  resources: [],
 };
 
 describe('ClientDashboardOverview', () => {
   beforeEach(() => {
     dashboardMocks.navigate.mockReset();
     dashboardMocks.useDashboardMetrics.mockReset();
+    vi.stubEnv('VITE_API_BASE_URL', 'http://localhost:3000');
   });
 
   it('shows the loading state', () => {
@@ -108,7 +108,7 @@ describe('ClientDashboardOverview', () => {
     expect(screen.getByText(/Parque Alameda/)).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Firulais' })).toHaveAttribute(
       'src',
-      '/uploads/pet.jpg',
+      'http://localhost:3000/uploads/pet.jpg',
     );
     expect(screen.getByTestId('plan-progress')).toHaveTextContent('con-plan');
     expect(screen.getByTestId('ad-progress')).toHaveTextContent(
@@ -136,6 +136,24 @@ describe('ClientDashboardOverview', () => {
     );
   });
 
+  it('formats midnight UTC dates without moving them to the previous day', () => {
+    dashboardMocks.useDashboardMetrics.mockReturnValue({
+      metrics: {
+        ...dashboardMetrics,
+        planProgress: {
+          ...planProgress,
+          dateMissing: '2026-05-01T00:00:00.000Z',
+        },
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<ClientDashboardOverview />);
+
+    expect(screen.getByText(/Desde 01\/05\/2026/)).toBeInTheDocument();
+  });
+
   it('shows a fallback when location is empty', () => {
     dashboardMocks.useDashboardMetrics.mockReturnValue({
       metrics: {
@@ -154,7 +172,7 @@ describe('ClientDashboardOverview', () => {
     expect(screen.getByText(/ubicación no disponible/)).toBeInTheDocument();
   });
 
-  it('navigates to exclusive content and pet collection pages', () => {
+  it('navigates to the pet collection page', () => {
     dashboardMocks.useDashboardMetrics.mockReturnValue({
       metrics: dashboardMetrics,
       loading: false,
@@ -164,20 +182,10 @@ describe('ClientDashboardOverview', () => {
     render(<ClientDashboardOverview />);
 
     fireEvent.click(
-      screen.getByRole('button', {
-        name: 'Visita nuestro contenido exclusivo',
-      }),
-    );
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Colección de mascotas' }),
+      screen.getByRole('button', { name: 'Galería de mascotas' }),
     );
 
-    expect(dashboardMocks.navigate).toHaveBeenNthCalledWith(
-      1,
-      '/portal-exclusivo',
-    );
-    expect(dashboardMocks.navigate).toHaveBeenNthCalledWith(
-      2,
+    expect(dashboardMocks.navigate).toHaveBeenCalledWith(
       '/inicio/coleccion-mascotas',
     );
   });

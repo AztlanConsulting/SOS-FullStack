@@ -8,26 +8,57 @@ import { Button } from '@/shared/components/ui/Button';
 const dashboardContainerClass =
   'w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto';
 
+const DEFAULT_API_BASE_URL = 'http://localhost:3000';
+
+const trimTrailingSlashes = (url: string) => url.replace(/\/+$/, '');
+
+const resolveMediaUrl = (url?: string | null) => {
+  const mediaUrl = url?.trim();
+
+  if (!mediaUrl) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(mediaUrl)) {
+    return mediaUrl;
+  }
+
+  const baseUrl = trimTrailingSlashes(
+    import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL,
+  );
+  const path = mediaUrl.startsWith('/') ? mediaUrl : `/${mediaUrl}`;
+
+  return `${baseUrl}${path}`;
+};
+
+const formatDateMissing = (dateMissing?: string | null) => {
+  if (!dateMissing) {
+    return '';
+  }
+
+  const date = new Date(dateMissing);
+
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
+  return date.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+};
+
 const ClientDashboardOverview = () => {
   const { metrics, loading, error } = useDashboardMetrics();
   const navigate = useNavigate();
 
   const petData = metrics?.planProgress;
   const lostLocation = petData?.location?.trim();
-  const formattedDate = petData?.dateMissing
-    ? new Date(petData.dateMissing).toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })
-    : '';
-
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-  const posterUrl = petData?.posterImage
-    ? petData.posterImage.startsWith('http')
-      ? petData.posterImage
-      : `${baseUrl}${petData.posterImage}`
-    : null;
+  const formattedDate = formatDateMissing(petData?.dateMissing);
+  const petImageUrl = resolveMediaUrl(petData?.petImage) || 'pet.jpg';
+  const posterUrl = resolveMediaUrl(petData?.posterImage);
 
   const handleResourcesPage = () => {
     navigate('/portal-exclusivo');
@@ -83,7 +114,7 @@ const ClientDashboardOverview = () => {
                 <div className="flex w-full flex-col items-center gap-6 md:flex-row md:justify-center md:gap-10">
                   <div className="w-40 h-40 md:w-50 md:h-50 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
                     <img
-                      src={petData.petImage || 'pet.jpg'}
+                      src={petImageUrl}
                       alt={petData.petName}
                       className="w-full h-full object-cover"
                     />

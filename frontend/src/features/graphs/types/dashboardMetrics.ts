@@ -32,15 +32,6 @@ export interface DashboardStats {
   distribution: PlanDistributionMetric[];
 }
 
-export interface PurchasedResourceResponse {
-  id: string;
-  name: string;
-  type: 'manual' | 'workshop';
-  imageUrl: string;
-  description?: string;
-}
-
 export interface DashboardResponse {
   planProgress: PlanSubscriptionProgress | null;
-  resources: PurchasedResourceResponse[];
 }

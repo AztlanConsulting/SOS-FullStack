@@ -20,7 +20,6 @@ const dashboardResponse: DashboardResponse = {
     dateMissing: '2026-05-01',
     location: 'Parque Alameda',
   },
-  resources: [],
 };
 
 describe('getDashboardMetrics', () => {

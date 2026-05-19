@@ -89,14 +89,6 @@ export const getCreatePetReportFieldErrors = (
   }, {});
 };
 
-export interface PurchasedResourceResponse {
-  id: string;
-  name: string;
-  type: 'manual' | 'workshop';
-  imageUrl: string;
-  description?: string;
-}
-
 export interface PlanProgressResult {
   planName: string;
   totalDays: number;
@@ -110,5 +102,4 @@ export interface PlanProgressResult {
 
 export interface DashboardResponse {
   planProgress: PlanProgressResult | null;
-  resources: PurchasedResourceResponse[];
 }

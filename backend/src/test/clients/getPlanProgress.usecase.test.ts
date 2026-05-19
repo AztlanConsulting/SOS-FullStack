@@ -62,7 +62,7 @@ describe('getPlanProgress', () => {
 
     petRepository = {
       createPet: jest.fn(),
-      getPetByUserId: jest.fn(),
+      getPetsByUserId: jest.fn(),
     };
 
     purchasedPlanRepository = {
@@ -77,7 +77,7 @@ describe('getPlanProgress', () => {
   });
 
   test('returns null when the user pet does not exist', async () => {
-    petRepository.getPetByUserId.mockResolvedValue(null);
+    petRepository.getPetsByUserId.mockResolvedValue([]);
 
     const result = await getPlanProgress(
       { petRepository, purchasedPlanRepository },
@@ -85,13 +85,13 @@ describe('getPlanProgress', () => {
     );
 
     expect(result).toBeNull();
-    expect(petRepository.getPetByUserId).toHaveBeenCalledWith('user-1');
+    expect(petRepository.getPetsByUserId).toHaveBeenCalledWith('user-1');
     expect(purchasedPlanRepository.getActivePlanByPetId).not.toHaveBeenCalled();
   });
 
   test('returns null when the pet has no active plan', async () => {
     const pet = createPet();
-    petRepository.getPetByUserId.mockResolvedValue(pet);
+    petRepository.getPetsByUserId.mockResolvedValue([pet]);
     purchasedPlanRepository.getActivePlanByPetId.mockResolvedValue(null);
 
     const result = await getPlanProgress(
@@ -108,7 +108,7 @@ describe('getPlanProgress', () => {
   test('builds plan progress with remaining days, images, and location', async () => {
     const pet = createPet();
     const plan = createPlan();
-    petRepository.getPetByUserId.mockResolvedValue(pet);
+    petRepository.getPetsByUserId.mockResolvedValue([pet]);
     purchasedPlanRepository.getActivePlanByPetId.mockResolvedValue(plan);
 
     const result = await getPlanProgress(
@@ -129,7 +129,7 @@ describe('getPlanProgress', () => {
   });
 
   test('does not return negative days when the plan has ended', async () => {
-    petRepository.getPetByUserId.mockResolvedValue(createPet());
+    petRepository.getPetsByUserId.mockResolvedValue([createPet()]);
     purchasedPlanRepository.getActivePlanByPetId.mockResolvedValue(
       createPlan({
         duration: 5,
@@ -143,5 +143,43 @@ describe('getPlanProgress', () => {
     );
 
     expect(result?.daysRemaining).toBe(0);
+  });
+
+  test('uses the first user pet that has an active plan', async () => {
+    const petWithoutPlan = createPet({
+      _id: new Types.ObjectId('67b67b67b67b67b67b67b67b'),
+      name: 'Sin plan',
+    });
+    const petWithPlan = createPet({
+      _id: new Types.ObjectId('68b68b68b68b68b68b68b68b'),
+      name: 'Con plan',
+      photos: ['/uploads/active-pet.jpg', '/uploads/active-poster.jpg'],
+    });
+    const activePlan = createPlan({
+      petId: petWithPlan._id,
+      name: 'Premium',
+    });
+
+    petRepository.getPetsByUserId.mockResolvedValue([
+      petWithoutPlan,
+      petWithPlan,
+    ]);
+    purchasedPlanRepository.getActivePlanByPetId
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(activePlan);
+
+    const result = await getPlanProgress(
+      { petRepository, purchasedPlanRepository },
+      'user-1',
+    );
+
+    expect(result?.petName).toBe('Con plan');
+    expect(result?.planName).toBe('Premium');
+    expect(
+      purchasedPlanRepository.getActivePlanByPetId,
+    ).toHaveBeenNthCalledWith(1, petWithoutPlan._id.toString());
+    expect(
+      purchasedPlanRepository.getActivePlanByPetId,
+    ).toHaveBeenNthCalledWith(2, petWithPlan._id.toString());
   });
 });

@@ -3,6 +3,16 @@ import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { Poster } from '@/features/poster/components/Poster.component';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
+class MockResizeObserver {
+  observe() {}
+
+  unobserve() {}
+
+  disconnect() {}
+}
+
+vi.stubGlobal('ResizeObserver', MockResizeObserver);
+
 describe('Poster component', () => {
   beforeEach(() => {
     vi.clearAllMocks();

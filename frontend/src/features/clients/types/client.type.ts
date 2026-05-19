@@ -3,7 +3,12 @@
  * These types define the structure for data flowing between the API
  * and the User Interface.
  */
-export type PlanStatus = 'continua' | 'casi expira' | 'expirado' | 'RIP';
+export type PlanStatus =
+  | 'continua'
+  | 'casi expira'
+  | 'expirado'
+  | 'RIP'
+  | 'encontrado';
 
 /**
  * Detailed information about a pet belonging to a client.
@@ -34,6 +39,7 @@ export interface ClientPlan {
   radius?: number;
   feautures?: string[];
   expirationDate?: string;
+  createdAt?: string;
 }
 
 /**
@@ -45,6 +51,7 @@ export interface ClientListItem {
   username: string;
   email: string;
   phone: string;
+  createdAt: string;
   description?: string;
   conversation?: string;
   pet?: Pick<ClientPet, '_id' | 'name' | 'species' | 'description'>;
@@ -66,6 +73,8 @@ export interface ClientDetail {
   createdAt: string;
   pets: ClientPet[];
   plans: ClientPlan[];
+  notes?: string;
+  paymentMethod?: string;
 }
 
 /**

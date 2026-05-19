@@ -7,9 +7,9 @@ import type { ClientListItem } from '../types/client.type';
  */
 const HEADERS = [
   'Nombre',
-  'ID Plan',
+  'Fecha de compra',
   'Nombre mascota',
-  'Notas',
+  'Características',
   'Link de la conversacion',
   'Estatus del plan',
 ];
@@ -87,7 +87,16 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   </td>
                   <td className="px-4 py-3">
                     <Text variant="caption">
-                      {client.plan?._id.slice(-4) ?? '—'}
+                      {client.plan?.createdAt
+                        ? new Date(client.plan.createdAt).toLocaleDateString(
+                            'es-MX',
+                            {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                            },
+                          )
+                        : '—'}
                     </Text>
                   </td>
                   <td className="px-4 py-3">
@@ -165,7 +174,14 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   Mascota: {client.pet?.name ?? '—'}
                 </Text>
                 <Text variant="small" color="text-gray-500">
-                  ID Plan: {client.plan?._id.slice(-4) ?? '—'}
+                  Fecha:{' '}
+                  {client.createdAt
+                    ? new Date(client.createdAt).toLocaleDateString('es-MX', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })
+                    : '—'}
                 </Text>
                 <Text variant="small" color="text-gray-500">
                   Notas: {client.pet?.description ?? '—'}

@@ -9,6 +9,12 @@ const router = express.Router();
  */
 router.get('/', ClientController.getClients);
 /**
+ * @route   PUT /clients/plan-status/:planId
+ * @desc    Update the status of a purchased plan.
+ * @access  Protected
+ */
+router.put('/plan-status/:planId', ClientController.updatePlanStatus);
+/**
  * @route   GET /api/clientes/:id
  * @desc    Retrieve full details of a specific client by ID.
  * @access  Protected

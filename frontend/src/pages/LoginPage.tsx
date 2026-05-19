@@ -11,11 +11,7 @@ const LoginPage = () => {
   if (isAuthLoading) return <p>Loading...</p>;
 
   if (user) {
-<<<<<<< HEAD
-    return <Navigate to="/clientes" replace />;
-=======
     return <Navigate to={roleNavigation(user.role)} replace />;
->>>>>>> f8193bbcb3386dcd51f79fd079f7ed6a5b68e0d7
   }
 
   return (

@@ -11,18 +11,14 @@ import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import routerLostPet from './foundPet.routes';
 import { PurchasePage } from '@pages/PurchasePage';
-import routerClient from './client.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
 import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
-<<<<<<< HEAD
 import routerClients from './client.routes';
-=======
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
->>>>>>> f8193bbcb3386dcd51f79fd079f7ed6a5b68e0d7
 
 export const router = createBrowserRouter([
   {
@@ -63,7 +59,6 @@ export const router = createBrowserRouter([
             <ClientDashboard />
           </RoleProtectedRoute>
         ),
-        children: [...routerClient],
       },
       {
         path: '/credits',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { HiFilter } from 'react-icons/hi';
 import { Text } from '@/shared/components/ui/Text';
 import type { PlanStatus } from '../types/client.type';
@@ -38,12 +38,26 @@ const STATUS_OPTIONS: { label: string; value: PlanStatus }[] = [
  */
 export const FilterDropdown = ({ filters, onChange }: Props) => {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Calculate how many filters are currently applied to show in the badge
   const activeCount = Object.values(filters).filter(Boolean).length;
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen((o) => !o)}
         className={`flex items-center gap-1 border rounded-md px-2 py-2 text-xs transition-colors ${
@@ -61,7 +75,7 @@ export const FilterDropdown = ({ filters, onChange }: Props) => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-1 w-52 bg-white border border-gray-200 rounded-lg shadow-md z-10 p-3 flex flex-col gap-3">
+        <div className="absolute right-0 bottom-full mb-1 w-52 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-md z-50 p-3 flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
           <div>
             <Text
               variant="small"

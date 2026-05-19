@@ -1,4 +1,6 @@
 import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
+import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
+import { getClientsByCountry } from '@/use-cases/clients/getClientsByCountry.usecase';
 import { getVisitMetric } from '@/use-cases/clients/getVisitMetrics.usecase';
 import { getPlanDistributionUseCase } from '@/use-cases/plans/getPlanDistribution.usecase';
 import type { Request, Response } from 'express';
@@ -48,6 +50,28 @@ export const MetricsController = {
       res.status(200).json(visits);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch visit metrics' });
+    }
+  },
+
+  /**
+   * HTTP Request Handler to retrieve administrative metrics of active user accounts
+   * aggregated geographically by country origins.
+   * * Maps incoming HTTP requests directly to internal Clean Architecture use cases
+   * using explicit repository injections.
+   * * @route GET /api/analytics/clients-by-country
+   * @param req - Express incoming HTTP request context structure.
+   * @param res - Express outgoing HTTP response channel context object.
+   * @returns {Promise<void>} Sends a JSON payload array containing names and total counts.
+   */
+  getClientsByCountry: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const data = await getClientsByCountry({
+        userRepository: userDataAccess,
+      });
+      res.status(200).json(data);
+    } catch (error) {
+      console.error('getClientsByCountry error:', error);
+      res.status(500).json({ error: 'Failed to fetch clients by country' });
     }
   },
 };

@@ -2,6 +2,16 @@ import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 /**
+ * Represents a plan that has been purchased for a pet, including its configuration and status.
+ */
+export type PlanStatus =
+  | 'continua'
+  | 'casi expira'
+  | 'expirado'
+  | 'RIP'
+  | 'encontrado';
+
+/**
  * Interface representing a Purchased Plan in the system.
  * This represents the "snapshot" of a plan at the moment of purchase,
  * including its configuration (days, radius) and active status.
@@ -15,6 +25,7 @@ export interface PurchasedPlan {
   radius: number;
   features: string[];
   active: boolean;
+  status: PlanStatus;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,6 +59,11 @@ const PurchasedPlanSchema = new Schema<PurchasedPlan>(
     active: {
       type: Boolean,
       default: false,
+    },
+    status: {
+      type: String,
+      enum: ['continua', 'casi expira', 'expirado', 'RIP', 'encontrado'],
+      default: 'casi expira',
     },
   },
   {

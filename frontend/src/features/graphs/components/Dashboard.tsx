@@ -3,8 +3,6 @@ import { useDashboardMetrics } from '@features/graphs/hooks/useDashboardMetrics'
 // Prueba de componentes
 import { CountdownChart } from './CountDownChart';
 import { ActivePlanChart } from './ActivePlanChart';
-import { CountriesBarChart } from './CountriesBarChart';
-import { VisitsLineChart } from './VisitsLineChart';
 
 export const Dashboard: React.FC = () => {
   const { metrics, loading, error } = useDashboardMetrics();
@@ -55,16 +53,6 @@ export const Dashboard: React.FC = () => {
         <div style={cardStyle}>
           <h3 style={{ textAlign: 'left' }}>Planes activos</h3>
           <ActivePlanChart data={metrics.distribution} />
-        </div>
-
-        <div style={cardStyle}>
-          <h3 style={{ textAlign: 'left' }}>Distribución por país</h3>
-          <CountriesBarChart data={metrics.sales} />
-        </div>
-
-        <div style={cardStyle}>
-          <h3 style={{ textAlign: 'left' }}> Visitantes </h3>
-          <VisitsLineChart data={metrics.visits} />
         </div>
       </div>
     </div>

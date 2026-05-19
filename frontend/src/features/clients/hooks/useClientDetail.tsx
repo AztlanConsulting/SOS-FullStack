@@ -15,25 +15,37 @@ export const useClientDetail = (id: string | null) => {
   const [client, setClient] = useState<ClientDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Numeric counter used to force a side-effect re-execution on demand
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
+
+  /**
+   * Internal worker function to execute the asynchronous data fetch from the service layer.
+   */
+  const fetchClient = async (clientId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await ClientService.getClientById(clientId);
+      setClient(data);
+    } catch {
+      setError('No se pudo cargar el cliente.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!id) {
       setClient(null);
       return;
     }
+    fetchClient(id);
+  }, [id, refetchTrigger]);
 
-    setLoading(true);
-    setError(null);
+  /**
+   * Imperatively forces a data reload from the server without changing the target client ID.
+   */
+  const refetch = () => setRefetchTrigger((t) => t + 1);
 
-    /**
-     * API Call to the client service.
-     * Updates the state based on the promise resolution.
-     */
-    ClientService.getClientById(id)
-      .then(setClient)
-      .catch(() => setError('No se pudo cargar el cliente.'))
-      .finally(() => setLoading(false));
-  }, [id]);
-
-  return { client, loading, error };
+  return { client, loading, error, refetch };
 };

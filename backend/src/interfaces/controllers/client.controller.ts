@@ -3,6 +3,8 @@ import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { getClientById } from '@/use-cases/clients/getClientById.usecase';
 import { getClients } from '@/use-cases/clients/getClients.usecase';
 import { updateClient } from '@/use-cases/clients/updateClient.usecase';
+import { updatePlanStatus } from '@/use-cases/clients/updatePlanStatus.usecase';
+import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
 
 /**
  * Dependency Injection setup.
@@ -55,6 +57,39 @@ export const ClientController = {
   },
 
   /**
+   * HTTP Request Handler to modify the operational status of an active subscription plan.
+   * * Validates input parameters before delegating execution to the business logic use case.
+   * * @route PUT /api/plans/:planId/status
+   * @param req - Express incoming HTTP request context structure carrying `planId` parameters and a `status` string payload.
+   * @param res - Express outgoing HTTP response channel context object.
+   * @returns {Promise<void>} Sends a 200 JSON success confirmation or an appropriate error code status.
+   */
+  updatePlanStatus: async (req: Request, res: Response): Promise<void> => {
+    console.log('updatePlanStatus hit', req.params, req.body);
+
+    try {
+      const planId = Array.isArray(req.params.planId)
+        ? req.params.planId[0]
+        : req.params.planId;
+      const { status } = req.body;
+
+      if (!planId || typeof planId !== 'string') {
+        res.status(400).json({ error: 'Invalid plan id' });
+        return;
+      }
+
+      await updatePlanStatus(
+        { purchasedPlanRepository: purchasedPlanDataAccess },
+        planId,
+        status,
+      );
+      res.status(200).json({ message: 'Plan status updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error updating plan status' });
+    }
+  },
+
+  /**
    * PATCH/PUT /clients/:id
    * Updates specific client fields (currently focused on conversation notes).
    */
@@ -63,14 +98,14 @@ export const ClientController = {
       const id = Array.isArray(req.params.id)
         ? req.params.id[0]
         : req.params.id;
-      const { conversation } = req.body;
+      const { conversation, notes } = req.body;
 
       if (!id || typeof id !== 'string') {
         res.status(400).json({ error: 'Invalid client id' });
         return;
       }
 
-      await updateClient(deps, id, { conversation });
+      await updateClient(deps, id, { conversation, notes });
       res.status(200).json({ message: 'Client updated successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Error updating client' });

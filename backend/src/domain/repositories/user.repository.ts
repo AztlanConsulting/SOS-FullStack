@@ -17,4 +17,5 @@ export interface UserRepository {
   getUsersWithPets(page: number, search?: string): Promise<GetClientsResult>;
   getClientDetail(id: string): Promise<ClientDetail | null>;
   updateUser(id: string, data: Partial<User>): Promise<void>;
+  getClientsByCountry(): Promise<{ name: string; value: number }[]>;
 }

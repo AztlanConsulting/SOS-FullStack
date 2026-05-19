@@ -3,6 +3,7 @@ import { Schema, model } from 'mongoose';
 
 export interface IPayment extends Document {
   orderId: string;
+  userId: string;
   amount: number;
   currency: string;
   method: string;
@@ -20,6 +21,7 @@ const paymentSchema = new Schema<IPayment>(
     method: { type: String, required: true },
     status: { type: String, required: true },
     clientSecret: { type: String, required: true },
+    userId: { type: String, required: true },
   },
   { timestamps: true },
 );

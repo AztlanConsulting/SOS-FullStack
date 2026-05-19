@@ -38,6 +38,9 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
   getPlanDistribution: async function (): Promise<PlanDistributionMetric[]> {
     const result = await PurchasedPlanModel.aggregate([
       {
+        $match: { status: { $nin: ['expirado', 'RIP', 'encontrado'] } },
+      },
+      {
         $group: {
           _id: '$name',
           value: { $sum: 1 },
@@ -81,5 +84,14 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
       { active: true },
     );
     return Boolean(updated);
+  },
+
+  /**
+   * Directly updates the descriptive lifecycle tag of a specific plan record.
+   * * @param planId - Document configuration tracking key.
+   * @param status - The target validation state to persist (e.g., 'expirado').
+   */
+  updatePlanStatus: async (planId: string, status: string): Promise<void> => {
+    await PurchasedPlanModel.findByIdAndUpdate(planId, { $set: { status } });
   },
 };

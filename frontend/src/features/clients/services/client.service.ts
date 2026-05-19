@@ -52,4 +52,36 @@ export const ClientService = {
       body: JSON.stringify({ conversation }),
     });
   },
+
+  /**
+   * Dispatches an HTTP PUT request to modify the operational status of a specific subscription ledger.
+   * * @param planId - The target unique identifier for the subscription ledger.
+   * @param status - The new string state to apply (e.g., 'active', 'expirado', 'cancelado').
+   * @returns {Promise<void>} Resolves when the network layer successfully finishes processing the update.
+   */
+  updatePlanStatus: async (planId: string, status: string): Promise<void> => {
+    await fetch(`/api/clients/plan-status/${planId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+  },
+
+  /**
+   * Dispatches an HTTP PUT request to update arbitrary metadata flags attached to a client's core profile.
+   * Typically used for syncing persistent administration overrides like support conversation URLs or CRM logs.
+   * * @param id - The unique user profile identification database token string.
+   * @param data - Fragmented payload shape containing tracking variables or text logs.
+   * @returns {Promise<void>} Resolves once network transactions conclude successfully.
+   */
+  updateClient: async (
+    id: string,
+    data: { conversation?: string; notes?: string },
+  ): Promise<void> => {
+    await fetch(`/api/clients/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  },
 };

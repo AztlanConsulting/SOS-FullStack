@@ -14,6 +14,8 @@ import { usePlanDistribution } from '@/features/graphs/hooks/useDashboardMetrics
 import { ActivePlanChart } from '@/features/graphs/components/ActivePlanChart';
 import { useVisitMetrics } from '@/features/graphs/hooks/useVisitMetrics';
 import { VisitsLineChart } from '@/features/graphs/components/VisitsLineChart';
+import { useClientsByCountry } from '@/features/graphs/hooks/useClientsByCountry';
+import { CountryDistributionChart } from '@/features/graphs/components/CountryDistributionChart';
 
 /**
  *
@@ -25,6 +27,8 @@ import { VisitsLineChart } from '@/features/graphs/components/VisitsLineChart';
  */
 export const ClientsPage = () => {
   const { distribution, loading: loadingMetrics } = usePlanDistribution();
+  const { data: countryData, loading: loadingCountries } =
+    useClientsByCountry();
   const [currentDate, setCurrentDate] = useState({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
@@ -108,6 +112,18 @@ export const ClientsPage = () => {
         </div>
         <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5">
           <Text variant="h3" weight="regular" className="mb-4">
+            Distribución por país
+          </Text>
+          {loadingCountries ? (
+            <Text variant="caption" color="text-gray-400">
+              Cargando...
+            </Text>
+          ) : (
+            <CountryDistributionChart data={countryData} />
+          )}
+        </div>
+        <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5">
+          <Text variant="h3" weight="regular" className="mb-4">
             Lista de clientes
           </Text>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
@@ -173,6 +189,7 @@ export const ClientsPage = () => {
               client={selectedClient}
               onClose={() => setSelectedClient(null)}
               onUpdate={fetchClients}
+              onRefresh={fetchClients}
             />
           )}
         </div>

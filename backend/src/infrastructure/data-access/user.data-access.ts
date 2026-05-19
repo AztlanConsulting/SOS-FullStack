@@ -181,7 +181,6 @@ export const userDataAccess: UserRepository = {
                 pipeline: [
                   { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
                   { $sort: { createdAt: -1 } },
-                  { $limit: 1 },
                 ],
                 as: 'plans',
               },
@@ -189,18 +188,68 @@ export const userDataAccess: UserRepository = {
             {
               $addFields: {
                 pet: { $arrayElemAt: ['$pets', 0] },
-                plan: { $arrayElemAt: ['$plans', 0] },
               },
             },
-            { $project: { password: 0, pets: 0, plans: 0 } },
+            { $project: { password: 0, pets: 0 } },
           ],
           total: [{ $count: 'count' }],
         },
       },
     ]);
 
-    const clients = result?.data ?? [];
     const total = result?.total?.[0]?.count ?? 0;
+    const clients = (result?.data ?? []).map((client: any) => {
+      if (client.plans && client.plans.length > 0) {
+        const sorted = [...client.plans].sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+
+        const newest = sorted[0];
+
+        // Evaluate active status only if the ledger hasn't reached terminal parameters
+        if (newest.status !== 'RIP' && newest.status !== 'encontrado') {
+          const now = new Date();
+          let expiresAt: Date;
+
+          // Process time stacking loops if overlapping active plans exist
+          if (sorted.length > 1) {
+            const prev = sorted[1];
+            const prevExpiry = new Date(
+              new Date(prev.createdAt).getTime() +
+                prev.duration * 24 * 60 * 60 * 1000,
+            );
+            if (prevExpiry > now) {
+              const remaining = prevExpiry.getTime() - now.getTime();
+              expiresAt = new Date(
+                now.getTime() +
+                  remaining +
+                  newest.duration * 24 * 60 * 60 * 1000,
+              );
+            } else {
+              expiresAt = new Date(
+                new Date(newest.createdAt).getTime() +
+                  newest.duration * 24 * 60 * 60 * 1000,
+              );
+            }
+          } else {
+            expiresAt = new Date(
+              new Date(newest.createdAt).getTime() +
+                newest.duration * 24 * 60 * 60 * 1000,
+            );
+          }
+
+          const ms = expiresAt.getTime() - now.getTime();
+          if (ms < 0) newest.status = 'expirado';
+          else if (ms < 24 * 60 * 60 * 1000) newest.status = 'casi expira';
+          else newest.status = 'continua';
+        }
+
+        client.plan = newest;
+        delete client.plans;
+      }
+      return client;
+    });
 
     return {
       clients,
@@ -209,9 +258,12 @@ export const userDataAccess: UserRepository = {
       totalPages: Math.ceil(total / LIMIT),
     };
   },
+
   /**
-   * Retrieves full profile information for a specific client.
-   * Unlike the list view, this returns all associated pets and all historical plans.
+   * Retrieves full demographic context data mapping for an explicit profile tracking ID.
+   * Combines transaction details and billing models completely within a single aggregation step.
+   * * @param id - User database Object ID reference string
+   * @returns Detailed composite profile payload or null if target account is invalid
    */
   getClientDetail: async (id: string): Promise<ClientDetail | null> => {
     const [client] = await UserModel.aggregate([
@@ -235,9 +287,101 @@ export const userDataAccess: UserRepository = {
           as: 'plans',
         },
       },
+      {
+        $addFields: {
+          plans: {
+            $map: {
+              input: '$plans',
+              as: 'p',
+              in: {
+                $mergeObjects: [
+                  '$$p',
+                  {
+                    status: {
+                      $let: {
+                        vars: {
+                          expiresAt: {
+                            $add: [
+                              '$$p.createdAt',
+                              {
+                                $multiply: [
+                                  '$$p.duration',
+                                  24 * 60 * 60 * 1000,
+                                ],
+                              },
+                            ],
+                          },
+                          now: '$$NOW',
+                        },
+                        in: {
+                          $cond: {
+                            if: {
+                              $in: ['$$p.status', ['RIP', 'encontrado']],
+                            },
+                            then: '$$p.status',
+                            else: {
+                              $switch: {
+                                branches: [
+                                  {
+                                    case: { $lt: ['$$expiresAt', '$$now'] },
+                                    then: 'expirado',
+                                  },
+                                  {
+                                    case: {
+                                      $lt: [
+                                        '$$expiresAt',
+                                        {
+                                          $add: ['$$now', 24 * 60 * 60 * 1000],
+                                        },
+                                      ],
+                                    },
+                                    then: 'casi expira',
+                                  },
+                                  {
+                                    case: { $gt: ['$$expiresAt', '$$now'] },
+                                    then: 'continua',
+                                  },
+                                ],
+                                default: 'RIP',
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'purchases',
+          localField: 'email',
+          foreignField: 'userEmail',
+          as: 'purchases',
+        },
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          let: { paymentId: { $arrayElemAt: ['$purchases.paymentId', 0] } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$orderId', '$$paymentId'] } } },
+            { $limit: 1 },
+          ],
+          as: 'payments',
+        },
+      },
+      {
+        $addFields: {
+          paymentMethod: { $arrayElemAt: ['$payments.method', 0] },
+        },
+      },
       { $project: { password: 0 } },
     ]);
-
     return client ?? null;
   },
 
@@ -247,5 +391,80 @@ export const userDataAccess: UserRepository = {
    */
   updateUser: async (id: string, data: Partial<User>): Promise<void> => {
     await UserModel.findByIdAndUpdate(id, { $set: data });
+  },
+
+  /**
+   * Aggregates demographic metrics based on geographical data extracted from lost pet reports.
+   * Returns sorted totals useful for populating global analytics metrics widgets.
+   * * @returns Arranged country data metrics mapping name-to-volume parameters
+   */
+  getClientsByCountry: async (): Promise<{ name: string; value: number }[]> => {
+    const result = await UserModel.aggregate([
+      {
+        $lookup: {
+          from: 'pets',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'pets',
+        },
+      },
+      {
+        $addFields: {
+          pet: { $arrayElemAt: ['$pets', 0] },
+        },
+      },
+      {
+        $match: {
+          'pet.placeMissing': { $exists: true, $ne: null },
+        },
+      },
+      {
+        $lookup: {
+          from: 'purchasedplans',
+          let: { petIds: '$pets._id' },
+          pipeline: [
+            { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
+            { $sort: { createdAt: -1 } },
+            { $limit: 1 },
+          ],
+          as: 'plans',
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { 'plans.0.status': { $nin: ['expirado', 'RIP', 'encontrado'] } },
+            { plans: { $size: 0 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          country: {
+            $trim: {
+              input: {
+                $arrayElemAt: [{ $split: ['$pet.placeMissing', ','] }, -1],
+              },
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$country',
+          value: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: '$_id',
+          value: 1,
+        },
+      },
+      { $sort: { value: -1 } },
+    ]);
+
+    return result;
   },
 };

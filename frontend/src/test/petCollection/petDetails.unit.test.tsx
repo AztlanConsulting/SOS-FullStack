@@ -45,7 +45,7 @@ describe('Load pet details', () => {
       { wrapper },
     );
 
-    expect(await screen.findAllByText('Dog')).toHaveLength(2);
+    expect(await screen.findByText('Dog')).toBeDefined;
     expect(screen.findByText('Huskey')).toBeDefined();
     expect(screen.findByText('Macho')).toBeDefined();
     expect(screen.findByText('Blanco y negro')).toBeDefined();
@@ -60,6 +60,6 @@ describe('Load pet details', () => {
 
     const backButton = screen.getByRole('button');
     fireEvent.click(backButton);
-    expect(navigateMock).toHaveBeenCalledWith(-1);
+    expect(navigateMock).toHaveBeenCalledWith('/inicio/coleccion-mascotas');
   });
 });

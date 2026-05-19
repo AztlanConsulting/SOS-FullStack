@@ -131,15 +131,18 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
 
   try {
     // Access the raw body attached by the middleware in index.ts
-    const { rawBody } = req as Request & { rawBody: Buffer };
+    const { rawBody } = req as Request & { rawBody: Buffer | string };
 
-    if (!(rawBody instanceof Buffer)) {
+    if (!rawBody) {
       throw new Error('Raw body not found. Check body-parser configuration.');
     }
 
+    // Ensure rawBody is a Buffer for Stripe signature verification
+    const payload = Buffer.isBuffer(rawBody) ? rawBody : Buffer.from(rawBody);
+
     // Use the raw body for signature verification
     const event = await handleStripeWebhook(StripeProvider, {
-      payload: rawBody,
+      payload: payload,
       sig: sig as string,
       secret: webhookSecret,
     });

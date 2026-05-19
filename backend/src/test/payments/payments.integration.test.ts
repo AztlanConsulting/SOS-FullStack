@@ -74,11 +74,13 @@ describe('Payments integration tests', () => {
     });
 
     const raw = JSON.stringify({ id: hookOrderId });
+    const rawBuffer = Buffer.from(raw);
 
     const res = await request(app)
       .post('/payments/webhook')
       .set('stripe-signature', 'sig_test')
-      .send(raw);
+      .set('Content-Type', 'application/json')
+      .send(rawBuffer);
 
     expect(res.status).toBe(200);
     expect(res.body.received).toBe(true);

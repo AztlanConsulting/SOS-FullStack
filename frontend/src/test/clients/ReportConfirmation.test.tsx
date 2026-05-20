@@ -5,6 +5,14 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
+const posterExportMocks = vi.hoisted(() => ({
+  exportPosterAsFile: vi.fn(),
+}));
+
+vi.mock('@/shared/services/posterExport.services', () => ({
+  exportPosterAsFile: posterExportMocks.exportPosterAsFile,
+}));
+
 vi.mock('@features/auth/hooks/useAuth', () => ({
   useAuth: () => ({
     user: null,
@@ -74,6 +82,9 @@ const MOCK_REPORT_DATA: LostPetReportData = {
 describe('ReportConfirmationPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    posterExportMocks.exportPosterAsFile.mockResolvedValue(
+      new File(['poster'], 'Firulais-poster.png', { type: 'image/png' }),
+    );
     mockLostPetReportData = null;
   });
 

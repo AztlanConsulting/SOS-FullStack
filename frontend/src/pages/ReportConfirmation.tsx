@@ -9,6 +9,15 @@ import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
+import type { LostPetReportData } from '@/shared/types/petReport.types';
+
+const appendPosterAsLastImage = (
+  reportData: LostPetReportData,
+  posterFile: File,
+): LostPetReportData => ({
+  ...reportData,
+  images: [...reportData.images, posterFile],
+});
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();

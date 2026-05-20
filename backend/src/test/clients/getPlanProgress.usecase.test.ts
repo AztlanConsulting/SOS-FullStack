@@ -62,13 +62,17 @@ describe('getPlanProgress', () => {
 
     petRepository = {
       createPet: jest.fn(),
+      getPetById: jest.fn(),
       getPetsByUserId: jest.fn(),
     };
 
     purchasedPlanRepository = {
       createPurchasedPlan: jest.fn(),
+      getPurchasedPlanById: jest.fn(),
       getActivePlanByPetId: jest.fn(),
       activatePurchasedPlan: jest.fn(),
+      updatePurchasedPlanSocialPosts: jest.fn(),
+      updateEmailStatus: jest.fn(),
     };
   });
 

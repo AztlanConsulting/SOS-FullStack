@@ -1,7 +1,7 @@
 import { Text } from '@shared/components/ui/Text';
 import ProductPageHero from '@shared/components/layout/ProductPageHero';
 import { formatDateEsShort } from '@shared/utils/dateUtils';
-import yellowIcon from '@assets/images/yellowIcon.png';
+// import yellowIcon from '@assets/images/yellowIcon.png';
 import { Button } from '@shared/components/ui/Button';
 import { FileDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -28,7 +28,8 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
       .then((blob) => {
         objectUrl = URL.createObjectURL(blob);
         setImageSrc(objectUrl);
-      });
+      })
+      .catch(() => setImageSrc(''));
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
@@ -60,7 +61,8 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
       <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-2xl xl:max-w-2xl py-6 md:py-8 flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <img
-            src={yellowIcon}
+            // src={yellowIcon}
+            src=""
             alt="Logo"
             className="w-7 h-7 md:w-10 md:h-10"
           />

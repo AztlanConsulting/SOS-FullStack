@@ -1,6 +1,6 @@
 import { Worker } from 'bullmq';
 import { redis } from './redis';
-import { emailService } from '@infrastructure/services/email.service';
+import { emailService } from '@infrastructure/service/email.service';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 import { petDataAccess } from '@/infrastructure/data-access/pet.data-access';

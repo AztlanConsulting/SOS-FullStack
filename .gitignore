@@ -138,3 +138,5 @@ public/
 vectorDatabase
 
 .opencode/
+create.env.prod.sh
+create.env.prod.bat

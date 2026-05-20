@@ -191,8 +191,12 @@ export const CountdownChart = ({
           </Text>
         </div>
       </div>
-
-      <Text variant="body" weight="medium" as="div" className="text-center">
+      <Text
+        variant="body"
+        weight="medium"
+        as="div"
+        className="text-center mb-4"
+      >
         Plan {planName}
       </Text>
     </div>

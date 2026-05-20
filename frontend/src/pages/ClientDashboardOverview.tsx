@@ -92,7 +92,7 @@ const ClientDashboardOverview = () => {
     <main className="w-full pt-20 pb-10 lg:pt-0">
       <div className="flex flex-col gap-10">
         <div className="w-full border-b border-gray-200">
-          <section className="w-full bg-dark-purple">
+          <section className="w-full bg-purple-primary">
             <div
               className={`${dashboardContainerClass} flex h-14 items-center justify-center md:h-16 lg:h-14`}
             >

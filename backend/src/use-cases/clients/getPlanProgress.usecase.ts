@@ -16,38 +16,11 @@ export const getPlanProgress = async (
     return null;
   }
 
-  for (const pet of pets) {
-    const plan = await purchasedPlanRepository.getActivePlanByPetId(
-      pet._id.toString(),
-    );
-
-    if (!plan) {
-      continue;
-    }
-
-    const totalDays = plan.duration;
-    const createdAt = new Date(plan.createdAt);
-    const today = new Date();
-
-    const diffTime = today.getTime() - createdAt.getTime();
-    const daysElapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const daysRemaining = Math.max(0, totalDays - daysElapsed);
-
-    const petImage = pet.photos[0] ?? null;
-    const posterImage = pet.photos.at(-1) ?? null;
-
-    const location = pet.location?.displayName ?? '';
-
-    return {
-      planName: plan.name,
-      totalDays,
-      daysRemaining,
-      petName: pet.name,
-      petImage,
-      posterImage,
-      dateMissing: pet.dateMissing,
-      location,
-    };
+  const plan = await purchasedPlanRepository.getPurchasedPlanById(
+    pet._id.toString(),
+  );
+  if (!plan) {
+    return null;
   }
 
   return null;

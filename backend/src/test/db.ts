@@ -11,7 +11,9 @@ export const connect = async () => {
   // Prevent Mongoose from throwing strictQuery warnings in Jest
   mongoose.set('strictQuery', false);
 
-  mongoServer = await MongoMemoryServer.create();
+  mongoServer = await MongoMemoryServer.create({
+    instance: { launchTimeout: 60000 },
+  });
   const uri = mongoServer.getUri();
 
   await mongoose.connect(uri);

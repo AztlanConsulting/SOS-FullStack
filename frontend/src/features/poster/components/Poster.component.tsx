@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
-import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
-import phone from '@assets/images/phone.png';
+import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
+import phone from '@assets/images/phone.webp';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(

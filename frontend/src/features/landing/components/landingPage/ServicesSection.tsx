@@ -1,5 +1,5 @@
 import { Text } from '../../../../shared/components/ui/Text';
-import Localizacion from '@assets/images/Localizacion.png';
+import Localizacion from '@assets/images/Localizacion.webp';
 
 const ServicesSection = () => {
   return (
@@ -20,7 +20,7 @@ const ServicesSection = () => {
               weight="medium"
               className="mb-4 lg:mb-6 text-center md:text-left lg:text-left"
             >
-              La tecnología detras.
+              La tecnología detrás.
             </Text>
             <Text variant="body" className="text-left">
               Utilizamos herramientas de segmentación geográfica para mostrar la

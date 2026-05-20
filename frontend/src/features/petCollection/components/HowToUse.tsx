@@ -1,8 +1,8 @@
 import { Text } from '@/shared/components/ui/Text';
-import lostDogs from '@/assets/images/lost-dogs.jpg';
-import SelectImage from '@/assets/images/SelectImage.png';
-import Gallery from '@/assets/images/Gallery.png';
-import Filter from '@/assets/images/Filter.png';
+import lostDogs from '@/assets/images/lost-dogs.webp';
+import SelectImage from '@/assets/images/SelectImage.webp';
+import Gallery from '@/assets/images/Gallery.webp';
+import Filter from '@/assets/images/Filter.webp';
 import HeroSection from '@/shared/components/layout/HeroSection';
 
 const HowToUse = () => {
@@ -11,12 +11,23 @@ const HowToUse = () => {
       <HeroSection
         title={'Galería de mascotas'}
         image={lostDogs}
-        content={
-          '¡Alguien pudo haber visto a tu mascota! Este es el lugar donde podrías buscar si han habido avistamentos de tu mascota y poder contactar con la persona que lo encontró.'
-        }
         bg="bg-purple-secondary"
         shadow="shadow-dark-purple md:max-h-84 object-top"
-      />
+        content=""
+      >
+        <Text>Encuentra posibles coincidencias de tu mascota.</Text>
+        <Text>
+          Sube una fotografía de tu mascota perdida y nuestro sistema analizará
+          la imagen para detectar mascotas encontradas con características
+          similares.
+        </Text>
+        <br />
+        <Text>
+          La herramienta puede ayudarte a localizar posibles avistamientos,
+          publicaciones o reportes relacionados con tu mascota y facilitar el
+          contacto con la persona que la encontró.
+        </Text>
+      </HeroSection>
       <section className="bg-white overflow-hidden py-8 ">
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
           <div className="text-center mb-8 lg:mb-20">
@@ -40,8 +51,8 @@ const HowToUse = () => {
                 Sube una foto de tu mascota dando click en “Subir imagen”.
               </Text>
               <Text variant="body" className="text-left">
-                Esta la puedes cambiar por si quieres probar con diferentes
-                fotos.
+                Puedes probar con diferentes fotos para aumentar las
+                posibilidades de coincidencia.
               </Text>
             </div>
           </div>

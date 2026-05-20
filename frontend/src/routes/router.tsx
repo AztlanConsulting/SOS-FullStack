@@ -17,6 +17,7 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import routerMembersOnly from './membersOnly.routes';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
 
@@ -59,7 +60,7 @@ export const router = createBrowserRouter([
             <ClientDashboard />
           </RoleProtectedRoute>
         ),
-        children: [...routerClient],
+        children: [...routerClient, ...routerMembersOnly],
       },
       {
         path: '/credits',

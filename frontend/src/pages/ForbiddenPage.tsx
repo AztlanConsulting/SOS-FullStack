@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { Text } from '@shared/components/ui/Text';
-import yellowIcon from '@assets/images/yellowIcon.png';
+import yellowIcon from '@assets/images/yellowIcon.webp';
 
 /**
  * ForbiddenPage

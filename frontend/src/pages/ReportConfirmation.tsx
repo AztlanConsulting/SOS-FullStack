@@ -8,22 +8,7 @@ import { Footer } from '@shared/components/layout/Footer';
 import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
-import whiteLogoSimple from '@assets/images/whiteLogoSimple.png';
-import type { LostPetReportData } from '@/shared/types/petReport.types';
-
-const isGeneratedPosterFile = (file: File) =>
-  file.type === 'image/png' && file.name.endsWith('-poster.png');
-
-const appendPosterAsLastImage = (
-  reportData: LostPetReportData,
-  posterFile: File,
-): LostPetReportData => ({
-  ...reportData,
-  images: [
-    ...reportData.images.filter((file) => !isGeneratedPosterFile(file)),
-    posterFile,
-  ],
-});
+import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();

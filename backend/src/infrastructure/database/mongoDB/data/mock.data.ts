@@ -13,7 +13,9 @@ import { PurchasedPlanModel } from '@domain/models/purchasedPlan.model';
 import { ManualModel } from '@domain/models/manual.model';
 import { WorkshopModel } from '@domain/models/workshop.model';
 import { PurchaseModel } from '@domain/models/purchase.model';
+import { MembersOnlyModel } from '@domain/models/membersOnly.model';
 import initPlanDB from './plans.data';
+import initMembersOnlyDB from './membersOnly.data';
 
 import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
@@ -37,11 +39,13 @@ try {
   await ManualModel.deleteMany({});
   await WorkshopModel.deleteMany({});
   await PurchaseModel.deleteMany({});
+  await MembersOnlyModel.deleteMany({});
 
   await initWorkshopDB();
   await initManualDB();
   await initBlogDB();
   await initPlanDB();
+  await initMembersOnlyDB();
 
   const resources = await ResourcesModel.insertMany([
     { name: 'users', description: 'User management' },

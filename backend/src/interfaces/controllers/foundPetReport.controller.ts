@@ -7,6 +7,7 @@ import type { Request, Response } from 'express';
 import { FoundPetDataAccess } from '@/infrastructure/data-access/foundPet.data-access';
 import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 import getLocation from '@/utils/getLocation.mapper';
+import type { GeocodingResult } from '@/types/pet.types';
 
 export async function postFoundPetReport(req: Request, res: Response) {
   try {
@@ -18,6 +19,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
       color,
       size,
       description,
+      location,
       locationCoords,
       contactName,
       phoneNumber,
@@ -44,9 +46,14 @@ export async function postFoundPetReport(req: Request, res: Response) {
     const customId = new Types.ObjectId();
     const imageIds = imageBuffers.map((_, i) => `${customId}_img_${i}`);
 
-    const location = await getLocation(locationCoords);
-    console.log(location);
-    if (!Boolean(location)) throw Error("Couldn't get location");
+    const requestLocation: GeocodingResult =
+      (process.env.ENV === 'develop' && req.body.defaultLocation) ||
+      (await getLocation(locationCoords)) ||
+      getOpenStreetMapLocation(location, locationCoords);
+
+    console.log(requestLocation);
+
+    if (!Boolean(requestLocation)) throw Error("Couldn't get location");
 
     const foundPetData: FoundPetReport = {
       _id: customId,
@@ -57,7 +64,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
       color,
       size,
       description,
-      location: location!,
+      location: requestLocation,
       contactName,
       phoneNumber,
       email,
@@ -71,9 +78,9 @@ export async function postFoundPetReport(req: Request, res: Response) {
         species,
         color,
         location: [
-          location?.properties.city ?? location?.properties.state,
-          // location?.properties.state,
-          location?.properties.country,
+          requestLocation?.properties.city ?? requestLocation?.properties.state,
+          requestLocation?.properties.state,
+          requestLocation?.properties.country,
         ]
           .filter((loc) => loc)
           .join(', '),
@@ -96,3 +103,19 @@ export async function postFoundPetReport(req: Request, res: Response) {
     });
   }
 }
+
+const getOpenStreetMapLocation = (
+  location: string,
+  locationCoords: [number, number],
+) => {
+  const locationArray = location.split(',');
+  return {
+    coords: locationCoords,
+    displayName: location,
+    properties: {
+      city: locationArray[0],
+      state: locationArray.length < 3 ? locationArray[0] : locationArray[1],
+      country: locationArray.length < 3 ? locationArray[1] : locationArray[2],
+    },
+  };
+};

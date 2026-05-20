@@ -10,6 +10,22 @@ import wrapper from '../utils/wrapper.util';
 import TestComponent from '../utils/TestContextComponent';
 import { type LostPetReportData } from '@/shared/types/petReport.types';
 
+vi.mock('@shared/context/Location.context', () => ({
+  useLocationContext: () => ({
+    currencyCode: 'MXN',
+    exchangeRate: 1,
+    plans: [],
+    manuals: [],
+    workshops: [],
+    country: null,
+    loading: false,
+    error: null,
+  }),
+  LocationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
 const navigateMock = vi.fn();
 // Replace useNavigate so we can assert route targets and payloads.
 vi.mock('react-router', async () => {

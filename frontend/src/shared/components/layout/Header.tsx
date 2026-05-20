@@ -128,7 +128,12 @@ const Header = ({
   };
 
   return (
-    <header className="bg-white border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16">
+    <header
+      className={
+        'bg-white' +
+        ' border-b border-[color:var(--color-grey-border)] py-4 lg:py-2 w-full fixed lg:static top-0 left-0 right-0 z-50 lg:pt-16'
+      }
+    >
       {!isMenuOpen && (
         <>
           {isSocialOpen ? (
@@ -158,10 +163,12 @@ const Header = ({
               className="fixed right-0 z-[1000] shadow-xl rounded-lg"
               style={{ bottom: '80px' }}
             >
-              <div className="w-[30px] h-[104px] color-primary-bg rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 ">
+              <div
+                className={`w-[30px] h-[104px] ${bgColors[color]} rounded-tl-[8px] rounded-bl-[8px] flex flex-col items-center justify-center gap-2 `}
+              >
                 <button
                   onClick={() => setIsSocialOpen((prev) => !prev)}
-                  className="w-[24px] h-[24px] color-primary-bg rounded-[4px] flex items-center justify-center cursor-pointer"
+                  className={`w-[24px] h-[24px] ${bgColors[color]} rounded-[4px] flex items-center justify-center cursor-pointer`}
                 >
                   <span className="text-xs font-medium text-black -rotate-90 whitespace-nowrap">
                     {isSocialOpen ? 'Cerrar' : 'Síguenos'}

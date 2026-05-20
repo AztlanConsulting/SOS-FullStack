@@ -1,4 +1,5 @@
 import { Text } from '@shared/components/ui/Text/Text';
+import type React from 'react';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
 import type { ReactNode } from 'react';
@@ -6,9 +7,10 @@ import type { ReactNode } from 'react';
 interface Props {
   bg?: string;
   shadow?: string;
+  shadowClass?: string;
   title: string;
   image: string;
-  content: string;
+  content: React.ReactNode;
   buttonText?: string;
   onClick?: () => void;
   children?: ReactNode;
@@ -17,6 +19,7 @@ interface Props {
 const HeroSection = ({
   bg = 'white',
   shadow = 'shadow-primary',
+  shadowClass = 'color-primary-shadow',
   title,
   image,
   content,
@@ -45,7 +48,7 @@ const HeroSection = ({
           <img
             src={image}
             alt="Manuales"
-            className={`w-full rounded-lg object-cover ${shadow} shadow-lg`}
+            className={`w-full rounded-lg object-cover ${shadowClass} shadow-lg`}
           />
         </div>
 

@@ -61,7 +61,7 @@ const ClientDashboardOverview = () => {
   const posterUrl = resolveMediaUrl(petData?.posterImage);
 
   const handleResourcesPage = () => {
-    navigate('/portal-exclusivo');
+    navigate('/contenido-exclusivo');
   };
 
   const handlePetCollection = () => {

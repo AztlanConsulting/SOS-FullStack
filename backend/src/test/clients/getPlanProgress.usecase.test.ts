@@ -24,7 +24,7 @@ const createPet = (overrides: Partial<Pet> = {}): Pet => ({
   color: 'Café',
   size: 'Mediana: 11 a 25 kg',
   description: 'Perrito amigable con collar azul.',
-  photos: ['/uploads/pet.jpg', '/uploads/poster.jpg'],
+  photos: ['/uploads/pet.jpg', '/uploads/detail.jpg', '/uploads/poster.jpg'],
   location: {
     coords: [20.5888, -100.3899],
     displayName: 'Parque Alameda',

@@ -34,13 +34,16 @@ export const getPlanProgress = async (
       0,
     );
 
+    const posterImage =
+      pet.photos.length > 1 ? (pet.photos.at(-1) ?? null) : null;
+
     return {
       planName: plan.name,
       totalDays: plan.duration,
       daysRemaining: Math.max(plan.duration - elapsedDays, 0),
       petName: pet.name,
       petImage: pet.photos[0] ?? null,
-      posterImage: pet.photos[1] ?? null,
+      posterImage,
       dateMissing: pet.dateMissing,
       location: pet.location.displayName,
     };

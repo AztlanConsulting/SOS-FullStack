@@ -136,7 +136,7 @@ const ClientDashboardOverview = () => {
                         onClick={handleResourcesPage}
                       />
                       <Button
-                        label="Galería de mascotas"
+                        label="Radar de coincidencias"
                         variant="primary"
                         textColor="bg-white text-black hover:bg-dark-purple hover:text-white"
                         onClick={handlePetCollection}

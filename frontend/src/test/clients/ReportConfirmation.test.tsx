@@ -5,6 +5,24 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
+class MockResizeObserver {
+  observe() {}
+
+  unobserve() {}
+
+  disconnect() {}
+}
+
+vi.stubGlobal('ResizeObserver', MockResizeObserver);
+
+vi.mock('@/shared/services/posterExport.services', () => ({
+  exportPosterAsFile: vi
+    .fn()
+    .mockResolvedValue(
+      new File(['poster'], 'poster.png', { type: 'image/png' }),
+    ),
+}));
+
 vi.mock('@features/auth/hooks/useAuth', () => ({
   useAuth: () => ({
     user: null,
@@ -129,6 +147,11 @@ describe('ReportConfirmationPage', () => {
     mockLostPetReportData = MOCK_REPORT_DATA;
 
     renderWithRouter(<ReportConfirmationPage />);
-    expect(screen.getByTestId('data-confirmation')).toBeDefined();
+    screen.getByText('Editar nombre').click();
+
+    expect(mockSetLostPetReportData).toHaveBeenCalledWith({
+      ...MOCK_REPORT_DATA,
+      name: 'Nuevo nombre',
+    });
   });
 });

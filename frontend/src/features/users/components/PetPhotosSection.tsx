@@ -2,6 +2,8 @@ import { FileUpload } from '@shared/components/ui/FileUpload/FileUpload';
 import { PhotoDistributionPicker } from './PhotoDistributionPicker';
 import { usePetPhotos } from '@shared/hooks/usePetPhotos';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
+import { PetPhotoCropperModal } from './PetPhotoCropperModal';
+import { usePetPhotoCropper } from '../hooks/usePetPhotoCropper';
 
 export interface PetPhotosSectionProps {
   formData: Partial<LostPetReportData>;
@@ -18,9 +20,27 @@ export const PetPhotosSection = ({
     formData,
     updateForm,
   );
+  const {
+    cropOpen,
+    cropImageUrl,
+    cropPosition,
+    cropAspectRatio,
+    zoom,
+    selectedIndex,
+    isSavingCrop,
+    setCropPosition,
+    setZoom,
+    handleFileSelection,
+    handleCropComplete,
+    handleCropSave,
+    closeCropper,
+  } = usePetPhotoCropper(photoCount, (index, file) => {
+    handleFileUpload(index, file);
+  });
 
   const handleLayoutChange = (val: 1 | 2 | 3 | 4) => {
     // Apply as one atomic update to avoid stale-state overwrites in confirmation.
+    closeCropper();
     updateForm({ imageLayout: val.toString(), images: [] });
   };
 
@@ -49,12 +69,31 @@ export const PetPhotosSection = ({
           <FileUpload
             key={num}
             index={num}
-            onChange={(file) => handleFileUpload(num, file)}
+            onChange={(file) =>
+              handleFileSelection(num, file, (slotIndex) =>
+                handleFileUpload(slotIndex, null),
+              )
+            }
             error={errors[`images_${num}`]}
             currentFileName={formData.images?.[num - 1]?.name}
           />
         ))}
       </div>
+
+      <PetPhotoCropperModal
+        open={cropOpen}
+        imageUrl={cropImageUrl}
+        selectedIndex={selectedIndex}
+        cropPosition={cropPosition}
+        zoom={zoom}
+        cropAspectRatio={cropAspectRatio}
+        isSaving={isSavingCrop}
+        onClose={closeCropper}
+        onCropChange={setCropPosition}
+        onZoomChange={setZoom}
+        onCropComplete={handleCropComplete}
+        onSave={handleCropSave}
+      />
     </section>
   );
 };

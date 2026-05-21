@@ -93,7 +93,7 @@ export const CountdownChart = ({
           minHeight: '170px',
         }
       : { height: 'clamp(145px, 42vw, 220px)' };
-  const chartTopPadding = size === 'large' ? '50px' : '10px';
+  const chartTopPadding = size === 'large' ? '92px' : '10px';
   const summaryPositionStyle =
     size === 'large'
       ? { top: '68%', transform: 'translate(-50%, -50%)' }
@@ -117,7 +117,7 @@ export const CountdownChart = ({
         variant="caption"
         weight="medium"
         color="text-[#333]"
-        className="absolute -top-[5px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
+        className="absolute top-[10px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
       >
         Lleva {daysUsed} días tu plan
       </Text>
@@ -195,7 +195,7 @@ export const CountdownChart = ({
         variant="body"
         weight="medium"
         as="div"
-        className="text-center mt-3 mb-4"
+        className="text-center mt-9 mb-4"
       >
         Plan {planName}
       </Text>

@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import { Button } from '@shared/components/ui/Button/Button';
+import { Select } from '@shared/components/ui/Select/Select';
 import {
   exportPosterAsPdfColor,
   exportPosterAsPdfBlackAndWhite,
@@ -13,21 +14,33 @@ interface AdProgressSectionProps {
 const mediaContentClass = 'w-full max-w-xs md:max-w-sm lg:w-1/2';
 const actionsClass =
   'flex w-full max-w-xs flex-col gap-3 md:max-w-md md:flex-row md:gap-4 md:text-nowrap';
+const PAPER_SIZES = [
+  { label: 'Carta', value: 'letter' },
+  { label: 'A4', value: 'a4' },
+  { label: 'Oficio', value: 'legal' },
+  { label: 'A3', value: 'a3' },
+  { label: 'A5', value: 'a5' },
+];
 
 export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
   posterUrl,
 }) => {
-  const posterRef = useRef<HTMLImageElement>(null);
+  // Default to 'a4'
+  const [selectedFormat, setSelectedFormat] = useState<string>('letter');
 
   const handleDownloadColor = () => {
-    if (posterRef.current) {
-      exportPosterAsPdfColor(posterRef.current, 'poster-mascota-color');
+    if (posterUrl) {
+      exportPosterAsPdfColor(posterUrl, 'poster-mascota-color', selectedFormat);
     }
   };
 
   const handleDownloadBW = () => {
-    if (posterRef.current) {
-      exportPosterAsPdfBlackAndWhite(posterRef.current, 'poster-mascota-bn');
+    if (posterUrl) {
+      exportPosterAsPdfBlackAndWhite(
+        posterUrl,
+        'poster-mascota-bn',
+        selectedFormat,
+      );
     }
   };
 
@@ -43,11 +56,25 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center gap-6">
         <div className={mediaContentClass}>
           <img
-            ref={posterRef}
             src={posterUrl}
             alt="Póster de mascota perdida"
             className="w-full h-auto object-cover"
             crossOrigin="anonymous"
+          />
+        </div>
+
+        {/* Paper Size Dropdown Selector */}
+        <div className="w-full">
+          <Select
+            label="Tamaño de impresión"
+            id="paper-size"
+            options={PAPER_SIZES.map((s) => ({
+              value: s.value,
+              label: s.label,
+            }))}
+            value={selectedFormat}
+            onChange={(e) => setSelectedFormat(e.target.value)}
+            focusColor="purple"
           />
         </div>
 

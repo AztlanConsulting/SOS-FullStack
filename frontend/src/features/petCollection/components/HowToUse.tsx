@@ -9,10 +9,10 @@ const HowToUse = () => {
   return (
     <div className="mb-4">
       <HeroSection
-        title={'Galería de mascotas'}
+        title={'Radar de coincidencias'}
         image={lostDogs}
         bg="bg-purple-secondary"
-        shadow="shadow-dark-purple md:max-h-84 object-top"
+        shadowClass="shadow-dark-purple md:max-h-84 object-top"
         content=""
       >
         <Text>Encuentra posibles coincidencias de tu mascota.</Text>

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 
 const chartContentClass = 'w-full max-w-xs md:max-w-md lg:max-w-lg';
 const actionsClass =
-  'mt-4 flex w-full max-w-xs flex-col gap-3 md:max-w-md md:flex-row md:gap-4 md:text-nowrap';
+  'flex w-full max-w-xs flex-col gap-3 md:max-w-md md:flex-row md:gap-4 md:text-nowrap';
 
 interface PlanProgressSectionProps {
   petData: PlanSubscriptionProgress | null;
@@ -33,7 +33,7 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
         Progreso del plan
       </Text>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-8 flex flex-1 flex-col items-center justify-between">
         {petData ? (
           <>
             <div className={chartContentClass}>

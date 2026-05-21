@@ -1,0 +1,157 @@
+import nodemailer from 'nodemailer';
+
+import type {
+  EmailService,
+  SendActivatePlanEmailDTO,
+} from '@domain/ports/emailService.port';
+
+let transporterPromise: Promise<nodemailer.Transporter> | null = null;
+
+/**
+ * Development:
+ * Uses Ethereal test SMTP automatically.
+ *
+ * Production:
+ * Uses real SMTP credentials from .env
+ */
+const getTransporter = async (): Promise<nodemailer.Transporter> => {
+  if (transporterPromise) {
+    return transporterPromise;
+  }
+
+  transporterPromise = (async () => {
+    const isDevelopment = process.env.ENV !== 'production';
+
+    if (isDevelopment) {
+      const testAccount = await nodemailer.createTestAccount();
+
+      console.log('📩 Ethereal test account created:');
+      console.log('User:', testAccount.user);
+      console.log('Pass:', testAccount.pass);
+
+      return nodemailer.createTransport({
+        host: testAccount.smtp.host,
+        port: testAccount.smtp.port,
+        secure: testAccount.smtp.secure,
+        auth: {
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      });
+    }
+
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: Number(process.env.SMTP_PORT) === 465,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+  })();
+
+  return transporterPromise;
+};
+
+export const emailService: EmailService = {
+  async sendActivatePlanEmail(data: SendActivatePlanEmailDTO): Promise<void> {
+    const transporter = await getTransporter();
+
+    const info = await transporter.sendMail({
+      from: `"SOS Encontrando Mascotas" <${process.env.SMTP_USER ?? 'test@sospets.local'}>`,
+      to: data.to,
+      subject: 'Información sobre tu reporte de mascota',
+      html: `
+       <div style="margin:0;padding:0;background-color:#f8f9fa;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa;padding:40px 10px;">
+          <tr>
+            <td align="center">
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05);">
+                
+                <tr>
+                  <td style="background-color:#f9cd48;height:6px;"></td>
+                </tr>
+
+                <tr>
+                  <td align="center" style="padding: 32px 32px 24px 32px;">
+                    <h1 style="margin:0;color:#1a1a1a;font-size:22px;letter-spacing:-0.5px;font-weight:bold;">
+                      SOS Encontrando Mascotas
+                    </h1>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:0 30px 40px 30px;color:#444444;line-height:1.6;">
+                    <p style="font-size:16px;margin-bottom:12px;">Hola <strong>${data.username}</strong>,</p>
+                    <p style="font-size:15px;color:#666;margin-bottom:32px;">
+                      Gracias por elegir nuestros servicios. A continuación, encontrarás las credenciales para acceder a tu cuenta en nuestro portal exclusivo:
+                    </p>
+
+                    <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:20px;text-align:center;margin-bottom:32px;">
+                        <p style="font-size:12px; color:#aaa; margin-top:15px;">
+                          Correo electrónico: ${data.to}
+                        </p>
+                        <p style="font-size:12px; color:#aaa; margin-top:15px;">
+                          Contraseña: ${data.password}
+                        </p>
+                    </div>
+
+                    <p style="font-size:15px;color:#666;margin-bottom:32px;">
+                      También te compartimos los links a las publicaciones de tu reporte en nuestras redes sociales:
+                    </p>
+
+                    <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:20px;text-align:center;margin-bottom:32px;">
+                        <p style="font-size:12px; color:#aaa; margin-top:15px;">
+                          Facebook: ${data.facebookUrl ?? 'Hubo un error al generar el enlace. Por favor, comunícate con nosotros para obtener ayuda.'}
+                        </p>
+                        <p style="font-size:12px; color:#aaa; margin-top:15px;">
+                          Instagram: ${data.instagramUrl ?? 'Hubo un error al generar el enlace. Por favor, comunícate con nosotros para obtener ayuda.'}
+                        </p>
+                    </div>
+
+                    <p style="font-size:15px;color:#666;margin-bottom:32px;">
+                      Te recomendamos comunicarte con nosotros para conocer el estado actual y los próximos pasos de nuestro servicio. Utiliza el siguiente botón para contactar con tu asesor:
+                    </p>
+
+                    <div style="margin-top:20px; display:flex; justify-content:center;">
+                      <a href="http://m.me/2444791512265246" target="_blank" style="background-color:#f9cd48; color:#1a1a1a; padding:14px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px; display:inline-block; transition: background-color 0.3s ease;">
+                        Contactar con mi asesor
+                      </a>
+                    </div>
+
+                  </td>
+                </tr>
+
+                <tr>
+                  <td align="center" style="padding:32px;background-color:#fafafa;border-top:1px solid #f0f0f0;">
+                    <p style="margin:0;font-size:13px;color:#777;">
+                      ¿Tienes alguna duda? <br/>
+                      <a href="mailto:hola@sosencontrandomascotas.com" style="color:#f9cd48;text-decoration:none;font-weight:bold;">Contáctanos aquí</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin-top:24px;">
+                <tr>
+                  <td align="center" style="font-size:11px;color:#aaa;line-height:1.5;">
+                    <p>© ${new Date().getFullYear()} SOS Encontrando Mascotas. <br/>
+                    Este es un correo automático, por favor no respondas directamente.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    `,
+    });
+
+    const previewUrl = nodemailer.getTestMessageUrl(info);
+
+    if (Boolean(previewUrl)) {
+      console.log('📨 Preview email:', previewUrl);
+    }
+  },
+};

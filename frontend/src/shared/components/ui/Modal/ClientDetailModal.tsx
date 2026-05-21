@@ -154,43 +154,45 @@ export const ClientDetailModal = ({
                 </Text>
               </div>
             )}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-1">
               <HiLink size={14} className="text-gray-400 shrink-0" />
               {editingConversation ? (
-                <div className="flex items-center gap-2 flex-1">
+                <div className="flex items-center gap-2 flex-1 flex-wrap">
                   <input
                     type="text"
                     value={conversationValue}
                     onChange={(e) => setConversationValue(e.target.value)}
                     maxLength={150}
-                    className="text-xs border border-gray-300 rounded px-2 py-1 flex-1 outline-none focus:border-yellow-400"
+                    className="text-xs border border-gray-300 rounded px-2 py-1 min-w-0 flex-1 outline-none focus:border-yellow-400"
                     autoFocus
                   />
-                  <button
-                    onClick={async () => {
-                      await ClientService.updateConversation(
-                        client._id,
-                        conversationValue,
-                      );
-                      setEditingConversation(false);
-                      onUpdate(conversationValue);
-                    }}
-                    className="text-xs text-primary font-medium hover:text-yellow-600"
-                  >
-                    Guardar
-                  </button>
-                  <button
-                    onClick={() => {
-                      setConversationValue(detail?.conversation ?? '');
-                      setEditingConversation(false);
-                    }}
-                    className="text-xs text-gray-400 hover:text-gray-600"
-                  >
-                    Cancelar
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={async () => {
+                        await ClientService.updateConversation(
+                          client._id,
+                          conversationValue,
+                        );
+                        setEditingConversation(false);
+                        onUpdate(conversationValue);
+                      }}
+                      className="text-xs text-primary font-medium hover:text-yellow-600 whitespace-nowrap"
+                    >
+                      Guardar
+                    </button>
+                    <button
+                      onClick={() => {
+                        setConversationValue(detail?.conversation ?? '');
+                        setEditingConversation(false);
+                      }}
+                      className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 flex-1">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
                   <a
                     href={conversationValue}
                     target="_blank"

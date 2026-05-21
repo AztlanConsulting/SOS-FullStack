@@ -24,12 +24,12 @@ export const exportToCSV = (
     headers.join(','),
     ...rows.map((row) =>
       headers
-        .map((h) => `"${String(row[h] ?? '').replace(/"/g, '""')}"`)
+        .map((h) => `\t${String(row[h] ?? '').replace(/"/g, '""')}`)
         .join(','),
     ),
   ].join('\n');
   // Create a Blob containing the CSV data with UTF-8 encoding
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
   // Create a temporary URL pointing to the Blob
   const url = URL.createObjectURL(blob);
   // Create a hidden "a" element to trigger the download programmatically

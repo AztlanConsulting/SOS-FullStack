@@ -2,6 +2,7 @@ import { Text } from '../Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { ExpandedProps } from '@/shared/types/header.types';
 import { TbLogout } from 'react-icons/tb';
+import { HiLogout } from 'react-icons/hi';
 
 const SignOut = () => {
   const { logout } = useAuth();
@@ -39,4 +40,24 @@ const ExpandedSignOut = ({ setIsMenuOpen }: ExpandedProps) => {
   );
 };
 
-export default { desktop: SignOut, mobile: ExpandedSignOut };
+const WhiteStrokeSignOut = () => {
+  const { logout } = useAuth();
+
+  return (
+    <div
+      onClick={logout}
+      className="flex items-center gap-2 bg-primary border-2 border-white py-2 px-4 rounded-3xl cursor-pointer transition-colors hover:bg-[#C2991D]/60"
+    >
+      <HiLogout size={18} className="text-white" />
+      <Text variant="body" weight="medium" className="text-white">
+        Cerrar sesión
+      </Text>
+    </div>
+  );
+};
+
+export default {
+  desktop: SignOut,
+  mobile: ExpandedSignOut,
+  whiteStroke: WhiteStrokeSignOut,
+};

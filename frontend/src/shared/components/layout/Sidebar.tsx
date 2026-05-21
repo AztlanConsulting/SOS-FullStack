@@ -8,7 +8,10 @@ import {
 } from 'react-icons/hi';
 import { HiUserGroup } from 'react-icons/hi';
 import { FaDog } from 'react-icons/fa6';
+import { TbLogout } from 'react-icons/tb';
 import { Text } from '@/shared/components/ui/Text';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import SignOut from '@/shared/components/ui/Button/SignOut';
 import whiteIcon from '@/assets/images/whiteIcon.png';
 
 /**
@@ -32,6 +35,8 @@ const NAV_ITEMS = [
  * 2. Mobile: A fixed bottom navigation bar for thumb-friendly access.
  */
 export const Sidebar = () => {
+  const { logout } = useAuth();
+
   return (
     <>
       {/* Desktop sidebar */}
@@ -66,6 +71,10 @@ export const Sidebar = () => {
           ))}
         </nav>
 
+        <div className="mt-auto  z-10">
+          <SignOut.whiteStroke />
+        </div>
+
         <div className="absolute -bottom-20 -right-8">
           <div className="w-50 h-50 rounded-full bg-[#EFC137]" />
         </div>
@@ -94,6 +103,19 @@ export const Sidebar = () => {
               </Text>
             </NavLink>
           ))}
+          <button
+            onClick={logout}
+            className="flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors text-white hover:text-gray-200"
+          >
+            <TbLogout size={20} />
+            <Text
+              variant="small"
+              weight="medium"
+              className="text-inherit text-[10px]"
+            >
+              Salir
+            </Text>
+          </button>
         </nav>
       </div>
 

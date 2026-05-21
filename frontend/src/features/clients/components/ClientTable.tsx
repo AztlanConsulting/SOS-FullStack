@@ -102,12 +102,12 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   <td className="px-4 py-3">
                     <Text variant="caption">{client.pet?.name ?? '—'}</Text>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 overflow-hidden text-ellipsis whitespace-nowrap">
                     <Text variant="caption">
                       {client.pet?.description ?? '—'}
                     </Text>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 overflow-hidden text-ellipsis whitespace-nowrap">
                     {client.conversation ? (
                       <a
                         href={client.conversation}

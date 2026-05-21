@@ -28,9 +28,9 @@ const optionsConfig = [
     label: '3 fotos',
     icon: (
       <>
-        <rect x="3" y="3" width="8" height="18" rx="1" strokeWidth="1.5" />
-        <rect x="13" y="3" width="8" height="8" rx="1" strokeWidth="1.5" />
-        <rect x="13" y="13" width="8" height="8" rx="1" strokeWidth="1.5" />
+        <rect x="3" y="3" width="8" height="8" rx="1" strokeWidth="1.5" />
+        <rect x="3" y="13" width="8" height="8" rx="1" strokeWidth="1.5" />
+        <rect x="13" y="3" width="8" height="18" rx="1" strokeWidth="1.5" />
       </>
     ),
   },

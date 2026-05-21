@@ -63,7 +63,6 @@ const ImageCropper: React.FC = () => {
       const croppedImg = await getCroppedImg(image, croppedAreaPixels);
       setCroppedImage(croppedImg);
     } catch (e) {
-      console.error(e);
     }
   };
 

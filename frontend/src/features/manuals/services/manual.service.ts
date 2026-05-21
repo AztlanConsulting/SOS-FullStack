@@ -13,7 +13,6 @@ export const getManuals = async () => {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Failed to fetch manuals:', error);
     throw error;
   }
 };
@@ -34,7 +33,6 @@ export const getManualById = async (id: string) => {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Failed to fetch a manual by id:', error);
     throw error;
   }
 };

@@ -10,10 +10,6 @@ jest.mock('@infrastructure/api/stripeProvider.api', () => ({
   },
 }));
 
-jest.mock('@interfaces/middleware/auth.middleware', () => ({
-  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
-}));
-
 import app from '@/index';
 import request from 'supertest';
 import mongoose from 'mongoose';

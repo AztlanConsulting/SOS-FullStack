@@ -3,10 +3,6 @@ import request from 'supertest';
 import foundPetRoutes from '@interfaces/routes/foundPet.routes';
 import { connect, closeDatabase, clearDatabase } from '../db';
 
-jest.mock('@interfaces/middleware/auth.middleware', () => ({
-  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
-}));
-
 jest.mock(
   '@/infrastructure/data-access/vectorDB/petVector.data-access',
   () => ({

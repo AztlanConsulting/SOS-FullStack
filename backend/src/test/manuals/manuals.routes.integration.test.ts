@@ -1,7 +1,3 @@
-jest.mock('@interfaces/middleware/auth.middleware', () => ({
-  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
-}));
-
 import express from 'express';
 import request from 'supertest';
 import manualRoutes from '@interfaces/routes/manuals.routes';

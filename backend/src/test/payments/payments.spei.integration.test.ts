@@ -14,10 +14,6 @@ jest.mock('@/use-cases/emails/sendPaymentEmail.usecase', () => ({
   sendPaymentEmail: jest.fn(),
 }));
 
-jest.mock('@interfaces/middleware/auth.middleware', () => ({
-  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
-}));
-
 import app from '@/index';
 import request from 'supertest';
 import { mongoDB, clearDatabase, closeDatabase } from '@db/mongoDB/mongoDB';

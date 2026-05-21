@@ -1,7 +1,3 @@
-jest.mock('@interfaces/middleware/auth.middleware', () => ({
-  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
-}));
-
 import { PaymentModel } from '@/domain/models/payment.model';
 import { PurchaseModel } from '@/domain/models/purchase.model';
 import app from '@/index';

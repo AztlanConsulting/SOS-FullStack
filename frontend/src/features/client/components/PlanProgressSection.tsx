@@ -21,23 +21,19 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
 
   const handleContactAdviser = () => {
     window.open(
-      'https://www.facebook.com/messages/t/SOSencontrandomascotas',
+      'https://m.me/2444791512265246',
       '_blank',
       'noopener,noreferrer',
     );
   };
 
   return (
-    <div className="flex flex-col gap-5">
-      <Text
-        variant="h3"
-        weight="medium"
-        className="text-center lg:text-left w-full"
-      >
+    <div className="flex h-full flex-col gap-5">
+      <Text variant="h3" weight="medium" className="text-center w-full">
         Progreso del plan
       </Text>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-col items-center justify-center">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center">
         {petData ? (
           <>
             <div className={chartContentClass}>

@@ -66,7 +66,7 @@ export const CountdownChart = ({
 
     const outer = Math.min(maxRadiusByWidth, maxRadiusByHeight);
 
-    const thickness = Math.max(14, Math.min(22, outer * 0.12));
+    const thickness = Math.max(14, Math.min(22, outer * 0.11));
 
     return {
       outerRadius: outer,
@@ -88,12 +88,12 @@ export const CountdownChart = ({
   const chartFrameStyle =
     size === 'large'
       ? {
-          aspectRatio: '2 / 1',
+          aspectRatio: '3 / 1',
           maxHeight: '260px',
           minHeight: '170px',
         }
       : { height: 'clamp(145px, 42vw, 220px)' };
-  const chartTopPadding = size === 'large' ? '18px' : '10px';
+  const chartTopPadding = size === 'large' ? '50px' : '10px';
   const summaryPositionStyle =
     size === 'large'
       ? { top: '68%', transform: 'translate(-50%, -50%)' }
@@ -117,7 +117,7 @@ export const CountdownChart = ({
         variant="caption"
         weight="medium"
         color="text-[#333]"
-        className="absolute -top-[10px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
+        className="absolute -top-[5px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
       >
         Lleva {daysUsed} días tu plan
       </Text>
@@ -177,7 +177,7 @@ export const CountdownChart = ({
             ...summaryPositionStyle,
           }}
         >
-          <Text variant="h1" weight="regular" as="div" color="text-inherit">
+          <Text variant="h2" weight="medium" as="div" color="text-inherit">
             {daysRemaining} días
           </Text>
           <Text
@@ -195,7 +195,7 @@ export const CountdownChart = ({
         variant="body"
         weight="medium"
         as="div"
-        className="text-center mb-4"
+        className="text-center mt-3 mb-4"
       >
         Plan {planName}
       </Text>

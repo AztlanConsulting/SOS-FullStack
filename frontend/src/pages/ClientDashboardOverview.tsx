@@ -6,7 +6,7 @@ import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button';
 
 const dashboardContainerClass =
-  'w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto';
+  'w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto';
 
 const DEFAULT_API_BASE_URL = 'http://localhost:3000';
 
@@ -112,7 +112,7 @@ const ClientDashboardOverview = () => {
             <section className="w-full bg-light-purple">
               <div className={`${dashboardContainerClass} py-8 lg:py-10`}>
                 <div className="flex w-full flex-col items-center gap-6 md:flex-row md:justify-center md:gap-10">
-                  <div className="w-40 h-40 md:w-50 md:h-50 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
+                  <div className="w-60 h-60 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
                     <img
                       src={petImageUrl}
                       alt={petData.petName}
@@ -120,7 +120,7 @@ const ClientDashboardOverview = () => {
                     />
                   </div>
 
-                  <div className="flex w-full max-w-md flex-col items-center gap-2 text-center md:items-start md:text-left">
+                  <div className="flex w-full flex-col items-center gap-5 text-center md:items-start md:text-left">
                     <Text variant="h3" weight="medium" as="div">
                       {petData.petName}
                     </Text>
@@ -128,7 +128,7 @@ const ClientDashboardOverview = () => {
                       Desde {formattedDate}, <br /> se perdió en{' '}
                       {lostLocation || 'ubicación no disponible'}.
                     </Text>
-                    <div className="mt-2 flex w-full max-w-xs flex-col gap-3 md:max-w-md lg:max-w-xl lg:flex-row lg:gap-4 lg:text-nowrap">
+                    <div className="mt-2 flex w-full flex-col gap-3 md:max-w-md lg:max-w-xl lg:flex-row lg:gap-4 lg:text-nowrap">
                       <Button
                         label="Visita nuestro contenido exclusivo"
                         variant="primary"
@@ -138,7 +138,7 @@ const ClientDashboardOverview = () => {
                       <Button
                         label="Radar de coincidencias"
                         variant="primary"
-                        textColor="bg-white text-black hover:bg-dark-purple hover:text-white"
+                        textColor="bg-white text-[var(--color-purple-primary)] hover:bg-dark-purple hover:text-white border-2 border-[var(--color-purple-primary)]"
                         onClick={handlePetCollection}
                       />
                     </div>
@@ -150,11 +150,11 @@ const ClientDashboardOverview = () => {
         </div>
 
         <div className={dashboardContainerClass}>
-          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-6">
+          <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:items-stretch">
+            <div className="lg:col-span-6 lg:h-full">
               <PlanProgressSection petData={metrics.planProgress} />
             </div>
-            <div className="lg:col-span-6">
+            <div className="lg:col-span-6 lg:h-full">
               <AdProgressSection posterUrl={posterUrl} />
             </div>
           </div>

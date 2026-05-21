@@ -535,7 +535,7 @@ echo 'server {
     ssl_ciphers         HIGH:!aNULL:!MD5;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; script-src 'self' https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com https://api.umami.is; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://api.umami.is; connect-src 'self' https://api.stripe.com https://www.paypal.com https://api.umami.is;" always;
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: https: blob:; script-src 'self' https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com https://www.sandbox.paypal.com https://hcaptcha.com https://*.hcaptcha.com; script-src-elem 'self' https://*.paypal.com https://*.paypalobjects.com https://api.google.com https://js.stripe.com 'sha256-npT7gANf5j5xQfBnLoFhyBq4QaE/X/oJcc6dqflY9zw='; style-src-elem 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://api.stripe.com https://www.paypal.com https://photon.komoot.io https://www.sandbox.paypal.com;" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
@@ -566,6 +566,7 @@ echo 'server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 }
+
 
 '> /etc/nginx/sites-available/default
 

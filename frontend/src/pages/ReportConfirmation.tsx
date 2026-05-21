@@ -124,7 +124,7 @@ export const ReportConfirmationPage: React.FC = () => {
                   transform: 'rotate(-30deg)',
                 }}
               /> */}
-              {/* <img
+              {/* <img loading='lazy'
                 src={whiteLogoSimple}
                 alt="Watermark Logo"
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 opacity-40 pointer-events-none"
@@ -137,6 +137,7 @@ export const ReportConfirmationPage: React.FC = () => {
               <div className="absolute bg-white/20 backdrop-blur-[2px] w-full p-4 bottom-0 h-1/2" />
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <img
+                  loading="lazy"
                   src={whiteLogoSimple}
                   alt="Watermark Logo"
                   className=" w-30 opacity-50 pointer-events-none"

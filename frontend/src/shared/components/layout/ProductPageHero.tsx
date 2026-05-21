@@ -8,6 +8,7 @@ const ProductPageHero = ({ product }: Props) => {
   return (
     <div className="pt-8 md:pt-0 md:row-span-2 mx-auto w-5/6 md:w-full">
       <img
+        loading="lazy"
         src={product.imageUrl}
         alt={product.name}
         className="color-grey-border rounded-lg w-full h-50 sm:h-80 md:h-90 object-cover"

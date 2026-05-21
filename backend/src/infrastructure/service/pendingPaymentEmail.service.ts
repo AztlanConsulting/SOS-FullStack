@@ -124,7 +124,7 @@ export const pendingPaymentEmailService: StripeEmailService = {
                             ? `
                           <div style="border-top:1px solid #eee;margin-top:20px;padding-top:20px;">
                               <div style="margin-bottom:12px; background-color: #f9cd48; padding: 20px; border-radius: 8px;">
-                                <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.oxxoNumber}&includetext&scale=2&height=15" 
+                                <img loading='lazy' src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.oxxoNumber}&includetext&scale=2&height=15" 
                                     alt="Código de Barras" 
                                     style="max-width:100%; height:auto; display:block; margin: 0 auto; mix-blend-mode: multiply;">
                               </div>

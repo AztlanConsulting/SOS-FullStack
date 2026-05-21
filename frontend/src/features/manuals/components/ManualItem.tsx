@@ -22,6 +22,7 @@ export const ManualItem = ({
       className="bg-white rounded-lg color-grey-border w-full flex flex-col h-full"
     >
       <img
+        loading="lazy"
         src={manual.imageUrl}
         alt={manual.name}
         className="rounded-t-lg w-full h-40 sm:h-60 md:h-40 object-cover"

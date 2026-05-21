@@ -29,6 +29,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
   return (
     <div className="bg-white rounded-lg border w-full flex flex-col h-full">
       <img
+        loading="lazy"
         src={imageSrc}
         alt={card.name}
         className="rounded-t-lg w-full h-40 object-cover"

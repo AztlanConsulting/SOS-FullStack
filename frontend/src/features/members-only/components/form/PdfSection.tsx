@@ -18,6 +18,7 @@ const PdfSection = () => {
             Cuéntanos de tu mascota
           </Text>
           <img
+            loading="lazy"
             src={petAndOwners}
             alt="Publicación"
             className="object-cover rounded-lg w-full h-full md:order-1 md:row-span-2"

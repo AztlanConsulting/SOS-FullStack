@@ -126,7 +126,12 @@ const ImageCropper: React.FC = () => {
       {croppedImage && (
         <div className="mt-6">
           <h2 className="text-lg font-semibold mb-2">Cropped Preview</h2>
-          <img src={croppedImage} alt="Cropped" className="rounded-lg border" />
+          <img
+            loading="lazy"
+            src={croppedImage}
+            alt="Cropped"
+            className="rounded-lg border"
+          />
         </div>
       )}
     </div>

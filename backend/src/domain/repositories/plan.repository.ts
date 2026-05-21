@@ -16,4 +16,5 @@ export interface PlanRepository {
    * @returns A promise that resolves to an array of PlanResult objects.
    */
   getPlans(): Promise<PlanResult[]>;
+  getPlanByName(name: string): Promise<PlanResult | null>;
 }

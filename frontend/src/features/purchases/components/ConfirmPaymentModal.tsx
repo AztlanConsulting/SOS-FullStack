@@ -51,7 +51,12 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
             scrollbarColor: '#a8aaad #eaecef',
           }}
         >
-          <img src={success} alt="Success" className="w-14 mb-4" />
+          <img
+            loading="lazy"
+            src={success}
+            alt="Success"
+            className="w-14 mb-4"
+          />
 
           <Text
             variant="h3"

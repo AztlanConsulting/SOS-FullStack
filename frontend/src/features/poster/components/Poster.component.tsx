@@ -11,7 +11,13 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         return <div className={`${className} bg-[#E7E0CC]`} />;
       }
 
-      return <img src={URL.createObjectURL(file)} className={className} />;
+      return (
+        <img
+          loading="lazy"
+          src={URL.createObjectURL(file)}
+          className={className}
+        />
+      );
     };
 
     const renderImages = () => {
@@ -83,7 +89,12 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         className="w-[1080px] h-[1350px] flex flex-col bg-white"
       >
         <div className="color-primary-bg h-[104px] w-[1080px] flex items-center justify-evenly">
-          <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
+          <img
+            loading="lazy"
+            src={whiteLogoSimple}
+            alt="Logo"
+            className="w-[92px] h-[92px]"
+          />
           <Text
             variant="body"
             weight="bold"
@@ -93,13 +104,23 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
             SE BUSCA A{' '}
             <span className="underline">{pet.name.toUpperCase()}</span>
           </Text>
-          <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
+          <img
+            loading="lazy"
+            src={whiteLogoSimple}
+            alt="Logo"
+            className="w-[92px] h-[92px]"
+          />
         </div>
 
         <div className="w-[1080px] h-[689px] flex flex-col items-center justify-end bg-[#F9F1DE]">
           {renderImages()}
           <div className="w-[850px] flex justify-between items-center">
-            <img src={phone} alt="Phone" className="w-[86px] h-[120px]" />
+            <img
+              loading="lazy"
+              src={phone}
+              alt="Phone"
+              className="w-[86px] h-[120px]"
+            />
             <div className="flex flex-col justify-center items-end">
               <Text variant="body" weight="regular" className="text-[34px]">
                 SI LE VES, LLAMA AL

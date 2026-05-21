@@ -88,7 +88,7 @@ export const sendWorkshopEmailService: WorkshopEmailService = {
 
                     <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:30px;text-align:center;">
                       
-                      <img src="${data.imageUrl}" alt="${data.workshopName}" style="width:180px; height:auto; border-radius:8px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); margin-bottom:20px;">
+                      <img loading='lazy' src="${data.imageUrl}" alt="${data.workshopName}" style="width:180px; height:auto; border-radius:8px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); margin-bottom:20px;">
                       
                       <h2 style="margin:0 0 8px 0;font-size:20px;color:#1a1a1a;">${data.workshopName}</h2>
 

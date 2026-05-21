@@ -9,6 +9,7 @@ const ProductDetail = ({ product }: Props) => {
   return (
     <>
       <img
+        loading="lazy"
         src={product.imageUrl}
         className="rounded-lg w-full h-60 object-cover"
       />

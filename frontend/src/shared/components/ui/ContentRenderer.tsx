@@ -16,6 +16,7 @@ const ContentRenderer = ({ content }: Props) => {
         if (block.type.toLowerCase() === 'image') {
           return (
             <img
+              loading="lazy"
               key={`${block.type}-${idx}`}
               src={block.content}
               alt={`content-${idx}`}

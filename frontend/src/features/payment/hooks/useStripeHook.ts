@@ -3,6 +3,7 @@ import { createPaymentIntent } from '@/features/payment/services/stripe.service'
 import type {
   Order,
   OxxoDetails,
+  PaymentIntent,
   SpeiDetails,
 } from '@/features/payment/types/payment.types';
 
@@ -18,14 +19,17 @@ export const useStripeHook = (data: Order, idempotencyKey: string) => {
     const init = async () => {
       try {
         setLoading(true);
-        const res = await createPaymentIntent(
-          data.amount,
-          data.currency,
-          data.method,
-          data.name,
-          data.email,
+        const paymentIntentBody: PaymentIntent = {
+          amount: data.amount,
+          currency: data.currency,
+          method: data.method,
+          name: data.name,
+          email: data.email,
           idempotencyKey,
-        );
+          ...(data.product && { product: data.product }),
+          ...(data.plan !== undefined && { plan: data.plan }),
+        };
+        const res = await createPaymentIntent(paymentIntentBody);
 
         if (cancelled) return;
 

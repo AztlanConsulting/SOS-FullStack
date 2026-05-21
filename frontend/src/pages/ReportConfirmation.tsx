@@ -62,25 +62,56 @@ export const ReportConfirmationPage: React.FC = () => {
     };
   }, []);
 
-  const handleUpdateForm = (newData: Partial<LostPetReportData>) => {
+  const handleUpdateForm = (newData: Partial<typeof lostPetReportData>) => {
+    if (lostPetReportData) {
+      setLostPetReportData({ ...lostPetReportData, ...newData });
+    }
+  };
+
+  const handleContinueForm = async (
+    newData: Partial<typeof lostPetReportData>,
+  ) => {
     if (!lostPetReportData) return;
-    setLostPetReportData({ ...lostPetReportData, ...newData });
+    try {
+      const posterFile = await exportPosterAsFile(
+        posterRef.current,
+        `${lostPetReportData.name}-poster`,
+      );
+
+      if (posterFile) {
+        const imageCount = parseInt(lostPetReportData.imageLayout || '1', 10);
+        const currentImageCount = lostPetReportData.images?.length || 0;
+
+        let updatedImages: File[];
+        // If we have exactly as many images as the layout requires + 1,
+        // replace the last one with the poster. Otherwise, append.
+        if (currentImageCount >= imageCount + 1) {
+          updatedImages = [
+            ...(lostPetReportData.images || []).slice(0, -1),
+            posterFile,
+          ];
+        } else {
+          updatedImages = [...(lostPetReportData.images || []), posterFile];
+        }
+
+        const updatedData = {
+          ...lostPetReportData,
+          images: updatedImages,
+          ...newData,
+        };
+        setLostPetReportData(updatedData);
+      } else {
+        console.warn('No posterFile returned');
+        setLostPetReportData({ ...lostPetReportData, ...newData });
+      }
+    } catch (err) {
+      console.error('Error in handleContinueForm:', err);
+      setLostPetReportData({ ...lostPetReportData, ...newData });
+    }
   };
 
   const handleProceedToPayment = async () => {
-    if (!lostPetReportData) return;
-
-    const posterFile = await exportPosterAsFile(
-      posterRef.current,
-      `${lostPetReportData.name}-poster`,
-    );
-
-    if (posterFile) {
-      setLostPetReportData(
-        appendPosterAsLastImage(lostPetReportData, posterFile),
-      );
-    }
-
+    await handleContinueForm({});
     navigate('/plans');
   };
 
@@ -120,27 +151,6 @@ export const ReportConfirmationPage: React.FC = () => {
               >
                 <Poster ref={posterRef} pet={lostPetReportData} />
               </div>
-
-              {/* Watermark to prevent exporting image */}
-              {/* <div
-                className="absolute inset-0 pointer-events-none opacity-50"
-                style={{
-                  backgroundImage: `url(${whiteLogoSimple})`,
-                  backgroundRepeat: 'repeat',
-                  backgroundSize: '100px',
-                  transform: 'rotate(-30deg)',
-                }}
-              /> */}
-              {/* <img
-                src={whiteLogoSimple}
-                alt="Watermark Logo"
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 opacity-40 pointer-events-none"
-              /> */}
-              {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-5xl font-bold text-black/20 text-center mt-20">
-                  Esta es una vista previa
-                </span>
-              </div> */}
               <div className="absolute bg-white/20 backdrop-blur-[2px] w-full p-4 bottom-0 h-1/2" />
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <img

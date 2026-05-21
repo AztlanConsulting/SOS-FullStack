@@ -27,7 +27,6 @@ export const IpApiService: ILocationRepository = {
         currency: response.data.Currency,
       };
     } catch (error) {
-      console.error('Error en ApiService:', error);
       return null;
     }
   },

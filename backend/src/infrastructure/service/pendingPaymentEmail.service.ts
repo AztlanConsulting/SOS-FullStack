@@ -240,12 +240,7 @@ export const pendingPaymentEmailService: StripeEmailService = {
     });
 
     const previewUrl = nodemailer.getTestMessageUrl(info);
-
-    if (Boolean(previewUrl)) {
-      console.log('📨 Preview email:', previewUrl);
-      console.log(
-        'Timestamp:',
-        new Date().toLocaleString('es-MX', {
+  },
           year: 'numeric',
           month: 'long',
           day: 'numeric',

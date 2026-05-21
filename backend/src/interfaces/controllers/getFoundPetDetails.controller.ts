@@ -25,7 +25,6 @@ async function getFoundPetDetails(req: Request, res: Response) {
 
     res.status(200).send(petDetails);
   } catch (error) {
-    console.error(error);
     res
       .status(500)
       .send(`Error fetching petDetails with id: ${req.params.id ?? undefined}`);

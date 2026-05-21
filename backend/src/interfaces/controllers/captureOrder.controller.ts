@@ -96,7 +96,6 @@ export default async function captureOrder(req: Request, res: Response) {
     if (capturedOrder.id !== undefined)
       return res.status(200).send(capturedOrder.id);
   } catch (error) {
-    console.error(error);
     res.status(500).send(error);
   }
 }

@@ -5,7 +5,7 @@ import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
-router.post('/report', postFoundPetReport);
+router.post('/report', authMiddleware, postFoundPetReport);
 router.get('/:id', getFoundPetDetails);
 
 export default router;

@@ -1,17 +1,146 @@
 # SOS-Full Stack - Manual de instalación
 
-## Acceso al servidor
+## 1. Arquitectura general del sistema
 
-- Tipo de acceso: ssh
-- Requisitos: usuario - contraseña - ip
+### 1.1 Estructura del proyecto
 
-`ssh usuario@ip`
+```bash
+/backend
+    /backend/src/config # Configuración para pruebas
+    /backend/src/domain # Manejo de datos e información
+        /backend/src/domain/models
+        /backend/src/domain/ports
+        /backend/src/domain/repositories
+    /backend/src/infrastructure # Conección con servicios externos y base de datos
+        /backend/src/infrastructure/api
+        /backend/src/infrastructure/data-access
+        /backend/src/infrastructure/databasse
+        /backend/src/infrastructure/service
+    /backend/src/interface # Controladores y enrutadores
+        /backend/src/interface/controllers
+        /backend/src/interface/middleware
+        /backend/src/interface/routes
+    /backend/src/queues # Cola de trabajos para publicar en redes
+    /backend/src/test # Pruebas unitarias y de integración
+    /backend/src/types # Tipado para TS
+    /backend/src/use-case # Lógica por función
+        /backend/src/use-case/auth
+        /backend/src/use-case/blogs
+        /backend/src/use-case/clients
+        /backend/src/use-case/emails
+        /backend/src/use-case/images
+        /backend/src/use-case/manuals
+        /backend/src/use-case/members-only
+        /backend/src/use-case/plans
+        /backend/src/use-case/workshops
+        /backend/src/use-case/foundPet
+        /backend/src/use-case/ip
+        /backend/src/use-case/payments
+        /backend/src/use-case/purchases
+    /backend/src/utils # Herramientas reutilizables
+/frontend
+    /frontend/src/assets # Archivos estáticos de la aplicación
+        /frontend/src/assets/audio
+        /frontend/src/assets/images
+    /frontend/src/features # Componentes visuales y lógica por función
+        /frontend/src/features/auth
+        /frontend/src/features/blog
+        /frontend/src/features/client
+        /frontend/src/features/fount-pet
+        /frontend/src/features/graphs
+        /frontend/src/features/landing
+        /frontend/src/features/manuals
+        /frontend/src/features/map
+        /frontend/src/features/members-only
+        /frontend/src/features/payment
+        /frontend/src/features/petCollection
+        /frontend/src/features/plans
+        /frontend/src/features/poster
+        /frontend/src/features/purchases
+        /frontend/src/features/users
+        /frontend/src/features/workshop
+    /frontend/src/pages # Puntos de entrada para las interfaces / diferentes funciones
+    /frontend/src/routes # Enrutamiento del lado del cliente
+    /frontend/src/shared # Componentes compartidos entre diferentes funciones / reutilización
+    /frontend/src/test # Pruebas
+```
 
-## Configuración previa del servidor.
+### 1.2 Módulos del sistema
 
-_Si ya cuenta con docker instalado y ya tiene una configuración de nginx customizada se puede saltar hasta la sección de configuración de la aplicación_
+| Módulos      | Description                                                       |
+| ------------ | ----------------------------------------------------------------- |
+| auth         | Autenticación y autorización de los usuarios                      |
+| blogs        | Blogs y noticias de la socia para informar a usuarios             |
+| clients      | Clientes que han contratado un plan o se han registrado           |
+| emails       | Mandar correos electrónicos de compra                             |
+| images       | Manejo de imágenes de mascotas                                    |
+| manuals      | Cursos de la socia a la venta                                     |
+| members-only | Información de portal exclusivo                                   |
+| plans        | Planes de contratación                                            |
+| workshops    | Talleres a la venta                                               |
+| foundPet     | Mascotas encontradas por terceros                                 |
+| ip           | Identificación de lugar de procedencia y precio para los usuarios |
+| payments     | Procesamiento de pagos                                            |
+| purchases    | Registro de transacciones                                         |
 
-### 0. Instalar curl
+## 2 Tecnologías utilizadas
+
+| Tecnología utilizada  | Descripción                                                                |
+| --------------------- | -------------------------------------------------------------------------- |
+| Express               | Backend de la aplicación                                                   |
+| React                 | Frontend de la aplicación                                                  |
+| Docker                | Contenedor para correr otras de las tecnologías utilziadas                 |
+| Typescript            | Javascript con tipado para mayor facilidad de desarrollo y documentación   |
+| Git                   | Control de versiones                                                       |
+| MongoDB               | Base de datos por colecciones                                              |
+| Redis                 | Cache para manejar queues                                                  |
+| Weaviate              | Base de datos vectorial                                                    |
+| eslint                | Análisis de código para mejorar la calidad de este                         |
+| prettier              | Asegura que el código siga un formato                                      |
+| husky                 | Asegura que el código cumpla con los estándares antes de unirse con github |
+| Stripe                | Procesamiento de pagos tarjeta / oxxo / spei                               |
+| Paypal                | Procesamiento de pagos paypal                                              |
+| axios                 | Peticiones http                                                            |
+| bcryptjs              | Encriptación de contraseñas                                                |
+| cors                  | Seguridad                                                                  |
+| dotenv                | Configuración de la aplicación mediante archivos .env                      |
+| ioredis               | Comunicación con Redis                                                     |
+| jsonwebtokens         | Tokens de sesión para los clientes autenticados                            |
+| mongoose              | Cliente para comunicación con base de datos MongoDB                        |
+| multer                | Recibir archivos desde el cliente en peticiones                            |
+| nodemailer            | Mandar correos electrónicos                                                |
+| zod                   | Seguridad - verifica la información que se manda del front-end al backend  |
+| cookie-parser         | Guardar información de cookies para usuarios                               |
+| jest                  | Pruebas automáticas                                                        |
+| supertest             | Pruebas de integración                                                     |
+| graphql               | Necesario para weaviate - peticiones                                       |
+| mongodb-memory-server | Pruebas de integración                                                     |
+| html-to-image         | Convertir componentes html a imágenes                                      |
+| jspdf                 | Generación de pdfs desde el cliente                                        |
+| leaflet               | Autocompletar ubicación                                                    |
+| recharts              | Gráficas                                                                   |
+| tailwind              | Estilo de la interface                                                     |
+| vite                  | Bundler para aplicaciones de react                                         |
+| vitest                | Pruebas                                                                    |
+| Open Street Map       | Mapa de ubicación del usuario                                              |
+
+## 3. Requisitos previos
+
+### 3.1 Asegurece de tener las siguientes herramientas instaladas
+
+**Correr el proyecto**
+
+- Curl
+- Docker
+- Node y NPM
+- MongoDB
+
+**Despliegue**
+
+- NGINX
+- PM2
+
+#### 3.1.1 Curl
 
 Necesario para las demás
 
@@ -19,7 +148,7 @@ Necesario para las demás
 sudo apt install curl
 ```
 
-### 1. Instalación de docker
+#### 3.1.2 Instalación de docker
 
 _Este paso puede variar dependiendo del ambiente de producción y sistema operativo. A continuación se explica la instalación de la aplicación y componentes en el ambiente de Ubuntu 24.04_
 
@@ -27,13 +156,13 @@ _Este paso puede variar dependiendo del ambiente de producción y sistema operat
 
 Usar la línea de comandos para las ejecutar las siguientes líneas
 
-1.1 **Asegurarse que no haya versiones anteriores instaladas**
+1 **Asegurarse que no haya versiones anteriores instaladas**
 
 ```bash
 sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
 ```
 
-1.2 **Instalar repositorio de docker**
+2 **Instalar repositorio de docker**
 
 ```bash
 # Add Docker's official GPG key:
@@ -56,23 +185,23 @@ EOF
 sudo apt update
 ```
 
-1.3 **Instalar docker y sus componentes**
+3 **Instalar docker y sus componentes**
 
 ```bash
 sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-1.4 **Verificar instalación**
+4 **Verificar instalación**
 
 ```bash
 sudo docker run hello-world
 ```
 
-### 2. Instalación y configuración de NGINX
+#### 3.1.3 Instalación y configuración de NGINX
 
 - [Documentación oficial](https://nginx.org/en/linux_packages.html#Ubuntu)
 
-  2.1 **Instalar prerrequisitos y nginx**
+  1 **Instalar prerrequisitos y nginx**
 
 ```bash
 sudo apt install curl gnupg2 ca-certificates lsb-release ubuntu-keyring
@@ -93,33 +222,33 @@ sudo apt update
 sudo apt install nginx
 ```
 
-2.2 **Verifica que la instalación fue correcta con:**
+2 **Verifica que la instalación fue correcta con:**
 
 ```bash
 sudo nginx -t
 sudo systemctl status nginx
 ```
 
-2.3 **Activar el servicio**
+3 **Activar el servicio**
 Si en el paso anterior nginx tiene un estado de apagado es necesario activarlo manualmente
 
 ```bash
 sudo systemctl start nginx
 ```
 
-### 3. Instalación de nvm, node y npm
+#### 3.1.4 Instalación de nvm, node y npm
 
 - [Documentación oficial](https://www.geeksforgeeks.org/linux-unix/how-to-install-nvm-on-ubuntu-22-04/)
 
 NVM es un paquete que nos ayudará a instalar la versión de node que utilizaremos para el proyecto, ya que este corre en JavaScript
 
-3.1 **Instalar nvm**
+1 **Instalar nvm**
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 ```
 
-3.2 **Verificar instalación**
+2 **Verificar instalación**
 
 ```bash
 nvm --version
@@ -127,13 +256,13 @@ nvm --version
 
 **Debe dar una respuesta como 1.2.2**
 
-3.3. **Instalar la versión 25.9 de node**
+**Instalar la versión 25.9 de node**
 
 ```bash
 nvm install 25.9
 ```
 
-3.4 **Ver versiones instaladas**
+4 **Ver versiones instaladas**
 
 ```bash
 nvm ls
@@ -141,30 +270,30 @@ nvm ls
 
 En la lista debería aparecer la versión que se instaló en el paso anterior
 
-3.5 **Seleccionarla como versión predefinida**
+5 **Seleccionarla como versión predefinida**
 
 ```bash
 nvm use 25.9
 ```
 
-3.6 **Verifica la instalación de los programas**
+6 **Verifica la instalación de los programas**
 
 ```bash
 node --version
 npm --version
 ```
 
-### 4. Instalación de PM2
+#### 3.1.5 Instalación de PM2
 
 ```bash
 npm install -g pm2
 ```
 
-### 5. Instalación de MongoDB
+#### 3.1.6 Instalación de MongoDB
 
 - [Documentación oficial](https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-ubuntu/)
 
-  5.1 **Instalar pre-requisitos**
+  1 **Instalar pre-requisitos**
 
 ```bash
 sudo apt-get install gnupg curl
@@ -173,7 +302,7 @@ curl -fsSL https://pgp.mongodb.com/server-8.0.asc | \
    --dearmor
 ```
 
-5.2 **Instalar mongoDB**
+2 **Instalar mongoDB**
 
 ```bash
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
@@ -181,45 +310,62 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 ```
 
-5.3 **Iniciar servicio**
+3 **Iniciar servicio**
 
 ```bash
 sudo systemctl start mongod
 ```
 
-5.4 **Verificar que esté corriendo correctamente**
+4 **Verificar que esté corriendo correctamente**
 
 ```bash
 sudo systemctl status mongod
 ```
 
----
+### 3.2. Acceso al servidor
 
-## Configuración de la aplicación
+- Tipo de acceso: ssh
+- Requisitos: usuario - contraseña - ip
 
-### 1. Clonar el repositorio y acceder a este
+`ssh usuario@ip`
+
+## 4. Estructura del proyecto
+
+El sistema tiene dos capas principales - backend y frontend
+
+- /backend
+
+Capa que maneja la lógica y conección con bases de datos y servicios de la aplciación
+**Arqutiectura:** MVC
+La arquitectura del sistema es Modelo, Vista, Controlador. De manera que la vista está manejada completamente por el área de /frontend, controlador es la lógica, utilizando las capas de Interface-UseCase-Infraestructura para las conecciones entre peticiones y la base de datos, que es parte de Dominio-Infraestructura
+
+- /frontend
+
+Parte de la arquitectura MVC y maneja únciamente la interface y las peticiones que se hacen en el backend.
+
+## 5. Configuración del entorno local
 
 ```bash
 git clone https://github.com/AztlanConsulting/SOS-FullStack.git
 cd SOS-FullStack
 ```
 
-### 2. Iniciar base de datos vectorial
+### 5.1 Configuración de docker
 
-La configuración de la base de datos vectorial se encuentra en el archivo docker-compose.yml, en este se puede cambiar la configuración si se quiere modificar algo como los puertos. Pero la configuración establecida es necesaria para el correcto funcionamiento de la aplicación
+La configuración de la base de datos vectorial y la cola de tareas, se encuentra en el archivo docker-compose.yml, en este se puede cambiar la configuración si se quiere modificar algo como los puertos. Pero la configuración establecida es necesaria para el correcto funcionamiento de la aplicación por defecto.
 
-2.1 **Levantar el contenedor**
+5.1.1 **Levantar el contenedor**
 
 La base de datos vectorial es utilizada para la función de mascotas encontradas.
 Es necesario generar la imagen de docker y levantarla para que funcione
 
 ```bash
-docker compose up
+docker compose up -d
 ```
 
 Si la configuración de docker fue correcta, este debería ejecutar el archivo dentro del proyecto docker-compose.yml para instalar weaviate e iniciar el contenedor.
 
-2.2 **Verificar que el proceso corre de manera correcta**
+5.1.2 **Verificar que el proceso corre de manera correcta**
 
 ```bash
 docker ps
@@ -227,38 +373,23 @@ docker ps
 
 Debería mostrar los contenedores corriendo por el momento (pythonVector)
 
-### 3. Preparar entornos
+### 5.2 Instalación de dependencias
 
-3.1 **Correr npm install en los diferentes entornos**
+5.2.1 **Correr npm install en los diferentes entornos**
 
 ```bash
+npm install
 npm run install:all
+
+npm install -g pm2
 ```
 
-3.2 **Popular la base de datos con la información pre-definida**
+### 5.3 Variables de entorno
 
-```bash
-cd backend
-npm run init:mongoDB
-```
+| Nota: Usar archivo script que se distribuye de manera segura y directa
 
-3.3 **En caso de querer probar el software o correrlo en modo de desarrollo**
-
-- Iniciar el backend con:
-
-```bash
-npm run dev
-```
-
-- En otra consola correr:
-
-```bash
-npm run init:vectorDB
-```
-
-3.4 **Variables de entorno**
-
-Volver a la ruta del proyecto de caso de ser necesario con `cd`
+Linux / Mac: `create.env.prod.sh`
+Windows: `create.env.prod.bat`
 
 ```bash
 echo    'SERVER_PORT=3000
@@ -284,7 +415,11 @@ CORS_ORIGIN=http://localhost:5173
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=hola@sosencontrandomascotas.com
-SMTP_PASS={password}' > ./backend/.env
+SMTP_PASS={password}
+REDIS_HOST=localhost
+REDIS_PORT=6379
+UMAMI_API_KEY={key}
+UMAMI_WEBSITE_ID={id}' > ./backend/.env
 
 echo    'VITE_API_BASE_URL="http://localhost:3000"
 VITE_ENVIROMENT="sandbox"
@@ -293,41 +428,89 @@ VITE_PAYPAL_SECRET={paypal-secret}
 VITE_STRIPE_PUBLISHABLE_KEY={stripe-public-key}' > ./frontend/.env
 ```
 
-3.5 **Configurar variables de entorno con claves reales**
+### 5.4 **Ejecución del proyecto**
 
-En los diferentes archivos .env se manejan diferentes valores para servicios externos, encriptación o de configuración.
-En este caso, aquellos envueltos en llaves son las variables que se tienen que asignar manualmente para el correcto funcionamiento de la aplicación
-
-### 4. Correr el proyecto en desarrollo
-
-Desde la ruta del proyecto correr:
-`npm run dev`
-
-O de manera individual:
+**Desarollo**
 
 ```bash
-# Para front-end
-npm run dev --prefix frontend
-
-# O para backend
-npm run dev --prefix backend
+npm run dev
 ```
 
-### 5. Estructura del proyecto
+**Producción**
 
-/backend: lógica de la aplicación - enlace entre el funcionamiento de la aplicación y la información con el cliente
+```bash
+npm run build
+pm2 start ecosystem.config.js
+```
 
-/frontend: Interface de la aplicación
+### 5.5 **Popular la base de datos con la información pre-definida**
 
-### 6. Guía de despliegue (Producción)
+**Popular MongoDB**
 
-6.1 **Acceder al servidor:** `ssh usuario@ip`
-6.2 **Configuración de servicios**
+```bash
+cd backend
+npm run init:mongoDB [develop | production]
+```
+
+**Popular Weaviate (solo desarrollo)**
+
+1. Crear una carpeta en la ruta /vectorDatabase
+
+Insertar una carpeta con raza de mascota e imágenes
+
+`Ej. /vectorDB/golden/img_1.jpg`
+
+```bash
+cd backend
+npm run dev # Corriendo
+# En orta consola
+npm run init:vectorDB populate
+```
+
+## 6. Acceso al servidor
+
+### 6.1 Conexión SSH
+
+`ssh [usuario]@[ip-servidor]`
+
+### 6.2 Configuración opcional SSH
+
+```bash
+Host [alias]
+   HostName [ip]
+   User [usuario]
+   IdentityFile [ruta_llave]
+```
+
+## 7. Desplegar en producción
+
+### 7.1 Instalar dependencias
+
+```bash
+npm run install:all
+```
+
+### 7.2 Build del proyecto
+
+```bash
+npm run build
+```
+
+### 7.3 Despliegue de la aplicación
+
+```bash
+pm2 start ecosystem.config.js
+
+sudo rm -rf /var/www/html/*
+sudo cp -r frontend/dist/* /var/www/html/
+```
+
+2 **Configuración de servicios**
 
 - Servidor web: Nginx
 - Proxy reverso: Si
 - Puertos utilizados: 443, 8080, 3000
-  6.3 **Claves de seguridad**
+  3 **Claves de seguridad**
 
 Cambiar {dominio} por el dominio de la aplicación
 
@@ -338,18 +521,26 @@ sudo openssl req -new -key /etc/ssl/private/{dominio}.key -out /etc/ssl/certs/{d
 sudo openssl x509 -req -in /etc/ssl/certs/{dominio}.csr -signkey /etc/ssl/private/{dominio}.key -out /etc/ssl/certs/{dominio}.crt -days 365
 ```
 
-6.4 **Configuración de nginx**
+4 **Configuración de nginx**
 
 ```bash
 mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
 
 echo 'server {
     listen              443 ssl;
-    server_name         {dominio};
-    ssl_certificate     /etc/letsencrypt/live/{dominio}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{dominio}/privkey.pem;
+    server_name         www.encontrandomascotas.com encontrandomascotas.com;
+    ssl_certificate     /etc/letsencrypt/live/www.encontrandomascotas.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/www.encontrandomascotas.com/privkey.pem;
     ssl_protocols       TLSv1.2 TLSv1.3;
     ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: https: blob:; script-src 'self' https://js.stripe.com https://www.paypal.com https://www.paypalobjects.com https://www.sandbox.paypal.com https://hcaptcha.com https://*.hcaptcha.com; script-src-elem 'self' https://*.paypal.com https://*.paypalobjects.com https://api.google.com https://js.stripe.com 'sha256-npT7gANf5j5xQfBnLoFhyBq4QaE/X/oJcc6dqflY9zw='; style-src-elem 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://www.sandbox.paypal.com; connect-src 'self' https://api.stripe.com https://www.paypal.com https://photon.komoot.io https://www.sandbox.paypal.com;" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+
 
     root /var/www/html;
     index index.html;
@@ -364,6 +555,7 @@ echo 'server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
+        proxy_set_header X-Real_IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_cache_bypass $http_upgrade;
     }
@@ -374,6 +566,8 @@ echo 'server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 }
+
+
 '> /etc/nginx/sites-available/default
 
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
@@ -382,36 +576,46 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-6.4 Construir programa para producción
+## 8. Persistencia y ejecución en servidor
 
-```bash
-npm run build
+### 8.1 Herramientas de gestión de procesos:
 
-sudo rm -rf /var/www/html/*
-sudo cp -r frontend/dist/* /var/www/html/
-```
+| Herramienta | Descripción                                                             |
+| ----------- | ----------------------------------------------------------------------- |
+| PM2         | Proceso principal de la aplicación, reinicio automático cuando de error |
+| Docker      | Base de datos vectoriales y cola de tareas                              |
 
-6.5 Correr el proyecto en producción
+### 8.2 Ejecución de servicios
 
-```bash
-pm2 start ecosystem.config.js
-```
+- `pm2 start`
+- `docker compose up -d`
 
-### 7. Comandos de producción
+### 8.3 Información de servicios
 
-- Iniciar servidor - pm2 start ecosystem.config.js
-- Reiniciar servidor - pm2 restart
-- Logs servidor - pm2 logs --lines 100
-- Detener servidor - pm2 kill
+**Ver Estado**
 
-### 8. Persistencia y ejecución en servidor
+- `pm2 ls`
+- `docekr ps`
 
-8.1 Herramientas de gestión de procesos:
+**Ver logs**
 
-- PM2 para el servidor
-- Docker para la galería de mascotas encontradas
+- `pm2 logs 0`
+- `docker logs <process-id>`
 
-### 9. Flujo de actualización
+**Reiniciar el servicio**
+
+- `pm2 restart 0`
+- `docker restart <container_name_or_id>`
+
+## 9. Configuración del servidor web
+
+### 9.1 Servidor web utilizado
+
+| Tecnología | Uso           |
+| ---------- | ------------- |
+| NGINX      | Proxy reverso |
+
+## 10. Flujo de actualización
 
 ```bash
 cd SOS-Fullstack
@@ -432,7 +636,7 @@ sudo cp -r frontend/dist/* /var/www/html/
 sudo systemctl restart nginx
 ```
 
-### 10. Consideraciones adicionales
+### 11. Consideraciones adicionales
 
 El servidor debe tener el puerto 443 abierto al público para funcionar
 

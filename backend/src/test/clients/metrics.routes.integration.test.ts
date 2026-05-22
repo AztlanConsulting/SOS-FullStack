@@ -137,7 +137,8 @@ describe('Metrics Routes (Integration)', () => {
       size: 'medium',
       description: 'sin ubicacion',
       photos: [],
-      location: {
+      location: 'Ciudad de México',
+      geocodingLocation: {
         coords: [-99.1332, 19.4326],
         displayName: 'Ciudad de México',
         properties: {

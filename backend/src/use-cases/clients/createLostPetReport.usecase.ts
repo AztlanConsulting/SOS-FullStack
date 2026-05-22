@@ -140,7 +140,7 @@ const mapToPet = async (
     size: input.size,
     description: input.description,
     photos: input.images,
-    location: location!,
+    geocodingLocation: location!,
   };
 };
 

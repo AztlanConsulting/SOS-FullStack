@@ -2,7 +2,9 @@ import { MembersOnlyModel } from '@domain/models/membersOnly.model';
 import fs from 'fs';
 import path from 'path';
 
-const MOCK_FILES_DIR = path.join(import.meta.dirname, 'mock-files');
+const MOCK_FILES_DIR = path.join(__dirname, 'mock-files');
+
+//const MOCK_FILES_DIR = path.join(import.meta.dirname, 'mock-files');
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads', 'members-only');
 
 function copyToUploads(srcName: string, destName: string): void {

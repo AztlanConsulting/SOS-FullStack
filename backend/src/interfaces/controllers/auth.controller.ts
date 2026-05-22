@@ -63,7 +63,6 @@ export const login = async (req: Request, res: Response) => {
       }
     }
 
-    console.error('Login error:', error);
     res.status(500).json({
       error: 'INTERNAL_ERROR',
       message: 'Error al iniciar sesión',

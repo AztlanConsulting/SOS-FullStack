@@ -59,6 +59,7 @@ describe('Client Routes', () => {
       radius: 10,
       features: ['búsqueda activa'],
       active: true,
+      status: 'continua',
     });
   });
 

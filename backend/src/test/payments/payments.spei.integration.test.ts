@@ -18,6 +18,7 @@ import app from '@/index';
 import request from 'supertest';
 import { mongoDB, clearDatabase, closeDatabase } from '@db/mongoDB/mongoDB';
 import { PaymentModel } from '@domain/models/payment.model';
+import { WorkshopModel } from '@/domain/models/workshop.model';
 
 const { StripeProvider } = require('@infrastructure/api/stripeProvider.api');
 const {
@@ -40,6 +41,17 @@ describe('SPEI payment integration', () => {
   });
 
   test('POST /payments/payment-intent returns spei details and creates pending DB record', async () => {
+    // Create a real workshop in DB
+    const workshop = await WorkshopModel.create({
+      name: 'something',
+      description: 'something',
+      price: 50,
+      content: [],
+      category: ['something'],
+      img: { data: Buffer.from('hola'), contentType: 'pdf' },
+      imageUrl: 'http://example.com',
+    });
+
     (StripeProvider.createIntent as jest.Mock).mockResolvedValue({
       id: 'pi_spei_1',
       amount: 10000,
@@ -61,6 +73,7 @@ describe('SPEI payment integration', () => {
       method: 'spei',
       name: 'Test User',
       email: 'test@example.com',
+      product: { productId: workshop._id, productName: 'something' },
     };
 
     const res = await request(app)

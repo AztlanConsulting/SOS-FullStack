@@ -11,6 +11,7 @@ const UploadPet = ({ img, uploadFile }: Props) => {
     <div className="bg-purple-primary h-1/2 min-h-48 md:h-screen md:w-1/3 p-2 py-10 flex flex-col items-center justify-center gap-5 shadow-dark-purple shadow-lg">
       {img && (
         <img
+          loading="lazy"
           alt="Previsualización"
           src={URL.createObjectURL(img)}
           className="rounded-full border-2 border-dark-purple size-80 md:size-96 object-cover"

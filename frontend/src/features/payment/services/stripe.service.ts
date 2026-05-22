@@ -1,11 +1,17 @@
-export const createPaymentIntent = async (
-  amount: number,
-  currency: string,
-  method?: string,
-  name?: string,
-  email?: string,
-  idempotencyKey?: string,
-) => {
+import type { PaymentIntent } from '../types/payment.types';
+
+export const createPaymentIntent = async (paymentIntent: PaymentIntent) => {
+  const {
+    amount,
+    currency,
+    method,
+    name,
+    email,
+    product,
+    plan,
+    idempotencyKey,
+  } = paymentIntent;
+
   try {
     const base_url = import.meta.env.VITE_API_BASE_URL;
     const res = await fetch(`${base_url}/payments/payment-intent`, {
@@ -14,7 +20,15 @@ export const createPaymentIntent = async (
         'Content-Type': 'application/json',
         'x-idempotency-key': idempotencyKey ?? '',
       },
-      body: JSON.stringify({ amount, currency, method, name, email }),
+      body: JSON.stringify({
+        amount,
+        currency,
+        method,
+        name,
+        email,
+        product,
+        plan,
+      }),
     });
     const data = await res.json();
     return data.result;

@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --color-primary: #f9cd48;
-  --color-purple: #9D7FAD;
-  --color-light-purple: #9D7FAD33;
+  --color-purple: #9d7fad;
+  --color-light-purple: #9d7fad33;
   --radius-c: 20px;
   --color-secondary: #fef5da;
   --color-purple-primary: #9d7fad;
@@ -38,6 +37,11 @@ input[type='search']::-webkit-search-cancel-button {
   display: none;
 }
 
+@font-face {
+  font-family: 'Work Sans';
+  src: url('assets/font/WorkSans-VariableFont_wght.ttf');
+}
+
 :root {
   font-family: 'Work Sans', sans-serif;
   line-height: 1.5;
@@ -49,8 +53,8 @@ input[type='search']::-webkit-search-cancel-button {
 
   --color-primary: #f9cd48;
   --color-secondary: #fef5da;
-  --color-purple: #9D7FAD;
-  --color-light-purple: #9D7FAD33;
+  --color-purple: #9d7fad;
+  --color-light-purple: #9d7fad33;
   --color-success: #198754;
   --color-success-bg: #d1e7dd;
   --color-warning: #ff9500;
@@ -61,7 +65,7 @@ input[type='search']::-webkit-search-cancel-button {
   --color-grey-text: #61646b;
   --color-light-grey-text: #afb1b6;
   --color-primary-shadow: 2px 4px 4px #f9cd48;
-  --color-light-purple-shadow: 2px 4px 4px #9D7FAD;
+  --color-light-purple-shadow: 2px 4px 4px #9d7fad;
   --color-purple-primary: #9d7fad;
   --color-purple-secondary: #ddd2e3;
   --color-dark-purple: #673881;

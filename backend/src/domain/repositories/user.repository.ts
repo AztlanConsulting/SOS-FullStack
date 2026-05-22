@@ -13,4 +13,5 @@ export interface UserRepository {
   getUserPermissions(userId: string): Promise<PopulatedPermission[]>;
   createUser(userData: UserCreateInput): Promise<string>;
   activateUser(email: string): Promise<void>;
+  updateUserPassword(email: string, newPassword: string): Promise<void>;
 }

@@ -77,10 +77,6 @@ export default async function captureOrder(req: Request, res: Response) {
       }
     }
 
-    if (result === 'not_found' || result === 'already_updated') {
-      console.warn('Payment not found in DB or already updated');
-    }
-
     let id: string | undefined = productId;
     if (!Boolean(productId)) {
       id = planId!; // Register plan details and return id

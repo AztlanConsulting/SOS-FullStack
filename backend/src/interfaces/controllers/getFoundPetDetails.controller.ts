@@ -9,7 +9,6 @@ async function getFoundPetDetails(req: Request, res: Response) {
     const params = safeParse(z.object({ id: z.string() }), req.params);
 
     if (params.error) {
-      console.error(params.error);
       throw Error("Coudln't parse ID from params");
     }
 

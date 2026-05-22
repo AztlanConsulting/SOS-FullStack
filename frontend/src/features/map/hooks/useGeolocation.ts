@@ -25,7 +25,6 @@ export const useGeolocation = () => {
         setIsLocating(false);
       },
       (error) => {
-        console.error('Error obteniendo la ubicación:', error);
         alert(
           'No pudimos acceder a tu ubicación. Por favor, verifica los permisos de tu navegador.',
         );

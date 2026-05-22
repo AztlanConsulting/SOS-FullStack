@@ -24,10 +24,6 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
     // if (isDevelopment) {
     //   const testAccount = await nodemailer.createTestAccount();
 
-    //   console.log('Ethereal test account created:');
-    //   console.log('User:', testAccount.user);
-    //   console.log('Pass:', testAccount.pass);
-
     //   return nodemailer.createTransport({
     //     host: testAccount.smtp.host,
     //     port: testAccount.smtp.port,

@@ -1,7 +1,11 @@
+export interface Plan {
+  name: string;
+  duration: number;
+  createdAt: Date;
+}
+
 export interface PlanSubscriptionProgress {
-  planName: string;
-  totalDays: number;
-  daysRemaining: number;
+  plans: Plan[];
   petName: string;
   petImage: string | null;
   posterImage: string | null;
@@ -33,5 +37,5 @@ export interface DashboardStats {
 }
 
 export interface DashboardResponse {
-  planProgress: PlanSubscriptionProgress | null;
+  planProgress: PlanSubscriptionProgress[] | null;
 }

@@ -12,42 +12,39 @@ interface Dependencies {
 export const getPlanProgress = async (
   { petRepository, purchasedPlanRepository }: Dependencies,
   userId: string,
-): Promise<PlanProgressResult | null> => {
+): Promise<PlanProgressResult[] | null> => {
   const pets = await petRepository.getPetsByUserId(userId);
   if (pets.length === 0) {
     return null;
   }
 
+  const planProgress: PlanProgressResult[] = [];
+
   for (const pet of pets) {
-    const plan = await purchasedPlanRepository.getActivePlanByPetId(
+    const plans = await purchasedPlanRepository.getActivePlansByPetId(
       pet._id.toString(),
     );
 
-    if (!plan) {
+    if (!plans || plans.length === 0) {
       continue;
     }
-
-    const elapsedDays = Math.max(
-      Math.floor(
-        (Date.now() - new Date(plan.createdAt).getTime()) / MS_PER_DAY,
-      ),
-      0,
-    );
 
     const posterImage =
       pet.photos.length > 1 ? (pet.photos.at(-1) ?? null) : null;
 
-    return {
-      planName: plan.name,
-      totalDays: plan.duration,
-      daysRemaining: Math.max(plan.duration - elapsedDays, 0),
+    planProgress.push({
+      plans: plans.map((p) => ({
+        name: p.name,
+        duration: p.duration,
+        createdAt: p.createdAt,
+      })),
       petName: pet.name,
       petImage: pet.photos[0] ?? null,
       posterImage,
       dateMissing: pet.dateMissing,
       location: pet.location.displayName,
-    };
+    });
   }
 
-  return null;
+  return planProgress;
 };

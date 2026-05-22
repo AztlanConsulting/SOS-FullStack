@@ -38,15 +38,15 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
     return plan as PurchasedPlan;
   },
 
-  async getActivePlanByPetId(petId: string): Promise<PurchasedPlan | null> {
-    const plan = await PurchasedPlanModel.findOne({
+  async getActivePlansByPetId(petId: string): Promise<PurchasedPlan[] | null> {
+    const plans = await PurchasedPlanModel.find({
       petId,
       active: true,
     })
       .sort({ createdAt: -1 })
       .lean();
 
-    return plan ? (plan as PurchasedPlan) : null;
+    return plans as PurchasedPlan[];
   },
 
   /**

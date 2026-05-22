@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import type { PlanSubscriptionProgress } from '@features/graphs/types/dashboardMetrics';
 import { Text } from '@/shared/components/ui/Text';
+import { calculateStackedExpiry } from '@/shared/utils/planDates';
 
 interface CountdownChartProps {
   data?: PlanSubscriptionProgress;
@@ -78,11 +79,38 @@ export const CountdownChart = ({
     return null;
   }
 
-  const { planName, totalDays, daysRemaining } = data;
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-  const daysUsed = totalDays - daysRemaining;
+  // Total days is the sum of all plan durations
+  const plans = data.plans ?? [];
+  const totalDays = plans.reduce((acc, plan) => acc + (plan?.duration ?? 0), 0);
 
-  const progressPercentage = (daysRemaining * 100) / totalDays;
+  // Calculate stacked expiries from plans (convert createdAt to string)
+  const sortedPlans = [...plans].sort(
+    (a, b) =>
+      new Date(a.createdAt ?? 0).getTime() -
+      new Date(b.createdAt ?? 0).getTime(),
+  );
+
+  const expiryDates = calculateStackedExpiry(
+    sortedPlans.map((p) => ({
+      createdAt:
+        p?.createdAt?.toString?.() ?? new Date(p?.createdAt).toISOString(),
+      duration: p?.duration ?? 0,
+    })),
+  );
+
+  const finalExpiry = expiryDates.length
+    ? new Date(Math.max(...expiryDates.map((d) => d.getTime())))
+    : null;
+  const now = new Date();
+  const msRemaining = finalExpiry ? finalExpiry.getTime() - now.getTime() : 0;
+  const daysRemaining =
+    msRemaining <= 0 ? 0 : Math.ceil(msRemaining / MS_PER_DAY);
+
+  const daysUsed = Math.max(0, totalDays - daysRemaining);
+
+  const progressPercentage = totalDays > 0 ? (totalDays * 100) / daysUsed : 0;
 
   const progressColor = getProgressColor(progressPercentage);
   const chartFrameStyle =
@@ -93,10 +121,10 @@ export const CountdownChart = ({
           minHeight: '170px',
         }
       : { height: 'clamp(145px, 42vw, 220px)' };
-  const chartTopPadding = size === 'large' ? '92px' : '10px';
+  const chartTopPadding = size === 'large' ? '100px' : '10px';
   const summaryPositionStyle =
     size === 'large'
-      ? { top: '68%', transform: 'translate(-50%, -50%)' }
+      ? { top: '80%', transform: 'translate(-50%, -50%)' }
       : { bottom: '0px', transform: 'translateX(-50%)' };
 
   const pieData = [
@@ -117,7 +145,7 @@ export const CountdownChart = ({
         variant="caption"
         weight="medium"
         color="text-[#333]"
-        className="absolute top-[10px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
+        className="absolute top-[0px] lg:top-[10px] left-0 bg-[#FCFCD4] border border-[#D4E157] rounded-[4px] px-3 py-1 z-10"
       >
         Lleva {daysUsed} días tu plan
       </Text>
@@ -191,13 +219,27 @@ export const CountdownChart = ({
           </Text>
         </div>
       </div>
+      <div className="mt-10 text-center">
+        <Text variant="caption" weight="medium" color="text-gray-500">
+          Fechas de expiración por plan
+        </Text>
+        <div className="mt-8 flex flex-col items-center gap-2">
+          {expiryDates.length > 0 &&
+            sortedPlans.map((p: any, i: number) => (
+              <Text key={`${p?.name ?? 'plan'}-${i}`} variant="body" as="div">
+                {p?.name ?? 'Sin nombre'} —{' '}
+                {expiryDates[i]?.toLocaleDateString('es-ES')}
+              </Text>
+            ))}
+        </div>
+      </div>
       <Text
         variant="body"
         weight="medium"
         as="div"
         className="text-center mt-9 mb-4"
       >
-        Plan {planName}
+        Plan {sortedPlans.map((p: any) => p?.name ?? '').join(' + ')}
       </Text>
     </div>
   );

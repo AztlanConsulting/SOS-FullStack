@@ -9,7 +9,7 @@ export interface PurchasedPlanRepository {
     planData: PurchasedPlanCreateInput,
   ): Promise<PurchasedPlan>;
   getPurchasedPlanById(planId: string): Promise<PurchasedPlan | null>;
-  getActivePlanByPetId(petId: string): Promise<PurchasedPlan | null>;
+  getActivePlansByPetId(petId: string): Promise<PurchasedPlan[] | null>;
   activatePurchasedPlan(planId: string): Promise<void>;
   updatePurchasedPlanSocialPosts(
     planId: string,

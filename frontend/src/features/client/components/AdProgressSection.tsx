@@ -11,7 +11,7 @@ interface AdProgressSectionProps {
   posterUrl: string | null;
 }
 
-const mediaContentClass = 'w-full max-w-xs md:max-w-sm lg:w-1/2';
+const mediaContentClass = 'w-full px-10';
 const actionsClass =
   'flex w-full max-w-xs flex-col gap-3 md:max-w-md md:flex-row md:gap-4 md:text-nowrap';
 const PAPER_SIZES = [
@@ -53,7 +53,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       <Text variant="h3" weight="medium" className="text-center w-full">
         Poster de tu mascota
       </Text>
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 md:p-8 flex flex-1 flex-col items-center justify-center gap-6">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 flex flex-1 flex-col items-center justify-between gap-6">
         <div className={mediaContentClass}>
           <img
             src={posterUrl}
@@ -76,22 +76,21 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
             onChange={(e) => setSelectedFormat(e.target.value)}
             focusColor="purple"
           />
-        </div>
+          <div className={`${actionsClass} mt-5`}>
+            <Button
+              label="Descargar a Color"
+              variant="primary"
+              textColor="bg-purple-primary text-white hover:bg-dark-purple"
+              onClick={handleDownloadColor}
+            />
 
-        <div className={actionsClass}>
-          <Button
-            label="Descargar a Color"
-            variant="primary"
-            textColor="bg-purple-primary text-white hover:bg-dark-purple"
-            onClick={handleDownloadColor}
-          />
-
-          <Button
-            label="Descargar en B/N"
-            textColor="bg-purple-secondary text-black hover:bg-dark-purple hover:text-white"
-            variant="primary"
-            onClick={handleDownloadBW}
-          />
+            <Button
+              label="Descargar en B/N"
+              textColor="bg-purple-secondary text-black hover:bg-dark-purple hover:text-white"
+              variant="primary"
+              onClick={handleDownloadBW}
+            />
+          </div>
         </div>
       </div>
     </div>

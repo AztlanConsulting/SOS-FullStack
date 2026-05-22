@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { CountdownChart } from '@/features/graphs/components/CountDownChart';
 import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button/Button';
@@ -14,6 +15,31 @@ interface PlanProgressSectionProps {
 
 const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
   const navigate = useNavigate();
+  const [isLgScreen, setIsLgScreen] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsLgScreen(event.matches);
+    };
+
+    setIsLgScreen(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleChange);
+
+      return () => {
+        mediaQuery.removeEventListener('change', handleChange);
+      };
+    }
+
+    mediaQuery.addListener(handleChange);
+
+    return () => {
+      mediaQuery.removeListener(handleChange);
+    };
+  }, []);
 
   const handlePlanExtension = () => {
     navigate('/extender-plan');
@@ -33,11 +59,14 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
         Progreso del plan
       </Text>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-8 flex flex-1 flex-col items-center justify-between">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 flex flex-1 flex-col items-center justify-between">
         {petData ? (
           <>
             <div className={chartContentClass}>
-              <CountdownChart data={petData} size="large" />
+              <CountdownChart
+                data={petData}
+                size={isLgScreen ? 'large' : 'default'}
+              />
             </div>
             <div className={actionsClass}>
               <Button

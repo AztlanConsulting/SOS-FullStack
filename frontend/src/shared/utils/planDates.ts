@@ -14,34 +14,33 @@ export const calculateStackedExpiry = (
 ): Date[] => {
   const sorted = [...plans].sort(
     (a, b) =>
-      new Date(b.createdAt ?? 0).getTime() -
-      new Date(a.createdAt ?? 0).getTime(),
+      new Date(a.createdAt ?? 0).getTime() -
+      new Date(b.createdAt ?? 0).getTime(),
   );
 
-  const now = new Date();
+  const expiries: Date[] = [];
 
-  return sorted.map((plan, index) => {
+  for (let index = 0; index < sorted.length; index += 1) {
+    const plan = sorted[index];
+    const createdAt = new Date(plan.createdAt ?? 0);
     const durationMs = plan.duration * 24 * 60 * 60 * 1000;
 
-    /**
-     * Stack Evaluation:
-     * If evaluating the absolute latest purchase execution, check if it was
-     * checked out while an identical prior commitment was still actively running.
-     */
-    if (index === 0 && sorted.length > 1) {
-      const prevPlan = sorted[1];
-      const prevExpiry = new Date(
-        new Date(prevPlan.createdAt ?? 0).getTime() +
-          prevPlan.duration * 24 * 60 * 60 * 1000,
-      );
-      // If the older plan hasn't expired yet, append this duration to its end date
-      if (prevExpiry > now) {
-        const remaining = prevExpiry.getTime() - now.getTime();
-        return new Date(now.getTime() + remaining + durationMs);
-      }
+    if (index === 0) {
+      expiries.push(new Date(createdAt.getTime() + durationMs));
+      continue;
     }
 
-    // Default: Standalone timeline generation using isolated data inputs
-    return new Date(new Date(plan.createdAt ?? 0).getTime() + durationMs);
-  });
+    const previousExpiry = expiries[index - 1];
+
+    // If this plan was created before the previous one ended, extend from the prior computed expiry.
+    if (createdAt.getTime() < previousExpiry.getTime()) {
+      expiries.push(new Date(previousExpiry.getTime() + durationMs));
+      continue;
+    }
+
+    // Otherwise, this plan starts a new independent timeline.
+    expiries.push(new Date(createdAt.getTime() + durationMs));
+  }
+
+  return expiries;
 };

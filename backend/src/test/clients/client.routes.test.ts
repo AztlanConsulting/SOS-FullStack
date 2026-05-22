@@ -48,8 +48,8 @@ describe('Client Routes', () => {
       size: 'large',
       description: 'ojos grandes',
       photos: [],
-      placeMissing: 'Querétaro',
-      location: {
+      location: 'Querétaro',
+      geocodingLocation: {
         coords: [-100.3854, 20.6295],
         displayName: 'Querétaro, Mexico',
         properties: {

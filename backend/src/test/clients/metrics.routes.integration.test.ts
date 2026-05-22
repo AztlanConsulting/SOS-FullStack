@@ -43,8 +43,8 @@ describe('Metrics Routes (Integration)', () => {
       size: 'large',
       description: 'juguetona',
       photos: [],
-      placeMissing: 'Guadalajara, Jalisco, México',
-      location: {
+      location: 'Guadalajara, Jalisco, México',
+      geocodingLocation: {
         coords: [-103.3496, 20.6597],
         displayName: 'Guadalajara, Jalisco, México',
         properties: {
@@ -103,7 +103,7 @@ describe('Metrics Routes (Integration)', () => {
   });
 
   /**
-   * Verifies country distribution extracts country from placeMissing
+   * Verifies country distribution extracts country from location
    */
   test('GET /metrics/clients-by-country extracts country correctly', async () => {
     const res = await request(app).get('/metrics/clients-by-country');
@@ -113,7 +113,7 @@ describe('Metrics Routes (Integration)', () => {
   });
 
   /**
-   * Verifies clients without placeMissing are excluded from country distribution
+   * Verifies clients without location are excluded from country distribution
    */
   test('GET /metrics/clients-by-country excludes clients without location', async () => {
     const role = await RoleModel.findOne({ role: 'CLIENT' });

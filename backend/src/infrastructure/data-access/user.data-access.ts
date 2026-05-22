@@ -415,7 +415,7 @@ export const userDataAccess: UserRepository = {
       },
       {
         $match: {
-          'pet.placeMissing': { $exists: true, $ne: null },
+          'pet.location': { $exists: true, $ne: null },
         },
       },
       {
@@ -443,7 +443,7 @@ export const userDataAccess: UserRepository = {
           country: {
             $trim: {
               input: {
-                $arrayElemAt: [{ $split: ['$pet.placeMissing', ','] }, -1],
+                $arrayElemAt: [{ $split: ['$pet.location', ','] }, -1],
               },
             },
           },

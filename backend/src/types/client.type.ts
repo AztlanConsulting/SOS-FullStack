@@ -19,7 +19,7 @@ export interface ClientPet {
   description?: string;
   photos?: string[];
   dateMissing?: Date;
-  placeMissing?: string;
+  location?: string;
 }
 
 /**

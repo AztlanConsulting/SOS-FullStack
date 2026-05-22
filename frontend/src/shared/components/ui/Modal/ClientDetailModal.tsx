@@ -110,7 +110,7 @@ export const ClientDetailModal = ({
       )}
 
       {detail && (
-        <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-500px)] modal-scrollbar pr-6">
+        <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-200px)] modal-scrollbar pr-6">
           <div className="grid grid-cols-2 gap-2">
             <div className="flex items-center gap-2">
               <HiMail size={14} className="text-gray-400 shrink-0" />
@@ -260,7 +260,7 @@ export const ClientDetailModal = ({
                     <span className="text-gray-700">{detail.pets[0].sex}</span>
                   </Text>
                 )}
-                {detail.pets[0].placeMissing && (
+                {detail.pets[0].location && (
                   <Text
                     variant="small"
                     color="text-gray-500"
@@ -268,7 +268,7 @@ export const ClientDetailModal = ({
                   >
                     Lugar:{' '}
                     <span className="text-gray-700">
-                      {detail.pets[0].placeMissing}
+                      {detail.pets[0].location}
                     </span>
                   </Text>
                 )}

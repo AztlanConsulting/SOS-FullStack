@@ -11,6 +11,7 @@ export const PaymentDataAccess: PaymentRepository = {
     await PaymentModel.create({
       ...data,
       clientSecret: data.clientSecret ?? 'unknown',
+      userId: data.userId ?? 'system',
       status: 'pending',
     });
   },

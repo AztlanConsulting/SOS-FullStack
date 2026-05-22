@@ -49,6 +49,15 @@ describe('Client Routes', () => {
       description: 'ojos grandes',
       photos: [],
       placeMissing: 'Querétaro',
+      location: {
+        coords: [-100.3854, 20.6295],
+        displayName: 'Querétaro, Mexico',
+        properties: {
+          city: 'Querétaro',
+          country: 'Mexico',
+          state: 'Querétaro',
+        },
+      },
     });
 
     await PurchasedPlanModel.create({

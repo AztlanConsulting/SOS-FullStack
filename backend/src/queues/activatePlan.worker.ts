@@ -22,7 +22,6 @@ new Worker(
       const { userEmail, planId } = job.data;
 
       const user = await userDataAccess.getUserByEmail(userEmail);
-
       if (!user) {
         throw new Error('USER_NOT_FOUND');
       }
@@ -60,7 +59,7 @@ new Worker(
         ? (pet.photos?.at(-1) ?? '')
         : 'https://picsum.photos/id/237/1200/1200.jpg';
 
-      if (!facebookAlreadyPosted) {
+      if (!facebookAlreadyPosted && false) {
         try {
           const fb = await metaPublisher.publishToFacebook({
             imageUrl,
@@ -111,7 +110,7 @@ new Worker(
         }
       }
 
-      if (!instagramAlreadyPosted) {
+      if (!instagramAlreadyPosted && false) {
         try {
           const ig = await metaPublisher.publishToInstagram({
             imageUrl,
@@ -144,8 +143,13 @@ new Worker(
       const instagramDone =
         latestPlan.socialPosts?.instagram?.status === 'posted';
 
+      console.log('About to send email');
+
       // Send email only after both social posts are completed
-      if (facebookDone && instagramDone && latestPlan.emailStatus !== 'sent') {
+      if (
+        (facebookDone && instagramDone && latestPlan.emailStatus !== 'sent') ||
+        true
+      ) {
         await sendEmailQueue.add(
           'send-email-job',
           {

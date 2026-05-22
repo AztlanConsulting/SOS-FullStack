@@ -45,18 +45,22 @@ new Worker(
         return;
       }
 
-      console.log(user);
+      console.log(user.email);
+      console.log(user.password);
+      const regex = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
+      console.log('Regex', regex.test(user.password));
 
       await emailService.sendActivatePlanEmail({
         to: user.email,
         username: user.email,
-        password: pet.name,
+        password: user.password,
         facebookUrl: purchasedPlan.socialPosts?.facebook?.url ?? '',
         instagramUrl: purchasedPlan.socialPosts?.instagram?.url ?? '',
       });
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
     } catch (error) {
+      console.log(error);
       throw error;
     }
   },

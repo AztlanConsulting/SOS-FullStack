@@ -16,7 +16,7 @@ export const getPlanProgress = async (
     return null;
   }
 
-  const plan = await purchasedPlanRepository.getActivePlanByPetId(
+  const plan = await purchasedPlanRepository.getPurchasedPlanById(
     pet._id.toString(),
   );
   if (!plan) {

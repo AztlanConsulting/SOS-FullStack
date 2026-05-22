@@ -3,7 +3,7 @@ import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
 import { useNavigate } from 'react-router';
-import success from '@assets/images/success.png';
+import success from '@assets/images/success.webp';
 import { useLocationContext } from '@/shared/context/Location.context';
 import { formatCurrency } from '@shared/utils/formatCurrency';
 

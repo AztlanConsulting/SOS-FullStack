@@ -1,7 +1,13 @@
 import { twMerge } from 'tailwind-merge';
 import type { ComponentType } from 'react';
 import { Text } from '../Text';
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'plans' | 'toolbar';
+type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'plans'
+  | 'toolbar'
+  | 'purple';
 type ButtonProps = {
   label: string;
   onClick?: () => void;
@@ -37,6 +43,7 @@ export function Button({
       'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
     toolbar:
       '!rounded-md !px-2 !py-1.5 bg-white text-gray-600 hover:bg-[#F9CD48]/35 hover:text-[#C2991D] hover:border hover:border-[#C2991D] border border-gray-300 text-xs font-normal w-auto mx-0',
+    purple: 'bg-purple-primary text-white hover:bg-purple-primary w-full',
   };
   return (
     <button

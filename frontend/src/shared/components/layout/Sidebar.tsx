@@ -12,7 +12,7 @@ import { TbLogout } from 'react-icons/tb';
 import { Text } from '@/shared/components/ui/Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import SignOut from '@/shared/components/ui/Button/SignOut';
-import whiteIcon from '@/assets/images/whiteIcon.png';
+import whiteIcon from '@/assets/images/whiteIcon.webp';
 
 /**
  * Configuration for the main navigation.

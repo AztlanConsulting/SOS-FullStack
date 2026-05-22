@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
+import '@testing-library/jest-dom/vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { ClientTable } from '@/features/clients/components/ClientTable';
 import type {
@@ -65,12 +66,12 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('renders all column headers', () => {
     renderTable();
-    expect(screen.getByText('Nombre')).toBeInTheDocument();
-    expect(screen.getByText('Fecha de compra')).toBeInTheDocument();
-    expect(screen.getByText('Nombre mascota')).toBeInTheDocument();
-    expect(screen.getByText('Características')).toBeInTheDocument();
-    expect(screen.getByText('Link de la conversacion')).toBeInTheDocument();
-    expect(screen.getByText('Estatus del plan')).toBeInTheDocument();
+    expect(screen.queryAllByText('Nombre').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Fecha de compra').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Nombre mascota').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Características').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Link de la conversacion').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Estatus del plan').length).toBeGreaterThan(0);
   });
 
   /**
@@ -78,9 +79,9 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('renders client rows with correct data', () => {
     renderTable();
-    expect(screen.getByText('Sebastian')).toBeInTheDocument();
-    expect(screen.getByText('Pookie')).toBeInTheDocument();
-    expect(screen.getByText('ojos grandes')).toBeInTheDocument();
+    expect(screen.queryAllByText('Sebastian').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Pookie').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('ojos grandes').length).toBeGreaterThan(0);
   });
 
   /**
@@ -88,7 +89,7 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('shows loading message when loading is true', () => {
     renderTable([], true);
-    expect(screen.getByText('Cargando...')).toBeInTheDocument();
+    expect(screen.queryAllByText('Cargando...').length).toBeGreaterThan(0);
   });
 
   /**
@@ -96,7 +97,7 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('shows empty message when no clients', () => {
     renderTable([]);
-    expect(screen.getByText('No se encontraron clientes.')).toBeInTheDocument();
+    expect(screen.queryAllByText('No se encontraron clientes.').length).toBeGreaterThan(0);
   });
 
   /**

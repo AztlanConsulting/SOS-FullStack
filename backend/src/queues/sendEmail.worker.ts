@@ -45,6 +45,8 @@ new Worker(
         return;
       }
 
+      console.log(user);
+
       await emailService.sendActivatePlanEmail({
         to: user.email,
         username: user.email,
@@ -55,7 +57,6 @@ new Worker(
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
     } catch (error) {
-
       throw error;
     }
   },

@@ -75,9 +75,7 @@ new Worker(
               postedAt: new Date(),
             },
           });
-
         } catch (error) {
-
           // Facebook may publish successfully but fail before the DB checkpoint
           // is saved (timeout, crash, network error, etc.).
           //
@@ -128,9 +126,7 @@ new Worker(
               postedAt: new Date(),
             },
           });
-
         } catch (error) {
-
           throw error;
         }
       }
@@ -172,7 +168,6 @@ new Worker(
         );
       }
     } catch (error) {
-
       throw error;
     }
   },

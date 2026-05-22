@@ -77,6 +77,7 @@ export const createLostPetReport = async (
   if (!user) {
     const roleId = await roleRepository.getRoleIdByName('CLIENT');
     const hashedPassword = await bcrypt.hash(input.name, 10);
+    console.log(hashedPassword);
 
     if (roleId == null) {
       throw new Error('CLIENT_ROLE_NOT_FOUND');

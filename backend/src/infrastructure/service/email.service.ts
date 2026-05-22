@@ -54,6 +54,8 @@ export const emailService: EmailService = {
   async sendActivatePlanEmail(data: SendActivatePlanEmailDTO): Promise<void> {
     const transporter = await getTransporter();
 
+    console.log('sendActivatePlanEmail');
+
     const info = await transporter.sendMail({
       from: `"SOS Pets" <${process.env.SMTP_USER ?? 'test@sospets.local'}>`,
       to: data.to,

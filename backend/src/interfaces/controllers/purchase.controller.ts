@@ -36,7 +36,6 @@ export const makeCreatePurchase = () => {
         message: 'Purchase created successfully',
       });
     } catch (error) {
-      console.error(error);
       const message =
         error instanceof Error ? error.message : 'Purchase failed';
       return res.status(500).json({ error: message });

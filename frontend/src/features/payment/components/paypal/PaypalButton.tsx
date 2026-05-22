@@ -36,8 +36,6 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
           className="-z-20 w-full"
           presentationMode="auto"
           createOrder={async () => {
-            console.log('Create order');
-
             const response = await createPaypalPayment(data, exchangeRate);
             if (response.status !== 201)
               throw "Error, couldn't process payment";
@@ -53,7 +51,6 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
             return { orderId };
           }}
           onApprove={async ({ orderId }: OnApproveDataOneTimePayments) => {
-            console.log('Approve order');
             let purchaseInfo = purchaseDetail;
             if (data.plan) {
               purchaseInfo = {
@@ -62,20 +59,16 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
                 productType: 'plan',
               };
             }
-            console.log(purchaseInfo);
-
             const response = await confirmPaypalPayment(
               orderId,
               purchaseInfo,
               planIdRef.current,
             );
             if (response.status == 200) {
-              console.log('Payment captured!');
               success();
             }
           }}
           onError={(error) => {
-            console.log(error);
           }}
         />
       </div>

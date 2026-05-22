@@ -33,7 +33,6 @@ export const createPaymentIntent = async (paymentIntent: PaymentIntent) => {
     const data = await res.json();
     return data.result;
   } catch (error) {
-    console.error('Payment intent creation failed:', error);
     throw error;
   }
 };

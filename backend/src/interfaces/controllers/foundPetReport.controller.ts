@@ -51,8 +51,6 @@ export async function postFoundPetReport(req: Request, res: Response) {
       (await getLocation(locationCoords)) ||
       getOpenStreetMapLocation(location, locationCoords);
 
-    console.log(requestLocation);
-
     if (!Boolean(requestLocation)) throw Error("Couldn't get location");
 
     const foundPetData: FoundPetReport = {

@@ -17,8 +17,6 @@ new Worker(
 
   async (job) => {
     try {
-      console.log('Email job started:', job.id);
-
       const { userEmail, planId } = job.data;
 
       const user = await userDataAccess.getUserByEmail(userEmail);
@@ -44,7 +42,6 @@ new Worker(
 
       // Prevent duplicated email delivery
       if (purchasedPlan.emailStatus === 'sent') {
-        console.log('Email already sent');
         return;
       }
 
@@ -57,10 +54,7 @@ new Worker(
       });
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
-
-      console.log('Email sent successfully');
     } catch (error) {
-      console.error('Email job failed:', error);
 
       throw error;
     }

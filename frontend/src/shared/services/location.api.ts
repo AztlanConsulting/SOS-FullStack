@@ -8,7 +8,6 @@ export const getPricing = async (): Promise<PricingData> => {
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching pricing:', error);
     throw error;
   }
 };

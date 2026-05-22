@@ -84,7 +84,6 @@ export const useCheckout = ({
             setMessage('Pago procesado exitosamente con producto');
           }
         } catch (error) {
-          console.error('Error creating purchase:', error);
           setMessage('Error al procesar la compra');
           setIsProcessing(false);
           return;

@@ -54,11 +54,11 @@ export const ClientDetailModal = ({
   // Calculates the expiry dates before rendering
   const expiryDates = detail?.plans
     ? calculateStackedExpiry(
-        detail.plans.filter(
-          (p): p is typeof p & { createdAt: string; duration: number } =>
-            Boolean(p.createdAt && p.duration),
-        ),
-      )
+      detail.plans.filter(
+        (p): p is typeof p & { createdAt: string; duration: number } =>
+          Boolean(p.createdAt && p.duration),
+      ),
+    )
     : [];
 
   // Sync internal input state when data is loaded from the hook
@@ -110,7 +110,7 @@ export const ClientDetailModal = ({
       )}
 
       {detail && (
-        <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-500px)] modal-scrollbar">
+        <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-500px)] modal-scrollbar pr-6">
           <div className="grid grid-cols-2 gap-2">
             <div className="flex items-center gap-2">
               <HiMail size={14} className="text-gray-400 shrink-0" />
@@ -139,10 +139,10 @@ export const ClientDetailModal = ({
               <Text variant="small" color="text-gray-600">
                 {detail.createdAt
                   ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    })
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })
                   : '—'}
               </Text>
             </div>
@@ -361,10 +361,10 @@ export const ClientDetailModal = ({
                           {expiryDates[index] < new Date()
                             ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                             : expiryDates[index].toLocaleDateString('es-MX', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                              })}
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                            })}
                         </span>
                       </Text>
                     )}

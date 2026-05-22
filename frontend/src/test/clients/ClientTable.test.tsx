@@ -14,6 +14,7 @@ const mockClients: ClientListItem[] = [
     email: 'sebastian@test.com',
     phone: '1234567890',
     conversation: 'https://sos.com',
+    createdAt: new Date('2024-01-15').toISOString(),
     pet: {
       _id: 'p1',
       name: 'Pookie',
@@ -27,6 +28,7 @@ const mockClients: ClientListItem[] = [
     username: 'Jorge',
     email: 'jorge@test.com',
     phone: '0987654321',
+    createdAt: new Date('2024-02-20').toISOString(),
     pet: {
       _id: 'p2',
       name: 'Mamba',
@@ -63,12 +65,12 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('renders all column headers', () => {
     renderTable();
-    expect(screen.getAllByText('Nombre')).toBeDefined();
-    expect(screen.getAllByText('Fecha de compra')).toBeDefined();
-    expect(screen.getAllByText('Nombre mascota')).toBeDefined();
-    expect(screen.getAllByText('Características')).toBeDefined();
-    expect(screen.getAllByText('Link de la conversacion')).toBeDefined();
-    expect(screen.getAllByText('Estatus del plan')).toBeDefined();
+    expect(screen.getByText('Nombre')).toBeInTheDocument();
+    expect(screen.getByText('Fecha de compra')).toBeInTheDocument();
+    expect(screen.getByText('Nombre mascota')).toBeInTheDocument();
+    expect(screen.getByText('Características')).toBeInTheDocument();
+    expect(screen.getByText('Link de la conversacion')).toBeInTheDocument();
+    expect(screen.getByText('Estatus del plan')).toBeInTheDocument();
   });
 
   /**
@@ -76,9 +78,9 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('renders client rows with correct data', () => {
     renderTable();
-    expect(screen.getAllByText('Sebastian')).toBeDefined();
-    expect(screen.getAllByText('Pookie')).toBeDefined();
-    expect(screen.getAllByText('ojos grandes')).toBeDefined();
+    expect(screen.getByText('Sebastian')).toBeInTheDocument();
+    expect(screen.getByText('Pookie')).toBeInTheDocument();
+    expect(screen.getByText('ojos grandes')).toBeInTheDocument();
   });
 
   /**
@@ -86,7 +88,7 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('shows loading message when loading is true', () => {
     renderTable([], true);
-    expect(screen.getAllByText('Cargando...')).toBeDefined();
+    expect(screen.getByText('Cargando...')).toBeInTheDocument();
   });
 
   /**
@@ -94,7 +96,7 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('shows empty message when no clients', () => {
     renderTable([]);
-    expect(screen.getAllByText('No se encontraron clientes.')).toBeDefined();
+    expect(screen.getByText('No se encontraron clientes.')).toBeInTheDocument();
   });
 
   /**

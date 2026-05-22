@@ -81,9 +81,7 @@ export const CountdownChart = ({
 
   const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-  // Total days is the sum of all plan durations
   const plans = data.plans ?? [];
-  const totalDays = plans.reduce((acc, plan) => acc + (plan?.duration ?? 0), 0);
 
   // Calculate stacked expiries from plans (convert createdAt to string)
   const sortedPlans = [...plans].sort(
@@ -91,6 +89,7 @@ export const CountdownChart = ({
       new Date(a.createdAt ?? 0).getTime() -
       new Date(b.createdAt ?? 0).getTime(),
   );
+  const displayPlans = [...sortedPlans].reverse();
 
   const expiryDates = calculateStackedExpiry(
     sortedPlans.map((p) => ({
@@ -100,15 +99,40 @@ export const CountdownChart = ({
     })),
   );
 
-  const finalExpiry = expiryDates.length
-    ? new Date(Math.max(...expiryDates.map((d) => d.getTime())))
-    : null;
   const now = new Date();
+  const activePlanEntries = displayPlans
+    .map((plan, index) => ({
+      plan,
+      expiryDate: expiryDates[index],
+    }))
+    .filter(
+      ({ expiryDate }) => expiryDate && expiryDate.getTime() >= now.getTime(),
+    );
+
+  const activeDisplayPlans = activePlanEntries.map(({ plan }) => plan);
+  const activeExpiryDates = activePlanEntries.map(
+    ({ expiryDate }) => expiryDate,
+  );
+
+  // Total days is the sum of all non-expired plan durations
+  const totalDays = activeDisplayPlans.reduce(
+    (acc, plan) => acc + (plan?.duration ?? 0),
+    0,
+  );
+
+  const finalExpiry = activeExpiryDates.length
+    ? new Date(Math.max(...activeExpiryDates.map((d) => d.getTime())))
+    : null;
   const msRemaining = finalExpiry ? finalExpiry.getTime() - now.getTime() : 0;
   const daysRemaining =
     msRemaining <= 0 ? 0 : Math.ceil(msRemaining / MS_PER_DAY);
 
   const daysUsed = Math.max(0, totalDays - daysRemaining);
+  console.log('Total Days:', totalDays);
+  console.log('finalExpiry:', finalExpiry);
+  console.log('msRemaining:', msRemaining);
+  console.log('Days Remaining:', daysRemaining);
+  console.log('Days Used:', daysUsed);
 
   const progressPercentage = totalDays > 0 ? (totalDays * 100) / daysUsed : 0;
 
@@ -224,13 +248,18 @@ export const CountdownChart = ({
           Fechas de expiración por plan
         </Text>
         <div className="mt-8 flex flex-col items-center gap-2">
-          {expiryDates.length > 0 &&
-            sortedPlans.map((p: any, i: number) => (
+          {activeExpiryDates.length > 0 &&
+            activeDisplayPlans.map((p: any, i: number) => (
               <Text key={`${p?.name ?? 'plan'}-${i}`} variant="body" as="div">
                 {p?.name ?? 'Sin nombre'} —{' '}
-                {expiryDates[i]?.toLocaleDateString('es-ES')}
+                {activeExpiryDates[i]?.toLocaleDateString('es-ES')}
               </Text>
             ))}
+          {activeExpiryDates.length === 0 && (
+            <Text variant="body" as="div" color="text-gray-500">
+              No hay planes activos.
+            </Text>
+          )}
         </div>
       </div>
       <Text
@@ -239,7 +268,7 @@ export const CountdownChart = ({
         as="div"
         className="text-center mt-9 mb-4"
       >
-        Plan {sortedPlans.map((p: any) => p?.name ?? '').join(' + ')}
+        Plan {activeDisplayPlans.map((p: any) => p?.name ?? '').join(' + ')}
       </Text>
     </div>
   );

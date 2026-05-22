@@ -42,5 +42,5 @@ export const calculateStackedExpiry = (
     expiries.push(new Date(createdAt.getTime() + durationMs));
   }
 
-  return expiries;
+  return expiries.reverse();
 };

@@ -1,6 +1,7 @@
 import type {
   PurchasedPlan,
   PurchasedPlanCreateInput,
+  SocialPostsInput,
 } from '@domain/models/purchasedPlan.model';
 
 /**
@@ -36,19 +37,11 @@ export interface PurchasedPlanRepository {
    */
   getPlanDistribution(): Promise<PlanDistributionMetric[]>;
   /**
-   * Evaluates the system for an active, ongoing subscription linked to a specific pet.
-   * Crucial for validation gates, access tokens, or preventing duplicate coverage.
-   * * @param petId - The unique system identifier for the domestic animal.
-   * @returns The active plan document if found, or null if no valid plan is running.
-   */
-  getActivePlanByPetId(petId: string): Promise<PurchasedPlan | null>;
-  /**
    * Flips a newly purchased or pending plan into an operative state, triggering
    * the beginning of its active countdown cycle.
    * * @param planId - The unique document identifier for the plan ledger.
-   * @returns A boolean indicating if the activation sequence completed successfully.
    */
-  activatePurchasedPlan(planId: string): Promise<boolean>;
+  activatePurchasedPlan(planId: string): Promise<void>;
   /**
    * Directly updates the underlying business lifecycle status flag of a plan
    * (e.g., 'pending', 'active', 'expired', 'canceled').
@@ -56,4 +49,14 @@ export interface PurchasedPlanRepository {
    * @param status - The targeted lifecycle string token to apply.
    */
   updatePlanStatus(planId: string, status: string): Promise<void>;
+  getPurchasedPlanById(planId: string): Promise<PurchasedPlan | null>;
+  activatePurchasedPlan(planId: string): Promise<void>;
+  updatePurchasedPlanSocialPosts(
+    planId: string,
+    data: SocialPostsInput,
+  ): Promise<void>;
+  updateEmailStatus(
+    planId: string,
+    status: 'pending' | 'sent' | 'failed',
+  ): Promise<void>;
 }

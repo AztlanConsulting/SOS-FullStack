@@ -1,8 +1,8 @@
-import visa from '@assets/images/paymentIcons/Visa.png';
-import mastercard from '@assets/images/paymentIcons/MasterC.png';
-import american from '@assets/images/paymentIcons/American.png';
-import paypal from '@assets/images/paymentIcons/PayPal.png';
-import oxxo from '@assets/images/paymentIcons/oxxoPay.png';
+import visa from '@assets/images/paymentIcons/Visa.webp';
+import mastercard from '@assets/images/paymentIcons/MasterC.webp';
+import american from '@assets/images/paymentIcons/American.webp';
+import paypal from '@assets/images/paymentIcons/PayPal.webp';
+import oxxo from '@assets/images/paymentIcons/oxxoPay.webp';
 import bank from '@assets/images/paymentIcons/Bank.svg';
 import type { PaymentMethod } from '../types/PaymentMethod.type';
 import Paypal from '@features/payment/components/paypal/Paypal';

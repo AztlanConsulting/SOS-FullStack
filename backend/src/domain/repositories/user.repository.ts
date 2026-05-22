@@ -18,4 +18,5 @@ export interface UserRepository {
   getClientDetail(id: string): Promise<ClientDetail | null>;
   updateUser(id: string, data: Partial<User>): Promise<void>;
   getClientsByCountry(): Promise<{ name: string; value: number }[]>;
+  activateUser(email: string): Promise<void>;
 }

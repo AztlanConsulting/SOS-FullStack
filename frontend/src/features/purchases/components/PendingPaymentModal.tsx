@@ -3,7 +3,7 @@ import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
 import { useNavigate } from 'react-router';
-import pending from '@assets/images/pending.png';
+import pending from '@assets/images/pending.webp';
 
 interface Props {
   plan: LostPetReportData | null;

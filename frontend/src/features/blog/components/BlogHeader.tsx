@@ -1,7 +1,7 @@
 import { Text } from '@shared/components/ui/Text';
 import ProductPageHero from '@shared/components/layout/ProductPageHero';
 import { formatDateEsShort } from '@shared/utils/dateUtils';
-import yellowIcon from '@assets/images/yellowIcon.png';
+import yellowIcon from '@assets/images/yellowIcon.webp';
 import type { Blog } from '../types/blog.types';
 
 interface Props {

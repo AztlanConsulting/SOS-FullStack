@@ -16,6 +16,12 @@ export type PlanStatus =
  * This represents the "snapshot" of a plan at the moment of purchase,
  * including its configuration (days, radius) and active status.
  */
+export interface SocialPost {
+  url?: string;
+  status?: 'pending' | 'posted' | 'failed';
+  postedAt?: Date;
+}
+
 export interface PurchasedPlan {
   _id: Types.ObjectId;
   petId: Types.ObjectId;
@@ -26,6 +32,12 @@ export interface PurchasedPlan {
   features: string[];
   active: boolean;
   status: PlanStatus;
+  socialPosts?: {
+    facebook?: SocialPost;
+    instagram?: SocialPost;
+  };
+  emailStatus?: 'pending' | 'sent' | 'failed';
+  emailSentAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,6 +56,23 @@ export type PurchasedPlanCreateInput = Omit<
  * Includes a reference to the 'Pets' model to link search efforts to a specific animal.
  * Uses 'timestamps: true' to automatically manage 'createdAt' and 'updatedAt'.
  */
+export type SocialPlatform = 'facebook' | 'instagram';
+
+export type SocialPostsInput = Partial<Record<SocialPlatform, SocialPost>>;
+
+const SocialPostSchema = new Schema<SocialPost>(
+  {
+    url: { type: String },
+    status: {
+      type: String,
+      enum: ['pending', 'posted', 'failed'],
+      default: 'pending',
+    },
+    postedAt: { type: Date },
+  },
+  { _id: false },
+);
+
 const PurchasedPlanSchema = new Schema<PurchasedPlan>(
   {
     petId: {
@@ -56,15 +85,22 @@ const PurchasedPlanSchema = new Schema<PurchasedPlan>(
     duration: { type: Number, required: true },
     radius: { type: Number, required: true },
     features: [{ type: String, required: true }],
-    active: {
-      type: Boolean,
-      default: false,
+    active: { type: Boolean, default: false },
+    socialPosts: {
+      facebook: SocialPostSchema,
+      instagram: SocialPostSchema,
     },
     status: {
       type: String,
       enum: ['continua', 'casi expira', 'expirado', 'RIP', 'encontrado'],
       default: 'casi expira',
     },
+    emailStatus: {
+      type: String,
+      enum: ['pending', 'sent', 'failed'],
+      default: 'pending',
+    },
+    emailSentAt: { type: Date },
   },
   {
     timestamps: true,

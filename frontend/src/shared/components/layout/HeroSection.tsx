@@ -1,25 +1,31 @@
 import { Text } from '@shared/components/ui/Text/Text';
+import type React from 'react';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
+import type { ReactNode } from 'react';
 
 interface Props {
   bg?: string;
   shadow?: string;
+  shadowClass?: string;
   title: string;
   image: string;
-  content: string;
+  content: React.ReactNode;
   buttonText?: string;
   onClick?: () => void;
+  children?: ReactNode;
 }
 
 const HeroSection = ({
   bg = 'white',
   shadow = 'shadow-primary',
+  shadowClass = 'color-primary-shadow',
   title,
   image,
   content,
   buttonText,
   onClick,
+  children,
 }: Props) => {
   return (
     <section
@@ -42,7 +48,7 @@ const HeroSection = ({
           <img
             src={image}
             alt="Manuales"
-            className={`w-full rounded-lg object-cover ${shadow} shadow-lg`}
+            className={`w-full rounded-lg object-cover ${shadowClass} shadow-lg`}
           />
         </div>
 
@@ -53,7 +59,7 @@ const HeroSection = ({
             color="color-grey-text"
             className="text-left mb-6"
           >
-            {content}
+            {children ?? content}
           </Text>
           {buttonText && (
             <Button

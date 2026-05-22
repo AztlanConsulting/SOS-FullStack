@@ -1,17 +1,18 @@
 import CustomPlanPage from '@/pages/CustomPlanPage';
 import PlansPage from '@pages/Plans';
+import RenewPlansPage from '@pages/RenewPlansPage';
 
 export default [
   {
-    /**
-     * Route for the plans overview page.
-     * Accessible via the '/planes' path to display the plans.
-     */
     path: '/planes',
     element: <PlansPage />,
   },
   {
     path: '/planes/personalizado',
     element: <CustomPlanPage />,
+  },
+  {
+    path: '/renovar-planes',
+    element: <RenewPlansPage />,
   },
 ];

@@ -24,10 +24,6 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
     // if (isDevelopment) {
     //   const testAccount = await nodemailer.createTestAccount();
 
-    //   console.log('Ethereal test account created:');
-    //   console.log('User:', testAccount.user);
-    //   console.log('Pass:', testAccount.pass);
-
     //   return nodemailer.createTransport({
     //     host: testAccount.smtp.host,
     //     port: testAccount.smtp.port,
@@ -153,20 +149,5 @@ export const sendManualEmailService: ManualEmailService = {
     });
 
     const previewUrl = nodemailer.getTestMessageUrl(info);
-
-    if (Boolean(previewUrl)) {
-      console.log('📨 Preview email:', previewUrl);
-      console.log(
-        'Timestamp:',
-        new Date().toLocaleString('es-MX', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }),
-      );
-    }
   },
 };

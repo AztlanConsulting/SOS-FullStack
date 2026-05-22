@@ -34,7 +34,6 @@ export const useStripeHook = (data: Order, idempotencyKey: string) => {
         setOxxoData(res.oxxoDetails ?? null);
         setSpeiData(res.speiDetails ?? null);
       } catch (error) {
-        console.error(error);
       } finally {
         if (!cancelled) {
           setLoading(false);

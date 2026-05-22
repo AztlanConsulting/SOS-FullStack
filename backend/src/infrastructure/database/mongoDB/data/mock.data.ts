@@ -157,9 +157,7 @@ try {
     ]);
   }
 
-  console.log('Mock data for data base done.');
   process.exit(0);
 } catch (error) {
-  console.error('Error seeding data:', error);
   process.exit(1);
 }

@@ -23,8 +23,6 @@ export default async function findSimilarPets(req: Request, res: Response) {
 
     res.status(200).json(result);
   } catch (err: unknown) {
-    // console.log(err);
-
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
 
     res.status(500).json({

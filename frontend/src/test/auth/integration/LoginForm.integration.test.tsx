@@ -146,8 +146,10 @@ describe('LoginForm integration', () => {
   it('logs in and navigates to /dashboard on success', async () => {
     const user = userEvent.setup();
 
-    // Mock successful login response
+    // Mock successful login response with admin role (for dashboard access)
     mockLogin.mockResolvedValue(mockAdmin);
+    // Update context mock to reflect logged-in state
+    mockContextValue.user = mockAdmin;
 
     renderApp();
 
@@ -165,7 +167,7 @@ describe('LoginForm integration', () => {
     expect(mockLogin).toHaveBeenCalledWith('test@mail.com', '123456', false);
 
     // Verify navigation to dashboard
-    expect(await screen.findByText('Dashboard')).toBeInTheDocument();
+    await expect(screen.findByText('Dashboard')).resolves.toBeInTheDocument();
   });
 
   it('does not navigate when login fails', async () => {

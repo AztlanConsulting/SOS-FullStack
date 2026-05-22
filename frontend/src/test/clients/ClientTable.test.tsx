@@ -64,9 +64,9 @@ describe('ClientTable (Component Tests)', () => {
   test('renders all column headers', () => {
     renderTable();
     expect(screen.getAllByText('Nombre')).toBeDefined();
-    expect(screen.getAllByText('ID Plan')).toBeDefined();
+    expect(screen.getAllByText('Fecha de compra')).toBeDefined();
     expect(screen.getAllByText('Nombre mascota')).toBeDefined();
-    expect(screen.getAllByText('Notas')).toBeDefined();
+    expect(screen.getAllByText('Características')).toBeDefined();
     expect(screen.getAllByText('Link de la conversacion')).toBeDefined();
     expect(screen.getAllByText('Estatus del plan')).toBeDefined();
   });

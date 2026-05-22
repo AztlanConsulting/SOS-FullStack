@@ -110,7 +110,7 @@ export const ClientDetailModal = ({
       )}
 
       {detail && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-500px)] modal-scrollbar">
           <div className="grid grid-cols-2 gap-2">
             <div className="flex items-center gap-2">
               <HiMail size={14} className="text-gray-400 shrink-0" />
@@ -389,7 +389,7 @@ export const ClientDetailModal = ({
                   className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
                   autoFocus
                 />
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-end">
                   <button
                     onClick={async () => {
                       await ClientService.updateClient(client._id, {
@@ -398,18 +398,22 @@ export const ClientDetailModal = ({
                       setEditingNotes(false);
                       onUpdate(detail?.conversation ?? '');
                     }}
-                    className="text-xs text-primary font-medium hover:text-yellow-600"
+                    className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
                   >
-                    Guardar
+                    <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                      Guardar
+                    </span>
                   </button>
                   <button
                     onClick={() => {
                       setNotesValue(detail?.notes ?? '');
                       setEditingNotes(false);
                     }}
-                    className="text-xs text-gray-400 hover:text-gray-600"
+                    className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
                   >
-                    Cancelar
+                    <span className="text-xs text-gray-400 group-hover:text-red-400">
+                      Cancelar
+                    </span>
                   </button>
                 </div>
               </div>

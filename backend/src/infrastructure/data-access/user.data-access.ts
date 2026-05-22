@@ -450,6 +450,41 @@ export const userDataAccess: UserRepository = {
         },
       },
       {
+        $addFields: {
+          country: {
+            $replaceAll: {
+              input: {
+                $replaceAll: {
+                  input: {
+                    $replaceAll: {
+                      input: {
+                        $replaceAll: {
+                          input: {
+                            $replaceAll: {
+                              input: { $toLower: '$country' },
+                              find: 'é',
+                              replacement: 'e',
+                            },
+                          },
+                          find: 'á',
+                          replacement: 'a',
+                        },
+                      },
+                      find: 'í',
+                      replacement: 'i',
+                    },
+                  },
+                  find: 'ó',
+                  replacement: 'o',
+                },
+              },
+              find: 'ú',
+              replacement: 'u',
+            },
+          },
+        },
+      },
+      {
         $group: {
           _id: '$country',
           value: { $sum: 1 },

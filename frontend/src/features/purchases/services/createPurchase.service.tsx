@@ -19,7 +19,6 @@ export const createPurchase = async (
 
     return data.message;
   } catch (error) {
-    console.error('Purchase creation failed:', error);
     throw error;
   }
 };

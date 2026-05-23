@@ -105,7 +105,6 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       throw error;
     }
   } catch (error) {
-    console.error(error);
     const message = error instanceof Error ? error.message : 'Payment failed';
     return res.status(500).json({ error: message });
   }
@@ -125,7 +124,6 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
     typeof webhookSecret !== 'string' ||
     webhookSecret.trim() === ''
   ) {
-    console.error('Webhook Error: Missing signature or secret');
     res.status(400).send('Webhook Error: Missing signature or secret');
     return;
   }
@@ -157,11 +155,9 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
         paymentIntent.id,
       );
       if (result === 'not_found') {
-        console.warn('Payment not found in DB');
       }
 
       if (result === 'already_updated') {
-        console.log('Webhook already processed (idempotent)');
       }
 
       // Retry mechanism to wait for purchase creation (up to 5 seconds)

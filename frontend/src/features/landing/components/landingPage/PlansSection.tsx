@@ -8,6 +8,7 @@ const PlansSection = () => {
         <div className="flex flex-col md:flex-row-reverse items-center lg:justify-between gap-8 lg:gap-0">
           <div className="">
             <img
+              loading="lazy"
               src={experiencia}
               alt="Planes"
               className="w-full max-w-[200px] h-auto rounded-lg"

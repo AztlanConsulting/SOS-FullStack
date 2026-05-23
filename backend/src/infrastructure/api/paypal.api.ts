@@ -44,7 +44,6 @@ const PaypalProvider: PaypalApi = {
       })
       .then((json) => ({ accessToken: json.access_token, error: null }))
       .catch((error: string) => {
-        console.error("Error generating paypal's access token: ", error);
         return { accessToken: null, error };
       });
 
@@ -83,7 +82,6 @@ const PaypalProvider: PaypalApi = {
         };
       })
       .catch((error: string) => {
-        console.error(error);
         return { orderId: null, error };
       });
 
@@ -116,7 +114,6 @@ const PaypalProvider: PaypalApi = {
     })
       .then((res) => res.json())
       .catch((error) => {
-        console.error(error);
         return { error };
       });
 

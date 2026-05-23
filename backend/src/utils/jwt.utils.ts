@@ -67,7 +67,6 @@ export function parseExpiration(exp: string): Date {
   const match = exp.match(/(\d+)([smhd])/);
 
   if (!match) {
-    console.error('[parseExpirationToDate] invalid format:', exp);
     throw new Error('Invalid expiration format');
   }
 

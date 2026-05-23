@@ -7,5 +7,3 @@ const data = await vectorDB.graphql
   .do();
 
 const petIds = data.data.Get.Pet;
-
-console.log(petIds);

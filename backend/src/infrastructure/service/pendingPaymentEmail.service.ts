@@ -49,10 +49,6 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
     // if (isDevelopment) {
     //   const testAccount = await nodemailer.createTestAccount();
 
-    //   console.log('Ethereal test account created:');
-    //   console.log('User:', testAccount.user);
-    //   console.log('Pass:', testAccount.pass);
-
     //   return nodemailer.createTransport({
     //     host: testAccount.smtp.host,
     //     port: testAccount.smtp.port,
@@ -124,7 +120,7 @@ export const pendingPaymentEmailService: StripeEmailService = {
                             ? `
                           <div style="border-top:1px solid #eee;margin-top:20px;padding-top:20px;">
                               <div style="margin-bottom:12px; background-color: #f9cd48; padding: 20px; border-radius: 8px;">
-                                <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.oxxoNumber}&includetext&scale=2&height=15" 
+                                <img loading='lazy' src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.oxxoNumber}&includetext&scale=2&height=15" 
                                     alt="Código de Barras" 
                                     style="max-width:100%; height:auto; display:block; margin: 0 auto; mix-blend-mode: multiply;">
                               </div>
@@ -240,20 +236,5 @@ export const pendingPaymentEmailService: StripeEmailService = {
     });
 
     const previewUrl = nodemailer.getTestMessageUrl(info);
-
-    if (Boolean(previewUrl)) {
-      console.log('📨 Preview email:', previewUrl);
-      console.log(
-        'Timestamp:',
-        new Date().toLocaleString('es-MX', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }),
-      );
-    }
   },
 };

@@ -12,6 +12,7 @@ const PublicationSection = () => {
         </div>
         <div className="flex flex-col md:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <img
+            loading="lazy"
             src={acompanamiento}
             alt="Publicación"
             className="w-full max-w-[200px] h-auto"

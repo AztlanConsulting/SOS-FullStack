@@ -12,10 +12,9 @@ jest.mock('@infrastructure/api/stripeProvider.api', () => ({
 
 import app from '@/index';
 import request from 'supertest';
-import mongoose from 'mongoose';
 import { PaymentModel } from '@domain/models/payment.model';
-import { PurchaseModel } from '@/domain/models/purchase.model';
 import { mongoDB, clearDatabase, closeDatabase } from '@db/mongoDB/mongoDB';
+import { WorkshopModel } from '@/domain/models/workshop.model';
 
 const { StripeProvider } = require('@infrastructure/api/stripeProvider.api');
 
@@ -35,6 +34,17 @@ describe('Payments integration tests', () => {
   });
 
   test('POST /payments/payment-intent creates intent and DB pending record', async () => {
+    // Create a real workshop in DB
+    const workshop = await WorkshopModel.create({
+      name: 'something',
+      description: 'something',
+      price: 50,
+      content: [],
+      category: ['something'],
+      img: { data: Buffer.from('hola'), contentType: 'pdf' },
+      imageUrl: 'http://example.com',
+    });
+
     (StripeProvider.createIntent as jest.Mock).mockResolvedValue({
       id: 'pi_integ_1',
       amount: 5000,
@@ -42,7 +52,12 @@ describe('Payments integration tests', () => {
       clientSecret: 'cs_test',
     });
 
-    const payload = { amount: 50.0, currency: 'MXN', method: 'card' };
+    const payload = {
+      amount: 50.0,
+      currency: 'MXN',
+      method: 'card',
+      product: { productId: workshop._id, productName: 'something' },
+    };
 
     const res = await request(app)
       .post('/payments/payment-intent')

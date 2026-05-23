@@ -31,7 +31,6 @@ export const petVector: PetVectorRepository = {
 
       return true;
     } catch (error) {
-      console.error(error);
       throw Error('Docker is not initialized');
     }
   },

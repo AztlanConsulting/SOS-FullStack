@@ -42,11 +42,13 @@ export const Sidebar = () => {
       {/* Desktop sidebar */}
       <div className="hidden md:flex flex-col h-screen w-64 bg-primary px-4 py-6 shrink-0 sticky top-0 overflow-hidden">
         <div className="flex justify-center mb-2">
-          <img
-            src={whiteIcon}
-            alt="SOS Logo"
-            className="w-30 h-30 object-contain"
-          />
+          <NavLink to="/">
+            <img
+              src={whiteIcon}
+              alt="SOS Logo"
+              className="w-30 h-30 object-contain"
+            />
+          </NavLink>
         </div>
         <div className="w-[calc(100%+2rem)] h-[1.5px] bg-white mb-5 -mx-4" />
 
@@ -56,10 +58,9 @@ export const Sidebar = () => {
               key={path}
               to={path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 transition-colors ${
-                  isActive
-                    ? 'bg-white text-primary rounded-full ml-0 -mr-9 shadow-md'
-                    : 'text-white hover:bg-[#EFC137] rounded-full ml-0 -mr-9'
+                `flex items-center gap-3 px-4 py-3 transition-colors ${isActive
+                  ? 'bg-white text-primary rounded-full ml-0 -mr-9 shadow-md'
+                  : 'text-white hover:bg-[#EFC137] rounded-full ml-0 -mr-9'
                 }`
               }
             >
@@ -88,8 +89,7 @@ export const Sidebar = () => {
               key={path}
               to={path}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${
-                  isActive ? 'bg-white text-primary' : 'text-white'
+                `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${isActive ? 'bg-white text-primary' : 'text-white'
                 }`
               }
             >

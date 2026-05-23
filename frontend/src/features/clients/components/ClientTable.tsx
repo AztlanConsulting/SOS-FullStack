@@ -1,6 +1,7 @@
 import { Text } from '@/shared/components/ui/Text';
 import { PlanStatusBadge } from '@/shared/components/ui/StatusBadge/PlanStatus';
 import type { ClientListItem } from '../types/client.type';
+import { href } from 'react-router-dom';
 
 /**
  * Standard headers for the client administration table.
@@ -10,7 +11,7 @@ const HEADERS = [
   'Fecha de compra',
   'Nombre mascota',
   'Características',
-  'Link de la conversacion',
+  'Link de la conversación',
   'Estatus del plan',
 ];
 
@@ -89,13 +90,13 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                     <Text variant="caption">
                       {client.plan?.createdAt
                         ? new Date(client.plan.createdAt).toLocaleDateString(
-                            'es-MX',
-                            {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                            },
-                          )
+                          'es-MX',
+                          {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                          },
+                        )
                         : '—'}
                     </Text>
                   </td>
@@ -109,19 +110,21 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   </td>
                   <td className="px-4 py-3 overflow-hidden text-ellipsis whitespace-nowrap">
                     {client.conversation ? (
-                      <a
-                        href={client.conversation}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-blue-500 text-xs hover:underline"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {client.conversation}
-                      </a>
+                      client.conversation.startsWith('http') ? (
+                        <a
+                          href={client.conversation}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-blue-500 text-xs hover:underline"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {client.conversation}
+                        </a>
+                      ) : (
+                        <Text variant="caption" color="text-gray-500">{client.conversation}</Text>
+                      )
                     ) : (
-                      <Text variant="caption" color="text-gray-400">
-                        —
-                      </Text>
+                      <Text variant="caption" color="text-gray-400">—</Text>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -177,25 +180,29 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   Fecha:{' '}
                   {client.createdAt
                     ? new Date(client.createdAt).toLocaleDateString('es-MX', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                      })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
                     : '—'}
                 </Text>
                 <Text variant="small" color="text-gray-500">
                   Notas: {client.pet?.description ?? '—'}
                 </Text>
                 {client.conversation && (
-                  <a
-                    href={client.conversation}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-500 text-xs hover:underline"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {client.conversation}
-                  </a>
+                  client.conversation.startsWith('http') ? (
+                    <a
+                      href={client.conversation}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-500 text-xs hover:underline truncate block"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {client.conversation}
+                    </a>
+                  ) : (
+                    <Text variant="small" color="text-gray-500">{client.conversation}</Text>
+                  )
                 )}
                 {client.plan?.status ? (
                   <PlanStatusBadge status={client.plan.status} />

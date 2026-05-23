@@ -154,15 +154,16 @@ export const ClientDetailModal = ({
                 </Text>
               </div>
             )}
-            <div className="flex items-center gap-2 flex-1">
+            <div className="flex items-center gap-2 flex-1 col-span-2">
               <HiLink size={14} className="text-gray-400 shrink-0" />
               {editingConversation ? (
                 <div className="flex items-center gap-2 flex-1 flex-wrap">
                   <input
-                    type="text"
+                    type="url"
                     value={conversationValue}
                     onChange={(e) => setConversationValue(e.target.value)}
-                    maxLength={150}
+                    maxLength={100}
+                    placeholder="https://..."
                     className="text-xs border border-gray-300 rounded px-2 py-1 min-w-0 flex-1 outline-none focus:border-yellow-400"
                     autoFocus
                   />
@@ -193,14 +194,20 @@ export const ClientDetailModal = ({
                 </div>
               ) : (
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <a
-                    href={conversationValue}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-500 text-xs hover:underline truncate max-w-[180px] block"
-                  >
-                    {conversationValue || '—'}
-                  </a>
+                  {conversationValue && conversationValue.startsWith('http') ? (
+                    <a
+                      href={conversationValue}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-500 text-xs hover:underline truncate min-w-0 flex-1 block"
+                    >
+                      {conversationValue}
+                    </a>
+                  ) : (
+                    <Text variant="small" color="text-gray-500" className="flex-1 truncate">
+                      {conversationValue || '—'}
+                    </Text>
+                  )}
                   <button
                     onClick={() => setEditingConversation(true)}
                     className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
@@ -260,15 +267,15 @@ export const ClientDetailModal = ({
                     <span className="text-gray-700">{detail.pets[0].sex}</span>
                   </Text>
                 )}
-                {detail.pets[0].location && (
-                  <Text
-                    variant="small"
-                    color="text-gray-500"
-                    className="col-span-2"
-                  >
+                {detail.pets[0].geocodingLocation?.properties && (
+                  <Text variant="small" color="text-gray-500" className="col-span-2">
                     Lugar:{' '}
                     <span className="text-gray-700">
-                      {detail.pets[0].location}
+                      {[
+                        detail.pets[0].geocodingLocation.properties.city,
+                        detail.pets[0].geocodingLocation.properties.state,
+                        detail.pets[0].geocodingLocation.properties.country,
+                      ].filter(Boolean).join(', ')}
                     </span>
                   </Text>
                 )}
@@ -332,25 +339,23 @@ export const ClientDetailModal = ({
                       </Text>
                     )}
                     <div className="flex items-center gap-2">
-                      <select
-                        value={planStatuses[plan._id] ?? plan.status}
-                        onChange={async (e) => {
-                          const newStatus = e.target.value as PlanStatus;
-                          setPlanStatuses((prev) => ({
-                            ...prev,
-                            [plan._id]: newStatus,
-                          }));
-                          await ClientService.updatePlanStatus(
-                            plan._id,
-                            newStatus,
-                          );
-                          onRefresh?.();
-                        }}
-                        className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
-                      >
-                        <option value="RIP">RIP</option>
-                        <option value="encontrado">Encontrado</option>
-                      </select>
+                      {index === 0 && (
+                        <select
+                          value={planStatuses[plan._id] ?? ''}
+                          onChange={async (e) => {
+                            if (!e.target.value) return;
+                            const newStatus = e.target.value as PlanStatus;
+                            setPlanStatuses((prev) => ({ ...prev, [plan._id]: newStatus }));
+                            await ClientService.updatePlanStatus(plan._id, newStatus);
+                            onRefresh?.();
+                          }}
+                          className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
+                        >
+                          <option value="">—</option>
+                          <option value="RIP">RIP</option>
+                          <option value="encontrado">Encontrado</option>
+                        </select>
+                      )}
                     </div>
                     {expiryDates[index] && (
                       <Text variant="small" color="text-gray-500">
@@ -419,7 +424,7 @@ export const ClientDetailModal = ({
               </div>
             ) : (
               <div className="flex items-start gap-2">
-                <Text variant="small" color="text-gray-600" className="flex-1">
+                <Text variant="small" color="text-gray-600" className="flex-1 break-all">
                   {notesValue || 'Sin notas'}
                 </Text>
                 <button

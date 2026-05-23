@@ -162,6 +162,32 @@ export const userDataAccess: UserRepository = {
       { $match: matchStage },
       { $sort: { createdAt: -1 } },
       {
+        $lookup: {
+          from: 'purchases',
+          let: { email: { $toLower: '$email' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: [{ $toLower: '$userEmail' }, '$$email'] },
+              },
+            },
+          ],
+          as: 'purchases',
+        },
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          let: { paymentId: { $arrayElemAt: ['$purchases.paymentId', 0] } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$orderId', '$$paymentId'] } } },
+            { $limit: 1 },
+          ],
+          as: 'payments',
+        },
+      },
+      { $match: { 'payments.0.status': 'succeeded' } },
+      {
         $facet: {
           data: [
             { $skip: skip },
@@ -408,6 +434,7 @@ export const userDataAccess: UserRepository = {
           as: 'pets',
         },
       },
+
       {
         $addFields: {
           pet: { $arrayElemAt: ['$pets', 0] },
@@ -415,7 +442,10 @@ export const userDataAccess: UserRepository = {
       },
       {
         $match: {
-          'pet.location': { $exists: true, $ne: null },
+          'pet.geocodingLocation.properties.country': {
+            $exists: true,
+            $ne: null,
+          },
         },
       },
       {
@@ -441,45 +471,41 @@ export const userDataAccess: UserRepository = {
       {
         $addFields: {
           country: {
-            $trim: {
-              input: {
-                $arrayElemAt: [{ $split: ['$pet.location', ','] }, -1],
-              },
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          country: {
-            $replaceAll: {
-              input: {
-                $replaceAll: {
-                  input: {
-                    $replaceAll: {
-                      input: {
-                        $replaceAll: {
-                          input: {
-                            $replaceAll: {
-                              input: { $toLower: '$country' },
-                              find: 'é',
-                              replacement: 'e',
+            $toLower: {
+              $replaceAll: {
+                input: {
+                  $replaceAll: {
+                    input: {
+                      $replaceAll: {
+                        input: {
+                          $replaceAll: {
+                            input: {
+                              $replaceAll: {
+                                input: {
+                                  $ifNull: [
+                                    '$pet.geocodingLocation.properties.country',
+                                    '',
+                                  ],
+                                },
+                                find: 'é',
+                                replacement: 'e',
+                              },
                             },
+                            find: 'á',
+                            replacement: 'a',
                           },
-                          find: 'á',
-                          replacement: 'a',
                         },
+                        find: 'í',
+                        replacement: 'i',
                       },
-                      find: 'í',
-                      replacement: 'i',
                     },
+                    find: 'ó',
+                    replacement: 'o',
                   },
-                  find: 'ó',
-                  replacement: 'o',
                 },
+                find: 'ú',
+                replacement: 'u',
               },
-              find: 'ú',
-              replacement: 'u',
             },
           },
         },
@@ -499,6 +525,8 @@ export const userDataAccess: UserRepository = {
       },
       { $sort: { value: -1 } },
     ]);
+    console.log('country result:', JSON.stringify(result, null, 2));
+    console.log('result length:', result.length);
 
     return result;
   },

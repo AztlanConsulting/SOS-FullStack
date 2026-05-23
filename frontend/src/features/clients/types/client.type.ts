@@ -23,8 +23,17 @@ export interface ClientPet {
   size?: string;
   description?: string;
   photos?: string[];
-  dateMissing?: Date;
-  location?: string;
+  dateMissing?: string;
+  placeMissing?: string;
+  geocodingLocation?: {
+    coords: [number, number];
+    displayName: string;
+    properties: {
+      city: string;
+      country: string;
+      state: string;
+    };
+  };
 }
 
 /**

@@ -6,6 +6,8 @@ import { RoleModel } from '@domain/models/role.model';
 import { UserModel } from '@domain/models/user.model';
 import { PetModel } from '@domain/models/pet.model';
 import { PurchasedPlanModel } from '@domain/models/purchasedPlan.model';
+import { PurchaseModel } from '@domain/models/purchase.model';
+import { PaymentModel } from '@domain/models/payment.model';
 import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
@@ -69,6 +71,25 @@ describe('Client Routes', () => {
       features: ['búsqueda activa'],
       active: true,
       status: 'continua',
+    });
+
+    // Create Payment and Purchase records to satisfy the getUsersWithPets filter
+    const paymentId = new Types.ObjectId().toString();
+    await PaymentModel.create({
+      orderId: paymentId,
+      userId: user._id.toString(),
+      amount: 9.99,
+      currency: 'USD',
+      method: 'stripe',
+      status: 'succeeded',
+      clientSecret: 'secret_test',
+    });
+
+    await PurchaseModel.create({
+      userEmail: user.email,
+      paymentId: paymentId,
+      productId: pet._id.toString(),
+      productType: 'plan',
     });
   });
 

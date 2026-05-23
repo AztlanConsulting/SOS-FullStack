@@ -5,16 +5,40 @@ import { RENEW_PLANS } from '@features/plans/components/renewPlans';
 import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePetReport } from '@/shared/context/PetReportContext';
 import { Button } from '@shared/components/ui/Button/Button';
 import { useNavigate } from 'react-router';
 
 export default function RenewPlansPage() {
   const [current, setCurrent] = useState(0);
+  const { lostPetReportData, setLostPetReportData } = usePetReport();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!lostPetReportData) {
+      navigate('/');
+    }
+  }, [lostPetReportData, navigate]);
+
   const handleSelectPlan = (plan: PlanCardProps) => {
-    navigate('/renovar-planes', { replace: true, state: { plan } });
+    if (!lostPetReportData) return;
+
+    const updated = {
+      ...lostPetReportData,
+      planName: plan.name,
+      planDetails: {
+        days: parseInt(plan.duration) || 0,
+        km: parseInt(plan.radius) || 0,
+        selectedFeatures: plan.features
+          .filter((f) => f.included)
+          .map((f) => f.label),
+        totalPrice: Number(plan.price),
+      },
+    };
+
+    setLostPetReportData(updated);
+    navigate('/compra', { replace: true, state: null });
   };
 
   const prev = () => setCurrent((i) => Math.max(i - 1, 0));

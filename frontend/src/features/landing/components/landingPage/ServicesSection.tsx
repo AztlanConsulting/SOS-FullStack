@@ -8,6 +8,7 @@ const ServicesSection = () => {
         <div className="flex flex-col md:flex-row items-center lg:justify-between gap-8 lg:gap-12">
           <div className="relative ">
             <img
+              loading="lazy"
               src={Localizacion}
               alt="Servicios"
               className="w-full max-w-[200px] h-auto rounded-lg"

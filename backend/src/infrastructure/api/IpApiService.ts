@@ -17,7 +17,6 @@ export const IpApiService: ILocationRepository = {
       const response = await axios.get(`https://apip.cc/api-json/${ip}`);
 
       if (response.data.error !== undefined) {
-        console.error('error: ', response.data.reason);
         return null;
       }
 
@@ -27,7 +26,6 @@ export const IpApiService: ILocationRepository = {
         currency: response.data.Currency,
       };
     } catch (error) {
-      console.error('Error en ApiService:', error);
       return null;
     }
   },

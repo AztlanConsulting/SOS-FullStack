@@ -18,7 +18,12 @@ const PetHero = ({ petInfo }: Props) => {
       >
         <IoMdClose className="mx-auto" />
       </button>
-      <img src={image} alt="Manuales" className="object-contain  w-full " />
+      <img
+        loading="lazy"
+        src={image}
+        alt="Manuales"
+        className="object-contain  w-full "
+      />
     </section>
   );
 };

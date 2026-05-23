@@ -181,6 +181,7 @@ const Header = ({
       )}
       <div className="pl-8 pr-3 lg:w-5/6 mx-auto flex items-center justify-between">
         <img
+          loading="lazy"
           src={yellowIcon}
           alt="Logo"
           className="w-12 h-12 lg:hidden cursor-pointer"
@@ -192,6 +193,7 @@ const Header = ({
 
         <nav className="hidden lg:fixed lg:top-0 lg:left-0 lg:right-0 lg:flex items-center justify-between px-12 lg:px-8 z-40 bg-white py-2 border-b border-[color:var(--color-grey-border)]">
           <img
+            loading="lazy"
             src={yellowIcon}
             alt="Logo"
             className="w-12 h-12 lg:w-14 lg:h-14 cursor-pointer"
@@ -311,6 +313,7 @@ const Header = ({
             {/* Top */}
             <div className="p-8 border-b border-white flex justify-center">
               <img
+                loading="lazy"
                 src={whiteIcon}
                 alt="Logo"
                 className="w-14 h-14 cursor-pointer"

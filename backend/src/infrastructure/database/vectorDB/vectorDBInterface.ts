@@ -11,8 +11,6 @@ async function get() {
     .do();
 
   const petIds = data.data.Get.Pet;
-
-  console.log(petIds);
 }
 
 async function getIds() {
@@ -23,7 +21,6 @@ async function getIds() {
     .do();
 
   const refIds = pets.data.Get.Pet;
-  console.log(refIds);
 }
 
 async function start() {
@@ -40,8 +37,6 @@ async function start() {
       await startVectorDB();
       break;
     default:
-      console.error(`\x1b[31mError: method - "${method}" not expected.\x1b[0m`);
-      console.log('vectorDBInterface expects an argument: getId, get, clean');
       process.exit(1);
   }
 }

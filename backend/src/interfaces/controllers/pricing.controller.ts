@@ -41,9 +41,8 @@ export const PricingController = {
     const location = await GetLocationByIp(safeIp, IpApiService);
     const currencyCode = location?.currency ?? 'USD';
     // 2. Fetch all products from internal data access layers
-    const planRepository = getPlansDB(PlanDataAccess);
     const [plans, manuals, workshops] = await Promise.all([
-      planRepository.getPlans(),
+      getPlansDB(PlanDataAccess),
       ManualDataAccess.getManuals({ page: 0, searchTerm: '' }),
       WorkshopDataAccess.getWorkshops({ page: 0, searchTerm: '' }),
     ]);

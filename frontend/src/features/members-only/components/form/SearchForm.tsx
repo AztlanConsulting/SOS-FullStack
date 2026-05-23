@@ -142,7 +142,9 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialData }) => {
           <Modal
             color="purple"
             title="¡Reporte enviado!"
-            description="Gracias por reportar la mascota perdida."
+            description="Muchas gracias por compartir esta información con nosotros. Cada detalle sobre la personalidad, 
+            hábitos y comportamiento de tu mascota nos ayuda a comprender mejor el caso y poder darte recomendaciones más 
+            precisas para su búsqueda."
             onClose={() => {
               resetForm();
               navigate('/inicio/contenido-exclusivo/formulario');

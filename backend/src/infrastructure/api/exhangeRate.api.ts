@@ -46,14 +46,12 @@ export const ExchangeRateApiService: IExchangeRateRepository = {
       const response = await axios.get(`https://open.er-api.com/v6/latest/USD`);
 
       if (response.data.result !== 'success') {
-        console.error('Exchange rate API error:', response.data);
         return null;
       }
 
       const rate = response.data.rates[currencyCode];
 
       if (rate === undefined) {
-        console.error('Currency code not found in API response:', currencyCode);
         return null;
       }
 

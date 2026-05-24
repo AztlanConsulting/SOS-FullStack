@@ -40,5 +40,6 @@ export interface LostPetReportData extends FoundPetReportData {
     km: number;
     selectedFeatures: string[];
     totalPrice: number;
+    originalPrice?: number;
   };
 }

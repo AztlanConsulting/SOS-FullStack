@@ -24,6 +24,9 @@ export default function RenewPlansPage() {
   const handleSelectPlan = (plan: PlanCardProps) => {
     //if (!lostPetReportData) return;
 
+    const originalPrice = Number(plan.price);
+    const discountedPrice = Math.round(originalPrice * 0.85 * 100) / 100;
+
     const updated = {
       ...lostPetReportData,
       planName: plan.name,
@@ -33,7 +36,8 @@ export default function RenewPlansPage() {
         selectedFeatures: plan.features
           .filter((f) => f.included)
           .map((f) => f.label),
-        totalPrice: Number(plan.price),
+        totalPrice: discountedPrice,
+        originalPrice,
       },
     };
 

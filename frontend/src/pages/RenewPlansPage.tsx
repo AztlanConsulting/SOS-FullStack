@@ -15,14 +15,14 @@ export default function RenewPlansPage() {
   const { lostPetReportData, setLostPetReportData } = usePetReport();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!lostPetReportData) {
       navigate('/');
     }
   }, [lostPetReportData, navigate]);
-
+*/
   const handleSelectPlan = (plan: PlanCardProps) => {
-    if (!lostPetReportData) return;
+    //if (!lostPetReportData) return;
 
     const updated = {
       ...lostPetReportData,

@@ -36,10 +36,15 @@ export const PhotonGeocoding = {
         feature.geometry.coordinates[1],
         feature.geometry.coordinates[0],
       ] as [number, number],
+      properties: {
+        city: feature.properties.city,
+        state: feature.properties.state,
+        country: feature.properties.country,
+      },
     }));
   },
 
-  async reverse(coords: [number, number]): Promise<string | null> {
+  async reverse(coords: [number, number]): Promise<GeocodingResult | null> {
     const [lat, lon] = coords;
 
     const res = await fetch(
@@ -59,6 +64,14 @@ export const PhotonGeocoding = {
       .join(', ')
       .trim();
 
-    return address || null;
+    return {
+      coords: [lat, lon],
+      displayName: address || `${lat}, ${lon}`,
+      properties: {
+        city: props.city ?? props.state ?? undefined,
+        state: props.state,
+        country: props.country,
+      },
+    } as GeocodingResult;
   },
 };

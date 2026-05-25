@@ -15,7 +15,7 @@ export interface Pet {
   size: string;
   description: string;
   photos: string[];
-  placeMissing: string;
+  location: string;
   createdAt: Date;
   updatedAt: Date;
 }

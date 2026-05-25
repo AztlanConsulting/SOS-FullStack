@@ -9,6 +9,8 @@ import manualRoutes from './manuals.routes';
 import purchaseRoutes from './purchase.routes';
 import workshopRoutes from './workshops.routes';
 import planRoutes from './plans.routes';
+import clientRoutes from './client.routes';
+import metricsRoutes from './metrics.routes';
 import foundPetRoutes from './foundPet.routes';
 import searchFormRoutes from './searchForm.routes';
 import membersOnlyRoutes from './membersOnly.routes';
@@ -29,6 +31,7 @@ router.use('/workshop', workshopRoutes);
 router.use('/manuals', manualRoutes);
 router.use('/purchases', purchaseRoutes);
 router.use('/plans', planRoutes);
+router.use('/api/clients', clientRoutes);
 router.use('/found-pets', foundPetRoutes);
 router.use('/searchform', searchFormRoutes);
 router.use('/members-only', membersOnlyRoutes);
@@ -36,5 +39,6 @@ router.use('/', pricingRoutes);
 
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);
+router.use('/metrics', metricsRoutes);
 
 export default router;

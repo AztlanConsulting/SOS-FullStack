@@ -1,3 +1,5 @@
+import type { ClientDetail } from '@/types/client.type';
+import type { GetClientsResult } from '@/use-cases/clients/getClients.usecase';
 import type {
   User,
   UserWithRole,
@@ -7,6 +9,7 @@ import { UserModel } from '@domain/models/user.model';
 import type { UserRepository } from '@domain/repositories/user.repository';
 import type { PopulatedPermission } from '@validation/auth.types';
 import type { UserPermissions } from '@validation/auth.types';
+import { Types } from 'mongoose';
 
 export const userDataAccess: UserRepository = {
   /**
@@ -140,6 +143,453 @@ export const userDataAccess: UserRepository = {
   },
 
   /**
+   * Fetches a paginated list of users, including their primary pet and most recent plan.
+   *
+   * Highlights:
+   * - Uses `$facet` to perform data retrieval and total count in a single database round-trip.
+   * - Uses a nested `$lookup` pipeline to find the single most recent plan associated with the user's pets.
+   */
+  getUsersWithPets: async (
+    page: number,
+    search?: string,
+  ): Promise<GetClientsResult> => {
+    const LIMIT = 10;
+    const skip = (page - 1) * LIMIT;
+
+    const [result] = await UserModel.aggregate([
+      {
+        $lookup: {
+          from: 'purchases',
+          let: { email: { $toLower: '$email' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: [{ $toLower: '$userEmail' }, '$$email'] },
+              },
+            },
+          ],
+          as: 'purchases',
+        },
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          let: { paymentId: { $arrayElemAt: ['$purchases.paymentId', 0] } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$orderId', '$$paymentId'] } } },
+            { $limit: 1 },
+          ],
+          as: 'payments',
+        },
+      },
+      { $match: { 'payments.0.status': 'succeeded' } },
+      // Unwind pets so each pet becomes its own row
+      {
+        $lookup: {
+          from: 'pets',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'pets',
+        },
+      },
+      { $unwind: { path: '$pets', preserveNullAndEmptyArrays: false } },
+      ...(search != null
+        ? [{ $match: { username: { $regex: search, $options: 'i' } } }]
+        : []),
+      { $sort: { createdAt: -1 } },
+      {
+        $facet: {
+          data: [
+            { $skip: skip },
+            { $limit: LIMIT },
+            {
+              $lookup: {
+                from: 'purchasedplans',
+                let: { petId: '$pets._id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$petId', '$$petId'] } } },
+                  { $sort: { createdAt: -1 } },
+                ],
+                as: 'plans',
+              },
+            },
+            {
+              $addFields: {
+                pet: '$pets',
+              },
+            },
+            { $project: { password: 0, pets: 0 } },
+          ],
+          total: [{ $count: 'count' }],
+        },
+      },
+    ]);
+
+    const total = result?.total?.[0]?.count ?? 0;
+    const clients = (result?.data ?? []).map((client: any) => {
+      if (client.plans && client.plans.length > 0) {
+        const sorted = [...client.plans].sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+
+        const newest = sorted[0];
+
+        if (newest.status !== 'RIP' && newest.status !== 'encontrado') {
+          const now = new Date();
+          let expiresAt: Date;
+
+          if (sorted.length > 1) {
+            const prev = sorted[1];
+            const prevExpiry = new Date(
+              new Date(prev.createdAt).getTime() +
+                prev.duration * 24 * 60 * 60 * 1000,
+            );
+            if (prevExpiry > now) {
+              const remaining = prevExpiry.getTime() - now.getTime();
+              expiresAt = new Date(
+                now.getTime() +
+                  remaining +
+                  newest.duration * 24 * 60 * 60 * 1000,
+              );
+            } else {
+              expiresAt = new Date(
+                new Date(newest.createdAt).getTime() +
+                  newest.duration * 24 * 60 * 60 * 1000,
+              );
+            }
+          } else {
+            expiresAt = new Date(
+              new Date(newest.createdAt).getTime() +
+                newest.duration * 24 * 60 * 60 * 1000,
+            );
+          }
+
+          const ms = expiresAt.getTime() - now.getTime();
+          if (ms < 0) newest.status = 'expirado';
+          else if (ms < 24 * 60 * 60 * 1000) newest.status = 'casi expira';
+          else newest.status = 'continua';
+        }
+
+        client.plan = newest;
+        delete client.plans;
+      }
+      return client;
+    });
+
+    return {
+      clients,
+      total,
+      page,
+      totalPages: Math.ceil(total / LIMIT),
+    };
+  },
+
+  /**
+   * Retrieves full demographic context data mapping for an explicit profile tracking ID.
+   * Combines transaction details and billing models completely within a single aggregation step.
+   * * @param id - User database Object ID reference string
+   * @returns Detailed composite profile payload or null if target account is invalid
+   */
+  getClientDetail: async (id: string): Promise<ClientDetail | null> => {
+    const [client] = await UserModel.aggregate([
+      { $match: { _id: new Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: 'pets',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'pets',
+        },
+      },
+      {
+        $addFields: {
+          pets: {
+            $map: {
+              input: '$pets',
+              as: 'pet',
+              in: {
+                $mergeObjects: [
+                  '$$pet',
+                  {
+                    plans: {
+                      $sortArray: {
+                        input: { $ifNull: ['$$pet.plans', []] },
+                        sortBy: { createdAt: -1 },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'purchasedplans',
+          let: { petIds: '$pets._id' },
+          pipeline: [
+            { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'allPlans',
+        },
+      },
+      {
+        $addFields: {
+          pets: {
+            $map: {
+              input: '$pets',
+              as: 'pet',
+              in: {
+                $mergeObjects: [
+                  '$$pet',
+                  {
+                    plans: {
+                      $map: {
+                        input: {
+                          $filter: {
+                            input: '$allPlans',
+                            as: 'plan',
+                            cond: { $eq: ['$$plan.petId', '$$pet._id'] },
+                          },
+                        },
+                        as: 'p',
+                        in: {
+                          $mergeObjects: [
+                            '$$p',
+                            {
+                              status: {
+                                $let: {
+                                  vars: {
+                                    expiresAt: {
+                                      $add: [
+                                        '$$p.createdAt',
+                                        {
+                                          $multiply: [
+                                            '$$p.duration',
+                                            24 * 60 * 60 * 1000,
+                                          ],
+                                        },
+                                      ],
+                                    },
+                                    now: '$$NOW',
+                                  },
+                                  in: {
+                                    $cond: {
+                                      if: {
+                                        $in: [
+                                          '$$p.status',
+                                          ['RIP', 'encontrado'],
+                                        ],
+                                      },
+                                      then: '$$p.status',
+                                      else: {
+                                        $switch: {
+                                          branches: [
+                                            {
+                                              case: {
+                                                $lt: ['$$expiresAt', '$$now'],
+                                              },
+                                              then: 'expirado',
+                                            },
+                                            {
+                                              case: {
+                                                $lt: [
+                                                  '$$expiresAt',
+                                                  {
+                                                    $add: [
+                                                      '$$now',
+                                                      24 * 60 * 60 * 1000,
+                                                    ],
+                                                  },
+                                                ],
+                                              },
+                                              then: 'casi expira',
+                                            },
+                                            {
+                                              case: {
+                                                $gt: ['$$expiresAt', '$$now'],
+                                              },
+                                              then: 'continua',
+                                            },
+                                          ],
+                                          default: 'RIP',
+                                        },
+                                      },
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'purchases',
+          let: { email: { $toLower: '$email' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: [{ $toLower: '$userEmail' }, '$$email'] },
+              },
+            },
+          ],
+          as: 'purchases',
+        },
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          let: { paymentId: { $arrayElemAt: ['$purchases.paymentId', 0] } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$orderId', '$$paymentId'] } } },
+            { $limit: 1 },
+          ],
+          as: 'payments',
+        },
+      },
+      {
+        $addFields: {
+          paymentMethod: { $arrayElemAt: ['$payments.method', 0] },
+        },
+      },
+      { $project: { password: 0, allPlans: 0 } },
+    ]);
+    return client ?? null;
+  },
+
+  /**
+   * General purpose update method for user records.
+   * Primarily used for updating 'conversation' links or 'active' status.
+   */
+  updateUser: async (id: string, data: Partial<User>): Promise<void> => {
+    await UserModel.findByIdAndUpdate(id, { $set: data });
+  },
+
+  /**
+   * Aggregates demographic metrics based on geographical data extracted from lost pet reports.
+   * Returns sorted totals useful for populating global analytics metrics widgets.
+   * * @returns Arranged country data metrics mapping name-to-volume parameters
+   */
+  getClientsByCountry: async (): Promise<{ name: string; value: number }[]> => {
+    const result = await UserModel.aggregate([
+      {
+        $lookup: {
+          from: 'pets',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'pets',
+        },
+      },
+
+      {
+        $addFields: {
+          pet: { $arrayElemAt: ['$pets', 0] },
+        },
+      },
+      {
+        $match: {
+          'pet.location.properties.country': {
+            $exists: true,
+            $ne: null,
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'purchasedplans',
+          let: { petIds: '$pets._id' },
+          pipeline: [
+            { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
+            { $sort: { createdAt: -1 } },
+            { $limit: 1 },
+          ],
+          as: 'plans',
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { 'plans.0.status': { $nin: ['expirado', 'RIP', 'encontrado'] } },
+            { plans: { $size: 0 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          country: {
+            $toLower: {
+              $replaceAll: {
+                input: {
+                  $replaceAll: {
+                    input: {
+                      $replaceAll: {
+                        input: {
+                          $replaceAll: {
+                            input: {
+                              $replaceAll: {
+                                input: {
+                                  $ifNull: [
+                                    '$pet.location.properties.country',
+                                    '',
+                                  ],
+                                },
+                                find: 'é',
+                                replacement: 'e',
+                              },
+                            },
+                            find: 'á',
+                            replacement: 'a',
+                          },
+                        },
+                        find: 'í',
+                        replacement: 'i',
+                      },
+                    },
+                    find: 'ó',
+                    replacement: 'o',
+                  },
+                },
+                find: 'ú',
+                replacement: 'u',
+              },
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$country',
+          value: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: '$_id',
+          value: 1,
+        },
+      },
+      { $sort: { value: -1 } },
+    ]);
+    console.log('country result:', JSON.stringify(result, null, 2));
+    console.log('result length:', result.length);
+
+    return result;
+  },
+
+  /**
    * Activates a user account.
    *
    * @param email - Email of the user to activate
@@ -148,6 +598,17 @@ export const userDataAccess: UserRepository = {
     await UserModel.findOneAndUpdate(
       { email },
       { $set: { active: true } },
+      { runValidators: true },
+    ).exec();
+  },
+
+  updateUserPassword: async function (
+    email: string,
+    newPassword: string,
+  ): Promise<void> {
+    await UserModel.findOneAndUpdate(
+      { email },
+      { $set: { password: newPassword } },
       { runValidators: true },
     ).exec();
   },

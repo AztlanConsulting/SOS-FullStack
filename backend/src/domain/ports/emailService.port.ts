@@ -36,8 +36,8 @@ export interface SendWorkshopEmailDTO {
 
 export interface SendActivatePlanEmailDTO {
   to: string;
-  username: string;
-  password: string;
+  username?: string;
+  password?: string;
   facebookUrl?: string;
   instagramUrl?: string;
 }

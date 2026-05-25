@@ -2,7 +2,7 @@ function roleNavigation(role: string) {
   let path = '/';
   switch (role) {
     case 'ADMIN':
-      path = '/dashboard';
+      path = '/clientes';
       break;
     default:
       path = '/inicio';

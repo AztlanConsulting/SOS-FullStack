@@ -12,6 +12,7 @@ import type {
 import { isNonNullType } from 'graphql';
 import { GeocodingResult } from '@/types/pet.types';
 import getLocation from '@/utils/getLocation.mapper';
+import genRandomPassword from '@/utils/getRandomPassword.util';
 
 export interface CreateLostPetReportInput {
   name: string;
@@ -76,7 +77,9 @@ export const createLostPetReport = async (
 
   if (!user) {
     const roleId = await roleRepository.getRoleIdByName('CLIENT');
-    const hashedPassword = await bcrypt.hash(input.name, 10);
+    const password = genRandomPassword(12);
+    // const hashedPassword = await bcrypt.hash(input.name, 10);
+    // console.log(hashedPassword);
 
     if (roleId == null) {
       throw new Error('CLIENT_ROLE_NOT_FOUND');
@@ -86,7 +89,7 @@ export const createLostPetReport = async (
       username: input.contactName,
       email: input.email,
       phone: input.phoneNumber,
-      password: hashedPassword,
+      password: password,
       roleId: new Types.ObjectId(roleId as string),
       permissions: [],
     });
@@ -159,5 +162,6 @@ const mapToPurchasedPlan = (
     duration: input.planDetails.days,
     radius: input.planDetails.km,
     features: input.planDetails.selectedFeatures,
+    status: 'continua',
   };
 };

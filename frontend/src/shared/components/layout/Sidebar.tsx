@@ -40,27 +40,27 @@ export const Sidebar = () => {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden md:flex flex-col h-screen w-64 bg-primary px-4 py-6 shrink-0 sticky top-0 overflow-hidden">
+      <div className="hidden md:flex flex-col h-screen w-52 lg:w-64 bg-primary px-4 py-6 shrink-0 sticky top-0 overflow-y-auto sidebar-scrollbar overflow-x-hidden">
         <div className="flex justify-center mb-2">
           <NavLink to="/">
             <img
               src={whiteIcon}
               alt="SOS Logo"
-              className="w-30 h-30 object-contain"
+              className="w-24 h-24 object-contain"
             />
           </NavLink>
         </div>
         <div className="w-[calc(100%+2rem)] h-[1.5px] bg-white mb-5 -mx-4" />
 
-        <nav className="flex flex-col gap-3">
+        <nav className="flex flex-col gap-3 flex-1">
           {NAV_ITEMS.map(({ label, icon: Icon, path }) => (
             <NavLink
               key={path}
               to={path}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 transition-colors ${isActive
-                  ? 'bg-white text-primary rounded-full ml-0 -mr-9 shadow-md'
-                  : 'text-white hover:bg-[#EFC137] rounded-full ml-0 -mr-9'
+                  ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
+                  : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
                 }`
               }
             >
@@ -72,12 +72,13 @@ export const Sidebar = () => {
           ))}
         </nav>
 
+
         <div className="mt-auto  z-10">
           <SignOut.whiteStroke />
         </div>
 
-        <div className="absolute -bottom-20 -right-8">
-          <div className="w-50 h-50 rounded-full bg-[#EFC137]" />
+        <div className="absolute bottom-0 -right-8 max-h-[500px]:hidden [@media(max-height:700px)]:hidden">
+          <div className="w-50 h-30 rounded-t-full bg-[#EFC137]" />
         </div>
       </div>
 

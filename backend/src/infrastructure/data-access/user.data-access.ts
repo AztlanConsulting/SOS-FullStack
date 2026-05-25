@@ -155,12 +155,8 @@ export const userDataAccess: UserRepository = {
   ): Promise<GetClientsResult> => {
     const LIMIT = 10;
     const skip = (page - 1) * LIMIT;
-    const matchStage =
-      search != null ? { username: { $regex: search, $options: 'i' } } : {};
 
     const [result] = await UserModel.aggregate([
-      { $match: matchStage },
-      { $sort: { createdAt: -1 } },
       {
         $lookup: {
           from: 'purchases',
@@ -187,6 +183,20 @@ export const userDataAccess: UserRepository = {
         },
       },
       { $match: { 'payments.0.status': 'succeeded' } },
+      // Unwind pets so each pet becomes its own row
+      {
+        $lookup: {
+          from: 'pets',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'pets',
+        },
+      },
+      { $unwind: { path: '$pets', preserveNullAndEmptyArrays: false } },
+      ...(search != null
+        ? [{ $match: { username: { $regex: search, $options: 'i' } } }]
+        : []),
+      { $sort: { createdAt: -1 } },
       {
         $facet: {
           data: [
@@ -194,18 +204,10 @@ export const userDataAccess: UserRepository = {
             { $limit: LIMIT },
             {
               $lookup: {
-                from: 'pets',
-                localField: '_id',
-                foreignField: 'userId',
-                as: 'pets',
-              },
-            },
-            {
-              $lookup: {
                 from: 'purchasedplans',
-                let: { petIds: '$pets._id' },
+                let: { petId: '$pets._id' },
                 pipeline: [
-                  { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
+                  { $match: { $expr: { $eq: ['$petId', '$$petId'] } } },
                   { $sort: { createdAt: -1 } },
                 ],
                 as: 'plans',
@@ -213,7 +215,7 @@ export const userDataAccess: UserRepository = {
             },
             {
               $addFields: {
-                pet: { $arrayElemAt: ['$pets', 0] },
+                pet: '$pets',
               },
             },
             { $project: { password: 0, pets: 0 } },
@@ -233,12 +235,10 @@ export const userDataAccess: UserRepository = {
 
         const newest = sorted[0];
 
-        // Evaluate active status only if the ledger hasn't reached terminal parameters
         if (newest.status !== 'RIP' && newest.status !== 'encontrado') {
           const now = new Date();
           let expiresAt: Date;
 
-          // Process time stacking loops if overlapping active plans exist
           if (sorted.length > 1) {
             const prev = sorted[1];
             const prevExpiry = new Date(
@@ -303,6 +303,29 @@ export const userDataAccess: UserRepository = {
         },
       },
       {
+        $addFields: {
+          pets: {
+            $map: {
+              input: '$pets',
+              as: 'pet',
+              in: {
+                $mergeObjects: [
+                  '$$pet',
+                  {
+                    plans: {
+                      $sortArray: {
+                        input: { $ifNull: ['$$pet.plans', []] },
+                        sortBy: { createdAt: -1 },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
         $lookup: {
           from: 'purchasedplans',
           let: { petIds: '$pets._id' },
@@ -310,68 +333,97 @@ export const userDataAccess: UserRepository = {
             { $match: { $expr: { $in: ['$petId', '$$petIds'] } } },
             { $sort: { createdAt: -1 } },
           ],
-          as: 'plans',
+          as: 'allPlans',
         },
       },
       {
         $addFields: {
-          plans: {
+          pets: {
             $map: {
-              input: '$plans',
-              as: 'p',
+              input: '$pets',
+              as: 'pet',
               in: {
                 $mergeObjects: [
-                  '$$p',
+                  '$$pet',
                   {
-                    status: {
-                      $let: {
-                        vars: {
-                          expiresAt: {
-                            $add: [
-                              '$$p.createdAt',
-                              {
-                                $multiply: [
-                                  '$$p.duration',
-                                  24 * 60 * 60 * 1000,
-                                ],
-                              },
-                            ],
+                    plans: {
+                      $map: {
+                        input: {
+                          $filter: {
+                            input: '$allPlans',
+                            as: 'plan',
+                            cond: { $eq: ['$$plan.petId', '$$pet._id'] },
                           },
-                          now: '$$NOW',
                         },
+                        as: 'p',
                         in: {
-                          $cond: {
-                            if: {
-                              $in: ['$$p.status', ['RIP', 'encontrado']],
-                            },
-                            then: '$$p.status',
-                            else: {
-                              $switch: {
-                                branches: [
-                                  {
-                                    case: { $lt: ['$$expiresAt', '$$now'] },
-                                    then: 'expirado',
-                                  },
-                                  {
-                                    case: {
-                                      $lt: [
-                                        '$$expiresAt',
+                          $mergeObjects: [
+                            '$$p',
+                            {
+                              status: {
+                                $let: {
+                                  vars: {
+                                    expiresAt: {
+                                      $add: [
+                                        '$$p.createdAt',
                                         {
-                                          $add: ['$$now', 24 * 60 * 60 * 1000],
+                                          $multiply: [
+                                            '$$p.duration',
+                                            24 * 60 * 60 * 1000,
+                                          ],
                                         },
                                       ],
                                     },
-                                    then: 'casi expira',
+                                    now: '$$NOW',
                                   },
-                                  {
-                                    case: { $gt: ['$$expiresAt', '$$now'] },
-                                    then: 'continua',
+                                  in: {
+                                    $cond: {
+                                      if: {
+                                        $in: [
+                                          '$$p.status',
+                                          ['RIP', 'encontrado'],
+                                        ],
+                                      },
+                                      then: '$$p.status',
+                                      else: {
+                                        $switch: {
+                                          branches: [
+                                            {
+                                              case: {
+                                                $lt: ['$$expiresAt', '$$now'],
+                                              },
+                                              then: 'expirado',
+                                            },
+                                            {
+                                              case: {
+                                                $lt: [
+                                                  '$$expiresAt',
+                                                  {
+                                                    $add: [
+                                                      '$$now',
+                                                      24 * 60 * 60 * 1000,
+                                                    ],
+                                                  },
+                                                ],
+                                              },
+                                              then: 'casi expira',
+                                            },
+                                            {
+                                              case: {
+                                                $gt: ['$$expiresAt', '$$now'],
+                                              },
+                                              then: 'continua',
+                                            },
+                                          ],
+                                          default: 'RIP',
+                                        },
+                                      },
+                                    },
                                   },
-                                ],
-                                default: 'RIP',
+                                },
                               },
                             },
-                          },
+                          ],
                         },
                       },
                     },
@@ -412,7 +464,7 @@ export const userDataAccess: UserRepository = {
           paymentMethod: { $arrayElemAt: ['$payments.method', 0] },
         },
       },
-      { $project: { password: 0 } },
+      { $project: { password: 0, allPlans: 0 } },
     ]);
     return client ?? null;
   },

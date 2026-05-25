@@ -34,6 +34,9 @@ export const ClientsPage = () => {
     month: new Date().getMonth() + 1,
   });
 
+  const [selectedPetId, setSelectedPetId] = useState<string | undefined>(
+    undefined,
+  );
   const { visits, loading: loadingVisits } = useVisitMetrics(
     currentDate.year,
     currentDate.month,
@@ -161,7 +164,10 @@ export const ClientsPage = () => {
           <ClientTable
             clients={clients}
             loading={loading}
-            onRowClick={(client) => setSelectedClient(client)}
+            onRowClick={(client) => {
+              setSelectedClient(client);
+              setSelectedPetId(client.pet?._id);
+            }}
           />
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-3 mt-4">
@@ -187,7 +193,11 @@ export const ClientsPage = () => {
           {selectedClient && (
             <ClientDetailModal
               client={selectedClient}
-              onClose={() => setSelectedClient(null)}
+              petId={selectedPetId}
+              onClose={() => {
+                setSelectedClient(null);
+                setSelectedPetId(undefined);
+              }}
               onUpdate={fetchClients}
               onRefresh={fetchClients}
             />

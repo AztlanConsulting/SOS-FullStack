@@ -29,6 +29,7 @@ export interface ClientPet {
       state: string;
     };
   };
+  plans?: ClientPlan[];
 }
 /**
  * Configuration and metadata of a plan purchased by a client.
@@ -40,8 +41,9 @@ export interface ClientPlan {
   price?: number;
   duration?: number;
   radius?: number;
-  feautures?: string[];
+  features?: string[];
   expirationDate?: string;
+  createdAt?: string;
 }
 
 /**
@@ -50,12 +52,13 @@ export interface ClientPlan {
  */
 export interface ClientListItem {
   _id: string;
-  name: string;
+  username: string;
   email: string;
   phone: string;
   conversation?: string;
-  pet?: Pick<ClientPet, '_id' | 'name' | 'species'>;
-  plans: Pick<ClientPlan, '_id' | 'name' | 'status'>;
+  createdAt?: string;
+  pet?: Pick<ClientPet, '_id' | 'name' | 'description'>;
+  plan?: Pick<ClientPlan, '_id' | 'name' | 'status' | 'createdAt'>;
 }
 
 /**
@@ -66,13 +69,13 @@ export interface ClientDetail {
   _id: string;
   username: string;
   email: string;
-  phone: string;
-  conversation?: string;
+  phone?: string;
   fbUser?: string;
-  active?: boolean;
-  createdAt: string;
+  conversation?: string;
+  notes?: string;
+  createdAt?: string;
+  paymentMethod?: string;
   pets: ClientPet[];
-  plans: ClientPlan[];
 }
 
 /**

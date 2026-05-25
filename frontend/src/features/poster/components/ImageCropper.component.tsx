@@ -62,8 +62,7 @@ const ImageCropper: React.FC = () => {
     try {
       const croppedImg = await getCroppedImg(image, croppedAreaPixels);
       setCroppedImage(croppedImg);
-    } catch (e) {
-    }
+    } catch (e) {}
   };
 
   return (
@@ -94,6 +93,7 @@ const ImageCropper: React.FC = () => {
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
+              disableAutomaticStylesInjection
             />
           </div>
 

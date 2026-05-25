@@ -29,6 +29,12 @@ export const getPlanProgress = async (
       continue;
     }
 
+    const planStatus = plans.some((plan) => plan.status === 'RIP')
+      ? 'RIP'
+      : plans.some((plan) => plan.status === 'encontrado')
+        ? 'encontrado'
+        : 'continua';
+
     const posterImage =
       pet.photos.length > 1 ? (pet.photos.at(-1) ?? null) : null;
 
@@ -40,6 +46,7 @@ export const getPlanProgress = async (
       })),
       petName: pet.name,
       petImage: pet.photos[0] ?? null,
+      planStatus: planStatus,
       posterImage,
       dateMissing: pet.dateMissing,
       location: pet.location.displayName,

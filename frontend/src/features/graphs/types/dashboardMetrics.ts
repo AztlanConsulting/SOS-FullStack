@@ -12,6 +12,7 @@ export interface PlanSubscriptionProgress {
   plans: Plan[];
   petName: string;
   petImage: string | null;
+  planStatus: 'continua' | 'RIP' | 'encontrado';
   posterImage: string | null;
   dateMissing: string;
   location: string;

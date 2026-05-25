@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router';
 import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button';
 import { useState } from 'react';
+import encontrado from '@assets/images/Encontrado.webp';
+import rip from '@assets/images/RIP.webp';
+import portal from '@assets/images/Portal.webp';
 
 const dashboardContainerClass =
   'w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto';
@@ -92,17 +95,18 @@ const ClientDashboardOverview = () => {
         <div className="w-full border-b border-gray-200 bg-light-purple min-h-[80vh]">
           <section className="w-full bg-purple-primary mb-5">
             <div
-              className={`${dashboardContainerClass} py-5 flex items-center justify-center`}
+              className={`${dashboardContainerClass} py-8 flex flex-col items-center justify-center`}
             >
               <Text
                 variant="h2"
                 weight="medium"
                 as="div"
                 color="text-white"
-                className="leading-none"
+                className="leading-none mb-8"
               >
                 Portal exclusivo
               </Text>
+              <img src={portal} alt="Portal exclusivo" className="w-full" />
             </div>
           </section>
           <div className="py-5">
@@ -206,7 +210,40 @@ const ClientDashboardOverview = () => {
                           <div className="pt-5">
                             <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:items-stretch">
                               <div className="lg:col-span-6 lg:h-full">
-                                <PlanProgressSection petData={petData} />
+                                {petData.planStatus === 'RIP' && (
+                                  <div className="flex h-full flex-col gap-5">
+                                    <Text
+                                      variant="h3"
+                                      weight="medium"
+                                      className="text-center w-full"
+                                    >
+                                      Progreso del plan
+                                    </Text>
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 py-5 px-5 lg:px-15 flex flex-1 flex-col items-center justify-center">
+                                      <img src={rip} alt="RIP" />
+                                    </div>
+                                  </div>
+                                )}
+                                {petData.planStatus === 'encontrado' && (
+                                  <div className="flex h-full flex-col gap-5">
+                                    <Text
+                                      variant="h3"
+                                      weight="medium"
+                                      className="text-center w-full"
+                                    >
+                                      Progreso del plan
+                                    </Text>
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 py-5 px-5 lg:px-10 flex flex-1 flex-col items-center justify-center">
+                                      <img
+                                        src={encontrado}
+                                        alt="Mascota encontrada"
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+                                {petData.planStatus === 'continua' && (
+                                  <PlanProgressSection petData={petData} />
+                                )}
                               </div>
                               <div className="lg:col-span-6 lg:h-full">
                                 <AdProgressSection posterUrl={posterUrl} />

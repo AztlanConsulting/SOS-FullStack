@@ -68,7 +68,10 @@ describe('userDataAccess (Unit Tests)', () => {
     await userDataAccess.getUsersWithPets(1, 'Sebastian');
 
     const aggregateCall = (UserModel.aggregate as jest.Mock).mock.calls[0][0];
-    const matchStage = aggregateCall[0].$match;
+    const matchStage = aggregateCall.find(
+      (stage: any) => stage.$match?.username,
+    )?.$match;
+
     expect(matchStage.username.$regex).toBe('Sebastian');
   });
 

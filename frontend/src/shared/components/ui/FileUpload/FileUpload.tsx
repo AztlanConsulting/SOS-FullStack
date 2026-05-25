@@ -19,6 +19,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (onChange) onChange(file);
+    e.currentTarget.value = '';
   };
 
   const hasErrorState = Boolean(error);
@@ -32,6 +33,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           type="file"
           className="hidden"
           accept="image/*"
+          onClick={(e) => {
+            e.currentTarget.value = '';
+          }}
           onChange={handleChange}
         />
 

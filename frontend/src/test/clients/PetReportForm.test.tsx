@@ -98,9 +98,31 @@ describe('PetReportForm Component', () => {
     expect(screen.getByText('Ingresa un color')).toBeDefined();
     expect(screen.getByText('Ingresa una ubicación')).toBeDefined();
     expect(screen.getByText('Falta la foto 1')).toBeDefined();
-    expect(screen.getByText('Ingresa el nombre del dueño')).toBeDefined();
+    expect(
+      screen.getByText('Ingresa nombre y apellido del dueño'),
+    ).toBeDefined();
     expect(screen.getByText('Ingresa un número de teléfono')).toBeDefined();
     expect(screen.getByText('Ingresa un correo electrónico')).toBeDefined();
+  });
+
+  test('shows validation error when contact name is missing surname', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(
+      <PetReportForm
+        initialData={{
+          ...VALID_INITIAL_DATA,
+          contactName: 'Juan',
+          phoneNumber: '',
+          email: '',
+        }}
+      />,
+    );
+
+    await user.click(screen.getByText('Contratar el servicio'));
+
+    expect(
+      screen.getByText('Ingresa nombre y apellido del dueño'),
+    ).toBeDefined();
   });
 
   test('does not navigate when the form has errors', async () => {

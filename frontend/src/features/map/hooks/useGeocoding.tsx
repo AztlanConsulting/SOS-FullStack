@@ -8,6 +8,12 @@ const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
 type MarkerAddressPayload = {
   coords: [number, number];
   address: string;
+  properties?: {
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  isComplete?: boolean;
 };
 
 /**
@@ -66,11 +72,34 @@ export function useGeocoding(
   useEffect(() => {
     const unsubscribe = LeafletMapService.onMarkerMove(async (coords) => {
       setResults([]);
-      const address = await PhotonGeocoding.reverse(coords);
+      const result = await PhotonGeocoding.reverse(coords);
 
-      if (address) {
-        setQuery(address);
-        onMarkerAddressChange?.({ coords, address });
+      console.log('[useGeocoding] marker moved', {
+        coords,
+        reverseResult: result,
+        properties: result?.properties,
+      });
+
+      if (result) {
+        setQuery(result.displayName);
+        const isComplete = Boolean(
+          result.properties?.city &&
+          result.properties?.state &&
+          result.properties?.country,
+        );
+        onMarkerAddressChange?.({
+          coords: result.coords,
+          address: result.displayName,
+          properties: result.properties,
+          isComplete,
+        });
+      } else {
+        onMarkerAddressChange?.({
+          coords,
+          address: '',
+          properties: undefined,
+          isComplete: false,
+        });
       }
     });
 

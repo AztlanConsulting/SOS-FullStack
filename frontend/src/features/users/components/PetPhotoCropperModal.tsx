@@ -1,4 +1,4 @@
-import ReactCrop from 'react-easy-crop';
+import Cropper from 'react-easy-crop';
 import { Button } from '@/shared/components/ui/Button';
 import { Text } from '@/shared/components/ui/Text';
 
@@ -64,8 +64,8 @@ export const PetPhotoCropperModal = ({
             El recorte se ajusta al formato del póster para esta posición.
           </Text>
 
-          <div className="relative h-[45vh] w-full overflow-hidden rounded-lg bg-black">
-            <ReactCrop
+          <div className="cropper relative h-[45vh] w-full overflow-hidden rounded-lg bg-black">
+            <Cropper
               image={imageUrl}
               crop={cropPosition}
               zoom={zoom}
@@ -78,6 +78,7 @@ export const PetPhotoCropperModal = ({
               objectFit="contain"
               restrictPosition
               showGrid={false}
+              disableAutomaticStylesInjection
             />
           </div>
 

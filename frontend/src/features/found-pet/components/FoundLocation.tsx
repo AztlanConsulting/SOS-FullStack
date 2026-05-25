@@ -24,8 +24,14 @@ export const PetLocationSection = ({
     reportType === 'lost' ? 'Lugar de extravío' : 'Lugar de encuentro';
   const placeholderText = 'Ej: Parque Central, Centro Histórico';
 
-  const { results, isLoading, displayValue, onSelectAddress, onSearchWrapper } =
-    usePetLocation(mapID, formData, updateForm);
+  const {
+    results,
+    isLoading,
+    displayValue,
+    onSelectAddress,
+    onSearchWrapper,
+    locationError,
+  } = usePetLocation(mapID, formData, updateForm);
 
   return (
     <section
@@ -44,6 +50,7 @@ export const PetLocationSection = ({
           query={displayValue}
           results={results}
           isLoading={isLoading}
+          error={locationError ?? undefined}
           onSearch={onSearchWrapper}
           onSelect={onSelectAddress}
         />

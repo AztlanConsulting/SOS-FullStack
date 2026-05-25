@@ -434,7 +434,6 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Nombre de la mascota"
             value={formData.name || ''}
             field="name"
-            hasLength={false}
             maxLength={40}
           />
           <EditableField
@@ -527,7 +526,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Nombre y apellido"
             value={formData.contactName || ''}
             field="contactName"
-            hasLength={false}
+            maxLength={40}
           />
           <EditableField
             updateForm={updateForm}
@@ -542,8 +541,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             label="Correo electrónico"
             value={formData.email || ''}
             field="email"
-            hasLength={false}
-            maxLength={40}
+            maxLength={128}
           />
         </section>
       </div>

@@ -29,9 +29,7 @@ function useUpdatePetLocation<T extends FoundPetReportData>(
             ...locationLogic<T>(prev, p),
           }));
         })
-        .catch((error) => {
-          console.error('Error updating PetReportForm: ', error);
-        });
+        .catch((error) => {});
     }
   }, [formData.location?.coords]);
 }

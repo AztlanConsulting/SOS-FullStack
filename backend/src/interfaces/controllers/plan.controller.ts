@@ -11,8 +11,7 @@ export const getPlans = async (_req: Request, res: Response): Promise<void> => {
     /**
      * Initialize the use case with the concrete data access implementation.
      */
-    const repository = getPlansDB(PlanDataAccess);
-    const plans = await repository.getPlans();
+    const plans = await getPlansDB(PlanDataAccess);
     res.json(plans);
   } catch (error) {
     console.error(error);

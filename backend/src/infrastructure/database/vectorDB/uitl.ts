@@ -8,7 +8,6 @@ async function startVectorDB() {
   await vectorDB.schema.classCreator().withClass(petConfig).do();
 
   const schemaRes = await vectorDB.schema.getter().do();
-  console.log(schemaRes);
 }
 
 export default startVectorDB;

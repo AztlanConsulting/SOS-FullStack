@@ -7,6 +7,7 @@ type ButtonVariant =
   | 'danger'
   | 'plans'
   | 'purplePlans'
+  | 'toolbar'
   | 'purple';
 type ButtonProps = {
   label: string;
@@ -43,6 +44,8 @@ export function Button({
       'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
     purplePlans:
       'bg-purple-primary text-white hover:bg-purple-primary w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
+    toolbar:
+      '!rounded-md !px-2 !py-1.5 bg-white text-gray-600 hover:bg-[#F9CD48]/35 hover:text-[#C2991D] hover:border hover:border-[#C2991D] border border-gray-300 text-xs font-normal w-auto mx-0',
     purple: 'bg-purple-primary text-white hover:bg-purple-primary w-full',
   };
   return (
@@ -59,21 +62,38 @@ export function Button({
         bgColor,
       )}
     >
-      <div
-        className={`flex justify-${Icon ? 'between' : 'center'} items-center w-full cursor-pointer`}
-      >
-        {Icon ? <div className="w-[33px]" /> : <></>}
+      {' '}
+      {variant === 'toolbar' ? (
+        <div className="flex items-center gap-1">
+          {Icon && <Icon size={18} />}
+          {label && (
+            <Text variant="small" weight="medium" className="text-inherit">
+              {label}
+            </Text>
+          )}
+        </div>
+      ) : (
+        <div
+          className={`flex justify-${Icon ? 'between' : 'center'} items-center w-full cursor-pointer`}
+        >
+          {Icon ? <div className="w-[33px]" /> : <></>}
 
-        <Text variant="caption" as="p" weight="medium" className="text-inherit">
-          {isLoading ? 'Guardando...' : label}
-        </Text>
+          <Text
+            variant="caption"
+            as="p"
+            weight="medium"
+            className="text-inherit"
+          >
+            {isLoading ? 'Guardando...' : label}
+          </Text>
 
-        {Icon && (
-          <span className="flex items-center justify-start w-[33px]">
-            <Icon size={17} />
-          </span>
-        )}
-      </div>
+          {Icon && (
+            <span className="flex items-center justify-start w-[33px]">
+              <Icon size={17} />
+            </span>
+          )}
+        </div>
+      )}
     </button>
   );
 }

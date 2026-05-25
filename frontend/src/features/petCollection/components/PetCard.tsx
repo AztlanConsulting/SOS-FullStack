@@ -16,6 +16,7 @@ const PetCard = ({ petInfo }: Props) => {
     >
       <div className="relative h-56 w-full">
         <img
+          loading="lazy"
           alt="Mascota encontrada"
           src={image}
           className="w-full md:max-h-56 h-full object-cover"

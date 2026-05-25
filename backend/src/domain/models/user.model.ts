@@ -3,6 +3,9 @@ import { Schema, model } from 'mongoose';
 import type { Role } from '@domain/models/role.model';
 import type { Permission } from '@domain/models/permission.model';
 
+/**
+ * Core User Entity interface matching the persisted database document structure.
+ */
 export interface User {
   _id: Types.ObjectId;
   roleId: Types.ObjectId;
@@ -16,17 +19,29 @@ export interface User {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+  notes?: string;
 }
 
+/**
+ * Data payload format required to construct and save a new User.
+ * Strips auto-generated fields and default statuses.
+ */
 export type UserCreateInput = Omit<
   User,
   '_id' | 'createdAt' | 'updatedAt' | 'active'
 >;
-
+/**
+ * Extended type representation containing population data for RBAC evaluation.
+ * Swaps out the raw roleId ObjectId for selected properties from the Role model.
+ */
 export type UserWithRole = Omit<User, 'roleId'> & {
   roleId: Pick<Role, '_id' | 'role'>;
 };
 
+/**
+ * Deeply populated type parsing user scopes, pulling permissions from both
+ * inherited roles and direct user-level permission matrices.
+ */
 export type UserWithPermissions = Omit<User, 'permissions' | 'roleId'> & {
   roleId: {
     permissions?: Permission[];
@@ -34,6 +49,9 @@ export type UserWithPermissions = Omit<User, 'permissions' | 'roleId'> & {
   permissions?: Permission[];
 };
 
+/**
+ * Mongoose Data Schema definition defining indexes, types, and operational validation.
+ */
 const UserSchema = new Schema<User>(
   {
     roleId: {
@@ -60,6 +78,7 @@ const UserSchema = new Schema<User>(
     fbUser: { type: String },
     conversation: { type: String },
     active: { type: Boolean, default: false },
+    notes: { type: String, default: '' },
   },
   {
     timestamps: true,

@@ -4,6 +4,7 @@ import { emailService } from '@/infrastructure/service/email.service';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 import { petDataAccess } from '@/infrastructure/data-access/pet.data-access';
+import bcrypt from 'bcryptjs';
 
 /**
  * Worker responsible for:
@@ -17,8 +18,6 @@ new Worker(
 
   async (job) => {
     try {
-      console.log('Email job started:', job.id);
-
       const { userEmail, planId } = job.data;
 
       const user = await userDataAccess.getUserByEmail(userEmail);
@@ -44,24 +43,28 @@ new Worker(
 
       // Prevent duplicated email delivery
       if (purchasedPlan.emailStatus === 'sent') {
-        console.log('Email already sent');
         return;
       }
 
+      const regex = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
+
       await emailService.sendActivatePlanEmail({
         to: user.email,
-        username: user.email,
-        password: pet.name,
+        ...(() =>
+          regex.test(user.password)
+            ? {}
+            : { username: user.email, password: user.password })(),
+
         facebookUrl: purchasedPlan.socialPosts?.facebook?.url ?? '',
         instagramUrl: purchasedPlan.socialPosts?.instagram?.url ?? '',
       });
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
-
-      console.log('Email sent successfully');
+      await userDataAccess.updateUserPassword(
+        user.email,
+        await bcrypt.hash(user.password, 10),
+      );
     } catch (error) {
-      console.error('Email job failed:', error);
-
       throw error;
     }
   },

@@ -20,7 +20,6 @@ async function countPetPages(req: Request, res: Response) {
 
     return res.status(200).send(total);
   } catch (err) {
-    console.error(err);
     res.status(500).send(err);
   }
 }

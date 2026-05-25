@@ -12,7 +12,6 @@ export const HeaderBack = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    console.log('handleBack');
     if (onBack) {
       onBack();
       return;

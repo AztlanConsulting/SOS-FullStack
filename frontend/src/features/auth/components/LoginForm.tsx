@@ -69,7 +69,12 @@ export const LoginForm = () => {
           {/* CARD */}
           <div className="bg-white rounded-2xl border-2 border-[var(--color-primary)] p-6 md:p-10 shadow-sm text-center mx-auto w-full max-w-lg">
             {/* LOGO */}
-            <img src={yellowIcon} alt="logo" className="w-28 mx-auto mb-4" />
+            <img
+              loading="lazy"
+              src={yellowIcon}
+              alt="logo"
+              className="w-28 mx-auto mb-4"
+            />
 
             {/* TITLE */}
             <Text

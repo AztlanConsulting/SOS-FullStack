@@ -6,7 +6,6 @@ interface Props {
 }
 
 const PlanDetail = ({ reportData }: Props) => {
-  // console.log('PlanDetail', reportData);
   return (
     <div className="w-10/12">
       <ul>

@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
  * File filter to restrict uploads to images only.
  * Rejects any file that does not have an image MIME type.
  */
-const fileFilter: multer.Options['fileFilter'] = (_req, file, cb) => {
+export const fileFilter: multer.Options['fileFilter'] = (_req, file, cb) => {
   if (!file.mimetype.startsWith('image/')) {
     return cb(new Error('Only image files are allowed'));
   }

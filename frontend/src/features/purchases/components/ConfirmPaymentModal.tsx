@@ -51,7 +51,12 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
             scrollbarColor: '#a8aaad #eaecef',
           }}
         >
-          <img src={success} alt="Success" className="w-14 mb-4" />
+          <img
+            loading="lazy"
+            src={success}
+            alt="Success"
+            className="w-14 mb-4"
+          />
 
           <Text
             variant="h3"
@@ -85,9 +90,10 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Contraseña:</span>
-                    <span className="font-mono font-medium text-gray-800">
-                      {plan.name}
+                    <span className="text-gray-500 pr-5">Contraseña:</span>
+                    <span className="font-mono font-medium text-gray-800 text-right">
+                      En unos momentos deberás recibir un correo con tu
+                      contraseña
                     </span>
                   </div>
                 </div>

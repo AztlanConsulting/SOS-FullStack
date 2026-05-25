@@ -21,7 +21,12 @@ export const ForbiddenPage = () => {
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
           <div className="bg-white rounded-2xl border-2 border-[var(--color-primary)] p-8 md:p-10 shadow-sm text-center mx-auto w-full max-w-md">
             {/* LOGO */}
-            <img src={yellowIcon} alt="logo" className="w-24 mx-auto mb-6" />
+            <img
+              loading="lazy"
+              src={yellowIcon}
+              alt="logo"
+              className="w-24 mx-auto mb-6"
+            />
 
             {/* TITLE */}
             <Text

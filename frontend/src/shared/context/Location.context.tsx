@@ -97,7 +97,6 @@ export const LocationProvider = ({
  */
 export const useLocationContext = () => {
   const context = useContext(LocationContext);
-  console.log('LocationContext value:', context);
   if (!context) {
     throw new Error('useLocation must be used within a LocationProvider');
   }

@@ -21,18 +21,12 @@ async function main() {
   const args = process.argv.slice(2);
   let fn = args[0] == 'populate' ? populate : insertImages;
   if (args[0] == 'rename') {
-    console.log('renaming files, no interaction to the database being made');
     await readDirectory(baseRoute, renameFiles);
   } else {
     try {
-      console.log('Inserting images to the database');
       await startVectorDB();
       await readDirectory(baseRoute, fn);
-      console.log('Images inserted into the database successfully');
-    } catch (error) {
-      console.error('======= Docker container not started =======');
-      console.log(error);
-    }
+    } catch (error) {}
   }
 }
 
@@ -86,9 +80,7 @@ async function renameFiles(
   const img = await fs.readFileSync(thisPath);
   const baseName = directoryPath.split('/').at(-1);
   await fs.writeFileSync(directoryPath + `/${baseName}_${idx}.jpg`, img);
-  await fs.rm(thisPath, (err) => {
-    if (err) console.log(err);
-  });
+  await fs.rm(thisPath, (err) => {});
 }
 
 async function populate(_baseUrl: string, thisPath: string, _idx: number) {
@@ -126,10 +118,6 @@ async function populate(_baseUrl: string, thisPath: string, _idx: number) {
 
   if (res.status !== 201)
     throw Error('Error in creating new found pet reports');
-
-  // console.log(res.data);
 }
 
-await main().then(() =>
-  console.log('Vector Database finished being initialized'),
-);
+await main();

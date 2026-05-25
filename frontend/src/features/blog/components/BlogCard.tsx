@@ -14,6 +14,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
       className="bg-white rounded-lg color-grey-border w-full flex flex-col h-full"
     >
       <img
+        loading="lazy"
         src={blog.imageUrl}
         alt={blog.name}
         className="rounded-t-lg w-full h-40 object-cover"

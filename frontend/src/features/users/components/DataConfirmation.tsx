@@ -367,6 +367,7 @@ const EditablePhotos = ({
                     className="w-full bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <img
+                      loading="lazy"
                       src={url}
                       alt={`Mascota ${index + 1}`}
                       className="w-full h-auto object-contain block"

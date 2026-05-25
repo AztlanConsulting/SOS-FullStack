@@ -63,6 +63,6 @@ export const ManualDataAccess: ManualRepository = {
    */
 
   async getManualById(id: string): Promise<ManualResult | null> {
-    return await ManualModel.findById(id);
+    return await ManualModel.findById(id).lean().exec();
   },
 };

@@ -103,10 +103,10 @@ export const emailService: EmailService = {
 
                     <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:16px;padding:20px;text-align:center;margin-bottom:32px;">
                         <p style="font-size:12px; color:#aaa; margin-top:15px;">
-                          Facebook: ${data.facebookUrl ?? 'Hubo un error al generar el enlace. Por favor, comunícate con nosotros para obtener ayuda.'}
+                          Facebook: ${data.facebookUrl ? `<a href="${data.facebookUrl}" target="_blank" style="color:#f9cd48;text-decoration:underline;">${data.facebookUrl}</a>` : 'Hubo un error al generar el enlace. Por favor, comunícate con nosotros para obtener ayuda.'}
                         </p>
                         <p style="font-size:12px; color:#aaa; margin-top:15px;">
-                          Instagram: ${data.instagramUrl ?? 'Hubo un error al generar el enlace. Por favor, comunícate con nosotros para obtener ayuda.'}
+                          Instagram: ${data.instagramUrl ? `<a href="${data.instagramUrl}" target="_blank" style="color:#f9cd48;text-decoration:underline;">${data.instagramUrl}</a>` : 'Hubo un error al generar el enlace. Por favor, comunícate con nosotros para obtener ayuda.'}
                         </p>
                     </div>
 

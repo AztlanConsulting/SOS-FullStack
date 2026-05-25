@@ -34,9 +34,9 @@ const PetGallery = ({
   useClickOutside(dropdownRef, setIsOpen);
 
   return (
-    <div className="p-2 md:w-2/3 md:h-screen bg-purple-secondary">
+    <div className="px-2 py-4 md:w-2/3 md:h-screen bg-purple-secondary">
       <div className="relative flex justify-end w-full pl-2">
-        <div ref={dropdownRef}>
+        <div ref={dropdownRef} className="mb-4">
           <button
             onClick={() => setIsOpen((prev) => !prev)}
             name={'petDropdown'}

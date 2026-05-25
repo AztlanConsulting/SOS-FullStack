@@ -1,11 +1,21 @@
+export interface Plan {
+  name: string;
+  duration: number;
+  createdAt: Date;
+}
+
 /**
  * Tracks the lifecycle of a specific service plan.
  * Used for progress bars or "Time remaining" indicators.
  */
 export interface PlanSubscriptionProgress {
-  planName: string;
-  totalDays: number;
-  daysRemaining: number;
+  plans: Plan[];
+  petName: string;
+  petImage: string | null;
+  planStatus: 'continua' | 'RIP' | 'encontrado';
+  posterImage: string | null;
+  dateMissing: string;
+  location: string;
 }
 
 /**
@@ -46,4 +56,8 @@ export interface DashboardStats {
   sales: CountryStatsMetric[];
   plan: PlanSubscriptionProgress;
   distribution: PlanDistributionMetric[];
+}
+
+export interface DashboardResponse {
+  planProgress: PlanSubscriptionProgress[] | null;
 }

@@ -37,7 +37,11 @@ export const PetLocationSection = ({
     onSelectAddress,
     onSearchWrapper,
     onFocusWrapper,
+    locationError,
   } = usePetLocation(mapID, formData, updateForm);
+
+  // Prefer hook location error over form validation error
+  const inputError = locationError || errors.address;
 
   return (
     <section
@@ -62,7 +66,7 @@ export const PetLocationSection = ({
           onSelectAddress(result);
           onInteraction?.();
         }}
-        error={errors.address}
+        error={inputError}
       />
 
       <MapDisplay

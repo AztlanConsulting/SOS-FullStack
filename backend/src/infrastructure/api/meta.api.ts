@@ -35,10 +35,23 @@ export const metaPublisher: SocialPublisher = {
     const ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN;
     const PAGE_ID = process.env.FB_PAGE_ID;
 
+    // Get page access token
+    const pagesRes = await axios.get(`${BASE_URL}/me/accounts`, {
+      params: {
+        access_token: ACCESS_TOKEN,
+      },
+    });
+
+    const page = pagesRes.data.data?.find(
+      (p: { id: string; access_token: string }) => p.id === PAGE_ID,
+    );
+
+    const PAGE_ACCESS_TOKEN = page.access_token;
+
     const res = await post(`/${PAGE_ID}/photos`, {
       url: data.imageUrl,
       caption: data.caption,
-      access_token: ACCESS_TOKEN,
+      access_token: PAGE_ACCESS_TOKEN,
     });
 
     const postId = res.post_id;
@@ -101,6 +114,9 @@ export const metaPublisher: SocialPublisher = {
       creation_id: media.id,
       access_token: ACCESS_TOKEN,
     });
+
+    // Wait 10 seconds to ensure the post is live before trying to retrieve the permalink
+    await new Promise((resolve) => setTimeout(resolve, 10000));
 
     const igMediaId = publish.id;
 

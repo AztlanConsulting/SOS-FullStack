@@ -1,6 +1,90 @@
 import { toPng, toJpeg } from 'html-to-image';
 import jsPDF from 'jspdf';
 
+type PosterSource = HTMLElement | string | File | null;
+
+const loadImageFromSource = async (source: Exclude<PosterSource, null>) => {
+  if (source instanceof HTMLElement) {
+    if (source instanceof HTMLImageElement) {
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.src = source.src;
+      await new Promise<void>((resolve, reject) => {
+        image.onload = () => resolve();
+        image.onerror = (error) => reject(error);
+      });
+      return image;
+    }
+
+    const dataUrl = await toJpeg(source, {
+      quality: 1,
+      pixelRatio: 3,
+      cacheBust: true,
+    });
+
+    const image = new Image();
+    image.src = dataUrl;
+    await new Promise<void>((resolve, reject) => {
+      image.onload = () => resolve();
+      image.onerror = (error) => reject(error);
+    });
+
+    return image;
+  }
+
+  const image = new Image();
+  image.crossOrigin = 'anonymous';
+
+  if (source instanceof File) {
+    const dataUrl = await new Promise<string | null>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () =>
+        resolve(typeof reader.result === 'string' ? reader.result : null);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(source);
+    });
+
+    if (!dataUrl) {
+      return null;
+    }
+
+    image.src = dataUrl;
+  } else {
+    image.src = source;
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    image.onload = () => resolve();
+    image.onerror = (error) => reject(error);
+  });
+
+  return image;
+};
+
+const getPageSize = (format: string) => {
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format });
+
+  return {
+    pdf,
+    pageWidth: pdf.internal.pageSize.getWidth(),
+    pageHeight: pdf.internal.pageSize.getHeight(),
+  };
+};
+
+const addCenteredImageToPdf = (
+  pdf: jsPDF,
+  imageDataUrl: string,
+  imageWidth: number,
+  imageHeight: number,
+  pageWidth: number,
+  pageHeight: number,
+) => {
+  const x = (pageWidth - imageWidth) / 2;
+  const y = (pageHeight - imageHeight) / 2;
+
+  pdf.addImage(imageDataUrl, 'JPEG', x, y, imageWidth, imageHeight);
+};
+
 export const exportPosterAsFile = async (
   node: HTMLElement | null,
   fileName: string,
@@ -13,11 +97,9 @@ export const exportPosterAsFile = async (
     cacheBust: false,
   });
 
-  // Convert base64 to Blob
   const res = await fetch(dataUrl);
   const blob = await res.blob();
 
-  // Create File from Blob
   const file = new File([blob], `${fileName}.png`, {
     type: 'image/png',
   });
@@ -26,102 +108,105 @@ export const exportPosterAsFile = async (
 };
 
 export const exportPosterAsPdfColor = async (
-  node: HTMLElement | null,
+  source: PosterSource,
   fileName: string,
+  format: string = 'letter',
 ) => {
-  if (!node) return;
+  if (!source) return;
 
-  const dataUrl = await toJpeg(node, {
-    quality: 1,
-    pixelRatio: 3,
-    cacheBust: true,
-  });
+  const image = await loadImageFromSource(source);
+  if (!image) return;
 
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-  });
+  const { pdf, pageWidth, pageHeight } = getPageSize(format);
 
-  const pageWidth = 210;
-  const pageHeight = 297;
+  const imgAspect = image.width / image.height;
+  const pageAspect = pageWidth / pageHeight;
 
-  let imgWidth = pageWidth;
-  let imgHeight = (1350 * imgWidth) / 1080;
+  let imageWidth = pageWidth;
+  let imageHeight = pageWidth / imgAspect;
 
-  if (imgHeight > pageHeight) {
-    imgHeight = pageHeight;
-    imgWidth = (1080 * imgHeight) / 1350;
+  if (imageHeight > pageHeight) {
+    imageHeight = pageHeight;
+    imageWidth = imageHeight * imgAspect;
   }
 
-  const x = (pageWidth - imgWidth) / 2;
-  const y = (pageHeight - imgHeight) / 2;
+  if (imgAspect > pageAspect) {
+    imageWidth = pageWidth;
+    imageHeight = imageWidth / imgAspect;
+  }
 
-  pdf.addImage(dataUrl, 'JPEG', x, y, imgWidth, imgHeight);
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) return;
+
+  ctx.drawImage(image, 0, 0);
+
+  const imageDataUrl = canvas.toDataURL('image/jpeg', 1);
+  addCenteredImageToPdf(
+    pdf,
+    imageDataUrl,
+    imageWidth,
+    imageHeight,
+    pageWidth,
+    pageHeight,
+  );
   pdf.save(`${fileName}.pdf`);
 };
 
 export const exportPosterAsPdfBlackAndWhite = async (
-  node: HTMLElement | null,
+  source: PosterSource,
   fileName: string,
+  format: string = 'a5',
 ) => {
-  if (!node) return;
+  if (!source) return;
 
-  const dataUrl = await toJpeg(node, {
-    quality: 1,
-    pixelRatio: 3,
-    cacheBust: true,
-  });
+  const image = await loadImageFromSource(source);
+  if (!image) return;
 
-  const img = new Image();
-  img.src = dataUrl;
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
 
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
-    if (!ctx) return;
+  ctx.drawImage(image, 0, 0);
 
-    canvas.width = img.width;
-    canvas.height = img.height;
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
 
-    ctx.drawImage(img, 0, 0);
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+    data[i] = avg;
+    data[i + 1] = avg;
+    data[i + 2] = avg;
+  }
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
+  ctx.putImageData(imageData, 0, 0);
 
-    for (let i = 0; i < data.length; i += 4) {
-      const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-      data[i] = avg; // red
-      data[i + 1] = avg; // green
-      data[i + 2] = avg; // blue
-    }
+  const bwDataUrl = canvas.toDataURL('image/jpeg', 1);
 
-    ctx.putImageData(imageData, 0, 0);
+  const { pdf, pageWidth, pageHeight } = getPageSize(format);
+  const imgAspect = image.width / image.height;
 
-    const bwDataUrl = canvas.toDataURL('image/jpeg', 1);
+  let imageWidth = pageWidth;
+  let imageHeight = imageWidth / imgAspect;
 
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    });
+  if (imageHeight > pageHeight) {
+    imageHeight = pageHeight;
+    imageWidth = imageHeight * imgAspect;
+  }
 
-    const pageWidth = 210;
-    const pageHeight = 297;
-
-    let imgWidth = pageWidth;
-    let imgHeight = (1350 * imgWidth) / 1080;
-
-    if (imgHeight > pageHeight) {
-      imgHeight = pageHeight;
-      imgWidth = (1080 * imgHeight) / 1350;
-    }
-
-    const x = (pageWidth - imgWidth) / 2;
-    const y = (pageHeight - imgHeight) / 2;
-
-    pdf.addImage(bwDataUrl, 'JPEG', x, y, imgWidth, imgHeight);
-    pdf.save(`${fileName}.pdf`);
-  };
+  addCenteredImageToPdf(
+    pdf,
+    bwDataUrl,
+    imageWidth,
+    imageHeight,
+    pageWidth,
+    pageHeight,
+  );
+  pdf.save(`${fileName}.pdf`);
 };

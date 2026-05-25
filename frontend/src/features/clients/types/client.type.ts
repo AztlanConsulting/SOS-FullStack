@@ -23,9 +23,10 @@ export interface ClientPet {
   size?: string;
   description?: string;
   photos?: string[];
+  plans?: ClientPlan[];
   dateMissing?: string;
   placeMissing?: string;
-  geocodingLocation?: {
+  location?: {
     coords: [number, number];
     displayName: string;
     properties: {
@@ -34,6 +35,8 @@ export interface ClientPet {
       state: string;
     };
   };
+  paymentMethod?: string;
+  paymentStatus?: 'pending' | 'succeeded' | 'failed';
 }
 
 /**
@@ -84,6 +87,7 @@ export interface ClientDetail {
   plans: ClientPlan[];
   notes?: string;
   paymentMethod?: string;
+  paymentStatus?: 'pending' | 'succeeded' | 'failed';
 }
 
 /**

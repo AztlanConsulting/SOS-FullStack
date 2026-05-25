@@ -3,29 +3,26 @@ import Header from '@/shared/components/layout/Header';
 import SignOut from '@/shared/components/ui/Button/SignOut';
 import { Outlet } from 'react-router';
 import { HiOutlineUserCircle } from 'react-icons/hi2';
-import { LiaToolsSolid } from 'react-icons/lia';
-import { IoBookOutline } from 'react-icons/io5';
+import { HiMiniRectangleStack } from 'react-icons/hi2';
 import { PiDogLight } from 'react-icons/pi';
-import { TbEdit } from 'react-icons/tb';
 
 const navLinks = [
-  { label: 'Inicio', href: '/inicio', icon: <HiOutlineUserCircle /> },
+  { label: 'Portal exclusivo', href: '/inicio', icon: <HiOutlineUserCircle /> },
   {
-    label: 'Mascotas',
-    icon: <PiDogLight />,
-    children: [
-      { label: 'Perdida', href: '/lost-pet' },
-      { label: 'Mascotas encontradas', href: '/inicio/coleccion-mascotas' },
-    ],
+    label: 'Contenido exclusivo',
+    href: '/inicio/contenido-exclusivo',
+    icon: <HiMiniRectangleStack />,
   },
-  { label: 'Blog', href: '/inicio/blog', icon: <TbEdit /> },
-  { label: 'Talleres', href: '/inicio/talleres', icon: <LiaToolsSolid /> },
-  { label: 'Manuales', href: '/inicio/manuales', icon: <IoBookOutline /> },
+  {
+    label: 'Radar de coincidencias',
+    href: '/inicio/radar-de-coincidencias',
+    icon: <PiDogLight />,
+  },
 ];
 
 const ClientDashboard = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header
         navLinks={navLinks}
         color={'purple-primary'}
@@ -34,7 +31,7 @@ const ClientDashboard = () => {
       />
       <Outlet />
       <Footer bg={'bg-purple-primary'} />
-    </>
+    </div>
   );
 };
 

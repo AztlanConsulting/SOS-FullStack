@@ -56,7 +56,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
       </div>
 
       {isLoading && (
-        <p className="text-xs text-gray-400 absolute mt-1 left-1">
+        <p className="mt-1 w-full text-xs text-gray-400">
           Buscando direcciones...
         </p>
       )}
@@ -75,14 +75,22 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
         </ul>
       )}
       {error && (
-        <Text
-          variant="small"
-          as="small"
-          weight="regular"
-          className="color-danger ml-1 italic"
+        <div
+          className={
+            results.length > 0
+              ? 'absolute top-[105%] left-0 right-0 z-0 pointer-events-none'
+              : 'mt-1 w-full'
+          }
         >
-          {error}
-        </Text>
+          <Text
+            variant="small"
+            as="small"
+            weight="regular"
+            className="ml-1 color-danger italic"
+          >
+            {error}
+          </Text>
+        </div>
       )}
     </div>
   );

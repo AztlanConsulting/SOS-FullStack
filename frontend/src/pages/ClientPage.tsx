@@ -10,7 +10,7 @@ import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientDetailModal } from '@/shared/components/ui/Modal/ClientDetailModal';
 import { exportToCSV } from '@/shared/utils/exportCSV';
 import { FilterDropdown } from '@/features/clients/components/FilterDropdown';
-import { usePlanDistribution } from '@/features/graphs/hooks/useDashboardMetrics';
+import { usePlanDistribution } from '@/features/graphs/hooks/usePlanDistribution';
 import { ActivePlanChart } from '@/features/graphs/components/ActivePlanChart';
 import { useVisitMetrics } from '@/features/graphs/hooks/useVisitMetrics';
 import { VisitsLineChart } from '@/features/graphs/components/VisitsLineChart';

@@ -149,6 +149,26 @@ describe('FileUpload Component', () => {
     expect(mockOnChange).toHaveBeenCalledTimes(2);
   });
 
+  test('calls onChange again when the same file is selected twice', async () => {
+    const user = userEvent.setup();
+    const mockOnChange = vi.fn();
+    const { container } = render(
+      <FileUpload index={1} onChange={mockOnChange} />,
+    );
+
+    const input = container.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+    const sameFile = new File(['same'], 'repetida.jpg', { type: 'image/jpeg' });
+
+    await user.upload(input, sameFile);
+    await user.upload(input, sameFile);
+
+    expect(mockOnChange).toHaveBeenCalledTimes(2);
+    expect(mockOnChange).toHaveBeenNthCalledWith(1, sameFile);
+    expect(mockOnChange).toHaveBeenNthCalledWith(2, sameFile);
+  });
+
   test('the file input is wrapped in a label (clickable area)', () => {
     const { container } = render(<FileUpload index={1} />);
     const label = container.querySelector('label');

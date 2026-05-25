@@ -4,7 +4,7 @@ import PetCollectionPage from '@/pages/PetCollectionPage';
 
 const router = [
   {
-    path: 'coleccion-mascotas',
+    path: 'radar-de-coincidencias',
     element: (
       <PetGalleryProvider>
         <PetCollectionPage />

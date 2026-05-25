@@ -28,7 +28,8 @@ const MembersOnlyHeader = ({ membersOnly }: Props) => {
       .then((blob) => {
         objectUrl = URL.createObjectURL(blob);
         setImageSrc(objectUrl);
-      });
+      })
+      .catch(() => setImageSrc(''));
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };

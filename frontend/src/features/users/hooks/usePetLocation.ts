@@ -17,17 +17,40 @@ export const usePetLocation = (
   const updateFormRef = useRef(updateForm);
   updateFormRef.current = updateForm;
 
+  const [locationError, setLocationError] = useState<string | null>(null);
+
   const onMarkerAddressChange = useCallback(
     ({
       coords: markerCoords,
       address,
+      properties,
+      isComplete,
     }: {
       coords: [number, number];
       address: string;
+      properties?: { city?: string; state?: string; country?: string };
+      isComplete?: boolean;
     }) => {
+      console.log('[usePetLocation] marker address change', {
+        markerCoords,
+        address,
+        properties,
+        isComplete,
+      });
+
+      // If the reverse geocode couldn't provide full city/state/country, surface an error
+      if (!isComplete) {
+        setLocationError(
+          'No podemos determinar ciudad/estado/país para esta ubicación. Intenta mover el pin o seleccionar otra ubicación.',
+        );
+        return;
+      }
+
+      setLocationError(null);
       const markerLocation: GeocodingResult = {
         coords: markerCoords,
         displayName: address,
+        properties,
       };
       updateFormRef.current({
         address,
@@ -80,6 +103,20 @@ export const usePetLocation = (
   const onSelectAddress = (result: any) => {
     handleSelect(result);
     setHasInteracted(true);
+    const isComplete = Boolean(
+      result?.properties?.city &&
+      result?.properties?.state &&
+      result?.properties?.country,
+    );
+
+    if (!isComplete) {
+      setLocationError(
+        'No podemos determinar ciudad/estado/país para esta ubicación. Intenta seleccionar otra ubicación.',
+      );
+      return;
+    }
+
+    setLocationError(null);
     updateFormRef.current({
       address: result.displayName,
       location: result,
@@ -107,5 +144,6 @@ export const usePetLocation = (
     onSelectAddress,
     onSearchWrapper,
     onFocusWrapper,
+    locationError,
   };
 };

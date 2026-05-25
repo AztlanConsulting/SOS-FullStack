@@ -53,7 +53,7 @@ export const UserInfoSection = ({
           id="petName"
           label="Nombre de la mascota"
           value={formData.name || ''}
-          hasLength={false}
+          maxLength={40}
           onChange={(e) => updateForm({ name: e.target.value })}
           error={errors.name}
         />

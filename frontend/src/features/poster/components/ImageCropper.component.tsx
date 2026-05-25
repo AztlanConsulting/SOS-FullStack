@@ -93,6 +93,7 @@ const ImageCropper: React.FC = () => {
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
+              disableAutomaticStylesInjection
             />
           </div>
 

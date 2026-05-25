@@ -79,6 +79,17 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
     return plan as PurchasedPlan;
   },
 
+  async getActivePlansByPetId(petId: string): Promise<PurchasedPlan[] | null> {
+    const plans = await PurchasedPlanModel.find({
+      petId,
+      active: true,
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return plans as PurchasedPlan[];
+  },
+
   /**
    * Activates a purchased plan.
    *

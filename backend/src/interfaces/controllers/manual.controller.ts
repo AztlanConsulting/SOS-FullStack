@@ -41,3 +41,16 @@ export async function getManuals(req: Request, res: Response) {
     res.status(500).send(error);
   }
 }
+
+export const getManualById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const idStr = Array.isArray(id) ? id[0] : id;
+    const manual = await ManualDataAccess.getManualById(idStr);
+    if (!manual)
+      return res.status(404).json({ message: 'Manual no encontrado' });
+    return res.status(200).json(manual);
+  } catch (err) {
+    return res.status(500).json({ message: 'Error al obtener el manual' });
+  }
+};

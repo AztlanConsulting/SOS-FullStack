@@ -122,6 +122,11 @@ const Header = ({
     'purple-primary': 'bg-purple-primary',
   };
 
+  const focusedBgColors: Record<string, string> = {
+    primary: 'bg-primary',
+    'purple-primary': 'bg-dark-purple/10',
+  };
+
   const borderColors: Record<string, string> = {
     primary: 'border-primary',
     'purple-primary': 'border-purple-primary',
@@ -336,7 +341,7 @@ const Header = ({
                         onClick={() =>
                           setOpenDropdown(isExpanded ? null : link.label)
                         }
-                        className="flex gap-4 items-center py-5 px-6 transition-all cursor-pointer justify-between"
+                        className={`flex gap-4 items-center py-5 px-6 transition-all cursor-pointer justify-between ${isExpanded ? focusedBgColors[color] : ''}`}
                       >
                         <div className="flex gap-4 items-center">
                           <span className="text-white text-2xl">
@@ -374,9 +379,7 @@ const Header = ({
                                   setIsMenuOpen(false);
                                   setOpenDropdown(null);
                                 }}
-                                className={`flex gap-4 items-center py-5 pl-16 pr-3 transition-all cursor-pointer ${
-                                  childIsActive ? 'bg-[#FAD25A]' : ''
-                                }`}
+                                className={`flex gap-4 items-center py-5 pl-16 pr-3 transition-all cursor-pointer ${childIsActive ? focusedBgColors[color] : ''}`}
                               >
                                 <Text
                                   variant="body"
@@ -402,9 +405,7 @@ const Header = ({
                       navigate(link.href!);
                       setIsMenuOpen(false);
                     }}
-                    className={`flex gap-4 items-center py-5 pl-6 transition-all cursor-pointer ${
-                      isActive ? 'bg-[#FAD25A]' : ''
-                    }`}
+                    className={`flex gap-4 items-center py-5 pl-6 transition-all cursor-pointer ${isActive ? focusedBgColors[color] : ''}`}
                   >
                     <div className="flex gap-4 items-center box-shad">
                       <span className="text-white text-2xl">{link.icon}</span>

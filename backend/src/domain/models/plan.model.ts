@@ -8,6 +8,7 @@ import { Schema, model } from 'mongoose';
 export interface IPlan extends Document {
   name: string;
   price: number;
+  discounted?: Boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,6 +21,7 @@ const planSchema = new Schema<IPlan>(
   {
     name: { type: String, required: true },
     price: { type: Number, required: true },
+    discounted: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

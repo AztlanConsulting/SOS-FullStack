@@ -4,6 +4,7 @@ import { emailService } from '@/infrastructure/service/email.service';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 import { petDataAccess } from '@/infrastructure/data-access/pet.data-access';
+import bcrypt from 'bcryptjs';
 
 /**
  * Worker responsible for:
@@ -45,17 +46,25 @@ new Worker(
         return;
       }
 
+      const regex = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
+
       await emailService.sendActivatePlanEmail({
         to: user.email,
-        username: user.email,
-        password: pet.name,
+        ...(() =>
+          regex.test(user.password)
+            ? {}
+            : { username: user.email, password: user.password })(),
+
         facebookUrl: purchasedPlan.socialPosts?.facebook?.url ?? '',
         instagramUrl: purchasedPlan.socialPosts?.instagram?.url ?? '',
       });
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
+      await userDataAccess.updateUserPassword(
+        user.email,
+        await bcrypt.hash(user.password, 10),
+      );
     } catch (error) {
-
       throw error;
     }
   },

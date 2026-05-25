@@ -151,4 +151,15 @@ export const userDataAccess: UserRepository = {
       { runValidators: true },
     ).exec();
   },
+
+  updateUserPassword: async function (
+    email: string,
+    newPassword: string,
+  ): Promise<void> {
+    await UserModel.findOneAndUpdate(
+      { email },
+      { $set: { password: newPassword } },
+      { runValidators: true },
+    ).exec();
+  },
 };

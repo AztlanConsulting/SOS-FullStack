@@ -26,8 +26,7 @@ async function main() {
     try {
       await startVectorDB();
       await readDirectory(baseRoute, fn);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 }
 

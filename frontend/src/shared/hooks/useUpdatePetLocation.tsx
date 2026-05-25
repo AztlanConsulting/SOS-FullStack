@@ -29,8 +29,7 @@ function useUpdatePetLocation<T extends FoundPetReportData>(
             ...locationLogic<T>(prev, p),
           }));
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
     }
   }, [formData.location?.coords]);
 }

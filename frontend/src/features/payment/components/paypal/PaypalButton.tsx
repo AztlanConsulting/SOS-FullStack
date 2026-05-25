@@ -68,8 +68,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               success();
             }
           }}
-          onError={(error) => {
-          }}
+          onError={(error) => {}}
         />
       </div>
     </>

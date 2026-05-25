@@ -5,6 +5,7 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   options: { value: string; label: string }[];
   error?: string;
+  focusColor?: 'yellow' | 'purple';
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -13,26 +14,37 @@ export const Select: React.FC<SelectProps> = ({
   options,
   required,
   error,
+  focusColor = 'yellow',
   ...props
 }) => {
   const hasErrorState = Boolean(error);
+  const usePurple = focusColor === 'purple';
+
+  const wrapperFocusClasses = hasErrorState
+    ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500'
+    : usePurple
+      ? 'border-gray-400 focus-within:border-[var(--color-purple-primary)] focus-within:ring-[var(--color-purple-primary)]'
+      : 'border-gray-400 focus-within:border-yellow-500 focus-within:ring-yellow-500';
+
+  const labelFocusClass = hasErrorState
+    ? 'group-focus-within:text-red-500'
+    : usePurple
+      ? 'group-focus-within:text-[var(--color-purple-primary)]'
+      : 'group-focus-within:text-[var(--color-primary)]';
 
   return (
     <div className="flex flex-col w-full">
       <div
-        className={`group relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:ring-1 group ${
-          hasErrorState
-            ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500'
-            : 'border-gray-400 focus-within:border-yellow-500 focus-within:ring-yellow-500'
-        }`}
+        className={`group relative border border-gray-400 rounded-lg px-2 py-1 bg-white focus-within:ring-1 ${wrapperFocusClasses}`}
       >
         <label
           htmlFor={id}
-          className={`block text-xs text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+          className={`block text-xs text-gray-400 ${labelFocusClass}`}
         >
           {label}
           {required && <span className="text-red-500 font-bold">*</span>}
         </label>
+
         <select
           id={id}
           className="w-full text-sm text-gray-700 bg-transparent outline-none appearance-none cursor-pointer"
@@ -47,7 +59,8 @@ export const Select: React.FC<SelectProps> = ({
             </option>
           ))}
         </select>
-        <div className="absolute right-3 top-1/2 translate-y-[-10%] pointer-events-none text-black">
+
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-black">
           <svg
             width="14"
             height="8"
@@ -65,6 +78,7 @@ export const Select: React.FC<SelectProps> = ({
           </svg>
         </div>
       </div>
+
       {error && (
         <Text
           variant="small"

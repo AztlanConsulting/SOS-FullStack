@@ -9,6 +9,7 @@
   --color-purple-primary: #9d7fad;
   --color-purple-secondary: #ddd2e3;
   --color-dark-purple: #673881;
+  --color-light-dark-purple: #67388133;
 }
 
 html,
@@ -55,6 +56,9 @@ input[type='search']::-webkit-search-cancel-button {
   --color-purple: #9d7fad;
   --color-light-purple: #9d7fad33;
   --color-success: #198754;
+  --color-status-ok: #27a300;
+  --color-status-warning: #e3e36a;
+  --color-status-danger: #ba0c0c;
   --color-success-bg: #d1e7dd;
   --color-warning: #ff9500;
   --color-danger: #ff3333;
@@ -100,6 +104,10 @@ input[type='search']::-webkit-search-cancel-button {
 
 .color-danger-bg {
   background-color: var(--color-danger-bg);
+}
+
+.color-warning-bg {
+  background-color: var(--color-warning);
 }
 
 .color-grey-bg {

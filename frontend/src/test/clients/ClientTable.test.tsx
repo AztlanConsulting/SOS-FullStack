@@ -70,7 +70,9 @@ describe('ClientTable (Component Tests)', () => {
     expect(screen.queryAllByText('Fecha de compra').length).toBeGreaterThan(0);
     expect(screen.queryAllByText('Nombre mascota').length).toBeGreaterThan(0);
     expect(screen.queryAllByText('Características').length).toBeGreaterThan(0);
-    expect(screen.queryAllByText('Link de la conversación').length).toBeGreaterThan(0);
+    expect(
+      screen.queryAllByText('Link de la conversación').length,
+    ).toBeGreaterThan(0);
     expect(screen.queryAllByText('Estatus del plan').length).toBeGreaterThan(0);
   });
 
@@ -97,7 +99,9 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('shows empty message when no clients', () => {
     renderTable([]);
-    expect(screen.queryAllByText('No se encontraron clientes.').length).toBeGreaterThan(0);
+    expect(
+      screen.queryAllByText('No se encontraron clientes.').length,
+    ).toBeGreaterThan(0);
   });
 
   /**

@@ -1,3 +1,4 @@
+import { PurchasedPlan } from '@/domain/models/purchasedPlan.model';
 import { z } from 'zod';
 
 export const PET_REPORT_SEX_VALUES = [
@@ -89,21 +90,22 @@ export const getCreatePetReportFieldErrors = (
   }, {});
 };
 
-export interface PurchasedResourceResponse {
-  id: string;
+export interface Plan {
   name: string;
-  type: 'manual' | 'workshop';
-  imageUrl: string;
-  description?: string;
+  duration: number;
+  createdAt: Date;
 }
 
 export interface PlanProgressResult {
-  planName: string;
-  totalDays: number;
-  daysRemaining: number;
+  plans: Plan[];
+  petName: string;
+  petImage: string | null;
+  planStatus: 'continua' | 'RIP' | 'encontrado';
+  posterImage: string | null;
+  dateMissing: string | Date;
+  location: string;
 }
 
 export interface DashboardResponse {
-  planProgress: PlanProgressResult | null;
-  resources: PurchasedResourceResponse[];
+  planProgress: PlanProgressResult[] | null;
 }

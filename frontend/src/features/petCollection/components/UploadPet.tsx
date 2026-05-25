@@ -8,7 +8,7 @@ interface Props {
 
 const UploadPet = ({ img, uploadFile }: Props) => {
   return (
-    <div className="bg-purple-primary h-1/2 min-h-48 md:h-screen md:w-1/3 p-2 py-10 flex flex-col items-center justify-center gap-5 shadow-dark-purple shadow-lg">
+    <div className="bg-purple-primary h-1/2 min-h-48 md:h-screen md:w-1/3 p-2 py-10 flex flex-col items-center justify-center gap-5 shadow-[0_8px_20px_rgba(103,56,129,0.20)] overflow-visible relative z-10">
       {img && (
         <img
           loading="lazy"

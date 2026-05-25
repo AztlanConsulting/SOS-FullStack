@@ -28,7 +28,6 @@ interface Props {
   onRefresh?: () => void;
 }
 
-
 /**
  *
  * Displays a comprehensive view of a client's profile, including:
@@ -56,9 +55,8 @@ export const ClientDetailModal = ({
     {},
   );
   const petsToShow = petId
-    ? detail?.pets?.filter(p => p._id === petId)
+    ? detail?.pets?.filter((p) => p._id === petId)
     : detail?.pets;
-
 
   // Sync internal input state when data is loaded from the hook
   useEffect(() => {
@@ -140,10 +138,10 @@ export const ClientDetailModal = ({
               <Text variant="small" color="text-gray-600">
                 {detail.createdAt
                   ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
                   : '—'}
               </Text>
             </div>
@@ -236,15 +234,15 @@ export const ClientDetailModal = ({
           {petsToShow?.map((pet, petIndex) => {
             const expiryDates = pet.plans
               ? calculateStackedExpiry(
-                pet.plans.filter(
-                  (
-                    p,
-                  ): p is typeof p & {
-                    createdAt: string;
-                    duration: number;
-                  } => Boolean(p.createdAt && p.duration),
-                ),
-              )
+                  pet.plans.filter(
+                    (
+                      p,
+                    ): p is typeof p & {
+                      createdAt: string;
+                      duration: number;
+                    } => Boolean(p.createdAt && p.duration),
+                  ),
+                )
               : [];
 
             return (
@@ -392,13 +390,13 @@ export const ClientDetailModal = ({
                                 {expiryDates[index] < new Date()
                                   ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                                   : expiryDates[index].toLocaleDateString(
-                                    'es-MX',
-                                    {
-                                      day: '2-digit',
-                                      month: '2-digit',
-                                      year: 'numeric',
-                                    },
-                                  )}
+                                      'es-MX',
+                                      {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric',
+                                      },
+                                    )}
                               </span>
                             </Text>
                           )}

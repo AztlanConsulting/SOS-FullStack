@@ -23,7 +23,7 @@ export interface ClientPet {
   size?: string;
   description?: string;
   photos?: string[];
-  plans: ClientPlan[];
+  plans?: ClientPlan[];
   dateMissing?: string;
   placeMissing?: string;
   location?: {
@@ -35,6 +35,8 @@ export interface ClientPet {
       state: string;
     };
   };
+  paymentMethod?: string;
+  paymentStatus?: 'pending' | 'succeeded' | 'failed';
 }
 
 /**
@@ -85,6 +87,7 @@ export interface ClientDetail {
   plans: ClientPlan[];
   notes?: string;
   paymentMethod?: string;
+  paymentStatus?: 'pending' | 'succeeded' | 'failed';
 }
 
 /**

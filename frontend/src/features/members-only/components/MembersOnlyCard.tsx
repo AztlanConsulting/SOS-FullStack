@@ -20,7 +20,8 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
       .then((blob) => {
         objectUrl = URL.createObjectURL(blob);
         setImageSrc(objectUrl);
-      });
+      })
+      .catch(() => setImageSrc(''));
     return () => {
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };

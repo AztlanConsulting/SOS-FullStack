@@ -90,13 +90,13 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                     <Text variant="caption">
                       {client.plan?.createdAt
                         ? new Date(client.plan.createdAt).toLocaleDateString(
-                          'es-MX',
-                          {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                          },
-                        )
+                            'es-MX',
+                            {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                            },
+                          )
                         : '—'}
                     </Text>
                   </td>
@@ -121,10 +121,14 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                           {client.conversation}
                         </a>
                       ) : (
-                        <Text variant="caption" color="text-gray-500">{client.conversation}</Text>
+                        <Text variant="caption" color="text-gray-500">
+                          {client.conversation}
+                        </Text>
                       )
                     ) : (
-                      <Text variant="caption" color="text-gray-400">—</Text>
+                      <Text variant="caption" color="text-gray-400">
+                        —
+                      </Text>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -180,17 +184,17 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   Fecha:{' '}
                   {client.createdAt
                     ? new Date(client.createdAt).toLocaleDateString('es-MX', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    })
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })
                     : '—'}
                 </Text>
                 <Text variant="small" color="text-gray-500">
                   Notas: {client.pet?.description ?? '—'}
                 </Text>
-                {client.conversation && (
-                  client.conversation.startsWith('http') ? (
+                {client.conversation &&
+                  (client.conversation.startsWith('http') ? (
                     <a
                       href={client.conversation}
                       target="_blank"
@@ -201,9 +205,10 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                       {client.conversation}
                     </a>
                   ) : (
-                    <Text variant="small" color="text-gray-500">{client.conversation}</Text>
-                  )
-                )}
+                    <Text variant="small" color="text-gray-500">
+                      {client.conversation}
+                    </Text>
+                  ))}
                 {client.plan?.status ? (
                   <PlanStatusBadge status={client.plan.status} />
                 ) : (

@@ -2,6 +2,8 @@ import type { PetRepository } from '@domain/repositories/pet.repository';
 import type { PurchasedPlanRepository } from '@domain/repositories/purchasedPlan.repository';
 import type { PlanProgressResult } from '../../types/clients.type';
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 interface Dependencies {
   petRepository: PetRepository;
   purchasedPlanRepository: PurchasedPlanRepository;
@@ -10,30 +12,46 @@ interface Dependencies {
 export const getPlanProgress = async (
   { petRepository, purchasedPlanRepository }: Dependencies,
   userId: string,
-): Promise<PlanProgressResult | null> => {
-  const pet = await petRepository.getPetByUserId(userId);
-  if (!pet) {
+): Promise<PlanProgressResult[] | null> => {
+  const pets = await petRepository.getPetsByUserId(userId);
+  if (pets.length === 0) {
     return null;
   }
 
-  const plan = await purchasedPlanRepository.getPurchasedPlanById(
-    pet._id.toString(),
-  );
-  if (!plan) {
-    return null;
+  const planProgress: PlanProgressResult[] = [];
+
+  for (const pet of pets) {
+    const plans = await purchasedPlanRepository.getActivePlansByPetId(
+      pet._id.toString(),
+    );
+
+    if (!plans || plans.length === 0) {
+      continue;
+    }
+
+    const planStatus = plans.some((plan) => plan.status === 'RIP')
+      ? 'RIP'
+      : plans.some((plan) => plan.status === 'encontrado')
+        ? 'encontrado'
+        : 'continua';
+
+    const posterImage =
+      pet.photos.length > 1 ? (pet.photos.at(-1) ?? null) : null;
+
+    planProgress.push({
+      plans: plans.map((p) => ({
+        name: p.name,
+        duration: p.duration,
+        createdAt: p.createdAt,
+      })),
+      petName: pet.name,
+      petImage: pet.photos[0] ?? null,
+      planStatus: planStatus,
+      posterImage,
+      dateMissing: pet.dateMissing,
+      location: pet.location.displayName,
+    });
   }
 
-  const totalDays = plan.duration;
-  const createdAt = new Date(plan.createdAt);
-  const today = new Date();
-
-  const diffTime = today.getTime() - createdAt.getTime();
-  const daysElapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const daysRemaining = Math.max(0, totalDays - daysElapsed);
-
-  return {
-    planName: plan.name,
-    totalDays,
-    daysRemaining,
-  };
+  return planProgress;
 };

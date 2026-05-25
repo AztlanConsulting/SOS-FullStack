@@ -19,8 +19,7 @@ export const mongoDB = async (enviroment?: string) => {
     }
 
     await mongoose.connect(uri);
-  } catch (error: unknown) {
-  }
+  } catch (error: unknown) {}
 };
 
 /**

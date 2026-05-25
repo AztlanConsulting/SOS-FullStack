@@ -31,6 +31,8 @@ export interface PurchasedPlanRepository {
   createPurchasedPlan(
     planData: PurchasedPlanCreateInput,
   ): Promise<PurchasedPlan>;
+  getPurchasedPlanById(planId: string): Promise<PurchasedPlan | null>;
+  getActivePlansByPetId(petId: string): Promise<PurchasedPlan[] | null>;
   /**
    * Aggregates purchase history to compute the global popularity of different plans.
    * * @returns A promise resolving to an array of metrics structured for visualization tools.

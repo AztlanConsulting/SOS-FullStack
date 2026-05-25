@@ -11,10 +11,6 @@ router.post(
   clientsController.createLostPetReportController,
 );
 
-router.get(
-  '/dashboard',
-  authMiddleware,
-  clientsController.getDashboardController,
-);
+router.get('/inicio', authMiddleware, clientsController.getDashboardController);
 
 export default router;

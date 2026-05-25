@@ -6,7 +6,7 @@ import { Text } from '@/shared/components/ui/Text/Text';
 import { Button } from '@/shared/components/ui/Button';
 import { useState } from 'react';
 import encontrado from '@assets/images/Encontrado.webp';
-import rip from '@assets/images/RIP.webp';
+import rip from '@assets/images/Rip.webp';
 import portal from '@assets/images/Portal.webp';
 
 const dashboardContainerClass =

@@ -162,5 +162,6 @@ const mapToPurchasedPlan = (
     duration: input.planDetails.days,
     radius: input.planDetails.km,
     features: input.planDetails.selectedFeatures,
+    status: 'continua',
   };
 };

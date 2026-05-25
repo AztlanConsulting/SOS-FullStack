@@ -9,16 +9,23 @@ vi.mock('@/features/graphs/services/graphs.service', () => ({
 }));
 
 const dashboardResponse: DashboardResponse = {
-  planProgress: {
-    planName: 'Básico',
-    totalDays: 30,
-    daysRemaining: 12,
-    petName: 'Firulais',
-    petImage: '/pet.jpg',
-    posterImage: '/poster.jpg',
-    dateMissing: '2026-05-01',
-    location: 'Parque Alameda',
-  },
+  planProgress: [
+    {
+      plans: [
+        {
+          name: 'Básico',
+          duration: 30,
+          createdAt: new Date('2026-05-08T12:00:00.000Z'),
+        },
+      ],
+      petName: 'Firulais',
+      petImage: '/pet.jpg',
+      planStatus: 'continua',
+      posterImage: '/poster.jpg',
+      dateMissing: '2026-05-01',
+      location: 'Parque Alameda',
+    },
+  ],
 };
 
 describe('useDashboardMetrics', () => {

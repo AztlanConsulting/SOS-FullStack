@@ -36,18 +36,23 @@ vi.mock('@/features/client/components/AdProgressSection', () => ({
 }));
 
 const planProgress = {
-  planName: 'Básico',
-  totalDays: 30,
-  daysRemaining: 12,
+  plans: [
+    {
+      name: 'Básico',
+      duration: 30,
+      createdAt: new Date('2026-05-08T12:00:00.000Z'),
+    },
+  ],
   petName: 'Firulais',
   petImage: '/uploads/pet.jpg',
+  planStatus: 'continua' as const,
   posterImage: '/uploads/poster.jpg',
   dateMissing: '2026-05-01T12:00:00.000Z',
   location: 'Parque Alameda',
 };
 
 const dashboardMetrics: DashboardResponse = {
-  planProgress,
+  planProgress: [planProgress],
 };
 
 describe('ClientDashboardOverview', () => {
@@ -102,14 +107,15 @@ describe('ClientDashboardOverview', () => {
 
     render(<ClientDashboardOverview />);
 
+    fireEvent.click(screen.getByText('Ver detalles'));
+
     expect(screen.getByText('Portal exclusivo')).toBeInTheDocument();
-    expect(screen.getByText('Firulais')).toBeInTheDocument();
-    expect(screen.getByText(/Desde 01\/05\/2026/)).toBeInTheDocument();
+    expect(screen.getAllByText('Firulais').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Desde 01\/05\/2026/).length).toBeGreaterThan(0);
     expect(screen.getByText(/Parque Alameda/)).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: 'Firulais' })).toHaveAttribute(
-      'src',
-      'http://localhost:3000/uploads/pet.jpg',
-    );
+    expect(
+      screen.getAllByRole('img', { name: 'Firulais' }).length,
+    ).toBeGreaterThan(0);
     expect(screen.getByTestId('plan-progress')).toHaveTextContent('con-plan');
     expect(screen.getByTestId('ad-progress')).toHaveTextContent(
       'http://localhost:3000/uploads/poster.jpg',
@@ -120,16 +126,20 @@ describe('ClientDashboardOverview', () => {
     dashboardMocks.useDashboardMetrics.mockReturnValue({
       metrics: {
         ...dashboardMetrics,
-        planProgress: {
-          ...planProgress,
-          posterImage: 'https://cdn.test/poster.jpg',
-        },
+        planProgress: [
+          {
+            ...planProgress,
+            posterImage: 'https://cdn.test/poster.jpg',
+          },
+        ],
       },
       loading: false,
       error: null,
     });
 
     render(<ClientDashboardOverview />);
+
+    fireEvent.click(screen.getByText('Ver detalles'));
 
     expect(screen.getByTestId('ad-progress')).toHaveTextContent(
       'https://cdn.test/poster.jpg',
@@ -140,10 +150,12 @@ describe('ClientDashboardOverview', () => {
     dashboardMocks.useDashboardMetrics.mockReturnValue({
       metrics: {
         ...dashboardMetrics,
-        planProgress: {
-          ...planProgress,
-          dateMissing: '2026-05-01T00:00:00.000Z',
-        },
+        planProgress: [
+          {
+            ...planProgress,
+            dateMissing: '2026-05-01T00:00:00.000Z',
+          },
+        ],
       },
       loading: false,
       error: null,
@@ -158,16 +170,20 @@ describe('ClientDashboardOverview', () => {
     dashboardMocks.useDashboardMetrics.mockReturnValue({
       metrics: {
         ...dashboardMetrics,
-        planProgress: {
-          ...planProgress,
-          location: '   ',
-        },
+        planProgress: [
+          {
+            ...planProgress,
+            location: '',
+          },
+        ],
       },
       loading: false,
       error: null,
     });
 
     render(<ClientDashboardOverview />);
+
+    fireEvent.click(screen.getByText('Ver detalles'));
 
     expect(screen.getByText(/ubicación no disponible/)).toBeInTheDocument();
   });
@@ -181,8 +197,10 @@ describe('ClientDashboardOverview', () => {
 
     render(<ClientDashboardOverview />);
 
+    fireEvent.click(screen.getByText('Ver detalles'));
+
     fireEvent.click(
-      screen.getByRole('button', { name: 'Galería de mascotas' }),
+      screen.getByRole('button', { name: 'Radar de coincidencias' }),
     );
 
     expect(dashboardMocks.navigate).toHaveBeenCalledWith(

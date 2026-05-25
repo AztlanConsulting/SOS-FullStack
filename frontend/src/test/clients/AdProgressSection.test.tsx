@@ -46,20 +46,18 @@ describe('AdProgressSection', () => {
       <AdProgressSection posterUrl="http://localhost:3000/uploads/poster.jpg" />,
     );
 
-    const poster = screen.getByRole('img', {
-      name: 'Póster de mascota perdida',
-    });
-
     fireEvent.click(screen.getByRole('button', { name: 'Descargar a Color' }));
     fireEvent.click(screen.getByRole('button', { name: 'Descargar en B/N' }));
 
     expect(exportMocks.color).toHaveBeenCalledWith(
-      poster,
+      'http://localhost:3000/uploads/poster.jpg',
       'poster-mascota-color',
+      'letter',
     );
     expect(exportMocks.blackAndWhite).toHaveBeenCalledWith(
-      poster,
+      'http://localhost:3000/uploads/poster.jpg',
       'poster-mascota-bn',
+      'letter',
     );
   });
 });

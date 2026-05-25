@@ -38,9 +38,20 @@ const petData: PlanSubscriptionProgress = {
 describe('PlanProgressSection', () => {
   beforeEach(() => {
     planProgressMocks.navigate.mockReset();
+    vi.stubGlobal('matchMedia', () => ({
+      matches: false,
+      media: '(min-width: 1024px)',
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
   });
 
   afterEach(() => {
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
@@ -75,7 +86,7 @@ describe('PlanProgressSection', () => {
     );
 
     expect(openMock).toHaveBeenCalledWith(
-      'https://www.facebook.com/messages/t/SOSencontrandomascotas',
+      'https://m.me/2444791512265246',
       '_blank',
       'noopener,noreferrer',
     );

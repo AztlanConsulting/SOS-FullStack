@@ -46,6 +46,7 @@ const HeroSection = ({
 
         <div className="order-2 md:order-1 md:row-span-2 my-3 md:my-0">
           <img
+            loading="lazy"
             src={image}
             alt="Manuales"
             className={`w-full rounded-lg object-cover ${shadowClass} shadow-lg`}

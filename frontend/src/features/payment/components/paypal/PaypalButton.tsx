@@ -36,6 +36,9 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
           className="-z-20 w-full"
           presentationMode="auto"
           createOrder={async () => {
+            const response = await createPaypalPayment(data, exchangeRate);
+            if (response.status !== 201)
+              throw "Error, couldn't process payment";
             if (data.plan) {
               const petResult: PurchasedPlanResponse =
                 await createLostPetReportRequest(data.plan);
@@ -43,7 +46,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               const newPetId = petResult.plan._id;
               planIdRef.current = newPetId;
             }
-            const response = await createPaypalPayment(data, exchangeRate);
+
             const orderId = response.data.result.id;
             return { orderId };
           }}

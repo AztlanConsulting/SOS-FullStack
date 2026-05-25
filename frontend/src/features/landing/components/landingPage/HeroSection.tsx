@@ -49,6 +49,7 @@ const HeroSection = () => {
 
           <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
             <img
+              loading="lazy"
               src={owner}
               alt="Mascota"
               className="w-auto h-[283px] lg:h-[330px] rounded-lg"

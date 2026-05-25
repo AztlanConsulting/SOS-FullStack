@@ -36,3 +36,17 @@ export interface OxxoDetails {
   expiresAfter: number | null;
   voucherUrl: string | null;
 }
+
+export interface PaymentIntent {
+  amount: number;
+  currency: string;
+  product?: {
+    productId: string;
+    productName: string;
+  };
+  plan?: LostPetReportData;
+  method?: string;
+  name?: string;
+  email?: string;
+  idempotencyKey: string;
+}

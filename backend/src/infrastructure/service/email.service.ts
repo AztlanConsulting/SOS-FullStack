@@ -70,9 +70,30 @@ export const emailService: EmailService = {
                 </tr>
 
                 <tr>
-                  <td align="center" style="padding: 32px 32px 24px 32px; display: flex; justify-content: space-around;">
-                    <img src="https://encontrandomascotas.com/api/logo/yellowIcon.webp"/>
-                    <h1 style="margin:0;color:#1a1a1a;font-size:22px;letter-spacing:-0.5px;font-weight:bold;">
+                  <td style="vertical-align:middle;padding-right:12px;">
+                    <img
+                      src="https://encontrandomascotas.com/api/logo/yellowIcon.png"
+                      alt="SOS Encontrando Mascotas"
+                      height="40"
+                      style="
+                        display:block;
+                        height:40px;
+                        width:auto;
+                        border:0;
+                        outline:none;
+                        text-decoration:none;
+                      "
+                    />
+                  </td>
+
+                  <td style="vertical-align:middle;">
+                    <h1 style="
+                      margin:0;
+                      color:#1a1a1a;
+                      font-size:22px;
+                      line-height:40px;
+                      font-weight:bold;
+                    ">
                       SOS Encontrando Mascotas
                     </h1>
                   </td>

@@ -9,7 +9,6 @@ async function getFoundPetDetails(req: Request, res: Response) {
     const params = safeParse(z.object({ id: z.string() }), req.params);
 
     if (params.error) {
-      console.error(params.error);
       throw Error("Coudln't parse ID from params");
     }
 
@@ -25,7 +24,6 @@ async function getFoundPetDetails(req: Request, res: Response) {
 
     res.status(200).send(petDetails);
   } catch (error) {
-    console.error(error);
     res
       .status(500)
       .send(`Error fetching petDetails with id: ${req.params.id ?? undefined}`);

@@ -37,6 +37,7 @@ const HowToUse = () => {
           </div>
           <div className="flex flex-col md:flex-row items-center lg:justify-between gap-8 lg:gap-12">
             <img
+              loading="lazy"
               src={SelectImage}
               alt="Publicación"
               className="w-4/5 md:w-1/2 h-auto rounded-lg"
@@ -62,6 +63,7 @@ const HowToUse = () => {
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row-reverse items-center lg:justify-between gap-8 lg:gap-12">
             <img
+              loading="lazy"
               src={Gallery}
               alt="Publicación"
               className="w-4/5 md:w-1/3 h-auto rounded-lg"
@@ -87,6 +89,7 @@ const HowToUse = () => {
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row items-center lg:justify-between gap-8 lg:gap-12">
             <img
+              loading="lazy"
               src={Filter}
               alt="Publicación"
               className="w-4/5 md:w-1/3 h-auto rounded-lg"

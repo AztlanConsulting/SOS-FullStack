@@ -6,6 +6,7 @@ import type {
   SocialPostsInput,
 } from '@domain/models/purchasedPlan.model';
 import type { PurchasedPlanRepository } from '@domain/repositories/purchasedPlan.repository';
+import type { PlanDistributionMetric } from '@domain/repositories/purchasedPlan.repository';
 
 export const purchasedPlanDataAccess: PurchasedPlanRepository = {
   /**
@@ -23,6 +24,46 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
   },
 
   /**
+   * Retrieves the distribution of purchased plans grouped by name.
+   *
+   * This implementation uses a MongoDB aggregation pipeline to count occurrences
+   * of each plan name, providing data suitable for pie charts or bar graphs.
+   *
+   * Pipeline Stages:
+   * 1. $group: Aggregates records by the 'name' field and counts the total ($sum: 1).
+   * 2. $project: Reshapes the document to match the PlanDistributionMetric interface,
+   *    renaming the internal '_id' to 'name' and suppressing the default ID.
+   * 3. $sort: Orders the results from most to least popular.
+   *
+   * @returns {Promise<PlanDistributionMetric[]>} Array of metrics with plan names and total sales.
+   */
+  getPlanDistribution: async function (): Promise<PlanDistributionMetric[]> {
+    const result = await PurchasedPlanModel.aggregate([
+      {
+        $match: { status: { $nin: ['expirado', 'RIP', 'encontrado'] } },
+      },
+      {
+        $group: {
+          _id: '$name',
+          value: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: '$_id',
+          value: 1,
+        },
+      },
+      { $sort: { value: -1 } },
+    ]);
+
+    return result;
+  },
+
+  /*
+   * @param petId The pet id from the user.
+   * @returns The plan for that pet.
    * Retrieves a purchased plan by its ID.
    *
    * @param planId - Unique identifier of the purchased plan
@@ -124,5 +165,14 @@ export const purchasedPlanDataAccess: PurchasedPlanRepository = {
       { $set: update },
       { runValidators: true },
     ).exec();
+  },
+
+  /**
+   * Directly updates the descriptive lifecycle tag of a specific plan record.
+   * * @param planId - Document configuration tracking key.
+   * @param status - The target validation state to persist (e.g., 'expirado').
+   */
+  updatePlanStatus: async (planId: string, status: string): Promise<void> => {
+    await PurchasedPlanModel.findByIdAndUpdate(planId, { $set: { status } });
   },
 };

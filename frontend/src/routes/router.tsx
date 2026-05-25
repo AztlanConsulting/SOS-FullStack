@@ -11,12 +11,12 @@ import routerPlans from './plan.routes';
 import routerManuals from './manual.routes';
 import routerLostPet from './foundPet.routes';
 import { PurchasePage } from '@pages/PurchasePage';
-import routerClient from './client.routes';
 import { PetReportForm } from '@features/users/components/PetReportForm';
 import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
+import routerClients from './client.routes';
 import routerMembersOnly from './membersOnly.routes';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
             <ClientDashboard />
           </RoleProtectedRoute>
         ),
-        children: [...routerClient, ...routerMembersOnly],
+        children: [...routerMembersOnly],
       },
       {
         path: '/credits',
@@ -87,6 +87,7 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
+      ...routerClients,
     ],
   },
 ]);

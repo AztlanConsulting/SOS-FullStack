@@ -16,16 +16,10 @@ export const mongoDB = async (enviroment?: string) => {
       });
 
       uri = mongoServer.getUri();
-
-      console.log("USING MEMORY DATABASE: CHANGES WON'T BE PERSISTENT");
     }
 
     await mongoose.connect(uri);
-
-    console.log('MongoDB connected');
-  } catch (error: unknown) {
-    console.error('Error connecting to MongoDB', error);
-  }
+  } catch (error: unknown) {}
 };
 
 /**

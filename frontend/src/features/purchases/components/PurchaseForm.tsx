@@ -60,8 +60,6 @@ const PurchaseForm = ({
     }),
   };
 
-  console.log(orderDetails);
-
   return (
     <div>
       <Text

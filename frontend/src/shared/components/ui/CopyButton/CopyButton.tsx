@@ -19,9 +19,7 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
       await navigator.clipboard.writeText(text);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
-    } catch {
-      console.error('Failed to copy');
-    }
+    } catch {}
   };
 
   return (

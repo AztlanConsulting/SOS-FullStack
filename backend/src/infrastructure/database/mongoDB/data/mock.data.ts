@@ -21,6 +21,7 @@ import bcrypt from 'bcryptjs';
 import initBlogDB from './blogs.data';
 import initWorkshopDB from './workshops.data';
 import initManualDB from './manuals.data';
+import { tryCatch } from 'bullmq';
 
 dotenv.config();
 
@@ -45,7 +46,7 @@ try {
   await initManualDB();
   await initBlogDB();
   await initPlanDB();
-  await initMembersOnlyDB();
+  //await initMembersOnlyDB();
 
   const resources = await ResourcesModel.insertMany([
     { name: 'users', description: 'User management' },
@@ -162,9 +163,7 @@ try {
     ]);
   }
 
-  console.log('Mock data for data base done.');
   process.exit(0);
 } catch (error) {
-  console.error('Error seeding data:', error);
   process.exit(1);
 }

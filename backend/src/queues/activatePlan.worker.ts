@@ -6,6 +6,7 @@ import { petDataAccess } from '@infrastructure/data-access/pet.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 import { sendEmailQueue } from './sendEmail.queue';
 import type { Pet } from '@/domain/models/pet.model';
+import axios from 'axios';
 
 /**
  * Worker responsible for:
@@ -19,12 +20,9 @@ new Worker(
 
   async (job) => {
     try {
-      console.log('Job started:', job.id);
-
       const { userEmail, planId } = job.data;
 
       const user = await userDataAccess.getUserByEmail(userEmail);
-
       if (!user) {
         throw new Error('USER_NOT_FOUND');
       }
@@ -53,7 +51,6 @@ new Worker(
       const emailAlreadySent = purchasedPlan.emailStatus === 'sent';
 
       if (facebookAlreadyPosted && instagramAlreadyPosted && emailAlreadySent) {
-        console.log('Plan already fully processed');
         return;
       }
 
@@ -65,8 +62,6 @@ new Worker(
 
       if (!facebookAlreadyPosted) {
         try {
-          console.log('Publishing to Facebook...');
-
           const fb = await metaPublisher.publishToFacebook({
             imageUrl,
             caption,
@@ -80,11 +75,9 @@ new Worker(
               postedAt: new Date(),
             },
           });
-
-          console.log('Facebook post published:', fb.url);
         } catch (error) {
-          console.error('Facebook publish error:', error);
-
+          if (axios.isAxiosError(error)) console.log(error.response?.data);
+          else console.log(error);
           // Facebook may publish successfully but fail before the DB checkpoint
           // is saved (timeout, crash, network error, etc.).
           //
@@ -95,8 +88,6 @@ new Worker(
           );
 
           if (existingPost) {
-            console.log('Facebook post found after error');
-
             await purchasedPlanDataAccess.updatePurchasedPlanSocialPosts(
               planId,
               {
@@ -124,8 +115,6 @@ new Worker(
 
       if (!instagramAlreadyPosted) {
         try {
-          console.log('Publishing to Instagram...');
-
           const ig = await metaPublisher.publishToInstagram({
             imageUrl,
             caption,
@@ -139,11 +128,9 @@ new Worker(
               postedAt: new Date(),
             },
           });
-
-          console.log('Instagram post published:', ig.url);
         } catch (error) {
-          console.error('Instagram publish error:', error);
-
+          if (axios.isAxiosError(error)) console.log(error.response?.data);
+          else console.log(error);
           throw error;
         }
       }
@@ -183,14 +170,10 @@ new Worker(
             removeOnFail: false,
           },
         );
-
-        console.log('Email job queued');
       }
-
-      console.log('Publishing workflow completed');
     } catch (error) {
-      console.error('Job failed:', error);
-
+      if (axios.isAxiosError(error)) console.log(error.response?.data);
+      else console.log(error);
       throw error;
     }
   },

@@ -27,8 +27,6 @@ export default async function createSearchFormController(
       data: createdReport,
     });
   } catch (err: unknown) {
-    console.error(err);
-
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
 
     res.status(500).json({

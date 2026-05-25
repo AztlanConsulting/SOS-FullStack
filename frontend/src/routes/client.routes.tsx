@@ -1,12 +1,21 @@
-import ClientDashboardOverview from '@/pages/ClientDashboardOverview';
-import routerPetCollection from './petCollection.routes';
+import { RoleProtectedRoute } from './RoleProtectedRoute';
+import { ClientsPage } from '@/pages/ClientPage';
 
-const router = [
+/**
+ * Route configuration for Client-related pages.
+ *
+ * This array defines the path and the associated component,
+ * wrapped in a security layer to restrict access based on user roles.
+ */
+const routerClients = [
   {
-    path: '',
-    element: <ClientDashboardOverview />,
+    path: '/clientes',
+    element: (
+      <RoleProtectedRoute allowedRoles={['ADMIN']}>
+        <ClientsPage />
+      </RoleProtectedRoute>
+    ),
   },
-  ...routerPetCollection,
 ];
 
-export default router;
+export default routerClients;

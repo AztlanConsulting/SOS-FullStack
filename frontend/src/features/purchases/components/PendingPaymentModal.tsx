@@ -42,7 +42,12 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
 
         {/* Content area with internal scroll if height is restricted */}
         <div className="p-6 overflow-y-auto flex flex-col items-center">
-          <img src={pending} alt="pending" className="w-14 mb-4" />
+          <img
+            loading="lazy"
+            src={pending}
+            alt="pending"
+            className="w-14 mb-4"
+          />
 
           <Text
             variant="h3"

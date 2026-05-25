@@ -21,7 +21,7 @@ export const ContactInfoSection = <T extends FoundPetReportData>({
         <Input
           id="ownerName"
           label={`Nombre y apellido del ${owner ? 'dueño' : 'para contactarte'}`}
-          hasLength={false}
+          maxLength={40}
           value={formData.contactName || ''}
           onChange={(e) => updateForm({ contactName: e.target.value })}
           error={errors.contactName}
@@ -39,7 +39,7 @@ export const ContactInfoSection = <T extends FoundPetReportData>({
           id="ownerEmail"
           label="Correo electrónico"
           type="email"
-          hasLength={false}
+          maxLength={128}
           value={formData.email || ''}
           onChange={(e) => updateForm({ email: e.target.value })}
           error={errors.email}

@@ -23,9 +23,10 @@ export interface ClientPet {
   size?: string;
   description?: string;
   photos?: string[];
+  plans: ClientPlan[];
   dateMissing?: string;
   placeMissing?: string;
-  geocodingLocation?: {
+  location?: {
     coords: [number, number];
     displayName: string;
     properties: {

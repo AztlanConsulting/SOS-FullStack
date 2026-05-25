@@ -31,6 +31,10 @@ const isPhoneEmpty = (phone: string) => {
   }
 };
 
+const hasFirstAndLastName = (name: string) => {
+  return name.trim().split(/\s+/).filter(Boolean).length >= 2;
+};
+
 export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
   const navigate = useNavigate();
   const { setLostPetReportData } = usePetReport();
@@ -107,7 +111,9 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
       species: 'petSpecies',
       date: 'petDate',
       breed: 'petBreed',
+      sex: 'petSex',
       color: 'petColor',
+      size: 'petSize',
       images: 'photo-upload-section',
       address: 'pet-location-input',
       contactName: 'ownerName',
@@ -183,8 +189,8 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
       }
     }
 
-    if (!formData.contactName)
-      newErrors.contactName = 'Ingresa el nombre del dueño';
+    if (!formData.contactName || !hasFirstAndLastName(formData.contactName))
+      newErrors.contactName = 'Ingresa nombre y apellido del dueño';
 
     if (!formData.phoneNumber || isPhoneEmpty(formData.phoneNumber)) {
       newErrors.phoneNumber = 'Ingresa un número de teléfono';

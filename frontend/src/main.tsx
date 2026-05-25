@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import 'react-easy-crop/react-easy-crop.css';
 import './index.css';
 import { RouterProvider } from 'react-router';
 import { router } from './routes/router';

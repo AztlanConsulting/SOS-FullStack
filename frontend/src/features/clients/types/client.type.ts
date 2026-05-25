@@ -23,7 +23,7 @@ export interface ClientPet {
   size?: string;
   description?: string;
   photos?: string[];
-  plans: ClientPlan[];
+  plans?: ClientPlan[];
   dateMissing?: string;
   placeMissing?: string;
   location?: {

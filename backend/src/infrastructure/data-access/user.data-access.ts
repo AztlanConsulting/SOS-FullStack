@@ -385,8 +385,14 @@ export const userDataAccess: UserRepository = {
       {
         $lookup: {
           from: 'purchases',
-          localField: 'email',
-          foreignField: 'userEmail',
+          let: { email: { $toLower: '$email' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: [{ $toLower: '$userEmail' }, '$$email'] },
+              },
+            },
+          ],
           as: 'purchases',
         },
       },
@@ -442,7 +448,7 @@ export const userDataAccess: UserRepository = {
       },
       {
         $match: {
-          'pet.geocodingLocation.properties.country': {
+          'pet.location.properties.country': {
             $exists: true,
             $ne: null,
           },
@@ -483,7 +489,7 @@ export const userDataAccess: UserRepository = {
                               $replaceAll: {
                                 input: {
                                   $ifNull: [
-                                    '$pet.geocodingLocation.properties.country',
+                                    '$pet.location.properties.country',
                                     '',
                                   ],
                                 },

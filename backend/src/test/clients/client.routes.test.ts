@@ -50,8 +50,7 @@ describe('Client Routes', () => {
       size: 'large',
       description: 'ojos grandes',
       photos: [],
-      location: 'Querétaro',
-      geocodingLocation: {
+      location: {
         coords: [-100.3854, 20.6295],
         displayName: 'Querétaro, Mexico',
         properties: {
@@ -77,7 +76,6 @@ describe('Client Routes', () => {
     const paymentId = new Types.ObjectId().toString();
     await PaymentModel.create({
       orderId: paymentId,
-      userId: user._id.toString(),
       amount: 9.99,
       currency: 'USD',
       method: 'stripe',

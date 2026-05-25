@@ -50,7 +50,6 @@ export interface PurchasedPlanRepository {
    */
   updatePlanStatus(planId: string, status: string): Promise<void>;
   getPurchasedPlanById(planId: string): Promise<PurchasedPlan | null>;
-  activatePurchasedPlan(planId: string): Promise<void>;
   updatePurchasedPlanSocialPosts(
     planId: string,
     data: SocialPostsInput,

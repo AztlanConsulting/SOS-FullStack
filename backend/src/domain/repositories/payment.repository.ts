@@ -5,7 +5,6 @@ export interface PaymentDBDto {
   method: string;
   // change to clientId when registering client si finished
   clientSecret: string | null;
-  userId?: string;
 }
 export interface PaymentRepository {
   createPending(data: PaymentDBDto): Promise<void>;

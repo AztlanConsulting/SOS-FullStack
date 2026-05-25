@@ -14,8 +14,7 @@ export interface Pet {
   size: string;
   description: string;
   photos: string[];
-  location?: string;
-  geocodingLocation: GeocodingResult;
+  location: GeocodingResult;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,8 +33,7 @@ const PetSchema = new Schema<Pet>(
     size: { type: String, required: true },
     description: { type: String },
     photos: [{ type: String }],
-    location: { type: String },
-    geocodingLocation: {
+    location: {
       coords: { type: [Number], required: true },
       displayName: { type: String, required: true },
       properties: {

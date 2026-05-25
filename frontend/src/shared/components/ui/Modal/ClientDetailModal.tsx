@@ -114,7 +114,7 @@ export const ClientDetailModal = ({
           <div className="grid grid-cols-2 gap-2">
             <div className="flex items-center gap-2">
               <HiMail size={14} className="text-gray-400 shrink-0" />
-              <Text variant="small" color="text-gray-600">
+              <Text variant="small" color="text-gray-600" className="truncate">
                 {detail.email}
               </Text>
             </div>
@@ -267,14 +267,14 @@ export const ClientDetailModal = ({
                     <span className="text-gray-700">{detail.pets[0].sex}</span>
                   </Text>
                 )}
-                {detail.pets[0].geocodingLocation?.properties && (
+                {detail.pets[0].location?.properties && (
                   <Text variant="small" color="text-gray-500" className="col-span-2">
                     Lugar:{' '}
                     <span className="text-gray-700">
                       {[
-                        detail.pets[0].geocodingLocation.properties.city,
-                        detail.pets[0].geocodingLocation.properties.state,
-                        detail.pets[0].geocodingLocation.properties.country,
+                        detail.pets[0].location.properties.city,
+                        detail.pets[0].location.properties.state,
+                        detail.pets[0].location.properties.country,
                       ].filter(Boolean).join(', ')}
                     </span>
                   </Text>

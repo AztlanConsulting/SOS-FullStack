@@ -20,7 +20,7 @@ export interface ClientPet {
   photos?: string[];
   dateMissing?: string;
   placeMissing?: string;
-  geocodingLocation?: {
+  location?: {
     coords: [number, number];
     displayName: string;
     properties: {

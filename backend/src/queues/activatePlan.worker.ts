@@ -6,6 +6,7 @@ import { petDataAccess } from '@infrastructure/data-access/pet.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
 import { sendEmailQueue } from './sendEmail.queue';
 import type { Pet } from '@/domain/models/pet.model';
+import axios from 'axios';
 
 /**
  * Worker responsible for:
@@ -75,6 +76,8 @@ new Worker(
             },
           });
         } catch (error) {
+          if (axios.isAxiosError(error)) console.log(error.response?.data);
+          else console.log(error);
           // Facebook may publish successfully but fail before the DB checkpoint
           // is saved (timeout, crash, network error, etc.).
           //
@@ -126,6 +129,8 @@ new Worker(
             },
           });
         } catch (error) {
+          if (axios.isAxiosError(error)) console.log(error.response?.data);
+          else console.log(error);
           throw error;
         }
       }
@@ -167,6 +172,8 @@ new Worker(
         );
       }
     } catch (error) {
+      if (axios.isAxiosError(error)) console.log(error.response?.data);
+      else console.log(error);
       throw error;
     }
   },

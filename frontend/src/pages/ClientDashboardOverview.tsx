@@ -106,7 +106,12 @@ const ClientDashboardOverview = () => {
               >
                 Portal exclusivo
               </Text>
-              <img src={portal} alt="Portal exclusivo" className="w-full" />
+              <img
+                loading="lazy"
+                src={portal}
+                alt="Portal exclusivo"
+                className="w-full"
+              />
             </div>
           </section>
           <div className="py-5">
@@ -172,6 +177,7 @@ const ClientDashboardOverview = () => {
                           <div className="flex w-full flex-col items-center gap-6 md:flex-row md:justify-center md:gap-10 p-5 bg-purple-secondary rounded-lg shadow-sm">
                             <div className="w-50 h-50 rounded-full overflow-hidden border-[3px] border-purple-primary shrink-0 shadow-sm">
                               <img
+                                loading="lazy"
                                 src={petImageUrl}
                                 alt={petData.petName}
                                 className="w-full h-full object-cover"
@@ -220,7 +226,7 @@ const ClientDashboardOverview = () => {
                                       Progreso del plan
                                     </Text>
                                     <div className="bg-white rounded-lg shadow-sm border border-gray-100 py-5 px-5 lg:px-15 flex flex-1 flex-col items-center justify-center">
-                                      <img src={rip} alt="RIP" />
+                                      <img loading="lazy" src={rip} alt="RIP" />
                                     </div>
                                   </div>
                                 )}
@@ -235,6 +241,7 @@ const ClientDashboardOverview = () => {
                                     </Text>
                                     <div className="bg-white rounded-lg shadow-sm border border-gray-100 py-5 px-5 lg:px-10 flex flex-1 flex-col items-center justify-center">
                                       <img
+                                        loading="lazy"
                                         src={encontrado}
                                         alt="Mascota encontrada"
                                       />

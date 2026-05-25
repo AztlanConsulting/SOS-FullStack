@@ -56,6 +56,7 @@ export const AdProgressSection: React.FC<AdProgressSectionProps> = ({
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 flex flex-1 flex-col items-center justify-between gap-6">
         <div className={mediaContentClass}>
           <img
+            loading="lazy"
             src={posterUrl}
             alt="Póster de mascota perdida"
             className="w-full h-auto object-cover"

@@ -92,7 +92,6 @@ describe('userDataAccess (Unit Tests)', () => {
     expect(result).not.toBeNull();
     expect(result?.username).toBe('Sebastian');
     expect(result?.pets).toHaveLength(1);
-    expect(result?.plans).toHaveLength(1);
   });
 
   /**

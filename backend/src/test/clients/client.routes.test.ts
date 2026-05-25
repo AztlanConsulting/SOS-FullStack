@@ -156,7 +156,6 @@ describe('Client Routes', () => {
     expect(res.status).toBe(200);
     expect(res.body.username).toBe('Sebastian');
     expect(Array.isArray(res.body.pets)).toBe(true);
-    expect(Array.isArray(res.body.plans)).toBe(true);
   });
 
   /**

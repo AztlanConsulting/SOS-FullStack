@@ -1,37 +1,28 @@
 import { useEffect, useState } from 'react';
-import type { DashboardStats } from '@features/graphs/types/dashboardMetrics';
+import { getDashboardMetrics } from '../services/graphs.service';
+import type { DashboardResponse } from '../types/dashboardMetrics';
 
-/**
- * usePlanDistribution Hook
- *
- * A specialized data-fetching hook that retrieves the statistical breakdown
- * of purchased plans. This data is typically consumed by Donut or Pie charts
- * to visualize product popularity within the dashboard.
- *
- * @returns {Object} An object containing the distribution data, loading state, and any fetch errors.
- */
-export const usePlanDistribution = () => {
-  const [distribution, setDistribution] = useState<
-    DashboardStats['distribution']
-  >([]);
+export const useDashboardMetrics = () => {
+  const [metrics, setMetrics] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchDistribution = async () => {
+    const loadData = async () => {
       try {
-        const data = await fetch('/metrics/plan-distribution').then((res) =>
-          res.json(),
-        );
-        setDistribution(data);
-      } catch {
-        setError('Failed to fetch plan distribution');
+        setLoading(true);
+        const data = await getDashboardMetrics();
+        setMetrics(data);
+      } catch (err) {
+        console.error(err);
+        setError('Error al cargar la información del dashboard');
       } finally {
         setLoading(false);
       }
     };
-    fetchDistribution();
+
+    loadData();
   }, []);
 
-  return { distribution, loading, error };
+  return { metrics, loading, error };
 };

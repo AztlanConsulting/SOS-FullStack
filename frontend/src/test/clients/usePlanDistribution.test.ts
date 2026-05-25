@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { usePlanDistribution } from '@features/graphs/hooks/useDashboardMetrics';
+import { usePlanDistribution } from '@features/graphs/hooks/usePlanDistribution';
 
 describe('usePlanDistribution (Unit Tests)', () => {
   beforeEach(() => {

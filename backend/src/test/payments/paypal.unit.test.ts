@@ -166,7 +166,6 @@ describe('PaymentDataAccess unit-test', () => {
     expect(PaymentModel.create).toHaveBeenCalledWith({
       ...mockPaymentData,
       status: 'pending',
-      userId: 'system',
     });
   });
 

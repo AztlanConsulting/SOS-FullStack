@@ -43,8 +43,7 @@ describe('Metrics Routes (Integration)', () => {
       size: 'large',
       description: 'juguetona',
       photos: [],
-      location: 'Guadalajara, Jalisco, México',
-      geocodingLocation: {
+      location: {
         coords: [-103.3496, 20.6597],
         displayName: 'Guadalajara, Jalisco, México',
         properties: {
@@ -137,14 +136,13 @@ describe('Metrics Routes (Integration)', () => {
       size: 'medium',
       description: 'sin ubicacion',
       photos: [],
-      location: 'Ciudad de México',
-      geocodingLocation: {
-        coords: [-99.1332, 19.4326],
-        displayName: 'Ciudad de México',
+      location: {
+        coords: [-103.3496, 20.6597],
+        displayName: 'Guadalajara, Jalisco, México',
         properties: {
-          city: 'Ciudad de México',
+          city: 'Guadalajara',
           country: 'México',
-          state: 'CDMX',
+          state: 'Jalisco',
         },
       },
     });

@@ -100,7 +100,6 @@ describe('Paypal integration tests', () => {
         method: 'paypal',
         clientSecret: 'temp_secret',
         status: 'pending',
-        userId: 'test-user-id',
       });
 
       // 2. Setup Mock Responses for Capture

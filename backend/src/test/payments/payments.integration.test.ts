@@ -81,7 +81,6 @@ describe('Payments integration tests', () => {
       method: 'stripe',
       clientSecret: 'x',
       status: 'pending',
-      userId: 'test-user-id',
     });
 
     (StripeProvider.constructEvent as jest.Mock).mockResolvedValue({

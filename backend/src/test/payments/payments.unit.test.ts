@@ -69,7 +69,6 @@ describe('Payments unit tests', () => {
       ...mockPaymentData,
       clientSecret: mockPaymentData.clientSecret ?? 'unknown',
       status: 'pending',
-      userId: 'system',
     });
   });
 

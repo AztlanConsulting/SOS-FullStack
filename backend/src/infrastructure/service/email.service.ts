@@ -70,25 +70,24 @@ export const emailService: EmailService = {
                 </tr>
 
                 <tr>
-                  <td style="vertical-align:middle;padding-right:12px;">
+                  <td align="center" width="100%" style="vertical-align:middle;padding-right:12px; margin-bottom:12px;">
                     <img
                       src="https://encontrandomascotas.com/api/logo/yellowIcon.png"
                       alt="SOS Encontrando Mascotas"
-                      height="40"
+                      height="80"
                       style="
                         display:block;
-                        height:40px;
+                        height:80px;
                         width:auto;
                         border:0;
                         outline:none;
                         text-decoration:none;
+                        margin-right: 10px;
                       "
                     />
-                  </td>
-
-                  <td style="vertical-align:middle;">
                     <h1 style="
                       margin:0;
+                      margin-bottom: 20px;
                       color:#1a1a1a;
                       font-size:22px;
                       line-height:40px;

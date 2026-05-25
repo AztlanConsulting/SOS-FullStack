@@ -71,7 +71,7 @@ export const emailService: EmailService = {
 
                 <tr>
                   <td align="center" style="padding: 32px 32px 24px 32px; display: flex; justify-content: space-around;">
-                    <img src="encontrandomascotas.com/api/logo/yellowIcon.webp"/>
+                    <img src="https://encontrandomascotas.com/api/logo/yellowIcon.webp"/>
                     <h1 style="margin:0;color:#1a1a1a;font-size:22px;letter-spacing:-0.5px;font-weight:bold;">
                       SOS Encontrando Mascotas
                     </h1>

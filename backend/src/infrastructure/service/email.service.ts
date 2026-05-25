@@ -70,7 +70,8 @@ export const emailService: EmailService = {
                 </tr>
 
                 <tr>
-                  <td align="center" style="padding: 32px 32px 24px 32px;">
+                  <td align="center" style="padding: 32px 32px 24px 32px; display: flex; justify-content: space-around;">
+                    <img src="encontrandomascotas.com/logo/yellowIcon.webp"/>
                     <h1 style="margin:0;color:#1a1a1a;font-size:22px;letter-spacing:-0.5px;font-weight:bold;">
                       SOS Encontrando Mascotas
                     </h1>
@@ -94,7 +95,7 @@ export const emailService: EmailService = {
                           Contraseña: <span style="color:#444">${data.password}</span>
                         </p>
                     </div>`
-                        : ''
+                        : '<p>Recuerda que ya cuenta con una cuenta para acceder al portal exclusivo</p>'
                     }
 
                     <p style="font-size:15px;color:#666;margin-bottom:32px;">

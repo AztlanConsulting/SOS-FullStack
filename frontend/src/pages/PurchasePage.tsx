@@ -28,6 +28,8 @@ export const PurchasePage = () => {
   const [success, setSuccess] = successHook;
   const [pending, setPending] = pendingHook;
   const { isLoading, error: queryError, data } = query;
+  const isPlanExtension = productType === 'plan-extension';
+  const reportDataForCheckout = isPlanExtension ? null : lostPetReportData;
 
   useEffect(() => {
     if (selectedPlan && productType === 'plan-extension') {
@@ -49,11 +51,11 @@ export const PurchasePage = () => {
       return;
     }
 
-    const p: Product | undefined = lostPetReportData ? undefined : data;
+    const p: Product | undefined = reportDataForCheckout ? undefined : data;
     setProduct(p);
   }, [
     data,
-    lostPetReportData,
+    reportDataForCheckout,
     selectedPlan,
     productId,
     productType,
@@ -61,10 +63,10 @@ export const PurchasePage = () => {
   ]);
 
   useEffect(() => {
-    if (!Boolean(state) && !Boolean(lostPetReportData)) {
+    if (!Boolean(state) && !Boolean(reportDataForCheckout)) {
       navigate('/');
     }
-  }, [state, lostPetReportData]);
+  }, [state, reportDataForCheckout]);
 
   const purchaseDetail: PurchaseDetail = {
     userName,
@@ -87,11 +89,11 @@ export const PurchasePage = () => {
       <main className="max-lg:pt-20 min-h-screen">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
-        {Boolean(product || lostPetReportData) && (
+        {Boolean(product || reportDataForCheckout) && (
           <div className="mx-auto flex flex-col lg:flex-row lg:row-0 lg:grid lg:grid-cols-2 mb-10 w-full w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
             <PurchaseDetails
               product={product}
-              reportData={lostPetReportData}
+              reportData={reportDataForCheckout}
               success={success}
               pending={pending}
               onCloseSuccess={() => setSuccess(false)}
@@ -99,7 +101,7 @@ export const PurchasePage = () => {
             />
             <PurchaseForm
               product={product}
-              petReportData={lostPetReportData}
+              petReportData={reportDataForCheckout}
               success={processPayment}
               pending={handlePending}
               onMethodSelect={() => {

@@ -10,6 +10,15 @@ jest.mock('@infrastructure/api/stripeProvider.api', () => ({
   },
 }));
 
+jest.mock('@/infrastructure/api/exhangeRate.api', () => ({
+  ExchangeRateApiService: {
+    getRate: jest.fn(async (currencyCode: string) => ({
+      currencyCode,
+      rate: 1,
+    })),
+  },
+}));
+
 jest.mock('@/use-cases/emails/sendPaymentEmail.usecase', () => ({
   sendPaymentEmail: jest.fn(),
 }));
@@ -54,7 +63,7 @@ describe('OXXO payment integration', () => {
 
     (StripeProvider.createIntent as jest.Mock).mockResolvedValue({
       id: 'pi_oxxo_1',
-      amount: 2500,
+      amount: 5000,
       currency: 'MXN',
       clientSecret: null,
       oxxoDetails: {
@@ -65,7 +74,7 @@ describe('OXXO payment integration', () => {
     });
 
     const payload = {
-      amount: 25.0,
+      amount: 50.0,
       currency: 'MXN',
       method: 'oxxo',
       name: 'Test User',

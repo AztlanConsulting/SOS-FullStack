@@ -470,8 +470,18 @@ export const StripeCard = ({
 
   if (loading) return <p className="align-center">Cargando...</p>;
 
+  if (data.method === 'card') {
+    return clientSecret ? (
+      <Elements stripe={stripePromise} options={{ clientSecret }}>
+        <PaymentForm />
+      </Elements>
+    ) : (
+      <p>Error al cargar pago</p>
+    );
+  }
+
   return clientSecret ? (
-    <Elements stripe={stripePromise} options={{ clientSecret }}>
+    <Elements stripe={stripePromise}>
       <PaymentForm />
     </Elements>
   ) : (

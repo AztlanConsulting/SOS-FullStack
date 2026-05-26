@@ -115,8 +115,8 @@ export const metaPublisher: SocialPublisher = {
       access_token: ACCESS_TOKEN,
     });
 
-    // Wait 10 seconds to ensure the post is live before trying to retrieve the permalink
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    // Wait 30 seconds to ensure the post is live before trying to retrieve the permalink
+    await new Promise((resolve) => setTimeout(resolve, 30000));
 
     const igMediaId = publish.id;
 

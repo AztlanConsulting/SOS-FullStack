@@ -34,6 +34,9 @@ jobs:
       - name: Install backend dependencies
         run: npm install --prefix backend
 
+      - name: Dedupe dependencies
+        run: npm dedupe --prefix backend
+
       - name: Install frontend dependencies
         run: npm install --prefix frontend
 

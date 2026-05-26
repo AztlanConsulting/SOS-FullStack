@@ -97,8 +97,29 @@ export const pendingPaymentEmailService: StripeEmailService = {
                   </tr>
 
                   <tr>
-                    <td align="center" style="padding: 32px 32px 32px 32px;">
-                      <h1 style="margin:0;color:#1a1a1a;font-size:22px;letter-spacing:-0.5px;font-weight:bold;">
+                    <td align="center" width="100%" style="vertical-align:middle;padding-right:12px; margin-bottom:12px;">
+                      <img
+                        src="https://encontrandomascotas.com/api/logo/yellowIcon.png"
+                        alt="SOS Encontrando Mascotas"
+                        height="80"
+                        style="
+                          display:block;
+                          height:80px;
+                          width:auto;
+                          border:0;
+                          outline:none;
+                          text-decoration:none;
+                          margin-right: 10px;
+                        "
+                      />
+                      <h1 style="
+                        margin:0;
+                        margin-bottom: 20px;
+                        color:#1a1a1a;
+                        font-size:22px;
+                        line-height:40px;
+                        font-weight:bold;
+                      ">
                         SOS Encontrando Mascotas
                       </h1>
                     </td>

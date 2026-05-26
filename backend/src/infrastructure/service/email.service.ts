@@ -70,8 +70,29 @@ export const emailService: EmailService = {
                 </tr>
 
                 <tr>
-                  <td align="center" style="padding: 32px 32px 24px 32px;">
-                    <h1 style="margin:0;color:#1a1a1a;font-size:22px;letter-spacing:-0.5px;font-weight:bold;">
+                  <td align="center" width="100%" style="vertical-align:middle;padding-right:12px; margin-bottom:12px;">
+                    <img
+                      src="https://encontrandomascotas.com/api/logo/yellowIcon.png"
+                      alt="SOS Encontrando Mascotas"
+                      height="80"
+                      style="
+                        display:block;
+                        height:80px;
+                        width:auto;
+                        border:0;
+                        outline:none;
+                        text-decoration:none;
+                        margin-right: 10px;
+                      "
+                    />
+                    <h1 style="
+                      margin:0;
+                      margin-bottom: 20px;
+                      color:#1a1a1a;
+                      font-size:22px;
+                      line-height:40px;
+                      font-weight:bold;
+                    ">
                       SOS Encontrando Mascotas
                     </h1>
                   </td>
@@ -94,7 +115,7 @@ export const emailService: EmailService = {
                           Contraseña: <span style="color:#444">${data.password}</span>
                         </p>
                     </div>`
-                        : ''
+                        : '<p>Recuerda que ya cuentas con una cuenta para acceder al portal exclusivo</p>'
                     }
 
                     <p style="font-size:15px;color:#666;margin-bottom:32px;">
@@ -114,7 +135,7 @@ export const emailService: EmailService = {
                       Te recomendamos comunicarte con nosotros para conocer el estado actual y los próximos pasos de nuestro servicio. Utiliza el siguiente botón para contactar con tu asesor:
                     </p>
 
-                    <div style="margin-top:20px; display:flex; justify-content:center;">
+                    <div style="margin-top:20px; display:flex; justify-content:center; align-items:center;">
                       <a href="http://m.me/2444791512265246" target="_blank" style="background-color:#f9cd48; color:#1a1a1a; padding:14px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px; display:inline-block; transition: background-color 0.3s ease;">
                         Contactar con mi asesor
                       </a>

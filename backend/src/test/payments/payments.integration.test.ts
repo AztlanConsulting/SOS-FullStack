@@ -10,6 +10,15 @@ jest.mock('@infrastructure/api/stripeProvider.api', () => ({
   },
 }));
 
+jest.mock('@/infrastructure/api/exhangeRate.api', () => ({
+  ExchangeRateApiService: {
+    getRate: jest.fn(async (currencyCode: string) => ({
+      currencyCode,
+      rate: 1,
+    })),
+  },
+}));
+
 import app from '@/index';
 import request from 'supertest';
 import { PaymentModel } from '@domain/models/payment.model';

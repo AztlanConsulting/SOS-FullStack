@@ -9,20 +9,15 @@ import { Button } from '@shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
 import { Poster } from '@/features/poster/components/Poster.component';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
-import type { LostPetReportData } from '@/shared/types/petReport.types';
-
-const appendPosterAsLastImage = (
-  reportData: LostPetReportData,
-  posterFile: File,
-): LostPetReportData => ({
-  ...reportData,
-  images: [...reportData.images, posterFile],
-});
 
 export const ReportConfirmationPage: React.FC = () => {
   const navigate = useNavigate();
   const { lostPetReportData, setLostPetReportData } = usePetReport();
   const posterRef = useRef<HTMLDivElement>(null);
+  const [pendingNavigate, setPendingNavigate] = useState(false);
+  const [pendingReportData, setPendingReportData] = useState<
+    typeof lostPetReportData | null
+  >(null);
   // Reference to the preview container where the poster is displayed
   const posterPreviewRef = useRef<HTMLDivElement>(null);
   // Scale factor used to shrink the full-size poster into the preview box
@@ -33,6 +28,15 @@ export const ReportConfirmationPage: React.FC = () => {
       navigate('/');
     }
   }, [lostPetReportData, navigate]);
+
+  useEffect(() => {
+    if (!pendingNavigate || !pendingReportData) return;
+
+    if (lostPetReportData === pendingReportData) {
+      setPendingNavigate(false);
+      navigate('/plans');
+    }
+  }, [lostPetReportData, navigate, pendingNavigate, pendingReportData]);
 
   useEffect(() => {
     // Get available width inside preview container
@@ -100,19 +104,24 @@ export const ReportConfirmationPage: React.FC = () => {
           ...newData,
         };
         setLostPetReportData(updatedData);
+        setPendingReportData(updatedData);
       } else {
         console.warn('No posterFile returned');
-        setLostPetReportData({ ...lostPetReportData, ...newData });
+        const updatedData = { ...lostPetReportData, ...newData };
+        setLostPetReportData(updatedData);
+        setPendingReportData(updatedData);
       }
     } catch (err) {
       console.error('Error in handleContinueForm:', err);
-      setLostPetReportData({ ...lostPetReportData, ...newData });
+      const updatedData = { ...lostPetReportData, ...newData };
+      setLostPetReportData(updatedData);
+      setPendingReportData(updatedData);
     }
   };
 
   const handleProceedToPayment = async () => {
     await handleContinueForm({});
-    navigate('/plans');
+    setPendingNavigate(true);
   };
 
   if (!lostPetReportData) return null;

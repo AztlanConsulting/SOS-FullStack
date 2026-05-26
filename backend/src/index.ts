@@ -36,6 +36,16 @@ app.use(
 );
 
 app.use(
+  '/logo',
+  (_req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+  },
+  express.static('assets'),
+);
+
+app.use(
   cors({
     origin: allowedOrigins,
     credentials: true,

@@ -10,6 +10,15 @@ jest.mock('@infrastructure/api/stripeProvider.api', () => ({
   },
 }));
 
+jest.mock('@/infrastructure/api/exhangeRate.api', () => ({
+  ExchangeRateApiService: {
+    getRate: jest.fn(async (currencyCode: string) => ({
+      currencyCode,
+      rate: 1,
+    })),
+  },
+}));
+
 jest.mock('@/use-cases/emails/sendPaymentEmail.usecase', () => ({
   sendPaymentEmail: jest.fn(),
 }));
@@ -54,7 +63,7 @@ describe('SPEI payment integration', () => {
 
     (StripeProvider.createIntent as jest.Mock).mockResolvedValue({
       id: 'pi_spei_1',
-      amount: 10000,
+      amount: 5000,
       currency: 'MXN',
       clientSecret: null,
       speiDetails: {
@@ -68,7 +77,7 @@ describe('SPEI payment integration', () => {
     });
 
     const payload = {
-      amount: 100.0,
+      amount: 50.0,
       currency: 'MXN',
       method: 'spei',
       name: 'Test User',

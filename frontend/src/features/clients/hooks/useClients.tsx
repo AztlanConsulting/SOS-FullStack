@@ -49,7 +49,7 @@ export const useClients = () => {
     setError(null);
     try {
       const result = await fetch(
-        `/api/clients?${new URLSearchParams({ page: String(page), search: debouncedSearch, ...filters })}`,
+        `/clientDashboard?${new URLSearchParams({ page: String(page), search: debouncedSearch, ...filters })}`,
       ).then((res) => res.json());
       /**
        * Client-side Filtering:

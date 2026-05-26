@@ -3,7 +3,7 @@ import type { ClientListResponse } from '../types/client.type';
 /**
  * Frontend Service for Client Management.
  *
- * Provides an abstraction layer for interacting with the `/api/clients` endpoints.
+ * Provides an abstraction layer for interacting with the `/clientDashboard` endpoints.
  * Handles query parameter serialization and standardizes fetch requests.
  */
 export const ClientService = {
@@ -23,7 +23,7 @@ export const ClientService = {
       params.search = search;
     }
     const data = await fetch(
-      `/api/clients?${new URLSearchParams(params)}`,
+      `/clientDashboard?${new URLSearchParams(params)}`,
     ).then((res) => res.json());
     return data;
   },
@@ -34,7 +34,9 @@ export const ClientService = {
    * @param id - The unique MongoDB ObjectId of the user.
    */
   getClientById: async (id: string) => {
-    const data = await fetch(`/api/clients/${id}`).then((res) => res.json());
+    const data = await fetch(`/clientDashboard/${id}`).then((res) =>
+      res.json(),
+    );
     return data;
   },
 
@@ -46,7 +48,7 @@ export const ClientService = {
    * @param conversation - The full URL string of the conversation.
    */
   updateConversation: async (id: string, conversation: string) => {
-    await fetch(`/api/clients/${id}`, {
+    await fetch(`/clientDashboard/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ conversation }),
@@ -60,7 +62,7 @@ export const ClientService = {
    * @returns {Promise<void>} Resolves when the network layer successfully finishes processing the update.
    */
   updatePlanStatus: async (planId: string, status: string): Promise<void> => {
-    await fetch(`/api/clients/plan-status/${planId}`, {
+    await fetch(`/clientDashboard/plan-status/${planId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
@@ -78,7 +80,7 @@ export const ClientService = {
     id: string,
     data: { conversation?: string; notes?: string },
   ): Promise<void> => {
-    await fetch(`/api/clients/${id}`, {
+    await fetch(`/clientDashboard/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

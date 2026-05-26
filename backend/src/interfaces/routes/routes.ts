@@ -31,7 +31,7 @@ router.use('/workshop', workshopRoutes);
 router.use('/manuals', manualRoutes);
 router.use('/purchases', purchaseRoutes);
 router.use('/plans', planRoutes);
-router.use('/api/clients', clientRoutes);
+router.use('/clientDashboard', clientRoutes);
 router.use('/found-pets', foundPetRoutes);
 router.use('/searchform', searchFormRoutes);
 router.use('/members-only', membersOnlyRoutes);

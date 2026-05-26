@@ -34,6 +34,8 @@ async function confirmPaymentAmount(
 
     if (realPrice === null) throw Error('Amount forgery, item does not exist');
 
+    req.body.amount = realPrice;
+
     next();
   } catch (error) {
     console.error(error);

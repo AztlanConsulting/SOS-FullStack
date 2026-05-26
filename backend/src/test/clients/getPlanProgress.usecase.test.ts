@@ -131,6 +131,7 @@ describe('getPlanProgress', () => {
 
     expect(result).toEqual([
       {
+        petId: pet._id.toString(),
         plans: [
           {
             name: 'Básico',
@@ -178,6 +179,7 @@ describe('getPlanProgress', () => {
 
     expect(result).toEqual([
       {
+        petId: petWithPlan._id.toString(),
         plans: [
           {
             name: 'Premium',

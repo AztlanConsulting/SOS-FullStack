@@ -20,16 +20,22 @@ vi.mock('react-router', async () => {
 
 vi.mock('@/features/graphs/components/CountDownChart', () => ({
   CountdownChart: ({ data }: { data: PlanSubscriptionProgress }) => (
-    <div data-testid="countdown-chart">Plan {data.planName}</div>
+    <div data-testid="countdown-chart">Plan {data.plans[0]?.name}</div>
   ),
 }));
 
 const petData: PlanSubscriptionProgress = {
-  planName: 'Básico',
-  totalDays: 30,
-  daysRemaining: 12,
+  petId: 'pet-123',
+  plans: [
+    {
+      name: 'Básico',
+      duration: 30,
+      createdAt: new Date('2026-05-01T00:00:00.000Z'),
+    },
+  ],
   petName: 'Firulais',
   petImage: null,
+  planStatus: 'continua',
   posterImage: null,
   dateMissing: '2026-05-01',
   location: 'Parque Alameda',
@@ -75,7 +81,7 @@ describe('PlanProgressSection', () => {
 
     expect(planProgressMocks.navigate).toHaveBeenCalledWith(
       '/inicio/extender-plan',
-      { state: { petId: undefined } },
+      { state: { petId: 'pet-123' } },
     );
   });
 

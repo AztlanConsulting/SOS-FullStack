@@ -17,6 +17,12 @@ void loadWorkers();
 
 const app = express();
 
+const allowedOrigins = [
+  process.env.FRONT_END_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+].filter((origin): origin is string => Boolean(origin));
+
 // app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use(
@@ -31,7 +37,7 @@ app.use(
 
 app.use(
   cors({
-    origin: process.env.FRONT_END_URL ?? 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   }),

@@ -15,7 +15,9 @@ export default function usePurchase() {
   const query = useQuery({
     queryKey: ['img', productId, productType],
     queryFn: async () => await getProductImage(productType, productId),
-    enabled: Boolean(productId && productType),
+    enabled: Boolean(
+      productId && productType && ['manual', 'taller'].includes(productType),
+    ),
   });
 
   return {

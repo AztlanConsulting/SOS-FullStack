@@ -17,6 +17,7 @@ import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-a
 import { sendWorkshopEmailService } from '@/infrastructure/service/sendWorkshopEmail.service';
 import { sendWorkshopEmail } from '@/use-cases/emails/sendWorkshopEmail.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
+import { Types } from 'mongoose';
 
 export default async function captureOrder(req: Request, res: Response) {
   try {
@@ -25,7 +26,7 @@ export default async function captureOrder(req: Request, res: Response) {
     const details = purchaseDetailsSchema.safeParse(req.body);
     if (details.error) throw details.error;
 
-    const { purchaseDetails, planId } = details.data;
+    const { purchaseDetails, planId, extensionPlan } = details.data;
     const { userEmail, productId, productType } = purchaseDetails;
 
     const capturedOrder = await ucCaptureOrder(paypalApi, orderId as string);
@@ -41,6 +42,28 @@ export default async function captureOrder(req: Request, res: Response) {
         userEmail,
         planId!,
       );
+    }
+
+    if (productType === 'plan-extension' && !extensionPlan) {
+      return res.status(400).json({
+        error: 'Missing extension plan data',
+      });
+    }
+
+    let purchasedPlanId = productId;
+
+    if (productType === 'plan-extension' && extensionPlan) {
+      const newPlan = await purchasedPlanDataAccess.createPurchasedPlan({
+        petId: new Types.ObjectId(extensionPlan.petId),
+        name: extensionPlan.name,
+        price: extensionPlan.price,
+        duration: extensionPlan.duration,
+        radius: extensionPlan.radius,
+        features: extensionPlan.features,
+        status: 'continua',
+      });
+
+      purchasedPlanId = newPlan._id.toString();
     }
 
     if (productType === 'manual') {
@@ -77,15 +100,15 @@ export default async function captureOrder(req: Request, res: Response) {
       }
     }
 
-    let id: string | undefined = productId;
-    if (!Boolean(productId)) {
-      id = planId!; // Register plan details and return id
-    }
+    const finalProductId =
+      productType === 'plan-extension'
+        ? purchasedPlanId
+        : (productId ?? planId!);
 
     await createPurchaseDB(PurchaseDataAccess, {
       userEmail,
       paymentId: capturedOrder.id!,
-      productId: productId ?? id!,
+      productId: finalProductId,
       productType,
     });
 

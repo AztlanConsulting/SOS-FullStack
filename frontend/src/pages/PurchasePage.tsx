@@ -10,6 +10,7 @@ import { usePetReport } from '@/shared/context/PetReportContext';
 import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import type { Product } from '@/shared/types/purchase.types';
+import { useLocationContext } from '@/shared/context/Location.context';
 
 // Container for purchase information and purchase logic
 export const PurchasePage = () => {
@@ -20,16 +21,37 @@ export const PurchasePage = () => {
   const { lostPetReportData } = usePetReport();
   const { state, query } = usePurchase();
   const navigate = useNavigate();
-  const { productId, productType, userEmail, userName } = state ?? {};
+  const { exchangeRate } = useLocationContext();
+  const { productId, productType, userEmail, userName, selectedPlan } =
+    state ?? {};
 
   const [success, setSuccess] = successHook;
   const [pending, setPending] = pendingHook;
   const { isLoading, error: queryError, data } = query;
 
   useEffect(() => {
+    if (selectedPlan && productType === 'plan-extension') {
+      setProduct({
+        _id: productId,
+        imageUrl: '',
+        name: selectedPlan.name,
+        content: [],
+        price: selectedPlan.price / (exchangeRate || 1),
+      });
+
+      return;
+    }
+
     const p: Product | undefined = lostPetReportData ? undefined : data;
     setProduct(p);
-  }, [data, lostPetReportData]);
+  }, [
+    data,
+    lostPetReportData,
+    selectedPlan,
+    productId,
+    productType,
+    exchangeRate,
+  ]);
 
   useEffect(() => {
     if (!Boolean(state) && !Boolean(lostPetReportData)) {
@@ -78,6 +100,7 @@ export const PurchasePage = () => {
                 setPending(false);
               }}
               purchaseDetail={purchaseDetail}
+              selectedPlan={selectedPlan}
             />
           </div>
         )}

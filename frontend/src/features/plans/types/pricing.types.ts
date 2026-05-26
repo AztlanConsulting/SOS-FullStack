@@ -11,4 +11,5 @@ export interface LocalizedItem {
   localizedPrice: number;
   currencyCode: string;
   exchangeRate: number;
+  discounted?: boolean;
 }

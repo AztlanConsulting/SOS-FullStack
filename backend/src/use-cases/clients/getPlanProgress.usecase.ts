@@ -39,6 +39,7 @@ export const getPlanProgress = async (
       pet.photos.length > 1 ? (pet.photos.at(-1) ?? null) : null;
 
     planProgress.push({
+      petId: pet._id.toString(),
       plans: plans.map((p) => ({
         name: p.name,
         duration: p.duration,

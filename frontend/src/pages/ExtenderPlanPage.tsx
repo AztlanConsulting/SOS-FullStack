@@ -1,52 +1,89 @@
 import PlanCard, {
   type PlanCardProps,
 } from '@features/plans/components/PlanCard';
-import { RENEW_PLANS } from '@features/plans/components/renewPlans';
 import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState, useEffect } from 'react';
-import { usePetReport } from '@/shared/context/PetReportContext';
 import { Button } from '@shared/components/ui/Button/Button';
-import { useNavigate } from 'react-router';
+import { usePlans } from '@features/plans/hooks/usePlans';
+import { useLocation, useNavigate } from 'react-router';
+import { useAuth } from '@features/auth/hooks/useAuth';
 
-export default function RenewPlansPage() {
+export default function ExtenderPlanPage() {
+  const { plans, loading, error } = usePlans(true);
   const [current, setCurrent] = useState(0);
-  const { lostPetReportData, setLostPetReportData } = usePetReport();
+  const location = useLocation();
+  const { petId } = (location.state ?? {}) as { petId?: string };
   const navigate = useNavigate();
+  const { user } = useAuth();
 
-  /*useEffect(() => {
-    if (!lostPetReportData) {
+  useEffect(() => {
+    if (!petId) {
       navigate('/');
     }
-  }, [lostPetReportData, navigate]);
-*/
+  }, [petId, navigate]);
+
   const handleSelectPlan = (plan: PlanCardProps) => {
-    //if (!lostPetReportData) return;
+    if (!petId) return;
 
-    const originalPrice = Number(plan.price);
-    const discountedPrice = Math.round(originalPrice * 0.85 * 100) / 100;
-
-    const updated = {
-      ...lostPetReportData,
-      planName: plan.name,
-      planDetails: {
-        days: parseInt(plan.duration) || 0,
-        km: parseInt(plan.radius) || 0,
-        selectedFeatures: plan.features
-          .filter((f) => f.included)
-          .map((f) => f.label),
-        totalPrice: discountedPrice,
-        originalPrice,
+    navigate('/compra', {
+      replace: true,
+      state: {
+        productType: 'plan-extension',
+        productId: petId,
+        userEmail: user?.email ?? '',
+        userName: user?.username ?? '',
+        petId,
+        selectedPlan: {
+          name: plan.name,
+          price: Number(plan.price),
+          duration: parseInt(plan.duration) || 0,
+          radius: parseInt(plan.radius) || 0,
+          features: plan.features
+            .filter((feature) => feature.included)
+            .map((feature) => feature.label),
+        },
       },
-    };
-
-    setLostPetReportData(updated);
-    navigate('/compra', { replace: true, state: null });
+    });
   };
 
   const prev = () => setCurrent((i) => Math.max(i - 1, 0));
-  const next = () => setCurrent((i) => Math.min(i + 1, RENEW_PLANS.length - 1));
+  const next = () => setCurrent((i) => Math.min(i + 1, plans.length - 1));
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
+          <p className="text-gray-500">Cargando planes...</p>
+        </main>
+      </>
+    );
+  }
+
+  if (error) {
+    console.log('Error loading plans:', error);
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
+          <p className="text-red-400">Error al cargar los planes.</p>
+        </main>
+      </>
+    );
+  }
+
+  if (plans.length === 0) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
+          <p className="text-gray-500">No se encontraron planes.</p>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
@@ -58,10 +95,10 @@ export default function RenewPlansPage() {
           as="h2"
           className="text-2xl lg:text-2xl text-gray-900 mb-2"
         >
-          Renovar Plan
+          Extender plan
         </Text>
         <div className="hidden md:flex flex-row gap-10 w-full justify-center items-stretch">
-          {RENEW_PLANS.map((plan, i) => (
+          {plans.map((plan, i) => (
             <PlanCard
               key={i}
               {...plan}
@@ -88,15 +125,15 @@ export default function RenewPlansPage() {
 
           <div className="w-9/12">
             <PlanCard
-              {...RENEW_PLANS[current]}
+              {...plans[current]}
               colorScheme="purple"
-              onSelect={() => handleSelectPlan(RENEW_PLANS[current])}
+              onSelect={() => handleSelectPlan(plans[current])}
             />
           </div>
           <div className="w-1/12 flex justify-end">
             <button
               onClick={next}
-              disabled={current === RENEW_PLANS.length - 1}
+              disabled={current === plans.length - 1}
               className="p-1.5 rounded-full bg-white border-[3.5px] border-[#61646B] disabled:opacity-30 shrink-0"
             >
               <HiArrowRight
@@ -109,7 +146,7 @@ export default function RenewPlansPage() {
         </div>
 
         <div className="flex md:hidden gap-2 mt-4">
-          {RENEW_PLANS.map((_, i) => (
+          {plans.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}

@@ -21,17 +21,22 @@ async function confirmPaymentAmount(
 
     const data = paymentDetail.data;
 
-    const realPrice = await (data.product
-      ? verifyProduct(data.product!.productId)
-      : (data.plan.planName &&
-          verifyPlan(data.plan.planName, data.plan.planDetails)) ||
-        null);
+    const realPrice = await (data.extensionPlan
+      ? verifyExtensionPlan(data.extensionPlan.name)
+      : data.product
+        ? verifyProduct(data.product.productId)
+        : (data.plan?.planName &&
+            verifyPlan(data.plan.planName, data.plan.planDetails)) ||
+          null);
 
     // if (realPrice && realPrice != data.amount) throw Error('Amount forgery');
 
     if (!realPrice) throw Error('Amount forgery, item does not exists');
 
-    req.body.amount = realPrice;
+    // Keep Stripe payment-intent amount in requested currency; normalize only PayPal order creation.
+    if (req.path === '/create-order') {
+      req.body.amount = realPrice;
+    }
 
     console.log(realPrice);
 
@@ -62,6 +67,16 @@ async function verifyPlan(
   const plan = await getPlanByName(PlanDataAccess, planName);
 
   return plan?.price ?? null;
+}
+
+async function verifyExtensionPlan(planName: string): Promise<number | null> {
+  const plan = await getPlanByName(PlanDataAccess, planName);
+
+  if (!plan || !plan.discounted) {
+    return null;
+  }
+
+  return plan.price;
 }
 
 export default confirmPaymentAmount;

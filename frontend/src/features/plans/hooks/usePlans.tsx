@@ -15,7 +15,7 @@ import type { PlanCardProps } from '@features/plans/components/PlanCard';
  *
  * @returns {Object} { plans: PlanCardProps[], loading: boolean, error: string | null }
  */
-export const usePlans = () => {
+export const usePlans = (discounted: boolean) => {
   const {
     plans: localizedPlans,
     currencyCode,
@@ -33,16 +33,27 @@ export const usePlans = () => {
      * We iterate through the plans returned by the API (which have the correct currency/price)
      * and enrich them with static metadata (icons, feature lists) from the local codebase.
      */
-    const merged = localizedPlans.map((apiPlan) => {
+    const merged = localizedPlans.flatMap((apiPlan) => {
+      if (Boolean(apiPlan.discounted) !== discounted) {
+        return [];
+      }
+
       const staticPlan = PLANS.find((p) => p.name === apiPlan.name);
-      return {
-        ...staticPlan,
-        price: String(apiPlan.localizedPrice),
-        currency: currencyCode,
-      };
+      if (!staticPlan) {
+        return [];
+      }
+
+      return [
+        {
+          ...staticPlan,
+          price: String(apiPlan.localizedPrice),
+          currency: currencyCode,
+        } as PlanCardProps,
+      ];
     });
-    setPlans(merged as PlanCardProps[]);
-  }, [localizedPlans, currencyCode]);
+
+    setPlans(merged);
+  }, [localizedPlans, currencyCode, discounted]);
 
   return { plans, loading, error };
 };

@@ -4,6 +4,7 @@ import type { Order, PurchaseDetail } from '../types/payment.types';
 import { createPurchase } from '@/features/purchases/services/createPurchase.service';
 import { createLostPetReportRequest } from '@/features/users/services/lostPet.service';
 import type { PurchasedPlanResponse } from '@/shared/types/pet.types';
+import { createPurchasedPlanRequest } from '@features/plans/services/createPurchasedPlan.service';
 
 interface UseCheckoutProps {
   data: Order;
@@ -64,6 +65,11 @@ export const useCheckout = ({
           const petResult: PurchasedPlanResponse =
             await createLostPetReportRequest(data.plan);
           newPurchasedPlanId = petResult.plan._id;
+        } else if (data.extensionPlan) {
+          const purchasedPlan = await createPurchasedPlanRequest(
+            data.extensionPlan,
+          );
+          newPurchasedPlanId = purchasedPlan.plan._id;
         }
         try {
           if (data.plan) {
@@ -74,6 +80,14 @@ export const useCheckout = ({
               'plan',
             );
             setMessage('Pago procesado exitosamente con plan');
+          } else if (data.extensionPlan) {
+            await createPurchase(
+              data.email || '',
+              paymentId,
+              newPurchasedPlanId || '',
+              'plan-extension',
+            );
+            setMessage('Pago procesado exitosamente con plan extendido');
           } else {
             await createPurchase(
               data.email || '',
@@ -106,6 +120,11 @@ export const useCheckout = ({
         const petResult: PurchasedPlanResponse =
           await createLostPetReportRequest(data.plan);
         newPurchasedPlanId = petResult.plan._id;
+      } else if (data.extensionPlan) {
+        const purchasedPlan = await createPurchasedPlanRequest(
+          data.extensionPlan,
+        );
+        newPurchasedPlanId = purchasedPlan.plan._id;
       }
       try {
         if (data.plan) {
@@ -116,6 +135,14 @@ export const useCheckout = ({
             'plan',
           );
           setMessage('Pago procesado exitosamente con plan');
+        } else if (data.extensionPlan) {
+          await createPurchase(
+            data.email || '',
+            paymentId,
+            newPurchasedPlanId || '',
+            'plan-extension',
+          );
+          setMessage('Pago procesado exitosamente con plan extendido');
         } else {
           await createPurchase(
             data.email || '',

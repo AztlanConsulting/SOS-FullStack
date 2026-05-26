@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router';
  * - Mobile: A carousel/slider view with navigation arrows and pagination dots.
  */
 export default function PlansPage() {
-  const { plans, loading, error } = usePlans();
+  const { plans, loading, error } = usePlans(false);
   const [current, setCurrent] = useState(0);
   const { lostPetReportData, setLostPetReportData } = usePetReport();
   const navigate = useNavigate();

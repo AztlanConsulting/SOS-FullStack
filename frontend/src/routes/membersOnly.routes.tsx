@@ -4,6 +4,7 @@ import MembersOnlyPage from '../pages/MembersOnlyPage';
 import ClientDashboardOverview from '@/pages/ClientDashboardOverview';
 import routerPetCollection from './petCollection.routes';
 import { Outlet } from 'react-router';
+import ExtenderPlanPage from '@/pages/ExtenderPlanPage';
 
 const routes = [
   {
@@ -27,6 +28,10 @@ const routes = [
         element: <MembersOnlyPage />,
       },
     ],
+  },
+  {
+    path: '/extender-plan',
+    element: <ExtenderPlanPage />,
   },
   ...routerPetCollection,
 ];

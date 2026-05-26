@@ -42,7 +42,9 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
   }, []);
 
   const handlePlanExtension = () => {
-    navigate('/extender-plan');
+    navigate('/inicio/extender-plan', {
+      state: { petId: petData?.petId },
+    });
   };
 
   const handleContactAdviser = () => {

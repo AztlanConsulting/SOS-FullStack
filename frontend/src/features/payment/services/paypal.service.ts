@@ -6,10 +6,12 @@ export async function confirmPaypalPayment(
   orderId: string,
   purchaseDetails: PurchaseDetail,
   planId: string | null,
+  extensionPlan?: unknown,
 ) {
   return await axiosInstance.post(`/payments/capture-order/${orderId}`, {
     planId,
     purchaseDetails,
+    extensionPlan,
   });
 }
 export async function createPaypalPayment(data: Order, exchangeRate: number) {

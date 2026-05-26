@@ -5,6 +5,7 @@
 export interface PlanResult {
   name: string;
   price: number;
+  discounted?: boolean;
 }
 /**
  * Interface for the Plan repository.

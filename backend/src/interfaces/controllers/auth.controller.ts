@@ -32,7 +32,7 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.ENV === 'production',
       sameSite: 'lax',
-      path: '/api/auth/refresh',
+      path: '/auth/refresh',
     };
 
     if (Boolean(remember)) {
@@ -98,7 +98,7 @@ export const refresh = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.ENV === 'production',
       sameSite: 'lax',
-      path: '/api/auth/refresh',
+      path: '/auth/refresh',
     };
 
     if (decoded.remember) {
@@ -112,7 +112,7 @@ export const refresh = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'REFRESH_TOKEN_REVOKED') {
-        res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+        res.clearCookie('refreshToken', { path: '/auth/refresh' });
         res.status(401).json({
           error: 'TOKEN_REVOKED',
           message: 'Sesion invalidada. Inicia sesion nuevamente.',
@@ -121,7 +121,7 @@ export const refresh = async (req: Request, res: Response) => {
       }
     }
     // Generic invalid token fallback
-    res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+    res.clearCookie('refreshToken', { path: '/auth/refresh' });
     res
       .status(401)
       .json({ error: 'UNAUTHORIZED', message: 'Refresh token invalido' });
@@ -140,7 +140,7 @@ export const logout = async (req: Request, res: Response) => {
   }
 
   // Clear cookie regardless of DB state
-  res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+  res.clearCookie('refreshToken', { path: '/auth/refresh' });
   res.status(200).json({ message: 'Sesion cerrada correctamente' });
 };
 

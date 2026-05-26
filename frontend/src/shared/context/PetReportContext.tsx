@@ -24,7 +24,9 @@ export const PetReportProvider: React.FC<{ children: ReactNode }> = ({
   const [lostPetReportData, setLostPetReportData] =
     useState<LostPetReportData | null>(null);
 
-  useEffect(() => {}, [foundPetReportData]);
+  useEffect(() => {
+    console.log(lostPetReportData);
+  }, [foundPetReportData?.images]);
 
   return (
     <PetReportContext.Provider

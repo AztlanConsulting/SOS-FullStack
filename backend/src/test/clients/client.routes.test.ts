@@ -96,7 +96,7 @@ describe('Client Routes', () => {
   });
 
   /**
-   * Verifies GET /api/clients returns 200 and a list of clients
+   * Verifies GET /clientDashboard returns 200 and a list of clients
    */
   test('GET /api/clientes replies with 200 and list of clients', async () => {
     const res = await request(app).get('/api/clientes');
@@ -149,7 +149,7 @@ describe('Client Routes', () => {
   });
 
   /**
-   * Verifies GET /api/clients/:id returns full client detail
+   * Verifies GET /clientDashboard/:id returns full client detail
    */
   test('GET /api/clientes/:id returns full client detail', async () => {
     const res = await request(app).get(`/api/clientes/${userId}`);
@@ -159,7 +159,7 @@ describe('Client Routes', () => {
   });
 
   /**
-   * Verifies GET /api/clients/:id returns 404 for unknown id
+   * Verifies GET /clientDashboard/:id returns 404 for unknown id
    */
   test('GET /api/clientes/:id returns 404 for unknown id', async () => {
     const res = await request(app).get(`/api/clientes/${new Types.ObjectId()}`);
@@ -167,7 +167,7 @@ describe('Client Routes', () => {
   });
 
   /**
-   * Verifies PUT /api/clients/:id updates conversation link
+   * Verifies PUT /clientDashboard/:id updates conversation link
    */
   test('PUT /api/clientes/:id updates conversation link', async () => {
     const res = await request(app)

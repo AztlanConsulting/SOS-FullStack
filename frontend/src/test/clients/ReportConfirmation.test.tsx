@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { ReportConfirmationPage } from '@pages/ReportConfirmation';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
+import * as React from 'react';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 const posterExportMocks = vi.hoisted(() => ({
@@ -64,13 +65,26 @@ vi.mock('react-router', async () => {
 });
 
 let mockLostPetReportData: LostPetReportData | null = null;
-const mockSetLostPetReportData = vi.fn();
+let updatePetReportData: React.Dispatch<
+  React.SetStateAction<LostPetReportData | null>
+> | null = null;
+const mockSetLostPetReportData = vi.fn((data: LostPetReportData | null) => {
+  updatePetReportData?.(data);
+});
 
 vi.mock('@shared/context/PetReportContext', () => ({
-  usePetReport: () => ({
-    lostPetReportData: mockLostPetReportData,
-    setLostPetReportData: mockSetLostPetReportData,
-  }),
+  usePetReport: () => {
+    const [lostPetReportData, setLostPetReportData] = React.useState(
+      mockLostPetReportData,
+    );
+
+    updatePetReportData = setLostPetReportData;
+
+    return {
+      lostPetReportData,
+      setLostPetReportData: mockSetLostPetReportData,
+    };
+  },
 }));
 
 const renderWithRouter = (ui: React.ReactElement) =>
@@ -104,6 +118,7 @@ describe('ReportConfirmationPage', () => {
       new File(['poster'], 'Firulais-poster.png', { type: 'image/png' }),
     );
     mockLostPetReportData = null;
+    updatePetReportData = null;
   });
 
   test('redirects to "/" when lostPetReportData is null (direct URL access)', () => {
@@ -151,14 +166,17 @@ describe('ReportConfirmationPage', () => {
 
     await user.click(screen.getByText('Continuar'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/plans');
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/plans');
+    });
   });
 
-  test('calls setLostPetReportData with merged data when handleUpdateForm is triggered', () => {
+  test('calls setLostPetReportData with merged data when handleUpdateForm is triggered', async () => {
+    const user = userEvent.setup();
     mockLostPetReportData = MOCK_REPORT_DATA;
 
     renderWithRouter(<ReportConfirmationPage />);
-    screen.getByText('Editar nombre').click();
+    await user.click(screen.getByText('Editar nombre'));
 
     expect(mockSetLostPetReportData).toHaveBeenCalledWith({
       ...MOCK_REPORT_DATA,

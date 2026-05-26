@@ -115,7 +115,7 @@ export const emailService: EmailService = {
                           Contraseña: <span style="color:#444">${data.password}</span>
                         </p>
                     </div>`
-                        : '<p>Recuerda que ya cuenta con una cuenta para acceder al portal exclusivo</p>'
+                        : '<p>Recuerda que ya cuentas con una cuenta para acceder al portal exclusivo</p>'
                     }
 
                     <p style="font-size:15px;color:#666;margin-bottom:32px;">

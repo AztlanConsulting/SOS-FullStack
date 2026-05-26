@@ -70,7 +70,7 @@ export const emailService: EmailService = {
                 </tr>
 
                 <tr>
-                  <td align="center" width="100%" style="vertical-align:middle;padding-right:12px; margin-bottom:12px;">
+                  <td align="center" width="100%" style="vertical-align:middle;padding:0 30px 0px 30px; margin-bottom:12px;">
                     <img
                       src="https://encontrandomascotas.com/api/logo/yellowIcon.png"
                       alt="SOS Encontrando Mascotas"

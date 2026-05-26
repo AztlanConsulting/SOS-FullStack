@@ -24,7 +24,7 @@ export default function CustomPlanPage() {
         >
           Personaliza tu plan
         </Text>
-        <CustomPlanCard />
+        <CustomPlanCard checkoutPath="/compra" />
       </main>
     </>
   );

@@ -116,7 +116,10 @@ describe('usePurchase', () => {
       unstable_mask: undefined,
     });
 
-    vi.mocked(getProductImage).mockResolvedValue(mockProduct);
+    vi.mocked(getProductImage).mockResolvedValue({
+      ...mockProduct,
+      imageUrl: '',
+    });
     vi.mocked(useAuth).mockReturnValue({
       user: { username: 'Test User' },
       isAuthLoading: false,

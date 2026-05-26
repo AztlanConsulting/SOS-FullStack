@@ -97,6 +97,7 @@ export interface Plan {
 }
 
 export interface PlanProgressResult {
+  petId: string;
   plans: Plan[];
   petName: string;
   petImage: string | null;

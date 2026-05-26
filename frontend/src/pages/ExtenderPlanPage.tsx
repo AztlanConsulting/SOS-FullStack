@@ -1,65 +1,74 @@
 import PlanCard, {
   type PlanCardProps,
 } from '@features/plans/components/PlanCard';
-import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState, useEffect } from 'react';
-import { usePetReport } from '@/shared/context/PetReportContext';
 import { Button } from '@shared/components/ui/Button/Button';
 import { usePlans } from '@features/plans/hooks/usePlans';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { useAuth } from '@features/auth/hooks/useAuth';
 
-/**
- * PlansPage Component.
- * * Displays the available service plans to the user.
- * It features a responsive design:
- * - Desktop: Horizontal grid/flex layout showing all plans side-by-side.
- * - Mobile: A carousel/slider view with navigation arrows and pagination dots.
- */
-export default function PlansPage() {
-  const { plans, loading, error } = usePlans(false);
+export default function ExtenderPlanPage() {
+  const { plans, loading, error } = usePlans(true);
   const [current, setCurrent] = useState(0);
-  const { lostPetReportData, setLostPetReportData } = usePetReport();
+  const location = useLocation();
+  const { petId, currentPlanNames } = (location.state ?? {}) as {
+    petId?: string;
+    currentPlanNames?: string[];
+  };
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const hiddenPlanNames = new Set(currentPlanNames ?? []);
+  const visiblePlans = hiddenPlanNames.size
+    ? plans.filter((plan) => !hiddenPlanNames.has(plan.name))
+    : plans;
 
   useEffect(() => {
-    if (!lostPetReportData) {
-      navigate('/');
+    if (!petId) {
+      navigate('/inicio');
     }
-  }, [lostPetReportData, navigate]);
+  }, [petId, navigate]);
+
+  useEffect(() => {
+    if (current >= visiblePlans.length) {
+      setCurrent(0);
+    }
+  }, [current, visiblePlans.length]);
 
   const handleSelectPlan = (plan: PlanCardProps) => {
-    if (!lostPetReportData) return;
+    if (!petId) return;
 
-    const updated = {
-      ...lostPetReportData,
-      planName: plan.name,
-      planDetails: {
-        days: parseInt(plan.duration) || 0,
-        km: parseInt(plan.radius) || 0,
-        selectedFeatures: plan.features
-          .filter((f) => f.included)
-          .map((f) => f.label),
-        totalPrice: Number(plan.price),
+    navigate('/inicio/compra', {
+      replace: true,
+      state: {
+        productType: 'plan-extension',
+        productId: plan._id,
+        userEmail: user?.email ?? '',
+        userName: user?.username ?? '',
+        selectedPlan: {
+          name: plan.name,
+          price: Number(plan.price),
+          duration: parseInt(plan.duration) || 0,
+          radius: parseInt(plan.radius) || 0,
+          features: plan.features
+            .filter((feature) => feature.included)
+            .map((feature) => feature.label),
+          petId,
+        },
       },
-    };
-
-    setLostPetReportData(updated);
-    navigate('/compra', { replace: true, state: null });
+    });
   };
 
-  /**
-   * Navigation handlers for the mobile carousel view.
-   */
   const prev = () => setCurrent((i) => Math.max(i - 1, 0));
-  const next = () => setCurrent((i) => Math.min(i + 1, plans.length - 1));
+  const next = () =>
+    setCurrent((i) => Math.min(i + 1, visiblePlans.length - 1));
 
   if (loading) {
     return (
       <>
-        <Header />
-        <main className="min-h-screen bg-[#FEF5DA] flex items-center justify-center">
+        <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
           <p className="text-gray-500">Cargando planes...</p>
         </main>
       </>
@@ -67,22 +76,21 @@ export default function PlansPage() {
   }
 
   if (error) {
+    console.log('Error loading plans:', error);
     return (
       <>
-        <Header />
-        <main className="min-h-screen bg-[#FEF5DA] flex items-center justify-center">
+        <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
           <p className="text-red-400">Error al cargar los planes.</p>
         </main>
       </>
     );
   }
 
-  if (plans.length === 0) {
+  if (visiblePlans.length === 0) {
     return (
       <>
-        <Header />
-        <main className="min-h-screen bg-[#FEF5DA] flex items-center justify-center">
-          <p className="text-gray-500">No se encontraron planes.</p>
+        <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
+          <p className="text-gray-500">No se encontraron planes disponibles.</p>
         </main>
       </>
     );
@@ -90,22 +98,21 @@ export default function PlansPage() {
 
   return (
     <>
-      <Header />
-      <main className="min-h-screen bg-[#FEF5DA] flex flex-col items-center py-8 pt-28 lg:pt-8">
+      <main className="min-h-screen bg-purple-secondary flex flex-col items-center py-8 pt-28 lg:pt-8">
         <Text
           variant="h2"
           weight="medium"
           as="h2"
           className="text-2xl lg:text-2xl text-gray-900 mb-2"
         >
-          {' '}
-          Planes{' '}
+          Extender plan
         </Text>
         <div className="hidden md:flex flex-row gap-10 w-full justify-center items-stretch">
-          {plans.map((plan, i) => (
+          {visiblePlans.map((plan, i) => (
             <PlanCard
               key={i}
               {...plan}
+              colorScheme="purple"
               onSelect={() => handleSelectPlan(plan)}
             />
           ))}
@@ -128,14 +135,15 @@ export default function PlansPage() {
 
           <div className="w-9/12">
             <PlanCard
-              {...plans[current]}
-              onSelect={() => handleSelectPlan(plans[current])}
+              {...visiblePlans[current]}
+              colorScheme="purple"
+              onSelect={() => handleSelectPlan(visiblePlans[current])}
             />
           </div>
           <div className="w-1/12 flex justify-end">
             <button
               onClick={next}
-              disabled={current === plans.length - 1}
+              disabled={current === visiblePlans.length - 1}
               className="p-1.5 rounded-full bg-white border-[3.5px] border-[#61646B] disabled:opacity-30 shrink-0"
             >
               <HiArrowRight
@@ -148,7 +156,7 @@ export default function PlansPage() {
         </div>
 
         <div className="flex md:hidden gap-2 mt-4">
-          {plans.map((_, i) => (
+          {visiblePlans.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
@@ -159,12 +167,18 @@ export default function PlansPage() {
           ))}
         </div>
 
-        <div className="flex justify-center pb-5 mt-5  w-75 sm:w-10/12 md:w-auto">
+        <div className="flex justify-center pb-5 mt-5 w-75 sm:w-10/12 md:w-auto">
           <Button
             label="¿No es lo que buscas? Personalízalo"
             variant="danger"
             icon={HiArrowRight}
-            onClick={() => navigate('/planes/personalizado')}
+            onClick={() =>
+              navigate('/inicio/personalizado', {
+                state: {
+                  petId,
+                },
+              })
+            }
           />
         </div>
       </main>

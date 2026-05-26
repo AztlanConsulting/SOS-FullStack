@@ -1,6 +1,15 @@
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import type { Address } from '@stripe/stripe-js';
 
+export type ExtensionPlan = {
+  petId: string;
+  name: string;
+  price: number;
+  duration: number;
+  radius: number;
+  features: string[];
+};
+
 export type Order = {
   amount: number;
   currency: string;
@@ -13,6 +22,7 @@ export type Order = {
     productId: string;
   };
   plan?: LostPetReportData;
+  extensionPlan?: ExtensionPlan;
 };
 
 export type PurchaseDetail = {
@@ -45,6 +55,7 @@ export interface PaymentIntent {
     productName: string;
   };
   plan?: LostPetReportData;
+  extensionPlan?: ExtensionPlan;
   method?: string;
   name?: string;
   email?: string;

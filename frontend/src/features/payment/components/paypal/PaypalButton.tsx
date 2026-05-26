@@ -45,6 +45,8 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
 
               const newPetId = petResult.plan._id;
               planIdRef.current = newPetId;
+            } else if (data.extensionPlan) {
+              planIdRef.current = data.extensionPlan.petId;
             }
 
             const orderId = response.data.result.id;
@@ -58,17 +60,26 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
                 productId: planIdRef.current!,
                 productType: 'plan',
               };
+            } else if (data.extensionPlan) {
+              purchaseInfo = {
+                ...purchaseDetail,
+                productId: planIdRef.current!,
+                productType: 'plan',
+              };
             }
             const response = await confirmPaypalPayment(
               orderId,
               purchaseInfo,
               planIdRef.current,
+              data.extensionPlan,
             );
             if (response.status == 200) {
               success();
             }
           }}
-          onError={(error) => {}}
+          onError={(error) => {
+            console.error('PayPal Button Error:', error);
+          }}
         />
       </div>
     </>

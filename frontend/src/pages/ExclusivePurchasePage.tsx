@@ -1,9 +1,7 @@
 import { Text } from '@shared/components/ui/Text/Text';
 import PurchaseForm from '../features/purchases/components/PurchaseForm';
-import Header from '@shared/components/layout/Header';
 import PurchaseDetails from '../features/purchases/components/PurchaseDetails';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
-import Footer from '@shared/components/layout/Footer';
 import type { PurchaseDetail } from '@features/payment/types/payment.types';
 import usePurchase from '@features/purchases/hooks/usePurchase';
 import { usePetReport } from '@/shared/context/PetReportContext';
@@ -13,7 +11,7 @@ import type { Product } from '@/shared/types/purchase.types';
 import { useLocationContext } from '@/shared/context/Location.context';
 
 // Container for purchase information and purchase logic
-export const PurchasePage = () => {
+export const ExclusivePurchasePage = () => {
   const successHook = useState(false);
   const pendingHook = useState(false);
   const [product, setProduct] = useState<Product | undefined>(undefined);
@@ -85,7 +83,6 @@ export const PurchasePage = () => {
 
   return (
     <>
-      <Header />
       <main className="max-lg:pt-20 min-h-screen">
         {isLoading && <LoadingSpinner size="lg" />}
         {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
@@ -114,7 +111,6 @@ export const PurchasePage = () => {
           </div>
         )}
       </main>
-      <Footer />
     </>
   );
 };

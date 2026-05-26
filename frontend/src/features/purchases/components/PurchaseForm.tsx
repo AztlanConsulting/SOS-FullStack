@@ -9,6 +9,7 @@ import type {
 import paymentMethods from '../services/paymentMethods.service';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { useLocationContext } from '@/shared/context/Location.context';
+import type { ExtensionPlan } from '@features/payment/types/payment.types';
 
 interface Props {
   product?: Product;
@@ -17,6 +18,7 @@ interface Props {
   pending: () => void;
   purchaseDetail: PurchaseDetail;
   onMethodSelect?: () => void;
+  selectedPlan?: ExtensionPlan;
 }
 
 // Logic to handle payment method, display different cards for each payment
@@ -29,6 +31,7 @@ const PurchaseForm = ({
   success,
   pending,
   onMethodSelect,
+  selectedPlan,
 }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
   const { currencyCode, exchangeRate } = useLocationContext();
@@ -49,14 +52,23 @@ const PurchaseForm = ({
     currency: currencyCode,
     name: purchaseDetail.userName ?? petReportData?.contactName ?? undefined,
     email: purchaseDetail.userEmail ?? petReportData?.email ?? undefined,
-    ...(product && {
-      product: {
-        productId: product._id,
-        productName: product.name,
-      },
-    }),
+    ...(product &&
+      product._id &&
+      !selectedPlan && {
+        product: {
+          productId: product._id as string,
+          productName: product.name,
+        },
+      }),
     ...(petReportData && {
       plan: petReportData,
+    }),
+    ...(selectedPlan && {
+      extensionPlan: {
+        ...selectedPlan,
+        // Keep the original selected plan petId; only fallback to product if needed.
+        petId: selectedPlan.petId || product?.petId || '',
+      },
     }),
   };
 

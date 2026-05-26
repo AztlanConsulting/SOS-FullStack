@@ -9,6 +9,7 @@ export interface Plan {
  * Used for progress bars or "Time remaining" indicators.
  */
 export interface PlanSubscriptionProgress {
+  petId: string;
   plans: Plan[];
   petName: string;
   petImage: string | null;

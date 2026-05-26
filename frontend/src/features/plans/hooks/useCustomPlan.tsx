@@ -63,15 +63,74 @@ const getPricingTiers = (): PricingTier[] => [
 ];
 
 /**
+ * Configuration for the various pricing brackets.
+ * Base rates and feature costs adjust based on the length of the campaign.
+ */
+const getExclusivePricingTiers = (): PricingTier[] => [
+  {
+    minDays: 1,
+    maxDays: 4,
+    pricePerDay: 3.8,
+    pricePerKm: 0.72,
+    features: [
+      { key: 'asesor', label: 'Asesor de búsqueda', price: 2.3 },
+      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 2.3 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 2.3 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.3 },
+    ],
+  },
+  {
+    minDays: 5,
+    maxDays: 6,
+    pricePerDay: 3.6,
+    pricePerKm: 0.595,
+    features: [
+      { key: 'asesor', label: 'Asesor de búsqueda', price: 3.8 },
+      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 3.8 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 3.8 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 3.8 },
+    ],
+  },
+  {
+    minDays: 7,
+    maxDays: 14,
+    pricePerDay: 3.4,
+    pricePerKm: 0.55,
+    features: [
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 4.76 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.1 },
+    ],
+  },
+  {
+    minDays: 15,
+    maxDays: 30,
+    pricePerDay: 3.4,
+    pricePerKm: 0.55,
+    features: [
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 4.76 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.1 },
+    ],
+  },
+];
+
+type ColorScheme = 'yellow' | 'purple';
+
+const getPricingTiersByScheme = (colorScheme: ColorScheme): PricingTier[] =>
+  colorScheme === 'purple' ? getExclusivePricingTiers() : getPricingTiers();
+
+/**
  * Locates the appropriate pricing tier based on the number of days requested.
  * @param days - Total duration of the plan.
+ * @param colorScheme - The active plan theme, which determines the pricing table.
  * @returns The matching PricingTier object.
  */
-export const getTier = (days: number): PricingTier => {
-  const tier = getPricingTiers().find(
-    (t) => days >= t.minDays && days <= t.maxDays,
-  );
-  return tier || getPricingTiers()[0];
+export const getTier = (
+  days: number,
+  colorScheme: ColorScheme = 'yellow',
+): PricingTier => {
+  const pricingTiers = getPricingTiersByScheme(colorScheme);
+  const tier = pricingTiers.find((t) => days >= t.minDays && days <= t.maxDays);
+  return tier || pricingTiers[0];
 };
 
 /**
@@ -86,8 +145,9 @@ export const calculatePrice = (
   days: number,
   km: number,
   selectedFeatures: string[],
+  colorScheme: ColorScheme = 'yellow',
 ): number => {
-  const tier = getTier(days);
+  const tier = getTier(days, colorScheme);
   // Calculate the base cost using duration and distance rates
   const basePrice = days * tier.pricePerDay + km * tier.pricePerKm;
   // Sum the prices of all valid selected features within this tier
@@ -101,7 +161,7 @@ export const calculatePrice = (
  * Custom hook to manage the state and logic for building a personalized plan.
  * Handles calculation updates, tier shifts, and feature selection logic.
  */
-export const useCustomPlan = () => {
+export const useCustomPlan = (colorScheme: ColorScheme = 'yellow') => {
   const [days, setDays] = useState(3);
   const [km, setKm] = useState(5);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
@@ -111,7 +171,7 @@ export const useCustomPlan = () => {
    * Memoized tier information.
    * Updates only when the number of days changes to determine available features and rates.
    */
-  const tier = useMemo(() => getTier(days), [days]);
+  const tier = useMemo(() => getTier(days, colorScheme), [days, colorScheme]);
 
   /**
    * Toggles a feature's selection status.
@@ -131,8 +191,8 @@ export const useCustomPlan = () => {
    * @param newDays - The new duration selected by the user.
    */
   const handleDaysChange = (newDays: number) => {
-    const newTier = getTier(newDays);
-    const currentTier = getTier(days);
+    const newTier = getTier(newDays, colorScheme);
+    const currentTier = getTier(days, colorScheme);
     if (newTier.minDays !== currentTier.minDays) {
       setSelectedFeatures([]);
     }
@@ -144,8 +204,8 @@ export const useCustomPlan = () => {
    * Re-runs whenever days, kilometers, or feature selections change.
    */
   const totalPrice = useMemo(
-    () => calculatePrice(days, km, selectedFeatures),
-    [days, km, selectedFeatures],
+    () => calculatePrice(days, km, selectedFeatures, colorScheme),
+    [days, km, selectedFeatures, colorScheme],
   );
 
   const localizedTotalPrice = useMemo(

@@ -5,10 +5,11 @@ import { ExchangeRateApiService } from '@/infrastructure/api/exhangeRate.api';
 import { paymentDetails } from '@/types/payment.types';
 import type { CustomPlanData } from '@/types/plan.types';
 import { getManualByIdDB } from '@/use-cases/manuals/getManualsDB.usecase';
-import getPlanByName from '@/use-cases/plans/getPlanByName.usecase';
+import { getPlansDB } from '@/use-cases/plans/getPlansDB.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
 import { getLocalizedPricing } from '@/use-cases/ip/getLocalizedPricing.usecase';
-import { calculatePrice } from '@/utils/calculateCustomPlan';
+import { calculatePrice, getTier } from '@/utils/calculateCustomPlan';
+import getPlanByName from '@/use-cases/plans/getPlanByName.usecase';
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
@@ -23,15 +24,17 @@ async function confirmPaymentAmount(
 
     const data = paymentDetail.data;
 
-    const expectedAmount = await (data.product
-      ? verifyProduct(data.product.productId, data.currency)
-      : (data.plan.planName &&
-          verifyPlan(
-            data.plan.planName,
-            data.plan.planDetails,
-            data.currency,
-          )) ||
-        null);
+    const expectedAmount = await (data.extensionPlan
+      ? verifyExtensionPlan(data.extensionPlan, data.currency)
+      : data.product
+        ? verifyProduct(data.product.productId, data.currency)
+        : (data.plan?.planName &&
+            verifyPlan(
+              data.plan.planName,
+              data.plan.planDetails,
+              data.currency,
+            )) ||
+          null);
 
     if (expectedAmount === null) {
       throw Error('Amount forgery, item does not exists');
@@ -94,11 +97,67 @@ async function verifyPlan(
   if (planName === 'Personalizado' && customPlanData)
     return await localizeAmount(calculatePrice(customPlanData), currencyCode);
 
-  const plan = await getPlanByName(PlanDataAccess, planName);
+  const plans = await getPlansDB(PlanDataAccess);
+  const plan = plans.find((item) => item.name === planName && !item.discounted);
 
   return plan?.price === undefined
     ? null
     : await localizeAmount(plan.price, currencyCode);
+}
+
+async function verifyExtensionPlan(
+  planOrObj: {
+    name: string;
+    duration: number;
+    radius: number;
+    features: string[];
+  },
+  currencyCode?: string,
+): Promise<number | null> {
+  if (!currencyCode) return null;
+
+  if (planOrObj && typeof planOrObj === 'object') {
+    if (
+      planOrObj.name === 'Personalizado' &&
+      typeof planOrObj.duration === 'number'
+    ) {
+      // Convert custom-plan feature labels back to keys expected by the pricing util.
+      const tier = getTier(planOrObj.duration, 'purple');
+      const selectedKeys = (planOrObj.features ?? []).reduce<string[]>(
+        (acc, featureLabel) => {
+          const match = tier.features.find(
+            (feature) =>
+              feature.label === featureLabel || feature.key === featureLabel,
+          );
+          if (match) acc.push(match.key);
+          return acc;
+        },
+        [],
+      );
+
+      const customPlanPrice = calculatePrice(
+        {
+          days: planOrObj.duration,
+          km: planOrObj.radius ?? 0,
+          selectedFeatures: selectedKeys,
+        },
+        'purple',
+      );
+
+      return await localizeAmount(customPlanPrice, currencyCode);
+    }
+
+    const plans = await getPlansDB(PlanDataAccess);
+    const plan = plans.find(
+      (item) => item.name === planOrObj.name && item.discounted,
+    );
+
+    return plan?.price === undefined
+      ? null
+      : await localizeAmount(plan.price, currencyCode);
+  }
+
+  return null;
 }
 
 export default confirmPaymentAmount;

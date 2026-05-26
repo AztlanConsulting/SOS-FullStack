@@ -36,6 +36,7 @@ export interface PlanCardProps {
   onSelect: () => void;
   highlighted?: boolean;
   badge?: string;
+  colorScheme?: 'yellow' | 'purple';
 }
 
 /**
@@ -52,11 +53,29 @@ const PlanCard: React.FC<PlanCardProps> = ({
   highlighted = false,
   badge,
   onSelect,
+  colorScheme = 'yellow',
 }) => {
   const [activeTooltip, setActiveTooltip] = useState<{
     title: string;
     description: string;
   } | null>(null);
+
+  const theme = {
+    yellow: {
+      accent: 'bg-[#F9CD48] border-[#F9CD48]',
+      borderHighlighted: 'border-[#F9CD48]',
+      borderDefault: 'border-[#AFB1B6]',
+      badge: 'border-[#F9CD48]',
+      buttonVariant: 'plans' as const,
+    },
+    purple: {
+      accent: 'bg-purple border-purple',
+      borderHighlighted: 'border-purple',
+      borderDefault: 'border-purple-secondary',
+      badge: 'border-purple',
+      buttonVariant: 'purplePlans' as const,
+    },
+  }[colorScheme];
 
   const locationContext = useLocationContext();
   const displayCurrency = currency ?? locationContext.currencyCode ?? 'USD';
@@ -67,7 +86,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
     <div className="relative pt-4 md:h-full">
       {badge && (
         <div className="absolute top-1 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-white border-2 border-[#F9CD48] text-gray-800 text-medium font-medium px-4 py-2 rounded-full whitespace-nowrap">
+          <span
+            className={`bg-white border-2 ${theme.badge} text-gray-800 text-medium font-medium px-4 py-2 rounded-full whitespace-nowrap`}
+          >
             {badge}
           </span>
         </div>
@@ -75,11 +96,11 @@ const PlanCard: React.FC<PlanCardProps> = ({
 
       <div
         className={`relative w-full max-w-sm rounded-2xl border-2 bg-white overflow-hidden md:min-h-[550px] ${
-          highlighted ? 'border-[#F9CD48]' : 'border-[#AFB1B6]'
+          highlighted ? theme.borderHighlighted : theme.borderDefault
         }`}
       >
         <div
-          className={`bg-[#F9CD48] border-b-2 ${highlighted ? 'border-[#F9CD48]' : 'border-[#AFB1B6]'} py-3 text-center`}
+          className={`${theme.accent} border-b-2 ${highlighted ? theme.borderHighlighted : theme.borderDefault} py-3 text-center`}
         >
           <Text variant="body" weight="medium" className="text-white">
             {name}
@@ -118,7 +139,11 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </ul>
 
         <div className="flex justify-center pb-5">
-          <Button label="Seleccionar" variant="plans" onClick={onSelect} />
+          <Button
+            label="Seleccionar"
+            variant={theme.buttonVariant}
+            onClick={onSelect}
+          />
         </div>
       </div>
       {activeTooltip && (

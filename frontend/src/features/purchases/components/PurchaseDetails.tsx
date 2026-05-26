@@ -31,6 +31,7 @@ const PurchaseDetails = ({
 
   const rawPrice = product?.price ?? plan?.totalPrice ?? 0;
   const localizedPrice = Math.round(rawPrice * exchangeRate * 100) / 100;
+  const originalPrice = plan?.originalPrice ?? null;
   return (
     <div className="md:p-0 w-10/12 mx-auto">
       <Text
@@ -41,7 +42,7 @@ const PurchaseDetails = ({
         Detalles de la compra
       </Text>
       <div
-        className={`mb-3 md:mb-0 rounded-lg ${product ? 'bg-secondary' : 'bg-gray-100 border-2 border-gray-200'} p-4 py-6`}
+        className={`mb-3 md:mb-0 rounded-lg ${product ? (product.radius ? 'bg-light-purple' : 'bg-secondary') : 'bg-gray-100 border-2 border-gray-200'} p-4 py-6`}
       >
         <div className="flex flex-col items-center md:gap-5 gap-1">
           {/* Different UI elements depending if its a plan or manual / workshop */}
@@ -49,7 +50,37 @@ const PurchaseDetails = ({
           {product && <ProductDetail product={product} />}
         </div>
       </div>
-      <div className="flex justify-between my-6">
+      {originalPrice && (
+        <div className="flex justify-between mt-6 mb-1">
+          <Text variant="body" weight="regular" color="text-gray-500">
+            Precio original:
+          </Text>
+          <Text
+            variant="body"
+            weight="regular"
+            color="text-gray-500"
+            className="line-through"
+          >
+            {formatCurrency(originalPrice, currencyCode)} {currencyCode}
+          </Text>
+        </div>
+      )}
+      {originalPrice && (
+        <div className="flex justify-between mb-3">
+          <Text variant="body" weight="regular" color="text-green-600">
+            Descuento (15%):
+          </Text>
+          <Text variant="body" weight="regular" color="text-green-600">
+            -
+            {formatCurrency(
+              Math.round((originalPrice - rawPrice) * 100) / 100,
+              currencyCode,
+            )}{' '}
+            {currencyCode}
+          </Text>
+        </div>
+      )}
+      <div className={`flex justify-between ${originalPrice ? '' : 'my-6'}`}>
         <Text variant="body" weight="regular" color="text-black">
           Total a pagar:
         </Text>

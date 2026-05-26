@@ -17,6 +17,7 @@ import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-a
 import { sendWorkshopEmailService } from '@/infrastructure/service/sendWorkshopEmail.service';
 import { sendWorkshopEmail } from '@/use-cases/emails/sendWorkshopEmail.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
+import { Types } from 'mongoose';
 
 export default async function captureOrder(req: Request, res: Response) {
   try {
@@ -25,21 +26,41 @@ export default async function captureOrder(req: Request, res: Response) {
     const details = purchaseDetailsSchema.safeParse(req.body);
     if (details.error) throw details.error;
 
-    const { purchaseDetails, planId } = details.data;
+    const { purchaseDetails, planId, extensionPlan } = details.data;
     const { userEmail, productId, productType } = purchaseDetails;
 
     const capturedOrder = await ucCaptureOrder(paypalApi, orderId as string);
 
     if (Boolean(capturedOrder.error)) throw capturedOrder.error;
 
-    const result = await markAsSucceededDB(PaymentDataAccess, String(orderId));
+    await markAsSucceededDB(PaymentDataAccess, String(orderId));
 
-    if (productType === 'plan') {
+    let purchasedPlanId = planId || productId!;
+
+    if (extensionPlan) {
+      if (!Types.ObjectId.isValid(extensionPlan.petId)) {
+        return res.status(400).json({ error: 'Invalid extension plan petId' });
+      }
+
+      const purchasedPlan = await purchasedPlanDataAccess.createPurchasedPlan({
+        petId: new Types.ObjectId(extensionPlan.petId),
+        name: extensionPlan.name,
+        price: extensionPlan.price,
+        duration: extensionPlan.duration,
+        radius: extensionPlan.radius,
+        features: extensionPlan.features,
+        status: 'continua',
+      });
+
+      purchasedPlanId = purchasedPlan._id.toString();
+    }
+
+    if (productType === 'plan' || extensionPlan) {
       await activatePlan(
         userDataAccess,
         purchasedPlanDataAccess,
         userEmail,
-        planId!,
+        purchasedPlanId,
       );
     }
 
@@ -77,21 +98,18 @@ export default async function captureOrder(req: Request, res: Response) {
       }
     }
 
-    let id: string | undefined = productId;
-    if (!Boolean(productId)) {
-      id = planId!; // Register plan details and return id
-    }
-
     await createPurchaseDB(PurchaseDataAccess, {
       userEmail,
       paymentId: capturedOrder.id!,
-      productId: productId ?? id!,
-      productType,
+      productId: purchasedPlanId,
+      productType: extensionPlan ? 'plan-extension' : productType,
     });
 
     if (capturedOrder.id !== undefined)
       return res.status(200).send(capturedOrder.id);
   } catch (error) {
-    res.status(500).send(error);
+    const message =
+      error instanceof Error ? error.message : 'Failed to capture order';
+    res.status(500).json({ error: message });
   }
 }

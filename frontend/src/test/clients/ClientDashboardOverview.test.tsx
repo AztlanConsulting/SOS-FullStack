@@ -204,7 +204,7 @@ describe('ClientDashboardOverview', () => {
     );
 
     expect(dashboardMocks.navigate).toHaveBeenCalledWith(
-      '/inicio/coleccion-mascotas',
+      '/inicio/radar-de-coincidencias',
     );
   });
 });

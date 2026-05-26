@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { getPlans } from '@interfaces/controllers/plan.controller';
+import {
+  getPlans,
+  createPurchasedPlan,
+} from '@interfaces/controllers/plan.controller';
 
 const router = Router();
 
@@ -9,5 +12,6 @@ const router = Router();
  * Retrieves the list of all available service plans from the database.
  */
 router.get('/getPlans', getPlans);
+router.post('/createPurchasedPlan', createPurchasedPlan);
 
 export default router;

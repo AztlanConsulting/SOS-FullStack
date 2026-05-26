@@ -4,6 +4,8 @@ import { Text } from '@shared/components/ui/Text';
 import type { Product } from '@shared/types/purchase.types';
 import { useNavigate } from 'react-router';
 import pending from '@assets/images/pending.webp';
+import { useLocationContext } from '@/shared/context/Location.context';
+import { formatCurrency } from '@shared/utils/formatCurrency';
 
 interface Props {
   plan: LostPetReportData | null;
@@ -13,6 +15,7 @@ interface Props {
 
 const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
   const navigate = useNavigate();
+  const { currencyCode, exchangeRate } = useLocationContext();
 
   function close() {
     if (onClose) onClose();
@@ -106,7 +109,12 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
                   Producto
                 </span>
                 <span className="font-semibold text-gray-900 text-right">
-                  {product.name} (MX${product.price} MXN)
+                  {product.name} (
+                  {formatCurrency(
+                    Math.round(Number(product.price * exchangeRate)),
+                    currencyCode,
+                  )}{' '}
+                  {currencyCode})
                 </span>
               </div>
             )}

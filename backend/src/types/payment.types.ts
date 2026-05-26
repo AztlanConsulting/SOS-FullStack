@@ -12,6 +12,16 @@ export const paymentDetails = z.object({
     })
     .optional(),
   plan: z.any().optional(),
+  extensionPlan: z
+    .object({
+      petId: z.string(),
+      name: z.string(),
+      price: z.number(),
+      duration: z.number(),
+      radius: z.number(),
+      features: z.array(z.string()),
+    })
+    .optional(),
 });
 
 export const purchaseDetailsSchema = z
@@ -22,6 +32,16 @@ export const purchaseDetailsSchema = z
       productId: z.string().optional(),
       productType: z.string(),
     }),
+    extensionPlan: z
+      .object({
+        petId: z.string(),
+        name: z.string(),
+        price: z.number(),
+        duration: z.number(),
+        radius: z.number(),
+        features: z.array(z.string()),
+      })
+      .optional(),
   })
   .refine(
     (data) =>

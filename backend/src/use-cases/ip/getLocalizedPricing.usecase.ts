@@ -7,6 +7,7 @@ import type { IExchangeRateRepository } from '@domain/ports/ILocationRepository'
 export interface PriceableItem {
   name: string;
   price: number;
+  discounted?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ export interface localizedItem {
   localizedPrice: number;
   currencyCode: string;
   exchangeRate: number;
+  discounted?: boolean;
 }
 
 /**
@@ -45,5 +47,6 @@ export const getLocalizedPricing = async (
     localizedPrice: Math.round(item.price * rate * 100) / 100,
     currencyCode: resolvedCurrency,
     exchangeRate: rate,
+    discounted: item.discounted,
   }));
 };

@@ -1,6 +1,9 @@
 import type { Request, Response } from 'express';
 import { createPurchaseDB } from '@use-cases/purchases/createPurchaseDB.usecase';
 import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
+import { activatePlan } from '@/use-cases/plans/activatePlan.usecase';
+import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
+import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
 
 /**
  * Factory function that returns a middleware to create a new purchase.
@@ -23,6 +26,15 @@ export const makeCreatePurchase = () => {
         productType === undefined
       ) {
         return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      if (productType === 'plan' || productType === 'plan-extension') {
+        await activatePlan(
+          userDataAccess,
+          purchasedPlanDataAccess,
+          userEmail,
+          productId,
+        );
       }
 
       await createPurchaseDB(PurchaseDataAccess, {

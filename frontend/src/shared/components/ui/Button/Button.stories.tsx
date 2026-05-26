@@ -47,6 +47,13 @@ export const Plans: Story = {
   },
 };
 
+export const PurplePlans: Story = {
+  args: {
+    label: 'Seleccionar',
+    variant: 'purplePlans',
+  },
+};
+
 export const Disabled: Story = {
   args: {
     label: 'Unavailable',

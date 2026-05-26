@@ -2,12 +2,17 @@ import type { PaymentIntentDTO } from '@/domain/ports/paymentProvider.port';
 import type { DetailOrder } from '@/domain/ports/paypal.port';
 
 function createItems(data: PaymentIntentDTO) {
+  const itemName =
+    data.product?.productName ?? data.extensionPlan?.name ?? data.plan!.name;
+  const itemDescription =
+    data.product?.productId ??
+    data.extensionPlan?.petId ??
+    `${data.plan!.planDetails?.days} | ${data.plan!.planDetails?.km}`;
+
   return [
     {
-      name: data.product?.productName ?? data.plan!.name,
-      description:
-        data.product?.productId ??
-        `${data.plan!.planDetails?.days} | ${data.plan!.planDetails?.km}`,
+      name: itemName,
+      description: itemDescription,
       quantity: '1',
       unit_amount: {
         currency_code: data.currency,

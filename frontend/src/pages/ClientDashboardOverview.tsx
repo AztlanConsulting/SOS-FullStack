@@ -62,11 +62,17 @@ const ClientDashboardOverview = () => {
   const petsData = metrics?.planProgress;
 
   const handleResourcesPage = () => {
-    navigate('/contenido-exclusivo');
+    navigate('/inicio/contenido-exclusivo');
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
   };
 
   const handlePetCollection = () => {
-    navigate('/inicio/coleccion-mascotas');
+    navigate('/inicio/radar-de-coincidencias');
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
   };
 
   if (loading) {

@@ -4,6 +4,9 @@ import MembersOnlyPage from '../pages/MembersOnlyPage';
 import ClientDashboardOverview from '@/pages/ClientDashboardOverview';
 import routerPetCollection from './petCollection.routes';
 import { Outlet } from 'react-router';
+import ExtenderPlanPage from '@/pages/ExtenderPlanPage';
+import { ExclusivePurchasePage } from '@/pages/ExclusivePurchasePage';
+import ExclusiveCustomPlanPage from '@/pages/ExclusiveCustomPlanPage';
 
 const routes = [
   {
@@ -27,6 +30,18 @@ const routes = [
         element: <MembersOnlyPage />,
       },
     ],
+  },
+  {
+    path: 'extender-plan',
+    element: <ExtenderPlanPage />,
+  },
+  {
+    path: 'compra',
+    element: <ExclusivePurchasePage />,
+  },
+  {
+    path: 'personalizado',
+    element: <ExclusiveCustomPlanPage />,
   },
   ...routerPetCollection,
 ];

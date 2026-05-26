@@ -1,7 +1,7 @@
 import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
 import app from '@/index';
 import request from 'supertest';
-import initMembersOnlyDB from '@db/mongoDB/data/membersOnly.data';
+import initMembersOnlyDB from '@db/mongoDB/data/mock/membersOnly.data';
 import { MembersOnlyModel } from '@domain/models/membersOnly.model';
 
 jest.mock('@interfaces/middleware/auth.middleware', () => ({

@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from '@interfaces/routes/auth.routes';
 
 import { connect, closeDatabase, clearDatabase } from '../../db';
-import initAuthDB from '@infrastructure/database/mongoDB/data/auth.data';
+import initAuthDB from '@db/mongoDB/data/auth.data';
 
 describe('auth routes (integration)', () => {
   // Express application instance used for testing

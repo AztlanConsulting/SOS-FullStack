@@ -1,7 +1,7 @@
 import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
 import app from '@/index';
 import request from 'supertest';
-import initBlogDB from '@db/mongoDB/data/blogs.data';
+import initBlogDB from '@db/mongoDB/data/mock/blogs.data';
 
 describe('blog routes (integration)', () => {
   beforeAll(async () => {

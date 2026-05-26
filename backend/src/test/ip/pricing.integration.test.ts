@@ -1,7 +1,7 @@
 import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
 import app from '@/index';
 import request from 'supertest';
-import { initPriceDB } from '@db/mongoDB/data/pricing.data';
+import { initPriceDB } from '@db/mongoDB/data/mock/pricing.data';
 
 describe('pricing routes (integration)', () => {
   beforeAll(async () => {

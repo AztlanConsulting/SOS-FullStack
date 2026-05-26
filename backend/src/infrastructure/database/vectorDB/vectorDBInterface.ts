@@ -11,6 +11,7 @@ async function get() {
     .do();
 
   const petIds = data.data.Get.Pet;
+  console.log(petIds);
 }
 
 async function getIds() {
@@ -21,6 +22,7 @@ async function getIds() {
     .do();
 
   const refIds = pets.data.Get.Pet;
+  console.log(refIds);
 }
 
 async function start() {
@@ -37,6 +39,7 @@ async function start() {
       await startVectorDB();
       break;
     default:
+      console.error('\x1b[31mParámetros válidos: [get | getId | clean]');
       process.exit(1);
   }
 }

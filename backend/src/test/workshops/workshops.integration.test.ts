@@ -1,7 +1,7 @@
 import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
 import app from '@/index';
 import request from 'supertest';
-import initWorkshopDB from '@db/mongoDB/data/workshops.data';
+import initWorkshopDB from '@db/mongoDB/data/mock/workshops.data';
 
 describe('Workshop integration test', () => {
   // Setup responses

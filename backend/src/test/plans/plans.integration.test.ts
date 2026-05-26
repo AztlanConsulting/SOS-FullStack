@@ -2,7 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import planRoutes from '@interfaces/routes/plans.routes';
 import { connect, closeDatabase, clearDatabase } from '../db';
-import initPlanDB from '@infrastructure/database/mongoDB/data/plans.data';
+import initPlanDB from '@db/mongoDB/data/mock/plans.data';
 
 describe('plans routes (integration)', () => {
   const app = express();
@@ -61,9 +61,9 @@ describe('plans routes (integration)', () => {
     expect(names).toContain('Básico');
     expect(names).toContain('Estándar');
     expect(names).toContain('Premium');
-    expect(prices).toContain(390);
-    expect(prices).toContain(840);
-    expect(prices).toContain(1600);
+    expect(prices).toContain(22.55);
+    expect(prices).toContain(48.62);
+    expect(prices).toContain(92.6);
   });
 
   /**

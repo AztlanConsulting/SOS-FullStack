@@ -26,7 +26,9 @@ async function main() {
     try {
       await startVectorDB();
       await readDirectory(baseRoute, fn);
-    } catch (error) {}
+    } catch (error) {
+      console.error('%cParámetros válidos: [populate | null]', 'color: red');
+    }
   }
 }
 

@@ -9,6 +9,7 @@ import { getPlansDB } from '@/use-cases/plans/getPlansDB.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
 import { getLocalizedPricing } from '@/use-cases/ip/getLocalizedPricing.usecase';
 import { calculatePrice, getTier } from '@/utils/calculateCustomPlan';
+import getPlanByName from '@/use-cases/plans/getPlanByName.usecase';
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 

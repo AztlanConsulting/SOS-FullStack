@@ -73,7 +73,10 @@ describe('PlanProgressSection', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Extender plan' }));
 
-    expect(planProgressMocks.navigate).toHaveBeenCalledWith('/extender-plan');
+    expect(planProgressMocks.navigate).toHaveBeenCalledWith(
+      '/inicio/extender-plan',
+      { state: { petId: undefined } },
+    );
   });
 
   it('opens the adviser chat in a new window', () => {

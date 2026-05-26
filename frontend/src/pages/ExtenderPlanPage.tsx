@@ -1,7 +1,6 @@
 import PlanCard, {
   type PlanCardProps,
 } from '@features/plans/components/PlanCard';
-import Header from '@/shared/components/layout/Header';
 import { Text } from '@shared/components/ui/Text';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useState, useEffect } from 'react';
@@ -14,27 +13,40 @@ export default function ExtenderPlanPage() {
   const { plans, loading, error } = usePlans(true);
   const [current, setCurrent] = useState(0);
   const location = useLocation();
-  const { petId } = (location.state ?? {}) as { petId?: string };
+  const { petId, currentPlanNames } = (location.state ?? {}) as {
+    petId?: string;
+    currentPlanNames?: string[];
+  };
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const hiddenPlanNames = new Set(currentPlanNames ?? []);
+  const visiblePlans = hiddenPlanNames.size
+    ? plans.filter((plan) => !hiddenPlanNames.has(plan.name))
+    : plans;
+
   useEffect(() => {
     if (!petId) {
-      navigate('/');
+      navigate('/inicio');
     }
   }, [petId, navigate]);
+
+  useEffect(() => {
+    if (current >= visiblePlans.length) {
+      setCurrent(0);
+    }
+  }, [current, visiblePlans.length]);
 
   const handleSelectPlan = (plan: PlanCardProps) => {
     if (!petId) return;
 
-    navigate('/compra', {
+    navigate('/inicio/compra', {
       replace: true,
       state: {
         productType: 'plan-extension',
-        productId: petId,
+        productId: plan._id,
         userEmail: user?.email ?? '',
         userName: user?.username ?? '',
-        petId,
         selectedPlan: {
           name: plan.name,
           price: Number(plan.price),
@@ -43,18 +55,19 @@ export default function ExtenderPlanPage() {
           features: plan.features
             .filter((feature) => feature.included)
             .map((feature) => feature.label),
+          petId,
         },
       },
     });
   };
 
   const prev = () => setCurrent((i) => Math.max(i - 1, 0));
-  const next = () => setCurrent((i) => Math.min(i + 1, plans.length - 1));
+  const next = () =>
+    setCurrent((i) => Math.min(i + 1, visiblePlans.length - 1));
 
   if (loading) {
     return (
       <>
-        <Header />
         <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
           <p className="text-gray-500">Cargando planes...</p>
         </main>
@@ -66,7 +79,6 @@ export default function ExtenderPlanPage() {
     console.log('Error loading plans:', error);
     return (
       <>
-        <Header />
         <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
           <p className="text-red-400">Error al cargar los planes.</p>
         </main>
@@ -74,12 +86,11 @@ export default function ExtenderPlanPage() {
     );
   }
 
-  if (plans.length === 0) {
+  if (visiblePlans.length === 0) {
     return (
       <>
-        <Header />
         <main className="min-h-screen bg-purple-secondary flex items-center justify-center">
-          <p className="text-gray-500">No se encontraron planes.</p>
+          <p className="text-gray-500">No se encontraron planes disponibles.</p>
         </main>
       </>
     );
@@ -87,7 +98,6 @@ export default function ExtenderPlanPage() {
 
   return (
     <>
-      <Header />
       <main className="min-h-screen bg-purple-secondary flex flex-col items-center py-8 pt-28 lg:pt-8">
         <Text
           variant="h2"
@@ -98,7 +108,7 @@ export default function ExtenderPlanPage() {
           Extender plan
         </Text>
         <div className="hidden md:flex flex-row gap-10 w-full justify-center items-stretch">
-          {plans.map((plan, i) => (
+          {visiblePlans.map((plan, i) => (
             <PlanCard
               key={i}
               {...plan}
@@ -125,15 +135,15 @@ export default function ExtenderPlanPage() {
 
           <div className="w-9/12">
             <PlanCard
-              {...plans[current]}
+              {...visiblePlans[current]}
               colorScheme="purple"
-              onSelect={() => handleSelectPlan(plans[current])}
+              onSelect={() => handleSelectPlan(visiblePlans[current])}
             />
           </div>
           <div className="w-1/12 flex justify-end">
             <button
               onClick={next}
-              disabled={current === plans.length - 1}
+              disabled={current === visiblePlans.length - 1}
               className="p-1.5 rounded-full bg-white border-[3.5px] border-[#61646B] disabled:opacity-30 shrink-0"
             >
               <HiArrowRight
@@ -146,7 +156,7 @@ export default function ExtenderPlanPage() {
         </div>
 
         <div className="flex md:hidden gap-2 mt-4">
-          {plans.map((_, i) => (
+          {visiblePlans.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
@@ -162,7 +172,13 @@ export default function ExtenderPlanPage() {
             label="¿No es lo que buscas? Personalízalo"
             variant="danger"
             icon={HiArrowRight}
-            onClick={() => navigate('/planes/personalizado')}
+            onClick={() =>
+              navigate('/inicio/personalizado', {
+                state: {
+                  petId,
+                },
+              })
+            }
           />
         </div>
       </main>

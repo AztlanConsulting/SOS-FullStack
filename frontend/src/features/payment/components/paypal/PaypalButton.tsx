@@ -64,7 +64,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               purchaseInfo = {
                 ...purchaseDetail,
                 productId: planIdRef.current!,
-                productType: 'plan-extension',
+                productType: 'plan',
               };
             }
             const response = await confirmPaypalPayment(
@@ -77,7 +77,9 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               success();
             }
           }}
-          onError={(error) => {}}
+          onError={(error) => {
+            console.error('PayPal Button Error:', error);
+          }}
         />
       </div>
     </>

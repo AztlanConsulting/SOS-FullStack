@@ -33,27 +33,16 @@ export default async function captureOrder(req: Request, res: Response) {
 
     if (Boolean(capturedOrder.error)) throw capturedOrder.error;
 
-    const result = await markAsSucceededDB(PaymentDataAccess, String(orderId));
+    await markAsSucceededDB(PaymentDataAccess, String(orderId));
 
-    if (productType === 'plan') {
-      await activatePlan(
-        userDataAccess,
-        purchasedPlanDataAccess,
-        userEmail,
-        planId!,
-      );
-    }
+    let purchasedPlanId = planId || productId!;
 
-    if (productType === 'plan-extension' && !extensionPlan) {
-      return res.status(400).json({
-        error: 'Missing extension plan data',
-      });
-    }
+    if (extensionPlan) {
+      if (!Types.ObjectId.isValid(extensionPlan.petId)) {
+        return res.status(400).json({ error: 'Invalid extension plan petId' });
+      }
 
-    let purchasedPlanId = productId;
-
-    if (productType === 'plan-extension' && extensionPlan) {
-      const newPlan = await purchasedPlanDataAccess.createPurchasedPlan({
+      const purchasedPlan = await purchasedPlanDataAccess.createPurchasedPlan({
         petId: new Types.ObjectId(extensionPlan.petId),
         name: extensionPlan.name,
         price: extensionPlan.price,
@@ -63,7 +52,16 @@ export default async function captureOrder(req: Request, res: Response) {
         status: 'continua',
       });
 
-      purchasedPlanId = newPlan._id.toString();
+      purchasedPlanId = purchasedPlan._id.toString();
+    }
+
+    if (productType === 'plan' || extensionPlan) {
+      await activatePlan(
+        userDataAccess,
+        purchasedPlanDataAccess,
+        userEmail,
+        purchasedPlanId,
+      );
     }
 
     if (productType === 'manual') {
@@ -100,21 +98,18 @@ export default async function captureOrder(req: Request, res: Response) {
       }
     }
 
-    const finalProductId =
-      productType === 'plan-extension'
-        ? purchasedPlanId
-        : (productId ?? planId!);
-
     await createPurchaseDB(PurchaseDataAccess, {
       userEmail,
       paymentId: capturedOrder.id!,
-      productId: finalProductId,
-      productType,
+      productId: purchasedPlanId,
+      productType: extensionPlan ? 'plan-extension' : productType,
     });
 
     if (capturedOrder.id !== undefined)
       return res.status(200).send(capturedOrder.id);
   } catch (error) {
-    res.status(500).send(error);
+    const message =
+      error instanceof Error ? error.message : 'Failed to capture order';
+    res.status(500).json({ error: message });
   }
 }

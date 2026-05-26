@@ -28,6 +28,9 @@ export const useStripeHook = (data: Order, idempotencyKey: string) => {
           idempotencyKey,
           ...(data.product && { product: data.product }),
           ...(data.plan !== undefined && { plan: data.plan }),
+          ...(data.extensionPlan !== undefined && {
+            extensionPlan: data.extensionPlan,
+          }),
         };
         const res = await createPaymentIntent(paymentIntentBody);
 
@@ -38,6 +41,7 @@ export const useStripeHook = (data: Order, idempotencyKey: string) => {
         setOxxoData(res.oxxoDetails ?? null);
         setSpeiData(res.speiDetails ?? null);
       } catch (error) {
+        console.error('Error creating payment intent:', error);
       } finally {
         if (!cancelled) {
           setLoading(false);

@@ -1,5 +1,7 @@
 import type { CustomPlanData, PricingTier } from '@/types/plan.types';
 
+type ColorScheme = 'yellow' | 'purple';
+
 /**
  * Configuration for the various pricing brackets.
  * Base rates and feature costs adjust based on the length of the campaign.
@@ -51,16 +53,68 @@ const getPricingTiers = (): PricingTier[] => [
   },
 ];
 
+const getExclusivePricingTiers = (): PricingTier[] => [
+  {
+    minDays: 1,
+    maxDays: 4,
+    pricePerDay: 3.8,
+    pricePerKm: 0.72,
+    features: [
+      { key: 'asesor', label: 'Asesor de búsqueda', price: 2.3 },
+      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 2.3 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 2.3 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.3 },
+    ],
+  },
+  {
+    minDays: 5,
+    maxDays: 6,
+    pricePerDay: 3.6,
+    pricePerKm: 0.595,
+    features: [
+      { key: 'asesor', label: 'Asesor de búsqueda', price: 3.8 },
+      { key: 'geo_dinamica', label: 'Geolocalización dinámica', price: 3.8 },
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 3.8 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 3.8 },
+    ],
+  },
+  {
+    minDays: 7,
+    maxDays: 14,
+    pricePerDay: 3.4,
+    pricePerKm: 0.55,
+    features: [
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 4.76 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.1 },
+    ],
+  },
+  {
+    minDays: 15,
+    maxDays: 30,
+    pricePerDay: 3.4,
+    pricePerKm: 0.55,
+    features: [
+      { key: 'geo_doble', label: 'Geolocalización doble', price: 4.76 },
+      { key: 'reel', label: 'Reel de Instagram y Facebook', price: 2.1 },
+    ],
+  },
+];
+
+const getPricingTiersByScheme = (colorScheme: ColorScheme): PricingTier[] =>
+  colorScheme === 'purple' ? getExclusivePricingTiers() : getPricingTiers();
+
 /**
  * Locates the appropriate pricing tier based on the number of days requested.
  * @param days - Total duration of the plan.
  * @returns The matching PricingTier object.
  */
-export const getTier = (days: number): PricingTier => {
-  const tier = getPricingTiers().find(
-    (t) => days >= t.minDays && days <= t.maxDays,
-  );
-  return tier || getPricingTiers()[0];
+export const getTier = (
+  days: number,
+  colorScheme: ColorScheme = 'yellow',
+): PricingTier => {
+  const pricingTiers = getPricingTiersByScheme(colorScheme);
+  const tier = pricingTiers.find((t) => days >= t.minDays && days <= t.maxDays);
+  return tier || pricingTiers[0];
 };
 
 /**
@@ -71,12 +125,11 @@ export const getTier = (days: number): PricingTier => {
  * @param selectedFeatures - Array of feature keys selected by the user.
  * @returns Total calculated price as a number.
  */
-export const calculatePrice = ({
-  days,
-  km,
-  selectedFeatures,
-}: CustomPlanData): number => {
-  const tier = getTier(days);
+export const calculatePrice = (
+  { days, km, selectedFeatures }: CustomPlanData,
+  colorScheme: ColorScheme = 'yellow',
+): number => {
+  const tier = getTier(days, colorScheme);
   // Calculate the base cost using duration and distance rates
   const basePrice = days * tier.pricePerDay + km * tier.pricePerKm;
   // Sum the prices of all valid selected features within this tier

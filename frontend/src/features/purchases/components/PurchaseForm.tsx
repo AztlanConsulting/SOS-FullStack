@@ -53,9 +53,10 @@ const PurchaseForm = ({
     name: purchaseDetail.userName ?? petReportData?.contactName ?? undefined,
     email: purchaseDetail.userEmail ?? petReportData?.email ?? undefined,
     ...(product &&
+      product._id &&
       !selectedPlan && {
         product: {
-          productId: product._id,
+          productId: product._id as string,
           productName: product.name,
         },
       }),
@@ -65,7 +66,8 @@ const PurchaseForm = ({
     ...(selectedPlan && {
       extensionPlan: {
         ...selectedPlan,
-        petId: purchaseDetail.productId,
+        // Keep the original selected plan petId; only fallback to product if needed.
+        petId: selectedPlan.petId || product?.petId || '',
       },
     }),
   };

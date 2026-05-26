@@ -42,7 +42,7 @@ const PurchaseDetails = ({
         Detalles de la compra
       </Text>
       <div
-        className={`mb-3 md:mb-0 rounded-lg ${product ? 'bg-secondary' : 'bg-gray-100 border-2 border-gray-200'} p-4 py-6`}
+        className={`mb-3 md:mb-0 rounded-lg ${product ? (product.radius ? 'bg-light-purple' : 'bg-secondary') : 'bg-gray-100 border-2 border-gray-200'} p-4 py-6`}
       >
         <div className="flex flex-col items-center md:gap-5 gap-1">
           {/* Different UI elements depending if its a plan or manual / workshop */}

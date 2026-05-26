@@ -6,9 +6,10 @@ import type { CustomPlanData } from '@/types/plan.types';
 import { getManualByIdDB } from '@/use-cases/manuals/getManualsDB.usecase';
 import getPlanByName from '@/use-cases/plans/getPlanByName.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
-import { calculatePrice } from '@/utils/calculateCustomPlan';
+import { calculatePrice, getTier } from '@/utils/calculateCustomPlan';
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
+import { getPlansDB } from '@/use-cases/plans/getPlansDB.usecase';
 
 async function confirmPaymentAmount(
   req: Request,
@@ -22,7 +23,7 @@ async function confirmPaymentAmount(
     const data = paymentDetail.data;
 
     const realPrice = await (data.extensionPlan
-      ? verifyExtensionPlan(data.extensionPlan.name)
+      ? verifyExtensionPlan(data.extensionPlan)
       : data.product
         ? verifyProduct(data.product.productId)
         : (data.plan?.planName &&
@@ -31,14 +32,7 @@ async function confirmPaymentAmount(
 
     // if (realPrice && realPrice != data.amount) throw Error('Amount forgery');
 
-    if (!realPrice) throw Error('Amount forgery, item does not exists');
-
-    // Keep Stripe payment-intent amount in requested currency; normalize only PayPal order creation.
-    if (req.path === '/create-order') {
-      req.body.amount = realPrice;
-    }
-
-    console.log(realPrice);
+    if (realPrice === null) throw Error('Amount forgery, item does not exist');
 
     next();
   } catch (error) {
@@ -69,8 +63,55 @@ async function verifyPlan(
   return plan?.price ?? null;
 }
 
-async function verifyExtensionPlan(planName: string): Promise<number | null> {
-  const plan = await getPlanByName(PlanDataAccess, planName);
+async function verifyExtensionPlan(planOrObj: any): Promise<number | null> {
+  // If an object is provided (extension plan payload), handle 'Personalizado' specially
+  if (planOrObj && typeof planOrObj === 'object') {
+    const ext = planOrObj as {
+      name?: string;
+      duration?: number;
+      radius?: number;
+      features?: string[];
+      price?: number;
+    };
+
+    if (ext.name === 'Personalizado' && typeof ext.duration === 'number') {
+      // Map feature labels back to keys using the pricing tier for the provided duration
+      const tier = getTier(ext.duration, 'purple');
+      const selectedKeys = (ext.features ?? []).reduce<string[]>(
+        (acc, fLabel) => {
+          const match = tier.features.find(
+            (tf) => tf.label === fLabel || tf.key === fLabel,
+          );
+          if (match) acc.push(match.key);
+          return acc;
+        },
+        [],
+      );
+
+      const price = calculatePrice(
+        {
+          days: ext.duration,
+          km: ext.radius ?? 0,
+          selectedFeatures: selectedKeys,
+        },
+        'purple',
+      );
+      return price;
+    }
+    // If not a personalizado custom object, try DB lookup by name below
+    const planName = ext.name;
+    if (!planName) return null;
+    const plans = await getPlansDB(PlanDataAccess);
+    const plan = plans.find(
+      (item) => item.name === planName && item.discounted,
+    );
+    if (!plan || !plan.discounted) return null;
+    return plan.price;
+  }
+
+  // Fallback: treat input as planName string
+  const plans = await getPlansDB(PlanDataAccess);
+  const plan = plans.find((item) => item.name === planOrObj && item.discounted);
 
   if (!plan || !plan.discounted) {
     return null;

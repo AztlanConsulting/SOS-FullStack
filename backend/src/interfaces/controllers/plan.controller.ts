@@ -53,6 +53,11 @@ export const createPurchasedPlan = async (
       return;
     }
 
+    if (!Types.ObjectId.isValid(petId)) {
+      res.status(400).json({ error: 'Invalid petId' });
+      return;
+    }
+
     const plan = await purchasedPlanDataAccess.createPurchasedPlan({
       petId: new Types.ObjectId(petId),
       name,

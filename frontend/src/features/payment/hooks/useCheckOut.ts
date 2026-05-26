@@ -60,18 +60,19 @@ export const useCheckout = ({
     // For card payments, if succeeded immediately, complete the purchase
     if (paymentIntent?.status === 'succeeded' && paymentMethod === 'card') {
       if (purchaseDetail && paymentId) {
-        let newPurchasedPlanId;
-        if (data.plan) {
-          const petResult: PurchasedPlanResponse =
-            await createLostPetReportRequest(data.plan);
-          newPurchasedPlanId = petResult.plan._id;
-        } else if (data.extensionPlan) {
-          const purchasedPlan = await createPurchasedPlanRequest(
-            data.extensionPlan,
-          );
-          newPurchasedPlanId = purchasedPlan.plan._id;
-        }
         try {
+          let newPurchasedPlanId;
+          if (data.plan) {
+            const petResult: PurchasedPlanResponse =
+              await createLostPetReportRequest(data.plan);
+            newPurchasedPlanId = petResult.plan._id;
+          } else if (data.extensionPlan) {
+            const purchasedPlan = await createPurchasedPlanRequest(
+              data.extensionPlan,
+            );
+            newPurchasedPlanId = purchasedPlan.plan._id;
+          }
+
           if (data.plan) {
             await createPurchase(
               data.email || '',
@@ -98,6 +99,7 @@ export const useCheckout = ({
             setMessage('Pago procesado exitosamente con producto');
           }
         } catch (error) {
+          console.error('Error creating purchase:', error);
           setMessage('Error al procesar la compra');
           setIsProcessing(false);
           return;
@@ -115,18 +117,19 @@ export const useCheckout = ({
 
   const handleConfirmation = async () => {
     if (purchaseDetail && paymentId) {
-      let newPurchasedPlanId;
-      if (data.plan) {
-        const petResult: PurchasedPlanResponse =
-          await createLostPetReportRequest(data.plan);
-        newPurchasedPlanId = petResult.plan._id;
-      } else if (data.extensionPlan) {
-        const purchasedPlan = await createPurchasedPlanRequest(
-          data.extensionPlan,
-        );
-        newPurchasedPlanId = purchasedPlan.plan._id;
-      }
       try {
+        let newPurchasedPlanId;
+        if (data.plan) {
+          const petResult: PurchasedPlanResponse =
+            await createLostPetReportRequest(data.plan);
+          newPurchasedPlanId = petResult.plan._id;
+        } else if (data.extensionPlan) {
+          const purchasedPlan = await createPurchasedPlanRequest(
+            data.extensionPlan,
+          );
+          newPurchasedPlanId = purchasedPlan.plan._id;
+        }
+
         if (data.plan) {
           await createPurchase(
             data.email || '',

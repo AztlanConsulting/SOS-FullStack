@@ -3,8 +3,8 @@ import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
 import { useCustomPlan } from '../hooks/useCustomPlan';
-import { usePetReport } from '@/shared/context/PetReportContext';
 import { ALL_FEATURES } from '../hooks/useCustomPlan';
+import { usePetReport } from '@/shared/context/PetReportContext';
 import { useNavigate } from 'react-router';
 
 /**
@@ -13,7 +13,21 @@ import { useNavigate } from 'react-router';
  * and selecting optional features via checkboxes.
  * Prices and feature availability are updated in real-time based on the selected tier.
  */
-const CustomPlanCard: React.FC = () => {
+export interface CustomPlanCardProps {
+  colorScheme?: 'yellow' | 'purple';
+  checkoutPath?: string;
+  userEmail?: string;
+  userName?: string;
+  petId?: string;
+}
+
+const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
+  colorScheme = 'yellow',
+  checkoutPath = '/compra',
+  userEmail = '',
+  userName = '',
+  petId = '',
+}) => {
   const {
     days,
     km,
@@ -25,8 +39,10 @@ const CustomPlanCard: React.FC = () => {
     handleDaysChange,
     setKm,
     toggleFeature,
-  } = useCustomPlan();
+  } = useCustomPlan(colorScheme);
   const navigate = useNavigate();
+
+  const { lostPetReportData, setLostPetReportData } = usePetReport();
 
   const BASE_FEATURES = [
     'Publicación en nuestras redes sociales',
@@ -34,11 +50,30 @@ const CustomPlanCard: React.FC = () => {
     'Cartel para imprimir',
   ];
 
-  const { lostPetReportData, setLostPetReportData } = usePetReport();
+  const theme = {
+    yellow: {
+      accent: 'bg-[#F9CD48]',
+      headerBorder: 'border-[#AFB1B6]',
+      borderDefault: 'border-[#AFB1B6]',
+      rangeAccent: 'accent-[#F9CD48]',
+      buttonVariant: 'plans' as const,
+    },
+    purple: {
+      accent: 'bg-purple',
+      headerBorder: 'border-purple',
+      borderDefault: 'border-purple-secondary',
+      rangeAccent: 'accent-purple',
+      buttonVariant: 'purplePlans' as const,
+    },
+  }[colorScheme];
 
   return (
-    <div className="w-full max-w-sm rounded-2xl border-2 border-[#AFB1B6] bg-white overflow-hidden">
-      <div className="bg-[#F9CD48] border-b-2 border-[#AFB1B6] py-2 text-center">
+    <div
+      className={`w-full max-w-sm rounded-2xl border-2 ${theme.borderDefault} bg-white overflow-hidden`}
+    >
+      <div
+        className={`${theme.accent} border-b-2 ${theme.headerBorder} py-2 text-center`}
+      >
         <Text variant="body" weight="medium" className="text-white">
           Personalizado
         </Text>
@@ -88,7 +123,7 @@ const CustomPlanCard: React.FC = () => {
             step={1}
             value={days}
             onChange={(e) => handleDaysChange(Number(e.target.value))}
-            className="w-full accent-[#F9CD48] range-slider"
+            className={`w-full ${theme.rangeAccent} range-slider`}
           />
           <div className="flex justify-between">
             <Text variant="small" className="text-gray-400">
@@ -141,7 +176,7 @@ const CustomPlanCard: React.FC = () => {
             step={1}
             value={km}
             onChange={(e) => setKm(Number(e.target.value))}
-            className="w-full accent-[#F9CD48] range-slider"
+            className={`w-full ${theme.rangeAccent} range-slider`}
           />
           <div className="flex justify-between">
             <Text variant="small" className="text-gray-400">
@@ -248,8 +283,42 @@ const CustomPlanCard: React.FC = () => {
         <div className="flex justify-center">
           <Button
             label="Confirmar plan"
-            variant="plans"
+            variant={theme.buttonVariant}
             onClick={() => {
+              if (colorScheme === 'purple') {
+                const selectedPlan = {
+                  name: 'Personalizado',
+                  price: localizedTotalPrice,
+                  duration: days,
+                  radius: km,
+                  features: Array.from(
+                    new Set([
+                      ...BASE_FEATURES,
+                      ...selectedFeatures.map((key) => {
+                        const feature = tier.features.find(
+                          (f) => f.key === key,
+                        );
+                        return feature?.label || key;
+                      }),
+                    ]),
+                  ),
+                  petId: petId,
+                };
+
+                navigate(checkoutPath, {
+                  replace: true,
+                  state: {
+                    productType: 'plan-extension',
+                    productId: petId,
+                    userEmail,
+                    userName,
+                    selectedPlan,
+                  },
+                });
+                return;
+              }
+
+              // yellow / public flow - preserve existing PetReportContext behavior
               if (!lostPetReportData) return;
 
               const dynamicFeature = `Anuncio de ${days} días en un área de ${km} km a la redonda`;

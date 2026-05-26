@@ -46,6 +46,15 @@ export interface PetReportData {
   };
 }
 
+export interface ExtensionPlanData {
+  petId: string;
+  name: string;
+  price: number;
+  duration: number;
+  radius: number;
+  features: string[];
+}
+
 export interface PaymentIntentDTO {
   amount: number;
   currency: string;
@@ -57,6 +66,7 @@ export interface PaymentIntentDTO {
     productId: string;
   };
   plan?: PetReportData;
+  extensionPlan?: ExtensionPlanData;
   idempotencyKey?: string;
 }
 

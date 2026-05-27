@@ -1,6 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { usePlanDistribution } from '@features/graphs/hooks/usePlanDistribution';
+import axiosInstance from '@/shared/utils/axios';
+
+vi.mock('@shared/utils/axios', () => ({
+  default: {
+    get: vi.fn(),
+  },
+}));
 
 describe('usePlanDistribution (Unit Tests)', () => {
   beforeEach(() => {
@@ -11,15 +18,12 @@ describe('usePlanDistribution (Unit Tests)', () => {
    * Verifies hook fetches and returns plan distribution on mount
    */
   test('fetches and returns plan distribution on mount', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue([
-          { name: 'Plan Básico', value: 2 },
-          { name: 'Plan Estándar', value: 1 },
-        ]),
-      }),
-    );
+    vi.mocked(axiosInstance.get).mockResolvedValue({
+      data: [
+        { name: 'Plan Básico', value: 2 },
+        { name: 'Plan Estándar', value: 1 },
+      ],
+    });
 
     const { result } = renderHook(() => usePlanDistribution());
 
@@ -33,12 +37,9 @@ describe('usePlanDistribution (Unit Tests)', () => {
    * Verifies loading state is true while fetching
    */
   test('sets loading to true while fetching', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue([]),
-      }),
-    );
+    vi.mocked(axiosInstance.get).mockResolvedValue({
+      data: [],
+    });
 
     const { result } = renderHook(() => usePlanDistribution());
     expect(result.current.loading).toBe(true);
@@ -49,10 +50,9 @@ describe('usePlanDistribution (Unit Tests)', () => {
    * Verifies error state is set when fetch fails
    */
   test('sets error when fetch fails', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error')),
-    );
+    vi.mocked(axiosInstance.get).mockRejectedValue({
+      error: new Error('Network error'),
+    });
 
     const { result } = renderHook(() => usePlanDistribution());
 

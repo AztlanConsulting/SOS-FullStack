@@ -13,7 +13,7 @@ const PetHero = ({ petInfo }: Props) => {
   return (
     <section className={`flex flex-col items-center justify-center`}>
       <button
-        onClick={() => navigate('/inicio/coleccion-mascotas')}
+        onClick={() => navigate('/inicio/radar-de-coincidencias')}
         className="fixed top-3 md:top-1 left-3 md:right-108 bg-gray-800/90 rounded-full p-2 text-gray-200 hover:bg-gray-700/90 hover:shadow-sm hover:shadow-gray-400 size-9"
       >
         <IoMdClose className="mx-auto" />

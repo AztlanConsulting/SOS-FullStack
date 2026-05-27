@@ -3,6 +3,7 @@ import UploadPet from './UploadPet';
 import { type ChangeEvent } from 'react';
 import { useSharedGallery } from '../context/PetCollectionProvider';
 import HowToUse from './HowToUse';
+import convertToWebP from '../services/convertToWebp';
 
 const SearchPets = () => {
   const { imgHook, pages, handleSearch, vectorImages } = useSharedGallery();
@@ -11,9 +12,18 @@ const SearchPets = () => {
   async function uploadFile(
     event: ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) {
-    if (event.target.files && event.target.files[0]) {
-      setImg(event.target.files[0]);
+    if (
+      event.target.files &&
+      event.target.files[0] &&
+      event.target.files[0].size <= 5000000
+    ) {
+      console.log(event.target.files[0].size);
+      const compressed = await convertToWebP(event.target.files[0]);
+      console.log(compressed.size);
+      setImg(compressed);
+      return true;
     }
+    return false;
   }
 
   return (

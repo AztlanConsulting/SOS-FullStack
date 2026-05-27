@@ -16,12 +16,12 @@ import whiteIcon from '@/assets/images/whiteIcon.webp';
 
 const NAV_ITEMS = [
   { label: 'Clientes', icon: HiUsers, path: '/clientes', enabled: true },
-  { label: 'Mascotas', icon: FaDog, path: '/pets', enabled: false },
-  { label: 'Links', icon: HiLink, path: '/links', enabled: false },
-  { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
-  { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
-  { label: 'Recursos', icon: HiCog, path: '/resources', enabled: false },
-  { label: 'Planes', icon: HiClipboardList, path: '/plans', enabled: false },
+  // { label: 'Mascotas', icon: FaDog, path: '/pets', enabled: false },
+  // { label: 'Links', icon: HiLink, path: '/links', enabled: false },
+  // { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
+  // { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
+  // { label: 'Recursos', icon: HiCog, path: '/resources', enabled: false },
+  // { label: 'Planes', icon: HiClipboardList, path: '/plans', enabled: false },
 ];
 
 export const Sidebar = () => {
@@ -49,9 +49,10 @@ export const Sidebar = () => {
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 transition-colors ${isActive
-                    ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
-                    : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
+                  `flex items-center gap-3 px-4 py-3 transition-colors ${
+                    isActive
+                      ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
+                      : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
                   }`
                 }
               >
@@ -70,7 +71,7 @@ export const Sidebar = () => {
                   {label}
                 </Text>
               </div>
-            )
+            ),
           )}
         </nav>
 
@@ -92,12 +93,17 @@ export const Sidebar = () => {
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${isActive ? 'bg-white text-primary' : 'text-white'
+                  `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${
+                    isActive ? 'bg-white text-primary' : 'text-white'
                   }`
                 }
               >
                 <Icon size={20} />
-                <Text variant="small" weight="medium" className="text-inherit text-[10px]">
+                <Text
+                  variant="small"
+                  weight="medium"
+                  className="text-inherit text-[10px]"
+                >
                   {label}
                 </Text>
               </NavLink>
@@ -107,18 +113,26 @@ export const Sidebar = () => {
                 className="flex flex-col items-center gap-1 px-2 py-1 rounded-xl text-white opacity-40 pointer-events-none select-none"
               >
                 <Icon size={20} />
-                <Text variant="small" weight="medium" className="text-inherit text-[10px]">
+                <Text
+                  variant="small"
+                  weight="medium"
+                  className="text-inherit text-[10px]"
+                >
                   {label}
                 </Text>
               </div>
-            )
+            ),
           )}
           <button
             onClick={logout}
             className="flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors text-white hover:text-gray-200"
           >
             <TbLogout size={20} />
-            <Text variant="small" weight="medium" className="text-inherit text-[10px]">
+            <Text
+              variant="small"
+              weight="medium"
+              className="text-inherit text-[10px]"
+            >
               Salir
             </Text>
           </button>

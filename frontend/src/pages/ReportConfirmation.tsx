@@ -79,7 +79,7 @@ export const ReportConfirmationPage: React.FC = () => {
     try {
       const posterFile = await exportPosterAsFile(
         posterRef.current,
-        `${lostPetReportData.name}-poster`,
+        `${lostPetReportData.name.slice(0, 40)}-poster`,
       );
 
       if (posterFile) {

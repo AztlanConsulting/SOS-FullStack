@@ -31,6 +31,8 @@ export const createLostPetReportRequest = async (
     formData.append('images', file);
   });
 
+  console.log(formData);
+
   const { data } = await axiosInstance.post('/clients/lost-pet', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

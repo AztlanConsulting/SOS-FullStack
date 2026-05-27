@@ -2,8 +2,14 @@ import { renderHook, waitFor, act } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { useClients } from '@/features/clients/hooks/useClients';
 import type { PlanStatus } from '@/features/clients/types/client.type';
+import axiosInstance from '@/shared/utils/axios';
 
 vi.mock('@/features/clients/services/client.service');
+vi.mock('@shared/utils/axios', () => ({
+  default: {
+    get: vi.fn(),
+  },
+}));
 
 const mockResponse = {
   clients: [
@@ -29,12 +35,9 @@ const mockResponse = {
 describe('useClients (Unit Tests)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue(mockResponse),
-      }),
-    );
+    vi.mocked(axiosInstance.get).mockResolvedValue({
+      data: mockResponse,
+    });
   });
 
   /**
@@ -60,10 +63,9 @@ describe('useClients (Unit Tests)', () => {
    * Verifies error state is set when fetch fails
    */
   test('sets error when fetch fails', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error')),
-    );
+    vi.mocked(axiosInstance.get).mockRejectedValue({
+      error: new Error('Network error'),
+    });
     const { result } = renderHook(() => useClients());
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.error).toBe('Failed to fetch clients');
@@ -94,6 +96,6 @@ describe('useClients (Unit Tests)', () => {
       result.current.refresh();
     });
     await waitFor(() => expect(result.current.loading).toBe(false));
-    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(axiosInstance.get).toHaveBeenCalledTimes(2);
   });
 });

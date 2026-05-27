@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { DashboardStats } from '@features/graphs/types/dashboardMetrics';
+import axiosInstance from '@/shared/utils/axios';
 
 /**
  * usePlanDistribution Hook
@@ -20,10 +21,8 @@ export const usePlanDistribution = () => {
   useEffect(() => {
     const fetchDistribution = async () => {
       try {
-        const data = await fetch('/metrics/plan-distribution').then((res) =>
-          res.json(),
-        );
-        setDistribution(data);
+        const data = await axiosInstance.get('/metrics/plan-distribution');
+        setDistribution(data.data);
       } catch {
         setError('Failed to fetch plan distribution');
       } finally {

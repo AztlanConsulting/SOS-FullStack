@@ -30,6 +30,7 @@ const UploadPet = ({ img, uploadFile }: Props) => {
           className="hidden"
           alt="Cambiar imagen"
           id="img-input"
+          accept="image/png, image/jpg, image/jpeg"
         />
       </label>
     </div>

@@ -1,6 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { useClientsByCountry } from '@features/graphs/hooks/useClientsByCountry';
+import axiosInstance from '@/shared/utils/axios';
+
+vi.mock('@shared/utils/axios', () => ({
+  default: {
+    get: vi.fn(),
+  },
+}));
 
 describe('useClientsByCountry (Unit Tests)', () => {
   beforeEach(() => {
@@ -11,15 +18,12 @@ describe('useClientsByCountry (Unit Tests)', () => {
    * Verifies hook fetches and returns country data on mount
    */
   test('fetches and returns country data on mount', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue([
-          { name: 'México', value: 3 },
-          { name: 'Colombia', value: 1 },
-        ]),
-      }),
-    );
+    vi.mocked(axiosInstance.get).mockResolvedValue({
+      data: [
+        { name: 'México', value: 3 },
+        { name: 'Colombia', value: 1 },
+      ],
+    });
 
     const { result } = renderHook(() => useClientsByCountry());
 
@@ -34,12 +38,9 @@ describe('useClientsByCountry (Unit Tests)', () => {
    * Verifies loading state is true while fetching
    */
   test('sets loading to true while fetching', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue([]),
-      }),
-    );
+    vi.mocked(axiosInstance.get).mockResolvedValue({
+      data: [],
+    });
 
     const { result } = renderHook(() => useClientsByCountry());
     expect(result.current.loading).toBe(true);
@@ -50,10 +51,9 @@ describe('useClientsByCountry (Unit Tests)', () => {
    * Verifies error state is set when fetch fails
    */
   test('sets error when fetch fails', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error')),
-    );
+    vi.mocked(axiosInstance.get).mockRejectedValue({
+      error: new Error('Network error'),
+    });
 
     const { result } = renderHook(() => useClientsByCountry());
 

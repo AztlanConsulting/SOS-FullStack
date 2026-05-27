@@ -47,7 +47,7 @@ new Worker(
       }
 
       const regex = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
-
+      console.log(user.password);
       await emailService.sendActivatePlanEmail({
         to: user.email,
         ...(() =>
@@ -60,6 +60,7 @@ new Worker(
       });
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
+      if (regex.test(user.password)) return;
       await userDataAccess.updateUserPassword(
         user.email,
         await bcrypt.hash(user.password, 10),

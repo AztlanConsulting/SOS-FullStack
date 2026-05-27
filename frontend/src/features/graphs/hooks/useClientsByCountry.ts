@@ -1,3 +1,4 @@
+import axiosInstance from '@/shared/utils/axios';
 import { useEffect, useState } from 'react';
 
 export interface CountryMetric {
@@ -21,10 +22,9 @@ export const useClientsByCountry = () => {
     // Controller to abort asynchronous requests if component unmounts mid-flight
     const fetchData = async () => {
       try {
-        const result = await fetch('/metrics/clients-by-country').then((res) =>
-          res.json(),
-        );
-        setData(result);
+        const result = await axiosInstance.get('/metrics/clients-by-country');
+        console.log(result.data);
+        setData(result.data);
       } catch {
         setError('Error al cargar distribución por país');
       } finally {

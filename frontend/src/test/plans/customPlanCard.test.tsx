@@ -5,6 +5,7 @@ import CustomPlanCard from '@/features/plans/components/customPlanCard';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { PurchasePage } from '@/pages/PurchasePage';
+import wrapper from '../utils/wrapper.util';
 
 // Mocks the LocationContext to provide default USD pricing values.
 // Required because components using useLocationContext need a LocationProvider
@@ -60,6 +61,7 @@ const renderWithProvider = () => {
     <PetReportProvider>
       <RouterProvider router={router} />
     </PetReportProvider>,
+    { wrapper },
   );
 };
 

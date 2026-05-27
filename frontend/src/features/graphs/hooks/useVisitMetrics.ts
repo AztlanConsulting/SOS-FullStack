@@ -1,3 +1,4 @@
+import axiosInstance from '@/shared/utils/axios';
 import type { WeeklyVisit } from '../types/dashboardMetrics';
 import { useEffect, useState } from 'react';
 
@@ -25,10 +26,10 @@ export const useVisitMetrics = (year: number, month: number) => {
     const fetchVisits = async () => {
       setLoading(true);
       try {
-        const data = await fetch(
+        const data = await axiosInstance.get(
           `/metrics/visits?year=${year}&month=${month}`,
-        ).then((res) => res.json());
-        setVisits(data);
+        );
+        setVisits(data.data);
       } catch (err) {
         setError('Failed to fetch visit metrics');
       } finally {

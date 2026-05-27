@@ -1,6 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { useVisitMetrics } from '@features/graphs/hooks/useVisitMetrics';
+import axiosInstance from '@/shared/utils/axios';
+
+vi.mock('@shared/utils/axios', () => ({
+  default: {
+    get: vi.fn(),
+  },
+}));
 
 describe('useVisitMetrics (Unit Tests)', () => {
   beforeEach(() => {
@@ -11,17 +18,14 @@ describe('useVisitMetrics (Unit Tests)', () => {
    * Verifies hook fetches visit metrics with year and month params
    */
   test('fetches visit metrics with correct params', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue([
-          { week: 'Semana 1', views: 45, engagement: 67 },
-          { week: 'Semana 2', views: 0, engagement: 0 },
-          { week: 'Semana 3', views: 0, engagement: 0 },
-          { week: 'Semana 4', views: 0, engagement: 0 },
-        ]),
-      }),
-    );
+    vi.mocked(axiosInstance.get).mockResolvedValue({
+      data: [
+        { week: 'Semana 1', views: 45, engagement: 67 },
+        { week: 'Semana 2', views: 0, engagement: 0 },
+        { week: 'Semana 3', views: 0, engagement: 0 },
+        { week: 'Semana 4', views: 0, engagement: 0 },
+      ],
+    });
 
     const { result } = renderHook(() => useVisitMetrics(2026, 5));
 
@@ -30,7 +34,9 @@ describe('useVisitMetrics (Unit Tests)', () => {
     expect(result.current.visits).toHaveLength(4);
     expect(result.current.visits[0].week).toBe('Semana 1');
     expect(result.current.visits[0].views).toBe(45);
-    expect(fetch).toHaveBeenCalledWith('/metrics/visits?year=2026&month=5');
+    expect(axiosInstance.get).toHaveBeenCalledWith(
+      '/metrics/visits?year=2026&month=5',
+    );
   });
 
   /**
@@ -53,10 +59,9 @@ describe('useVisitMetrics (Unit Tests)', () => {
    * Verifies error state is set when fetch fails
    */
   test('sets error when fetch fails', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error')),
-    );
+    vi.mocked(axiosInstance.get).mockThrow({
+      error: 'Failed to fetch visit metrics',
+    });
 
     const { result } = renderHook(() => useVisitMetrics(2026, 5));
 
@@ -80,11 +85,13 @@ describe('useVisitMetrics (Unit Tests)', () => {
       { initialProps: { year: 2026, month: 5 } },
     );
 
-    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(axiosInstance.get).toHaveBeenCalledTimes(1));
 
     rerender({ year: 2026, month: 4 });
 
-    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
-    expect(fetch).toHaveBeenCalledWith('/metrics/visits?year=2026&month=4');
+    await waitFor(() => expect(axiosInstance.get).toHaveBeenCalledTimes(2));
+    expect(axiosInstance.get).toHaveBeenCalledWith(
+      '/metrics/visits?year=2026&month=4',
+    );
   });
 });

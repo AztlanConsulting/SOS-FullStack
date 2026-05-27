@@ -17,7 +17,9 @@ import { getUploadUrl } from '@/utils/uploadUrl.utils';
 
 const createLostPetReportController = async (req: Request, res: Response) => {
   try {
+    console.log(req.files);
     const images = req.files as Express.Multer.File[] | undefined;
+    console.log(images);
 
     if (!images || images.length === 0) {
       return res.status(400).json({ error: 'Se requiere al menos una imagen' });
@@ -34,6 +36,27 @@ const createLostPetReportController = async (req: Request, res: Response) => {
 
     const imageUrls = images.map((file) => getUploadUrl(req, file.filename));
 
+    // Truncate potentially long fields to enforce backend limits explicitly
+    const sanitizedData = { ...validation.data } as typeof validation.data;
+    if (typeof sanitizedData.name === 'string') {
+      sanitizedData.name = sanitizedData.name.slice(0, 40);
+    }
+    if (typeof sanitizedData.breed === 'string') {
+      sanitizedData.breed = sanitizedData.breed.slice(0, 40);
+    }
+    if (typeof sanitizedData.color === 'string') {
+      sanitizedData.color = sanitizedData.color.slice(0, 40);
+    }
+    if (typeof sanitizedData.description === 'string') {
+      sanitizedData.description = sanitizedData.description.slice(0, 100);
+    }
+    if (typeof sanitizedData.contactName === 'string') {
+      sanitizedData.contactName = sanitizedData.contactName.slice(0, 40);
+    }
+    if (typeof sanitizedData.email === 'string') {
+      sanitizedData.email = sanitizedData.email.slice(0, 128);
+    }
+
     const result = await createLostPetReport(
       {
         userRepository: userDataAccess,
@@ -42,7 +65,7 @@ const createLostPetReportController = async (req: Request, res: Response) => {
         roleRepository: roleDataAccess,
       },
       {
-        ...validation.data,
+        ...sanitizedData,
         images: imageUrls,
       },
     );

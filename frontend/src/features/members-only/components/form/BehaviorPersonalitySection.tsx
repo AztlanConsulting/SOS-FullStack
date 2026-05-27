@@ -164,7 +164,7 @@ export const BehaviorPersonalitySection = ({
           value={formData.fears || ''}
           maxLength={100}
           onChange={(e) => updateForm({ fears: e.target.value })}
-          hasLength={false}
+          hasLength={true}
           error={errors.fears}
         />
       </div>

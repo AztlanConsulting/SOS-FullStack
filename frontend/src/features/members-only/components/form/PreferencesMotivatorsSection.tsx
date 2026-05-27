@@ -23,9 +23,9 @@ export const PreferencesMotivatorsSection = ({
           id="attached-to"
           label="¿A quién está más apegado?"
           value={formData.attachedTo || ''}
-          maxLength={100}
+          maxLength={40}
           onChange={(e) => updateForm({ attachedTo: e.target.value })}
-          hasLength={false}
+          hasLength={true}
           error={errors.attachedTo}
         />
       </div>
@@ -35,9 +35,9 @@ export const PreferencesMotivatorsSection = ({
           id="toy-blanket"
           label="¿Tiene juguete/manta especial?"
           value={formData.toyBlanket || ''}
-          maxLength={100}
+          maxLength={40}
           onChange={(e) => updateForm({ toyBlanket: e.target.value })}
-          hasLength={false}
+          hasLength={true}
           error={errors.toyBlanket}
         />
       </div>
@@ -47,9 +47,9 @@ export const PreferencesMotivatorsSection = ({
           id="favorite-food"
           label="Comida o snack favorito"
           value={formData.favoriteFood || ''}
-          maxLength={100}
+          maxLength={3}
           onChange={(e) => updateForm({ favoriteFood: e.target.value })}
-          hasLength={false}
+          hasLength={true}
           error={errors.favoriteFood}
         />
       </div>
@@ -71,9 +71,9 @@ export const PreferencesMotivatorsSection = ({
           id="favorite-place"
           label="¿Lugar favorito?"
           value={formData.favoritePlace || ''}
-          maxLength={100}
+          maxLength={40}
           onChange={(e) => updateForm({ favoritePlace: e.target.value })}
-          hasLength={false}
+          hasLength={true}
           error={errors.favoritePlace}
         />
       </div>

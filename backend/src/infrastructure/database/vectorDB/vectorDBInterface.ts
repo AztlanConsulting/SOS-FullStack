@@ -8,9 +8,12 @@ async function get() {
     .get()
     .withClassName('Pet')
     .withFields(' refId species location color')
+    .withLimit(50)
     .do();
 
   const petIds = data.data.Get.Pet;
+
+  console.log(petIds);
 }
 
 async function getIds() {
@@ -18,9 +21,12 @@ async function getIds() {
     .get()
     .withClassName('Pet')
     .withFields('refId')
+    .withLimit(50)
     .do();
 
   const refIds = pets.data.Get.Pet;
+
+  console.log(refIds);
 }
 
 async function start() {
@@ -35,8 +41,10 @@ async function start() {
       break;
     case 'clean':
       await startVectorDB();
+      console.log('VectorDB clean');
       break;
     default:
+      console.log('Error: code not accepted, use - [get, getId, clean]');
       process.exit(1);
   }
 }

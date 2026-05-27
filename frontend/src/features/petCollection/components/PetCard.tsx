@@ -12,7 +12,7 @@ const PetCard = ({ petInfo }: Props) => {
   return (
     <Link
       className="w-full rounded-xl flex flex-col relative border-2 border-gray-400 overflow-hidden cursor-pointer max-h-80 bg-white"
-      to={`/inicio/coleccion-mascotas/${petInfo.refId}`}
+      to={`/inicio/radar-de-coincidencias/${petInfo.refId}`}
     >
       <div className="relative h-56 w-full">
         <img

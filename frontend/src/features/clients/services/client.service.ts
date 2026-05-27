@@ -47,9 +47,7 @@ export const ClientService = {
    * @param conversation - The full URL string of the conversation.
    */
   updateConversation: async (id: string, conversation: string) => {
-    await axiosInstance.put(`/clientDashboard/${id}`, {
-      body: conversation,
-    });
+    await axiosInstance.put(`/clientDashboard/${id}`, { conversation });
   },
 
   /**
@@ -60,7 +58,7 @@ export const ClientService = {
    */
   updatePlanStatus: async (planId: string, status: string): Promise<void> => {
     await axiosInstance.put(`/clientDashboard/plan-status/${planId}`, {
-      body: status,
+      status,
     });
   },
 
@@ -74,9 +72,7 @@ export const ClientService = {
   updateClient: async (
     id: string,
     data: { conversation?: string; notes?: string },
-  ): Promise<void> => {
-    await axiosInstance.put(`/clientDashboard/${id}`, {
-      body: data,
-    });
+  ) => {
+    await axiosInstance.put(`/clientDashboard/${id}`, data);
   },
 };

@@ -47,7 +47,7 @@ new Worker(
       }
 
       const regex = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
-
+      console.log(user.password);
       await emailService.sendActivatePlanEmail({
         to: user.email,
         ...(() =>

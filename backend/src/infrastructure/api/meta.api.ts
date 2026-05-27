@@ -55,10 +55,11 @@ export const metaPublisher: SocialPublisher = {
     });
 
     const postId = res.post_id;
+    const photoId = res.id;
 
     return {
       id: postId,
-      url: `https://www.facebook.com/${postId}`, // Direct link to Facebook post
+      url: `https://www.facebook.com/photo/?fbid=${photoId}&set=pb.${PAGE_ID}.-2207520000`, // Direct link to Facebook post
     };
   },
 

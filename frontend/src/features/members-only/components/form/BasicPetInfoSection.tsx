@@ -70,7 +70,8 @@ export const BasicPetInfoSection = ({
               approximateAge: val === '' ? '' : Math.max(0, parseInt(val)),
             });
           }}
-          hasLength={false}
+          hasLength={true}
+          maxDigits={3}
           error={errors.approximateAge}
         />
       </div>

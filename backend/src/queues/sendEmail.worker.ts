@@ -60,6 +60,7 @@ new Worker(
       });
 
       await purchasedPlanDataAccess.updateEmailStatus(planId, 'sent');
+      if (regex.test(user.password)) return;
       await userDataAccess.updateUserPassword(
         user.email,
         await bcrypt.hash(user.password, 10),

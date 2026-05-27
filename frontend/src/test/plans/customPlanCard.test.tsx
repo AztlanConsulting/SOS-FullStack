@@ -133,7 +133,7 @@ describe('CustomPlanCard Component', () => {
     const sliders = screen.getAllByRole('slider');
     fireEvent.change(sliders[0], { target: { value: '7' } });
     const messages = screen.getAllByText(
-      'No disponible con los días o km actuales.',
+      'Incluido con el plan con los días o km seleccionados.',
     );
     expect(messages.length).toBeGreaterThan(0);
   });

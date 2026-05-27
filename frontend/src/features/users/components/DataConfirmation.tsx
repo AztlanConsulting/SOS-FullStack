@@ -13,6 +13,7 @@ import { PetLocationSection } from './PetLocationSection';
 import { PetPhotosSection } from './PetPhotosSection';
 
 import { useEditableField } from '../hooks/useEditableField';
+import { usePetReport } from '@/shared/context/PetReportContext';
 
 export interface DataConfirmationProps {
   formData: LostPetReportData;
@@ -49,6 +50,11 @@ const EditableField = ({
   } = useEditableField(value, field, updateForm);
 
   const today = new Date().toLocaleDateString('en-CA');
+
+  const cancel = () => {
+    setTempValue(value);
+    setIsEditing(false);
+  };
 
   return (
     <div
@@ -107,6 +113,9 @@ const EditableField = ({
           <div className="flex justify-end mt-1">
             <Button onClick={handleSave} variant="primary" label="Guardar" />
           </div>
+          <div className="flex justify-end mt-1">
+            <Button onClick={cancel} variant="secondary" label="Cancelar" />
+          </div>
         </div>
       ) : (
         <div className="flex justify-between items-center w-full">
@@ -149,24 +158,46 @@ const EditableLocation = ({
   formData: LostPetReportData;
   updateForm: (newData: Partial<LostPetReportData>) => void;
 }) => {
+  const [tempLostPetReportData, setTempLostPetReportData] = useState(formData);
+
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const updateTemp = (newData: Partial<typeof formData>) => {
+    if (tempLostPetReportData) {
+      setTempLostPetReportData({ ...tempLostPetReportData, ...newData });
+    }
+  };
+
   const handleConfirm = () => {
-    if (!formData.address?.trim() && !formData.locationCoords) {
+    if (
+      !tempLostPetReportData.address?.trim() &&
+      !tempLostPetReportData.locationCoords
+    ) {
       setError('Debes seleccionar una ubicación válida.');
       return;
     }
 
+    updateForm({ location: tempLostPetReportData.location });
+    updateForm({ locationCoords: tempLostPetReportData.locationCoords });
+    updateForm({ address: tempLostPetReportData.address });
     setError(null);
     setIsEditing(false);
   };
 
+  const cancel = () => {
+    setTempLostPetReportData(formData);
+    setIsEditing(false);
+  };
+
   useEffect(() => {
-    if (formData.address?.trim() || formData.locationCoords) {
+    if (
+      tempLostPetReportData.address?.trim() ||
+      tempLostPetReportData.locationCoords
+    ) {
       setError(null);
     }
-  }, [formData.address, formData.locationCoords]);
+  }, [tempLostPetReportData.address, tempLostPetReportData.locationCoords]);
 
   return (
     <div
@@ -175,8 +206,8 @@ const EditableLocation = ({
       {isEditing ? (
         <div className="flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
           <PetLocationSection
-            formData={formData}
-            updateForm={updateForm}
+            formData={tempLostPetReportData}
+            updateForm={updateTemp}
             reportType="lost"
             mapID="edit-location-map"
             errors={{ address: error || '' }}
@@ -187,6 +218,7 @@ const EditableLocation = ({
             label="Confirmar Ubicación"
             onClick={handleConfirm}
           />
+          <Button variant="secondary" label="Cancelar" onClick={cancel} />
         </div>
       ) : (
         <div className="flex justify-between items-center w-full">
@@ -239,6 +271,19 @@ const EditablePhotos = ({
   const [slotErrors, setSlotErrors] = useState<Record<string, string>>({});
   const [hasTriedConfirm, setHasTriedConfirm] = useState(false);
 
+  const [tempLostPetReportData, setTempLostPetReportData] = useState(formData);
+
+  const updateTemp = (newData: Partial<typeof formData>) => {
+    if (tempLostPetReportData) {
+      setTempLostPetReportData({ ...tempLostPetReportData, ...newData });
+    }
+  };
+
+  const cancel = () => {
+    setTempLostPetReportData(formData);
+    setIsEditing(false);
+  };
+
   // Generate object URLs fron the File[] on the formData
   useEffect(() => {
     if (formData.images && formData.images.length > 0) {
@@ -257,8 +302,13 @@ const EditablePhotos = ({
   const handleConfirm = () => {
     setHasTriedConfirm(true);
 
-    const expectedPhotoCount = parseInt(formData.imageLayout || '1');
-    const selectedPhotos = (formData.images || []).slice(0, expectedPhotoCount);
+    const expectedPhotoCount = parseInt(
+      tempLostPetReportData.imageLayout || '1',
+    );
+    const selectedPhotos = (tempLostPetReportData.images || []).slice(
+      0,
+      expectedPhotoCount,
+    );
     const missingSlots: Record<string, string> = {};
 
     for (let i = 0; i < expectedPhotoCount; i++) {
@@ -272,6 +322,8 @@ const EditablePhotos = ({
       return;
     }
 
+    updateForm({ images: tempLostPetReportData.images });
+    updateForm({ imageLayout: tempLostPetReportData.imageLayout });
     setSlotErrors({});
     setHasTriedConfirm(false);
     setIsEditing(false);
@@ -284,7 +336,7 @@ const EditablePhotos = ({
       setHasTriedConfirm(false);
     }
 
-    updateForm(newData);
+    updateTemp(newData);
   };
 
   useEffect(() => {
@@ -297,8 +349,13 @@ const EditablePhotos = ({
       return;
     }
 
-    const expectedPhotoCount = parseInt(formData.imageLayout || '1');
-    const selectedPhotos = (formData.images || []).slice(0, expectedPhotoCount);
+    const expectedPhotoCount = parseInt(
+      tempLostPetReportData.imageLayout || '1',
+    );
+    const selectedPhotos = (tempLostPetReportData.images || []).slice(
+      0,
+      expectedPhotoCount,
+    );
     const nextMissingSlots: Record<string, string> = {};
 
     for (let i = 0; i < expectedPhotoCount; i++) {
@@ -308,7 +365,7 @@ const EditablePhotos = ({
     }
 
     setSlotErrors(nextMissingSlots);
-  }, [formData.images, isEditing, hasTriedConfirm]);
+  }, [tempLostPetReportData.images, isEditing, hasTriedConfirm]);
 
   return (
     <div
@@ -317,7 +374,7 @@ const EditablePhotos = ({
       {isEditing ? (
         <div className="flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
           <PetPhotosSection
-            formData={formData}
+            formData={tempLostPetReportData}
             updateForm={handlePhotosUpdate}
             errors={slotErrors}
           />
@@ -327,6 +384,7 @@ const EditablePhotos = ({
             label="Confirmar Fotos"
             onClick={handleConfirm}
           />
+          <Button variant="secondary" label="Cancelar" onClick={cancel} />
         </div>
       ) : (
         <div className="w-full flex flex-col">

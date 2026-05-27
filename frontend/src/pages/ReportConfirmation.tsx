@@ -121,6 +121,7 @@ export const ReportConfirmationPage: React.FC = () => {
 
   const handleProceedToPayment = async () => {
     await handleContinueForm({});
+    // console.log(lostPetReportData)
     setPendingNavigate(true);
   };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ClientListItem } from '../types/client.type';
 import type { ClientFilter } from '../components/FilterDropdown';
+import axiosInstance from '@/shared/utils/axios';
 
 /**
  * Delay in milliseconds before the search term is processed.
@@ -48,9 +49,10 @@ export const useClients = () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await fetch(
+      const res = await axiosInstance.get(
         `/clientDashboard?${new URLSearchParams({ page: String(page), search: debouncedSearch, ...filters })}`,
-      ).then((res) => res.json());
+      );
+      const result = res.data;
       /**
        * Client-side Filtering:
        * While the API handles search and pagination, additional specific filters

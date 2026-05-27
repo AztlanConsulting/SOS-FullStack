@@ -1,3 +1,4 @@
+import axiosInstance from '@/shared/utils/axios';
 import type { ClientListResponse } from '../types/client.type';
 
 /**
@@ -22,10 +23,10 @@ export const ClientService = {
     if (search) {
       params.search = search;
     }
-    const data = await fetch(
+    const data = await axiosInstance.get(
       `/clientDashboard?${new URLSearchParams(params)}`,
-    ).then((res) => res.json());
-    return data;
+    );
+    return data.data;
   },
 
   /**
@@ -34,10 +35,8 @@ export const ClientService = {
    * @param id - The unique MongoDB ObjectId of the user.
    */
   getClientById: async (id: string) => {
-    const data = await fetch(`/clientDashboard/${id}`).then((res) =>
-      res.json(),
-    );
-    return data;
+    const data = await axiosInstance.get(`/clientDashboard/${id}`);
+    return data.data;
   },
 
   /**
@@ -48,10 +47,8 @@ export const ClientService = {
    * @param conversation - The full URL string of the conversation.
    */
   updateConversation: async (id: string, conversation: string) => {
-    await fetch(`/clientDashboard/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conversation }),
+    await axiosInstance.put(`/clientDashboard/${id}`, {
+      body: conversation,
     });
   },
 
@@ -62,10 +59,8 @@ export const ClientService = {
    * @returns {Promise<void>} Resolves when the network layer successfully finishes processing the update.
    */
   updatePlanStatus: async (planId: string, status: string): Promise<void> => {
-    await fetch(`/clientDashboard/plan-status/${planId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
+    await axiosInstance.put(`/clientDashboard/plan-status/${planId}`, {
+      body: status,
     });
   },
 
@@ -80,10 +75,8 @@ export const ClientService = {
     id: string,
     data: { conversation?: string; notes?: string },
   ): Promise<void> => {
-    await fetch(`/clientDashboard/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+    await axiosInstance.put(`/clientDashboard/${id}`, {
+      body: data,
     });
   },
 };

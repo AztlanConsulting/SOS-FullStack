@@ -12,4 +12,5 @@ export type SocialLink = {
 
 export interface ExpandedProps {
   setIsMenuOpen: (b: boolean) => void;
+  color?: string;
 }

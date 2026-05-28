@@ -63,7 +63,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="w-full min-h-screen color-secondary-bg flex items-center justify-center px-6 py-6">
+    <div className="w-full min-h-screen color-secondary-bg flex items-center justify-center px-6 py-6 color-grey-border-top">
       <div className="w-full flex items-center justify-center">
         <div className="w-full px-4 md:px-6 lg:max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto">
           {/* CARD */}
@@ -73,7 +73,8 @@ export const LoginForm = () => {
               loading="lazy"
               src={yellowIcon}
               alt="logo"
-              className="w-28 mx-auto mb-4"
+              className="w-28 mx-auto mb-4 cursor-pointer"
+              onClick={() => navigate('/')}
             />
 
             {/* TITLE */}
@@ -184,12 +185,12 @@ export const LoginForm = () => {
               )}
 
               {/* FORGOT PASSWORD */}
-              <Text variant="caption" as="p" className="color-grey-text mt-1">
+              {/* <Text variant="caption" as="p" className="color-grey-text mt-1">
                 ¿Olvidaste tu contraseña?{' '}
                 <span className="whitespace-nowrap underline cursor-pointer hover:text-black">
                   Recuperar Contraseña
                 </span>
-              </Text>
+              </Text> */}
             </form>
           </div>
         </div>

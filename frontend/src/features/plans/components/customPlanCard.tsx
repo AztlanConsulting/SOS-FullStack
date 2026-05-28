@@ -272,7 +272,11 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
               Total
             </Text>
             <Text variant="body" weight="bold" className="text-gray-900">
-              {currencyCode} {localizedTotalPrice.toFixed(2)}
+              {currencyCode}{' '}
+              {localizedTotalPrice
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </Text>
           </div>
         </div>

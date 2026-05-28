@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text } from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import Checkbox from '../../../shared/components/ui/Checkbox/Checkbox';
@@ -196,7 +196,9 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
             const tierFeature = tier.features.find(
               (tierFeature) => tierFeature.key === feature.key,
             );
+
             const isAvailable = Boolean(tierFeature);
+            // setIsAvailable(Boolean(tierFeature))
 
             return (
               <label
@@ -216,19 +218,14 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
                       {feature.label}
                     </Text>
                   </div>
-                  {!isAvailable && (
-                    <Text variant="small" className="text-[#FF3333]">
-                      No disponible con los días o km actuales.
-                    </Text>
-                  )}
                 </div>
                 <Text
                   variant="small"
-                  className={isAvailable ? 'text-gray-500' : 'text-gray-400'}
+                  className={isAvailable ? 'text-gray-500' : 'text-green-500'}
                 >
                   {isAvailable
                     ? `+${currencyCode} ${localize(tierFeature!.price).toFixed(2)}`
-                    : 'No disponible'}
+                    : 'Incluido'}
                 </Text>
               </label>
             );
@@ -275,7 +272,11 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
               Total
             </Text>
             <Text variant="body" weight="bold" className="text-gray-900">
-              {currencyCode} {localizedTotalPrice.toFixed(2)}
+              {currencyCode}{' '}
+              {localizedTotalPrice
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </Text>
           </div>
         </div>
@@ -319,7 +320,7 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
               }
 
               // yellow / public flow - preserve existing PetReportContext behavior
-              if (!lostPetReportData) return;
+              if (!lostPetReportData) return navigate('/#report-section');
 
               const dynamicFeature = `Anuncio de ${days} días en un área de ${km} km a la redonda`;
 
@@ -344,6 +345,11 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
                   totalPrice: localizedTotalPrice,
                 },
               };
+
+              if (days >= 6)
+                updated.planDetails.selectedFeatures.push(
+                  ...ALL_FEATURES.map((v) => v.label).slice(0, 2),
+                );
 
               setLostPetReportData(updated);
               navigate('/compra');

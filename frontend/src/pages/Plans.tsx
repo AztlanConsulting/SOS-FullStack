@@ -23,14 +23,14 @@ export default function PlansPage() {
   const { lostPetReportData, setLostPetReportData } = usePetReport();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!lostPetReportData) {
-      navigate('/');
-    }
-  }, [lostPetReportData, navigate]);
+  // useEffect(() => {
+  //   if (!lostPetReportData) {
+  //     navigate('/');
+  //   }
+  // }, [lostPetReportData, navigate]);
 
   const handleSelectPlan = (plan: PlanCardProps) => {
-    if (!lostPetReportData) return;
+    if (!lostPetReportData) return navigate('/#report-section');
 
     const updated = {
       ...lostPetReportData,

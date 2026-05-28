@@ -1,12 +1,24 @@
-import type { ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { LuUpload } from 'react-icons/lu';
+import { Text } from '@/shared/components/ui';
 
 interface Props {
   img: File | null;
-  uploadFile: (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
+  uploadFile: (
+    e: ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) => Promise<boolean>;
 }
 
 const UploadPet = ({ img, uploadFile }: Props) => {
+  const [success, setSuccess] = useState(false);
+
+  async function handleUpload(
+    file: ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) {
+    setSuccess(false);
+    setSuccess(!(await uploadFile(file)));
+  }
+
   return (
     <div className="bg-purple-primary h-1/2 min-h-48 md:h-screen md:w-1/3 p-2 py-10 flex flex-col items-center justify-center gap-5 shadow-[0_8px_20px_rgba(103,56,129,0.20)] overflow-visible relative z-10">
       {img && (
@@ -26,13 +38,18 @@ const UploadPet = ({ img, uploadFile }: Props) => {
         {img ? 'Cambiar imagen' : 'Subir imagen'}
         <input
           type="file"
-          onChange={(e) => uploadFile(e)}
+          onChange={(e) => handleUpload(e)}
           className="hidden"
           alt="Cambiar imagen"
           id="img-input"
           accept="image/png, image/jpg, image/jpeg"
         />
       </label>
+      {success && (
+        <Text className="bg-purple-secondary rounded-c px-2 text-red-500">
+          Error: La imagen debe ser menor a 5MB
+        </Text>
+      )}
     </div>
   );
 };

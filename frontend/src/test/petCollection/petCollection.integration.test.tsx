@@ -25,7 +25,7 @@ global.URL.createObjectURL = vi.fn(() => 'mock-url');
 const FullAppRouter = () => (
   <PetGalleryProvider>
     <Routes>
-      <Route path="/inicio/coleccion-mascotas">
+      <Route path="/inicio/radar-de-coincidencias">
         <Route index element={<SearchPetsPage />} />
         <Route path=":id" element={<PetDetails />} />
       </Route>
@@ -177,7 +177,7 @@ describe('SearchPetsPage Integration', () => {
     });
 
     render(
-      <MemoryRouter initialEntries={['/inicio/coleccion-mascotas']}>
+      <MemoryRouter initialEntries={['/inicio/radar-de-coincidencias']}>
         <FullAppRouter />
       </MemoryRouter>,
       { wrapper },
@@ -232,11 +232,6 @@ describe('SearchPetsPage Integration', () => {
     // FIX: "Subir imagen" is the label text before upload, consistent with DOM
     fireEvent.change(screen.getByAltText('Cambiar imagen'), {
       target: { files: [file] },
-    });
-
-    await act(async () => {
-      await fireEvent.click(screen.getByText('Filtro'));
-      await fireEvent.click(screen.getByText('Buscar'));
     });
 
     await waitFor(() => {

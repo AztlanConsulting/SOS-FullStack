@@ -34,10 +34,10 @@ vi.mock('react-router', async () => {
 describe('Load pet details', () => {
   test('Load pet details', async () => {
     render(
-      <MemoryRouter initialEntries={['/inicio/coleccion-mascotas/123']}>
+      <MemoryRouter initialEntries={['/inicio/radar-de-coincidencias/123']}>
         <Routes>
           <Route
-            path="/inicio/coleccion-mascotas/:id"
+            path="/inicio/radar-de-coincidencias/:id"
             element={<PetDetails />}
           />
         </Routes>
@@ -60,6 +60,6 @@ describe('Load pet details', () => {
 
     const backButton = screen.getByRole('button');
     fireEvent.click(backButton);
-    expect(navigateMock).toHaveBeenCalledWith('/inicio/coleccion-mascotas');
+    expect(navigateMock).toHaveBeenCalledWith('/inicio/radar-de-coincidencias');
   });
 });

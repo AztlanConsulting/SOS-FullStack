@@ -32,7 +32,7 @@ describe('State management and components', () => {
 
     const linkElement = screen.getByRole('link');
     expect(linkElement.getAttribute('href')).toBe(
-      `/inicio/coleccion-mascotas/${pet.refId}`,
+      `/inicio/radar-de-coincidencias/${pet.refId}`,
     );
   });
 });

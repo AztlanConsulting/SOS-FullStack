@@ -1,21 +1,30 @@
 import { Button } from '@/shared/components/ui/Button';
 import { Text } from '@shared/components/ui/Text';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   isOpen: boolean;
+  img: File | null;
   handleSearch: (k: string, v: string) => void;
 }
 
-const PetDropDown = ({ isOpen, handleSearch }: Props) => {
+const PetDropDown = ({ isOpen, img, handleSearch }: Props) => {
   const [color, setColor] = useState('');
   const [location, setLocation] = useState('');
   const [species, setSpecies] = useState('');
 
+  useEffect(() => {
+    clean();
+  }, [img]);
+
+  useEffect(() => {
+    search();
+  }, [color, location, species]);
+
   function search() {
-    handleSearch('color', color);
-    handleSearch('location', location);
-    handleSearch('species', species);
+    handleSearch('color', color.slice(0, 40));
+    handleSearch('location', location.slice(0, 40));
+    handleSearch('species', species.slice(0, 40));
   }
 
   function clean() {
@@ -39,6 +48,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
             placeholder="Ej. Café"
             value={color}
+            maxLength={40}
             onChange={(e) => setColor(e.target.value)}
           />
           <label htmlFor="location">
@@ -52,6 +62,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
             placeholder="Ej. México"
             value={location}
+            maxLength={40}
             onChange={(e) => setLocation(e.target.value)}
           />
           <label htmlFor="location">
@@ -65,6 +76,7 @@ const PetDropDown = ({ isOpen, handleSearch }: Props) => {
             className="border-[1px] p-1 rounded-lg border-dark-purple w-full mb-2"
             placeholder="Ej. Golden Retriever"
             value={species}
+            maxLength={40}
             onChange={(e) => setSpecies(e.target.value)}
           />
         </div>

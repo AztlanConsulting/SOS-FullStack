@@ -1,5 +1,6 @@
 import { Text } from '@/shared/components/ui/Text';
 import { Modal } from '@/shared/components/ui/Modal/Modal';
+import { Button } from '@/shared/components/ui/Button';
 import { HiExclamationCircle } from 'react-icons/hi';
 
 /**
@@ -41,9 +42,11 @@ export const ConfirmationModal = ({
 }: ConfirmationModalProps) => {
   const isDanger = tone === 'danger';
   const accentClass = isDanger ? 'text-[var(--color-danger)]' : 'text-primary';
-  const confirmClass = isDanger
-    ? 'bg-[var(--color-danger)] hover:bg-[var(--color-status-danger)] focus:ring-[var(--color-danger-bg)]'
-    : 'bg-primary hover:opacity-90 focus:ring-[var(--color-secondary)]';
+  const confirmButtonClass = isDanger
+    ? 'bg-[var(--color-danger)] text-white hover:bg-[var(--color-status-danger)] focus:ring-[var(--color-danger-bg)]'
+    : 'bg-primary text-white hover:opacity-90 focus:ring-[var(--color-secondary)]';
+  const modalButtonClass =
+    'w-full sm:w-auto md:max-w-none mx-0 focus:outline-none focus:ring-4';
 
   // Prevent closing the dialog while the confirmed action is still in progress.
   const handleCancel = () => {
@@ -66,12 +69,11 @@ export const ConfirmationModal = ({
             size={28}
             className={`${accentClass} mt-0.5 shrink-0`}
           />
-          <p
-            id="confirmation-modal-description"
-            className="text-base font-normal leading-relaxed text-[var(--color-grey-text)]"
-          >
-            {description}
-          </p>
+          <div id="confirmation-modal-description">
+            <Text variant="body" color="text-[var(--color-grey-text)]" as="p">
+              {description}
+            </Text>
+          </div>
         </div>
 
         {errorMessage && (
@@ -81,22 +83,21 @@ export const ConfirmationModal = ({
         )}
 
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <button
-            type="button"
+          <Button
+            label={cancelLabel}
             onClick={handleCancel}
+            variant="secondary"
             disabled={isLoading}
-            className="rounded-md border border-[var(--color-grey-border)] px-4 py-2 text-sm font-medium text-[var(--color-grey-text)] transition-colors hover:bg-[var(--color-grey-bg)]"
-          >
-            {cancelLabel}
-          </button>
-          <button
-            type="button"
+            textColor={`border border-[var(--color-grey-border)] bg-white text-[var(--color-grey-text)] hover:bg-[var(--color-grey-bg)] ${modalButtonClass}`}
+          />
+          <Button
+            label={confirmLabel}
             onClick={onConfirm}
+            variant="primary"
             disabled={isLoading}
-            className={`${confirmClass} rounded-md px-4 py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-4`}
-          >
-            {isLoading ? 'Guardando...' : confirmLabel}
-          </button>
+            isLoading={isLoading}
+            textColor={`${confirmButtonClass} ${modalButtonClass}`}
+          />
         </div>
       </div>
     </Modal>

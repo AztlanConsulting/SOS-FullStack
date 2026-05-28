@@ -126,7 +126,9 @@ export const usePetReportForm = (initialData?: Partial<FoundPetReportData>) => {
 
     if (!formData.color) newErrors.color = 'Ingresa un color';
 
-    if (!formData.address) newErrors.address = 'Ingresa una ubicación';
+    if (!formData.address)
+      newErrors.address =
+        'Confirma la ubicación: mueve el pin o escribe otra dirección.';
 
     if (!formData.images || formData.images.length === 0)
       newErrors.images = 'Falta la foto ';

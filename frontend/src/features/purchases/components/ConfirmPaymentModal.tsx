@@ -106,7 +106,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
             >
               Gracias por tu compra.{' '}
               <strong>
-                Los detalles de la compra se han enviado a tu correo.
+                Los detalles de la compra llegará en unos minutos.
               </strong>
             </Text>
           )}

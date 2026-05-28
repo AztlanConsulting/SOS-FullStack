@@ -66,8 +66,11 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
           >
             Tu orden ha sido registrada. Para completar tu solicitud y obtener
             los beneficios de tu compra, es necesario realizar el pago.
-            <strong> Te enviamos los detalles a tu correo.</strong> Ya puedes
-            cerrar esta ventana.
+            <strong>
+              Te enviamos un correo con los detalles de la compra. Este puede
+              tardar unos minutos en llegar.
+            </strong>
+            Ya puedes cerrar esta ventana.
           </Text>
 
           {/* Summary Box - Condensed spacing */}

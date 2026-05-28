@@ -2,18 +2,32 @@ import { Text } from '@/shared/components/ui/Text';
 import { Modal } from '@/shared/components/ui/Modal/Modal';
 import { HiExclamationCircle } from 'react-icons/hi';
 
+/**
+ * Configuration properties for the ConfirmationModal component.
+ */
 type ConfirmationModalProps = {
+  /** Title displayed in the shared Modal header. */
   title: string;
+  /** Message that explains the action the administrator is confirming. */
   description: string;
+  /** Label for the primary confirmation button. */
   confirmLabel?: string;
+  /** Label for the secondary cancel button. */
   cancelLabel?: string;
+  /** Optional error message shown when the confirmed action fails. */
   errorMessage?: string | null;
+  /** Loading state used to disable actions while the request is pending. */
   isLoading?: boolean;
+  /** Visual emphasis for regular or destructive actions. */
   tone?: 'warning' | 'danger';
   onConfirm: () => void | Promise<void>;
   onCancel: () => void;
 };
 
+/**
+ * A reusable confirmation dialog for administration actions.
+ * Uses the shared Modal shell and keeps confirmation-specific content and actions inside.
+ */
 export const ConfirmationModal = ({
   title,
   description,
@@ -30,6 +44,8 @@ export const ConfirmationModal = ({
   const confirmClass = isDanger
     ? 'bg-[var(--color-danger)] hover:bg-[var(--color-status-danger)] focus:ring-[var(--color-danger-bg)]'
     : 'bg-primary hover:opacity-90 focus:ring-[var(--color-secondary)]';
+
+  // Prevent closing the dialog while the confirmed action is still in progress.
   const handleCancel = () => {
     if (!isLoading) {
       onCancel();
@@ -69,7 +85,7 @@ export const ConfirmationModal = ({
             type="button"
             onClick={handleCancel}
             disabled={isLoading}
-            className="rounded-md border border-[var(--color-grey-border)] px-4 py-2 text-sm font-medium text-[var(--color-grey-text)] transition-colors hover:bg-[var(--color-grey-bg)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md border border-[var(--color-grey-border)] px-4 py-2 text-sm font-medium text-[var(--color-grey-text)] transition-colors hover:bg-[var(--color-grey-bg)]"
           >
             {cancelLabel}
           </button>
@@ -77,7 +93,7 @@ export const ConfirmationModal = ({
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`${confirmClass} rounded-md px-4 py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60`}
+            className={`${confirmClass} rounded-md px-4 py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-4`}
           >
             {isLoading ? 'Guardando...' : confirmLabel}
           </button>

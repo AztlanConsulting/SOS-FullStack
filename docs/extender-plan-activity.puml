@@ -1,0 +1,135 @@
+@startuml Extender Plan Activity Diagram
+
+skinparam backgroundColor #FAFAFA
+skinparam activityBackgroundColor #E8EAF6
+skinparam activityBorderColor #3F51B5
+skinparam activityDiamondBackgroundColor #FFF9C4
+skinparam activityDiamondBorderColor #F9A825
+skinparam arrowColor #3F51B5
+skinparam activityStartColor #2E7D32
+skinparam activityEndColor #C62828
+skinparam noteBackgroundColor #FFF3E0
+skinparam noteBorderColor #FF8F00
+
+title Extender Plan — Activity Diagram
+
+|#E3F2FD|Cliente|
+|#E8F5E9|Frontend|
+|#FFF3E0|Backend|
+|#FCE4EC|Stripe|
+
+start
+
+|Cliente|
+:Abre el Dashboard del cliente;
+
+|Frontend|
+:GET /clients/inicio\n(con JWT token);
+
+|Backend|
+:authMiddleware valida JWT;
+
+if (Token válido?) then (no)
+  :Retorna 401 Unauthorized;
+  |Frontend|
+  :Redirige a Login;
+  stop
+else (sí)
+endif
+
+|Backend|
+:getDashboardController\nObtiene mascotas del usuario;
+:Para cada mascota,\nbusca planes comprados activos;
+:Determina planStatus\n('continua' | 'RIP' | 'encontrado');
+
+|Frontend|
+:Recibe datos de planes y mascota;
+:calculateStackedExpiry(plans)\nApila planes secuencialmente;
+:Calcula días restantes\ny porcentaje de progreso;
+
+if (planStatus === 'continua'?) then (no)
+  :Muestra estado RIP\no encontrado;
+  stop
+else (sí)
+endif
+
+:Renderiza PlanProgressSection\ncon botón "Extender plan";
+:CountDownChart muestra\nbarra de progreso;
+
+note right
+  Verde > 70% días restantes
+  Amarillo 30–70%
+  Rojo < 30%
+end note
+
+|Cliente|
+:Ve el progreso del plan\ny hace clic en "Extender plan";
+
+|Frontend|
+:navigate('/extender-plan');
+:Muestra planes disponibles\n(Básico / Estándar / Premium);
+
+|Cliente|
+:Selecciona plan a comprar\n(Básico $22.70 / Estándar $48.89 / Premium $93.12);
+
+|Frontend|
+:POST /purchases/createPurchase\n{ userEmail, paymentId, productId, productType: 'plan' };
+
+|Backend|
+:createPurchaseController\nrecibe solicitud;
+:createPurchaseDB use-case\ncrea registro de compra pendiente;
+
+|Frontend|
+:Redirige a Stripe Checkout;
+
+|Cliente|
+:Ingresa datos de pago en Stripe;
+
+|Stripe|
+:Procesa el pago;
+
+if (Pago exitoso?) then (no)
+  |Frontend|
+  :Muestra error de pago;
+  stop
+else (sí)
+endif
+
+|Stripe|
+:Envía webhook al backend\npayment_intent.succeeded;
+
+|Backend|
+:activatePlan use-case;
+:Valida que el plan comprado existe;
+:Activa usuario si no estaba activo;
+:Marca purchasedPlan.active = true;
+:Encola job de publicación\nen redes sociales;
+
+note right
+  Facebook / Instagram
+  tracking via socialPosts
+end note
+
+:Nuevo plan apilado sobre\nel plan anterior si aún vigente;
+
+note right
+  calculateStackedExpiry:
+  Si nuevo plan creado antes de
+  que expire el anterior,
+  se extiende desde la fecha
+  de expiración previa.
+end note
+
+|Frontend|
+:Redirige a confirmación\nde plan extendido;
+
+|Cliente|
+:Ve el dashboard actualizado\ncon el plan extendido;
+
+|Frontend|
+:GET /clients/inicio\nActualiza datos del dashboard;
+:CountDownChart refleja\nnuevos días acumulados;
+
+stop
+
+@enduml

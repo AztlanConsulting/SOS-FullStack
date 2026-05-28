@@ -1,0 +1,63 @@
+@startuml Extender Plan — Sequence Diagram
+
+title Extender Plan — Sequence Diagram
+
+actor "Cliente" as Cliente
+participant "Planes Page" as PlanesPage
+participant "Compra Page" as Compra
+participant "API" as API
+participant "activatePlan" as ActivatePlan
+participant "createPurchaseDB" as CreatePurchaseDB
+database "MongoDB" as DB
+participant "Stripe / PayPal" as Payment
+
+== Selecciona nuevo plan ==
+
+Cliente -> PlanesPage: Navega a /extender-plan
+PlanesPage -> API: GET /plans/getPlans
+API --> PlanesPage: Planes disponibles
+PlanesPage -> PlanesPage: Renderiza PlanCard
+Cliente -> PlanesPage: Selecciona un plan
+PlanesPage -> PlanesPage: Guarda selección en contexto
+PlanesPage -> Compra: navigate('/compra')
+
+== Procesa pago ==
+
+Cliente -> Compra: Elige método de pago
+
+alt Stripe (tarjeta)
+  Compra -> Payment: stripe.confirmPayment()
+  Payment --> Compra: paymentIntent.status
+else PayPal
+  Compra -> Payment: Redirige a PayPal
+  Payment --> Compra: ORDEN APROBADA
+end
+
+alt Pago exitoso
+  Compra -> API: POST /purchases/createPurchase
+  API -> CreatePurchaseDB: Crea registro de compra
+  CreatePurchaseDB -> DB: Guarda Purchase
+  DB --> API: OK
+  API --> Compra: 201 Created
+else Pago fallido
+  Payment --> Compra: error
+  Compra --> Cliente: Error de pago
+end
+
+== Activación del plan (vía webhook / captura) ==
+
+alt Stripe
+  Payment -> API: Webhook payment_intent.succeeded
+  API -> API: Busca compra (reintenta hasta 10 veces)
+else PayPal
+  Payment -> API: captureOrder(orderId, planId, userEmail)
+end
+
+API -> ActivatePlan: activatePlan(userEmail, planId)
+ActivatePlan -> DB: getPurchasedPlanById(planId)
+ActivatePlan -> DB: activateUser(email)
+ActivatePlan -> DB: activatePurchasedPlan(planId)
+ActivatePlan --> API: Plan activado
+API --> Compra: Confirmación
+
+@enduml

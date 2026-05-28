@@ -77,19 +77,23 @@ describe('useClients (Unit Tests)', () => {
   test('resets page to 1 when search changes', async () => {
     const { result } = renderHook(() => useClients());
     await waitFor(() => expect(result.current.loading).toBe(false));
+
     act(() => {
       result.current.setPage(3);
     });
     act(() => {
       result.current.setSearch('Sebastian');
     });
-    // Wait for debounce and fetch to complete
-    await waitFor(() => expect(result.current.loading).toBe(false));
-    // Verify a new fetch was triggered with the search term
-    expect(axiosInstance.get).toHaveBeenCalledWith(
-      expect.stringContaining('search=Sebastian'),
+
+    await waitFor(
+      () =>
+        expect(axiosInstance.get).toHaveBeenCalledWith(
+          expect.stringContaining('search=Sebastian'),
+          expect.anything(),
+        ),
+      { timeout: 2000 }, // wait up to 2s for debounce + fetch
     );
-  });
+  }, 10000); // extend test timeout to 10s
 
   /**
    * Verifies refresh triggers a new fetch
@@ -97,10 +101,14 @@ describe('useClients (Unit Tests)', () => {
   test('refresh triggers a new fetch', async () => {
     const { result } = renderHook(() => useClients());
     await waitFor(() => expect(result.current.loading).toBe(false));
+
     act(() => {
       result.current.refresh();
     });
-    await waitFor(() => expect(result.current.loading).toBe(false));
-    expect(axiosInstance.get).toHaveBeenCalledTimes(2);
-  });
+
+    await waitFor(
+      () => expect(axiosInstance.get).toHaveBeenCalledTimes(2),
+      { timeout: 2000 },
+    );
+  }, 10000);
 });

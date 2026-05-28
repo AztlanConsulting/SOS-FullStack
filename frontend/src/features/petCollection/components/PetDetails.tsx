@@ -19,7 +19,7 @@ const PetDetails = () => {
     <>
       <div
         className="fixed inset-0 z-40"
-        onClick={() => navigate('/inicio/coleccion-mascotas')}
+        onClick={() => navigate('/inicio/radar-de-coincidencias')}
       />
       <div className="fixed top-18 h-screen right-0 z-50 overflow-scroll overscroll-none slide-in">
         <main className="flex max-md:flex-col bg-white w-screen md:w-120 ">

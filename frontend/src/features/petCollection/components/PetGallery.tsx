@@ -36,21 +36,23 @@ const PetGallery = ({
   return (
     <div className="px-2 py-4 md:w-2/3 md:h-screen bg-purple-secondary">
       <div className="relative flex justify-end w-full pl-2">
-        <div ref={dropdownRef} className="mb-4">
-          <button
-            onClick={() => setIsOpen((prev) => !prev)}
-            name={'petDropdown'}
-            className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-purple-secondary text-dark-purple border-[1px] border-dark-purple hover:border-purple-primary group mr-7 md:mr-10"
-          >
-            <HiOutlineFilter
-              // color="black"
-              size="80%"
-              className="h-5"
-            />
-            <Text className="text-dark-purple">Filtro</Text>
-          </button>
-          <PetDropDown isOpen={isOpen} handleSearch={handleSearch} />
-        </div>
+        {img && (
+          <div ref={dropdownRef} className="mb-4">
+            <button
+              onClick={() => setIsOpen((prev) => !prev)}
+              name={'petDropdown'}
+              className="bg-white rounded-lg h-10 flex flex-row justify-center items-center cursor-pointer gap-1 px-2 hover:bg-purple-secondary text-dark-purple border-[1px] border-dark-purple hover:border-purple-primary group mr-7 md:mr-10"
+            >
+              <HiOutlineFilter
+                // color="black"
+                size="80%"
+                className="h-5"
+              />
+              <Text className="text-dark-purple">Filtro</Text>
+            </button>
+            <PetDropDown isOpen={isOpen} handleSearch={handleSearch} />
+          </div>
+        )}
       </div>
       {vectorImages.isLoading && <LoadingSpinner />}
       {vectorImages.error && (

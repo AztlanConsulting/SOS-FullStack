@@ -34,21 +34,12 @@ export const useClients = () => {
   }, [search]);
 
   /**
-   * Reset Pagination:
-   * If the search term or filters change, we reset back to page 1
-   * because the total result set has changed.
-   */
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch, filters]);
-
-  /**
    * Core Fetch Logic:
    * Memoized using useCallback to prevent unnecessary re-renders in child components.
    *
    * When client-side filters are active (status or conversation), fetches all results
    * without pagination to ensure accurate filtering. Otherwise uses normal pagination.
-   * 
+   *
    * Uses AbortController to cancel previous requests if a new one is initiated.
    */
   const fetchClients = useCallback(async () => {
@@ -65,7 +56,7 @@ export const useClients = () => {
     try {
       const hasClientFilter = filters.status || filters.conversation;
       const params = new URLSearchParams({
-        page: String(hasClientFilter ? 1 : page),
+        page: hasClientFilter ? '1' : String(page), // ← always use 1 when filtering
         ...(hasClientFilter ? { limit: '9999' } : {}),
         search: debouncedSearch,
       });
@@ -75,7 +66,13 @@ export const useClients = () => {
       });
       const result = res.data;
 
-      console.log('before filter:', result.clients.map((c: any) => ({ name: c.username, status: c.plan?.status })));
+      console.log(
+        'before filter:',
+        result.clients.map((c: any) => ({
+          name: c.username,
+          status: c.plan?.status,
+        })),
+      );
       console.log('filter value:', filters.status);
 
       /**

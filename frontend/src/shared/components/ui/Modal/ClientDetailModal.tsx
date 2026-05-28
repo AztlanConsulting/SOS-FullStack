@@ -124,6 +124,23 @@ export const ClientDetailModal = ({
   const getStatusLabel = (status: PlanStatus | '') =>
     status ? statusLabels[status] : '---';
 
+  const irreversibleSourceStatuses: Array<PlanStatus | ''> = [
+    '',
+    'continua',
+    'casi expira',
+    'expirado',
+  ];
+  const finalStatuses: PlanStatus[] = ['RIP', 'encontrado'];
+
+  const isIrreversibleStatusChange = () => {
+    if (!pendingStatusChange) return false;
+
+    return (
+      irreversibleSourceStatuses.includes(pendingStatusChange.previousStatus) &&
+      finalStatuses.includes(pendingStatusChange.status)
+    );
+  };
+
   const getStatusChangeDescription = () => {
     if (!pendingStatusChange) return '';
 
@@ -131,9 +148,11 @@ export const ClientDetailModal = ({
 
     if (
       pendingStatusChange.previousStatus === 'continua' ||
-      pendingStatusChange.previousStatus === ''
+      pendingStatusChange.previousStatus === '' ||
+      pendingStatusChange.previousStatus === 'casi expira' ||
+      pendingStatusChange.previousStatus === 'expirado'
     ) {
-      return `${baseDescription} Toma en cuenta que, una vez guardado, no se podrá regresar al estado ${getStatusLabel(pendingStatusChange.previousStatus)}.`;
+      return `${baseDescription} Toma en cuenta que, una vez guardado, no se podrá regresar al estado ${getStatusLabel(pendingStatusChange.previousStatus).toLowerCase()}.`;
     }
 
     return baseDescription;
@@ -616,7 +635,7 @@ export const ClientDetailModal = ({
           title="Confirmar cambio"
           description={getStatusChangeDescription()}
           confirmLabel="Sí, actualizar"
-          tone={pendingStatusChange.status === 'RIP' ? 'danger' : 'warning'}
+          tone={isIrreversibleStatusChange() ? 'danger' : 'warning'}
           isLoading={isUpdatingStatus}
           errorMessage={statusUpdateError}
           onCancel={() => {

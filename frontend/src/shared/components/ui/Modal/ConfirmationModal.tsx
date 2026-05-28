@@ -45,8 +45,6 @@ export const ConfirmationModal = ({
   const confirmButtonClass = isDanger
     ? 'bg-[var(--color-danger)] text-white hover:bg-[var(--color-status-danger)] focus:ring-[var(--color-danger-bg)]'
     : 'bg-primary text-white hover:opacity-90 focus:ring-[var(--color-secondary)]';
-  const modalButtonClass =
-    'w-full sm:w-auto md:max-w-none mx-0 focus:outline-none focus:ring-4';
 
   // Prevent closing the dialog while the confirmed action is still in progress.
   const handleCancel = () => {
@@ -82,13 +80,13 @@ export const ConfirmationModal = ({
           </Text>
         )}
 
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <div className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-end">
           <Button
             label={cancelLabel}
             onClick={handleCancel}
             variant="secondary"
             disabled={isLoading}
-            textColor={`border border-[var(--color-grey-border)] bg-white text-[var(--color-grey-text)] hover:bg-[var(--color-grey-bg)] ${modalButtonClass}`}
+            textColor={`border border-[var(--color-grey-border)] bg-white text-[var(--color-grey-text)] hover:bg-[var(--color-grey-bg)]`}
           />
           <Button
             label={confirmLabel}
@@ -96,7 +94,7 @@ export const ConfirmationModal = ({
             variant="primary"
             disabled={isLoading}
             isLoading={isLoading}
-            textColor={`${confirmButtonClass} ${modalButtonClass}`}
+            textColor={`${confirmButtonClass}`}
           />
         </div>
       </div>

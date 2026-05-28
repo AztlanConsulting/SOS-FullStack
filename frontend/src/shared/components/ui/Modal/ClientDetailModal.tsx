@@ -1,4 +1,5 @@
 import { Modal } from '@/shared/components/ui/Modal/Modal';
+import { ConfirmationModal } from '@/shared/components/ui/Modal/ConfirmationModal';
 import type { PlanStatus } from '@/features/clients/types/client.type';
 import { useState, useEffect } from 'react';
 import { Text } from '@/shared/components/ui/Text';
@@ -28,6 +29,10 @@ interface Props {
   onRefresh?: () => void;
 }
 
+type PendingDetailUpdate =
+  | { type: 'conversation'; value: string }
+  | { type: 'notes'; value: string };
+
 /**
  *
  * Displays a comprehensive view of a client's profile, including:
@@ -45,7 +50,12 @@ export const ClientDetailModal = ({
   petId,
 }: Props) => {
   // Fetch full details (pets, plans, etc.) using the custom hook
-  const { client: detail, loading, error } = useClientDetail(client._id);
+  const {
+    client: detail,
+    loading,
+    error,
+    refetch,
+  } = useClientDetail(client._id);
   // State for the inline editing flow of the conversation link
   const [editingConversation, setEditingConversation] = useState(false);
   const [conversationValue, setConversationValue] = useState(
@@ -53,6 +63,23 @@ export const ClientDetailModal = ({
   );
   const [planStatuses, setPlanStatuses] = useState<Record<string, PlanStatus>>(
     {},
+  );
+  const [pendingDetailUpdate, setPendingDetailUpdate] =
+    useState<PendingDetailUpdate | null>(null);
+  const [isUpdatingDetail, setIsUpdatingDetail] = useState(false);
+  const [detailUpdateError, setDetailUpdateError] = useState<string | null>(
+    null,
+  );
+  const [pendingStatusChange, setPendingStatusChange] = useState<{
+    planId: string;
+    planName: string;
+    petName: string;
+    previousStatus: PlanStatus | '';
+    status: PlanStatus;
+  } | null>(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(
+    null,
   );
   const petsToShow = petId
     ? detail?.pets?.filter((p) => p._id === petId)
@@ -85,6 +112,89 @@ export const ClientDetailModal = ({
       setNotesValue(detail.notes);
     }
   }, [detail]);
+
+  const statusLabels: Record<PlanStatus, string> = {
+    continua: 'Continua',
+    'casi expira': 'Casi expira',
+    expirado: 'Expirado',
+    RIP: 'RIP',
+    encontrado: 'Encontrado',
+  };
+
+  const getStatusLabel = (status: PlanStatus | '') =>
+    status ? statusLabels[status] : '---';
+
+  const getStatusChangeDescription = () => {
+    if (!pendingStatusChange) return '';
+
+    const baseDescription = `¿Está segura de marcar el plan ${pendingStatusChange.planName} de ${pendingStatusChange.petName} como ${statusLabels[pendingStatusChange.status]}?`;
+
+    if (
+      pendingStatusChange.previousStatus === 'continua' ||
+      pendingStatusChange.previousStatus === ''
+    ) {
+      return `${baseDescription} Toma en cuenta que, una vez guardado, no se podrá regresar al estado ${getStatusLabel(pendingStatusChange.previousStatus)}.`;
+    }
+
+    return baseDescription;
+  };
+
+  const confirmDetailUpdate = async () => {
+    if (!pendingDetailUpdate) return;
+
+    setIsUpdatingDetail(true);
+    setDetailUpdateError(null);
+
+    try {
+      if (pendingDetailUpdate.type === 'conversation') {
+        await ClientService.updateConversation(
+          client._id,
+          pendingDetailUpdate.value,
+        );
+        setEditingConversation(false);
+        onUpdate(pendingDetailUpdate.value);
+      } else {
+        await ClientService.updateClient(client._id, {
+          notes: pendingDetailUpdate.value,
+        });
+        setEditingNotes(false);
+        onUpdate(detail?.conversation ?? '');
+      }
+
+      setPendingDetailUpdate(null);
+      onRefresh?.();
+      refetch();
+    } catch {
+      setDetailUpdateError('No se pudo guardar el cambio.');
+    } finally {
+      setIsUpdatingDetail(false);
+    }
+  };
+
+  const confirmPlanStatusChange = async () => {
+    if (!pendingStatusChange) return;
+
+    setIsUpdatingStatus(true);
+    setStatusUpdateError(null);
+
+    try {
+      await ClientService.updatePlanStatus(
+        pendingStatusChange.planId,
+        pendingStatusChange.status,
+      );
+      setPlanStatuses((prev) => ({
+        ...prev,
+        [pendingStatusChange.planId]: pendingStatusChange.status,
+      }));
+      setPendingStatusChange(null);
+      onRefresh?.();
+      refetch();
+    } catch {
+      setStatusUpdateError('No se pudo actualizar el estatus del plan.');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   return (
     <Modal title={client.username} onClose={onClose}>
@@ -168,14 +278,14 @@ export const ClientDetailModal = ({
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={async () => {
-                        await ClientService.updateConversation(
-                          client._id,
-                          conversationValue,
-                        );
-                        setEditingConversation(false);
-                        onUpdate(conversationValue);
+                      onClick={() => {
+                        setDetailUpdateError(null);
+                        setPendingDetailUpdate({
+                          type: 'conversation',
+                          value: conversationValue,
+                        });
                       }}
+                      disabled={isUpdatingDetail}
                       className="text-xs text-primary font-medium hover:text-yellow-600 whitespace-nowrap"
                     >
                       Guardar
@@ -359,19 +469,20 @@ export const ClientDetailModal = ({
                             {index === 0 && (
                               <select
                                 value={planStatuses[plan._id] ?? ''}
-                                onChange={async (e) => {
+                                disabled={isUpdatingStatus}
+                                onChange={(e) => {
                                   if (!e.target.value) return;
                                   const newStatus = e.target
                                     .value as PlanStatus;
-                                  setPlanStatuses((prev) => ({
-                                    ...prev,
-                                    [plan._id]: newStatus,
-                                  }));
-                                  await ClientService.updatePlanStatus(
-                                    plan._id,
-                                    newStatus,
-                                  );
-                                  onRefresh?.();
+                                  setStatusUpdateError(null);
+                                  setPendingStatusChange({
+                                    planId: plan._id,
+                                    planName: plan.name,
+                                    petName: pet.name,
+                                    previousStatus:
+                                      planStatuses[plan._id] ?? '',
+                                    status: newStatus,
+                                  });
                                 }}
                                 className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
                               >
@@ -427,13 +538,14 @@ export const ClientDetailModal = ({
                 />
                 <div className="flex gap-2 justify-end">
                   <button
-                    onClick={async () => {
-                      await ClientService.updateClient(client._id, {
-                        notes: notesValue,
+                    onClick={() => {
+                      setDetailUpdateError(null);
+                      setPendingDetailUpdate({
+                        type: 'notes',
+                        value: notesValue,
                       });
-                      setEditingNotes(false);
-                      onUpdate(detail?.conversation ?? '');
                     }}
+                    disabled={isUpdatingDetail}
                     className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
                   >
                     <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
@@ -478,6 +590,43 @@ export const ClientDetailModal = ({
             )}
           </div>
         </div>
+      )}
+      {pendingDetailUpdate && (
+        <ConfirmationModal
+          title="Confirmar edición"
+          description={
+            pendingDetailUpdate.type === 'conversation'
+              ? `¿Está segura de guardar el nuevo link de conversación de ${client.username}?`
+              : `¿Está segura de guardar los cambios en las notas de ${client.username}?`
+          }
+          confirmLabel="Sí, guardar"
+          isLoading={isUpdatingDetail}
+          errorMessage={detailUpdateError}
+          onCancel={() => {
+            if (!isUpdatingDetail) {
+              setPendingDetailUpdate(null);
+              setDetailUpdateError(null);
+            }
+          }}
+          onConfirm={confirmDetailUpdate}
+        />
+      )}
+      {pendingStatusChange && (
+        <ConfirmationModal
+          title="Confirmar cambio"
+          description={getStatusChangeDescription()}
+          confirmLabel="Sí, actualizar"
+          tone={pendingStatusChange.status === 'RIP' ? 'danger' : 'warning'}
+          isLoading={isUpdatingStatus}
+          errorMessage={statusUpdateError}
+          onCancel={() => {
+            if (!isUpdatingStatus) {
+              setPendingStatusChange(null);
+              setStatusUpdateError(null);
+            }
+          }}
+          onConfirm={confirmPlanStatusChange}
+        />
       )}
     </Modal>
   );

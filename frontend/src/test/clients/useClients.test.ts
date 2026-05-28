@@ -83,7 +83,12 @@ describe('useClients (Unit Tests)', () => {
     act(() => {
       result.current.setSearch('Sebastian');
     });
-    await waitFor(() => expect(result.current.page).toBe(1));
+    // Wait for debounce and fetch to complete
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    // Verify a new fetch was triggered with the search term
+    expect(axiosInstance.get).toHaveBeenCalledWith(
+      expect.stringContaining('search=Sebastian'),
+    );
   });
 
   /**

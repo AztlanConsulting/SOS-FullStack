@@ -171,7 +171,8 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
     if (!formData.color) newErrors.color = 'Ingresa un color';
 
     if (!formData.address && !formData.locationCoords) {
-      newErrors.address = 'Ingresa una ubicación';
+      newErrors.address =
+        'Confirma la ubicación: mueve el pin o escribe otra dirección.';
     }
 
     const expectedPhotoCount = parseInt(formData.imageLayout || '1');

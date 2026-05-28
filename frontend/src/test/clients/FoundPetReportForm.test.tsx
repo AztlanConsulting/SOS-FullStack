@@ -3,6 +3,7 @@ import { PetReportForm } from '@features/found-pet/components/PetReportForm';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
+import type { FoundPetReportData } from '@shared/types/petReport.types';
 
 const { mockNavigate, mockSetFoundPetReportData, mockReportFoundPet } =
   vi.hoisted(() => ({
@@ -36,13 +37,13 @@ vi.mock('@features/found-pet/services/foundPetApi', () => ({
 const renderWithRouter = (ui: React.ReactElement) =>
   render(<BrowserRouter>{ui}</BrowserRouter>);
 
-const VALID_INITIAL_DATA = {
+const VALID_INITIAL_DATA: Partial<FoundPetReportData> = {
   species: 'Perro',
   date: '2020-06-15',
   breed: 'Labrador',
   color: 'Café',
   sex: 'Macho',
-  size: 'Mediano',
+  size: 'Mediana: 11 a 25 kg',
   address: 'Calle Epigmenio González 500, Querétaro',
   images: [new File(['content'], 'perro.jpg', { type: 'image/jpeg' })],
   contactName: 'Juan Pérez',
@@ -91,7 +92,11 @@ describe('FoundPetReportForm Component', () => {
     ).toBeDefined();
     expect(screen.getByText('Ingresa una raza o tipo')).toBeDefined();
     expect(screen.getByText('Ingresa un color')).toBeDefined();
-    expect(screen.getByText('Ingresa una ubicación')).toBeDefined();
+    expect(
+      screen.getByText(
+        'Confirma la ubicación: mueve el pin o escribe otra dirección.',
+      ),
+    ).toBeDefined();
     expect(screen.queryByText(/Falta la foto/)).toBeDefined();
     expect(
       screen.getByText('Ingresa un nombre para contactarte'),

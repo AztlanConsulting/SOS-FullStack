@@ -17,11 +17,9 @@ import { getUploadUrl } from '@/utils/uploadUrl.utils';
 
 const createLostPetReportController = async (req: Request, res: Response) => {
   try {
-    console.log(req.files);
     const images = req.files as Express.Multer.File[] | undefined;
-    console.log(images);
 
-    if (!images || images.length === 0) {
+    if (!images || images.length < 2) {
       return res.status(400).json({ error: 'Se requiere al menos una imagen' });
     }
 

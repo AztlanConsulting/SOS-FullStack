@@ -14,6 +14,7 @@ import {
   type OnApproveDataOneTimePayments,
 } from '@paypal/react-paypal-js/sdk-v6';
 import { useRef } from 'react';
+import { usePayment } from '../../hooks/usePayment';
 
 interface Props {
   data: Order;
@@ -28,6 +29,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
   const planIdRef = useRef<string | null>(null); // Use a ref to track the ID
   data.method = 'paypal';
   const { exchangeRate } = useLocationContext();
+  const { setError } = usePayment();
 
   return (
     <>
@@ -41,7 +43,9 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
               throw "Error, couldn't process payment";
             if (data.plan) {
               const petResult: PurchasedPlanResponse =
-                await createLostPetReportRequest(data.plan);
+                await createLostPetReportRequest(data.plan).catch((e) => {
+                  setError("Error: couldn't create plan");
+                });
 
               const newPetId = petResult.plan._id;
               planIdRef.current = newPetId;

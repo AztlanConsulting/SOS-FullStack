@@ -17,9 +17,7 @@ const SearchPets = () => {
       event.target.files[0] &&
       event.target.files[0].size <= 5000000
     ) {
-      console.log(event.target.files[0].size);
       const compressed = await convertToWebP(event.target.files[0]);
-      console.log(compressed.size);
       setImg(compressed);
       return true;
     }

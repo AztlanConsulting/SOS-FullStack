@@ -123,6 +123,7 @@ const TestimonialsSection = () => {
           <a
             href="https://www.instagram.com/stories/highlights/17876578843721551/"
             className="w-full flex justify-center"
+            target="_blank"
           >
             <Button label="Ver más opiniones" icon={CiShare1} />
           </a>

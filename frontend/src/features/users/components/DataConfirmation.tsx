@@ -178,14 +178,22 @@ const EditableField = ({
   );
 };
 
+interface EditProps {
+  formData: LostPetReportData;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
+  setEditOpen: Dispatch<SetStateAction<string[]>>;
+  id: string;
+  showError: boolean;
+}
+
 /** Editable filed for the location component. */
 const EditableLocation = ({
   formData,
   updateForm,
-}: {
-  formData: LostPetReportData;
-  updateForm: (newData: Partial<LostPetReportData>) => void;
-}) => {
+  id,
+  setEditOpen,
+  showError,
+}: EditProps) => {
   const [tempLostPetReportData, setTempLostPetReportData] = useState(formData);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -195,6 +203,17 @@ const EditableLocation = ({
     if (tempLostPetReportData) {
       setTempLostPetReportData({ ...tempLostPetReportData, ...newData });
     }
+  };
+
+  const openEdit = () => {
+    setIsEditing(true);
+    setEditOpen((prev) => [...prev, id]);
+    setError(null);
+  };
+  const closeEdit = () => {
+    setError(null);
+    setEditOpen((prev) => prev.filter((i) => i != id));
+    setIsEditing(false);
   };
 
   const handleConfirm = () => {
@@ -209,13 +228,11 @@ const EditableLocation = ({
     updateForm({ location: tempLostPetReportData.location });
     updateForm({ locationCoords: tempLostPetReportData.locationCoords });
     updateForm({ address: tempLostPetReportData.address });
-    setError(null);
-    setIsEditing(false);
   };
 
   const cancel = () => {
     setTempLostPetReportData(formData);
-    setIsEditing(false);
+    closeEdit();
   };
 
   useEffect(() => {
@@ -230,9 +247,12 @@ const EditableLocation = ({
   return (
     <div
       className={`rounded-lg flex flex-col justify-center mb-3 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 p-4'}`}
+      id={id}
     >
       {isEditing ? (
-        <div className="flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
+        <div
+          className={`flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm ${showError && 'border-1 border-red-600 rounded-sm'}`}
+        >
           <PetLocationSection
             formData={tempLostPetReportData}
             updateForm={updateTemp}
@@ -259,10 +279,7 @@ const EditableLocation = ({
             </span>
           </div>
           <button
-            onClick={() => {
-              setIsEditing(true);
-              setError(null);
-            }}
+            onClick={openEdit}
             className="text-gray-500 hover:text-black p-2 rounded-full hover:bg-gray-200 transition-colors"
           >
             <svg
@@ -290,10 +307,10 @@ const EditableLocation = ({
 const EditablePhotos = ({
   formData,
   updateForm,
-}: {
-  formData: LostPetReportData;
-  updateForm: (newData: Partial<LostPetReportData>) => void;
-}) => {
+  id,
+  setEditOpen,
+  showError,
+}: EditProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [slotErrors, setSlotErrors] = useState<Record<string, string>>({});
@@ -307,17 +324,31 @@ const EditablePhotos = ({
     }
   };
 
+  const openEdit = () => {
+    setIsEditing(true);
+    setSlotErrors({});
+    setHasTriedConfirm(false);
+    setEditOpen((prev) => [...prev, id]);
+  };
+  const closeEdit = () => {
+    setEditOpen((prev) => prev.filter((i) => i != id));
+    setIsEditing(false);
+  };
+
   const cancel = () => {
     setTempLostPetReportData(formData);
-    setIsEditing(false);
+    closeEdit();
   };
 
   // Generate object URLs fron the File[] on the formData
   useEffect(() => {
-    if (formData.images && formData.images.length > 0) {
+    if (
+      tempLostPetReportData.images &&
+      tempLostPetReportData.images.length > 0
+    ) {
       imageUrls.forEach((url) => URL.revokeObjectURL(url));
 
-      const validImages = formData.images.filter((f) => !!f);
+      const validImages = tempLostPetReportData.images.filter((f) => !!f);
       const urls = validImages.map((file) => URL.createObjectURL(file));
       setImageUrls(urls);
 
@@ -325,7 +356,7 @@ const EditablePhotos = ({
     } else {
       setImageUrls([]);
     }
-  }, [formData.images]);
+  }, [tempLostPetReportData.images]);
 
   const handleConfirm = () => {
     setHasTriedConfirm(true);
@@ -352,9 +383,10 @@ const EditablePhotos = ({
 
     updateForm({ images: tempLostPetReportData.images });
     updateForm({ imageLayout: tempLostPetReportData.imageLayout });
+
     setSlotErrors({});
     setHasTriedConfirm(false);
-    setIsEditing(false);
+    closeEdit();
   };
 
   const handlePhotosUpdate = (newData: Partial<LostPetReportData>) => {
@@ -397,10 +429,13 @@ const EditablePhotos = ({
 
   return (
     <div
-      className={`rounded-lg flex flex-col justify-center mb-3 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 p-4'}`}
+      className={`rounded-lg flex flex-col justify-center mb-3 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 p-4'} `}
+      id={id}
     >
       {isEditing ? (
-        <div className="flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
+        <div
+          className={`flex flex-col gap-4 w-full bg-white p-4 border border-gray-300 rounded-lg shadow-sm ${showError && 'border-1 border-red-600 rounded-sm'}`}
+        >
           <PetPhotosSection
             formData={tempLostPetReportData}
             updateForm={handlePhotosUpdate}
@@ -419,11 +454,7 @@ const EditablePhotos = ({
           <div className="flex justify-between items-center mb-4">
             <span className="text-xs text-gray-400 font-medium">Fotos</span>
             <button
-              onClick={() => {
-                setIsEditing(true);
-                setSlotErrors({});
-                setHasTriedConfirm(false);
-              }}
+              onClick={openEdit}
               className="text-gray-500 hover:text-black p-2 rounded-full hover:bg-gray-200 transition-colors"
             >
               <svg
@@ -608,7 +639,13 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
           Fotos de la mascota
         </Text>
         <section>
-          <EditablePhotos formData={formData} updateForm={updateForm} />
+          <EditablePhotos
+            formData={formData}
+            updateForm={updateForm}
+            setEditOpen={setEditOpen}
+            id="photos"
+            showError={showError}
+          />
         </section>
 
         <section>
@@ -620,7 +657,13 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
           >
             Donde se perdió
           </Text>
-          <EditableLocation formData={formData} updateForm={updateForm} />
+          <EditableLocation
+            formData={formData}
+            updateForm={updateForm}
+            setEditOpen={setEditOpen}
+            id="location"
+            showError={showError}
+          />
         </section>
 
         <section>

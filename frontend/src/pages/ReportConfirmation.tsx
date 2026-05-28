@@ -36,7 +36,7 @@ export const ReportConfirmationPage: React.FC = () => {
 
     if (lostPetReportData === pendingReportData) {
       setPendingNavigate(false);
-      navigate('/plans');
+      navigate('/planes');
     }
   }, [lostPetReportData, navigate, pendingNavigate, pendingReportData]);
 
@@ -69,9 +69,13 @@ export const ReportConfirmationPage: React.FC = () => {
   }, []);
 
   const handleUpdateForm = (newData: Partial<typeof lostPetReportData>) => {
-    if (lostPetReportData) {
-      setLostPetReportData({ ...lostPetReportData, ...newData });
-    }
+    setLostPetReportData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        ...newData,
+      };
+    });
   };
 
   const handleContinueForm = async (

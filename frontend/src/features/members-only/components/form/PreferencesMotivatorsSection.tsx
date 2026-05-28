@@ -47,7 +47,7 @@ export const PreferencesMotivatorsSection = ({
           id="favorite-food"
           label="Comida o snack favorito"
           value={formData.favoriteFood || ''}
-          maxLength={3}
+          maxLength={40}
           onChange={(e) => updateForm({ favoriteFood: e.target.value })}
           hasLength={true}
           error={errors.favoriteFood}

@@ -18,6 +18,12 @@ export default async function createSearchFormController(
   }
 
   const sanitized = { ...parsed.data };
+  if (typeof sanitized.approximateAge === 'number') {
+    const n = Math.trunc(sanitized.approximateAge);
+    sanitized.approximateAge = Number.isFinite(n)
+      ? Math.max(1, Math.min(999, n))
+      : (undefined as any);
+  }
   if (typeof sanitized.physicalCondition === 'string') {
     sanitized.physicalCondition = sanitized.physicalCondition.slice(0, 100);
   }

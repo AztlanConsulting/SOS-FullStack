@@ -53,7 +53,7 @@ export const petVector: PetVectorRepository = {
       .withFields('image refId species location color')
       .withNearImage({ image: image, distance: maxDistance })
       .withOffset(0)
-      .withLimit(100);
+      .withLimit(50);
 
     const resImg = await query.do();
 

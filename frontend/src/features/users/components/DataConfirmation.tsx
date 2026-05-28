@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  type Dispatch,
+  type SetStateAction,
+} from 'react';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 import { Input } from '@shared/components/ui/Input/Input';
@@ -13,11 +18,26 @@ import { PetLocationSection } from './PetLocationSection';
 import { PetPhotosSection } from './PetPhotosSection';
 
 import { useEditableField } from '../hooks/useEditableField';
-import { usePetReport } from '@/shared/context/PetReportContext';
 
 export interface DataConfirmationProps {
   formData: LostPetReportData;
   updateForm: (newData: Partial<LostPetReportData>) => void;
+  setEditOpen: Dispatch<SetStateAction<string[]>>;
+  showError: boolean;
+}
+
+export interface EditableField {
+  label: string;
+  value: string;
+  field: keyof LostPetReportData;
+  type?: 'text' | 'select' | 'date' | 'textarea' | 'phone';
+  options?: { value: string; label: string }[];
+  maxLength?: number;
+  hasLength?: boolean;
+  updateForm: (newData: Partial<LostPetReportData>) => void;
+  setEditOpen: Dispatch<SetStateAction<string[]>>;
+  id: string;
+  showError: boolean;
 }
 
 /** Editable field generic for text, selects, dates, texareas and phones */
@@ -30,16 +50,10 @@ const EditableField = ({
   maxLength,
   hasLength,
   updateForm,
-}: {
-  label: string;
-  value: string;
-  field: keyof LostPetReportData;
-  type?: 'text' | 'select' | 'date' | 'textarea' | 'phone';
-  options?: { value: string; label: string }[];
-  maxLength?: number;
-  hasLength?: boolean;
-  updateForm: (newData: Partial<LostPetReportData>) => void;
-}) => {
+  setEditOpen,
+  id,
+  showError,
+}: EditableField) => {
   const {
     isEditing,
     setIsEditing,
@@ -51,17 +65,31 @@ const EditableField = ({
 
   const today = new Date().toLocaleDateString('en-CA');
 
+  const openEdit = () => {
+    setIsEditing(true);
+    setEditOpen((prev) => [...prev, id]);
+  };
+
   const cancel = () => {
     setTempValue(value);
     setIsEditing(false);
+    setEditOpen((prev) => prev.filter((open) => id != open));
+  };
+
+  const save = () => {
+    handleSave();
+    setEditOpen((prev) => prev.filter((open) => id != open));
   };
 
   return (
     <div
       className={`rounded-lg flex flex-col justify-center mb-4 min-h-[70px] transition-all ${isEditing ? 'bg-transparent' : 'bg-gray-100 px-4'}`}
+      id={id}
     >
       {isEditing ? (
-        <div className="flex flex-col gap-2 w-full w-max-lg mx-auto">
+        <div
+          className={`flex flex-col gap-2 w-full w-max-lg mx-auto p-2 ${showError && 'border-1 border-red-600 rounded-sm'}`}
+        >
           {type === 'text' && (
             <Input
               id={field}
@@ -111,7 +139,7 @@ const EditableField = ({
           )}
 
           <div className="flex justify-end mt-1">
-            <Button onClick={handleSave} variant="primary" label="Guardar" />
+            <Button onClick={save} variant="primary" label="Guardar" />
           </div>
           <div className="flex justify-end mt-1">
             <Button onClick={cancel} variant="secondary" label="Cancelar" />
@@ -126,7 +154,7 @@ const EditableField = ({
             </span>
           </div>
           <button
-            onClick={() => setIsEditing(true)}
+            onClick={() => openEdit()}
             className="text-gray-500 hover:text-black p-2 rounded-full hover:bg-gray-200 transition-colors"
           >
             <svg
@@ -445,6 +473,8 @@ const EditablePhotos = ({
 export const DataConfirmation: React.FC<DataConfirmationProps> = ({
   formData,
   updateForm,
+  setEditOpen,
+  showError,
 }) => {
   useEffect(() => {
     window.scrollTo({
@@ -487,6 +517,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             Información de la mascota
           </Text>
           <EditableField
+            showError={showError}
+            id="petName"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="text"
             label="Nombre de la mascota"
@@ -495,6 +528,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             maxLength={40}
           />
           <EditableField
+            showError={showError}
+            id="species"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="select"
             label="Especie de la mascota"
@@ -503,6 +539,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             options={speciesOptions}
           />
           <EditableField
+            showError={showError}
+            id="lostDate"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="date"
             label="Fecha de extravío"
@@ -510,6 +549,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             field="date"
           />
           <EditableField
+            showError={showError}
+            id="breed"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="text"
             label="Raza/tipo de la mascota"
@@ -518,6 +560,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             maxLength={40}
           />
           <EditableField
+            showError={showError}
+            id="sex"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="select"
             label="Sexo de la mascota"
@@ -526,6 +571,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             options={sexOptions}
           />
           <EditableField
+            showError={showError}
+            id="color"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="text"
             label="Color de la mascota"
@@ -534,6 +582,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             maxLength={50}
           />
           <EditableField
+            showError={showError}
+            id="size"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="select"
             label="Talla de la mascota"
@@ -542,6 +593,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             options={sizeOptions}
           />
           <EditableField
+            showError={showError}
+            id="description"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="textarea"
             label="Descripción adicional de la mascota"
@@ -579,6 +633,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             Información de contacto
           </Text>
           <EditableField
+            showError={showError}
+            id="name"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="text"
             label="Nombre y apellido"
@@ -587,6 +644,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             maxLength={40}
           />
           <EditableField
+            showError={showError}
+            id="phone"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="phone"
             label="Número de teléfono"
@@ -594,6 +654,9 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             field="phoneNumber"
           />
           <EditableField
+            showError={showError}
+            id="email"
+            setEditOpen={setEditOpen}
             updateForm={updateForm}
             type="text"
             label="Correo electrónico"

@@ -92,23 +92,29 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500 pr-5">Contraseña:</span>
                     <span className="font-mono font-medium text-gray-800 text-right">
-                      En unos momentos deberás recibir un correo con tu
-                      contraseña
+                      De 5 a 10 minutos deberás recibir un correo electrónico
+                      con tu contraseña
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <Text
-              variant="body"
-              className="text-gray-600 mb-6 text-sm leading-snug"
-            >
-              Gracias por tu compra.{' '}
-              <strong>
-                Los detalles de la compra se han enviado a tu correo.
-              </strong>
-            </Text>
+            <>
+              <Text
+                variant="body"
+                className="text-gray-600 mb-6 text-sm leading-snug"
+              >
+                Gracias por tu compra.{' '}
+                <strong>
+                  Los detalles de la compra se han enviado a tu correo.
+                </strong>
+              </Text>
+
+              <Text variant="small" className="text-gray-400 mb-4 block">
+                El correo puede tardar hasta 5-10 minutos en llegar
+              </Text>
+            </>
           )}
 
           <div className="w-full bg-green-50/50 rounded-lg p-4 border border-green-100 mb-6 text-sm">

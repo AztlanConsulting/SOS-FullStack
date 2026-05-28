@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ClientListItem } from '../types/client.type';
 import type { ClientFilter } from '../components/FilterDropdown';
 import axiosInstance from '@/shared/utils/axios';
@@ -26,6 +26,7 @@ export const useClients = () => {
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [refetch, setRefetch] = useState(0);
   const [filters, setFilters] = useState<ClientFilter>({});
+  const controllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), DEBOUNCE_DELAY);
@@ -44,19 +45,42 @@ export const useClients = () => {
   /**
    * Core Fetch Logic:
    * Memoized using useCallback to prevent unnecessary re-renders in child components.
+   *
+   * When client-side filters are active (status or conversation), fetches all results
+   * without pagination to ensure accurate filtering. Otherwise uses normal pagination.
+   * 
+   * Uses AbortController to cancel previous requests if a new one is initiated.
    */
   const fetchClients = useCallback(async () => {
+    // Abort previous request if it exists
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
-      const res = await axiosInstance.get(
-        `/clientDashboard?${new URLSearchParams({ page: String(page), search: debouncedSearch, ...filters })}`,
-      );
+      const hasClientFilter = filters.status || filters.conversation;
+      const params = new URLSearchParams({
+        page: String(hasClientFilter ? 1 : page),
+        ...(hasClientFilter ? { limit: '9999' } : {}),
+        search: debouncedSearch,
+      });
+
+      const res = await axiosInstance.get(`/clientDashboard?${params}`, {
+        signal: controller.signal,
+      });
       const result = res.data;
+
+      console.log('before filter:', result.clients.map((c: any) => ({ name: c.username, status: c.plan?.status })));
+      console.log('filter value:', filters.status);
+
       /**
        * Client-side Filtering:
-       * While the API handles search and pagination, additional specific filters
-       * (Status and Conversation existence) are processed here.
+       * Status and Conversation filters are applied here.
        */
       const filtered = result.clients
         .filter(
@@ -70,9 +94,12 @@ export const useClients = () => {
         });
 
       setClients(filtered);
-      setTotalPages(result.totalPages);
-    } catch (err) {
-      setError('Failed to fetch clients');
+      setTotalPages(hasClientFilter ? 1 : result.totalPages);
+    } catch (err: any) {
+      // Ignore abort errors
+      if (err.name !== 'CanceledError') {
+        setError('Failed to fetch clients');
+      }
     } finally {
       setLoading(false);
     }
@@ -85,9 +112,45 @@ export const useClients = () => {
   }, [fetchClients, refetch]);
 
   /**
+   * Cleanup: abort pending request on unmount
+   */
+  useEffect(() => {
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  /**
    * Utility to manually trigger a data refresh from outside the hook.
    */
   const refresh = () => setRefetch((r) => r + 1);
+
+  /**
+   * Fetches all clients without pagination limit and applies active filters.
+   * Used for CSV export to include all matching records, not just the current page.
+   */
+  const exportClients = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/clientDashboard?${new URLSearchParams({ page: '1', limit: '9999', search: debouncedSearch })}`,
+      );
+      return res.data.clients
+        .filter(
+          (c: ClientListItem) =>
+            !filters.status || c.plan?.status === filters.status,
+        )
+        .filter((c: ClientListItem) => {
+          if (!filters.conversation) return true;
+          if (filters.conversation === 'con') return Boolean(c.conversation);
+          return !c.conversation;
+        });
+    } catch (err) {
+      console.error('Failed to export clients:', err);
+      return [];
+    }
+  }, [debouncedSearch, filters]);
 
   return {
     clients,
@@ -102,5 +165,6 @@ export const useClients = () => {
     refresh,
     filters,
     setFilters,
+    exportClients,
   };
 };

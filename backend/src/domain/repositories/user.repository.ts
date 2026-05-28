@@ -14,7 +14,11 @@ export interface UserRepository {
   getUserByEmail(email: string): Promise<UserWithRole | null>;
   getUserPermissions(userId: string): Promise<PopulatedPermission[]>;
   createUser(userData: UserCreateInput): Promise<string>;
-  getUsersWithPets(page: number, search?: string): Promise<GetClientsResult>;
+  getUsersWithPets(
+    page: number,
+    search?: string,
+    limit?: number,
+  ): Promise<GetClientsResult>;
   getClientDetail(id: string): Promise<ClientDetail | null>;
   updateUser(id: string, data: Partial<User>): Promise<void>;
   getClientsByCountry(): Promise<{ name: string; value: number }[]>;

@@ -90,13 +90,13 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                     <Text variant="caption">
                       {client.plan?.createdAt
                         ? new Date(client.plan.createdAt).toLocaleDateString(
-                            'es-MX',
-                            {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                            },
-                          )
+                          'es-MX',
+                          {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                          },
+                        )
                         : '—'}
                     </Text>
                   </td>
@@ -184,13 +184,13 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                   Fecha:{' '}
                   {client.createdAt
                     ? new Date(client.createdAt).toLocaleDateString('es-MX', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                      })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
                     : '—'}
                 </Text>
-                <Text variant="small" color="text-gray-500">
+                <Text variant="small" color="text-gray-500" className="break-words">
                   Notas: {client.pet?.description ?? '—'}
                 </Text>
                 {client.conversation &&
@@ -205,7 +205,7 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                       {client.conversation}
                     </a>
                   ) : (
-                    <Text variant="small" color="text-gray-500">
+                    <Text variant="small" color="text-gray-500" className="break-words">
                       {client.conversation}
                     </Text>
                   ))}
@@ -220,6 +220,6 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
             </div>
           ))}
       </div>
-    </div>
+    </div >
   );
 };

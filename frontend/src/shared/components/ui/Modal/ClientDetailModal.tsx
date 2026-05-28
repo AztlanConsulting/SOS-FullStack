@@ -2,6 +2,7 @@ import { Modal } from '@/shared/components/ui/Modal/Modal';
 import type { PlanStatus } from '@/features/clients/types/client.type';
 import { useState, useEffect } from 'react';
 import { Text } from '@/shared/components/ui/Text';
+import { stripEmojis } from '@/shared/utils/stripEmojis';
 import {
   HiMail,
   HiPhone,
@@ -14,6 +15,7 @@ import { useClientDetail } from '@/features/clients/hooks/useClientDetail';
 import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientService } from '@/features/clients/services/client.service';
 import { calculateStackedExpiry } from '@/shared/utils/planDates';
+import { kMaxLength } from 'buffer';
 
 interface Props {
   /** Summary data of the client from the list view. */
@@ -138,10 +140,10 @@ export const ClientDetailModal = ({
               <Text variant="small" color="text-gray-600">
                 {detail.createdAt
                   ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    })
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })
                   : '—'}
               </Text>
             </div>
@@ -156,39 +158,49 @@ export const ClientDetailModal = ({
             <div className="flex items-center gap-2 flex-1 col-span-2">
               <HiLink size={14} className="text-gray-400 shrink-0" />
               {editingConversation ? (
-                <div className="flex items-center gap-2 flex-1 flex-wrap">
-                  <input
-                    type="url"
-                    value={conversationValue}
-                    onChange={(e) => setConversationValue(e.target.value)}
-                    maxLength={100}
-                    placeholder="https://..."
-                    className="text-xs border border-gray-300 rounded px-2 py-1 min-w-0 flex-1 outline-none focus:border-yellow-400"
-                    autoFocus
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={async () => {
-                        await ClientService.updateConversation(
-                          client._id,
-                          conversationValue,
-                        );
-                        setEditingConversation(false);
-                        onUpdate(conversationValue);
+                <div className="flex flex-col gap-1 flex-1 w-full">
+                  <div className="flex items-center gap-2 flex-1 flex-wrap">
+                    <input
+                      type="url"
+                      value={conversationValue}
+                      onChange={(e) => {
+                        setConversationValue(stripEmojis(e.target.value));
                       }}
-                      className="text-xs text-primary font-medium hover:text-yellow-600 whitespace-nowrap"
-                    >
-                      Guardar
-                    </button>
-                    <button
-                      onClick={() => {
-                        setConversationValue(detail?.conversation ?? '');
-                        setEditingConversation(false);
-                      }}
-                      className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
-                    >
-                      Cancelar
-                    </button>
+                      maxLength={100}
+                      placeholder="https://..."
+                      className="text-xs border border-gray-300 rounded px-2 py-1 min-w-0 flex-1 outline-none focus:border-yellow-400"
+                      autoFocus
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={async () => {
+                          let value = conversationValue.trim();
+                          if (value && !value.startsWith('http')) {
+                            value = `https://${value}`;
+                            setConversationValue(value);
+                          }
+                          await ClientService.updateConversation(
+                            client._id,
+                            value,
+                          );
+                          setEditingConversation(false);
+                          onUpdate(value);
+                          onRefresh?.();
+                        }}
+                        className="text-xs text-primary font-medium hover:text-yellow-600 whitespace-nowrap"
+                      >
+                        Guardar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setConversationValue(detail?.conversation ?? '');
+                          setEditingConversation(false);
+                        }}
+                        className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -234,15 +246,15 @@ export const ClientDetailModal = ({
           {petsToShow?.map((pet, petIndex) => {
             const expiryDates = pet.plans
               ? calculateStackedExpiry(
-                  pet.plans.filter(
-                    (
-                      p,
-                    ): p is typeof p & {
-                      createdAt: string;
-                      duration: number;
-                    } => Boolean(p.createdAt && p.duration),
-                  ),
-                )
+                pet.plans.filter(
+                  (
+                    p,
+                  ): p is typeof p & {
+                    createdAt: string;
+                    duration: number;
+                  } => Boolean(p.createdAt && p.duration),
+                ),
+              )
               : [];
 
             return (
@@ -357,29 +369,31 @@ export const ClientDetailModal = ({
                           )}
                           <div className="flex items-center gap-2">
                             {index === 0 && (
-                              <select
-                                value={planStatuses[plan._id] ?? ''}
-                                onChange={async (e) => {
-                                  if (!e.target.value) return;
-                                  const newStatus = e.target
-                                    .value as PlanStatus;
-                                  setPlanStatuses((prev) => ({
-                                    ...prev,
-                                    [plan._id]: newStatus,
-                                  }));
-                                  await ClientService.updatePlanStatus(
-                                    plan._id,
-                                    newStatus,
-                                  );
-                                  onRefresh?.();
-                                }}
-                                className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
-                              >
-                                <option value="">—</option>
-                                <option value="RIP">RIP</option>
-                                <option value="encontrado">Encontrado</option>
-                              </select>
+                              <Text variant="small" color="text-gray-500">
+                                Estatus del plan:
+                              </Text>
                             )}
+                            <select
+                              value={planStatuses[plan._id] ?? ''}
+                              onChange={async (e) => {
+                                if (!e.target.value) return;
+                                const newStatus = e.target.value as PlanStatus;
+                                setPlanStatuses((prev) => ({
+                                  ...prev,
+                                  [plan._id]: newStatus,
+                                }));
+                                await ClientService.updatePlanStatus(
+                                  plan._id,
+                                  newStatus,
+                                );
+                                onRefresh?.();
+                              }}
+                              className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
+                            >
+                              <option value="">Seleccionar</option>
+                              <option value="RIP">RIP</option>
+                              <option value="encontrado">Encontrado</option>
+                            </select>
                           </div>
                           {expiryDates[index] && (
                             <Text variant="small" color="text-gray-500">
@@ -390,13 +404,13 @@ export const ClientDetailModal = ({
                                 {expiryDates[index] < new Date()
                                   ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                                   : expiryDates[index].toLocaleDateString(
-                                      'es-MX',
-                                      {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric',
-                                      },
-                                    )}
+                                    'es-MX',
+                                    {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                    },
+                                  )}
                               </span>
                             </Text>
                           )}
@@ -419,38 +433,50 @@ export const ClientDetailModal = ({
               <div className="flex flex-col gap-2">
                 <textarea
                   value={notesValue}
-                  onChange={(e) => setNotesValue(e.target.value)}
-                  maxLength={500}
+                  onChange={(e) => setNotesValue(stripEmojis(e.target.value))}
+                  maxLength={200}
                   rows={3}
                   className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
                   autoFocus
                 />
-                <div className="flex gap-2 justify-end">
-                  <button
-                    onClick={async () => {
-                      await ClientService.updateClient(client._id, {
-                        notes: notesValue,
-                      });
-                      setEditingNotes(false);
-                      onUpdate(detail?.conversation ?? '');
-                    }}
-                    className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
-                  >
-                    <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
-                      Guardar
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setNotesValue(detail?.notes ?? '');
-                      setEditingNotes(false);
-                    }}
-                    className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
-                  >
-                    <span className="text-xs text-gray-400 group-hover:text-red-400">
-                      Cancelar
-                    </span>
-                  </button>
+                <div className="flex gap-2 justify-between items-center">
+                  <div>
+                    <Text
+                      variant="small"
+                      as="span"
+                      weight="medium"
+                      className="text-emerald-700"
+                    >
+                      Quedan {200 - notesValue.length} caracteres
+                    </Text>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={async () => {
+                        await ClientService.updateClient(client._id, {
+                          notes: notesValue,
+                        });
+                        setEditingNotes(false);
+                        onUpdate(detail?.conversation ?? '');
+                      }}
+                      className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
+                    >
+                      <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                        Guardar
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setNotesValue(detail?.notes ?? '');
+                        setEditingNotes(false);
+                      }}
+                      className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
+                    >
+                      <span className="text-xs text-gray-400 group-hover:text-red-400">
+                        Cancelar
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (

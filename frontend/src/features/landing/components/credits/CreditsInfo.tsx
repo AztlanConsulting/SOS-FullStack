@@ -7,7 +7,7 @@ const CreditsInfo = () => {
         <div className=" lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="text-center mb-6 lg:mb-10">
             <Text as="h1" variant="h1" weight="medium">
-              Creditos de imagenes
+              Créditos de imagenes
             </Text>
           </div>
           <div className="flex-1 order-2 lg:order-1 text-left">

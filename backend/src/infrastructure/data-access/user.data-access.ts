@@ -152,8 +152,9 @@ export const userDataAccess: UserRepository = {
   getUsersWithPets: async (
     page: number,
     search?: string,
+    limit?: number,
   ): Promise<GetClientsResult> => {
-    const LIMIT = 10;
+    const LIMIT = limit ?? 10;
     const skip = (page - 1) * LIMIT;
 
     const [result] = await UserModel.aggregate([

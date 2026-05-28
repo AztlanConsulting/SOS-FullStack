@@ -1,13 +1,10 @@
 import { NavLink } from 'react-router';
 import {
   HiUsers,
-  HiLink,
   HiBookOpen,
   HiCog,
   HiClipboardList,
 } from 'react-icons/hi';
-import { HiUserGroup } from 'react-icons/hi';
-import { FaDog } from 'react-icons/fa6';
 import { TbLogout } from 'react-icons/tb';
 import { Text } from '@/shared/components/ui/Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -16,9 +13,6 @@ import whiteIcon from '@/assets/images/whiteIcon.webp';
 
 const NAV_ITEMS = [
   { label: 'Clientes', icon: HiUsers, path: '/clientes', enabled: true },
-  { label: 'Mascotas', icon: FaDog, path: '/pets', enabled: false },
-  { label: 'Links', icon: HiLink, path: '/links', enabled: false },
-  { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
   { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
   { label: 'Recursos', icon: HiCog, path: '/resources', enabled: false },
   { label: 'Planes', icon: HiClipboardList, path: '/plans', enabled: false },
@@ -30,7 +24,7 @@ export const Sidebar = () => {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden md:flex flex-col h-screen w-52 lg:w-64 bg-primary px-4 py-6 shrink-0 sticky top-0 overflow-y-auto sidebar-scrollbar overflow-x-hidden">
+      <div className="hidden lg:flex flex-col h-screen w-52 lg:w-64 bg-primary px-4 py-6 shrink-0 fixed top-0 left-0 overflow-x-hidden">
         <div className="flex justify-center mb-2">
           <NavLink to="/">
             <img
@@ -84,7 +78,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Mobile bottom nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-primary z-50 px-2 py-2">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-primary z-50 px-2 py-2 w-full overflow-hidden">
         <nav className="flex items-center justify-around">
           {NAV_ITEMS.map(({ label, icon: Icon, path, enabled }) =>
             enabled ? (
@@ -126,7 +120,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Mobile bottom padding so content doesn't hide behind nav */}
-      <div className="md:hidden h-16" />
+      <div className="lg:hidden h-16" />
     </>
   );
 };

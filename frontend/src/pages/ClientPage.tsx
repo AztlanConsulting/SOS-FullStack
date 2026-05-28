@@ -70,16 +70,17 @@ export const ClientsPage = () => {
     fetchClients,
     filters,
     setFilters,
+    exportClients,
   } = useClients();
 
   return (
-    <div className="flex min-h-screen bg-[#F6F6F6]">
+    <div className="flex min-h-screen bg-[#F6F6F6] overflow-x-hidden w-full">
       <Sidebar />
 
-      <div className="flex-1 p-6 pb-24 md:pb-6 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-full md:w-1/2 flex">
-            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[320px] overflow-hidden">
+      <div className="flex-1 p-4 lg:p-6 pb-24 lg:pb-6 flex flex-col gap-6 min-w-0 overflow-x-hidden lg:ml-64">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full lg:w-1/2 flex">
+            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[280px] lg:h-[320px] overflow-hidden">
               <Text variant="h3" weight="regular" className="mb-4">
                 Planes activos
               </Text>
@@ -92,8 +93,8 @@ export const ClientsPage = () => {
               )}
             </div>
           </div>
-          <div className="w-full md:w-1/2">
-            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[320px] overflow-hidden">
+          <div className="w-full lg:w-1/2">
+            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[280px] lg:h-[320px] overflow-hidden">
               <Text variant="h3" weight="regular" className="mb-4">
                 Visitas
               </Text>
@@ -135,10 +136,11 @@ export const ClientsPage = () => {
                 variant="toolbar"
                 label="Exportar"
                 icon={HiDownload}
-                onClick={() =>
+                onClick={async () => {
+                  const all = await exportClients();
                   exportToCSV(
                     'clientes',
-                    clients.map((c) => ({
+                    all.map((c: ClientListItem) => ({
                       Nombre: c.username,
                       Email: c.email,
                       Teléfono: c.phone,
@@ -147,8 +149,8 @@ export const ClientsPage = () => {
                       Estatus: c.plan?.status ?? '-',
                       Conversación: c.conversation ?? '-',
                     })),
-                  )
-                }
+                  );
+                }}
               />
             </div>
             <div className="flex items-center gap-2">

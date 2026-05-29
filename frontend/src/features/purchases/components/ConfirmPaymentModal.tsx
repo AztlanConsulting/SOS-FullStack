@@ -112,7 +112,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
               </Text>
 
               <Text variant="small" className="text-gray-400 mb-4 block">
-                El correo puede tardar hasta 5-10 minutos en llegar
+                El correo puede tardar 5-10 minutos en llegar
               </Text>
             </>
           )}

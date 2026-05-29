@@ -32,7 +32,15 @@ export const ClientController = {
       const limit = req.query.limit
         ? parseInt(req.query.limit as string)
         : undefined;
-      const result = await getClients(deps, { page, search, limit });
+      const status = req.query.status as string | undefined;
+      const conversation = req.query.conversation as 'con' | 'sin' | undefined;
+      const result = await getClients(deps, {
+        page,
+        search,
+        limit,
+        status,
+        conversation,
+      });
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching clients' });

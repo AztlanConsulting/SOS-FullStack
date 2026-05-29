@@ -153,6 +153,8 @@ export const userDataAccess: UserRepository = {
     page: number,
     search?: string,
     limit?: number,
+    status?: string,
+    conversation?: 'con' | 'sin',
   ): Promise<GetClientsResult> => {
     const LIMIT = limit ?? 10;
     const skip = (page - 1) * LIMIT;
@@ -184,7 +186,6 @@ export const userDataAccess: UserRepository = {
         },
       },
       { $match: { 'payments.0.status': 'succeeded' } },
-      // Unwind pets so each pet becomes its own row
       {
         $lookup: {
           from: 'pets',
@@ -194,9 +195,114 @@ export const userDataAccess: UserRepository = {
         },
       },
       { $unwind: { path: '$pets', preserveNullAndEmptyArrays: false } },
-      ...(search != null
+      ...(search != null && search !== ''
         ? [{ $match: { username: { $regex: search, $options: 'i' } } }]
         : []),
+      {
+        $lookup: {
+          from: 'purchasedplans',
+          let: { petId: '$pets._id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$petId', '$$petId'] } } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'plans',
+        },
+      },
+      {
+        $addFields: {
+          newestPlan: { $arrayElemAt: ['$plans', 0] },
+        },
+      },
+      {
+        $addFields: {
+          newestPlan: {
+            $cond: {
+              if: { $gt: [{ $size: { $ifNull: ['$plans', []] } }, 0] },
+              then: {
+                $mergeObjects: [
+                  { $arrayElemAt: ['$plans', 0] },
+                  {
+                    status: {
+                      $let: {
+                        vars: {
+                          p: { $arrayElemAt: ['$plans', 0] },
+                          expiresAt: {
+                            $add: [
+                              { $arrayElemAt: ['$plans.createdAt', 0] },
+                              {
+                                $multiply: [
+                                  { $arrayElemAt: ['$plans.duration', 0] },
+                                  24 * 60 * 60 * 1000,
+                                ],
+                              },
+                            ],
+                          },
+                          now: '$$NOW',
+                        },
+                        in: {
+                          $cond: {
+                            if: {
+                              $in: [
+                                { $arrayElemAt: ['$plans.status', 0] },
+                                ['RIP', 'encontrado', 'expirado'],
+                              ],
+                            },
+                            then: { $arrayElemAt: ['$plans.status', 0] },
+                            else: {
+                              $switch: {
+                                branches: [
+                                  {
+                                    case: { $lt: ['$$expiresAt', '$$now'] },
+                                    then: 'expirado',
+                                  },
+                                  {
+                                    case: {
+                                      $lt: [
+                                        '$$expiresAt',
+                                        {
+                                          $add: ['$$now', 24 * 60 * 60 * 1000],
+                                        },
+                                      ],
+                                    },
+                                    then: 'casi expira',
+                                  },
+                                  {
+                                    case: { $gt: ['$$expiresAt', '$$now'] },
+                                    then: 'continua',
+                                  },
+                                ],
+                                default: 'expirado',
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+              else: null,
+            },
+          },
+        },
+      },
+      ...(status ? [{ $match: { 'newestPlan.status': status } }] : []),
+      ...(conversation === 'con'
+        ? [{ $match: { conversation: { $exists: true, $nin: ['', null] } } }]
+        : conversation === 'sin'
+          ? [
+              {
+                $match: {
+                  $or: [
+                    { conversation: { $exists: false } },
+                    { conversation: '' },
+                    { conversation: null },
+                  ],
+                },
+              },
+            ]
+          : []),
       { $sort: { createdAt: -1 } },
       {
         $facet: {
@@ -204,22 +310,12 @@ export const userDataAccess: UserRepository = {
             { $skip: skip },
             { $limit: LIMIT },
             {
-              $lookup: {
-                from: 'purchasedplans',
-                let: { petId: '$pets._id' },
-                pipeline: [
-                  { $match: { $expr: { $eq: ['$petId', '$$petId'] } } },
-                  { $sort: { createdAt: -1 } },
-                ],
-                as: 'plans',
-              },
-            },
-            {
               $addFields: {
                 pet: '$pets',
+                plan: '$newestPlan',
               },
             },
-            { $project: { password: 0, pets: 0 } },
+            { $project: { password: 0, pets: 0, plans: 0, newestPlan: 0 } },
           ],
           total: [{ $count: 'count' }],
         },
@@ -227,59 +323,9 @@ export const userDataAccess: UserRepository = {
     ]);
 
     const total = result?.total?.[0]?.count ?? 0;
-    const clients = (result?.data ?? []).map((client: any) => {
-      if (client.plans && client.plans.length > 0) {
-        const sorted = [...client.plans].sort(
-          (a: any, b: any) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-
-        const newest = sorted[0];
-
-        if (newest.status !== 'RIP' && newest.status !== 'encontrado') {
-          const now = new Date();
-          let expiresAt: Date;
-
-          if (sorted.length > 1) {
-            const prev = sorted[1];
-            const prevExpiry = new Date(
-              new Date(prev.createdAt).getTime() +
-                prev.duration * 24 * 60 * 60 * 1000,
-            );
-            if (prevExpiry > now) {
-              const remaining = prevExpiry.getTime() - now.getTime();
-              expiresAt = new Date(
-                now.getTime() +
-                  remaining +
-                  newest.duration * 24 * 60 * 60 * 1000,
-              );
-            } else {
-              expiresAt = new Date(
-                new Date(newest.createdAt).getTime() +
-                  newest.duration * 24 * 60 * 60 * 1000,
-              );
-            }
-          } else {
-            expiresAt = new Date(
-              new Date(newest.createdAt).getTime() +
-                newest.duration * 24 * 60 * 60 * 1000,
-            );
-          }
-
-          const ms = expiresAt.getTime() - now.getTime();
-          if (ms < 0) newest.status = 'expirado';
-          else if (ms < 24 * 60 * 60 * 1000) newest.status = 'casi expira';
-          else newest.status = 'continua';
-        }
-
-        client.plan = newest;
-        delete client.plans;
-      }
-      return client;
-    });
 
     return {
-      clients,
+      clients: result?.data ?? [],
       total,
       page,
       totalPages: Math.ceil(total / LIMIT),

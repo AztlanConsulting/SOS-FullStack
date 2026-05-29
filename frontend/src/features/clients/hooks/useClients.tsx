@@ -13,8 +13,7 @@ const DEBOUNCE_DELAY = 300;
  * useClients Hook
  *
  * Manages the state and business logic for fetching, filtering, and paginating
- * the clients list. It coordinates complex state interactions like debouncing
- * search inputs and resetting pagination when filters change.
+ * the clients list. Filters are now handled server-side for accurate pagination.
  */
 export const useClients = () => {
   const [clients, setClients] = useState<ClientListItem[]>([]);
@@ -33,13 +32,16 @@ export const useClients = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
+  // Reset page to 1 when search or filters change
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, filters]);
+
   /**
    * Core Fetch Logic:
    * Memoized using useCallback to prevent unnecessary re-renders in child components.
    *
-   * When client-side filters are active (status or conversation), fetches all results
-   * without pagination to ensure accurate filtering. Otherwise uses normal pagination.
-   *
+   * Filters are applied server-side for accurate pagination.
    * Uses AbortController to cancel previous requests if a new one is initiated.
    */
   const fetchClients = useCallback(async () => {
@@ -53,12 +55,14 @@ export const useClients = () => {
 
     setLoading(true);
     setError(null);
+    setClients([]);
     try {
-      const hasClientFilter = filters.status || filters.conversation;
       const params = new URLSearchParams({
-        page: hasClientFilter ? '1' : String(page), // ← always use 1 when filtering
-        ...(hasClientFilter ? { limit: '9999' } : {}),
+        page: String(page),
+        limit: String(10),
         search: debouncedSearch,
+        ...(filters.status ? { status: filters.status } : {}),
+        ...(filters.conversation ? { conversation: filters.conversation } : {}),
       });
 
       const res = await axiosInstance.get(`/clientDashboard?${params}`, {
@@ -66,32 +70,8 @@ export const useClients = () => {
       });
       const result = res.data;
 
-      console.log(
-        'before filter:',
-        result.clients.map((c: any) => ({
-          name: c.username,
-          status: c.plan?.status,
-        })),
-      );
-      console.log('filter value:', filters.status);
-
-      /**
-       * Client-side Filtering:
-       * Status and Conversation filters are applied here.
-       */
-      const filtered = result.clients
-        .filter(
-          (c: ClientListItem) =>
-            !filters.status || c.plan?.status === filters.status,
-        )
-        .filter((c: ClientListItem) => {
-          if (!filters.conversation) return true;
-          if (filters.conversation === 'con') return Boolean(c.conversation);
-          return !c.conversation;
-        });
-
-      setClients(filtered);
-      setTotalPages(hasClientFilter ? 1 : result.totalPages);
+      setClients(res.data.clients);
+      setTotalPages(res.data.totalPages);
     } catch (err: any) {
       // Ignore abort errors
       if (err.name !== 'CanceledError') {
@@ -130,19 +110,17 @@ export const useClients = () => {
    */
   const exportClients = useCallback(async () => {
     try {
+      const params = new URLSearchParams({
+        page: '1',
+        limit: '9999',
+        search: debouncedSearch,
+        ...(filters.status ? { status: filters.status } : {}),
+        ...(filters.conversation ? { conversation: filters.conversation } : {}),
+      });
       const res = await axiosInstance.get(
-        `/clientDashboard?${new URLSearchParams({ page: '1', limit: '9999', search: debouncedSearch })}`,
+        `/clientDashboard?${params}`,
       );
-      return res.data.clients
-        .filter(
-          (c: ClientListItem) =>
-            !filters.status || c.plan?.status === filters.status,
-        )
-        .filter((c: ClientListItem) => {
-          if (!filters.conversation) return true;
-          if (filters.conversation === 'con') return Boolean(c.conversation);
-          return !c.conversation;
-        });
+      return res.data.clients;
     } catch (err) {
       console.error('Failed to export clients:', err);
       return [];

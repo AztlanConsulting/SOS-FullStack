@@ -18,6 +18,8 @@ export interface UserRepository {
     page: number,
     search?: string,
     limit?: number,
+    status?: string,
+    conversation?: 'con' | 'sin',
   ): Promise<GetClientsResult>;
   getClientDetail(id: string): Promise<ClientDetail | null>;
   updateUser(id: string, data: Partial<User>): Promise<void>;

@@ -21,6 +21,9 @@ const getProgressColor = (progressPercentage: number) => {
   return 'var(--color-status-ok)';
 };
 
+const clampPercentage = (percentage: number) =>
+  Math.min(100, Math.max(0, percentage));
+
 export const CountdownChart = ({
   data,
   size = 'default',
@@ -166,7 +169,8 @@ export const CountdownChart = ({
   console.log('Days Remaining:', daysRemaining);
   console.log('Days Used:', daysUsed);
 
-  const progressPercentage = totalDays > 0 ? (totalDays * 100) / daysUsed : 0;
+  const progressPercentage =
+    totalDays > 0 ? clampPercentage((daysRemaining * 100) / totalDays) : 0;
 
   const progressColor = getProgressColor(progressPercentage);
   const chartFrameStyle =
@@ -184,8 +188,8 @@ export const CountdownChart = ({
       : { bottom: '0px', transform: 'translateX(-50%)' };
 
   const pieData = [
-    { name: 'Transcurrido', value: daysRemaining },
-    { name: 'Restante', value: daysUsed },
+    { name: 'Restante', value: daysRemaining },
+    { name: 'Transcurrido', value: daysUsed },
   ];
 
   return (

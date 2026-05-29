@@ -35,7 +35,7 @@ const PetCard = ({ petInfo }: Props) => {
         <div className="px-2 py-1">
           <Text className="text-gray-500">
             {petInfo.location.slice(0, 40) +
-              (petInfo.location.length >= 20 && '...')}
+              (petInfo.location.length >= 20 ? '...' : '')}
           </Text>
         </div>
       </section>

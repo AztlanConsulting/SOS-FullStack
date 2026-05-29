@@ -34,9 +34,6 @@ export const ClientsPage = () => {
     month: new Date().getMonth() + 1,
   });
 
-  const [isExporting, setIsExporting] = useState(false);
-  const [exportError, setExportError] = useState<string | null>(null);
-
   const [selectedPetId, setSelectedPetId] = useState<string | undefined>(
     undefined,
   );

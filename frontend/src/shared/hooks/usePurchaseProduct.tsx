@@ -15,6 +15,13 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
     const normalizedName = name.trim().replace(/\s+/g, ' ');
     const nameParts = normalizedName.split(' ');
 
+    return nameParts.length >= 2;
+  };
+
+  const isCharacterValid = (name: string) => {
+    const normalizedName = name.trim().replace(/\s+/g, ' ');
+    const nameParts = normalizedName.split(' ');
+
     return (
       nameParts.length >= 2 &&
       nameParts[0].length >= 2 &&
@@ -46,10 +53,13 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
     const trimmedEmail = userEmail.trim();
 
     const nameValid = isValidName(userName);
+    const nameCharacterValid = isCharacterValid(userName);
     const emailValid = isValidEmail(trimmedEmail);
 
     if (!nameValid) {
       setNameError('Ingresa nombre y apellido para contactarte');
+    } else if (!nameCharacterValid) {
+      setNameError('El nombre y apellido deben tener al menos 2 caracteres');
     } else {
       setNameError('');
     }

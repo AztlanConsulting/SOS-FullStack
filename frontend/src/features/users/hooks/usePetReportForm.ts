@@ -203,7 +203,7 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
 
     if (!formData.contactName || !hasTwoCharacters(formData.contactName)) {
       newErrors.contactName =
-        'El nombre y/o apellido del dueño debe tener al menos 2 caracteres';
+        'El nombre y apellido deben tener al menos 2 caracteres cada uno';
     }
 
     if (!formData.phoneNumber || isPhoneEmpty(formData.phoneNumber)) {

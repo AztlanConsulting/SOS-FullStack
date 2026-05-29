@@ -59,7 +59,9 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
     if (!nameValid) {
       setNameError('Ingresa nombre y apellido para contactarte');
     } else if (!nameCharacterValid) {
-      setNameError('El nombre y apellido deben tener al menos 2 caracteres');
+      setNameError(
+        'El nombre y apellido deben tener al menos 2 caracteres cada uno',
+      );
     } else {
       setNameError('');
     }

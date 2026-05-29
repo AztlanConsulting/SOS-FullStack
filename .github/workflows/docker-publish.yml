@@ -108,4 +108,4 @@ jobs:
     steps:
       - name: Trigger webhook
         run: |
-          curl -X POST https://encontrandomascotas.com:9000/hooks/redeploy-webhook
+          curl -X POST http://encontrandomascotas.com:9000/hooks/redeploy-webhook

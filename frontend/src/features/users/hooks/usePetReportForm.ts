@@ -32,7 +32,16 @@ const isPhoneEmpty = (phone: string) => {
 };
 
 const hasFirstAndLastName = (name: string) => {
-  return name.trim().split(/\s+/).filter(Boolean).length >= 2;
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length < 2) return false;
+  return true;
+};
+
+const hasTwoCharacters = (name: string) => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const first = parts[0];
+  const last = parts[parts.length - 1];
+  return first.length >= 2 && last.length >= 2;
 };
 
 export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
@@ -190,8 +199,12 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
       }
     }
 
-    if (!formData.contactName || !hasFirstAndLastName(formData.contactName))
+    if (!formData.contactName || !hasFirstAndLastName(formData.contactName)) {
       newErrors.contactName = 'Ingresa nombre y apellido del dueño';
+    } else if (!hasTwoCharacters(formData.contactName)) {
+      newErrors.contactName =
+        'El nombre y/o apellido deben tener al menos 2 caracteres';
+    }
 
     if (!formData.phoneNumber || isPhoneEmpty(formData.phoneNumber)) {
       newErrors.phoneNumber = 'Ingresa un número de teléfono';

@@ -16,6 +16,7 @@ import { useClientDetail } from '@/features/clients/hooks/useClientDetail';
 import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientService } from '@/features/clients/services/client.service';
 import { calculateStackedExpiry } from '@/shared/utils/planDates';
+import LoadingSpinner from '../LoadingSpinner';
 
 interface Props {
   client: ClientListItem;
@@ -189,13 +190,9 @@ export const ClientDetailModal = ({
     <>
       <Modal title={client.username} onClose={onClose}>
         {loading && (
-          <Text
-            variant="caption"
-            color="text-gray-400"
-            className="text-center py-4"
-          >
-            Cargando...
-          </Text>
+          <div className="min-h-64 flex items-center justify-center">
+            <LoadingSpinner />
+          </div>
         )}
         {error && (
           <Text

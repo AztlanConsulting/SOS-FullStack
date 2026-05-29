@@ -1,4 +1,8 @@
-import { useGeocoding } from '@features/map/hooks/useGeocoding';
+import {
+  ADDRESS_SEARCH_MAX_LENGTH,
+  useGeocoding,
+} from '@features/map/hooks/useGeocoding';
+import { Input } from '@shared/components/ui/Input';
 
 const AddressSearch = () => {
   const { query, results, isLoading, handleSearch, handleSelect } =
@@ -6,19 +10,15 @@ const AddressSearch = () => {
 
   return (
     <div style={{ position: 'relative', marginBottom: '12px' }}>
-      <input
+      <Input
+        id="address-search"
+        label="Dirección"
         type="text"
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
+        maxLength={ADDRESS_SEARCH_MAX_LENGTH}
+        hasLength={true}
         placeholder="Busca la dirección donde perdiste a tu perro..."
-        style={{
-          width: '100%',
-          padding: '10px 14px',
-          fontSize: '14px',
-          borderRadius: '8px',
-          border: '2px solid #ccc',
-          boxSizing: 'border-box',
-        }}
       />
 
       {isLoading && (

@@ -3,7 +3,11 @@ import { LeafletMapService } from '../services/leafletMapService';
 import { PhotonGeocoding } from '@features/map/services/photonGeocodingService';
 import type { GeocodingResult } from '@features/map/types/geocodingResult';
 
-const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
+export const ADDRESS_SEARCH_MAX_LENGTH = 200;
+
+const DEFAULT_LOCATION_LABEL = '';
+const limitAddressLength = (value: string) =>
+  value.slice(0, ADDRESS_SEARCH_MAX_LENGTH);
 
 type MarkerAddressPayload = {
   coords: [number, number];
@@ -37,10 +41,12 @@ export function useGeocoding(
 
   // Handles the logic as the user types it out
   const handleSearch = useCallback((value: string) => {
-    setQuery(value);
+    const limitedValue = limitAddressLength(value);
+
+    setQuery(limitedValue);
 
     // Helps us avoid API requests in the case the query is too short
-    if (value.trim().length < 3) {
+    if (limitedValue.trim().length < 3) {
       setResults([]);
       return [];
     }
@@ -53,7 +59,7 @@ export function useGeocoding(
     debounceRef.current = setTimeout(async () => {
       setIsLoading(true);
 
-      const found = await PhotonGeocoding.search(value);
+      const found = await PhotonGeocoding.search(limitedValue);
 
       setResults(found);
       setIsLoading(false);
@@ -65,7 +71,7 @@ export function useGeocoding(
     LeafletMapService.flyTo(result.coords);
     LeafletMapService.placeMarker(result.coords, false);
 
-    setQuery(result.displayName);
+    setQuery(limitAddressLength(result.displayName));
     setResults([]);
   }, []);
 
@@ -75,7 +81,9 @@ export function useGeocoding(
       const result = await PhotonGeocoding.reverse(coords);
 
       if (result) {
-        setQuery(result.displayName);
+        const address = limitAddressLength(result.displayName);
+
+        setQuery(address);
         const isComplete = Boolean(
           result.properties?.city &&
           result.properties?.state &&
@@ -83,7 +91,7 @@ export function useGeocoding(
         );
         onMarkerAddressChange?.({
           coords: result.coords,
-          address: result.displayName,
+          address,
           properties: result.properties,
           isComplete,
         });

@@ -19,7 +19,7 @@ const createLostPetReportController = async (req: Request, res: Response) => {
   try {
     const images = req.files as Express.Multer.File[] | undefined;
 
-    if (!images || images.length === 0) {
+    if (!images || images.length < 2) {
       return res.status(400).json({ error: 'Se requiere al menos una imagen' });
     }
 

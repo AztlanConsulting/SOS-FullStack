@@ -60,6 +60,9 @@ export const ClientsPage = () => {
   const [selectedClient, setSelectedClient] = useState<ClientListItem | null>(
     null,
   );
+  // State to track export errors and loading
+  const [exportError, setExportError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   // Custom hook managing the fetch logic, pagination state, and filter parameters
   const {
     clients,
@@ -139,6 +142,7 @@ export const ClientsPage = () => {
                 variant="toolbar"
                 label="Exportar"
                 icon={HiDownload}
+                disabled={isExporting}
                 onClick={async () => {
                   if (clients.length === 0) {
                     setExportError('No hay clientes para exportar');

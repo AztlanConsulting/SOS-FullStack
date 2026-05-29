@@ -228,6 +228,7 @@ const EditableLocation = ({
     updateForm({ location: tempLostPetReportData.location });
     updateForm({ locationCoords: tempLostPetReportData.locationCoords });
     updateForm({ address: tempLostPetReportData.address });
+    closeEdit();
   };
 
   const cancel = () => {

@@ -11,7 +11,7 @@ const WorkshopSearchInput = ({ handleSearch }: Props) => {
         type="search"
         id="manuals-search"
         name="manuals-search"
-        placeholder="Buscar..."
+        placeholder="Buscar por título..."
         onChange={(event) => handleSearch(event.target.value)}
         className="bg-transparent outline-none text-black placeholder-gray-500 w-full h-full"
       />

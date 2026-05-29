@@ -99,3 +99,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # ── Webhook ──────────────────────────────────────────────────────────────────
+  trigger-webhook:
+    name: Trigger Redeploy Webhook
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+    
+    steps:
+      - name: Trigger webhook
+        run: |
+          curl -X POST https://encontrandomascotas.com:9000/hooks/redeploy-webhook

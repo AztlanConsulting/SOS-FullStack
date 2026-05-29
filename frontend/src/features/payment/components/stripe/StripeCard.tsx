@@ -7,6 +7,7 @@ import { useCheckout } from '@/features/payment/hooks/useCheckOut';
 import { Text } from '@/shared/components/ui/Text';
 import { Button } from '@/shared/components/ui/Button/Button';
 import { CopyButton } from '@/shared/components/ui/CopyButton';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 
 interface Props {
   data: Order;
@@ -468,7 +469,12 @@ export const StripeCard = ({
     );
   };
 
-  if (loading) return <p className="align-center">Cargando...</p>;
+  if (loading)
+    return (
+      <p className="align-center">
+        <LoadingSpinner />
+      </p>
+    );
 
   if (data.method === 'card') {
     return clientSecret ? (

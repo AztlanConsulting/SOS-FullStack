@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router';
 import { useAuth } from '@features/auth/hooks/useAuth';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 
 interface RoleProtectedRouteProps {
   children: React.ReactNode;
@@ -19,7 +20,12 @@ export const RoleProtectedRoute = ({
   const { user, isAuthLoading } = useAuth();
   const location = useLocation();
 
-  if (isAuthLoading) return <p>Loading...</p>;
+  if (isAuthLoading)
+    return (
+      <div className="min-h-64 flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
 
   // Not authenticated → redirect to login
   if (!user) {

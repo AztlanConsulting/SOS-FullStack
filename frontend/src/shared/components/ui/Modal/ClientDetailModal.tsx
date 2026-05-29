@@ -16,6 +16,7 @@ import { useClientDetail } from '@/features/clients/hooks/useClientDetail';
 import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientService } from '@/features/clients/services/client.service';
 import { calculateStackedExpiry } from '@/shared/utils/planDates';
+import LoadingSpinner from '../LoadingSpinner';
 
 interface Props {
   client: ClientListItem;
@@ -36,13 +37,23 @@ export const ClientDetailModal = ({
   onRefresh,
   petId,
 }: Props) => {
-  const { client: detail, loading, error, refetch } = useClientDetail(client._id);
+  const {
+    client: detail,
+    loading,
+    error,
+    refetch,
+  } = useClientDetail(client._id);
   const [editingConversation, setEditingConversation] = useState(false);
   const [conversationValue, setConversationValue] = useState('');
-  const [planStatuses, setPlanStatuses] = useState<Record<string, PlanStatus>>({});
-  const [pendingDetailUpdate, setPendingDetailUpdate] = useState<PendingDetailUpdate | null>(null);
+  const [planStatuses, setPlanStatuses] = useState<Record<string, PlanStatus>>(
+    {},
+  );
+  const [pendingDetailUpdate, setPendingDetailUpdate] =
+    useState<PendingDetailUpdate | null>(null);
   const [isUpdatingDetail, setIsUpdatingDetail] = useState(false);
-  const [detailUpdateError, setDetailUpdateError] = useState<string | null>(null);
+  const [detailUpdateError, setDetailUpdateError] = useState<string | null>(
+    null,
+  );
   const [pendingStatusChange, setPendingStatusChange] = useState<{
     planId: string;
     planName: string;
@@ -51,7 +62,9 @@ export const ClientDetailModal = ({
     status: PlanStatus;
   } | null>(null);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
-  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null);
+  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(
+    null,
+  );
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState('');
 
@@ -69,7 +82,9 @@ export const ClientDetailModal = ({
     if (detail?.pets) {
       const statuses: Record<string, PlanStatus> = {};
       detail.pets.forEach((pet) => {
-        pet.plans?.forEach((p) => { statuses[p._id] = p.status; });
+        pet.plans?.forEach((p) => {
+          statuses[p._id] = p.status;
+        });
       });
       setPlanStatuses(statuses);
     }
@@ -92,7 +107,12 @@ export const ClientDetailModal = ({
   const getStatusLabel = (status: PlanStatus | '') =>
     status ? statusLabels[status] : '---';
 
-  const irreversibleSourceStatuses: Array<PlanStatus | ''> = ['', 'continua', 'casi expira', 'expirado'];
+  const irreversibleSourceStatuses: Array<PlanStatus | ''> = [
+    '',
+    'continua',
+    'casi expira',
+    'expirado',
+  ];
   const finalStatuses: PlanStatus[] = ['RIP', 'encontrado'];
 
   const isIrreversibleStatusChange = () => {
@@ -106,7 +126,9 @@ export const ClientDetailModal = ({
   const getStatusChangeDescription = () => {
     if (!pendingStatusChange) return '';
     const base = `¿Está segura de marcar el plan ${pendingStatusChange.planName} de ${pendingStatusChange.petName} como ${statusLabels[pendingStatusChange.status]}?`;
-    if (irreversibleSourceStatuses.includes(pendingStatusChange.previousStatus)) {
+    if (
+      irreversibleSourceStatuses.includes(pendingStatusChange.previousStatus)
+    ) {
       return `${base} Toma en cuenta que, una vez guardado, no se podrá regresar al estado ${getStatusLabel(pendingStatusChange.previousStatus).toLowerCase()}.`;
     }
     return base;
@@ -118,11 +140,16 @@ export const ClientDetailModal = ({
     setDetailUpdateError(null);
     try {
       if (pendingDetailUpdate.type === 'conversation') {
-        await ClientService.updateConversation(client._id, pendingDetailUpdate.value);
+        await ClientService.updateConversation(
+          client._id,
+          pendingDetailUpdate.value,
+        );
         setEditingConversation(false);
         onUpdate(pendingDetailUpdate.value);
       } else {
-        await ClientService.updateClient(client._id, { notes: pendingDetailUpdate.value });
+        await ClientService.updateClient(client._id, {
+          notes: pendingDetailUpdate.value,
+        });
         setEditingNotes(false);
         onUpdate(detail?.conversation ?? '');
       }
@@ -141,8 +168,14 @@ export const ClientDetailModal = ({
     setIsUpdatingStatus(true);
     setStatusUpdateError(null);
     try {
-      await ClientService.updatePlanStatus(pendingStatusChange.planId, pendingStatusChange.status);
-      setPlanStatuses((prev) => ({ ...prev, [pendingStatusChange.planId]: pendingStatusChange.status }));
+      await ClientService.updatePlanStatus(
+        pendingStatusChange.planId,
+        pendingStatusChange.status,
+      );
+      setPlanStatuses((prev) => ({
+        ...prev,
+        [pendingStatusChange.planId]: pendingStatusChange.status,
+      }));
       setPendingStatusChange(null);
       onRefresh?.();
       refetch();
@@ -157,40 +190,66 @@ export const ClientDetailModal = ({
     <>
       <Modal title={client.username} onClose={onClose}>
         {loading && (
-          <Text variant="caption" color="text-gray-400" className="text-center py-4">Cargando...</Text>
+          <div className="min-h-64 flex items-center justify-center">
+            <LoadingSpinner />
+          </div>
         )}
         {error && (
-          <Text variant="caption" color="text-red-500" className="text-center py-4">{error}</Text>
+          <Text
+            variant="caption"
+            color="text-red-500"
+            className="text-center py-4"
+          >
+            {error}
+          </Text>
         )}
         {detail && (
           <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-200px)] modal-scrollbar pr-6">
             <div className="grid grid-cols-2 gap-2">
               <div className="flex items-center gap-2">
                 <HiMail size={14} className="text-gray-400 shrink-0" />
-                <Text variant="small" color="text-gray-600" className="truncate">{detail.email}</Text>
+                <Text
+                  variant="small"
+                  color="text-gray-600"
+                  className="truncate"
+                >
+                  {detail.email}
+                </Text>
               </div>
               <div className="flex items-center gap-2">
                 <HiPhone size={14} className="text-gray-400 shrink-0" />
-                <Text variant="small" color="text-gray-600">{detail.phone}</Text>
+                <Text variant="small" color="text-gray-600">
+                  {detail.phone}
+                </Text>
               </div>
               {detail.fbUser && (
                 <div className="flex items-center gap-2">
-                  <Text variant="small" color="text-gray-400">FB:</Text>
-                  <Text variant="small" color="text-gray-600">{detail.fbUser}</Text>
+                  <Text variant="small" color="text-gray-400">
+                    FB:
+                  </Text>
+                  <Text variant="small" color="text-gray-600">
+                    {detail.fbUser}
+                  </Text>
                 </div>
               )}
               <div className="flex items-center gap-2">
                 <HiCalendar size={14} className="text-gray-400 shrink-0" />
                 <Text variant="small" color="text-gray-600">
                   {detail.createdAt
-                    ? new Date(detail.createdAt).toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                    ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })
                     : '—'}
                 </Text>
               </div>
               {detail.paymentMethod && (
                 <div className="flex items-center gap-2">
                   <HiCreditCard size={14} className="text-gray-400 shrink-0" />
-                  <Text variant="small" color="text-gray-600">{detail.paymentMethod}</Text>
+                  <Text variant="small" color="text-gray-600">
+                    {detail.paymentMethod}
+                  </Text>
                 </div>
               )}
               <div className="flex items-center gap-2 flex-1 col-span-2">
@@ -201,7 +260,9 @@ export const ClientDetailModal = ({
                       <input
                         type="url"
                         value={conversationValue}
-                        onChange={(e) => setConversationValue(stripEmojis(e.target.value))}
+                        onChange={(e) =>
+                          setConversationValue(stripEmojis(e.target.value))
+                        }
                         maxLength={100}
                         placeholder="https://..."
                         className="text-xs border border-gray-300 rounded px-2 py-1 min-w-0 flex-1 outline-none focus:border-yellow-400"
@@ -216,7 +277,10 @@ export const ClientDetailModal = ({
                               setConversationValue(value);
                             }
                             setDetailUpdateError(null);
-                            setPendingDetailUpdate({ type: 'conversation', value });
+                            setPendingDetailUpdate({
+                              type: 'conversation',
+                              value,
+                            });
                           }}
                           disabled={isUpdatingDetail}
                           className="text-xs text-primary font-medium hover:text-yellow-600 whitespace-nowrap"
@@ -237,7 +301,8 @@ export const ClientDetailModal = ({
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 flex-1 min-w-0">
-                    {conversationValue && conversationValue.startsWith('http') ? (
+                    {conversationValue &&
+                    conversationValue.startsWith('http') ? (
                       <a
                         href={conversationValue}
                         target="_blank"
@@ -247,7 +312,11 @@ export const ClientDetailModal = ({
                         {conversationValue}
                       </a>
                     ) : (
-                      <Text variant="small" color="text-gray-500" className="flex-1 truncate">
+                      <Text
+                        variant="small"
+                        color="text-gray-500"
+                        className="flex-1 truncate"
+                      >
                         {conversationValue || '—'}
                       </Text>
                     )}
@@ -255,8 +324,13 @@ export const ClientDetailModal = ({
                       onClick={() => setEditingConversation(true)}
                       className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
                     >
-                      <HiPencil size={11} className="text-gray-400 group-hover:text-[#C2991D]" />
-                      <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">Editar</span>
+                      <HiPencil
+                        size={11}
+                        className="text-gray-400 group-hover:text-[#C2991D]"
+                      />
+                      <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                        Editar
+                      </span>
                     </button>
                   </div>
                 )}
@@ -268,38 +342,86 @@ export const ClientDetailModal = ({
             {petsToShow?.map((pet, petIndex) => {
               const expiryDates = pet.plans
                 ? calculateStackedExpiry(
-                  pet.plans.filter(
-                    (p): p is typeof p & { createdAt: string; duration: number } =>
-                      Boolean(p.createdAt && p.duration),
-                  ),
-                )
+                    pet.plans.filter(
+                      (
+                        p,
+                      ): p is typeof p & {
+                        createdAt: string;
+                        duration: number;
+                      } => Boolean(p.createdAt && p.duration),
+                    ),
+                  )
                 : [];
 
               return (
                 <div key={pet._id} className="flex flex-col gap-2">
                   {petIndex > 0 && <div className="h-px bg-gray-200" />}
                   <div className="flex items-center gap-2">
-                    <Text variant="caption" weight="semibold">{pet.name}</Text>
-                    <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{pet.species}</span>
+                    <Text variant="caption" weight="semibold">
+                      {pet.name}
+                    </Text>
+                    <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                      {pet.species}
+                    </span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                    {pet.breed && <Text variant="small" color="text-gray-500">Raza: <span className="text-gray-700">{pet.breed}</span></Text>}
-                    {pet.color && <Text variant="small" color="text-gray-500">Color: <span className="text-gray-700">{pet.color}</span></Text>}
-                    {pet.size && <Text variant="small" color="text-gray-500">Tamaño: <span className="text-gray-700">{pet.size}</span></Text>}
-                    {pet.sex && <Text variant="small" color="text-gray-500">Sexo: <span className="text-gray-700">{pet.sex}</span></Text>}
+                    {pet.breed && (
+                      <Text variant="small" color="text-gray-500">
+                        Raza: <span className="text-gray-700">{pet.breed}</span>
+                      </Text>
+                    )}
+                    {pet.color && (
+                      <Text variant="small" color="text-gray-500">
+                        Color:{' '}
+                        <span className="text-gray-700">{pet.color}</span>
+                      </Text>
+                    )}
+                    {pet.size && (
+                      <Text variant="small" color="text-gray-500">
+                        Tamaño:{' '}
+                        <span className="text-gray-700">{pet.size}</span>
+                      </Text>
+                    )}
+                    {pet.sex && (
+                      <Text variant="small" color="text-gray-500">
+                        Sexo: <span className="text-gray-700">{pet.sex}</span>
+                      </Text>
+                    )}
                     {pet.location?.properties && (
-                      <Text variant="small" color="text-gray-500" className="col-span-2">
-                        Lugar: <span className="text-gray-700">
-                          {[pet.location.properties.city, pet.location.properties.state, pet.location.properties.country]
-                            .filter(Boolean).join(', ')}
+                      <Text
+                        variant="small"
+                        color="text-gray-500"
+                        className="col-span-2"
+                      >
+                        Lugar:{' '}
+                        <span className="text-gray-700">
+                          {[
+                            pet.location.properties.city,
+                            pet.location.properties.state,
+                            pet.location.properties.country,
+                          ]
+                            .filter(Boolean)
+                            .join(', ')}
                         </span>
                       </Text>
                     )}
                   </div>
                   {pet.description && (
                     <div className="bg-gray-50 rounded-lg p-3">
-                      <Text variant="small" color="text-gray-400" className="mb-1">Características</Text>
-                      <Text variant="small" color="text-gray-600" className="leading-relaxed">{pet.description}</Text>
+                      <Text
+                        variant="small"
+                        color="text-gray-400"
+                        className="mb-1"
+                      >
+                        Características
+                      </Text>
+                      <Text
+                        variant="small"
+                        color="text-gray-600"
+                        className="leading-relaxed"
+                      >
+                        {pet.description}
+                      </Text>
                     </div>
                   )}
                   {pet.plans && pet.plans.length > 0 && (
@@ -308,13 +430,38 @@ export const ClientDetailModal = ({
                         <div key={plan._id} className="flex flex-col gap-1">
                           {index > 0 && <div className="h-px bg-gray-100" />}
                           <div className="grid grid-cols-2 gap-x-4 gap-y-1 items-center">
-                            <Text variant="small" color="text-gray-500">Plan: <span className="text-gray-700">{plan.name}</span></Text>
-                            {plan.duration && <Text variant="small" color="text-gray-500">Duración: <span className="text-gray-700">{plan.duration} días</span></Text>}
-                            {plan.radius && <Text variant="small" color="text-gray-500">Radio: <span className="text-gray-700">{plan.radius} km</span></Text>}
+                            <Text variant="small" color="text-gray-500">
+                              Plan:{' '}
+                              <span className="text-gray-700">{plan.name}</span>
+                            </Text>
+                            {plan.duration && (
+                              <Text variant="small" color="text-gray-500">
+                                Duración:{' '}
+                                <span className="text-gray-700">
+                                  {plan.duration} días
+                                </span>
+                              </Text>
+                            )}
+                            {plan.radius && (
+                              <Text variant="small" color="text-gray-500">
+                                Radio:{' '}
+                                <span className="text-gray-700">
+                                  {plan.radius} km
+                                </span>
+                              </Text>
+                            )}
                             {plan.createdAt && (
                               <Text variant="small" color="text-gray-500">
-                                Fecha de inicio: <span className="text-gray-700">
-                                  {new Date(plan.createdAt).toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                Fecha de inicio:{' '}
+                                <span className="text-gray-700">
+                                  {new Date(plan.createdAt).toLocaleDateString(
+                                    'es-MX',
+                                    {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                    },
+                                  )}
                                 </span>
                               </Text>
                             )}
@@ -325,13 +472,15 @@ export const ClientDetailModal = ({
                                   disabled={isUpdatingStatus}
                                   onChange={(e) => {
                                     if (!e.target.value) return;
-                                    const newStatus = e.target.value as PlanStatus;
+                                    const newStatus = e.target
+                                      .value as PlanStatus;
                                     setStatusUpdateError(null);
                                     setPendingStatusChange({
                                       planId: plan._id,
                                       planName: plan.name,
                                       petName: pet.name,
-                                      previousStatus: planStatuses[plan._id] ?? '',
+                                      previousStatus:
+                                        planStatuses[plan._id] ?? '',
                                       status: newStatus,
                                     });
                                   }}
@@ -345,10 +494,20 @@ export const ClientDetailModal = ({
                             </div>
                             {expiryDates[index] && (
                               <Text variant="small" color="text-gray-500">
-                                Fecha final: <span className={`font-medium ${expiryDates[index] < new Date() ? 'text-red-500' : 'text-gray-700'}`}>
+                                Fecha final:{' '}
+                                <span
+                                  className={`font-medium ${expiryDates[index] < new Date() ? 'text-red-500' : 'text-gray-700'}`}
+                                >
                                   {expiryDates[index] < new Date()
                                     ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
-                                    : expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                    : expiryDates[index].toLocaleDateString(
+                                        'es-MX',
+                                        {
+                                          day: '2-digit',
+                                          month: '2-digit',
+                                          year: 'numeric',
+                                        },
+                                      )}
                                 </span>
                               </Text>
                             )}
@@ -364,7 +523,9 @@ export const ClientDetailModal = ({
             <div className="h-px bg-gray-100" />
 
             <div className="flex flex-col gap-2">
-              <Text variant="small" weight="medium" color="text-gray-500">Notas</Text>
+              <Text variant="small" weight="medium" color="text-gray-500">
+                Notas
+              </Text>
               {editingNotes ? (
                 <div className="flex flex-col gap-2">
                   <textarea
@@ -376,19 +537,29 @@ export const ClientDetailModal = ({
                     autoFocus
                   />
                   <div className="flex gap-2 justify-between items-center">
-                    <Text variant="small" as="span" weight="medium" className="text-emerald-700">
+                    <Text
+                      variant="small"
+                      as="span"
+                      weight="medium"
+                      className="text-emerald-700"
+                    >
                       Quedan {200 - notesValue.length} caracteres
                     </Text>
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
                           setDetailUpdateError(null);
-                          setPendingDetailUpdate({ type: 'notes', value: notesValue });
+                          setPendingDetailUpdate({
+                            type: 'notes',
+                            value: notesValue,
+                          });
                         }}
                         disabled={isUpdatingDetail}
                         className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
                       >
-                        <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">Guardar</span>
+                        <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                          Guardar
+                        </span>
                       </button>
                       <button
                         onClick={() => {
@@ -397,22 +568,33 @@ export const ClientDetailModal = ({
                         }}
                         className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
                       >
-                        <span className="text-xs text-gray-400 group-hover:text-red-400">Cancelar</span>
+                        <span className="text-xs text-gray-400 group-hover:text-red-400">
+                          Cancelar
+                        </span>
                       </button>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-start gap-2">
-                  <Text variant="small" color="text-gray-600" className="flex-1 break-all">
+                  <Text
+                    variant="small"
+                    color="text-gray-600"
+                    className="flex-1 break-all"
+                  >
                     {notesValue || 'Sin notas'}
                   </Text>
                   <button
                     onClick={() => setEditingNotes(true)}
                     className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
                   >
-                    <HiPencil size={11} className="text-gray-400 group-hover:text-[#C2991D]" />
-                    <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">Editar</span>
+                    <HiPencil
+                      size={11}
+                      className="text-gray-400 group-hover:text-[#C2991D]"
+                    />
+                    <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                      Editar
+                    </span>
                   </button>
                 </div>
               )}

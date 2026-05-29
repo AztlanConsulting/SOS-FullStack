@@ -3,12 +3,18 @@ import { LoginForm } from '@features/auth/components/LoginForm';
 import { useAuth } from '@features/auth/hooks/useAuth';
 import roleNavigation from '@/shared/utils/roleNavigation';
 import { HiHome } from 'react-icons/hi2';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 
 const LoginPage = () => {
   const { user, isAuthLoading } = useAuth();
   const navigator = useNavigate();
 
-  if (isAuthLoading) return <p>Loading...</p>;
+  if (isAuthLoading)
+    return (
+      <div className="h-screen bg-secondary flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
 
   if (user) {
     return <Navigate to={roleNavigation(user.role)} replace />;

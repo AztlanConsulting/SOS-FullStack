@@ -24,7 +24,14 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
         variant="body"
         weight="medium"
         color="text-black"
-        className="pl-4 py-4 color-grey-border-top flex-grow"
+        className="px-4 mb-4 pt-4 color-grey-border-top flex-grow"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
       >
         {blog.name}
       </Text>

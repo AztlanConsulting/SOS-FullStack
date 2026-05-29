@@ -101,7 +101,7 @@ export default function PlansPage() {
           {' '}
           Planes{' '}
         </Text>
-        <div className="hidden md:flex flex-row gap-10 w-full justify-center items-stretch">
+        <div className="hidden lg:flex flex-row gap-10 w-full justify-center items-stretch">
           {plans.map((plan, i) => (
             <PlanCard
               key={i}
@@ -111,7 +111,7 @@ export default function PlansPage() {
           ))}
         </div>
 
-        <div className="flex md:hidden items-center w-full justify-evenly">
+        <div className="flex lg:hidden items-center w-full justify-evenly">
           <div className="w-1/12 flex justify-start">
             <button
               onClick={prev}
@@ -126,7 +126,7 @@ export default function PlansPage() {
             </button>
           </div>
 
-          <div className="w-9/12">
+          <div className="w-9/12 flex justify-center">
             <PlanCard
               {...plans[current]}
               onSelect={() => handleSelectPlan(plans[current])}
@@ -147,7 +147,7 @@ export default function PlansPage() {
           </div>
         </div>
 
-        <div className="flex md:hidden gap-2 mt-4">
+        <div className="flex lg:hidden gap-2 mt-4">
           {plans.map((_, i) => (
             <button
               key={i}

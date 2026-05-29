@@ -80,7 +80,7 @@ export const ClientsPage = () => {
       <div className="flex-1 p-4 lg:p-6 pb-24 lg:pb-6 flex flex-col gap-6 min-w-0 overflow-x-hidden lg:ml-64">
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-1/2 flex">
-            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[280px] lg:h-[320px] overflow-hidden">
+            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[320px] lg:h-[350px] overflow-hidden">
               <Text variant="h3" weight="regular" className="mb-4">
                 Planes activos
               </Text>
@@ -94,7 +94,7 @@ export const ClientsPage = () => {
             </div>
           </div>
           <div className="w-full lg:w-1/2">
-            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[280px] lg:h-[320px] overflow-hidden">
+            <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5 flex-1 h-[320px] lg:h-[350px] overflow-hidden">
               <Text variant="h3" weight="regular" className="mb-4">
                 Visitas
               </Text>

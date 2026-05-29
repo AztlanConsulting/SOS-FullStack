@@ -9,6 +9,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import wrapper from '../utils/wrapper.util';
 import TestComponent from '../utils/TestContextComponent';
 import { type LostPetReportData } from '@/shared/types/petReport.types';
+import { PaymentProvider } from '@/features/payment/hooks/PaymentProvider';
 
 vi.mock('@shared/context/Location.context', () => ({
   useLocationContext: () => ({
@@ -25,6 +26,14 @@ vi.mock('@shared/context/Location.context', () => ({
     <>{children}</>
   ),
 }));
+
+const RenderPaymentProvider = () => {
+  return (
+    <PaymentProvider>
+      <PurchasePage />
+    </PaymentProvider>
+  );
+};
 
 const navigateMock = vi.fn();
 // Replace useNavigate so we can assert route targets and payloads.
@@ -129,9 +138,12 @@ describe('usePurchase', () => {
     // Add context here
     // setReportData(mockReportData)
 
-    render(<TestComponent mockRData={null} component={<PurchasePage />} />, {
-      wrapper,
-    });
+    render(
+      <TestComponent mockRData={null} component={<RenderPaymentProvider />} />,
+      {
+        wrapper,
+      },
+    );
 
     const manualName = await screen.findByText('manual');
     const price = await screen.findByText('$399', { exact: false });
@@ -142,7 +154,10 @@ describe('usePurchase', () => {
 
   it('loads page plan information', async () => {
     render(
-      <TestComponent mockRData={mockReportData} component={<PurchasePage />} />,
+      <TestComponent
+        mockRData={mockReportData}
+        component={<RenderPaymentProvider />}
+      />,
       { wrapper },
     );
 

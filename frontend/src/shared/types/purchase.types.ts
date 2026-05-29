@@ -14,9 +14,9 @@ export type Product = {
   name: string;
   content: ContentBlock[];
   price: number;
-  radius: number;
-  duration: number;
-  features: {
+  radius?: number;
+  duration?: number;
+  features?: {
     label: string;
     included: boolean;
   };

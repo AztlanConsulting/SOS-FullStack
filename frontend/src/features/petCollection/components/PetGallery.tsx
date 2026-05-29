@@ -50,7 +50,11 @@ const PetGallery = ({
               />
               <Text className="text-dark-purple">Filtro</Text>
             </button>
-            <PetDropDown isOpen={isOpen} handleSearch={handleSearch} />
+            <PetDropDown
+              isOpen={isOpen}
+              img={img}
+              handleSearch={handleSearch}
+            />
           </div>
         )}
       </div>

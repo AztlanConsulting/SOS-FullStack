@@ -1,14 +1,11 @@
-import { NavLink } from 'react-router';
-import {
-  HiUsers,
-  HiBookOpen,
-  HiCog,
-  HiClipboardList,
-} from 'react-icons/hi';
+import { NavLink, useNavigate } from 'react-router';
+import { HiUsers } from 'react-icons/hi';
 import { TbLogout } from 'react-icons/tb';
+import { useState } from 'react';
 import { Text } from '@/shared/components/ui/Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import SignOut from '@/shared/components/ui/Button/SignOut';
+import { DecisionModal } from '@/shared/components/ui/Modal/DecisionModal';
 import whiteIcon from '@/assets/images/whiteIcon.webp';
 
 const NAV_ITEMS = [
@@ -23,6 +20,8 @@ const NAV_ITEMS = [
 
 export const Sidebar = () => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   return (
     <>
@@ -121,7 +120,7 @@ export const Sidebar = () => {
             ),
           )}
           <button
-            onClick={logout}
+            onClick={() => setIsLogoutModalOpen(true)}
             className="flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors text-white hover:text-gray-200"
           >
             <TbLogout size={20} />
@@ -130,11 +129,28 @@ export const Sidebar = () => {
               weight="medium"
               className="text-inherit text-[10px]"
             >
-              Salir
+              Cerrar sesión
             </Text>
           </button>
         </nav>
       </div>
+
+      {isLogoutModalOpen && (
+        <DecisionModal
+          title="¿Deseas cerrar sesión?"
+          description="Tu sesión se cerrará y tendrás que volver a iniciar sesión para continuar."
+          color="yellow"
+          onClose={() => setIsLogoutModalOpen(false)}
+          leftText="Cancelar"
+          rightText="Cerrar sesión"
+          onLeftAction={() => setIsLogoutModalOpen(false)}
+          onRightAction={() => {
+            logout();
+            navigate('/');
+            setIsLogoutModalOpen(false);
+          }}
+        />
+      )}
 
       {/* Mobile bottom padding so content doesn't hide behind nav */}
       <div className="lg:hidden h-16" />

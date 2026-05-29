@@ -11,7 +11,7 @@ const PetCard = ({ petInfo }: Props) => {
 
   return (
     <Link
-      className="w-full rounded-xl flex flex-col relative border-2 border-gray-400 overflow-hidden cursor-pointer max-h-80 bg-white"
+      className="w-full rounded-xl flex flex-col relative border-2 border-gray-400 overflow-hidden cursor-pointer max-h-82 bg-white"
       to={`/inicio/radar-de-coincidencias/${petInfo.refId}`}
     >
       <div className="relative h-56 w-full">
@@ -33,7 +33,10 @@ const PetCard = ({ petInfo }: Props) => {
           <Text variant="h4">{petInfo.species}</Text>
         </div>
         <div className="px-2 py-1">
-          <Text className="text-gray-500">{petInfo.location}</Text>
+          <Text className="text-gray-500">
+            {petInfo.location.slice(0, 40) +
+              (petInfo.location.length >= 20 && '...')}
+          </Text>
         </div>
       </section>
     </Link>

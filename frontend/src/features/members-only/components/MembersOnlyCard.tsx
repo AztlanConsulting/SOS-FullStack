@@ -40,7 +40,15 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
         variant="body"
         weight="medium"
         color="text-black"
-        className="pl-4 py-4 border-t border-purple flex-grow"
+        className="px-4 mb-4 pt-4 border-t border-purple flex-grow"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
+        }}
       >
         {card.name}
       </Text>

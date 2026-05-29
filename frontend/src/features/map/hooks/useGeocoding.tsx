@@ -74,12 +74,6 @@ export function useGeocoding(
       setResults([]);
       const result = await PhotonGeocoding.reverse(coords);
 
-      console.log('[useGeocoding] marker moved', {
-        coords,
-        reverseResult: result,
-        properties: result?.properties,
-      });
-
       if (result) {
         setQuery(result.displayName);
         const isComplete = Boolean(

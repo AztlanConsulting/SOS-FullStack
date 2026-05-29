@@ -65,8 +65,6 @@ export const ClientController = {
    * @returns {Promise<void>} Sends a 200 JSON success confirmation or an appropriate error code status.
    */
   updatePlanStatus: async (req: Request, res: Response): Promise<void> => {
-    console.log('updatePlanStatus hit', req.params, req.body);
-
     try {
       const planId = Array.isArray(req.params.planId)
         ? req.params.planId[0]

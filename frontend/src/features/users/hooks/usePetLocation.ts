@@ -30,13 +30,6 @@ export const usePetLocation = (
       properties?: { city?: string; state?: string; country?: string };
       isComplete?: boolean;
     }) => {
-      console.log('[usePetLocation] marker address change', {
-        markerCoords,
-        address,
-        properties,
-        isComplete,
-      });
-
       // If the reverse geocode couldn't provide full city/state/country, surface an error
       if (!isComplete) {
         setLocationError(

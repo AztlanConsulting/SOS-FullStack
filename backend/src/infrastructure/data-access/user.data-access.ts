@@ -583,8 +583,6 @@ export const userDataAccess: UserRepository = {
       },
       { $sort: { value: -1 } },
     ]);
-    console.log('country result:', JSON.stringify(result, null, 2));
-    console.log('result length:', result.length);
 
     return result;
   },

@@ -135,11 +135,15 @@ export const emailService: EmailService = {
                       Te recomendamos comunicarte con nosotros para conocer el estado actual y los próximos pasos de nuestro servicio. Utiliza el siguiente botón para contactar con tu asesor:
                     </p>
 
-                    <div style="margin-top:20px; display:flex; justify-content:center; align-items:center;">
-                      <a href="http://m.me/2444791512265246" target="_blank" style="background-color:#f9cd48; color:#1a1a1a; padding:14px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px; display:inline-block; transition: background-color 0.3s ease;">
-                        Contactar con mi asesor
-                      </a>
-                    </div>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;" align="center">
+                      <tr>
+                        <td align="center">
+                          <a href="http://m.me/2444791512265246" target="_blank" style="background-color:#f9cd48; color:#1a1a1a; padding:14px 32px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:16px; display:inline-block; transition: background-color 0.3s ease;">
+                            Contactar con mi asesor
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
 
                   </td>
                 </tr>

@@ -31,9 +31,6 @@ export const CountryDistributionChart = ({ data }: Props) => {
   const canvasRef = useRef<CanvasWithChart>(null);
 
   useEffect(() => {
-    console.log('canvas', canvasRef.current);
-    console.log('data', data);
-    console.log('window.Chart', window.Chart);
     if (!canvasRef.current || !data.length) return;
 
     const Chart = window.Chart;

@@ -59,7 +59,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
         })}
       </Text>
       <div className="flex flex-col items-center justify-center py-5 border-t border-purple ">
-        <div className="w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7">
+        <div className="w-full flex items-center justify-center">
           <Button
             label="Ver"
             variant="purplePlans"

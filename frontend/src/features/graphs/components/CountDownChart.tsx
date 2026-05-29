@@ -163,11 +163,6 @@ export const CountdownChart = ({
     msRemaining <= 0 ? 0 : Math.ceil(msRemaining / MS_PER_DAY);
 
   const daysUsed = Math.max(0, totalDays - daysRemaining);
-  console.log('Total Days:', totalDays);
-  console.log('finalExpiry:', finalExpiry);
-  console.log('msRemaining:', msRemaining);
-  console.log('Days Remaining:', daysRemaining);
-  console.log('Days Used:', daysUsed);
 
   const progressPercentage =
     totalDays > 0 ? clampPercentage((daysRemaining * 100) / totalDays) : 0;

@@ -87,11 +87,11 @@ describe('ClientTable (Component Tests)', () => {
   });
 
   /**
-   * Verifies loading state shows cargando message
+   * Verifies loading state shows spinner animation
    */
-  test('shows loading message when loading is true', () => {
-    renderTable([], true);
-    expect(screen.queryAllByText('Cargando...').length).toBeGreaterThan(0);
+  test('shows loading animation when loading is true', () => {
+    const { container } = renderTable([], true);
+    expect(container.querySelector('.animate-spin')).toBeTruthy();
   });
 
   /**

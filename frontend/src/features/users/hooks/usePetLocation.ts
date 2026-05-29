@@ -5,8 +5,7 @@ import { LeafletMapService } from '../../map/services/leafletMapService';
 import type { GeocodingResult } from '../../map/types/geocodingResult';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
-const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
-
+// Keep the map centered on a default location, but do not prefill the input value.
 export const usePetLocation = (
   mapID: string,
   formData: Partial<LostPetReportData>,
@@ -133,9 +132,9 @@ export const usePetLocation = (
     updateFormRef.current({ address: formData.address || '' });
   };
 
-  const displayValue = hasInteracted
-    ? query
-    : formData.address || query || DEFAULT_LOCATION_LABEL;
+  // If the user hasn't interacted, keep the input empty (show placeholder).
+  // The map will still initialize to the default coords via `useMap`.
+  const displayValue = hasInteracted ? query : formData.address || '';
 
   return {
     results,

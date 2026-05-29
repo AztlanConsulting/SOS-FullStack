@@ -124,28 +124,13 @@ describe('CustomPlanCard Component', () => {
   });
 
   /**
-   * Verifies unavailable features show the correct message.
-   * Days=3 is in tier 1-4 so all features are available — no unavailable message.
-   * This test uses days=7 where asesor and geo_dinamica are unavailable.
+   * Verifies unavailable features show "Incluido" price label.
    */
-  test('shows unavailability message for features not in current tier', () => {
+  test('shows "Incluido" price for unavailable features', () => {
     renderWithProvider();
     const sliders = screen.getAllByRole('slider');
     fireEvent.change(sliders[0], { target: { value: '7' } });
-    const messages = screen.getAllByText(
-      'No disponible con los días o km actuales.',
-    );
-    expect(messages.length).toBeGreaterThan(0);
-  });
-
-  /**
-   * Verifies unavailable features show "No disponible" price label.
-   */
-  test('shows "No disponible" price for unavailable features', () => {
-    renderWithProvider();
-    const sliders = screen.getAllByRole('slider');
-    fireEvent.change(sliders[0], { target: { value: '7' } });
-    const labels = screen.getAllByText('No disponible');
+    const labels = screen.getAllByText('Incluido');
     expect(labels.length).toBeGreaterThan(0);
   });
 

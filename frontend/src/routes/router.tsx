@@ -20,6 +20,7 @@ import routerClients from './client.routes';
 import routerMembersOnly from './membersOnly.routes';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
+import { PaymentProvider } from '@/features/payment/hooks/PaymentProvider';
 
 export const router = createBrowserRouter([
   {
@@ -35,7 +36,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/compra',
-        element: <PurchasePage />,
+        element: (
+          <PaymentProvider>
+            <PurchasePage />
+          </PaymentProvider>
+        ),
       },
       {
         path: '/forbidden',

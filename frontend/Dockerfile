@@ -14,7 +14,7 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL \
     VITE_PAYPAL_CLIENT=$VITE_PAYPAL_CLIENT \
     VITE_ENVIROMENT=$VITE_ENVIROMENT
 
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
 
 COPY . .

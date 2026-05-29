@@ -18,7 +18,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
 
 COPY --from=builder /app/dist ./dist

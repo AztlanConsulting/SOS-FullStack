@@ -74,11 +74,11 @@ export const BehaviorPersonalitySection = ({
               id="noise-reaction-other"
               label="Describe la reacción"
               value={formData.noiseReactionOther || ''}
-              maxLength={100}
+              maxLength={40}
               onChange={(e) =>
                 updateForm({ noiseReactionOther: e.target.value })
               }
-              hasLength={false}
+              hasLength={true}
               error={errors.noiseReactionOther}
             />
           </div>

@@ -31,6 +31,12 @@ export const usePetReportForm = (initialData?: Partial<FoundPetReportData>) => {
   const [success, setSuccess] = useState(false);
 
   const updateFormData = (newData: Partial<FoundPetReportData>) => {
+    if (
+      newData.images &&
+      newData.images.length > 0 &&
+      newData.images[0].size > 5000000
+    )
+      setErrors({ images: 'Imagen muy grande, máximo 5MB' });
     setFormData((prev) => ({ ...prev, ...newData }));
 
     const fieldName = Object.keys(newData)[0];
@@ -132,6 +138,9 @@ export const usePetReportForm = (initialData?: Partial<FoundPetReportData>) => {
 
     if (!formData.images || formData.images.length === 0)
       newErrors.images = 'Falta la foto ';
+
+    if (formData.images.length > 0 && formData.images[0].size > 5000000)
+      newErrors.images = 'Imagen muy grande, máximo 5MB';
 
     if (!formData.contactName)
       newErrors.contactName = 'Ingresa un nombre para contactarte';

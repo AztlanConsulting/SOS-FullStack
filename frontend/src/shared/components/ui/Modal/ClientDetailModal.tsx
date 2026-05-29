@@ -140,10 +140,10 @@ export const ClientDetailModal = ({
               <Text variant="small" color="text-gray-600">
                 {detail.createdAt
                   ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
                   : '—'}
               </Text>
             </div>
@@ -246,15 +246,15 @@ export const ClientDetailModal = ({
           {petsToShow?.map((pet, petIndex) => {
             const expiryDates = pet.plans
               ? calculateStackedExpiry(
-                pet.plans.filter(
-                  (
-                    p,
-                  ): p is typeof p & {
-                    createdAt: string;
-                    duration: number;
-                  } => Boolean(p.createdAt && p.duration),
-                ),
-              )
+                  pet.plans.filter(
+                    (
+                      p,
+                    ): p is typeof p & {
+                      createdAt: string;
+                      duration: number;
+                    } => Boolean(p.createdAt && p.duration),
+                  ),
+                )
               : [];
 
             return (
@@ -367,7 +367,7 @@ export const ClientDetailModal = ({
                               </span>
                             </Text>
                           )}
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 lg:gap-1">
                             {index === 0 && (
                               <Text variant="small" color="text-gray-500">
                                 Estatus del plan:
@@ -404,13 +404,13 @@ export const ClientDetailModal = ({
                                 {expiryDates[index] < new Date()
                                   ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                                   : expiryDates[index].toLocaleDateString(
-                                    'es-MX',
-                                    {
-                                      day: '2-digit',
-                                      month: '2-digit',
-                                      year: 'numeric',
-                                    },
-                                  )}
+                                      'es-MX',
+                                      {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric',
+                                      },
+                                    )}
                               </span>
                             </Text>
                           )}

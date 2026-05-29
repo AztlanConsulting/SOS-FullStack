@@ -100,7 +100,7 @@ export const Input: React.FC<InputProps> = ({
               variant="caption"
               as="span"
               weight="medium"
-              className="text-right text-emerald-700"
+              className="whitespace-nowrap text-right text-emerald-700 shrink-0"
             >
               Quedan {remaining} caracteres
             </Text>

@@ -34,6 +34,7 @@ const isPhoneEmpty = (phone: string) => {
 const hasFirstAndLastName = (name: string) => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length < 2) return false;
+  return true;
 };
 
 const hasTwoCharacters = (name: string) => {
@@ -198,12 +199,11 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
       }
     }
 
-    if (!formData.contactName || !hasFirstAndLastName(formData.contactName))
+    if (!formData.contactName || !hasFirstAndLastName(formData.contactName)) {
       newErrors.contactName = 'Ingresa nombre y apellido del dueño';
-
-    if (!formData.contactName || !hasTwoCharacters(formData.contactName)) {
+    } else if (!hasTwoCharacters(formData.contactName)) {
       newErrors.contactName =
-        'El nombre y apellido deben tener al menos 2 caracteres cada uno';
+        'El nombre y/o apellido deben tener al menos 2 caracteres';
     }
 
     if (!formData.phoneNumber || isPhoneEmpty(formData.phoneNumber)) {

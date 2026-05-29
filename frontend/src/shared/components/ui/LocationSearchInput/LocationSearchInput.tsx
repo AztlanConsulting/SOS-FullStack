@@ -16,6 +16,7 @@ interface LocationSearchInputProps {
   onSelect: (result: SearchResult) => void;
   onFocus?: () => void;
   error?: string;
+  maxLength?: number;
 }
 
 export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
@@ -28,8 +29,11 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
   onSelect,
   onFocus,
   error,
+  maxLength = 200,
 }) => {
   const hasErrorState = Boolean(error);
+  const inputValue = query.slice(0, maxLength);
+  const remaining = maxLength - inputValue.length;
 
   return (
     <div className="relative w-full">
@@ -47,19 +51,42 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
         </label>
         <input
           type="text"
-          value={query}
+          value={inputValue}
           onFocus={onFocus}
-          onChange={(e) => onSearch(e.target.value)}
+          onChange={(e) => onSearch(e.target.value.slice(0, maxLength))}
+          maxLength={maxLength}
           placeholder={placeholder}
           className="w-full bg-transparent outline-none text-gray-700 text-sm"
         />
       </div>
 
-      {isLoading && (
-        <p className="mt-1 w-full text-xs text-gray-400">
-          Buscando direcciones...
-        </p>
-      )}
+      <div
+        className={`mt-1 flex items-start gap-2 ${hasErrorState || isLoading ? 'justify-between' : 'justify-end'}`}
+      >
+        {isLoading && (
+          <p className="w-full text-xs text-gray-400">
+            Buscando direcciones...
+          </p>
+        )}
+        {!isLoading && error && (
+          <Text
+            variant="small"
+            as="small"
+            weight="regular"
+            className="ml-1 color-danger italic"
+          >
+            {error}
+          </Text>
+        )}
+        <Text
+          variant="caption"
+          as="span"
+          weight="medium"
+          className="shrink-0 text-right text-emerald-700"
+        >
+          Quedan {remaining} caracteres
+        </Text>
+      </div>
 
       {results.length > 0 && (
         <ul className="absolute top-[105%] left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg z-50 py-2 max-h-60 overflow-y-auto">
@@ -73,24 +100,6 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
             </li>
           ))}
         </ul>
-      )}
-      {error && (
-        <div
-          className={
-            results.length > 0
-              ? 'absolute top-[105%] left-0 right-0 z-0 pointer-events-none'
-              : 'mt-1 w-full'
-          }
-        >
-          <Text
-            variant="small"
-            as="small"
-            weight="regular"
-            className="ml-1 color-danger italic"
-          >
-            {error}
-          </Text>
-        </div>
       )}
     </div>
   );

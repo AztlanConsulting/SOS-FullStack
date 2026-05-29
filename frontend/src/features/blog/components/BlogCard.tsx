@@ -31,6 +31,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
         }}
       >
         {blog.name}

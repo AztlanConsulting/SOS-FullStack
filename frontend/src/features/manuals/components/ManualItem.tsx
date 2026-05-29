@@ -39,6 +39,7 @@ export const ManualItem = ({
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
         }}
       >
         {manual.name}

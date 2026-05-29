@@ -40,6 +40,7 @@ const WorkshopCard = ({
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
         }}
       >
         {workshop.name}

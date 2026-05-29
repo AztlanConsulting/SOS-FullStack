@@ -47,6 +47,7 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
         }}
       >
         {card.name}

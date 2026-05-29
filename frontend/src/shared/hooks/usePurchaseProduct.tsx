@@ -17,8 +17,8 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
 
     return (
       nameParts.length >= 2 &&
-      nameParts[0].length > 0 &&
-      nameParts[1].length > 0
+      nameParts[0].length >= 2 &&
+      nameParts[1].length >= 2
     );
   };
 

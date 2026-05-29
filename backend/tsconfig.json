@@ -22,5 +22,5 @@
       "@vectorDB": ["./src/infrastructure/database/vectorDB/vectorDatabase.ts"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "seed.ts"]
 }

@@ -1,41 +1,87 @@
----
+name: sos-fullstack
+
 services:
+  # ── Infrastructure ───────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:8
+    container_name: mongodbi
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  i2v-neural:
+    image: cr.weaviate.io/semitechnologies/img2vec-pytorch:resnet50
+    environment:
+      ENABLE_CUDA: "0"
+
   weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.30.0
     command:
       - --host
       - 0.0.0.0
       - --port
-      - '8080'
+      - "8080"
       - --scheme
       - http
-
-    image: cr.weaviate.io/semitechnologies/weaviate:1.30.0
-
     ports:
-      - 8080:8080
-      - 50051:50051
-
+      - "8080:8080"
+      - "50051:50051"
     restart: on-failure:0
-
     environment:
-      IMAGE_INFERENCE_API: 'http://i2v-neural:8080'
+      IMAGE_INFERENCE_API: "http://i2v-neural:8080"
       QUERY_DEFAULTS_LIMIT: 25
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      DEFAULT_VECTORIZER_MODULE: 'img2vec-neural'
-      ENABLE_MODULES: 'img2vec-neural'
-      CLUSTER_HOSTNAME: 'node1'
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      DEFAULT_VECTORIZER_MODULE: "img2vec-neural"
+      ENABLE_MODULES: "img2vec-neural"
+      CLUSTER_HOSTNAME: "node1"
+    depends_on:
+      - i2v-neural
 
-  i2v-neural:
-    image: cr.weaviate.io/semitechnologies/img2vec-pytorch:resnet50
-
-    environment:
-      ENABLE_CUDA: '0'
-
-  redis:
-    image: redis:7-alpine
-
+  # ── Application ──────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
     ports:
-      - '6379:6379'
-
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override with Docker service names for internal networking
+      MONGO_URI: "mongodb://admin:password@mongodb:27017"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      VECTOR_DB: "weaviate:8080"
+      CORS_ORIGIN: "http://localhost"
+      FRONT_END_URL: "http://localhost"
+    depends_on:
+      - mongodb
+      - redis
+      - weaviate
     restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:3000}
+        VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}
+        VITE_PAYPAL_CLIENT: ${VITE_PAYPAL_CLIENT}
+        VITE_ENVIROMENT: ${VITE_ENVIROMENT:-sandbox}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

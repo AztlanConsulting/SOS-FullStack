@@ -37,6 +37,7 @@
     "nodemailer": "^8.0.7",
     "stripe": "^22.0.0",
     "tsc-alias": "^1.8.17",
+    "weaviate-ts-client": "^2.2.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -61,7 +62,6 @@
     "ts-node": "^10.9.2",
     "tsc-esm-fix": "^3.1.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "weaviate-ts-client": "^2.2.0"
+    "typescript": "^6.0.2"
   }
 }

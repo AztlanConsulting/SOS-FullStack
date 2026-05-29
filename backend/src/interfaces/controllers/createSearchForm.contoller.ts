@@ -39,6 +39,11 @@ export default async function createSearchFormController(
   if (typeof sanitized.personality === 'string') {
     sanitized.personality = sanitized.personality.slice(0, 200);
   }
+
+  if (typeof sanitized.noiseReactionOther === 'string') {
+    sanitized.noiseReactionOther = sanitized.noiseReactionOther.slice(0, 40);
+  }
+
   if (typeof sanitized.whatHappenedWhenEscaped === 'string') {
     sanitized.whatHappenedWhenEscaped = sanitized.whatHappenedWhenEscaped.slice(
       0,

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { PieChart, Pie, Cell } from 'recharts';
 import type { PlanSubscriptionProgress } from '@features/graphs/types/dashboardMetrics';
 import { Text } from '@/shared/components/ui/Text';
 import { calculateStackedExpiry } from '@/shared/utils/planDates';
@@ -31,28 +31,60 @@ export const CountdownChart = ({
     height: 0,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = chartContainerRef.current;
 
-    if (!element || typeof ResizeObserver === 'undefined') {
+    if (!element || typeof window === 'undefined') {
       return;
     }
 
-    const resizeObserver = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
+    const updateChartSize = () => {
+      const { width, height } = element.getBoundingClientRect();
 
-      setChartSize({
-        width,
-        height,
+      if (width <= 0 || height <= 0) {
+        return;
+      }
+
+      setChartSize((currentSize) => {
+        const nextSize = {
+          width: Math.round(width),
+          height: Math.round(height),
+        };
+
+        if (
+          currentSize.width === nextSize.width &&
+          currentSize.height === nextSize.height
+        ) {
+          return currentSize;
+        }
+
+        return nextSize;
       });
+    };
+
+    updateChartSize();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateChartSize);
+
+      return () => {
+        window.removeEventListener('resize', updateChartSize);
+      };
+    }
+
+    let animationFrame = 0;
+    const resizeObserver = new ResizeObserver(() => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(updateChartSize);
     });
 
     resizeObserver.observe(element);
 
     return () => {
+      window.cancelAnimationFrame(animationFrame);
       resizeObserver.disconnect();
     };
-  }, [data]);
+  }, [data, size]);
 
   const { innerRadius, outerRadius } = useMemo(() => {
     if (chartSize.width === 0 || chartSize.height === 0) {
@@ -145,7 +177,7 @@ export const CountdownChart = ({
           minHeight: '170px',
         }
       : { height: 'clamp(145px, 42vw, 220px)' };
-  const chartTopPadding = size === 'large' ? '100px' : '10px';
+  const chartTopPadding = size === 'large' ? '100px' : '52px';
   const summaryPositionStyle =
     size === 'large'
       ? { top: '80%', transform: 'translate(-50%, -50%)' }
@@ -182,13 +214,8 @@ export const CountdownChart = ({
           ...chartFrameStyle,
         }}
       >
-        <ResponsiveContainer
-          width="100%"
-          height="100%"
-          minWidth={1}
-          minHeight={1}
-        >
-          <PieChart>
+        {chartSize.width > 0 && chartSize.height > 0 && (
+          <PieChart width={chartSize.width} height={chartSize.height}>
             <Pie
               data={[{ value: 100 }]}
               cx="50%"
@@ -218,7 +245,7 @@ export const CountdownChart = ({
               <Cell fill="transparent" />
             </Pie>
           </PieChart>
-        </ResponsiveContainer>
+        )}
 
         <div
           style={{

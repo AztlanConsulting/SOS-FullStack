@@ -236,8 +236,7 @@ export const StripeCard = ({
                   />
                   <div className="rounded-lg color-grey-bg px-3 py-3">
                     <Text variant="caption" as="p" className="text-gray-600">
-                      La confirmación del pago puede tardar algunos minutos
-                      después de realizar el pago en caja.
+                      La confirmación del pago puede tardar hasta 1 día hábil.
                     </Text>
                   </div>
                 </div>

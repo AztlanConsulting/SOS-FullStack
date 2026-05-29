@@ -21,10 +21,10 @@ export const exportToCSV = (
    * 4. Escape existing double quotes by doubling them (RFC 4180 standard).
    */
   const csv = [
-    headers.join(','),
+    headers.map((h) => `\t${h}`).join(','),
     ...rows.map((row) =>
       headers
-        .map((h) => `\t${String(row[h] ?? '').replace(/"/g, '""')}`)
+        .map((h) => `"${String(row[h] ?? '').replace(/"/g, '""')}"`)
         .join(','),
     ),
   ].join('\n');

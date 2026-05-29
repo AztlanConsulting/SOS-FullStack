@@ -237,10 +237,10 @@ export const ClientDetailModal = ({
                 <Text variant="small" color="text-gray-600">
                   {detail.createdAt
                     ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                      })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
                     : '—'}
                 </Text>
               </div>
@@ -302,7 +302,7 @@ export const ClientDetailModal = ({
                 ) : (
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     {conversationValue &&
-                    conversationValue.startsWith('http') ? (
+                      conversationValue.startsWith('http') ? (
                       <a
                         href={conversationValue}
                         target="_blank"
@@ -342,15 +342,15 @@ export const ClientDetailModal = ({
             {petsToShow?.map((pet, petIndex) => {
               const expiryDates = pet.plans
                 ? calculateStackedExpiry(
-                    pet.plans.filter(
-                      (
-                        p,
-                      ): p is typeof p & {
-                        createdAt: string;
-                        duration: number;
-                      } => Boolean(p.createdAt && p.duration),
-                    ),
-                  )
+                  pet.plans.filter(
+                    (
+                      p,
+                    ): p is typeof p & {
+                      createdAt: string;
+                      duration: number;
+                    } => Boolean(p.createdAt && p.duration),
+                  ),
+                )
                 : [];
 
               return (
@@ -501,13 +501,13 @@ export const ClientDetailModal = ({
                                   {expiryDates[index] < new Date()
                                     ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                                     : expiryDates[index].toLocaleDateString(
-                                        'es-MX',
-                                        {
-                                          day: '2-digit',
-                                          month: '2-digit',
-                                          year: 'numeric',
-                                        },
-                                      )}
+                                      'es-MX',
+                                      {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric',
+                                      },
+                                    )}
                                 </span>
                               </Text>
                             )}
@@ -536,7 +536,7 @@ export const ClientDetailModal = ({
                     className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
                     autoFocus
                   />
-                  <div className="flex gap-2 justify-between items-center">
+                  <div className="flex flex-col gap-2 items-end">
                     <Text
                       variant="small"
                       as="span"
@@ -545,7 +545,7 @@ export const ClientDetailModal = ({
                     >
                       Quedan {200 - notesValue.length} caracteres
                     </Text>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2.5">
                       <button
                         onClick={() => {
                           setDetailUpdateError(null);

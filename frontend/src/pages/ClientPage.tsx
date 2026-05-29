@@ -141,12 +141,18 @@ export const ClientsPage = () => {
                 icon={HiDownload}
                 disabled={isExporting}
                 onClick={async () => {
+                  if (clients.length === 0) {
+                    setExportError('No hay clientes para exportar');
+                    setTimeout(() => setExportError(null), 3000);
+                    return;
+                  }
                   setIsExporting(true);
                   setExportError(null);
+
                   try {
                     const all = await exportClients();
                     if (!all.length) {
-                      setExportError('No hay clientes para exportar.');
+                      setExportError('No hay clientes para exportar');
                       setTimeout(() => setExportError(null), 3000);
                       return;
                     }
@@ -162,25 +168,26 @@ export const ClientsPage = () => {
                         Conversación: c.conversation ?? '-',
                       })),
                     );
-                  } catch {
-                    setExportError('Error al exportar. Intenta de nuevo.');
+                  } catch (err) {
+                    setExportError('Error al exportar clientes');
                     setTimeout(() => setExportError(null), 3000);
                   } finally {
                     setIsExporting(false);
                   }
                 }}
               />
+              {exportError && (
+                <Text variant="caption" color="text-red-500">
+                  {exportError}
+                </Text>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <FilterDropdown filters={filters} onChange={setFilters} />
               <ClientSearch value={search} onChange={setSearch} />
             </div>
           </div>
-          {exportError && (
-            <Text variant="caption" color="text-red-500" className="mb-2">
-              {exportError}
-            </Text>
-          )}
+
           {error && (
             <Text variant="caption" color="text-red-500" className="mb-2">
               {error}

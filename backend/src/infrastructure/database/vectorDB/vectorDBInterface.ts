@@ -11,7 +11,8 @@ async function get() {
     .withLimit(50)
     .do();
 
-  const petIds = data.data.Get.Pet;
+  const pets = data.data.Get.Pet;
+  console.log(pets);
 }
 
 async function getIds() {
@@ -23,6 +24,7 @@ async function getIds() {
     .do();
 
   const refIds = pets.data.Get.Pet;
+  console.log(refIds);
 }
 
 async function start() {
@@ -36,6 +38,7 @@ async function start() {
       break;
     case 'clean':
       await startVectorDB();
+      console.log("Database Cleaned");
       break;
     default:
       console.log('Error: code not accepted, use - [get, getId, clean]');

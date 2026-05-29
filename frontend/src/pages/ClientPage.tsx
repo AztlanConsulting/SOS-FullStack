@@ -85,9 +85,9 @@ export const ClientsPage = () => {
                 Planes activos
               </Text>
               {loadingMetrics ? (
-                <Text variant="caption" color="text-gray-400">
-                  Cargando...
-                </Text>
+                <div className="flex items-center justify-center h-52">
+                  <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+                </div>
               ) : (
                 <ActivePlanChart data={distribution} />
               )}
@@ -99,9 +99,9 @@ export const ClientsPage = () => {
                 Visitas
               </Text>
               {loadingVisits ? (
-                <Text variant="caption" color="text-gray-400">
-                  Cargando...
-                </Text>
+                <div className="flex items-center justify-center h-52">
+                  <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+                </div>
               ) : (
                 <VisitsLineChart
                   data={visits}
@@ -119,9 +119,9 @@ export const ClientsPage = () => {
             Distribución por país
           </Text>
           {loadingCountries ? (
-            <Text variant="caption" color="text-gray-400">
-              Cargando...
-            </Text>
+            <div className="flex items-center justify-center h-52">
+              <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+            </div>
           ) : (
             <CountryDistributionChart data={countryData} />
           )}

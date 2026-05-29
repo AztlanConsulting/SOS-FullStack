@@ -1,3 +1,4 @@
+import { safeParse } from 'zod';
 import type { Request, Response } from 'express';
 import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { getClientById } from '@/use-cases/clients/getClientById.usecase';
@@ -5,6 +6,7 @@ import { getClients } from '@/use-cases/clients/getClients.usecase';
 import { updateClient } from '@/use-cases/clients/updateClient.usecase';
 import { updatePlanStatus } from '@/use-cases/clients/updatePlanStatus.usecase';
 import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
+import { notesSchema } from '@/types/clients.type';
 
 /**
  * Dependency Injection setup.
@@ -107,7 +109,14 @@ export const ClientController = {
       const id = Array.isArray(req.params.id)
         ? req.params.id[0]
         : req.params.id;
-      const { conversation, notes } = req.body;
+      const body = notesSchema.safeParse(req.body);
+
+      if (body.error) {
+        res.status(401).send(body.error);
+        return;
+      }
+
+      const { conversation, notes } = body.data;
 
       if (!id || typeof id !== 'string') {
         res.status(400).json({ error: 'Invalid client id' });

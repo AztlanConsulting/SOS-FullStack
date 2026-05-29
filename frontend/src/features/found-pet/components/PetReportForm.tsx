@@ -98,7 +98,7 @@ export const PetReportForm: React.FC<PetReportFormProps> = ({
         <div className="w-5/6 md:w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl mx-auto flex flex-col py-4">
           {submitError && (
             <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {submitError}
+              Ocurrió un error inesperado, vuelve a intentarlo más tarde.
             </div>
           )}
           <Button

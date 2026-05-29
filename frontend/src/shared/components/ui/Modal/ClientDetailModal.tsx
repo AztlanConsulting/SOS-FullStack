@@ -539,8 +539,16 @@ export const ClientDetailModal = ({
                     className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
                     autoFocus
                   />
-                  <div className="flex gap-2 justify-between items-center">
-                    <div className="flex gap-2">
+                  <div className="flex flex-col gap-2 items-end">
+                    <Text
+                      variant="small"
+                      as="span"
+                      weight="medium"
+                      className="text-emerald-700"
+                    >
+                      Quedan {200 - notesValue.length} caracteres
+                    </Text>
+                    <div className="flex gap-2.5">
                       <button
                         onClick={() => {
                           setDetailUpdateError(null);
@@ -568,14 +576,6 @@ export const ClientDetailModal = ({
                         </span>
                       </button>
                     </div>
-                    <Text
-                      variant="small"
-                      as="span"
-                      weight="medium"
-                      className="text-emerald-700"
-                    >
-                      Quedan {200 - notesValue.length} caracteres
-                    </Text>
                   </div>
                 </div>
               ) : (

@@ -57,6 +57,9 @@ export const ClientsPage = () => {
   const [selectedClient, setSelectedClient] = useState<ClientListItem | null>(
     null,
   );
+  // State to track export errors and loading
+  const [exportError, setExportError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   // Custom hook managing the fetch logic, pagination state, and filter parameters
   const {
     clients,
@@ -136,20 +139,35 @@ export const ClientsPage = () => {
                 variant="toolbar"
                 label="Exportar"
                 icon={HiDownload}
+                disabled={isExporting}
                 onClick={async () => {
-                  const all = await exportClients();
-                  exportToCSV(
-                    'clientes',
-                    all.map((c: ClientListItem) => ({
-                      Nombre: c.username,
-                      Email: c.email,
-                      Teléfono: c.phone,
-                      Mascota: c.pet?.name ?? '-',
-                      Plan: c.plan?.name ?? '-',
-                      Estatus: c.plan?.status ?? '-',
-                      Conversación: c.conversation ?? '-',
-                    })),
-                  );
+                  setIsExporting(true);
+                  setExportError(null);
+                  try {
+                    const all = await exportClients();
+                    if (!all.length) {
+                      setExportError('No hay clientes para exportar.');
+                      setTimeout(() => setExportError(null), 3000);
+                      return;
+                    }
+                    exportToCSV(
+                      'clientes',
+                      all.map((c: ClientListItem) => ({
+                        Nombre: c.username,
+                        Email: c.email,
+                        Teléfono: c.phone,
+                        Mascota: c.pet?.name ?? '-',
+                        Plan: c.plan?.name ?? '-',
+                        Estatus: c.plan?.status ?? '-',
+                        Conversación: c.conversation ?? '-',
+                      })),
+                    );
+                  } catch {
+                    setExportError('Error al exportar. Intenta de nuevo.');
+                    setTimeout(() => setExportError(null), 3000);
+                  } finally {
+                    setIsExporting(false);
+                  }
                 }}
               />
             </div>
@@ -158,6 +176,11 @@ export const ClientsPage = () => {
               <ClientSearch value={search} onChange={setSearch} />
             </div>
           </div>
+          {exportError && (
+            <Text variant="caption" color="text-red-500" className="mb-2">
+              {exportError}
+            </Text>
+          )}
           {error && (
             <Text variant="caption" color="text-red-500" className="mb-2">
               {error}

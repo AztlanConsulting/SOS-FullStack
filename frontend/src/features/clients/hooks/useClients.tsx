@@ -117,9 +117,7 @@ export const useClients = () => {
         ...(filters.status ? { status: filters.status } : {}),
         ...(filters.conversation ? { conversation: filters.conversation } : {}),
       });
-      const res = await axiosInstance.get(
-        `/clientDashboard?${params}`,
-      );
+      const res = await axiosInstance.get(`/clientDashboard?${params}`);
       return res.data.clients;
     } catch (err) {
       console.error('Failed to export clients:', err);

@@ -34,6 +34,9 @@ export const ClientsPage = () => {
     month: new Date().getMonth() + 1,
   });
 
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+
   const [selectedPetId, setSelectedPetId] = useState<string | undefined>(
     undefined,
   );
@@ -137,27 +140,53 @@ export const ClientsPage = () => {
                 label="Exportar"
                 icon={HiDownload}
                 onClick={async () => {
-                  const all = await exportClients();
-                  exportToCSV(
-                    'clientes',
-                    all.map((c: ClientListItem) => ({
-                      Nombre: c.username,
-                      Email: c.email,
-                      Teléfono: c.phone,
-                      Mascota: c.pet?.name ?? '-',
-                      Plan: c.plan?.name ?? '-',
-                      Estatus: c.plan?.status ?? '-',
-                      Conversación: c.conversation ?? '-',
-                    })),
-                  );
+                  if (clients.length === 0) {
+                    setExportError('No hay clientes para exportar');
+                    setTimeout(() => setExportError(null), 3000);
+                    return;
+                  }
+                  setIsExporting(true);
+                  setExportError(null);
+
+                  try {
+                    const all = await exportClients();
+                    if (!all.length) {
+                      setExportError('No hay clientes para exportar');
+                      setTimeout(() => setExportError(null), 3000);
+                      return;
+                    }
+                    exportToCSV(
+                      'clientes',
+                      all.map((c: ClientListItem) => ({
+                        Nombre: c.username,
+                        Email: c.email,
+                        Teléfono: c.phone,
+                        Mascota: c.pet?.name ?? '-',
+                        Plan: c.plan?.name ?? '-',
+                        Estatus: c.plan?.status ?? '-',
+                        Conversación: c.conversation ?? '-',
+                      })),
+                    );
+                  } catch (err) {
+                    setExportError('Error al exportar clientes');
+                    setTimeout(() => setExportError(null), 3000);
+                  } finally {
+                    setIsExporting(false);
+                  }
                 }}
               />
+              {exportError && (
+                <Text variant="caption" color="text-red-500">
+                  {exportError}
+                </Text>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <FilterDropdown filters={filters} onChange={setFilters} />
               <ClientSearch value={search} onChange={setSearch} />
             </div>
           </div>
+
           {error && (
             <Text variant="caption" color="text-red-500" className="mb-2">
               {error}

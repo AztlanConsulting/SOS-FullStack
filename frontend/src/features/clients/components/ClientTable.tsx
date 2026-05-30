@@ -7,9 +7,9 @@ import { href } from 'react-router-dom';
  * Standard headers for the client administration table.
  */
 const HEADERS = [
-  'Nombre',
+  'Nombre del cliente',
   'Fecha de compra',
-  'Nombre mascota',
+  'Nombre de la mascota',
   'Características',
   'Link de la conversación',
   'Estatus del plan',

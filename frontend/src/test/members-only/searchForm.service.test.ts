@@ -25,7 +25,9 @@ describe('createSearchForm', () => {
 
     await createSearchForm(FORM_DATA);
 
-    expect(mockPost).toHaveBeenCalledWith('/searchform', FORM_DATA);
+    expect(mockPost).toHaveBeenCalledWith('/searchform', FORM_DATA, {
+      timeout: 30000,
+    });
   });
 
   test('returns SearchFormResponse on success', async () => {

@@ -467,30 +467,33 @@ export const ClientDetailModal = ({
                             )}
                             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 lg:gap-1">
                               {index === 0 && (
-                                <select
-                                  value={planStatuses[plan._id] ?? ''}
-                                  disabled={isUpdatingStatus}
-                                  onChange={(e) => {
-                                    if (!e.target.value) return;
-                                    const newStatus = e.target
-                                      .value as PlanStatus;
-                                    setStatusUpdateError(null);
-                                    setPendingStatusChange({
-                                      planId: plan._id,
-                                      planName: plan.name,
-                                      petName: pet.name,
-                                      previousStatus:
-                                        planStatuses[plan._id] ?? '',
-                                      status: newStatus,
-                                    });
-                                  }}
-                                  className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
-                                >
-                                  <option value="">Seleccionar</option>
-                                  <option value="RIP">RIP</option>
-                                  <option value="encontrado">Encontrado</option>
-                                </select>
+                                <Text variant="small" color="text-gray-500">
+                                  Estatus del plan:
+                                </Text>
                               )}
+                              <select
+                                value={planStatuses[plan._id] ?? ''}
+                                disabled={isUpdatingStatus}
+                                onChange={(e) => {
+                                  if (!e.target.value) return;
+                                  const newStatus = e.target
+                                    .value as PlanStatus;
+                                  setStatusUpdateError(null);
+                                  setPendingStatusChange({
+                                    planId: plan._id,
+                                    planName: plan.name,
+                                    petName: pet.name,
+                                    previousStatus:
+                                      planStatuses[plan._id] ?? '',
+                                    status: newStatus,
+                                  });
+                                }}
+                                className="text-xs border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-yellow-400"
+                              >
+                                <option value="">Seleccionar</option>
+                                <option value="RIP">RIP</option>
+                                <option value="encontrado">Encontrado</option>
+                              </select>
                             </div>
                             {expiryDates[index] && (
                               <Text variant="small" color="text-gray-500">
@@ -536,7 +539,7 @@ export const ClientDetailModal = ({
                     className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
                     autoFocus
                   />
-                  <div className="flex gap-2 justify-between items-center">
+                  <div className="flex flex-col gap-2 items-end">
                     <Text
                       variant="small"
                       as="span"
@@ -545,7 +548,7 @@ export const ClientDetailModal = ({
                     >
                       Quedan {200 - notesValue.length} caracteres
                     </Text>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2.5">
                       <button
                         onClick={() => {
                           setDetailUpdateError(null);

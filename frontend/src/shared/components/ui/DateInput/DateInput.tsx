@@ -11,9 +11,21 @@ export const DateInput: React.FC<DateInputProps> = ({
   id,
   required,
   error,
+  onChange,
   ...props
 }) => {
   const hasErrorState = Boolean(error);
+  const maxDate = new Date().toISOString().split('T')[0];
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value;
+
+    if (nextValue && nextValue >= maxDate) {
+      return;
+    }
+
+    onChange?.(event);
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -35,6 +47,8 @@ export const DateInput: React.FC<DateInputProps> = ({
         <input
           type="date"
           id={id}
+          max={maxDate}
+          onChange={handleChange}
           className="w-full text-sm text-gray-700 bg-transparent outline-none relative z-10
                      [&::-webkit-calendar-picker-indicator]:opacity-0 
                      [&::-webkit-calendar-picker-indicator]:absolute 

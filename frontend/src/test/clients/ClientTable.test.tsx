@@ -66,9 +66,13 @@ describe('ClientTable (Component Tests)', () => {
    */
   test('renders all column headers', () => {
     renderTable();
-    expect(screen.queryAllByText('Nombre').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('Nombre del cliente').length).toBeGreaterThan(
+      0,
+    );
     expect(screen.queryAllByText('Fecha de compra').length).toBeGreaterThan(0);
-    expect(screen.queryAllByText('Nombre mascota').length).toBeGreaterThan(0);
+    expect(
+      screen.queryAllByText('Nombre de la mascota').length,
+    ).toBeGreaterThan(0);
     expect(screen.queryAllByText('Características').length).toBeGreaterThan(0);
     expect(
       screen.queryAllByText('Link de la conversación').length,

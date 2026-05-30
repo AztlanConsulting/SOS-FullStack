@@ -9,7 +9,6 @@ import { getPlansDB } from '@/use-cases/plans/getPlansDB.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
 import { getLocalizedPricing } from '@/use-cases/ip/getLocalizedPricing.usecase';
 import { calculatePrice, getTier } from '@/utils/calculateCustomPlan';
-import getPlanByName from '@/use-cases/plans/getPlanByName.usecase';
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
@@ -43,9 +42,9 @@ async function confirmPaymentAmount(
     const normalizedClientAmount = Math.round(data.amount);
     const normalizedExpectedAmount = Math.round(expectedAmount);
 
-    if (normalizedClientAmount !== normalizedExpectedAmount) {
-      throw Error('Amount forgery');
-    }
+    // if (normalizedClientAmount !== normalizedExpectedAmount) {
+    //   throw Error('Amount forgery');
+    // }
 
     req.body.amount = normalizedExpectedAmount;
     req.body.currency = data.currency.toUpperCase();

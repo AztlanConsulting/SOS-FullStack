@@ -20,7 +20,7 @@ async function confirmPaymentAmount(
   try {
     const paymentDetail = paymentDetails.safeParse(req.body);
     if (paymentDetail.error) throw paymentDetail.error;
-
+    console.log('Holefa');
     const data = paymentDetail.data;
 
     const expectedAmount = await (data.extensionPlan
@@ -35,9 +35,11 @@ async function confirmPaymentAmount(
             )) ||
           null);
 
+    console.log(expectedAmount);
     if (expectedAmount === null) {
       throw Error('Amount forgery, item does not exists');
     }
+    console.log('Not null');
 
     const normalizedClientAmount = Math.round(data.amount);
     const normalizedExpectedAmount = Math.round(expectedAmount);
@@ -92,6 +94,8 @@ async function verifyPlan(
   currencyCode?: string,
 ): Promise<number | null> {
   if (!currencyCode) return null;
+
+  console.log(customPlanData);
 
   if (planName === 'Personalizado' && customPlanData)
     return await localizeAmount(calculatePrice(customPlanData), currencyCode);

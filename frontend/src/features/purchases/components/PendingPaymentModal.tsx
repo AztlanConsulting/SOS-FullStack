@@ -97,7 +97,12 @@ const PendingPaymentModal = ({ plan, product, onClose }: Props) => {
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">Precio</span>
                   <span className="font-semibold text-gray-900">
-                    MX${Math.round(plan.planDetails!.totalPrice)} MXN
+                    MX$
+                    {Math.round(plan.planDetails!.totalPrice)
+                      .toFixed(2)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
+                    MXN
                   </span>
                 </div>
               </div>

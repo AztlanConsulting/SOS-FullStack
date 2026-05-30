@@ -184,7 +184,12 @@ export const StripeCard = ({
                         weight="semibold"
                         className="text-gray-900"
                       >
-                        ${data.amount} MXN
+                        $
+                        {data.amount
+                          .toFixed(2)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
+                        MXN
                       </Text>
                       <CopyButton
                         text={oxxoData.number || ''}
@@ -278,7 +283,12 @@ export const StripeCard = ({
                         weight="semibold"
                         className="break-all text-gray-900"
                       >
-                        ${data.amount} MXN
+                        $
+                        {data.amount
+                          .toFixed(2)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
+                        MXN
                       </Text>
                       <CopyButton
                         text={`$${data.amount}`}

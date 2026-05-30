@@ -4,6 +4,7 @@ import { usePetPhotos } from '@shared/hooks/usePetPhotos';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { PetPhotoCropperModal } from './PetPhotoCropperModal';
 import { usePetPhotoCropper } from '../hooks/usePetPhotoCropper';
+import { useEffect } from 'react';
 
 export interface PetPhotosSectionProps {
   formData: Partial<LostPetReportData>;
@@ -20,6 +21,10 @@ export const PetPhotosSection = ({
     formData,
     updateForm,
   );
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
   const {
     cropOpen,
     cropImageUrl,
@@ -64,7 +69,6 @@ export const PetPhotosSection = ({
         <p className="text-sm text-gray-700 font-medium">
           Sube fotos de tu mascota
         </p>
-
         {fileUploadSlots.map((num) => (
           <FileUpload
             key={num}

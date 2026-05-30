@@ -317,11 +317,30 @@ const EditablePhotos = ({
   const [slotErrors, setSlotErrors] = useState<Record<string, string>>({});
   const [hasTriedConfirm, setHasTriedConfirm] = useState(false);
 
+  const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
   const [tempLostPetReportData, setTempLostPetReportData] = useState(formData);
 
   const updateTemp = (newData: Partial<typeof formData>) => {
     if (tempLostPetReportData) {
       setTempLostPetReportData({ ...tempLostPetReportData, ...newData });
+
+      (newData.images || []).forEach((file, index) => {
+        if (file && file.size > MAX_SIZE) {
+          setSlotErrors((prev) => ({
+            ...prev,
+            [`images_${index + 1}`]: 'La imagen no debe superar los 5MB',
+          }));
+        } else {
+          setSlotErrors((prev) =>
+            Object.fromEntries(
+              Object.entries(prev).filter(
+                ([key, _]) => key != `images_${index + 1}`,
+              ),
+            ),
+          );
+        }
+      });
     }
   };
 
@@ -360,8 +379,6 @@ const EditablePhotos = ({
   }, [tempLostPetReportData.images]);
 
   const handleConfirm = () => {
-    setHasTriedConfirm(true);
-
     const expectedPhotoCount = parseInt(
       tempLostPetReportData.imageLayout || '1',
     );
@@ -377,11 +394,19 @@ const EditablePhotos = ({
       }
     }
 
+    (tempLostPetReportData.images || []).forEach((file, index) => {
+      if (file && file.size > MAX_SIZE) {
+        missingSlots[`images_${index + 1}`] =
+          'La imagen no debe superar los 5MB';
+      }
+    });
+
     if (Object.keys(missingSlots).length > 0) {
       setSlotErrors(missingSlots);
       return;
     }
 
+    setHasTriedConfirm(true);
     updateForm({ images: tempLostPetReportData.images });
     updateForm({ imageLayout: tempLostPetReportData.imageLayout });
 

@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useGeocoding } from '../../map/hooks/useGeocoding';
+import {
+  ADDRESS_SEARCH_MAX_LENGTH,
+  useGeocoding,
+} from '../../map/hooks/useGeocoding';
 import { useMap } from '../../map/hooks/useMap';
 import { LeafletMapService } from '../../map/services/leafletMapService';
 import type { GeocodingResult } from '../../map/types/geocodingResult';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 
-const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
+const limitAddressLength = (value = '') =>
+  value.slice(0, ADDRESS_SEARCH_MAX_LENGTH);
 
+// Keep the map centered on a default location, but do not prefill the input value.
 export const usePetLocation = (
   mapID: string,
   formData: Partial<LostPetReportData>,
@@ -31,13 +36,6 @@ export const usePetLocation = (
       properties?: { city?: string; state?: string; country?: string };
       isComplete?: boolean;
     }) => {
-      console.log('[usePetLocation] marker address change', {
-        markerCoords,
-        address,
-        properties,
-        isComplete,
-      });
-
       // If the reverse geocode couldn't provide full city/state/country, surface an error
       if (!isComplete) {
         setLocationError(
@@ -103,6 +101,7 @@ export const usePetLocation = (
   const onSelectAddress = (result: any) => {
     handleSelect(result);
     setHasInteracted(true);
+    const address = limitAddressLength(result.displayName);
     const isComplete = Boolean(
       result?.properties?.city &&
       result?.properties?.state &&
@@ -118,24 +117,29 @@ export const usePetLocation = (
 
     setLocationError(null);
     updateFormRef.current({
-      address: result.displayName,
-      location: result,
+      address,
+      location: {
+        ...result,
+        displayName: address,
+      },
       locationCoords: result.coords,
     });
   };
 
   const onSearchWrapper = (val: string) => {
     setHasInteracted(true);
-    handleSearch(val);
+    handleSearch(limitAddressLength(val));
   };
 
   const onFocusWrapper = () => {
-    updateFormRef.current({ address: formData.address || '' });
+    updateFormRef.current({ address: limitAddressLength(formData.address) });
   };
 
-  const displayValue = hasInteracted
-    ? query
-    : formData.address || query || DEFAULT_LOCATION_LABEL;
+  // If the user hasn't interacted, keep the input empty (show placeholder).
+  // The map will still initialize to the default coords via `useMap`.
+  const displayValue = limitAddressLength(
+    hasInteracted ? query : formData.address,
+  );
 
   return {
     results,

@@ -28,6 +28,22 @@ export const Input: React.FC<InputProps> = ({
   const maxNumberValue =
     typeof maxDigits === 'number' ? Math.pow(10, maxDigits) - 1 : undefined;
 
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (type === 'number') {
+      const allowed = [
+        'Backspace',
+        'Delete',
+        'Tab',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown',
+      ];
+      if (!allowed.includes(e.key) && !/^\d$/.test(e.key)) e.preventDefault();
+    }
+    props.onKeyDown?.(e);
+  };
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (type === 'number' && typeof maxDigits === 'number') {
       // keep only digits and truncate to maxDigits
@@ -77,6 +93,7 @@ export const Input: React.FC<InputProps> = ({
           className="w-full text-sm text-gray-700 bg-transparent outline-none"
           max={maxNumberValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
       </div>
       <div
@@ -100,7 +117,7 @@ export const Input: React.FC<InputProps> = ({
               variant="caption"
               as="span"
               weight="medium"
-              className="text-right text-emerald-700"
+              className="whitespace-nowrap text-right text-emerald-700 shrink-0"
             >
               Quedan {remaining} caracteres
             </Text>

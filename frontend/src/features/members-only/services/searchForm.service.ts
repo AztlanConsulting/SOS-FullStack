@@ -8,6 +8,8 @@ export interface SearchFormResponse {
 export const createSearchForm = async (
   formData: Record<string, unknown>,
 ): Promise<SearchFormResponse> => {
-  const { data } = await axiosInstance.post('/searchform', formData);
+  const { data } = await axiosInstance.post('/searchform', formData, {
+    timeout: 30000,
+  });
   return data;
 };

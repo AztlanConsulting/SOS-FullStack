@@ -96,7 +96,11 @@ describe('PetReportForm Component', () => {
     expect(screen.getByText('Selecciona una fecha')).toBeDefined();
     expect(screen.getByText('Ingresa una raza o tipo')).toBeDefined();
     expect(screen.getByText('Ingresa un color')).toBeDefined();
-    expect(screen.getByText('Ingresa una ubicación')).toBeDefined();
+    expect(
+      screen.getByText(
+        'Confirma la ubicación: mueve el pin o escribe otra dirección.',
+      ),
+    ).toBeDefined();
     expect(screen.getByText('Falta la foto 1')).toBeDefined();
     expect(
       screen.getByText('Ingresa nombre y apellido del dueño'),

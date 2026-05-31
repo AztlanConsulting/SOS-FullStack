@@ -13,6 +13,7 @@ const router = Router();
 router.post(
   '/payment-intent',
   confirmPaymentLocalizedAmount,
+  // confirmPaymentAmount,
   makeCreatePaymentIntent,
 );
 router.post('/webhook', makehandleStripeWebhook);

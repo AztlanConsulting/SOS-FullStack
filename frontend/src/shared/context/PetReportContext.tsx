@@ -7,9 +7,13 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 interface PetReportContextType {
   lostPetReportData: LostPetReportData | null;
-  setLostPetReportData: (data: LostPetReportData) => void;
+  setLostPetReportData: React.Dispatch<
+    React.SetStateAction<LostPetReportData | null>
+  >;
   foundPetReportData: FoundPetReportData | null;
-  setFoundPetReportData: (data: FoundPetReportData) => void;
+  setFoundPetReportData: React.Dispatch<
+    React.SetStateAction<FoundPetReportData | null>
+  >;
 }
 
 const PetReportContext = createContext<PetReportContextType | undefined>(
@@ -23,10 +27,6 @@ export const PetReportProvider: React.FC<{ children: ReactNode }> = ({
     useState<FoundPetReportData | null>(null);
   const [lostPetReportData, setLostPetReportData] =
     useState<LostPetReportData | null>(null);
-
-  useEffect(() => {
-    console.log(lostPetReportData);
-  }, [foundPetReportData]);
 
   return (
     <PetReportContext.Provider

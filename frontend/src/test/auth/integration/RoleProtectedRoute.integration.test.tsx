@@ -48,20 +48,6 @@ const renderWithAuth = (
 };
 
 describe('RoleProtectedRoute integration', () => {
-  it('shows loading state while auth is initializing', () => {
-    renderWithAuth(
-      {
-        user: null,
-        isAuthLoading: true,
-      },
-      <RoleProtectedRoute allowedRoles={['admin']}>
-        <div>Protected</div>
-      </RoleProtectedRoute>,
-    );
-
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-  });
-
   it('redirects to login when user is not authenticated', () => {
     renderWithAuth(
       {

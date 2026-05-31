@@ -32,7 +32,8 @@ const paymentMethods: PaymentMethod[] = [
   },
   {
     method: 'Transferencia SPEI',
-    description: 'Aprobación instantánea desde cualquier banca en línea',
+    description:
+      'Paga en línea desde tu banco. Confirmación en minutos hasta el siguiente día hábil.',
     icons: [bank],
     element: (
       data: Order,

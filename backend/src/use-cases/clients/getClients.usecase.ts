@@ -6,6 +6,9 @@ import type { UserRepository } from '@/domain/repositories/user.repository';
 export interface GetClientsInput {
   page: number;
   search?: string;
+  limit?: number;
+  status?: string;
+  conversation?: 'con' | 'sin';
 }
 
 /**
@@ -57,5 +60,11 @@ export const getClients = async (
   { userRepository }: Deps,
   input: GetClientsInput,
 ): Promise<GetClientsResult> => {
-  return userRepository.getUsersWithPets(input.page, input.search);
+  return userRepository.getUsersWithPets(
+    input.page,
+    input.search,
+    input.limit,
+    input.status,
+    input.conversation,
+  );
 };

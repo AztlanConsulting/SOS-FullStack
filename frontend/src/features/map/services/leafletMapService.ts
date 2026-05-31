@@ -81,7 +81,7 @@ export const LeafletMapService = {
    */
 
   addMarker(coords: [number, number]) {
-    console.log('Marker placed at:', coords);
+    // console.log('Marker placed at:', coords);
   },
 
   /**

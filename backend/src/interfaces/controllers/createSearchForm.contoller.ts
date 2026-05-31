@@ -18,6 +18,12 @@ export default async function createSearchFormController(
   }
 
   const sanitized = { ...parsed.data };
+  if (typeof sanitized.approximateAge === 'number') {
+    const n = Math.trunc(sanitized.approximateAge);
+    sanitized.approximateAge = Number.isFinite(n)
+      ? Math.max(1, Math.min(999, n))
+      : (undefined as any);
+  }
   if (typeof sanitized.physicalCondition === 'string') {
     sanitized.physicalCondition = sanitized.physicalCondition.slice(0, 100);
   }
@@ -33,6 +39,11 @@ export default async function createSearchFormController(
   if (typeof sanitized.personality === 'string') {
     sanitized.personality = sanitized.personality.slice(0, 200);
   }
+
+  if (typeof sanitized.noiseReactionOther === 'string') {
+    sanitized.noiseReactionOther = sanitized.noiseReactionOther.slice(0, 40);
+  }
+
   if (typeof sanitized.whatHappenedWhenEscaped === 'string') {
     sanitized.whatHappenedWhenEscaped = sanitized.whatHappenedWhenEscaped.slice(
       0,

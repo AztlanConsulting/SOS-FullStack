@@ -93,7 +93,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                     <span className="text-gray-500 pr-5">Contraseña:</span>
                     <span className="font-mono font-medium text-gray-800 text-right">
                       De 5 a 10 minutos deberás recibir un correo electrónico
-                      con tu contraseña
+                      con tu contraseña.
                     </span>
                   </div>
                 </div>

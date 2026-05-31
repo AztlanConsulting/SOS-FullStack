@@ -129,11 +129,11 @@ export const useSearchForm = (initialData?: Partial<SearchFormData>) => {
       newErrors.whatHappenedWhenEscaped = 'Describe qué pasó';
     }
 
-    const MAX_SIZE = 15 * 1024 * 1024;
+    const MAX_SIZE = 5 * 1024 * 1024;
 
     if (formData.vaccinationCard && formData.vaccinationCard instanceof File) {
       if (formData.vaccinationCard.size > MAX_SIZE) {
-        newErrors.vaccinationCard = 'El archivo no debe superar los 15MB';
+        newErrors.vaccinationCard = 'El archivo no debe superar los 5MB';
       }
 
       const allowedTypes = [

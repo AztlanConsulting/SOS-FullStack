@@ -77,7 +77,7 @@ const ClientDashboardOverview = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-[60vh] flex items-center justify-center">
+      <div className="w-full h-[70vh] flex items-center justify-center">
         <Text variant="h3" color="text-gray-400">
           Cargando la información...
         </Text>

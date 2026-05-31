@@ -89,7 +89,7 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
         className="-translate-x-4 md:translate-x-0"
         style={{
           width: '50%',
-          paddingLeft: '30px',
+          paddingLeft: '12px',
           display: 'flex',
           flexDirection: 'column',
           gap: '16px',
@@ -107,8 +107,8 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
               <span
                 style={{
                   display: 'inline-block',
-                  width: '18px',
-                  height: '18px',
+                  width: '15px',
+                  height: '15px',
                   borderRadius: '50%',
                   backgroundColor: dotColor,
                   flexShrink: 0,
@@ -116,7 +116,7 @@ export const ActivePlanChart: React.FC<ActivePlanChartProps> = ({ data }) => {
               />
               <span
                 style={{
-                  fontSize: '16px',
+                  fontSize: '14.8px',
                   color: 'inherit',
                   whiteSpace: 'nowrap',
                 }}

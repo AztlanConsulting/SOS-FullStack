@@ -8,7 +8,9 @@ describe('ClientSearch (Component Tests)', () => {
    */
   test('renders search input with placeholder', () => {
     render(<ClientSearch value="" onChange={vi.fn()} />);
-    expect(screen.getByPlaceholderText('Buscar cliente...')).toBeDefined();
+    expect(
+      screen.getByPlaceholderText('Buscar nombre del cliente...'),
+    ).toBeDefined();
   });
 
   /**
@@ -17,7 +19,7 @@ describe('ClientSearch (Component Tests)', () => {
   test('displays current value', () => {
     render(<ClientSearch value="Sebastian" onChange={vi.fn()} />);
     const input = screen.getByPlaceholderText(
-      'Buscar cliente...',
+      'Buscar nombre del cliente...',
     ) as HTMLInputElement;
     expect(input.value).toBe('Sebastian');
   });
@@ -28,9 +30,12 @@ describe('ClientSearch (Component Tests)', () => {
   test('calls onChange when input changes', () => {
     const onChange = vi.fn();
     render(<ClientSearch value="" onChange={onChange} />);
-    fireEvent.change(screen.getByPlaceholderText('Buscar cliente...'), {
-      target: { value: 'Jorge' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText('Buscar nombre del cliente...'),
+      {
+        target: { value: 'Jorge' },
+      },
+    );
     expect(onChange).toHaveBeenCalledWith('Jorge');
   });
 });

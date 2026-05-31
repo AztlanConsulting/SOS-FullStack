@@ -338,7 +338,7 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
                         const feature = tier.features.find(
                           (f) => f.key === key,
                         );
-                        return feature?.label || key;
+                        return feature?.key || key;
                       }),
                     ]),
                   ),
@@ -348,7 +348,7 @@ const CustomPlanCard: React.FC<CustomPlanCardProps> = ({
 
               if (days >= 6)
                 updated.planDetails.selectedFeatures.push(
-                  ...ALL_FEATURES.map((v) => v.label).slice(0, 2),
+                  ...ALL_FEATURES.map((v) => v.key).slice(0, 2),
                 );
 
               setLostPetReportData(updated);

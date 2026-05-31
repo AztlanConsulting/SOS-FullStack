@@ -419,7 +419,7 @@ const Header = ({
             </nav>
 
             {/* Bottom button */}
-            {<MobileSignIn setIsMenuOpen={setIsMenuOpen} />}
+            {<MobileSignIn setIsMenuOpen={setIsMenuOpen} color={color} />}
           </div>
         </div>
       )}

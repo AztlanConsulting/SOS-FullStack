@@ -110,3 +110,8 @@ export interface PlanProgressResult {
 export interface DashboardResponse {
   planProgress: PlanProgressResult[] | null;
 }
+
+export const notesSchema = z.object({
+  conversation: z.string().max(100, 'Error link demasiado grande').optional(),
+  notes: z.string().max(200, 'demasiadas notas').optional(),
+});

@@ -24,7 +24,7 @@ export const ClientSearch = ({ value, onChange }: Props) => {
       <HiSearch className="text-gray-400 shrink-0" size={14} />
       <input
         type="text"
-        placeholder="Buscar cliente..."
+        placeholder="Buscar nombre del cliente..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="outline-none border-none text-xs w-full bg-transparent text-gray-700 placeholder-gray-400"

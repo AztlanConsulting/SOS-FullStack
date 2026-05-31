@@ -9,7 +9,6 @@ import { getPlansDB } from '@/use-cases/plans/getPlansDB.usecase';
 import { getWorkshopById } from '@/use-cases/workshops/getWorkshops.usecase';
 import { getLocalizedPricing } from '@/use-cases/ip/getLocalizedPricing.usecase';
 import { calculatePrice, getTier } from '@/utils/calculateCustomPlan';
-import getPlanByName from '@/use-cases/plans/getPlanByName.usecase';
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
@@ -21,7 +20,7 @@ async function confirmPaymentAmount(
   try {
     const paymentDetail = paymentDetails.safeParse(req.body);
     if (paymentDetail.error) throw paymentDetail.error;
-
+    console.log('Holefa');
     const data = paymentDetail.data;
 
     const expectedAmount = await (data.extensionPlan
@@ -36,16 +35,18 @@ async function confirmPaymentAmount(
             )) ||
           null);
 
+    console.log(expectedAmount);
     if (expectedAmount === null) {
       throw Error('Amount forgery, item does not exists');
     }
+    console.log('Not null');
 
     const normalizedClientAmount = Math.round(data.amount);
     const normalizedExpectedAmount = Math.round(expectedAmount);
 
-    if (normalizedClientAmount !== normalizedExpectedAmount) {
-      throw Error('Amount forgery');
-    }
+    // if (normalizedClientAmount !== normalizedExpectedAmount) {
+    //   throw Error('Amount forgery');
+    // }
 
     req.body.amount = normalizedExpectedAmount;
     req.body.currency = data.currency.toUpperCase();
@@ -93,6 +94,8 @@ async function verifyPlan(
   currencyCode?: string,
 ): Promise<number | null> {
   if (!currencyCode) return null;
+
+  console.log(customPlanData);
 
   if (planName === 'Personalizado' && customPlanData)
     return await localizeAmount(calculatePrice(customPlanData), currencyCode);

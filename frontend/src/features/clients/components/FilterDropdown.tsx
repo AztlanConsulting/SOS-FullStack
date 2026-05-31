@@ -75,7 +75,7 @@ export const FilterDropdown = ({ filters, onChange }: Props) => {
       </button>
 
       {open && (
-        <div className="absolute right-0 bottom-full mb-1 w-52 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-md z-50 p-3 flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
+        <div className="absolute left-0 top-full mt-1 md:left-auto md:right-0 md:top-auto md:bottom-full md:mb-1 w-52 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-md z-10 p-3 flex flex-col gap-3 max-h-[80vh] overflow-y-auto">
           <div>
             <Text
               variant="small"

@@ -87,6 +87,10 @@ axiosInstance.interceptors.response.use(
       }
     }
 
+    if (error.response?.status === 500) {
+      console.log('Algo salio mal');
+    }
+
     return Promise.reject(error);
   },
 );

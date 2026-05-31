@@ -8,9 +8,14 @@ import { FoundPetDataAccess } from '@/infrastructure/data-access/foundPet.data-a
 import { petVector } from '@/infrastructure/data-access/vectorDB/petVector.data-access';
 import getLocation from '@/utils/getLocation.mapper';
 import type { GeocodingResult } from '@/types/pet.types';
+import { foundPet } from '@/types/foundPet.types';
 
 export async function postFoundPetReport(req: Request, res: Response) {
   try {
+    const body = foundPet.safeParse(req.body);
+
+    if (body.error) throw body.error;
+
     const {
       species,
       date,
@@ -25,8 +30,7 @@ export async function postFoundPetReport(req: Request, res: Response) {
       phoneNumber,
       email,
       images,
-    } = req.body;
-
+    } = body.data;
     if (!images || !Array.isArray(images) || images.length === 0) {
       return res.status(400).json({
         error: 'Invalid or missing images',
@@ -58,9 +62,14 @@ export async function postFoundPetReport(req: Request, res: Response) {
       species,
       date,
       breed: breed.slice(0, 40),
-      sex,
+      sex: sex as 'Macho' | 'Hembra' | 'Desconocido',
       color: color.slice(0, 40),
-      size,
+      size: size as
+        | 'Mini: 1 a 4 kg'
+        | 'Pequeña: 5 a 10 kg'
+        | 'Mediana: 11 a 25 kg'
+        | 'Grande: 26 a 45 kg'
+        | 'Gigante: más de 45 kg',
       description,
       location: requestLocation,
       contactName: contactName.slice(0, 40),

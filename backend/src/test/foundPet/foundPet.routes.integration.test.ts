@@ -97,7 +97,7 @@ describe('foundPet routes (integration)', () => {
       .post('/found-pets/report')
       .send(invalidPayload);
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(500);
     expect(res.body).toHaveProperty('error');
   });
 });

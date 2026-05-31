@@ -7,6 +7,7 @@ import { Outlet } from 'react-router';
 import ExtenderPlanPage from '@/pages/ExtenderPlanPage';
 import { ExclusivePurchasePage } from '@/pages/ExclusivePurchasePage';
 import ExclusiveCustomPlanPage from '@/pages/ExclusiveCustomPlanPage';
+import { PaymentProvider } from '@/features/payment/hooks/PaymentProvider';
 
 const routes = [
   {
@@ -37,7 +38,11 @@ const routes = [
   },
   {
     path: 'compra',
-    element: <ExclusivePurchasePage />,
+    element: (
+      <PaymentProvider>
+        <ExclusivePurchasePage />
+      </PaymentProvider>
+    ),
   },
   {
     path: 'personalizado',

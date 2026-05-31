@@ -30,7 +30,7 @@ export const FilesSubmissionSection = ({
     >
       <div id="vaccination-card-upload" className="flex flex-col w-full">
         <Text variant="caption" weight="medium" className="text-gray-700 mb-2">
-          Cartilla de vacunación (PDF o imagen, máx 15MB)
+          Cartilla de vacunación (PDF o imagen, máx 5MB)
         </Text>
         <label
           className={`relative w-full h-12 border rounded-lg bg-white flex items-center justify-center text-gray-700 text-sm font-medium transition-all cursor-pointer active:scale-[0.98] overflow-hidden px-4 ${

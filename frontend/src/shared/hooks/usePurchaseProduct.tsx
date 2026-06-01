@@ -72,7 +72,7 @@ export default function usePurchaseProduct(purchaseRequest: PurchaseRequest) {
       setEmailError('');
     }
 
-    if (!nameValid || !emailValid) return;
+    if (!nameValid || !emailValid || !nameCharacterValid) return;
 
     // @ts-ignore
     setLostPetReportData(null);

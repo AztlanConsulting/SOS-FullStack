@@ -131,7 +131,7 @@ export const ClientsPage = () => {
         </div>
         <div className="bg-[#FFE598]/20 rounded-xl border border-primary p-5">
           <Text variant="h3" weight="regular" className="mb-4">
-            Lista de clientes
+            Lista de mascotas perdidas
           </Text>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
             <div className="flex items-center gap-2">

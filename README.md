@@ -154,7 +154,7 @@ _Este paso puede variar dependiendo del ambiente de producción y sistema operat
 
 - [Documentación oficial](https://docs.docker.com/engine/install/ubuntu/)
 
-Usar la línea de comandos para las ejecutar las siguientes líneas
+Usar la línea de comandos para las ejecutar las siguientes líneas.
 
 1 **Asegurarse que no haya versiones anteriores instaladas**
 

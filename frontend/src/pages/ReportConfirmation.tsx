@@ -18,6 +18,8 @@ export const ReportConfirmationPage: React.FC = () => {
   const [pendingReportData, setPendingReportData] = useState<
     typeof lostPetReportData | null
   >(null);
+  const [editOpen, setEditOpen] = useState<string[]>([]);
+  const [showErrors, setShowErrors] = useState(false);
   // Reference to the preview container where the poster is displayed
   const posterPreviewRef = useRef<HTMLDivElement>(null);
   // Scale factor used to shrink the full-size poster into the preview box
@@ -34,7 +36,7 @@ export const ReportConfirmationPage: React.FC = () => {
 
     if (lostPetReportData === pendingReportData) {
       setPendingNavigate(false);
-      navigate('/plans');
+      navigate('/planes');
     }
   }, [lostPetReportData, navigate, pendingNavigate, pendingReportData]);
 
@@ -67,9 +69,13 @@ export const ReportConfirmationPage: React.FC = () => {
   }, []);
 
   const handleUpdateForm = (newData: Partial<typeof lostPetReportData>) => {
-    if (lostPetReportData) {
-      setLostPetReportData({ ...lostPetReportData, ...newData });
-    }
+    setLostPetReportData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        ...newData,
+      };
+    });
   };
 
   const handleContinueForm = async (
@@ -120,7 +126,28 @@ export const ReportConfirmationPage: React.FC = () => {
   };
 
   const handleProceedToPayment = async () => {
+    // Can't continue until no edit fields are open
+    setShowErrors(false);
+    if (editOpen.length > 0) {
+      const element = document.getElementById(editOpen[0]);
+      setShowErrors(true);
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+
+        setTimeout(() => {
+          if ('focus' in element) {
+            (element as HTMLElement).focus();
+          }
+        }, 400);
+      }
+      return;
+    }
     await handleContinueForm({});
+    // console.log(lostPetReportData)
     setPendingNavigate(true);
   };
 
@@ -140,6 +167,8 @@ export const ReportConfirmationPage: React.FC = () => {
           <DataConfirmation
             formData={lostPetReportData}
             updateForm={handleUpdateForm}
+            setEditOpen={setEditOpen}
+            showError={showErrors}
           />
 
           <div

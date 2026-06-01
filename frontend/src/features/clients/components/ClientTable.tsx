@@ -60,10 +60,10 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
           <tbody className="bg-white">
             {loading && (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center">
-                  <Text variant="caption" color="text-gray-400">
-                    Cargando...
-                  </Text>
+                <td colSpan={6} className="py-16">
+                  <div className="flex items-center justify-center">
+                    <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+                  </div>
                 </td>
               </tr>
             )}
@@ -147,13 +147,9 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
       </div>
       <div className="md:hidden flex flex-col gap-3">
         {loading && (
-          <Text
-            variant="caption"
-            color="text-gray-400"
-            className="text-center py-6"
-          >
-            Cargando...
-          </Text>
+          <div className="flex items-center justify-center py-16">
+            <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+          </div>
         )}
         {!loading && clients.length === 0 && (
           <Text
@@ -190,7 +186,11 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                       })
                     : '—'}
                 </Text>
-                <Text variant="small" color="text-gray-500">
+                <Text
+                  variant="small"
+                  color="text-gray-500"
+                  className="break-words"
+                >
                   Notas: {client.pet?.description ?? '—'}
                 </Text>
                 {client.conversation &&
@@ -205,7 +205,11 @@ export const ClientTable = ({ clients, loading, onRowClick }: Props) => {
                       {client.conversation}
                     </a>
                   ) : (
-                    <Text variant="small" color="text-gray-500">
+                    <Text
+                      variant="small"
+                      color="text-gray-500"
+                      className="break-words"
+                    >
                       {client.conversation}
                     </Text>
                   ))}

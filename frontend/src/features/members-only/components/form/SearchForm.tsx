@@ -129,7 +129,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialData }) => {
         </div>
 
         {isSubmitting && (
-          <div className="text-center text-blue-600">
+          <div className="text-center text-purple-primary">
             Enviando formulario...
           </div>
         )}

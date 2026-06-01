@@ -1,17 +1,11 @@
-import { NavLink } from 'react-router';
-import {
-  HiUsers,
-  HiLink,
-  HiBookOpen,
-  HiCog,
-  HiClipboardList,
-} from 'react-icons/hi';
-import { HiUserGroup } from 'react-icons/hi';
-import { FaDog } from 'react-icons/fa6';
+import { NavLink, useNavigate } from 'react-router';
+import { HiUsers } from 'react-icons/hi';
 import { TbLogout } from 'react-icons/tb';
+import { useState } from 'react';
 import { Text } from '@/shared/components/ui/Text';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import SignOut from '@/shared/components/ui/Button/SignOut';
+import { DecisionModal } from '@/shared/components/ui/Modal/DecisionModal';
 import whiteIcon from '@/assets/images/whiteIcon.webp';
 
 const NAV_ITEMS = [
@@ -26,11 +20,13 @@ const NAV_ITEMS = [
 
 export const Sidebar = () => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden md:flex flex-col h-screen w-52 lg:w-64 bg-primary px-4 py-6 shrink-0 sticky top-0 overflow-y-auto sidebar-scrollbar overflow-x-hidden">
+      <div className="hidden lg:flex flex-col h-screen w-52 lg:w-64 bg-primary px-4 py-6 shrink-0 fixed top-0 left-0 overflow-x-hidden">
         <div className="flex justify-center mb-2">
           <NavLink to="/">
             <img
@@ -85,7 +81,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Mobile bottom nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-primary z-50 px-2 py-2">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-primary z-50 px-2 py-2 w-full overflow-hidden">
         <nav className="flex items-center justify-around">
           {NAV_ITEMS.map(({ label, icon: Icon, path, enabled }) =>
             enabled ? (
@@ -124,7 +120,7 @@ export const Sidebar = () => {
             ),
           )}
           <button
-            onClick={logout}
+            onClick={() => setIsLogoutModalOpen(true)}
             className="flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors text-white hover:text-gray-200"
           >
             <TbLogout size={20} />
@@ -133,14 +129,31 @@ export const Sidebar = () => {
               weight="medium"
               className="text-inherit text-[10px]"
             >
-              Salir
+              Cerrar sesión
             </Text>
           </button>
         </nav>
       </div>
 
+      {isLogoutModalOpen && (
+        <DecisionModal
+          title="¿Deseas cerrar sesión?"
+          description="Tu sesión se cerrará y tendrás que volver a iniciar sesión para continuar."
+          color="yellow"
+          onClose={() => setIsLogoutModalOpen(false)}
+          leftText="Cancelar"
+          rightText="Cerrar sesión"
+          onLeftAction={() => setIsLogoutModalOpen(false)}
+          onRightAction={() => {
+            logout();
+            navigate('/');
+            setIsLogoutModalOpen(false);
+          }}
+        />
+      )}
+
       {/* Mobile bottom padding so content doesn't hide behind nav */}
-      <div className="md:hidden h-16" />
+      <div className="lg:hidden h-16" />
     </>
   );
 };

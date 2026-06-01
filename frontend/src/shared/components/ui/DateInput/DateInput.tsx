@@ -11,9 +11,42 @@ export const DateInput: React.FC<DateInputProps> = ({
   id,
   required,
   error,
+  value,
+  defaultValue,
+  onKeyDown,
+  onPaste,
+  onDrop,
+  style,
+  placeholder,
   ...props
 }) => {
   const hasErrorState = Boolean(error);
+  const shouldHideNativeDate = !value && !defaultValue;
+  const datePlaceholder = placeholder ?? 'dd/mm/aaaa';
+
+  const preventManualDateEntry = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    onKeyDown?.(event);
+
+    if (
+      event.defaultPrevented ||
+      [
+        'Tab',
+        'Shift',
+        'Control',
+        'Alt',
+        'Meta',
+        'Escape',
+        'Enter',
+        ' ',
+      ].includes(event.key)
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -35,7 +68,31 @@ export const DateInput: React.FC<DateInputProps> = ({
         <input
           type="date"
           id={id}
+          value={value}
+          defaultValue={defaultValue}
+          inputMode="none"
+          autoComplete="off"
+          placeholder={datePlaceholder}
+          onKeyDown={preventManualDateEntry}
+          onPaste={(event) => {
+            onPaste?.(event);
+            if (!event.defaultPrevented) event.preventDefault();
+          }}
+          onDrop={(event) => {
+            onDrop?.(event);
+            if (!event.defaultPrevented) event.preventDefault();
+          }}
+          style={
+            shouldHideNativeDate
+              ? {
+                  ...style,
+                  color: 'transparent',
+                  WebkitTextFillColor: 'transparent',
+                }
+              : style
+          }
           className="w-full text-sm text-gray-700 bg-transparent outline-none relative z-10
+                     [&::-webkit-datetime-edit]:text-inherit
                      [&::-webkit-calendar-picker-indicator]:opacity-0 
                      [&::-webkit-calendar-picker-indicator]:absolute 
                      [&::-webkit-calendar-picker-indicator]:right-0 
@@ -44,6 +101,12 @@ export const DateInput: React.FC<DateInputProps> = ({
                      [&::-webkit-calendar-picker-indicator]:cursor-pointer"
           {...props}
         />
+
+        {shouldHideNativeDate && (
+          <span className="absolute left-2 bottom-1 text-sm text-gray-400 pointer-events-none z-0">
+            {datePlaceholder}
+          </span>
+        )}
 
         <div className="absolute right-3 top-1/2 translate-y-[-10%] pointer-events-none text-black z-0">
           <svg

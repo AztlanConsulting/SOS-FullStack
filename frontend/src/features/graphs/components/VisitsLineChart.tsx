@@ -41,6 +41,9 @@ const MONTHS = [
   'Diciembre',
 ];
 
+const currentYear = new Date().getFullYear();
+const YEARS = Array.from({ length: 3 }, (_, i) => currentYear - i); // last 3 years
+
 /**
  * VisitsLineChart Component
  *
@@ -64,23 +67,39 @@ export const VisitsLineChart = ({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Month navigation */}
-      <div className="flex items-center justify-between mb-3">
-        <button
-          onClick={onPrev}
-          className="text-gray-400 hover:text-yellow-500 transition-colors px-2"
+      {/* Month/Year selector */}
+      <div className="flex gap-2 mb-3">
+        <select
+          value={month}
+          onChange={(e) => {
+            const diff = Number(e.target.value) - month;
+            if (diff > 0) Array.from({ length: diff }).forEach(() => onNext());
+            else Array.from({ length: -diff }).forEach(() => onPrev());
+          }}
+          className="flex-1 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-yellow-400 bg-white text-gray-600 cursor-pointer"
         >
-          ←
-        </button>
-        <span className="text-caption font-bold text-gray-600">
-          {MONTHS[month - 1]} {year}
-        </span>
-        <button
-          onClick={onNext}
-          className="text-gray-400 hover:text-yellow-500 transition-colors px-2"
+          {MONTHS.map((m, i) => (
+            <option key={i} value={i + 1}>
+              {m}
+            </option>
+          ))}
+        </select>
+        <select
+          value={year}
+          onChange={(e) => {
+            const yearDiff = (Number(e.target.value) - year) * 12;
+            if (yearDiff > 0)
+              Array.from({ length: yearDiff }).forEach(() => onNext());
+            else Array.from({ length: -yearDiff }).forEach(() => onPrev());
+          }}
+          className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-yellow-400 bg-white text-gray-600 cursor-pointer"
         >
-          →
-        </button>
+          {YEARS.map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Chart */}

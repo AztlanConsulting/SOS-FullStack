@@ -130,11 +130,13 @@ export const calculatePrice = (
   colorScheme: ColorScheme = 'yellow',
 ): number => {
   const tier = getTier(days, colorScheme);
+
   // Calculate the base cost using duration and distance rates
   const basePrice = days * tier.pricePerDay + km * tier.pricePerKm;
   // Sum the prices of all valid selected features within this tier
   const featuresPrice = tier.features
     .filter((f) => selectedFeatures.includes(f.key))
     .reduce((sum, f) => sum + f.price, 0);
+
   return basePrice + featuresPrice;
 };

@@ -1,3 +1,4 @@
+import { safeParse } from 'zod';
 import type { Request, Response } from 'express';
 import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { getClientById } from '@/use-cases/clients/getClientById.usecase';
@@ -5,6 +6,7 @@ import { getClients } from '@/use-cases/clients/getClients.usecase';
 import { updateClient } from '@/use-cases/clients/updateClient.usecase';
 import { updatePlanStatus } from '@/use-cases/clients/updatePlanStatus.usecase';
 import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
+import { notesSchema } from '@/types/clients.type';
 
 /**
  * Dependency Injection setup.
@@ -29,7 +31,18 @@ export const ClientController = {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const search = req.query.search as string | undefined;
-      const result = await getClients(deps, { page, search });
+      const limit = req.query.limit
+        ? parseInt(req.query.limit as string)
+        : undefined;
+      const status = req.query.status as string | undefined;
+      const conversation = req.query.conversation as 'con' | 'sin' | undefined;
+      const result = await getClients(deps, {
+        page,
+        search,
+        limit,
+        status,
+        conversation,
+      });
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching clients' });
@@ -65,8 +78,6 @@ export const ClientController = {
    * @returns {Promise<void>} Sends a 200 JSON success confirmation or an appropriate error code status.
    */
   updatePlanStatus: async (req: Request, res: Response): Promise<void> => {
-    console.log('updatePlanStatus hit', req.params, req.body);
-
     try {
       const planId = Array.isArray(req.params.planId)
         ? req.params.planId[0]
@@ -98,7 +109,14 @@ export const ClientController = {
       const id = Array.isArray(req.params.id)
         ? req.params.id[0]
         : req.params.id;
-      const { conversation, notes } = req.body;
+      const body = notesSchema.safeParse(req.body);
+
+      if (body.error) {
+        res.status(401).send(body.error);
+        return;
+      }
+
+      const { conversation, notes } = body.data;
 
       if (!id || typeof id !== 'string') {
         res.status(400).json({ error: 'Invalid client id' });

@@ -3,7 +3,14 @@ import { LeafletMapService } from '../services/leafletMapService';
 import { PhotonGeocoding } from '@features/map/services/photonGeocodingService';
 import type { GeocodingResult } from '@features/map/types/geocodingResult';
 
-const DEFAULT_LOCATION_LABEL = 'Ciudad de México, México';
+export const ADDRESS_SEARCH_MAX_LENGTH = 200;
+
+const DEFAULT_LOCATION_LABEL = '';
+const REVERSE_GEOCODING_DEBOUNCE_MS = 350;
+const limitAddressLength = (value: string) =>
+  value.slice(0, ADDRESS_SEARCH_MAX_LENGTH);
+
+const getCoordsKey = ([lat, lng]: [number, number]) => `${lat},${lng}`;
 
 type MarkerAddressPayload = {
   coords: [number, number];
@@ -34,13 +41,20 @@ export function useGeocoding(
 
   // Stores the debounce timer reference to allow clearing previous timeouts between renders
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reverseDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingReverseCoordsRef = useRef<string | null>(null);
+  const reverseGeocodingCacheRef = useRef(
+    new Map<string, MarkerAddressPayload>(),
+  );
 
   // Handles the logic as the user types it out
   const handleSearch = useCallback((value: string) => {
-    setQuery(value);
+    const limitedValue = limitAddressLength(value);
+
+    setQuery(limitedValue);
 
     // Helps us avoid API requests in the case the query is too short
-    if (value.trim().length < 3) {
+    if (limitedValue.trim().length < 3) {
       setResults([]);
       return [];
     }
@@ -53,7 +67,7 @@ export function useGeocoding(
     debounceRef.current = setTimeout(async () => {
       setIsLoading(true);
 
-      const found = await PhotonGeocoding.search(value);
+      const found = await PhotonGeocoding.search(limitedValue);
 
       setResults(found);
       setIsLoading(false);
@@ -65,42 +79,70 @@ export function useGeocoding(
     LeafletMapService.flyTo(result.coords);
     LeafletMapService.placeMarker(result.coords, false);
 
-    setQuery(result.displayName);
+    setQuery(limitAddressLength(result.displayName));
     setResults([]);
   }, []);
 
   useEffect(() => {
-    const unsubscribe = LeafletMapService.onMarkerMove(async (coords) => {
-      setResults([]);
-      const result = await PhotonGeocoding.reverse(coords);
-
-      console.log('[useGeocoding] marker moved', {
-        coords,
-        reverseResult: result,
-        properties: result?.properties,
-      });
-
-      if (result) {
-        setQuery(result.displayName);
-        const isComplete = Boolean(
-          result.properties?.city &&
-          result.properties?.state &&
-          result.properties?.country,
-        );
-        onMarkerAddressChange?.({
-          coords: result.coords,
-          address: result.displayName,
-          properties: result.properties,
-          isComplete,
-        });
-      } else {
-        onMarkerAddressChange?.({
-          coords,
-          address: '',
-          properties: undefined,
-          isComplete: false,
-        });
+    const updateMarkerAddress = (payload: MarkerAddressPayload) => {
+      if (payload.address) {
+        setQuery(limitAddressLength(payload.address));
       }
+      onMarkerAddressChange?.(payload);
+    };
+
+    const unsubscribe = LeafletMapService.onMarkerMove((coords) => {
+      const coordsKey = getCoordsKey(coords);
+      const cachedPayload = reverseGeocodingCacheRef.current.get(coordsKey);
+
+      setResults([]);
+
+      if (cachedPayload) {
+        updateMarkerAddress(cachedPayload);
+        return;
+      }
+
+      if (pendingReverseCoordsRef.current === coordsKey) {
+        return;
+      }
+
+      pendingReverseCoordsRef.current = coordsKey;
+
+      if (reverseDebounceRef.current) {
+        clearTimeout(reverseDebounceRef.current);
+      }
+
+      reverseDebounceRef.current = setTimeout(async () => {
+        const result = await PhotonGeocoding.reverse(coords);
+        let payload: MarkerAddressPayload;
+
+        if (result) {
+          const address = limitAddressLength(result.displayName);
+          const isComplete = Boolean(
+            result.properties?.city &&
+            result.properties?.state &&
+            result.properties?.country,
+          );
+
+          payload = {
+            coords: result.coords,
+            address,
+            properties: result.properties,
+            isComplete,
+          };
+        } else {
+          payload = {
+            coords,
+            address: '',
+            properties: undefined,
+            isComplete: false,
+          };
+        }
+
+        reverseGeocodingCacheRef.current.set(coordsKey, payload);
+        pendingReverseCoordsRef.current = null;
+        updateMarkerAddress(payload);
+      }, REVERSE_GEOCODING_DEBOUNCE_MS);
     });
 
     return () => {
@@ -108,6 +150,10 @@ export function useGeocoding(
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
+      if (reverseDebounceRef.current) {
+        clearTimeout(reverseDebounceRef.current);
+      }
+      pendingReverseCoordsRef.current = null;
     };
   }, [onMarkerAddressChange]);
 

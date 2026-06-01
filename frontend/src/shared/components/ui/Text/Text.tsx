@@ -19,6 +19,7 @@ type TextProps = {
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 };
 
 const variantStyles: Record<Variant, string> = {
@@ -46,6 +47,7 @@ export const Text = ({
   as: Component = 'p',
   children,
   className,
+  style,
 }: TextProps) => {
   const defaultColor = 'text-gray-900';
 
@@ -57,6 +59,7 @@ export const Text = ({
         color || defaultColor,
         className,
       )}
+      style={style}
     >
       {children}
     </Component>

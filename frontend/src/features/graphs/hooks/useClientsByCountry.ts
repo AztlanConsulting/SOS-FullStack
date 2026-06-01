@@ -23,7 +23,6 @@ export const useClientsByCountry = () => {
     const fetchData = async () => {
       try {
         const result = await axiosInstance.get('/metrics/clients-by-country');
-        console.log(result.data);
         setData(result.data);
       } catch {
         setError('Error al cargar distribución por país');

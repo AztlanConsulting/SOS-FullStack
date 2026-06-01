@@ -181,7 +181,7 @@ describe('useSearchForm', () => {
     expect(result.current.errors.whatHappenedWhenEscaped).toBeUndefined();
   });
 
-  test('returns error when file exceeds 15MB', async () => {
+  test('returns error when file exceeds 5MB', async () => {
     const largeFile = new File(['x'.repeat(16 * 1024 * 1024)], 'test.pdf', {
       type: 'application/pdf',
     });
@@ -196,7 +196,7 @@ describe('useSearchForm', () => {
     });
 
     expect(result.current.errors.vaccinationCard).toBe(
-      'El archivo no debe superar los 15MB',
+      'El archivo no debe superar los 5MB',
     );
   });
 

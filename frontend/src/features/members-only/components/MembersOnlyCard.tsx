@@ -40,7 +40,15 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
         variant="body"
         weight="medium"
         color="text-black"
-        className="pl-4 py-4 border-t border-purple flex-grow"
+        className="px-4 mb-4 pt-4 border-t border-purple flex-grow"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
+        }}
       >
         {card.name}
       </Text>
@@ -59,10 +67,10 @@ const MembersOnlyCard = ({ card }: { card: MembersOnly }) => {
         })}
       </Text>
       <div className="flex flex-col items-center justify-center py-5 border-t border-purple ">
-        <div className="w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7">
+        <div className="w-full flex items-center justify-center">
           <Button
             label="Ver"
-            variant="purple"
+            variant="purplePlans"
             onClick={() =>
               navigate(`/inicio/contenido-exclusivo/pagina/${card._id}`)
             }

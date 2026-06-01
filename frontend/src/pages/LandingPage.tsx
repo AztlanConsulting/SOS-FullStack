@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router';
 import Header from '../shared/components/layout/Header';
 import HeroSection from '../features/landing/components/landingPage/HeroSection';
 import { PetReportForm } from '@features/users/components/PetReportForm';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 
 const ServicesSection = lazy(
   () => import('../features/landing/components/landingPage/ServicesSection'),
@@ -43,7 +44,13 @@ const LandingPage = () => {
       <Header />
       <main className="pt-[72px] lg:pt-0">
         <HeroSection />
-        <Suspense fallback={<>Cargando...</>}>
+        <Suspense
+          fallback={
+            <div className="min-h-64 flex items-center justify-center">
+              <LoadingSpinner />
+            </div>
+          }
+        >
           <PublicationSection />
           <PlansSection />
           <ServicesSection />

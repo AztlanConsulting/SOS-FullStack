@@ -230,7 +230,7 @@ sudo systemctl status nginx
 ```
 
 3 **Activar el servicio**
-Si en el paso anterior nginx tiene un estado de apagado es necesario activarlo manualmente
+Si en el paso anterior nginx tiene un estado de apagado es necesario activarlo manualmente.
 
 ```bash
 sudo systemctl start nginx

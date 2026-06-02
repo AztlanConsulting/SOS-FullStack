@@ -10,6 +10,7 @@ import { usePayment } from '@/features/payment/hooks/usePayment';
 import ConfirmPaymentModal from '@/features/purchases/components/ConfirmPaymentModal';
 import PendingPaymentModal from '@/features/purchases/components/PendingPaymentModal';
 import usePurchasePage from '@/features/purchases/hooks/usePurchasePage';
+import { Suspense } from 'react';
 
 // Container for purchase information and purchase logic
 export const PurchasePage = () => {
@@ -21,15 +22,12 @@ export const PurchasePage = () => {
   const { productId, productType, userEmail, userName, selectedPlan } =
     purchaseData.state ?? {};
 
-  const { product } = purchaseData;
+  const { reportDataForCheckout, product } = purchaseData;
+  const { navigateHome } = purchaseData;
 
   const [success, setSuccess] = purchaseData.successHook;
   const [pending, setPending] = purchaseData.pendingHook;
   const { isLoading, error: queryError } = purchaseData.query;
-  const isPlanExtension = productType === 'plan-extension';
-  const reportDataForCheckout = isPlanExtension
-    ? null
-    : purchaseData.lostPetReportData;
 
   const purchaseDetail: PurchaseDetail = {
     userName,
@@ -49,55 +47,71 @@ export const PurchasePage = () => {
   return (
     <>
       <Header />
-      <main className="max-lg:pt-20 min-h-screen">
-        {isLoading && <LoadingSpinner size="lg" />}
-        {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
-        {Boolean(product || reportDataForCheckout) && (
-          <div className="mx-auto flex flex-col lg:flex-row lg:row-0 lg:grid lg:grid-cols-2 mb-10 w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
-            <PurchaseDetails
-              product={product}
-              reportData={reportDataForCheckout}
-            />
-            <PurchaseForm
-              product={product}
-              petReportData={reportDataForCheckout}
-              success={processPayment}
-              pending={handlePending}
-              onMethodSelect={() => {
-                setSuccess(false);
-                setPending(false);
-              }}
-              purchaseDetail={purchaseDetail}
-              selectedPlan={selectedPlan}
-            />
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <LoadingSpinner />
           </div>
-        )}
-        {error && (
-          <Modal
-            title={'Error al intentar procesar el pago'}
-            onClose={() => setError(null)}
-          >
-            <p className="text-center mb-2">Ha ocurrido un error inesperado.</p>
-            <p className="text-center">Vuelve a intentar en unos momentos</p>
-          </Modal>
-        )}
-        {/* Modal to show success state */}
-        {success && (
-          <ConfirmPaymentModal
-            plan={reportDataForCheckout}
-            product={product}
-            onClose={() => setSuccess(false)}
-          />
-        )}
-        {/* Modal to show pending state */}
-        {pending && (
-          <PendingPaymentModal
-            plan={reportDataForCheckout}
-            product={product}
-            onClose={() => setPending(false)}
-          />
-        )}
-      </main>
+        }
+      >
+        <main className="max-lg:pt-20 min-h-screen">
+          {isLoading && <LoadingSpinner size="lg" />}
+          {queryError && <Text>Error en la compra, intenta de nuevo</Text>}
+          {Boolean(product || reportDataForCheckout) && (
+            <div className="mx-auto flex flex-col lg:flex-row lg:row-0 lg:grid lg:grid-cols-2 mb-10 w-4/5 lg:w-full lg:max-w-4xl xl:max-w-5xl">
+              <PurchaseDetails
+                product={product}
+                reportData={reportDataForCheckout}
+              />
+              <PurchaseForm
+                product={product}
+                petReportData={reportDataForCheckout}
+                success={processPayment}
+                pending={handlePending}
+                onMethodSelect={() => {
+                  setSuccess(false);
+                  setPending(false);
+                }}
+                purchaseDetail={purchaseDetail}
+                selectedPlan={selectedPlan}
+              />
+            </div>
+          )}
+          {error && (
+            <Modal
+              title={'Error al intentar procesar el pago'}
+              onClose={() => setError(null)}
+            >
+              <p className="text-center mb-2">
+                Ha ocurrido un error inesperado.
+              </p>
+              <p className="text-center">Vuelve a intentar en unos momentos</p>
+            </Modal>
+          )}
+          {/* Modal to show success state */}
+          {success && (
+            <ConfirmPaymentModal
+              plan={reportDataForCheckout}
+              product={product}
+              onClose={() => {
+                setSuccess(false);
+                navigateHome();
+              }}
+            />
+          )}
+          {/* Modal to show pending state */}
+          {pending && (
+            <PendingPaymentModal
+              plan={reportDataForCheckout}
+              product={product}
+              onClose={() => {
+                setPending(false);
+                navigateHome();
+              }}
+            />
+          )}
+        </main>
+      </Suspense>
       <Footer />
     </>
   );

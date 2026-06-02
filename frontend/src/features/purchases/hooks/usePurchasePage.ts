@@ -62,9 +62,7 @@ function usePurchasePage() {
   ]);
 
   useEffect(() => {
-    console.log(reportDataForCheckout, product);
-    if (reportDataForCheckout && product) {
-      console.log('Store');
+    if (reportDataForCheckout || product) {
       // Store purchase information for paypal purchase flow
       sessionStorage.setItem(
         'checkoutData',
@@ -73,6 +71,8 @@ function usePurchasePage() {
           product,
         }),
       );
+    } else {
+      console.log('Error: No product or report');
     }
   }, [product]);
 
@@ -100,6 +100,10 @@ function usePurchasePage() {
     // console.log(queryParams)
   }, [state, reportDataForCheckout]);
 
+  function navigateHome() {
+    navigate('/');
+  }
+
   return {
     state,
     successHook,
@@ -107,6 +111,8 @@ function usePurchasePage() {
     query,
     lostPetReportData,
     product,
+    reportDataForCheckout,
+    navigateHome,
   };
 }
 

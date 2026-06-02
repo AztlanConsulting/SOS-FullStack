@@ -27,7 +27,7 @@ const PaypalProvider: PaypalApi = {
   // This value could be cached to optimize response, and lower api interactions
   async getAccessToken() {
     console.log('Client ID and secrets', `${CLIENT_ID}:${CLIENT_SECRET}`);
-
+    console.log(ENDPOINT_URL);
     const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
     const data = 'grant_type=client_credentials';
     const { accessToken, error } = await fetch(

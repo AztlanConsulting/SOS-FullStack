@@ -147,7 +147,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialData }) => {
             precisas para su búsqueda."
             onClose={() => {
               resetForm();
-              navigate('/inicio/contenido-exclusivo/formulario');
+              navigate('/inicio/contenido-exclusivo');
             }}
           />
         )}

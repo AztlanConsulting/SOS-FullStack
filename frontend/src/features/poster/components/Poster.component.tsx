@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 import phone from '@assets/images/phone.webp';
@@ -9,22 +9,15 @@ const PosterImage: React.FC<{ file: File; className: string }> = ({
   file,
   className,
 }) => {
-  const [src, setSrc] = useState<string>('');
+  // Keep a stable object URL for this file while the poster is mounted.
+  // Revoking too early can race with html-to-image and produce ERR_FILE_NOT_FOUND.
+  const objectUrl = useMemo(() => URL.createObjectURL(file), [file]);
 
-  useEffect(() => {
-    const objectUrl = URL.createObjectURL(file);
-    setSrc(objectUrl);
-
-    return () => {
-      URL.revokeObjectURL(objectUrl);
-    };
-  }, [file]);
-
-  if (!src) {
+  if (!objectUrl) {
     return <div className={`${className} bg-[#E7E0CC]`} />;
   }
 
-  return <img loading="eager" src={src} className={className} alt="" />;
+  return <img loading="eager" src={objectUrl} className={className} alt="" />;
 };
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(

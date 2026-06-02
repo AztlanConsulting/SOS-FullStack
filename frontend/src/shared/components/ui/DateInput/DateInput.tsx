@@ -59,7 +59,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       >
         <label
           htmlFor={id}
-          className={`block text-xs text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+          className={`block text-sm text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
         >
           {label}
           {required && <span className="text-red-500 font-bold">*</span>}
@@ -91,7 +91,7 @@ export const DateInput: React.FC<DateInputProps> = ({
                 }
               : style
           }
-          className="w-full text-sm text-gray-700 bg-transparent outline-none relative z-10
+          className="w-full text-base text-gray-700 bg-transparent outline-none relative z-10
                      [&::-webkit-datetime-edit]:text-inherit
                      [&::-webkit-calendar-picker-indicator]:opacity-0 
                      [&::-webkit-calendar-picker-indicator]:absolute 
@@ -103,7 +103,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         />
 
         {shouldHideNativeDate && (
-          <span className="absolute left-2 bottom-1 text-sm text-gray-400 pointer-events-none z-0">
+          <span className="absolute left-2 bottom-1 text-base text-gray-400 pointer-events-none z-0">
             {datePlaceholder}
           </span>
         )}

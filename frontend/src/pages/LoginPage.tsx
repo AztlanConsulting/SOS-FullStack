@@ -25,7 +25,7 @@ const LoginPage = () => {
       <button className="top-0 h-8 my-2 w-full flex items-start justify-start">
         <HiHome
           size="100%"
-          className="aspect-square text-primary w-fit ml-4 cursor-pointer"
+          className="aspect-square text-primary w-fit ml-1 cursor-pointer"
           onClick={() => navigator('/')}
         />
       </button>

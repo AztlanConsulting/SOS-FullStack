@@ -88,7 +88,8 @@ export const VisitsLineChart = ({
           value={year}
           onChange={(e) => {
             const yearDiff = (Number(e.target.value) - year) * 12;
-            if (yearDiff > 0) Array.from({ length: yearDiff }).forEach(() => onNext());
+            if (yearDiff > 0)
+              Array.from({ length: yearDiff }).forEach(() => onNext());
             else Array.from({ length: -yearDiff }).forEach(() => onPrev());
           }}
           className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-yellow-400 bg-white text-gray-600 cursor-pointer"

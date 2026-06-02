@@ -106,9 +106,8 @@ describe('useClients (Unit Tests)', () => {
       result.current.refresh();
     });
 
-    await waitFor(
-      () => expect(axiosInstance.get).toHaveBeenCalledTimes(2),
-      { timeout: 2000 },
-    );
+    await waitFor(() => expect(axiosInstance.get).toHaveBeenCalledTimes(2), {
+      timeout: 2000,
+    });
   }, 10000);
 });

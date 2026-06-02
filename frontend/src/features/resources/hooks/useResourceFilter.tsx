@@ -1,0 +1,54 @@
+import calculatePages from '@shared/utils/calculatePages';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+
+interface Props {
+  total: number;
+}
+
+// Handle logic for searching
+export default function useResourceFilter<T extends Props>(
+  queryFunction: (
+    page: number,
+    searchTerm?: string,
+    sortOption?: string,
+    typeOption?: string,
+  ) => Promise<T>,
+  type: string,
+  defaultSortOption: string = 'Nombre (A-Z)',
+) {
+  // Pagination state
+  const pageHook = useState(1);
+  const [page, setPage] = pageHook;
+
+  // Search Options
+  const [searchTerm, setSearchTerm] = useState('');
+  const sortHook = useState<string>(defaultSortOption);
+  const sortOption = sortHook[0];
+  const typeHook = useState<string>('Todos');
+  const typeOption = typeHook[0];
+
+  // Query
+  const query = useQuery({
+    queryKey: [type, page, searchTerm, sortOption, typeOption],
+    queryFn: async () =>
+      queryFunction(page, searchTerm, sortOption, typeOption),
+  });
+  const { data } = query;
+
+  // Pagination
+  const [visiblePages, totalPages] = useMemo(() => {
+    return data ? calculatePages(data.total, page, 6) : [[], 0];
+  }, [data, page]);
+
+  function handleSearch(value: string) {
+    setSearchTerm(value);
+    setPage(1);
+  }
+
+  // Structure data
+  const searchHook = { handleSearch, sortHook, typeHook };
+  const pages = { pageHook, visiblePages, totalPages };
+
+  return { searchHook, query, pages };
+}

@@ -110,6 +110,10 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
                   Los detalles de la compra se han enviado a tu correo.
                 </strong>
               </Text>
+
+              <Text variant="small" className="text-gray-400 mb-4 block">
+                El correo puede tardar 5-10 minutos en llegar
+              </Text>
             </>
           )}
 

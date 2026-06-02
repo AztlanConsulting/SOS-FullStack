@@ -1,5 +1,5 @@
 import { Worker } from 'bullmq';
-import { redis } from './redis';
+import { redisConnection } from './redis';
 import { emailService } from '@/infrastructure/service/email.service';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { purchasedPlanDataAccess } from '@infrastructure/data-access/purchasedPlan.data-access';
@@ -69,6 +69,6 @@ new Worker(
     }
   },
   {
-    connection: redis,
+    connection: redisConnection,
   },
 );

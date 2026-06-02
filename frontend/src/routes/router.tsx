@@ -16,12 +16,11 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
-import routerClients from './client.routes';
+import routerAdmin from './admin.routes.tsx';
 import routerMembersOnly from './membersOnly.routes';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
 import { PaymentProvider } from '@/features/payment/hooks/PaymentProvider';
-import routerResource from './resources.routes.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -58,7 +57,6 @@ export const router = createBrowserRouter([
             <Dashboard />
           </RoleProtectedRoute>
         ),
-        children: [...routerResource],
       },
       {
         path: '/inicio',
@@ -94,7 +92,7 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
-      ...routerClients,
+      ...routerAdmin,
     ],
   },
 ]);

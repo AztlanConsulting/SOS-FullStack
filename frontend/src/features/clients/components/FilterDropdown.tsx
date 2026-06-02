@@ -61,10 +61,11 @@ export const FilterDropdown = ({ filters, onChange }: Props) => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1 border rounded-md px-2 py-2 text-xs transition-colors ${activeCount > 0
-          ? 'border-[#C2991D] text-[#C2991D] bg-[#F9CD48]/35'
-          : 'border-gray-300 bg-white text-gray-600 hover:text-[#C2991D] hover:bg-[#F9CD48]/35 hover:border hover:border-[#C2991D]'
-          }`}
+        className={`flex items-center gap-1 border rounded-md px-2 py-2 text-xs transition-colors ${
+          activeCount > 0
+            ? 'border-[#C2991D] text-[#C2991D] bg-[#F9CD48]/35'
+            : 'border-gray-300 bg-white text-gray-600 hover:text-[#C2991D] hover:bg-[#F9CD48]/35 hover:border hover:border-[#C2991D]'
+        }`}
       >
         <HiFilter size={14} />
         {activeCount > 0 && (
@@ -95,10 +96,11 @@ export const FilterDropdown = ({ filters, onChange }: Props) => {
                       status: filters.status === value ? undefined : value,
                     })
                   }
-                  className={`text-left text-xs px-2 py-1.5 rounded-md transition-colors ${filters.status === value
-                    ? 'bg-yellow-50 text-yellow-600 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                  className={`text-left text-xs px-2 py-1.5 rounded-md transition-colors ${
+                    filters.status === value
+                      ? 'bg-yellow-50 text-yellow-600 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
                 >
                   {label}
                 </button>
@@ -128,10 +130,11 @@ export const FilterDropdown = ({ filters, onChange }: Props) => {
                         filters.conversation === value ? undefined : value,
                     })
                   }
-                  className={`text-left text-xs px-2 py-1.5 rounded-md transition-colors capitalize ${filters.conversation === value
-                    ? 'bg-yellow-50 text-yellow-600 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                  className={`text-left text-xs px-2 py-1.5 rounded-md transition-colors capitalize ${
+                    filters.conversation === value
+                      ? 'bg-yellow-50 text-yellow-600 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
                 >
                   {value === 'con' ? 'Con conversación' : 'Sin conversación'}
                 </button>

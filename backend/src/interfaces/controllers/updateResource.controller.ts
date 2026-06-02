@@ -2,16 +2,18 @@ import type {
   PartialResourceWithId,
   ResourceRepository,
 } from '@/domain/repositories/resource.repository';
-import { Resource } from '@/domain/repositories/resource.repository';
 import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
 import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
-import { resourceQuery, updateResourceSchema } from '@/types/resource.types';
+import {
+  resourceSearchQuery,
+  updateResourceSchema,
+} from '@/types/resource.types';
 import updateResourceUC from '@/use-cases/resources/updateResourceUC.usecase';
 import { type Request, type Response } from 'express';
 
 async function updateResource(req: Request, res: Response) {
   try {
-    const query = resourceQuery.safeParse(req.query);
+    const query = resourceSearchQuery.safeParse(req.query);
     const body = updateResourceSchema.safeParse(req.body);
 
     if (query.error || body.error) throw query.error ?? body.error;

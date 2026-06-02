@@ -38,7 +38,7 @@ async function start() {
       break;
     case 'clean':
       await startVectorDB();
-      console.log("Database Cleaned");
+      console.log('Database Cleaned');
       break;
     default:
       console.log('Error: code not accepted, use - [get, getId, clean]');

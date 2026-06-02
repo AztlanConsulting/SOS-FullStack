@@ -7,6 +7,7 @@ import {
 } from '@use-cases/workshops/getWorkshops.usecase';
 import type { Request, Response } from 'express';
 import { createWorkshop } from '@use-cases/workshops/createWorkshop.usecase';
+import { deleteWorkshop } from '@use-cases/workshops/deleteWorkshop.usecase';
 
 export async function getWorkshops(req: Request, res: Response) {
   try {
@@ -71,6 +72,26 @@ export async function postWorkshop(req: Request, res: Response) {
     const workshopId = await createWorkshop(WorkshopDataAccess, workshopData);
 
     return res.status(200).json({ workshopId });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+}
+
+export async function deleteWorkshopById(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const idStr = Array.isArray(id) ? id[0] : id;
+
+    const deleted = await deleteWorkshop(WorkshopDataAccess, idStr);
+
+    if (!deleted) {
+      return res
+        .status(404)
+        .json({ message: `No se encontró el taller con id: ${idStr}` });
+    }
+
+    return res.status(200).json({ message: 'Taller eliminado correctamente' });
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);

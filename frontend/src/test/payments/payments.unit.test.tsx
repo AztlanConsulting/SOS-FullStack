@@ -123,7 +123,7 @@ describe('PurchaseDetails', () => {
     fireEvent.click(
       screen.getByRole('button', { name: /Ir al iniciar sesión|Cerrar/i }),
     );
-    expect(navigateMock).toHaveBeenCalledWith('/');
+    expect(navigateMock).toHaveBeenCalledWith('/login');
   });
 
   it('shows the ConfirmPaymentModal when success is true plan', () => {
@@ -144,6 +144,6 @@ describe('PurchaseDetails', () => {
     fireEvent.click(
       screen.getByRole('button', { name: /Ir al iniciar sesión|Cerrar/i }),
     );
-    expect(navigateMock).toHaveBeenCalledWith('/');
+    expect(navigateMock).toHaveBeenCalledWith('/login');
   });
 });

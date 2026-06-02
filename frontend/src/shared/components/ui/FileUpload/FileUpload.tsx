@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Text } from '../Text';
 
-const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
+const ALLOWED_MIME_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/heif',
+  'image/heic',
+];
 
 interface FileUploadProps {
   index: number;
@@ -25,7 +30,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     e.currentTarget.value = '';
 
     if (file && !ALLOWED_MIME_TYPES.includes(file.type)) {
-      setTypeError('Solo se permiten archivos JPG/JPEG o PNG');
+      setTypeError('Solo se permiten archivos JPG/JPEG, PNG o HEIF');
       return;
     }
 
@@ -44,7 +49,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <input
           type="file"
           className="hidden"
-          accept="image/jpeg,image/png"
+          accept="image/jpeg,image/png,image/heif,image/heic"
           onClick={(e) => {
             e.currentTarget.value = '';
           }}

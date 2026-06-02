@@ -197,6 +197,20 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
         ...(type === 'manual' && { pdfUrl: secretUrl.trim() }),
       });
 
+      if (!secretUrl.trim()) {
+        setError(
+          type === 'manual'
+            ? 'El PDF URL es requerido'
+            : 'El Video URL es requerido',
+        );
+        return;
+      }
+
+      if (type === 'taller' && !emailContent.trim()) {
+        setError('El contenido del correo es requerido');
+        return;
+      }
+
       onSuccess?.();
     } catch {
       setError('Ocurrió un error al guardar. Intenta de nuevo.');

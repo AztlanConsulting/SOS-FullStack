@@ -1,6 +1,6 @@
 import { Queue } from 'bullmq';
-import { redis } from './redis';
+import { redisConnection } from './redis';
 
 export const activatePlanQueue = new Queue('payment-confirmation', {
-  connection: redis,
+  connection: redisConnection,
 });

@@ -1,5 +1,5 @@
 import { Worker } from 'bullmq';
-import { redis } from './redis';
+import { redisConnection } from './redis';
 import { metaPublisher } from '@infrastructure/api/meta.api';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { petDataAccess } from '@infrastructure/data-access/pet.data-access';
@@ -178,7 +178,7 @@ new Worker(
     }
   },
   {
-    connection: redis,
+    connection: redisConnection,
   },
 );
 

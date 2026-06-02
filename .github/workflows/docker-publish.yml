@@ -1,0 +1,124 @@
+name: Build & Publish Docker Images
+
+on:
+  push:
+    branches: [main, develop, feat/devops]
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ghcr.io/${{ github.repository }}-backend
+  FRONTEND_IMAGE: ghcr.io/${{ github.repository }}-frontend
+
+jobs:
+  # ── Backend ──────────────────────────────────────────────────────────────────
+  build-backend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.BACKEND_IMAGE }}
+          tags: |
+            type=sha,prefix=
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Frontend ─────────────────────────────────────────────────────────────────
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.FRONTEND_IMAGE }}
+          tags: |
+            type=sha,prefix=
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Debug secrets
+        run: |
+          if [ -z "${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}" ]; then
+            echo "❌ VITE_STRIPE_PUBLISHABLE_KEY is empty or not set"
+          else
+            echo "✅ VITE_STRIPE_PUBLISHABLE_KEY is set (length: $(echo -n '${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}' | wc -c))"
+          fi
+          if [ -z "${{ secrets.VITE_PAYPAL_CLIENT }}" ]; then
+            echo "❌ VITE_PAYPAL_CLIENT is empty or not set"
+          else
+            echo "✅ VITE_PAYPAL_CLIENT is set (length: $(echo -n '${{ secrets.VITE_PAYPAL_CLIENT }}' | wc -c))"
+          fi
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VITE_API_BASE_URL=https://encontrandomascotas.com/api
+            VITE_STRIPE_PUBLISHABLE_KEY=${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+            VITE_PAYPAL_CLIENT=${{ secrets.VITE_PAYPAL_CLIENT }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Webhook ──────────────────────────────────────────────────────────────────
+  trigger-webhook:
+    name: Trigger Redeploy Webhook
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+
+    steps:
+      - name: Trigger webhook
+        run: |
+          curl -X POST http://encontrandomascotas.com:9000/hooks/redeploy-webhook \
+            -H "X-Webhook-Secret: ${{ secrets.WEBHOOK_SECRET }}"

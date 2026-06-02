@@ -41,7 +41,7 @@ export const CountryDistributionChart = ({ data }: Props) => {
     if (existing) existing.destroy();
 
     const chart = new (Chart as unknown as {
-      new(ctx: HTMLCanvasElement, config: unknown): { destroy(): void };
+      new (ctx: HTMLCanvasElement, config: unknown): { destroy(): void };
     })(canvasRef.current, {
       type: 'bar',
       data: {

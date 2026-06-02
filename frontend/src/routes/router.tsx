@@ -21,6 +21,7 @@ import routerMembersOnly from './membersOnly.routes';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
 import { PaymentProvider } from '@/features/payment/hooks/PaymentProvider';
+import routerResource from './resources.routes.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
             <Dashboard />
           </RoleProtectedRoute>
         ),
+        children: [...routerResource],
       },
       {
         path: '/inicio',

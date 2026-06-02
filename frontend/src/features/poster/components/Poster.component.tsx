@@ -9,22 +9,22 @@ const PosterImage: React.FC<{ file: File; className: string }> = ({
   file,
   className,
 }) => {
-  const [src, setSrc] = useState<string>('');
+  // Create object URL synchronously so the <img> exists on first render.
+  const objectUrl = useState(() => URL.createObjectURL(file))[0];
 
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(file);
-    setSrc(objectUrl);
-
     return () => {
-      URL.revokeObjectURL(objectUrl);
+      try {
+        URL.revokeObjectURL(objectUrl);
+      } catch {}
     };
-  }, [file]);
+  }, [objectUrl]);
 
-  if (!src) {
+  if (!objectUrl) {
     return <div className={`${className} bg-[#E7E0CC]`} />;
   }
 
-  return <img loading="eager" src={src} className={className} alt="" />;
+  return <img loading="eager" src={objectUrl} className={className} alt="" />;
 };
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(

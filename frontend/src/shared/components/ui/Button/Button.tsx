@@ -9,7 +9,8 @@ type ButtonVariant =
   | 'purplePlans'
   | 'toolbar'
   | 'purple'
-  | 'purpleSecondary';
+  | 'purpleSecondary'
+  | 'add';
 type ButtonProps = {
   label: string;
   onClick?: () => void;
@@ -51,6 +52,7 @@ export function Button({
       'bg-purple-primary text-white hover:bg-purple-primary w-full md:max-w-lg mx-auto',
     purpleSecondary:
       'bg-white text-purple-primary hover:bg-purple-secondary w-full md:max-w-lg mx-auto border-2 border-purple-primary',
+    add: 'bg-white color-grey-text color-grey-border py-1.5 px-2 rounded-lg',
   };
   return (
     <button
@@ -75,6 +77,20 @@ export function Button({
               {label}
             </Text>
           )}
+        </div>
+      ) : variant === 'add' ? (
+        <div
+          className={`flex justify-${Icon ? 'between' : 'center'} items-center w-full cursor-pointer`}
+        >
+          {Icon && (
+            <span className="flex items-center justify-start w-[33px]">
+              <Icon size={17} />
+            </span>
+          )}
+
+          <Text variant="body" as="p" weight="medium" className="text-inherit">
+            {isLoading ? 'Cargando...' : label}
+          </Text>
         </div>
       ) : (
         <div

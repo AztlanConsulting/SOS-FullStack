@@ -15,8 +15,22 @@ export interface GetManual {
   sortOption?: string;
 }
 
+export interface CreateManualInput {
+  name: string;
+  price: number;
+  imageUrl: string;
+  content: ContentBlock[];
+  pdfUrl?: string;
+}
+
+export interface CreateManual {
+  manualId: string | null;
+  error: string | null;
+}
+
 export interface ManualRepository {
   getManuals(manualRequest: GetManual): Promise<ManualResult[]>;
   getTotalManuals(manualRequest: GetManual): Promise<number>;
   getManualById(id: string): Promise<ManualResult | null>;
+  createManual(manual: CreateManualInput): Promise<CreateManual>;
 }

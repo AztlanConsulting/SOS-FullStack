@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router';
-import { HiUsers } from 'react-icons/hi';
+import { HiUsers, HiCog } from 'react-icons/hi';
 import { TbLogout } from 'react-icons/tb';
 import { useState } from 'react';
 import { Text } from '@/shared/components/ui/Text';
@@ -14,7 +14,7 @@ const NAV_ITEMS = [
   // { label: 'Links', icon: HiLink, path: '/links', enabled: false },
   // { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
   // { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
-  // { label: 'Recursos', icon: HiCog, path: '/resources', enabled: false },
+  { label: 'Recursos', icon: HiCog, path: '/recursos', enabled: true },
   // { label: 'Planes', icon: HiClipboardList, path: '/plans', enabled: false },
 ];
 
@@ -45,10 +45,9 @@ export const Sidebar = () => {
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 transition-colors ${
-                    isActive
-                      ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
-                      : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
+                  `flex items-center gap-3 px-4 py-3 transition-colors ${isActive
+                    ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
+                    : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
                   }`
                 }
               >
@@ -89,8 +88,7 @@ export const Sidebar = () => {
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${
-                    isActive ? 'bg-white text-primary' : 'text-white'
+                  `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${isActive ? 'bg-white text-primary' : 'text-white'
                   }`
                 }
               >

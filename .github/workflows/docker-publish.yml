@@ -95,7 +95,6 @@ jobs:
             VITE_API_BASE_URL=https://encontrandomascotas.com/api
             VITE_STRIPE_PUBLISHABLE_KEY=${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
             VITE_PAYPAL_CLIENT=${{ secrets.VITE_PAYPAL_CLIENT }}
-            VITE_ENVIROMENT=${{ secrets.VITE_ENVIROMENT }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -108,4 +107,5 @@ jobs:
     steps:
       - name: Trigger webhook
         run: |
-          curl -X POST http://encontrandomascotas.com:9000/hooks/redeploy-webhook
+          curl -X POST http://encontrandomascotas.com:9000/hooks/redeploy-webhook \
+            -H "X-Webhook-Secret: ${{ secrets.WEBHOOK_SECRET }}"

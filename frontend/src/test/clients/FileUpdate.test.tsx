@@ -38,10 +38,106 @@ describe('FileUpload Component', () => {
     expect(input?.classList.contains('hidden')).toBe(true);
   });
 
-  test('file input only accepts image files (accept="image/*")', () => {
+  test('file input restricts accept to JPEG, PNG and HEIF only', () => {
     const { container } = render(<FileUpload index={1} />);
     const input = container.querySelector('input[type="file"]');
-    expect(input?.getAttribute('accept')).toBe('image/*');
+    expect(input?.getAttribute('accept')).toBe(
+      'image/jpeg,image/png,image/heif,image/heic',
+    );
+  });
+
+  test('does not call onChange and shows error when a non-allowed file type is selected', () => {
+    const mockOnChange = vi.fn();
+    const { container } = render(
+      <FileUpload index={1} onChange={mockOnChange} />,
+    );
+
+    const gif = new File(['content'], 'animacion.gif', { type: 'image/gif' });
+    const input = container.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    // Use fireEvent to bypass the accept-attribute filter and test the JS-level MIME check
+    fireEvent.change(input, { target: { files: [gif] } });
+
+    expect(mockOnChange).not.toHaveBeenCalled();
+    expect(
+      screen.getByText('Solo se permiten archivos JPG/JPEG, PNG o HEIF'),
+    ).toBeDefined();
+  });
+
+  test('does not call onChange for PDF files', () => {
+    const mockOnChange = vi.fn();
+    const { container } = render(
+      <FileUpload index={1} onChange={mockOnChange} />,
+    );
+
+    const pdf = new File(['content'], 'documento.pdf', {
+      type: 'application/pdf',
+    });
+    const input = container.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    fireEvent.change(input, { target: { files: [pdf] } });
+
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
+
+  test('calls onChange normally for PNG files', async () => {
+    const user = userEvent.setup();
+    const mockOnChange = vi.fn();
+    const { container } = render(
+      <FileUpload index={1} onChange={mockOnChange} />,
+    );
+
+    const png = new File(['content'], 'foto.png', { type: 'image/png' });
+    const input = container.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    await user.upload(input, png);
+
+    expect(mockOnChange).toHaveBeenCalledWith(png);
+  });
+
+  test('calls onChange normally for HEIF files', () => {
+    const mockOnChange = vi.fn();
+    const { container } = render(
+      <FileUpload index={1} onChange={mockOnChange} />,
+    );
+
+    const heif = new File(['content'], 'foto.heic', { type: 'image/heic' });
+    const input = container.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    fireEvent.change(input, { target: { files: [heif] } });
+
+    expect(mockOnChange).toHaveBeenCalledWith(heif);
+  });
+
+  test('clears the type error when a valid file is selected after an invalid one', () => {
+    const { container } = render(<FileUpload index={1} onChange={vi.fn()} />);
+    const input = container.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    // Trigger the error with an invalid type
+    fireEvent.change(input, {
+      target: { files: [new File(['x'], 'bad.gif', { type: 'image/gif' })] },
+    });
+    expect(
+      screen.getByText('Solo se permiten archivos JPG/JPEG, PNG o HEIF'),
+    ).toBeDefined();
+
+    // Follow up with a valid file — error should disappear
+    fireEvent.change(input, {
+      target: { files: [new File(['x'], 'good.jpg', { type: 'image/jpeg' })] },
+    });
+    expect(
+      screen.queryByText('Solo se permiten archivos JPG/JPEG, PNG o HEIF'),
+    ).toBeNull();
   });
 
   test('displays the file name after a file is selected', async () => {

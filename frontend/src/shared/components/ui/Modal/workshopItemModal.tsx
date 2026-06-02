@@ -78,13 +78,18 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
   };
 
   return (
-    <Modal title="Registrando un recurso" onClose={onClose} color="yellow">
+    <Modal
+      title="Registrando un recurso"
+      onClose={onClose}
+      color="yellow"
+      childrenClassName="px-0"
+    >
       {/* select-none prevents text highlight when clicking around the modal */}
-      <div className="flex flex-col gap-4 modal-scrollbar max-h-[70vh] overflow-y-auto pr-1 ">
+      <div className="flex flex-col modal-scrollbar max-h-[70vh] overflow-y-auto pl-6 pr-5 py-5 ">
         {/* ── Título ── */}
         <div className="flex flex-col gap-1">
           {/* ── Imagen de portada ── */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mb-4">
             <Text variant="small" weight="medium" color="text-gray-500">
               Imagen de portada
             </Text>
@@ -202,7 +207,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
         </div>
 
         {/* ── Precio ── */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 mt-4">
           <Text variant="small" weight="medium" color="text-gray-500">
             Precio
           </Text>
@@ -224,13 +229,13 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
               USD
             </Text>
           </div>
-          <Text variant="small" as="span" color="text-gray-400">
+          <Text variant="small" as="span" color="text-gray-400 text-right">
             Máximo {MAX_PRICE.toLocaleString('en-US')} USD
           </Text>
         </div>
 
         {/* ── PDF / Video URL ── */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 ">
           <Text variant="small" weight="medium" color="text-gray-500">
             {type === 'manual' ? 'PDF URL' : 'Video URL'}
           </Text>
@@ -244,7 +249,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             }
             className={FIELD_CLASS}
           />
-          <Text variant="small" color="text-gray-400">
+          <Text variant="small" color="text-gray-400" className="text-right">
             {type === 'manual'
               ? 'El cliente recibirá este PDF por correo al adquirir el manual'
               : 'El cliente recibirá este video por correo al adquirir el taller'}
@@ -252,9 +257,9 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
         </div>
 
         {type === 'taller' && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 mt-4">
             <Text variant="small" weight="medium" color="text-gray-500">
-              Contenido del correo
+              Contenido del correo electrónico
             </Text>
             <textarea
               value={emailContent}
@@ -302,7 +307,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                     <div className="flex items-center gap-1 mb-1">
                       <HiDocumentText size={13} className="text-gray-400" />
                       <Text variant="small" color="text-gray-400">
-                        Contenido
+                        Texto
                       </Text>
                     </div>
                     <textarea
@@ -435,7 +440,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
 
         {/* ── Add block dropdown ── */}
         {canAddBlock ? (
-          <div className="relative">
+          <div className="relative mt-4">
             <select
               defaultValue=""
               onChange={handleAddBlock}
@@ -445,7 +450,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                 Selecciona el bloque de contenido que quisieras insertar
               </option>
               <option value="imagen">Imagen </option>
-              <option value="texto">Contenido</option>
+              <option value="texto">Texto</option>
             </select>
             <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
               ▼
@@ -468,23 +473,22 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             {error}
           </Text>
         )}
-
-        {/* ── Actions ── */}
-        <div className="flex gap-3 pt-1">
-          <Button
-            variant="primary"
-            label="Guardar"
-            isLoading={loading}
-            disabled={loading}
-            onClick={handleSubmit}
-          />
-          <Button
-            variant="secondary"
-            label="Cancelar"
-            disabled={loading}
-            onClick={onClose}
-          />
-        </div>
+      </div>
+      {/* ── Actions ── */}
+      <div className=" flex flex-col lg:flex-row-reverse color-grey-border-top gap-4 px-5 py-4">
+        <Button
+          variant="primary"
+          label="Guardar"
+          isLoading={loading}
+          disabled={loading}
+          onClick={handleSubmit}
+        />
+        <Button
+          variant="secondary"
+          label="Cancelar"
+          disabled={loading}
+          onClick={onClose}
+        />
       </div>
     </Modal>
   );

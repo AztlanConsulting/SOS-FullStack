@@ -47,100 +47,78 @@ describe('ResourceModal', () => {
       queryClient,
     );
 
-    describe('ResourceModal', () => {
-      it('renders the selected resource details', () => {
-        const resource = {
-          _id: 'r1',
-          name: 'Manual de cuidado',
-          type: 'Manual',
-          price: 80,
-          imageUrl: 'https://example.com/cover.jpg',
-          resourceUrl: 'https://example.com/file.pdf',
-          emailContent: 'Contenido del correo',
-          content: [
-            { type: 'text', content: 'Primer bloque' },
-            { type: 'image', content: 'https://example.com/detail.jpg' },
-          ],
-        };
+    expect(screen.getByText('Detalle del recurso')).toBeInTheDocument();
+    expect(screen.getByText('Manual de cuidado')).toBeInTheDocument();
+    expect(screen.getByText('Manual')).toBeInTheDocument();
+    expect(screen.getByText('$80 USD')).toBeInTheDocument();
+    expect(screen.getByText('Primer bloque')).toBeInTheDocument();
+    expect(screen.getByText('Contenido del correo')).toBeInTheDocument();
+    expect(screen.getAllByAltText('Manual de cuidado')).toHaveLength(2);
+  });
 
-        render(<ResourceModal resource={resource} onClose={() => undefined} />);
+  it('opens the confirmation modal when Eliminar is clicked', () => {
+    renderWithClient(
+      <ResourceModal resource={resource} onClose={() => undefined} />,
+      queryClient,
+    );
 
-        expect(screen.getByText('Detalle del recurso')).toBeInTheDocument();
-        expect(screen.getByText('Manual de cuidado')).toBeInTheDocument();
-        expect(screen.getByText('Manual')).toBeInTheDocument();
-        expect(screen.getByText('$80 USD')).toBeInTheDocument();
-        expect(screen.getByText('Primer bloque')).toBeInTheDocument();
-        expect(screen.getByText('Contenido del correo')).toBeInTheDocument();
-        expect(screen.getAllByAltText('Manual de cuidado')).toHaveLength(2);
-      });
+    fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
 
-      it('opens the confirmation modal when Eliminar is clicked', () => {
-        renderWithClient(
-          <ResourceModal resource={resource} onClose={() => undefined} />,
-          queryClient,
-        );
+    expect(screen.getByText('Eliminar recurso')).toBeInTheDocument();
+    expect(
+      screen.getByText('¿Estas seguro de querer eliminar el taller?'),
+    ).toBeInTheDocument();
+  });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
+  it('closes the confirmation modal when Cancelar is clicked', () => {
+    renderWithClient(
+      <ResourceModal resource={resource} onClose={() => undefined} />,
+      queryClient,
+    );
 
-        expect(screen.getByText('Eliminar recurso')).toBeInTheDocument();
-        expect(
-          screen.getByText('¿Estas seguro de querer eliminar el taller?'),
-        ).toBeInTheDocument();
-      });
+    fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
 
-      it('closes the confirmation modal when Cancelar is clicked', () => {
-        renderWithClient(
-          <ResourceModal resource={resource} onClose={() => undefined} />,
-          queryClient,
-        );
+    expect(screen.queryByText('Eliminar recurso')).not.toBeInTheDocument();
+  });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
-        fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
+  it('calls deleteResource, invalidates the query cache and closes the modal on confirm', async () => {
+    vi.mocked(deleteResource).mockResolvedValueOnce(undefined);
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
+    const onClose = vi.fn();
 
-        expect(screen.queryByText('Eliminar recurso')).not.toBeInTheDocument();
-      });
+    renderWithClient(
+      <ResourceModal resource={resource} onClose={onClose} />,
+      queryClient,
+    );
 
-      it('calls deleteResource, invalidates the query cache and closes the modal on confirm', async () => {
-        vi.mocked(deleteResource).mockResolvedValueOnce(undefined);
-        const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
-        const onClose = vi.fn();
+    fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sí, eliminar' }));
 
-        renderWithClient(
-          <ResourceModal resource={resource} onClose={onClose} />,
-          queryClient,
-        );
+    await waitFor(() => {
+      expect(deleteResource).toHaveBeenCalledWith('r1');
+      expect(invalidateSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ queryKey: ['resources'] }),
+      );
+      expect(onClose).toHaveBeenCalled();
+    });
+  });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
-        fireEvent.click(screen.getByRole('button', { name: 'Sí, eliminar' }));
+  it('shows an error message when deleteResource fails', async () => {
+    vi.mocked(deleteResource).mockRejectedValueOnce(new Error('server error'));
 
-        await waitFor(() => {
-          expect(deleteResource).toHaveBeenCalledWith('r1');
-          expect(invalidateSpy).toHaveBeenCalledWith(
-            expect.objectContaining({ queryKey: ['resources'] }),
-          );
-          expect(onClose).toHaveBeenCalled();
-        });
-      });
+    renderWithClient(
+      <ResourceModal resource={resource} onClose={() => undefined} />,
+      queryClient,
+    );
 
-      it('shows an error message when deleteResource fails', async () => {
-        vi.mocked(deleteResource).mockRejectedValueOnce(
-          new Error('server error'),
-        );
+    fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sí, eliminar' }));
 
-        renderWithClient(
-          <ResourceModal resource={resource} onClose={() => undefined} />,
-          queryClient,
-        );
-
-        fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
-        fireEvent.click(screen.getByRole('button', { name: 'Sí, eliminar' }));
-
-        await waitFor(() => {
-          expect(
-            screen.getByText('Error al eliminar el recurso. Intente de nuevo.'),
-          ).toBeInTheDocument();
-        });
-      });
+    await waitFor(() => {
+      expect(
+        screen.getByText('Error al eliminar el recurso. Intente de nuevo.'),
+      ).toBeInTheDocument();
     });
   });
 });

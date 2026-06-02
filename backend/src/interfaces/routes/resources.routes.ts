@@ -4,7 +4,6 @@ import {
   deleteResourceById,
 } from '../controllers/resource.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
-import { getResources } from '../controllers/resource.controller';
 
 const router = Router();
 

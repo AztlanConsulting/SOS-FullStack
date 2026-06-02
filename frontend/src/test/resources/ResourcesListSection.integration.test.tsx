@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react'; // render used inside renderWithClient helper
 import { describe, expect, it, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ResourcesListSection from '@features/resources/components/ResourcesListSection';
@@ -40,7 +40,6 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
-    render(<ResourcesListSection />);
 
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
@@ -57,7 +56,6 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
-    render(<ResourcesListSection />);
 
     expect(
       screen.getByText('Error cargando resultados de búsqueda, $boom'),
@@ -80,7 +78,6 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
-    render(<ResourcesListSection />);
 
     expect(screen.getByText('No hay resultados...')).toBeInTheDocument();
   });
@@ -111,7 +108,6 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
-    render(<ResourcesListSection />);
 
     expect(screen.getByText('Recurso 1')).toBeInTheDocument();
     expect(screen.getByText('Resumen del recurso')).toBeInTheDocument();

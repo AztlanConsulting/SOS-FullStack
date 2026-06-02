@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 import phone from '@assets/images/phone.webp';
@@ -9,16 +9,9 @@ const PosterImage: React.FC<{ file: File; className: string }> = ({
   file,
   className,
 }) => {
-  // Create object URL synchronously so the <img> exists on first render.
-  const objectUrl = useState(() => URL.createObjectURL(file))[0];
-
-  useEffect(() => {
-    return () => {
-      try {
-        URL.revokeObjectURL(objectUrl);
-      } catch {}
-    };
-  }, [objectUrl]);
+  // Keep a stable object URL for this file while the poster is mounted.
+  // Revoking too early can race with html-to-image and produce ERR_FILE_NOT_FOUND.
+  const objectUrl = useMemo(() => URL.createObjectURL(file), [file]);
 
   if (!objectUrl) {
     return <div className={`${className} bg-[#E7E0CC]`} />;

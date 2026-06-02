@@ -5,6 +5,7 @@ import type {
 } from '@domain/repositories/manual.repository';
 import { ManualModel } from '@domain/models/manual.model';
 import type { SortOrder } from 'mongoose';
+import type { PartialResourceWithId } from '@/domain/repositories/resource.repository';
 
 const limit = 6;
 export const ManualDataAccess: ManualRepository = {
@@ -14,7 +15,6 @@ export const ManualDataAccess: ManualRepository = {
    * @param manualRequest - Object containing page index (0-based), searchTerm (partial match), and sortOption
    * @returns Promise resolving to an array of ManualResult objects
    */
-
   async getManuals({
     page = 0,
     sortOption = 'Nombre (A-Z)',
@@ -43,7 +43,6 @@ export const ManualDataAccess: ManualRepository = {
    * @param manualRequest - Object optionally containing searchTerm to filter count results
    * @returns Promise resolving to the total number of matching manuals
    */
-
   async getTotalManuals(manualRequest: GetManual): Promise<number> {
     const { searchTerm } = manualRequest;
     let query = ManualModel.find();
@@ -61,8 +60,28 @@ export const ManualDataAccess: ManualRepository = {
    * @param id - The MongoDB ObjectId of the manual to fetch
    * @returns Promise resolving to the ManualResult object, or null if no manual exists with that ID
    */
-
   async getManualById(id: string): Promise<ManualResult | null> {
     return await ManualModel.findById(id).lean().exec();
+  },
+  /**
+   * Retrieves a single manual document by its MongoDB ObjectId.
+   * @param updateInfo - body to update must have _id
+   * @returns result of the operation
+   */
+  updateResourceById: async function (
+    updateInfo: PartialResourceWithId,
+  ): Promise<boolean> {
+    updateInfo = {
+      ...updateInfo,
+      ...(updateInfo.resourceUrl !== undefined && {
+        pdfUrl: updateInfo.resourceUrl,
+      }),
+    };
+    const result = await ManualModel.updateOne(
+      { _id: updateInfo._id },
+      updateInfo,
+    );
+
+    return result.modifiedCount > 0;
   },
 };

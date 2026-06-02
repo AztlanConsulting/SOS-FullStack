@@ -1,3 +1,4 @@
+import type { PartialResourceWithId } from '@/domain/repositories/resource.repository';
 import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopModel } from '@domain/models/workshop.model';
 import type {
@@ -88,5 +89,22 @@ export const WorkshopDataAccess: WorkshopRepository = {
       return { workshopId: null, error: response.errors.toString() };
     }
     return { workshopId: response._id.toString(), error: null };
+  },
+
+  updateResourceById: async function (
+    updateInfo: PartialResourceWithId,
+  ): Promise<boolean> {
+    updateInfo = {
+      ...updateInfo,
+      ...(updateInfo.resourceUrl !== undefined && {
+        videoUrl: updateInfo.resourceUrl,
+      }),
+    };
+    const result = await WorkshopModel.updateOne(
+      { _id: updateInfo._id },
+      updateInfo,
+    );
+
+    return result.modifiedCount > 0;
   },
 };

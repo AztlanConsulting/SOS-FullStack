@@ -1,0 +1,49 @@
+import bcrypt from 'bcryptjs';
+import { config } from '@config/env.config';
+import type { UserRepository } from '@domain/repositories/user.repository';
+import type { RefreshTokenRepository } from '@domain/repositories/refreshToken.repository';
+import type { PasswordResetTokenRepository } from '@domain/repositories/passwordResetToken.repository';
+import { hashPasswordResetToken } from '@utils/passwordResetToken.utils';
+
+export const resetPassword = async (
+  repositories: {
+    userRepository: UserRepository;
+    refreshTokenRepository: RefreshTokenRepository;
+    passwordResetTokenRepository: PasswordResetTokenRepository;
+  },
+  input: {
+    token: string;
+    newPassword: string;
+  },
+): Promise<void> => {
+  const tokenHash = hashPasswordResetToken(input.token.trim());
+  const tokenRecord =
+    await repositories.passwordResetTokenRepository.findValidToken(
+      tokenHash,
+      new Date(),
+    );
+
+  if (tokenRecord == null) {
+    throw new Error('RESET_TOKEN_INVALID');
+  }
+
+  const user = await repositories.userRepository.getUserByEmail(
+    tokenRecord.email,
+  );
+
+  if (user == null || !user.active) {
+    throw new Error('USER_NOT_AVAILABLE');
+  }
+
+  const passwordHash = await bcrypt.hash(
+    input.newPassword,
+    config.bcryptSaltRounds,
+  );
+
+  await repositories.userRepository.updateUserPassword(
+    user.email,
+    passwordHash,
+  );
+  await repositories.refreshTokenRepository.revokeAllUserTokens(user._id);
+  await repositories.passwordResetTokenRepository.markTokenAsUsed(tokenHash);
+};

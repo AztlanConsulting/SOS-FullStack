@@ -45,7 +45,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
         }`}
       >
         <label
-          className={`block text-xs font-medium text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+          className={`block text-sm font-medium text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
         >
           {label}
         </label>
@@ -56,7 +56,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
           onChange={(e) => onSearch(e.target.value.slice(0, maxLength))}
           maxLength={maxLength}
           placeholder={placeholder}
-          className="w-full bg-transparent outline-none text-gray-700 text-sm"
+          className="w-full bg-transparent outline-none text-gray-700 text-base"
         />
       </div>
 

@@ -52,6 +52,11 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
 };
 
 export const emailService: EmailService = {
+  /**
+   * Sends the password reset email with the temporary recovery link.
+   *
+   * @param data - Recipient and reset link metadata
+   */
   async sendPasswordResetEmail(data: SendPasswordResetEmailDTO): Promise<void> {
     const transporter = await getTransporter();
 

@@ -5,6 +5,13 @@ import type { RefreshTokenRepository } from '@domain/repositories/refreshToken.r
 import type { PasswordResetTokenRepository } from '@domain/repositories/passwordResetToken.repository';
 import { hashPasswordResetToken } from '@utils/passwordResetToken.utils';
 
+/**
+ * Applies a new password using a valid reset token.
+ * Revokes existing sessions and consumes the token after the update succeeds.
+ *
+ * @param repositories - User, refresh token, and reset token persistence layers
+ * @param input - Raw reset token and new password
+ */
 export const resetPassword = async (
   repositories: {
     userRepository: UserRepository;

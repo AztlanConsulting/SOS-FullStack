@@ -23,6 +23,15 @@ const buildResetUrl = (token: string): string => {
   return `${frontendUrl.replace(/\/$/, '')}/recuperar-contrasena?token=${encodeURIComponent(token)}`;
 };
 
+/**
+ * Starts the password recovery flow for an active user.
+ * Does not reveal whether an email exists and enforces one reset link per 24 hours.
+ *
+ * @param repositories - User and reset token persistence layers
+ * @param emailService - Email sender used to deliver the reset link
+ * @param email - User email provided from the recovery form
+ * @return Request outcome used by the controller response
+ */
 export const requestPasswordReset = async (
   repositories: {
     userRepository: UserRepository;
@@ -58,6 +67,7 @@ export const requestPasswordReset = async (
   const tokenHash = hashPasswordResetToken(rawToken);
   const expiresAt = new Date(now.getTime() + PASSWORD_RESET_EXPIRATION_MS);
 
+  // Guard against concurrent requests that could otherwise create two links.
   const wasCreated =
     await repositories.passwordResetTokenRepository.createResetToken(
       {

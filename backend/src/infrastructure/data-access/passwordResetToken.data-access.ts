@@ -16,6 +16,16 @@ const isDuplicateKeyError = (error: unknown): boolean => {
 };
 
 export const passwordResetTokenDataAccess: PasswordResetTokenRepository = {
+  /**
+   * Creates or rotates a reset token only if the user's last token is old enough.
+   *
+   * The unique userId index prevents concurrent requests from creating
+   * multiple reset links for the same user inside the 24-hour window.
+   *
+   * @param token - Token document data to persist
+   * @param createdAfter - Earliest creation date still considered active
+   * @return Whether a new reset link can be sent
+   */
   async createResetToken(
     token: PasswordResetTokenCreateInput,
     createdAfter: Date,
@@ -59,6 +69,13 @@ export const passwordResetTokenDataAccess: PasswordResetTokenRepository = {
     }
   },
 
+  /**
+   * Finds the latest token created inside the cooldown window for a user.
+   *
+   * @param userId - User requesting password recovery
+   * @param createdAfter - Earliest creation date still considered active
+   * @return Recent token when one exists, otherwise null
+   */
   async findRecentTokenByUser(
     userId: Types.ObjectId,
     createdAfter: Date,
@@ -72,6 +89,13 @@ export const passwordResetTokenDataAccess: PasswordResetTokenRepository = {
       .exec();
   },
 
+  /**
+   * Finds an unused, unexpired reset token by hash.
+   *
+   * @param tokenHash - SHA-256 hash of the raw reset token
+   * @param now - Current validation time
+   * @return Matching reset token when valid, otherwise null
+   */
   async findValidToken(
     tokenHash: string,
     now: Date,
@@ -85,6 +109,11 @@ export const passwordResetTokenDataAccess: PasswordResetTokenRepository = {
       .exec();
   },
 
+  /**
+   * Marks a reset token as consumed after a successful password update.
+   *
+   * @param tokenHash - SHA-256 hash of the raw reset token
+   */
   async markTokenAsUsed(tokenHash: string): Promise<void> {
     await PasswordResetTokenModel.updateOne(
       { tokenHash, usedAt: null },

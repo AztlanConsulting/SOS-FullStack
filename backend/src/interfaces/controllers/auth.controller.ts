@@ -158,6 +158,10 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Sesion cerrada correctamente' });
 };
 
+/**
+ * Requests a password reset link for an email address.
+ * Uses generic responses for unknown emails to avoid account enumeration.
+ */
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body ?? {};
@@ -208,6 +212,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Validates whether the reset link token can still be used.
+ */
 export const validateResetPasswordToken = async (
   req: Request,
   res: Response,
@@ -245,6 +252,9 @@ export const validateResetPasswordToken = async (
   }
 };
 
+/**
+ * Updates the user's password using a valid reset token.
+ */
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { token, newPassword, confirmPassword } = req.body ?? {};

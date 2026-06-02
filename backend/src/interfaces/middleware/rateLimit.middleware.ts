@@ -15,6 +15,10 @@ export const loginLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+/**
+ * Rate limiter for password reset requests.
+ * Keeps the public recovery endpoint from being abused by repeated submissions.
+ */
 export const passwordResetLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,

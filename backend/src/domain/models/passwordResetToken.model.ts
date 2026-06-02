@@ -1,6 +1,10 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
+/**
+ * Password reset token persisted state.
+ * Stores only the token hash, never the raw value sent by email.
+ */
 export interface PasswordResetToken {
   _id: Types.ObjectId;
   userId: Types.ObjectId;
@@ -55,6 +59,7 @@ const PasswordResetTokenSchema = new Schema<PasswordResetToken>({
   },
 });
 
+// Remove expired reset tokens automatically once MongoDB's TTL monitor runs.
 PasswordResetTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 PasswordResetTokenSchema.index({ userId: 1, createdAt: -1 });
 

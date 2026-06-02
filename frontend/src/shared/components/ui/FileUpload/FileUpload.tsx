@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text } from '../Text';
+
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
 
 interface FileUploadProps {
   index: number;
@@ -16,13 +18,23 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   currentFileName,
   defaultDisplayName,
 }) => {
+  const [typeError, setTypeError] = useState<string | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    if (onChange) onChange(file);
     e.currentTarget.value = '';
+
+    if (file && !ALLOWED_MIME_TYPES.includes(file.type)) {
+      setTypeError('Solo se permiten archivos JPG/JPEG o PNG');
+      return;
+    }
+
+    setTypeError(null);
+    if (onChange) onChange(file);
   };
 
-  const hasErrorState = Boolean(error);
+  const displayedError = typeError ?? error;
+  const hasErrorState = Boolean(displayedError);
 
   return (
     <div>
@@ -32,7 +44,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <input
           type="file"
           className="hidden"
-          accept="image/*"
+          accept="image/jpeg,image/png"
           onClick={(e) => {
             e.currentTarget.value = '';
           }}
@@ -59,14 +71,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           <line x1="12" y1="3" x2="12" y2="15" />
         </svg>
       </label>
-      {error && (
+      {displayedError && (
         <Text
           variant="small"
           as="small"
           weight="regular"
           className="color-danger ml-1 italic"
         >
-          {error}
+          {displayedError}
         </Text>
       )}
     </div>

@@ -54,6 +54,14 @@ export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
           <>
             <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-180px)] modal-scrollbar pl-6 pr-5 py-5">
               <Text variant="caption" as="p" color="text-gray-600">
+                Imagen principal
+              </Text>
+              <img
+                src={resource.imageUrl}
+                alt={resource.name}
+                className="w-full h-auto object-cover rounded-lg mb-8"
+              />
+              <Text variant="caption" as="p" color="text-gray-600">
                 Título
               </Text>
               <Text variant="body" color="text-black" className="mb-6">
@@ -94,13 +102,22 @@ export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
                 ${resource.price} USD
               </Text>
               <Text variant="caption" as="p" color="text-gray-600">
-                Imagen principal
+                {resource.type === 'Taller' ? 'Video URL' : 'Pdf Url'}
               </Text>
-              <img
-                src={resource.imageUrl}
-                alt={resource.name}
-                className="w-full h-auto object-cover rounded-lg mb-8"
-              />
+              {resource.resourceUrl ? (
+                <a
+                  href={resource.resourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline mb-6"
+                >
+                  {resource.resourceUrl}
+                </a>
+              ) : (
+                <Text variant="body" className="mb-6">
+                  N/A
+                </Text>
+              )}
               <Text variant="caption" as="p" color="text-gray-600">
                 Contenidos
               </Text>

@@ -40,6 +40,7 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
+    render(<ResourcesListSection />);
 
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
@@ -56,6 +57,7 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
+    render(<ResourcesListSection />);
 
     expect(
       screen.getByText('Error cargando resultados de búsqueda, $boom'),
@@ -78,6 +80,7 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
+    render(<ResourcesListSection />);
 
     expect(screen.getByText('No hay resultados...')).toBeInTheDocument();
   });
@@ -108,6 +111,7 @@ describe('ResourcesListSection', () => {
     });
 
     renderWithClient(<ResourcesListSection />);
+    render(<ResourcesListSection />);
 
     expect(screen.getByText('Recurso 1')).toBeInTheDocument();
     expect(screen.getByText('Resumen del recurso')).toBeInTheDocument();

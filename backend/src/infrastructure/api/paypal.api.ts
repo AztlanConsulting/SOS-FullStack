@@ -26,6 +26,8 @@ const PaypalProvider: PaypalApi = {
   // Get token to use paypal api
   // This value could be cached to optimize response, and lower api interactions
   async getAccessToken() {
+    console.log('Client ID and secrets', `${CLIENT_ID}:${CLIENT_SECRET}`);
+
     const auth = `${CLIENT_ID}:${CLIENT_SECRET}`;
     const data = 'grant_type=client_credentials';
     const { accessToken, error } = await fetch(
@@ -54,13 +56,16 @@ const PaypalProvider: PaypalApi = {
     data: PaymentIntentDTO,
     detailOrder: DetailOrder,
   ): Promise<PaymentIntentResult> {
+    console.log('Getting access token');
     const { accessToken, error } = await PaypalProvider.getAccessToken();
+    console.log('Access token: ', accessToken);
 
     if (error !== null) {
       throw error;
     }
 
     let orderData = JSON.stringify(detailOrder);
+    console.log('Access token: ', accessToken);
 
     const paymentId: PaymentOrderId = await fetch(
       ENDPOINT_URL + '/v2/checkout/orders',
@@ -85,7 +90,9 @@ const PaypalProvider: PaypalApi = {
         return { orderId: null, error };
       });
 
+    console.log('PaymentId', paymentId);
     if (Boolean(paymentId.error)) throw paymentId.error;
+    console.log('OrderId', paymentId.orderId);
 
     const paymentResult = {
       id: paymentId.orderId!,

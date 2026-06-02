@@ -1,5 +1,5 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import type { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongoServer: MongoMemoryServer;
 
@@ -11,6 +11,7 @@ export const mongoDB = async (enviroment?: string) => {
 
     if (enviroment === 'test') {
       mongoose.set('strictQuery', false);
+      const { MongoMemoryServer } = await import('mongodb-memory-server');
       mongoServer = await MongoMemoryServer.create({
         instance: { launchTimeout: 60000 },
       });

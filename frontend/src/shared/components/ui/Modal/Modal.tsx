@@ -11,6 +11,7 @@ type ModalProps = {
   onClose: () => void;
   color?: 'yellow' | 'purple';
   children?: React.ReactNode;
+  childrenClassName?: string;
 };
 
 /**
@@ -23,6 +24,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   color = 'yellow',
   children,
+  childrenClassName,
 }) => {
   const headerBg = color === 'purple' ? 'bg-purple-primary' : 'bg-primary';
   return (
@@ -44,7 +46,7 @@ export const Modal: React.FC<ModalProps> = ({
           </button>
         </div>
 
-        <div className="bg-white px-5 py-5">
+        <div className={`bg-white ${childrenClassName || 'px-5 py-5'}`}>
           {children ?? (
             <Text variant="body" className="text-gray-700 leading-relaxed">
               {description}

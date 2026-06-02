@@ -7,6 +7,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import SignOut from '@/shared/components/ui/Button/SignOut';
 import { DecisionModal } from '@/shared/components/ui/Modal/DecisionModal';
 import whiteIcon from '@/assets/images/whiteIcon.webp';
+import { HiCollection } from 'react-icons/hi';
 
 const NAV_ITEMS = [
   { label: 'Clientes', icon: HiUsers, path: '/clientes', enabled: true },
@@ -14,7 +15,7 @@ const NAV_ITEMS = [
   // { label: 'Links', icon: HiLink, path: '/links', enabled: false },
   // { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
   // { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
-  { label: 'Recursos', icon: HiCog, path: '/recursos', enabled: true },
+  { label: 'Recursos', icon: HiCollection, path: '/recursos', enabled: true },
   // { label: 'Planes', icon: HiClipboardList, path: '/plans', enabled: false },
 ];
 

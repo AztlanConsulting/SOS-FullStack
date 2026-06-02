@@ -1,5 +1,6 @@
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ClientsPage } from '@/pages/ClientPage';
+import { ResourcesPage } from '@/pages/ResourcesPage';
 
 /**
  * Route configuration for Client-related pages.
@@ -13,6 +14,14 @@ const routerClients = [
     element: (
       <RoleProtectedRoute allowedRoles={['ADMIN']}>
         <ClientsPage />
+      </RoleProtectedRoute>
+    ),
+  },
+  {
+    path: '/recursos',
+    element: (
+      <RoleProtectedRoute allowedRoles={['ADMIN']}>
+        <ResourcesPage />
       </RoleProtectedRoute>
     ),
   },

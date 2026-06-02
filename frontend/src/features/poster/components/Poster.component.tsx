@@ -1,9 +1,31 @@
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 import phone from '@assets/images/phone.webp';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { AutoTextSize } from 'auto-text-size';
+
+const PosterImage: React.FC<{ file: File; className: string }> = ({
+  file,
+  className,
+}) => {
+  const [src, setSrc] = useState<string>('');
+
+  useEffect(() => {
+    const objectUrl = URL.createObjectURL(file);
+    setSrc(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [file]);
+
+  if (!src) {
+    return <div className={`${className} bg-[#E7E0CC]`} />;
+  }
+
+  return <img loading="eager" src={src} className={className} alt="" />;
+};
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
   ({ pet }, ref) => {
@@ -12,13 +34,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         return <div className={`${className} bg-[#E7E0CC]`} />;
       }
 
-      return (
-        <img
-          loading="lazy"
-          src={URL.createObjectURL(file)}
-          className={className}
-        />
-      );
+      return <PosterImage file={file} className={className} />;
     };
 
     const renderImages = () => {
@@ -91,7 +107,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
       >
         <div className="color-primary-bg h-[104px] w-[1080px] flex items-center justify-evenly">
           <img
-            loading="lazy"
+            loading="eager"
             src={whiteLogoSimple}
             alt="Logo"
             className="w-[92px] h-[92px]"
@@ -118,7 +134,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
             </AutoTextSize>
           </div>
           <img
-            loading="lazy"
+            loading="eager"
             src={whiteLogoSimple}
             alt="Logo"
             className="w-[92px] h-[92px]"
@@ -129,7 +145,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
           {renderImages()}
           <div className="w-[850px] flex justify-between items-center">
             <img
-              loading="lazy"
+              loading="eager"
               src={phone}
               alt="Phone"
               className="w-[86px] h-[120px]"

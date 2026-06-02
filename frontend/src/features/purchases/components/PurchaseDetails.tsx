@@ -2,8 +2,6 @@ import { Text } from '@shared/components/ui/Text';
 import ProductDetail from './ProductDetail';
 import PlanDetail from './PlanDetail';
 import type { Product } from '@shared/types/purchase.types';
-import ConfirmPaymentModal from './ConfirmPaymentModal';
-import PendingPaymentModal from './PendingPaymentModal';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { formatCurrency } from '@shared/utils/formatCurrency';
 import { useLocationContext } from '@/shared/context/Location.context';
@@ -11,21 +9,10 @@ import { useLocationContext } from '@/shared/context/Location.context';
 interface Props {
   reportData: LostPetReportData | null;
   product?: Product;
-  success: boolean;
-  pending: boolean;
-  onCloseSuccess?: () => void;
-  onClosePending?: () => void;
 }
 
 // Get all product details and display them to the user
-const PurchaseDetails = ({
-  reportData,
-  product,
-  success,
-  pending,
-  onCloseSuccess,
-  onClosePending,
-}: Props) => {
+const PurchaseDetails = ({ reportData, product }: Props) => {
   const plan = reportData?.planDetails ?? null;
   const { currencyCode, exchangeRate } = useLocationContext();
 
@@ -90,22 +77,6 @@ const PurchaseDetails = ({
           {currencyCode}
         </Text>
       </div>
-      {/* Modal to show success state */}
-      {success && (
-        <ConfirmPaymentModal
-          plan={reportData}
-          product={product}
-          onClose={onCloseSuccess}
-        />
-      )}
-      {/* Modal to show pending state */}
-      {pending && (
-        <PendingPaymentModal
-          plan={reportData}
-          product={product}
-          onClose={onClosePending}
-        />
-      )}
     </div>
   );
 };

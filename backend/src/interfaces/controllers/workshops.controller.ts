@@ -78,3 +78,15 @@ export async function postWorkshop(req: Request, res: Response) {
   }
 }
 
+export async function deleteWorkshopById(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const deleted = await WorkshopDataAccess.deleteWorkshop(id);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Taller no encontrado' });
+    }
+    return res.status(200).json({ message: 'Taller eliminado correctamente' });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+}

@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useMemo } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 import phone from '@assets/images/phone.webp';
@@ -7,12 +7,24 @@ import { AutoTextSize } from 'auto-text-size';
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
   ({ pet }, ref) => {
-    const renderImage = (file: File | undefined, className: string) => {
-      if (!file) {
+    const imageUrls = useMemo(
+      () => pet.images.map((file) => (file ? URL.createObjectURL(file) : null)),
+      [pet.images],
+    );
+
+    useEffect(() => {
+      return () => {
+        imageUrls.forEach((url) => url && URL.revokeObjectURL(url));
+      };
+    }, [imageUrls]);
+
+    const renderImage = (index: number, className: string) => {
+      const url = imageUrls[index];
+      if (!url) {
         return <div className={`${className} bg-[#E7E0CC]`} />;
       }
 
-      return <img src={URL.createObjectURL(file)} className={className} />;
+      return <img src={url} className={className} />;
     };
 
     const renderImages = () => {
@@ -20,15 +32,15 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         case '1':
           return (
             <div className="w-[850px] h-[550px]">
-              {renderImage(pet.images[0], 'w-[850px] h-[550px] object-cover')}
+              {renderImage(0, 'w-[850px] h-[550px] object-cover')}
             </div>
           );
 
         case '2':
           return (
             <div className="grid grid-cols-2 w-[850px] h-[550px]">
-              {renderImage(pet.images[0], 'w-[425px] h-[550px] object-cover')}
-              {renderImage(pet.images[1], 'w-[425px] h-[550px] object-cover')}
+              {renderImage(0, 'w-[425px] h-[550px] object-cover')}
+              {renderImage(1, 'w-[425px] h-[550px] object-cover')}
             </div>
           );
 
@@ -36,15 +48,15 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
           return (
             <div className="grid grid-cols-2 grid-rows-2 w-[850px] h-[550px]">
               {renderImage(
-                pet.images[0],
+                0,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-1',
               )}
               {renderImage(
-                pet.images[1],
+                1,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-2',
               )}
               {renderImage(
-                pet.images[2],
+                2,
                 'w-[425px] h-[550px] object-cover col-start-2 row-start-1 row-span-2',
               )}
             </div>
@@ -54,19 +66,19 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
           return (
             <div className="grid grid-cols-2 grid-rows-2 w-[850px] h-[550px]">
               {renderImage(
-                pet.images[0],
+                0,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-1',
               )}
               {renderImage(
-                pet.images[1],
+                1,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-2',
               )}
               {renderImage(
-                pet.images[2],
+                2,
                 'w-[425px] h-[275px] object-cover col-start-2 row-start-1',
               )}
               {renderImage(
-                pet.images[3],
+                3,
                 'w-[425px] h-[275px] object-cover col-start-2 row-start-2',
               )}
             </div>

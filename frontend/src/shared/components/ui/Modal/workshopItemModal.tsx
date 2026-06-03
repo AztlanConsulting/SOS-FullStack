@@ -53,6 +53,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
   } = useCreateWorkshopItem(() => {
     onSuccess();
     onClose();
+    window.location.reload();
   });
 
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);

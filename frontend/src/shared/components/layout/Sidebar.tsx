@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router';
-import { HiUsers } from 'react-icons/hi';
+import { HiUsers, HiCog } from 'react-icons/hi';
 import { TbLogout } from 'react-icons/tb';
 import { useState } from 'react';
 import { Text } from '@/shared/components/ui/Text';

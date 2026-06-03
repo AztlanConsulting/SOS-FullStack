@@ -31,6 +31,7 @@ const ContentRenderer = ({ content }: Props) => {
             as="p"
             variant="h3"
             weight="regular"
+            className="break-words whitespace-pre-wrap"
           >
             {block.content}
           </Text>

@@ -1,4 +1,23 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import heic2any from 'heic2any';
+
+const convertToJpeg = async (file: File): Promise<File> => {
+  const isHeic =
+    file.type === 'image/heic' ||
+    file.type === 'image/heif' ||
+    /\.(heic|heif)$/i.test(file.name);
+
+  if (!isHeic) return file;
+
+  const result = await heic2any({
+    blob: file,
+    toType: 'image/jpeg',
+    quality: 0.95,
+  });
+  const blob = Array.isArray(result) ? result[0] : result;
+  const newName = file.name.replace(/\.(heic|heif)$/i, '.jpg');
+  return new File([blob], newName, { type: 'image/jpeg' });
+};
 
 type CropArea = {
   x: number;
@@ -147,7 +166,7 @@ export const usePetPhotoCropper = (
   );
 
   const handleFileSelection = useCallback(
-    (
+    async (
       index: number,
       file: File | null,
       onClear?: (slotIndex: number) => void,
@@ -157,7 +176,8 @@ export const usePetPhotoCropper = (
         return;
       }
 
-      openCropper(index, file);
+      const converted = await convertToJpeg(file);
+      openCropper(index, converted);
     },
     [openCropper],
   );
@@ -177,14 +197,12 @@ export const usePetPhotoCropper = (
     setIsSavingCrop(true);
 
     try {
-      const extension = selectedFile.name.split('.').pop();
       const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
-      const mimeType = selectedFile.type || 'image/jpeg';
       const croppedFile = await getCroppedFile(
         cropImageUrl,
         cropAreaPixels,
-        `${baseName}-cropped${extension ? `.${extension}` : ''}`,
-        mimeType,
+        `${baseName}-cropped.jpg`,
+        'image/jpeg',
       );
 
       onSaveCroppedImage(selectedIndex, croppedFile);

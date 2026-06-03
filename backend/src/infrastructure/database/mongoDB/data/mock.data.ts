@@ -52,6 +52,7 @@ try {
     { name: 'users', description: 'User management' },
     { name: 'posts', description: 'Posts management' },
     { name: 'products', description: 'Products management' },
+    { name: 'resources', description: 'Resources management' },
   ]);
 
   const adminPermissions = await PermissionModel.insertMany(

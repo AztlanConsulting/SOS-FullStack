@@ -21,4 +21,5 @@ export interface WorkshopRepository extends ResourceRepository {
     categories: string[],
     page: number,
   ): Promise<Workshop[]>;
+  deleteWorkshop(id: string): Promise<boolean>;
 }

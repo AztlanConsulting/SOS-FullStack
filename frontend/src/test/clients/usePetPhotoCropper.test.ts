@@ -86,11 +86,11 @@ describe('usePetPhotoCropper', () => {
     });
   });
 
-  test('opens the cropper and computes the expected aspect ratio', () => {
+  test('opens the cropper and computes the expected aspect ratio', async () => {
     const { result } = renderHook(() => usePetPhotoCropper(3, vi.fn()));
 
-    act(() => {
-      result.current.handleFileSelection(3, makeFile('photo.jpg'));
+    await act(async () => {
+      await result.current.handleFileSelection(3, makeFile('photo.jpg'));
     });
 
     expect(result.current.cropOpen).toBe(true);
@@ -100,13 +100,13 @@ describe('usePetPhotoCropper', () => {
     expect(result.current.cropAspectRatio).toBeCloseTo(17 / 22);
   });
 
-  test('calls onClear when no file is selected', () => {
+  test('calls onClear when no file is selected', async () => {
     const onClear = vi.fn();
 
     const { result } = renderHook(() => usePetPhotoCropper(3, vi.fn()));
 
-    act(() => {
-      result.current.handleFileSelection(2, null, onClear);
+    await act(async () => {
+      await result.current.handleFileSelection(2, null, onClear);
     });
 
     expect(onClear).toHaveBeenCalledWith(2);
@@ -119,8 +119,8 @@ describe('usePetPhotoCropper', () => {
       usePetPhotoCropper(4, onSaveCroppedImage),
     );
 
-    act(() => {
-      result.current.handleFileSelection(1, makeFile('pet.jpg'));
+    await act(async () => {
+      await result.current.handleFileSelection(1, makeFile('pet.jpg'));
       result.current.handleCropComplete(
         { x: 0, y: 0, width: 100, height: 100 },
         { x: 10, y: 20, width: 200, height: 150 },
@@ -142,13 +142,13 @@ describe('usePetPhotoCropper', () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:pet-photo');
   });
 
-  test('revokes the preview URL when the hook unmounts', () => {
+  test('revokes the preview URL when the hook unmounts', async () => {
     const { result, unmount } = renderHook(() =>
       usePetPhotoCropper(2, vi.fn()),
     );
 
-    act(() => {
-      result.current.handleFileSelection(1, makeFile('pet.jpg'));
+    await act(async () => {
+      await result.current.handleFileSelection(1, makeFile('pet.jpg'));
     });
 
     unmount();

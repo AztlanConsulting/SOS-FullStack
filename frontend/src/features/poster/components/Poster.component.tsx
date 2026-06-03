@@ -1,33 +1,30 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useEffect, useMemo } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 import phone from '@assets/images/phone.webp';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { AutoTextSize } from 'auto-text-size';
 
-const PosterImage: React.FC<{ file: File; className: string }> = ({
-  file,
-  className,
-}) => {
-  // Keep a stable object URL for this file while the poster is mounted.
-  // Revoking too early can race with html-to-image and produce ERR_FILE_NOT_FOUND.
-  const objectUrl = useMemo(() => URL.createObjectURL(file), [file]);
-
-  if (!objectUrl) {
-    return <div className={`${className} bg-[#E7E0CC]`} />;
-  }
-
-  return <img loading="eager" src={objectUrl} className={className} alt="" />;
-};
-
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
   ({ pet }, ref) => {
-    const renderImage = (file: File | undefined, className: string) => {
-      if (!file) {
+    const imageUrls = useMemo(
+      () => pet.images.map((file) => (file ? URL.createObjectURL(file) : null)),
+      [pet.images],
+    );
+
+    useEffect(() => {
+      return () => {
+        imageUrls.forEach((url) => url && URL.revokeObjectURL(url));
+      };
+    }, [imageUrls]);
+
+    const renderImage = (index: number, className: string) => {
+      const url = imageUrls[index];
+      if (!url) {
         return <div className={`${className} bg-[#E7E0CC]`} />;
       }
 
-      return <PosterImage file={file} className={className} />;
+      return <img src={url} className={className} />;
     };
 
     const renderImages = () => {
@@ -35,15 +32,15 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         case '1':
           return (
             <div className="w-[850px] h-[550px]">
-              {renderImage(pet.images[0], 'w-[850px] h-[550px] object-cover')}
+              {renderImage(0, 'w-[850px] h-[550px] object-cover')}
             </div>
           );
 
         case '2':
           return (
             <div className="grid grid-cols-2 w-[850px] h-[550px]">
-              {renderImage(pet.images[0], 'w-[425px] h-[550px] object-cover')}
-              {renderImage(pet.images[1], 'w-[425px] h-[550px] object-cover')}
+              {renderImage(0, 'w-[425px] h-[550px] object-cover')}
+              {renderImage(1, 'w-[425px] h-[550px] object-cover')}
             </div>
           );
 
@@ -51,15 +48,15 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
           return (
             <div className="grid grid-cols-2 grid-rows-2 w-[850px] h-[550px]">
               {renderImage(
-                pet.images[0],
+                0,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-1',
               )}
               {renderImage(
-                pet.images[1],
+                1,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-2',
               )}
               {renderImage(
-                pet.images[2],
+                2,
                 'w-[425px] h-[550px] object-cover col-start-2 row-start-1 row-span-2',
               )}
             </div>
@@ -69,19 +66,19 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
           return (
             <div className="grid grid-cols-2 grid-rows-2 w-[850px] h-[550px]">
               {renderImage(
-                pet.images[0],
+                0,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-1',
               )}
               {renderImage(
-                pet.images[1],
+                1,
                 'w-[425px] h-[275px] object-cover col-start-1 row-start-2',
               )}
               {renderImage(
-                pet.images[2],
+                2,
                 'w-[425px] h-[275px] object-cover col-start-2 row-start-1',
               )}
               {renderImage(
-                pet.images[3],
+                3,
                 'w-[425px] h-[275px] object-cover col-start-2 row-start-2',
               )}
             </div>
@@ -99,12 +96,7 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         className="w-[1080px] h-[1350px] flex flex-col bg-white"
       >
         <div className="color-primary-bg h-[104px] w-[1080px] flex items-center justify-evenly">
-          <img
-            loading="eager"
-            src={whiteLogoSimple}
-            alt="Logo"
-            className="w-[92px] h-[92px]"
-          />
+          <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
           {/* <Text
             variant="body"
             weight="bold"
@@ -126,23 +118,13 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
               <span className="underline">{pet.name.toUpperCase()}</span>
             </AutoTextSize>
           </div>
-          <img
-            loading="eager"
-            src={whiteLogoSimple}
-            alt="Logo"
-            className="w-[92px] h-[92px]"
-          />
+          <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
         </div>
 
         <div className="w-[1080px] h-[689px] flex flex-col items-center justify-end bg-[#F9F1DE]">
           {renderImages()}
           <div className="w-[850px] flex justify-between items-center">
-            <img
-              loading="eager"
-              src={phone}
-              alt="Phone"
-              className="w-[86px] h-[120px]"
-            />
+            <img src={phone} alt="Phone" className="w-[86px] h-[120px]" />
             <div className="flex flex-col justify-center items-end">
               <Text variant="body" weight="regular" className="text-[34px]">
                 SI LE VES, LLAMA AL

@@ -24,6 +24,7 @@ describe('createWorkshop use-case (unit)', () => {
       workshopId: 'workshop-123',
       error: null,
     }),
+    deleteWorkshop: jest.fn(),
     ...overrides,
   });
 
@@ -77,6 +78,7 @@ describe('createManual use-case (unit)', () => {
       manualId: 'manual-456',
       error: null,
     }),
+    deleteManual: jest.fn(),
     ...overrides,
   });
 

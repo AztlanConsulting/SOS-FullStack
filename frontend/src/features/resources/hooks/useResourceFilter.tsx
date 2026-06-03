@@ -1,6 +1,12 @@
 import calculatePages from '@shared/utils/calculatePages';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import {
+  useMemo,
+  useState,
+  useCallback,
+  type SetStateAction,
+  type Dispatch,
+} from 'react';
 
 interface Props {
   total: number;
@@ -23,10 +29,24 @@ export default function useResourceFilter<T extends Props>(
 
   // Search Options
   const [searchTerm, setSearchTerm] = useState('');
-  const sortHook = useState<string>(defaultSortOption);
-  const sortOption = sortHook[0];
-  const typeHook = useState<string>('Todos');
-  const typeOption = typeHook[0];
+  const [sortOption, setSortOption] = useState<string>(defaultSortOption);
+  const [typeOption, setTypeOption] = useState<string>('Todos');
+
+  const handleSortChange = useCallback(
+    (value: React.SetStateAction<string>) => {
+      setSortOption(value);
+      setPage(1);
+    },
+    [setPage],
+  );
+
+  const handleTypeChange = useCallback(
+    (value: React.SetStateAction<string>) => {
+      setTypeOption(value);
+      setPage(1);
+    },
+    [setPage],
+  );
 
   // Query
   const query = useQuery({
@@ -47,7 +67,17 @@ export default function useResourceFilter<T extends Props>(
   }
 
   // Structure data
-  const searchHook = { handleSearch, sortHook, typeHook };
+  const searchHook = {
+    handleSearch,
+    sortHook: [sortOption, handleSortChange] as [
+      string,
+      Dispatch<SetStateAction<string>>,
+    ],
+    typeHook: [typeOption, handleTypeChange] as [
+      string,
+      Dispatch<SetStateAction<string>>,
+    ],
+  };
   const pages = { pageHook, visiblePages, totalPages };
 
   return { searchHook, query, pages };

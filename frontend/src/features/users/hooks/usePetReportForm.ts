@@ -232,6 +232,7 @@ export const usePetReportForm = (initialData?: Partial<LostPetReportData>) => {
 
     if (Object.keys(newErrors).length === 0) {
       setLostPetReportData(formData);
+      window.scrollTo(0, 0);
       navigate('/report-confirmation');
     } else {
       scrollToFirstError(newErrors);

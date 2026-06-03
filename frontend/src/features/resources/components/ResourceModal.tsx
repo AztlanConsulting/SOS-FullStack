@@ -52,7 +52,7 @@ export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
         )}
         {resource && (
           <>
-            <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-180px)] modal-scrollbar pl-6 pr-5 py-5">
+            <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-200px)] modal-scrollbar pl-6 pr-5 py-5">
               <Text variant="caption" as="p" color="text-gray-600">
                 Imagen de portada
               </Text>

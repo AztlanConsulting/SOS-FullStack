@@ -25,6 +25,7 @@
     "flowbite": "^4.0.1",
     "flowbite-react": "^0.12.17",
     "google-libphonenumber": "^3.2.44",
+    "heic2any": "^0.0.4",
     "html-to-image": "^1.11.13",
     "jspdf": "^4.2.1",
     "leaflet": "^1.9.4",

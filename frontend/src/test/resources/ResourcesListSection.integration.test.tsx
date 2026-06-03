@@ -1,7 +1,17 @@
 import '@testing-library/jest-dom/vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react'; // render used inside renderWithClient helper
 import { describe, expect, it, vi } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ResourcesListSection from '@features/resources/components/ResourcesListSection';
+
+function renderWithClient(ui: React.ReactElement) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+  );
+}
 
 const mockUseResourceFilter = vi.fn();
 
@@ -29,7 +39,7 @@ describe('ResourcesListSection', () => {
       pages: { pageHook: [1, vi.fn()], visiblePages: [], totalPages: 0 },
     });
 
-    render(<ResourcesListSection />);
+    renderWithClient(<ResourcesListSection />);
 
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
@@ -45,7 +55,7 @@ describe('ResourcesListSection', () => {
       pages: { pageHook: [1, vi.fn()], visiblePages: [], totalPages: 0 },
     });
 
-    render(<ResourcesListSection />);
+    renderWithClient(<ResourcesListSection />);
 
     expect(
       screen.getByText('Error cargando resultados de búsqueda, $boom'),
@@ -67,7 +77,7 @@ describe('ResourcesListSection', () => {
       pages: { pageHook: [1, vi.fn()], visiblePages: [], totalPages: 0 },
     });
 
-    render(<ResourcesListSection />);
+    renderWithClient(<ResourcesListSection />);
 
     expect(screen.getByText('No hay resultados...')).toBeInTheDocument();
   });
@@ -97,7 +107,7 @@ describe('ResourcesListSection', () => {
       pages: { pageHook: [1, vi.fn()], visiblePages: [1], totalPages: 1 },
     });
 
-    render(<ResourcesListSection />);
+    renderWithClient(<ResourcesListSection />);
 
     expect(screen.getByText('Recurso 1')).toBeInTheDocument();
     expect(screen.getByText('Resumen del recurso')).toBeInTheDocument();

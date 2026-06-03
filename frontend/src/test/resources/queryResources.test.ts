@@ -1,10 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import queryResources from '@features/resources/services/queryResources';
+import queryResources, {
+  deleteResource,
+} from '@features/resources/services/queryResources';
 import axiosInstance from '@shared/utils/axios';
 
 vi.mock('@shared/utils/axios', () => ({
   default: {
     get: vi.fn(),
+    delete: vi.fn(),
   },
 }));
 
@@ -48,5 +51,29 @@ describe('queryResources service', () => {
     vi.mocked(axiosInstance.get).mockRejectedValueOnce(new Error('network'));
 
     await expect(queryResources(1)).rejects.toThrow('network');
+  });
+});
+
+describe('deleteResource service', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('calls DELETE endpoint with the resource id', async () => {
+    vi.mocked(axiosInstance.delete).mockResolvedValueOnce({ data: undefined });
+
+    await deleteResource('resource-123');
+
+    expect(axiosInstance.delete).toHaveBeenCalledWith(
+      '/resources/resource-123',
+    );
+  });
+
+  it('propagates delete request errors', async () => {
+    vi.mocked(axiosInstance.delete).mockRejectedValueOnce(
+      new Error('not found'),
+    );
+
+    await expect(deleteResource('bad-id')).rejects.toThrow('not found');
   });
 });

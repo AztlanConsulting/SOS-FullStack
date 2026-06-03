@@ -51,7 +51,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
     coverDisplayHeightHook: [coverDisplayHeight, setCoverDisplayHeight],
     blocks,
     loading,
-    error,
+    errors,
     canAddBlock,
     MAX_NAME_LENGTH,
     MAX_TEXT_LENGTH,
@@ -112,6 +112,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                 if (file) setCoverImage(file);
               }}
             />
+
             {coverPreview ? (
               <div className="flex flex-col gap-2">
                 <img
@@ -154,6 +155,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                   icon={HiPhotograph}
                   onClick={() => coverInputRef.current?.click()}
                 />
+                {errors.coverImage && (
+                  <Text variant="small" color="text-red-500">
+                    {errors.coverImage}
+                  </Text>
+                )}
               </div>
             ) : (
               <button
@@ -180,6 +186,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
             placeholder="Nombre del recurso"
             className={FIELD_CLASS}
           />
+          {errors.name && (
+            <Text variant="small" color="text-red-500">
+              {errors.name}
+            </Text>
+          )}
           <Text
             variant="small"
             as="span"
@@ -238,6 +249,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
               USD
             </Text>
           </div>
+          {errors.price && (
+            <Text variant="small" color="text-red-500">
+              {errors.price}
+            </Text>
+          )}
           <Text variant="small" as="span" color="text-gray-400 text-right">
             Máximo {MAX_PRICE.toLocaleString('en-US')} USD
           </Text>
@@ -263,6 +279,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
               ? 'El cliente recibirá este PDF por correo al adquirir el manual'
               : 'El cliente recibirá este video por correo al adquirir el taller'}
           </Text>
+          {errors.secretUrl && (
+            <Text variant="small" color="text-red-500">
+              {errors.secretUrl}
+            </Text>
+          )}
         </div>
 
         {type === 'taller' && (
@@ -278,6 +299,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
               placeholder="Mensaje que recibirá el cliente al comprar el taller..."
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none focus:outline-none"
             />
+            {errors.emailContent && (
+              <Text variant="small" color="text-red-500">
+                {errors.emailContent}
+              </Text>
+            )}
             <Text
               variant="small"
               as="span"
@@ -483,14 +509,14 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
         )}
 
         {/* ── Error ── */}
-        {error && (
+        {errors.general && (
           <Text
             variant="small"
             weight="medium"
             color="text-red-500"
             className="text-center"
           >
-            {error}
+            {errors.general}
           </Text>
         )}
       </div>

@@ -48,7 +48,7 @@ export const useEditResource = (
     parseResourceBlock(resource?.content ?? []),
   );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const secretUrlHook = useState(resource?.resourceUrl!);
   const [coverImage, setCoverImageRaw] = useState<File | null>(null);
   const coverPreviewHook = useState(resource?.imageUrl!);
@@ -91,7 +91,10 @@ export const useEditResource = (
 
   // guard name length
   const setName = (v: string) => {
-    if (v.length <= MAX_NAME_LENGTH) setNameRaw(v);
+    if (v.length <= MAX_NAME_LENGTH) {
+      setNameRaw(v);
+      clearError('name');
+    }
   };
 
   // ── block helpers ───────────────────────────────────────────────────────────
@@ -140,7 +143,10 @@ export const useEditResource = (
     if (file !== null) {
       const sizeMB = file.size / (1024 * 1024);
       if (sizeMB > MAX_FILE_SIZE_MB) {
-        setError(`La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`);
+        setErrors((prev) => ({
+          ...prev,
+          [`imageBlock_${i}`]: `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`,
+        }));
         return;
       }
       const previewUrl = URL.createObjectURL(file);
@@ -168,7 +174,10 @@ export const useEditResource = (
     }
     const sizeMB = file.size / (1024 * 1024);
     if (sizeMB > MAX_FILE_SIZE_MB) {
-      setError(`La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`);
+      setErrors((prev) => ({
+        ...prev,
+        coverImage: `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`,
+      }));
       return;
     }
     setCoverImageRaw(file);
@@ -178,41 +187,57 @@ export const useEditResource = (
   const removeBlock = (i: number) =>
     setBlocks((p) => p.filter((_, idx) => idx !== i));
 
+  const clearError = (key: string) =>
+    setErrors((prev) => {
+      const copy = { ...prev };
+      delete copy[key];
+      return copy;
+    });
+
   // ── submit ──────────────────────────────────────────────────────────────────
   const handleSubmit = async () => {
-    setError(null);
+    setErrors({});
 
-    if (!name.trim()) {
-      setError('El título es requerido');
-      return;
-    }
-    if (name.trim().length > MAX_NAME_LENGTH) {
-      setError(`El título no puede superar ${MAX_NAME_LENGTH} caracteres`);
-      return;
-    }
+    // ── All sync validations first ──
+    const newErrors: Record<string, string> = {};
+
+    if (!name.trim()) newErrors.name = 'El título es requerido';
+    if (name.trim().length > MAX_NAME_LENGTH)
+      newErrors.name = `El título no puede superar ${MAX_NAME_LENGTH} caracteres`;
+
     const priceNum = parseInt(price, 10);
-    if (!price || isNaN(priceNum) || priceNum <= 0) {
-      setError('Ingresa un precio válido');
-      return;
-    }
-    if (priceNum > MAX_PRICE) {
-      setError(
-        `El precio no puede superar ${MAX_PRICE.toLocaleString('en-US')} USD`,
-      );
+    if (!price || isNaN(priceNum) || priceNum <= 0)
+      newErrors.price = 'Ingresa un precio válido';
+    else if (priceNum > MAX_PRICE)
+      newErrors.price = `El precio no puede superar ${MAX_PRICE.toLocaleString('en-US')} USD`;
+
+    if (!secretUrl.trim())
+      newErrors.secretUrl =
+        type === 'manual'
+          ? 'El PDF URL es requerido'
+          : 'El Video URL es requerido';
+    const urlRegex =
+      /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+    if (!urlRegex.test(secretUrl)) newErrors.secretUrl = 'URL inválido';
+    if (type === 'taller' && !emailContent.trim())
+      newErrors.emailContent = 'El contenido del correo es requerido';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
     setLoading(true);
     try {
-      if (error !== null) {
-        console.log(error);
-        throw error;
+      if (Object.keys(newErrors).length > 0) {
+        console.log(newErrors);
+        throw newErrors;
       }
       let coverUrl = resource?.imageUrl;
       if (coverImage) coverUrl = await ResourceService.uploadImage(coverImage);
 
       const serialised = await Promise.all(
-        blocks.map(async (block, idx) => {
+        blocks.map(async (block) => {
           if (block.kind === 'texto')
             return { type: 'text' as const, content: block.value }; // value → content
           if (block.kind === 'link')
@@ -235,6 +260,9 @@ export const useEditResource = (
         }),
       );
 
+      console.log(secretUrl);
+      console.log(type);
+
       const newObj: Partial<Resource> = {
         type,
         name: name.trim(),
@@ -246,8 +274,12 @@ export const useEditResource = (
           resourceUrl: secretUrl.trim(),
           emailContent: emailContent.trim(),
         }),
-        ...(type === 'manual' && { resourceUrl: secretUrl.trim() }),
+        ...(type.toLowerCase() === 'manual' && {
+          resourceUrl: secretUrl.trim(),
+        }),
       };
+
+      // console.log(newObj)
 
       const changeset = Object.fromEntries(
         (
@@ -282,8 +314,10 @@ export const useEditResource = (
         }),
       ) as Partial<Resource>;
 
+      console.log('Changeset', changeset);
+
       if (Object.keys(changeset).length < 3) {
-        setError('No hay cambios');
+        setErrors((prev) => ({ ...prev, general: 'No hay cambios' }));
         // throw Error("No hay cambios")
       }
 
@@ -293,24 +327,10 @@ export const useEditResource = (
         ...changeset,
       });
 
-      if (!secretUrl.trim()) {
-        setError(
-          type === 'manual'
-            ? 'El PDF URL es requerido'
-            : 'El Video URL es requerido',
-        );
-        return;
-      }
-
-      if (type === 'taller' && !emailContent.trim()) {
-        setError('El contenido del correo es requerido');
-        return;
-      }
-
       onSuccess?.();
     } catch (error) {
       console.log(error);
-      // setError('Ocurrió un error al guardar. Intenta de nuevo.');
+      setErrors({ general: 'Ocurrió un error al guardar. Intenta de nuevo.' });
     } finally {
       setLoading(false);
     }
@@ -337,7 +357,7 @@ export const useEditResource = (
     coverDisplayHeightHook,
     blocks,
     loading,
-    error,
+    errors,
     canAddBlock: blocks.length < MAX_BLOCKS,
     MAX_NAME_LENGTH,
     MAX_TEXT_LENGTH,

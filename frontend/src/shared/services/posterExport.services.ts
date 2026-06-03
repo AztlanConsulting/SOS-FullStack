@@ -1,5 +1,5 @@
-import { toPng, toJpeg } from 'html-to-image';
 import jsPDF from 'jspdf';
+import { domToBlob, domToPng, domToJpeg as toJpeg } from 'modern-screenshot';
 
 type PosterSource = HTMLElement | string | File | null;
 
@@ -18,8 +18,9 @@ const loadImageFromSource = async (source: Exclude<PosterSource, null>) => {
 
     const dataUrl = await toJpeg(source, {
       quality: 1,
-      pixelRatio: 3,
       cacheBust: true,
+      backgroundColor: '#ffffff',
+      skipFonts: false,
     });
 
     const image = new Image();
@@ -91,16 +92,19 @@ export const exportPosterAsFile = async (
 ): Promise<File | null> => {
   if (!node) return null;
 
-  const dataUrl = await toPng(node, {
-    quality: 1,
-    pixelRatio: 1,
-    cacheBust: false,
-  });
+  let dataUrl: Blob | null;
+  try {
+    dataUrl = await domToBlob(node, {});
+  } catch (err) {
+    console.error('Error generating poster image:', err);
+    throw err;
+  }
 
-  const res = await fetch(dataUrl);
-  const blob = await res.blob();
+  if (!dataUrl) {
+    throw new Error('invalid data url');
+  }
 
-  const file = new File([blob], `${fileName}.png`, {
+  const file = new File([dataUrl], `${fileName}.png`, {
     type: 'image/png',
   });
 

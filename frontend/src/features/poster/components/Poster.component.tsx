@@ -1,30 +1,53 @@
-import { forwardRef, useEffect, useMemo } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Text } from '@shared/components/ui/Text/Text';
 import whiteLogoSimple from '@assets/images/whiteLogoSimple.webp';
 import phone from '@assets/images/phone.webp';
 import type { LostPetReportData } from '@/shared/types/petReport.types';
 import { AutoTextSize } from 'auto-text-size';
+import { processFilesToDataURLs } from '@/shared/utils/imageToDataUrl';
+import { getStaticImageAsDataURL } from '@/shared/utils/staticAssetsToDataUrl';
 
 export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
   ({ pet }, ref) => {
-    const imageUrls = useMemo(
-      () => pet.images.map((file) => (file ? URL.createObjectURL(file) : null)),
-      [pet.images],
-    );
+    const [imageDataUrls, setImageDataUrls] = useState<string[]>([]);
+    const [isProcessing, setIsProcessing] = useState(true);
+    const [logoDataUrl, setLogoDataUrl] = useState<string>(whiteLogoSimple);
+    const [phoneDataUrl, setPhoneDataUrl] = useState<string>(phone);
 
     useEffect(() => {
-      return () => {
-        imageUrls.forEach((url) => url && URL.revokeObjectURL(url));
+      const processAllAssets = async () => {
+        setIsProcessing(true);
+        try {
+          // Process user uploaded images
+          const dataUrls = await processFilesToDataURLs(pet.images);
+          setImageDataUrls(dataUrls);
+
+          // Convert static assets to data URLs
+          const [logoData, phoneData] = await Promise.all([
+            getStaticImageAsDataURL(whiteLogoSimple),
+            getStaticImageAsDataURL(phone),
+          ]);
+
+          setLogoDataUrl(logoData);
+          setPhoneDataUrl(phoneData);
+        } catch (error) {
+          console.error('Failed to process images:', error);
+          setImageDataUrls([]);
+        } finally {
+          setIsProcessing(false);
+        }
       };
-    }, [imageUrls]);
+
+      processAllAssets();
+    }, [pet.images]);
 
     const renderImage = (index: number, className: string) => {
-      const url = imageUrls[index];
-      if (!url) {
+      const dataUrl = imageDataUrls[index];
+      if (!dataUrl || isProcessing) {
         return <div className={`${className} bg-[#E7E0CC]`} />;
       }
 
-      return <img src={url} className={className} />;
+      return <img src={dataUrl} className={className} decoding="sync" />;
     };
 
     const renderImages = () => {
@@ -96,7 +119,12 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
         className="w-[1080px] h-[1350px] flex flex-col bg-white"
       >
         <div className="color-primary-bg h-[104px] w-[1080px] flex items-center justify-evenly">
-          <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
+          <img
+            src={logoDataUrl}
+            alt="Logo"
+            className="w-[92px] h-[92px]"
+            decoding="sync"
+          />
           {/* <Text
             variant="body"
             weight="bold"
@@ -118,13 +146,23 @@ export const Poster = forwardRef<HTMLDivElement, { pet: LostPetReportData }>(
               <span className="underline">{pet.name.toUpperCase()}</span>
             </AutoTextSize>
           </div>
-          <img src={whiteLogoSimple} alt="Logo" className="w-[92px] h-[92px]" />
+          <img
+            src={logoDataUrl}
+            alt="Logo"
+            className="w-[92px] h-[92px]"
+            decoding="sync"
+          />
         </div>
 
         <div className="w-[1080px] h-[689px] flex flex-col items-center justify-end bg-[#F9F1DE]">
           {renderImages()}
           <div className="w-[850px] flex justify-between items-center">
-            <img src={phone} alt="Phone" className="w-[86px] h-[120px]" />
+            <img
+              src={phoneDataUrl}
+              alt="Phone"
+              className="w-[86px] h-[120px]"
+              decoding="sync"
+            />
             <div className="flex flex-col justify-center items-end">
               <Text variant="body" weight="regular" className="text-[34px]">
                 SI LE VES, LLAMA AL

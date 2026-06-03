@@ -2,7 +2,7 @@ import { Button, Text } from '@/shared/components/ui';
 import type { Resource } from '../types/resource';
 import { Modal } from '@/shared/components/ui/Modal/Modal';
 import { useEditResource } from '../hooks/useEditResource';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { HiDocumentText, HiLink, HiPhotograph, HiTrash } from 'react-icons/hi';
 import formatPrice from '@/shared/utils/formatPrice';
 
@@ -459,6 +459,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
         {canAddBlock ? (
           <div className="relative mt-4">
             <select
+              id="create-box"
               defaultValue=""
               onChange={handleAddBlock}
               className={

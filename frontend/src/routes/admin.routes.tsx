@@ -11,7 +11,6 @@ import { Outlet } from 'react-router';
  */
 const routerAdmin = [
   {
-    path: '/clientes',
     element: (
       <RoleProtectedRoute allowedRoles={['ADMIN']}>
         <Outlet />
@@ -19,11 +18,11 @@ const routerAdmin = [
     ),
     children: [
       {
-        index: true,
+        path: 'clientes',
         element: <ClientsPage />,
       },
       {
-        path: '/recursos',
+        path: 'recursos',
         element: <ResourcesPage />,
       },
     ],

@@ -88,6 +88,10 @@ export const ReportConfirmationPage: React.FC = () => {
         `${lostPetReportData.name.slice(0, 10)}-poster`,
       );
 
+      if (!posterFile) {
+        console.warn('No poster generated?');
+      }
+
       if (posterFile) {
         const imageCount = parseInt(lostPetReportData.imageLayout || '1', 10);
         const currentImageCount = lostPetReportData.images?.length || 0;

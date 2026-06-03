@@ -21,7 +21,6 @@ const allowedOrigins = [
   process.env.FRONT_END_URL,
   'http://localhost:5173',
   'http://localhost:5174',
-  'http://192.168.100.43:5173',
 ].filter((origin): origin is string => Boolean(origin));
 
 // app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));

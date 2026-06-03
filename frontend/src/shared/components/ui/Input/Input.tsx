@@ -75,7 +75,7 @@ export const Input: React.FC<InputProps> = ({
       >
         <label
           htmlFor={id}
-          className={`block text-xs text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+          className={`block text-sm text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
         >
           {label}{' '}
           {required && (
@@ -90,7 +90,7 @@ export const Input: React.FC<InputProps> = ({
           required={required}
           maxLength={maxLength}
           value={value}
-          className="w-full text-sm text-gray-700 bg-transparent outline-none"
+          className="w-full text-base text-gray-700 bg-transparent outline-none"
           max={maxNumberValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}

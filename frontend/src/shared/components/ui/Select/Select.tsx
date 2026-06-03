@@ -39,7 +39,7 @@ export const Select: React.FC<SelectProps> = ({
       >
         <label
           htmlFor={id}
-          className={`block text-xs text-gray-400 ${labelFocusClass}`}
+          className={`block text-sm text-gray-400 ${labelFocusClass}`}
         >
           {label}
           {required && <span className="text-red-500 font-bold">*</span>}
@@ -47,7 +47,7 @@ export const Select: React.FC<SelectProps> = ({
 
         <select
           id={id}
-          className="w-full text-sm text-gray-700 bg-transparent outline-none appearance-none cursor-pointer"
+          className="w-full text-base text-gray-700 bg-transparent outline-none appearance-none cursor-pointer"
           {...props}
         >
           <option value="" disabled>

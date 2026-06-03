@@ -25,7 +25,7 @@ export const login = async (req: Request, res: Response) => {
     if (!Boolean(email) || !Boolean(password)) {
       res.status(400).json({
         error: 'VALIDATION_ERROR',
-        message: 'Email y contrasena son requeridos',
+        message: 'Email y contraseña son requeridos',
       });
       return;
     }
@@ -194,7 +194,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     if (result.status === 'EMAIL_SENT') {
       res.status(200).json({
-        message: 'Se enviaron instrucciones para recuperar la contrasena.',
+        message: 'Se enviaron instrucciones para recuperar la contraseña.',
         expiresAt: result.expiresAt,
       });
       return;
@@ -202,12 +202,12 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message:
-        'Si el correo existe, se enviaran instrucciones para recuperar la contrasena.',
+        'Si el correo existe, se enviaran instrucciones para recuperar la contraseña.',
     });
   } catch (_error) {
     res.status(500).json({
       error: 'INTERNAL_ERROR',
-      message: 'Error al solicitar recuperacion de contrasena',
+      message: 'Error al solicitar recuperacion de contraseña',
     });
   }
 };
@@ -275,7 +275,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     if (newPassword.length < minPasswordLength) {
       res.status(400).json({
         error: 'VALIDATION_ERROR',
-        message: `La contrasena debe tener al menos ${minPasswordLength} caracteres`,
+        message: `La contraseña debe tener al menos ${minPasswordLength} caracteres`,
       });
       return;
     }
@@ -283,7 +283,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     if (newPassword !== confirmPassword) {
       res.status(400).json({
         error: 'VALIDATION_ERROR',
-        message: 'Las contrasenas no coinciden',
+        message: 'Las contraseñas no coinciden',
       });
       return;
     }
@@ -301,7 +301,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     );
 
     res.status(200).json({
-      message: 'Contrasena actualizada correctamente',
+      message: 'contraseña actualizada correctamente',
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -319,7 +319,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     res.status(500).json({
       error: 'INTERNAL_ERROR',
-      message: 'Error al actualizar contrasena',
+      message: 'Error al actualizar contraseña',
     });
   }
 };

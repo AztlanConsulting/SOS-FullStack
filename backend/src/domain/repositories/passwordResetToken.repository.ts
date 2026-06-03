@@ -45,4 +45,11 @@ export interface PasswordResetTokenRepository {
    * @param tokenHash - SHA-256 hash of the raw token
    */
   markTokenAsUsed(tokenHash: string): Promise<void>;
+
+  /**
+   * Deletes a reset token by hash when delivery fails before the user receives it.
+   *
+   * @param tokenHash - SHA-256 hash of the raw token
+   */
+  deleteTokenByHash(tokenHash: string): Promise<void>;
 }

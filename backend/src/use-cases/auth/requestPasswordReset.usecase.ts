@@ -93,12 +93,19 @@ export const requestPasswordReset = async (
     };
   }
 
-  await emailService.sendPasswordResetEmail({
-    to: normalizedEmail,
-    username: user.username,
-    resetUrl: buildResetUrl(rawToken),
-    expiresInHours: 24,
-  });
+  try {
+    await emailService.sendPasswordResetEmail({
+      to: normalizedEmail,
+      username: user.username,
+      resetUrl: buildResetUrl(rawToken),
+      expiresInHours: 24,
+    });
+  } catch (error) {
+    await repositories.passwordResetTokenRepository.deleteTokenByHash(
+      tokenHash,
+    );
+    throw error;
+  }
 
   return { status: 'EMAIL_SENT', expiresAt };
 };

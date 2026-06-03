@@ -9,11 +9,8 @@ import type {
 let transporterPromise: Promise<nodemailer.Transporter> | null = null;
 
 /**
- * Development:
- * Uses Ethereal test SMTP automatically.
- *
- * Production:
- * Uses real SMTP credentials from .env
+ * Uses real SMTP credentials when they are configured.
+ * Falls back to Ethereal only for local environments without SMTP settings.
  */
 const getTransporter = async (): Promise<nodemailer.Transporter> => {
   if (transporterPromise) {
@@ -21,34 +18,51 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   }
 
   transporterPromise = (async () => {
-    const isDevelopment = process.env.ENV !== 'production';
+    const hasSmtpConfig = Boolean(
+      process.env.SMTP_HOST &&
+      process.env.SMTP_PORT &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASS,
+    );
 
-    if (isDevelopment) {
-      const testAccount = await nodemailer.createTestAccount();
-
+    if (hasSmtpConfig) {
       return nodemailer.createTransport({
-        host: testAccount.smtp.host,
-        port: testAccount.smtp.port,
-        secure: testAccount.smtp.secure,
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: Number(process.env.SMTP_PORT) === 465,
         auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
         },
       });
     }
 
+    if (process.env.ENV === 'production') {
+      throw new Error('SMTP_CONFIG_MISSING');
+    }
+
+    const testAccount = await nodemailer.createTestAccount();
+
     return nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: Number(process.env.SMTP_PORT) === 465,
+      host: testAccount.smtp.host,
+      port: testAccount.smtp.port,
+      secure: testAccount.smtp.secure,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: testAccount.user,
+        pass: testAccount.pass,
       },
     });
   })();
 
   return transporterPromise;
+};
+
+const logPreviewUrl = (info: nodemailer.SentMessageInfo): void => {
+  const previewUrl = nodemailer.getTestMessageUrl(info);
+
+  if (previewUrl) {
+    console.log(previewUrl);
+  }
 };
 
 export const emailService: EmailService = {
@@ -63,7 +77,7 @@ export const emailService: EmailService = {
     const info = await transporter.sendMail({
       from: `"SOS Pets" <${process.env.SMTP_USER ?? 'test@sospets.local'}>`,
       to: data.to,
-      subject: 'Recupera tu contrasena',
+      subject: 'Recupera tu contraseña',
       html: `
         <div style="margin:0;padding:0;background-color:#f8f9fa;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
           <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa;padding:40px 10px;">
@@ -83,7 +97,7 @@ export const emailService: EmailService = {
                         style="display:block;height:80px;width:auto;border:0;outline:none;text-decoration:none;"
                       />
                       <h1 style="margin:12px 0 0 0;color:#1a1a1a;font-size:22px;line-height:32px;font-weight:bold;">
-                        Recupera tu contrasena
+                        Recupera tu contraseña
                       </h1>
                     </td>
                   </tr>
@@ -92,15 +106,15 @@ export const emailService: EmailService = {
                     <td style="padding:0 30px 40px 30px;color:#444444;line-height:1.6;">
                       <p style="font-size:16px;margin-bottom:12px;">Hola <strong>${data.username ?? data.to}</strong>,</p>
                       <p style="font-size:15px;color:#666;margin-bottom:24px;">
-                        Recibimos una solicitud para restablecer la contrasena de tu cuenta.
-                        Usa el siguiente boton para crear una nueva contrasena.
+                        Recibimos una solicitud para restablecer la contraseña de tu cuenta.
+                        Usa el siguiente boton para crear una nueva contraseña.
                       </p>
 
                       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px auto;" align="center">
                         <tr>
                           <td align="center">
                             <a href="${data.resetUrl}" target="_blank" style="background-color:#f9cd48;color:#1a1a1a;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">
-                              Restablecer contrasena
+                              Restablecer contraseña
                             </a>
                           </td>
                         </tr>
@@ -140,9 +154,7 @@ export const emailService: EmailService = {
       `,
     });
 
-    const previewUrl = nodemailer.getTestMessageUrl(info);
-
-    console.log(previewUrl);
+    logPreviewUrl(info);
   },
 
   async sendActivatePlanEmail(data: SendActivatePlanEmailDTO): Promise<void> {
@@ -267,8 +279,6 @@ export const emailService: EmailService = {
         `,
     });
 
-    const previewUrl = nodemailer.getTestMessageUrl(info);
-
-    console.log(previewUrl);
+    logPreviewUrl(info);
   },
 };

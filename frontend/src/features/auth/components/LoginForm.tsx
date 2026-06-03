@@ -185,12 +185,16 @@ export const LoginForm = () => {
               )}
 
               {/* FORGOT PASSWORD */}
-              {/* <Text variant="caption" as="p" className="color-grey-text mt-1">
+              <Text variant="caption" as="p" className="color-grey-text mt-1">
                 ¿Olvidaste tu contraseña?{' '}
-                <span className="whitespace-nowrap underline cursor-pointer hover:text-black">
+                <button
+                  type="button"
+                  onClick={() => navigate('/olvide-contrasena')}
+                  className="whitespace-nowrap underline cursor-pointer hover:text-black transition"
+                >
                   Recuperar Contraseña
-                </span>
-              </Text> */}
+                </button>
+              </Text>
             </form>
           </div>
         </div>

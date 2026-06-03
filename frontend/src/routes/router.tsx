@@ -13,6 +13,8 @@ import routerLostPet from './foundPet.routes';
 import { PurchasePage } from '@pages/PurchasePage';
 import { PetReportForm } from '@features/users/components/PetReportForm';
 import LoginPage from '../pages/LoginPage';
+import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
@@ -49,6 +51,14 @@ export const router = createBrowserRouter([
       {
         path: '/login',
         element: <LoginPage />,
+      },
+      {
+        path: '/olvide-contrasena',
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: '/recuperar-contrasena',
+        element: <ResetPasswordPage />,
       },
       {
         path: '/dashboard',

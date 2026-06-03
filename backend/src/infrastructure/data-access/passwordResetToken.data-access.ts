@@ -120,4 +120,13 @@ export const passwordResetTokenDataAccess: PasswordResetTokenRepository = {
       { $set: { usedAt: new Date() } },
     ).exec();
   },
+
+  /**
+   * Deletes a reset token by hash when the email could not be delivered.
+   *
+   * @param tokenHash - SHA-256 hash of the raw reset token
+   */
+  async deleteTokenByHash(tokenHash: string): Promise<void> {
+    await PasswordResetTokenModel.deleteOne({ tokenHash }).exec();
+  },
 };

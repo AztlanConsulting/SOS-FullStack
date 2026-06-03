@@ -49,7 +49,13 @@ export async function postWorkshop(req: Request, res: Response) {
     const body = workshopBody.safeParse(req.body);
     const image = req.file;
 
-    if (!body.success) throw body.error;
+    if (!body.success) {
+      return res.status(400).json({
+        message: body.error.errors[0]?.message || 'Validation error',
+        errors: body.error.errors,
+      });
+    }
+
     if (image !== undefined && body.data.imageUrl === undefined)
       throw Error('Image not provided');
 
@@ -70,7 +76,7 @@ export async function postWorkshop(req: Request, res: Response) {
 
     const workshopId = await createWorkshop(WorkshopDataAccess, workshopData);
 
-    return res.status(200).json({ workshopId });
+    return res.status(201).json({ workshopId });
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);

@@ -39,7 +39,7 @@ const ResourceSearch = ({ searchHook }: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-row justify-center items-center gap-2 my-4 w-full md:w-1/2 lg:w-2/5 md:place-self-end">
+    <div className="flex flex-row justify-center items-center gap-2 my-4 w-full md:w-1/2 lg:w-2/5 md:ml-auto">
       <div ref={dropdownRef} className="relative">
         <button
           onClick={() => setIsOpen((prev) => !prev)}

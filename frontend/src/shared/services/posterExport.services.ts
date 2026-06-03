@@ -86,46 +86,88 @@ const addCenteredImageToPdf = (
 };
 
 /**
- * Converts a data URL to a Blob without using fetch
- * This is more compatible with iOS Safari
+ * Converts a data URL to a Blob without using fetch()
+ * This is essential for iOS compatibility where fetch() on data URLs fails
+ * Works on all browsers and devices
  */
 const dataUrlToBlob = (dataUrl: string): Blob => {
-  const parts = dataUrl.split(',');
-  const header = parts[0];
-  const bstr = atob(parts[1]);
-  const n = bstr.length;
-  const u8arr = new Uint8Array(n);
+  try {
+    const parts = dataUrl.split(',');
+    if (parts.length !== 2) {
+      throw new Error('Invalid data URL format');
+    }
 
-  for (let i = 0; i < n; i++) {
-    u8arr[i] = bstr.charCodeAt(i);
+    const header = parts[0];
+    const data = parts[1];
+
+    // Decode base64
+    let bstr: string;
+    try {
+      bstr = atob(data);
+    } catch (e) {
+      throw new Error('Failed to decode base64 data');
+    }
+
+    const n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    for (let i = 0; i < n; i++) {
+      u8arr[i] = bstr.charCodeAt(i);
+    }
+
+    // Extract MIME type from header
+    const mimeMatch = header.match(/:(.*?);/);
+    const mimeType = mimeMatch ? mimeMatch[1] : 'image/png';
+
+    return new Blob([u8arr], { type: mimeType });
+  } catch (error) {
+    console.error('Error converting data URL to Blob:', error);
+    throw error;
   }
-
-  const mimeMatch = header.match(/:(.*?);/);
-  const mimeType = mimeMatch ? mimeMatch[1] : 'image/png';
-
-  return new Blob([u8arr], { type: mimeType });
 };
 
 export const exportPosterAsFile = async (
   node: HTMLElement | null,
   fileName: string,
 ): Promise<File | null> => {
-  if (!node) return null;
+  if (!node) {
+    console.warn('exportPosterAsFile: No HTML node provided');
+    return null;
+  }
 
-  const dataUrl = await toPng(node, {
-    quality: 1,
-    pixelRatio: 1,
-    cacheBust: false,
-  });
+  try {
+    const dataUrl = await toPng(node, {
+      quality: 1,
+      pixelRatio: 1,
+      cacheBust: false,
+    });
 
-  // Use direct conversion instead of fetch for iOS Safari compatibility
-  const blob = dataUrlToBlob(dataUrl);
+    if (!dataUrl) {
+      console.warn('exportPosterAsFile: toPng returned empty data URL');
+      return null;
+    }
 
-  const file = new File([blob], `${fileName}.png`, {
-    type: 'image/png',
-  });
+    // Use direct conversion instead of fetch() for iOS Safari compatibility
+    let blob: Blob;
+    try {
+      blob = dataUrlToBlob(dataUrl);
+    } catch (error) {
+      console.error(
+        'exportPosterAsFile: Failed to convert data URL to Blob:',
+        error,
+      );
+      return null;
+    }
 
-  return file;
+    const file = new File([blob], `${fileName}.png`, {
+      type: 'image/png',
+    });
+
+    return file;
+  } catch (error) {
+    console.error('exportPosterAsFile: Error creating poster file:', error);
+    return null;
+  }
 };
 
 export const exportPosterAsPdfColor = async (

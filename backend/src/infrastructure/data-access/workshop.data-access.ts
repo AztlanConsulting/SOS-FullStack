@@ -6,7 +6,7 @@ import type {
   GetWorkshop,
   WorkshopRepository,
 } from '@domain/repositories/workshop.repository';
-import type { SortOrder } from 'mongoose';
+import { Types, type SortOrder } from 'mongoose';
 
 const limit = 6;
 export const WorkshopDataAccess: WorkshopRepository = {
@@ -100,11 +100,13 @@ export const WorkshopDataAccess: WorkshopRepository = {
         videoUrl: updateInfo.resourceUrl,
       }),
     };
+    const { _id, ...fields } = updateInfo;
+
     const result = await WorkshopModel.updateOne(
-      { _id: updateInfo._id },
-      updateInfo,
+      { _id: new Types.ObjectId(_id) },
+      { $set: fields },
     );
 
-    return result.modifiedCount > 0;
+    return result.matchedCount > 0;
   },
 };

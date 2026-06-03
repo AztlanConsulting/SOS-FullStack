@@ -196,7 +196,6 @@ export const useEditResource = (
 
       const serialised = await Promise.all(
         blocks.map(async (block) => {
-          console.log(block);
           if (block.kind === 'texto')
             return { type: 'text' as const, content: block.value }; // value → content
           if (block.kind === 'link')
@@ -231,6 +230,7 @@ export const useEditResource = (
 
       await ResourceService.updateResource({
         _id: id,
+        type: newObj.type,
         ...changeset,
       });
 

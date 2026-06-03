@@ -16,7 +16,16 @@ export const ResourceService = {
   updateResource: async (
     payload: Partial<Resource> & Pick<Resource, '_id'>,
   ): Promise<boolean> => {
-    const { data } = await axiosInstance.put('/resource', payload);
+    const types: Record<string, string> = {
+      Taller: 'workshop',
+      Manual: 'manual',
+    };
+
+    const { data } = await axiosInstance.put('/resources', payload, {
+      params: {
+        resource: types[payload.type!],
+      },
+    });
     return data;
   },
 

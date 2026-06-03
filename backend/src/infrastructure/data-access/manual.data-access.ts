@@ -4,7 +4,7 @@ import type {
   ManualResult,
 } from '@domain/repositories/manual.repository';
 import { ManualModel } from '@domain/models/manual.model';
-import type { SortOrder } from 'mongoose';
+import { Types, type SortOrder } from 'mongoose';
 import type { PartialResourceWithId } from '@/domain/repositories/resource.repository';
 
 const limit = 6;
@@ -77,11 +77,13 @@ export const ManualDataAccess: ManualRepository = {
         pdfUrl: updateInfo.resourceUrl,
       }),
     };
+    const { _id, ...fields } = updateInfo;
+
     const result = await ManualModel.updateOne(
-      { _id: updateInfo._id },
-      updateInfo,
+      { _id: new Types.ObjectId(_id) },
+      { $set: fields },
     );
 
-    return result.modifiedCount > 0;
+    return result.matchedCount > 0;
   },
 };

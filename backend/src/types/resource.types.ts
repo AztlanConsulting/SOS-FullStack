@@ -26,7 +26,7 @@ export const resourceQuery = z
   );
 
 export const resourceSearchQuery = z.object({
-  resource: z.string().max(20).optional(),
+  resource: z.string().max(20),
 });
 
 export const resourceSchema = z.object({
@@ -38,10 +38,23 @@ export const resourceSchema = z.object({
   emailContent: z.string().max(400).optional(),
   content: z
     .array(
-      z.object({
-        content: z.string().max(400),
-        type: z.string().max(50),
-      }),
+      z
+        .object({
+          content: z.string(),
+          type: z.string().max(50),
+        })
+        .refine(
+          (item) => {
+            if (item.type !== 'image') {
+              return item.content.length <= 400;
+            }
+            return true;
+          },
+          {
+            message: 'Non-image content must be at most 400 characters',
+            path: ['content'],
+          },
+        ),
     )
     .max(10),
 });

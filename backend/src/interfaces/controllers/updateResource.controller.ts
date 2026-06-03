@@ -12,7 +12,6 @@ import updateResourceUC from '@/use-cases/resources/updateResourceUC.usecase';
 import { type Request, type Response } from 'express';
 
 async function updateResource(req: Request, res: Response) {
-  console.log(req.body, req.params);
   try {
     const query = resourceSearchQuery.safeParse(req.query);
     const body = updateResourceSchema.safeParse(req.body);
@@ -30,7 +29,10 @@ async function updateResource(req: Request, res: Response) {
       body.data as PartialResourceWithId,
     );
 
-    if (result.error) return res.status(404).send("Couldn't find object");
+    if (result.error) {
+      console.error(result.error);
+      return res.status(404).send("Couldn't find object");
+    }
 
     return res.status(200).send('success');
   } catch (err) {

@@ -84,19 +84,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Debug secrets
-        run: |
-          if [ -z "${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}" ]; then
-            echo "❌ VITE_STRIPE_PUBLISHABLE_KEY is empty or not set"
-          else
-            echo "✅ VITE_STRIPE_PUBLISHABLE_KEY is set (length: $(echo -n '${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}' | wc -c))"
-          fi
-          if [ -z "${{ secrets.VITE_PAYPAL_CLIENT }}" ]; then
-            echo "❌ VITE_PAYPAL_CLIENT is empty or not set"
-          else
-            echo "✅ VITE_PAYPAL_CLIENT is set (length: $(echo -n '${{ secrets.VITE_PAYPAL_CLIENT }}' | wc -c))"
-          fi
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:

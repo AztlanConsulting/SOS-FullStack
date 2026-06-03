@@ -33,4 +33,5 @@ export interface ManualRepository {
   getTotalManuals(manualRequest: GetManual): Promise<number>;
   getManualById(id: string): Promise<ManualResult | null>;
   createManual(manual: CreateManualInput): Promise<CreateManual>;
+  deleteManual(id: string): Promise<boolean>;
 }

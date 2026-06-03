@@ -77,6 +77,9 @@ export const ManualDataAccess: ManualRepository = {
     } catch (error) {
       return { manualId: null, error: 'Error al crear el manual' };
     }
+  async deleteManual(id: string): Promise<boolean> {
+    const deleted = await ManualModel.findByIdAndDelete(id);
+    return deleted !== null;
   },
 
   async deleteManual(id: string): Promise<boolean> {

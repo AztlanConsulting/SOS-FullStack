@@ -1,4 +1,5 @@
 import { getResourcesList } from '@use-cases/resources/getResources.usecase';
+import { deleteResource } from '@use-cases/resources/deleteResource.usecase';
 import {
   getManualByIdDB,
   getManualsDB,
@@ -7,6 +8,8 @@ import {
   getWorkshopById,
   getWorkshopList,
 } from '@use-cases/workshops/getWorkshops.usecase';
+import type { WorkshopRepository } from '@domain/repositories/workshop.repository';
+import type { ManualRepository } from '@domain/repositories/manual.repository';
 
 jest.mock('@use-cases/manuals/getManualsDB.usecase', () => ({
   getManualsDB: jest.fn(),
@@ -17,6 +20,47 @@ jest.mock('@use-cases/workshops/getWorkshops.usecase', () => ({
   getWorkshopList: jest.fn(),
   getWorkshopById: jest.fn(),
 }));
+
+describe('deleteResource use-case (unit)', () => {
+  const workshopRepo = {
+    deleteWorkshop: jest.fn(),
+  } as unknown as WorkshopRepository;
+  const manualRepo = {
+    deleteManual: jest.fn(),
+  } as unknown as ManualRepository;
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it('deletes a workshop and returns true without checking manuals', async () => {
+    jest.mocked(workshopRepo.deleteWorkshop).mockResolvedValueOnce(true);
+
+    const result = await deleteResource(workshopRepo, manualRepo, 'w1');
+
+    expect(workshopRepo.deleteWorkshop).toHaveBeenCalledWith('w1');
+    expect(manualRepo.deleteManual).not.toHaveBeenCalled();
+    expect(result).toBe(true);
+  });
+
+  it('falls back to manuals when the id does not match a workshop', async () => {
+    jest.mocked(workshopRepo.deleteWorkshop).mockResolvedValueOnce(false);
+    jest.mocked(manualRepo.deleteManual).mockResolvedValueOnce(true);
+
+    const result = await deleteResource(workshopRepo, manualRepo, 'm1');
+
+    expect(workshopRepo.deleteWorkshop).toHaveBeenCalledWith('m1');
+    expect(manualRepo.deleteManual).toHaveBeenCalledWith('m1');
+    expect(result).toBe(true);
+  });
+
+  it('returns false when the id matches neither a workshop nor a manual', async () => {
+    jest.mocked(workshopRepo.deleteWorkshop).mockResolvedValueOnce(false);
+    jest.mocked(manualRepo.deleteManual).mockResolvedValueOnce(false);
+
+    const result = await deleteResource(workshopRepo, manualRepo, 'unknown');
+
+    expect(result).toBe(false);
+  });
+});
 
 describe('resources use-cases (unit)', () => {
   beforeEach(() => {

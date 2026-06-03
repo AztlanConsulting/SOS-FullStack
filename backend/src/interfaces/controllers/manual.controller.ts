@@ -5,6 +5,7 @@ import {
 } from '@use-cases/manuals/getManualsDB.usecase';
 import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
 import { manualQuery } from '@/types/manual.types';
+import { deleteManual } from '@use-cases/manuals/deleteManual.usecase';
 
 export async function getManuals(req: Request, res: Response) {
   try {
@@ -52,5 +53,24 @@ export const getManualById = async (req: Request, res: Response) => {
     return res.status(200).json(manual);
   } catch (err) {
     return res.status(500).json({ message: 'Error al obtener el manual' });
+  }
+};
+
+export const deleteManualById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const idStr = Array.isArray(id) ? id[0] : id;
+
+    const deleted = await deleteManual(ManualDataAccess, idStr);
+
+    if (!deleted) {
+      return res
+        .status(404)
+        .json({ message: `No se encontró el manual con id: ${idStr}` });
+    }
+
+    return res.status(200).json({ message: 'Manual eliminado correctamente' });
+  } catch (err) {
+    return res.status(500).json({ message: 'Error al eliminar el manual' });
   }
 };

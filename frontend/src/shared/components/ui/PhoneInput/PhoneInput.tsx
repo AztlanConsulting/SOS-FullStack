@@ -32,18 +32,18 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       >
         <label
           htmlFor={id}
-          className={`block text-xs text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
+          className={`block text-sm text-gray-400 ${hasErrorState ? 'group-focus-within:text-red-500' : 'group-focus-within:text-[var(--color-primary)]'}`}
         >
           {label}
         </label>
-        <div className="text-sm text-gray-700 w-full flex items-center">
+        <div className="text-base text-gray-700 w-full flex items-center">
           <ReactInternationalPhone
             defaultCountry="mx"
             value={value}
             onChange={(phone) => onChange(phone)}
             forceDialCode={true}
             className="w-full"
-            inputClassName="!border-none !bg-transparent !text-sm !text-gray-700 !w-full focus:!ring-0 !p-0 !pl-3 !outline-none hover:!bg-transparent"
+            inputClassName="!border-none !bg-transparent !text-base !text-gray-700 !w-full focus:!ring-0 !p-0 !pl-3 !outline-none hover:!bg-transparent"
             inputProps={{
               id: id,
             }}

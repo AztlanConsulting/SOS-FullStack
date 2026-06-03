@@ -31,14 +31,17 @@ const MembersOnly = () => {
                   personalizadas según el comportamiento de tu mascota para
                   enfocar mejor la búsqueda.
                 </Text>
-                <Button
-                  label="Completar Perfil de Búsqueda"
-                  variant="purple"
-                  icon={HiChevronRight}
-                  onClick={() =>
-                    navigate('/inicio/contenido-exclusivo/formulario')
-                  }
-                />
+                <a
+                  href="https://www.sosencontrandomascotas.com/etologia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    label="Completar Perfil de Búsqueda"
+                    variant="purple"
+                    icon={HiChevronRight}
+                  />
+                </a>
               </div>
             </>
           }

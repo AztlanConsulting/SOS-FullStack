@@ -54,7 +54,7 @@ export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
           <>
             <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-180px)] modal-scrollbar pl-6 pr-5 py-5">
               <Text variant="caption" as="p" color="text-gray-600">
-                Imagen principal
+                Imagen de portada
               </Text>
               <img
                 src={resource.imageUrl}
@@ -99,10 +99,14 @@ export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
                 Precio
               </Text>
               <Text variant="body" color="text-black" className="mb-6">
-                ${resource.price} USD
+                $
+                {resource.price
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
+                USD
               </Text>
               <Text variant="caption" as="p" color="text-gray-600">
-                {resource.type === 'Taller' ? 'Video URL' : 'Pdf Url'}
+                {resource.type === 'Taller' ? 'Video URL' : 'PDF URL'}
               </Text>
               {resource.resourceUrl ? (
                 <a

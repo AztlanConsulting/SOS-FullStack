@@ -43,7 +43,7 @@ export const WorkshopDataAccess: WorkshopRepository = {
    * @returns Workshop
    */
   getWorkshopById: async function (id: string): Promise<Workshop | null> {
-    const workshop = await WorkshopModel.findById(id).exec();
+    const workshop = await WorkshopModel.findById(id).lean().exec();
     return workshop;
   },
   /**

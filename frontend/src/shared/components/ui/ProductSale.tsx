@@ -44,7 +44,7 @@ const ProductSale = ({
           variant="h2"
           weight="medium"
           color="text-black"
-          className="py-5 w-full"
+          className="py-5 w-full break-words"
         >
           {product.name}
         </Text>

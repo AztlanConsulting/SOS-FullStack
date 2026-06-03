@@ -33,6 +33,7 @@ describe('manuals use-cases (unit)', () => {
       ]),
       getTotalManuals: jest.fn().mockResolvedValue(1),
       getManualById: jest.fn(),
+      createManual: jest.fn(),
       deleteManual: jest.fn(),
     };
 
@@ -65,6 +66,7 @@ describe('manuals use-cases (unit)', () => {
       getManuals: jest.fn().mockRejectedValue(new Error('db failed')),
       getTotalManuals: jest.fn(),
       getManualById: jest.fn(),
+      createManual: jest.fn(),
       deleteManual: jest.fn(),
     };
 
@@ -87,6 +89,7 @@ describe('manuals use-cases (unit)', () => {
         ],
         imageUrl: 'b.jpg',
       }),
+      createManual: jest.fn(),
       deleteManual: jest.fn(),
     };
 
@@ -112,6 +115,7 @@ describe('manuals use-cases (unit)', () => {
       getManuals: jest.fn(),
       getTotalManuals: jest.fn(),
       getManualById: jest.fn().mockResolvedValue(null),
+      createManual: jest.fn(),
       deleteManual: jest.fn(),
     };
 

@@ -80,20 +80,13 @@ export async function postWorkshop(req: Request, res: Response) {
 
 export async function deleteWorkshopById(req: Request, res: Response) {
   try {
-    const { id } = req.params;
-    const idStr = Array.isArray(id) ? id[0] : id;
-
-    const deleted = await deleteWorkshop(WorkshopDataAccess, idStr);
-
+    const id = req.params.id as string;
+    const deleted = await WorkshopDataAccess.deleteWorkshop(id);
     if (!deleted) {
-      return res
-        .status(404)
-        .json({ message: `No se encontró el taller con id: ${idStr}` });
+      return res.status(404).json({ message: 'Taller no encontrado' });
     }
-
     return res.status(200).json({ message: 'Taller eliminado correctamente' });
   } catch (error) {
-    console.error(error);
     return res.status(500).send(error);
   }
 }

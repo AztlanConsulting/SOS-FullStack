@@ -2,9 +2,11 @@ import type {
   ManualRepository,
   GetManual,
   ManualResult,
+  CreateManual,
 } from '@domain/repositories/manual.repository';
 import { ManualModel } from '@domain/models/manual.model';
 import type { SortOrder } from 'mongoose';
+import type { CreateManualInput } from '@domain/repositories/manual.repository';
 
 const limit = 6;
 export const ManualDataAccess: ManualRepository = {
@@ -64,6 +66,17 @@ export const ManualDataAccess: ManualRepository = {
 
   async getManualById(id: string): Promise<ManualResult | null> {
     return await ManualModel.findById(id).lean().exec();
+  },
+
+  createManual: async function (
+    manual: CreateManualInput,
+  ): Promise<CreateManual> {
+    try {
+      const created = await ManualModel.create(manual);
+      return { manualId: created._id.toString(), error: null };
+    } catch (error) {
+      return { manualId: null, error: 'Error al crear el manual' };
+    }
   },
 
   async deleteManual(id: string): Promise<boolean> {

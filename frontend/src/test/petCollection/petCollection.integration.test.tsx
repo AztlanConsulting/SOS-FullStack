@@ -20,6 +20,16 @@ vi.mock('@/shared/utils/axios', () => ({
   },
 }));
 
+vi.mock('@/features/petCollection/services/convertToWebp', () => ({
+  default: vi.fn((file: File) =>
+    Promise.resolve(
+      new File([file], file.name.replace(/\.\w+$/, '.webp'), {
+        type: 'image/webp',
+      }),
+    ),
+  ),
+}));
+
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 const FullAppRouter = () => (

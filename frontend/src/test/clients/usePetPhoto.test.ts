@@ -6,6 +6,10 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 const makeFile = (name: string): File =>
   new File(['content'], name, { type: 'image/jpeg' });
 
+vi.mock('heic2any', () => ({
+  default: vi.fn().mockResolvedValue(new Blob()),
+}));
+
 describe('usePetPhotos hook', () => {
   let updateForm: Mock;
 

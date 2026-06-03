@@ -3,6 +3,35 @@ import jsPDF from 'jspdf';
 
 type PosterSource = HTMLElement | string | File | null;
 
+const waitForImageDecode = async (image: HTMLImageElement) => {
+  if (image.complete && image.naturalWidth > 0) {
+    if ('decode' in image) {
+      try {
+        await image.decode();
+      } catch {
+        // Ignore decode failures for already loaded images.
+      }
+    }
+
+    return;
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    image.onload = () => resolve();
+    image.onerror = (error) => reject(error);
+  });
+};
+
+const waitForNodeAssets = async (node: HTMLElement) => {
+  const images = Array.from(node.querySelectorAll('img'));
+
+  await Promise.all(images.map((image) => waitForImageDecode(image)));
+
+  if ('fonts' in document && document.fonts?.ready) {
+    await document.fonts.ready;
+  }
+};
+
 const loadImageFromSource = async (source: Exclude<PosterSource, null>) => {
   if (source instanceof HTMLElement) {
     if (source instanceof HTMLImageElement) {
@@ -20,6 +49,7 @@ const loadImageFromSource = async (source: Exclude<PosterSource, null>) => {
       quality: 1,
       pixelRatio: 3,
       cacheBust: true,
+      preferredFontFormat: 'woff2',
     });
 
     const image = new Image();
@@ -91,10 +121,12 @@ export const exportPosterAsFile = async (
 ): Promise<File | null> => {
   if (!node) return null;
 
+  await waitForNodeAssets(node);
+
   const dataUrl = await toPng(node, {
     quality: 1,
     pixelRatio: 1,
-    cacheBust: false,
+    cacheBust: true,
   });
 
   const res = await fetch(dataUrl);

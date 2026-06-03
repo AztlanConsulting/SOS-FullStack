@@ -20,7 +20,6 @@ const loadImageFromSource = async (source: Exclude<PosterSource, null>) => {
       quality: 1,
       pixelRatio: 3,
       cacheBust: true,
-      preferredFontFormat: 'woff2',
     });
 
     const image = new Image();
@@ -95,7 +94,7 @@ export const exportPosterAsFile = async (
   const dataUrl = await toPng(node, {
     quality: 1,
     pixelRatio: 1,
-    cacheBust: true,
+    cacheBust: false,
   });
 
   const res = await fetch(dataUrl);

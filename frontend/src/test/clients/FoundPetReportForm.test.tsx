@@ -23,10 +23,6 @@ vi.mock('react-router', async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-vi.mock('heic2any', () => ({
-  default: vi.fn().mockResolvedValue(new Blob()),
-}));
-
 vi.mock('@/shared/context/PetReportContext', () => ({
   usePetReport: () => ({
     setFoundPetReportData: mockSetFoundPetReportData,

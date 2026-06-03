@@ -46,10 +46,9 @@ export const Sidebar = () => {
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 transition-colors ${
-                    isActive
-                      ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
-                      : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
+                  `flex items-center gap-3 px-4 py-3 transition-colors ${isActive
+                    ? 'bg-white text-primary rounded-full ml-0 lg:-mr-9 shadow-md z-20'
+                    : 'text-white hover:bg-[#EFC137] rounded-full ml-0 lg:-mr-9'
                   }`
                 }
               >
@@ -90,8 +89,7 @@ export const Sidebar = () => {
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${
-                    isActive ? 'bg-white text-primary' : 'text-white'
+                  `flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-colors ${isActive ? 'bg-white text-primary' : 'text-white'
                   }`
                 }
               >

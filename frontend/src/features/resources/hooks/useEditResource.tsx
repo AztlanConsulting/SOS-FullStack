@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ResourceService } from '../services/resourceItem.service';
 import type { Resource } from '../types/resource';
 import parseResourceBlock from '../util/parseResourceBlock';
@@ -24,6 +24,7 @@ export interface LinkBlock {
 export interface ImageBlock {
   kind: 'imagen';
   file: File | null;
+  originalString?: string;
   previewUrl: string;
   displayHeight: number;
 }
@@ -43,8 +44,8 @@ export const useEditResource = (
   const [name, setNameRaw] = useState(resource?.name!);
   const [type, setType] = useState<string>(resource?.type!);
   const [price, setPrice] = useState(String(resource?.price!));
-  const blocksHook = useState<LocalBlock[]>(
-    parseResourceBlock(resource?.content!),
+  const blocksHook = useState<LocalBlock[]>(() =>
+    parseResourceBlock(resource?.content ?? []),
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -59,22 +60,34 @@ export const useEditResource = (
   const [coverPreview, setCoverPreview] = coverPreviewHook;
   const [secretUrl] = secretUrlHook;
 
-  resource?.content.forEach(async (block, i) => {
-    if (block.type == 'image') {
-      const previewUrl = block.content;
-      const response = await fetch(block.content);
-      const blob = await response.blob();
-      const file = new File([blob], 'image.jpg', { type: blob.type });
+  useEffect(() => {
+    if (!resource?.content) return;
 
-      setBlocks((p) =>
-        p.map((b, idx) =>
-          idx === i && b.kind === 'imagen'
-            ? { ...b, file, previewUrl, displayHeight: 400 }
-            : b,
-        ),
-      );
-    }
-  });
+    resource.content.forEach(async (block, i) => {
+      if (block.type === 'image') {
+        const previewUrl = block.content;
+        const response = await fetch(block.content);
+        const blob = await response.blob();
+        const file = new File([blob], 'defaultImage.jpg', {
+          type: blob.type,
+        });
+
+        setBlocks((p) =>
+          p.map((b, idx) =>
+            idx === i && b.kind === 'imagen'
+              ? {
+                  ...b,
+                  file,
+                  previewUrl,
+                  displayHeight: 400,
+                  originalString: block.content,
+                }
+              : b,
+          ),
+        );
+      }
+    });
+  }, [resource]);
 
   // guard name length
   const setName = (v: string) => {
@@ -191,11 +204,15 @@ export const useEditResource = (
 
     setLoading(true);
     try {
+      if (error !== null) {
+        console.log(error);
+        throw error;
+      }
       let coverUrl = resource?.imageUrl;
       if (coverImage) coverUrl = await ResourceService.uploadImage(coverImage);
 
       const serialised = await Promise.all(
-        blocks.map(async (block) => {
+        blocks.map(async (block, idx) => {
           if (block.kind === 'texto')
             return { type: 'text' as const, content: block.value }; // value → content
           if (block.kind === 'link')
@@ -203,8 +220,18 @@ export const useEditResource = (
               type: 'text' as const,
               content: normaliseLink(block.value),
             }; // value → content
-          const base64 = await ResourceService.uploadImage(block.file!);
-          return { type: 'image' as const, content: base64 }; // value → content
+          if (
+            block.kind === 'imagen' &&
+            block.file?.name != 'defaultImage.jpg'
+          ) {
+            const imageUrl = await ResourceService.uploadImage(block.file!);
+            return { type: 'image' as const, content: imageUrl }; // value → content
+          } else {
+            return {
+              type: 'image' as const,
+              content: block.originalString ?? '',
+            };
+          }
         }),
       );
 
@@ -214,19 +241,51 @@ export const useEditResource = (
         price: priceNum,
         imageUrl: coverUrl,
         content: serialised,
-        ...(type === 'taller' && {
+        ...(type.toLowerCase() === 'taller' && {
           description: name.trim(),
-          videoUrl: secretUrl.trim(),
+          resourceUrl: secretUrl.trim(),
           emailContent: emailContent.trim(),
         }),
-        ...(type === 'manual' && { pdfUrl: secretUrl.trim() }),
+        ...(type === 'manual' && { resourceUrl: secretUrl.trim() }),
       };
 
       const changeset = Object.fromEntries(
         (
           Object.entries(newObj) as [keyof Resource, Resource[keyof Resource]][]
-        ).filter(([key, value]) => resource?.[key] !== value),
+        ).filter(([key, value]) => {
+          if (key == 'content') {
+            const sortKeysDeep = (val: unknown): unknown => {
+              if (Array.isArray(val)) return val.map(sortKeysDeep);
+              if (val !== null && typeof val === 'object') {
+                return Object.keys(val)
+                  .sort()
+                  .reduce(
+                    (acc, k) => {
+                      acc[k] = sortKeysDeep(
+                        (val as Record<string, unknown>)[k],
+                      );
+                      return acc;
+                    },
+                    {} as Record<string, unknown>,
+                  );
+              }
+              return val;
+            };
+
+            const normalize = (val: unknown) =>
+              JSON.stringify(sortKeysDeep(val));
+
+            const isEqual = normalize(resource?.[key]) === normalize(value);
+            return !isEqual;
+          }
+          return resource?.[key] != value;
+        }),
       ) as Partial<Resource>;
+
+      if (Object.keys(changeset).length < 3) {
+        setError('No hay cambios');
+        // throw Error("No hay cambios")
+      }
 
       await ResourceService.updateResource({
         _id: id,
@@ -249,8 +308,9 @@ export const useEditResource = (
       }
 
       onSuccess?.();
-    } catch {
-      setError('Ocurrió un error al guardar. Intenta de nuevo.');
+    } catch (error) {
+      console.log(error);
+      // setError('Ocurrió un error al guardar. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,4 @@
 import axiosInstance from '@shared/utils/axios';
-import convertToWebP from '@/features/petCollection/services/convertToWebp';
 import type { Resource } from '../types/resource';
 
 /**
@@ -35,12 +34,17 @@ export const ResourceService = {
    * @returns The URL string of the uploaded image.
    */
   uploadImage: async (file: File): Promise<string> => {
-    const webpFile = await convertToWebP(file);
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(webpFile);
+    const formData = new FormData();
+    formData.append('image', file);
+    const response = await axiosInstance.post('/resources/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
+
+    if (response.status != 200) throw Error("Couldn't upload image");
+
+    const imageUrl = response.data;
+    return imageUrl;
   },
 };

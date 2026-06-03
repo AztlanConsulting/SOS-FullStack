@@ -8,16 +8,25 @@ import {
   authMiddleware,
   requirePermission,
 } from '../middleware/auth.middleware';
+import { upload } from '../middleware/upload.middleware';
+import uploadResourceImage from '../controllers/uploadResourceImage.controller';
 
 const router = Router();
 
-router.get('/', getResources);
-router.put('/', updateResource);
+router.get('/', authMiddleware, getResources);
+router.put('/', authMiddleware, updateResource);
 router.delete(
   '/:id',
   authMiddleware,
   requirePermission('resources', 'delete'),
   deleteResourceById,
+);
+
+router.post(
+  '/image',
+  authMiddleware,
+  upload.single('image'),
+  uploadResourceImage,
 );
 
 export default router;

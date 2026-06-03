@@ -44,6 +44,9 @@ function validateBlock(raw: unknown, index: number): ContentBlockBody | string {
 
   const b = raw as Record<string, unknown>;
 
+  if (!VALID_BLOCK_KINDS.includes(b.type as ValidBlockKind))
+    return `Bloque ${index + 1}: tipo inválido`;
+
   if (typeof b.content !== 'string')
     return `Bloque ${index + 1}: value debe ser texto`;
 

@@ -14,9 +14,8 @@ vi.stubGlobal('ResizeObserver', MockResizeObserver);
 describe('Poster component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Use vi.mocked to properly mock the global URL object
-    const mockCreateObjectURL = vi.fn().mockReturnValue('blob:poster-image');
-    URL.createObjectURL = mockCreateObjectURL;
+    // Use vi.spyOn to properly mock the URL.createObjectURL method
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:poster-image');
   });
 
   test('renders the poster title and image preview for a single uploaded photo', () => {

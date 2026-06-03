@@ -7,6 +7,8 @@ import initManualDB from '@infrastructure/database/mongoDB/data/manuals.data';
 
 jest.mock('@interfaces/middleware/auth.middleware', () => ({
   authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
+  requirePermission: () => (_req: unknown, _res: unknown, next: () => void) =>
+    next(),
 }));
 
 describe('resources routes (integration)', () => {

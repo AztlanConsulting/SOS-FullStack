@@ -38,11 +38,11 @@ describe('FileUpload Component', () => {
     expect(input?.classList.contains('hidden')).toBe(true);
   });
 
-  test('file input restricts accept to JPEG, PNG and HEIC/HEIF only', () => {
+  test('file input restricts accept to JPEG, PNG and HEIF only', () => {
     const { container } = render(<FileUpload index={1} />);
     const input = container.querySelector('input[type="file"]');
     expect(input?.getAttribute('accept')).toBe(
-      'image/jpeg,image/png,image/jpg,image/heic,image/heif',
+      'image/jpeg,image/png,image/heif,image/heic',
     );
   });
 
@@ -62,7 +62,7 @@ describe('FileUpload Component', () => {
 
     expect(mockOnChange).not.toHaveBeenCalled();
     expect(
-      screen.getByText('Solo se permiten archivos JPG/JPEG, PNG o HEIC/HEIF'),
+      screen.getByText('Solo se permiten archivos JPG/JPEG, PNG o HEIF'),
     ).toBeDefined();
   });
 
@@ -128,7 +128,7 @@ describe('FileUpload Component', () => {
       target: { files: [new File(['x'], 'bad.gif', { type: 'image/gif' })] },
     });
     expect(
-      screen.getByText('Solo se permiten archivos JPG/JPEG, PNG o HEIC/HEIF'),
+      screen.getByText('Solo se permiten archivos JPG/JPEG, PNG o HEIF'),
     ).toBeDefined();
 
     // Follow up with a valid file — error should disappear
@@ -136,7 +136,7 @@ describe('FileUpload Component', () => {
       target: { files: [new File(['x'], 'good.jpg', { type: 'image/jpeg' })] },
     });
     expect(
-      screen.queryByText('Solo se permiten archivos JPG/JPEG, PNG o HEIC/HEIF'),
+      screen.queryByText('Solo se permiten archivos JPG/JPEG, PNG o HEIF'),
     ).toBeNull();
   });
 

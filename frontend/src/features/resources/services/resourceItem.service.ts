@@ -16,6 +16,8 @@ export const ResourceService = {
   updateResource: async (
     payload: Partial<Resource> & Pick<Resource, '_id'>,
   ): Promise<boolean> => {
+    console.log(payload);
+    return true;
     const { data } = await axiosInstance.put('/resource', payload);
     return data;
   },

@@ -37,7 +37,6 @@ const normaliseLink = (v: string) =>
  */
 export const useEditResource = (
   resource: Resource | null,
-  file: File | null,
   onSuccess: () => void,
 ) => {
   const idHook = useState(resource?._id!);
@@ -50,9 +49,9 @@ export const useEditResource = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const secretUrlHook = useState(resource?.resourceUrl!);
-  const [coverImage, setCoverImageRaw] = useState<File | null>(file);
-  const coverPreviewHook = useState('');
-  const coverDisplayHeightHook = useState(144);
+  const [coverImage, setCoverImageRaw] = useState<File | null>(null);
+  const coverPreviewHook = useState(resource?.imageUrl!);
+  const coverDisplayHeightHook = useState(400);
   const [emailContent, setEmailContentRaw] = useState(resource?.emailContent!);
 
   const [id] = idHook;
@@ -173,14 +172,10 @@ export const useEditResource = (
       return;
     }
 
-    if (!coverImage) {
-      setError('Agrega una imagen de portada');
-      return;
-    }
-
     setLoading(true);
     try {
-      const coverUrl = await ResourceService.uploadImage(coverImage);
+      let coverUrl = resource?.imageUrl;
+      if (coverImage) coverUrl = await ResourceService.uploadImage(coverImage);
 
       const serialised = await Promise.all(
         blocks.map(async (block) => {
@@ -196,8 +191,7 @@ export const useEditResource = (
         }),
       );
 
-      const response = await ResourceService.updateResource({
-        _id: id,
+      const newObj: Partial<Resource> = {
         type,
         name: name.trim(),
         price: priceNum,
@@ -209,6 +203,17 @@ export const useEditResource = (
           emailContent: emailContent.trim(),
         }),
         ...(type === 'manual' && { pdfUrl: secretUrl.trim() }),
+      };
+
+      const changeset = Object.fromEntries(
+        (
+          Object.entries(newObj) as [keyof Resource, Resource[keyof Resource]][]
+        ).filter(([key, value]) => resource?.[key] !== value),
+      ) as Partial<Resource>;
+
+      await ResourceService.updateResource({
+        _id: id,
+        ...changeset,
       });
 
       if (!secretUrl.trim()) {

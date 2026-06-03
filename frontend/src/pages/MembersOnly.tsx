@@ -7,10 +7,10 @@ import owner from '@assets/images/PortalExclusivo.webp';
 import { Text } from '@shared/components/ui/Text';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 
 const MembersOnly = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="min-h-screen">

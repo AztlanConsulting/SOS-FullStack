@@ -95,14 +95,6 @@ export const ReportConfirmationPage: React.FC = () => {
       console.log('poster', posterFile);
 
       if (posterFile) {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(posterFile);
-        a.download = `aaaaa-${Date.now()}.jpeg`;
-        console.log('pepep', a.href);
-        a.click();
-
-        URL.revokeObjectURL(a.href);
-
         const imageCount = parseInt(lostPetReportData.imageLayout || '1', 10);
         const currentImageCount = lostPetReportData.images?.length || 0;
 
@@ -140,15 +132,6 @@ export const ReportConfirmationPage: React.FC = () => {
   };
 
   const handleProceedToPayment = async () => {
-    lostPetReportData?.images.forEach((image) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(image);
-      a.download = `aaaaa_crop-${Date.now()}.jpeg`;
-      a.click();
-
-      URL.revokeObjectURL(a.href);
-    });
-
     exportPosterAsFile(posterRef.current, 'poster-poster')
       .then((posterFile) => {
         if (posterFile) {

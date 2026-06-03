@@ -3,7 +3,7 @@ import {
   getResources,
   deleteResourceById,
 } from '../controllers/resource.controller';
-import { authMiddleware } from '../middleware/auth.middleware';
+import { authMiddleware, requirePermission } from '../middleware/auth.middleware';
 
 const router = Router();
 

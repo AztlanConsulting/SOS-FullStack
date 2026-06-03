@@ -89,4 +89,9 @@ export const WorkshopDataAccess: WorkshopRepository = {
     }
     return { workshopId: response._id.toString(), error: null };
   },
+
+  deleteWorkshop: async function (id: string): Promise<boolean> {
+    const deleted = await WorkshopModel.findByIdAndDelete(id);
+    return deleted !== null;
+  },
 };

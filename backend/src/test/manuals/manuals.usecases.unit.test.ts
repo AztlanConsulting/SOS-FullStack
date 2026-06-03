@@ -34,6 +34,7 @@ describe('manuals use-cases (unit)', () => {
       getTotalManuals: jest.fn().mockResolvedValue(1),
       getManualById: jest.fn(),
       createManual: jest.fn(),
+      deleteManual: jest.fn(),
     };
 
     const result = await getManualsDB(repo, request);
@@ -66,6 +67,7 @@ describe('manuals use-cases (unit)', () => {
       getTotalManuals: jest.fn(),
       getManualById: jest.fn(),
       createManual: jest.fn(),
+      deleteManual: jest.fn(),
     };
 
     await expect(getManualsDB(repo, request)).rejects.toThrow('db failed');
@@ -88,6 +90,7 @@ describe('manuals use-cases (unit)', () => {
         imageUrl: 'b.jpg',
       }),
       createManual: jest.fn(),
+      deleteManual: jest.fn(),
     };
 
     const result = await getManualByIdDB(repo, 'manual-1');
@@ -113,6 +116,7 @@ describe('manuals use-cases (unit)', () => {
       getTotalManuals: jest.fn(),
       getManualById: jest.fn().mockResolvedValue(null),
       createManual: jest.fn(),
+      deleteManual: jest.fn(),
     };
 
     const result = await getManualByIdDB(repo, 'missing-id');

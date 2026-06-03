@@ -20,4 +20,5 @@ export interface WorkshopRepository {
     categories: string[],
     page: number,
   ): Promise<Workshop[]>;
+  deleteWorkshop(id: string): Promise<boolean>;
 }

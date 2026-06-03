@@ -22,6 +22,7 @@ const PaymentMethodCard = ({ paymentMethod, onChecked }: Props) => {
             id={method}
             value={method}
             onChange={onChecked}
+            className="self-center"
           />
           <div>
             <Text variant="body" weight="regular">

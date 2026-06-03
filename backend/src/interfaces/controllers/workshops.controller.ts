@@ -7,6 +7,7 @@ import {
 } from '@use-cases/workshops/getWorkshops.usecase';
 import type { Request, Response } from 'express';
 import { createWorkshop } from '@use-cases/workshops/createWorkshop.usecase';
+import { deleteWorkshop } from '@use-cases/workshops/deleteWorkshop.usecase';
 
 export async function getWorkshops(req: Request, res: Response) {
   try {

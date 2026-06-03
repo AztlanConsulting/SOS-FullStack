@@ -20,7 +20,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
   function close() {
     if (onClose) onClose();
     window.scrollTo(0, 0);
-    navigate('/');
+    navigate('/login');
   }
 
   return (
@@ -176,7 +176,11 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
             )}
           </div>
 
-          <Button onClick={close} label="Ir al Inicio" variant="primary" />
+          <Button
+            onClick={close}
+            label="Ir al iniciar sesión"
+            variant="primary"
+          />
         </div>
       </div>
     </section>

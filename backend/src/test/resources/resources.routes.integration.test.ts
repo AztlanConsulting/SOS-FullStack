@@ -5,6 +5,12 @@ import { connect, clearDatabase, closeDatabase } from '../db';
 import initWorkshopDB from '@infrastructure/database/mongoDB/data/workshops.data';
 import initManualDB from '@infrastructure/database/mongoDB/data/manuals.data';
 
+jest.mock('@interfaces/middleware/auth.middleware', () => ({
+  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
+  requirePermission: () => (_req: unknown, _res: unknown, next: () => void) =>
+    next(),
+}));
+
 describe('resources routes (integration)', () => {
   const app = express();
   app.use('/resources', resourcesRoutes);
@@ -77,5 +83,60 @@ describe('resources routes (integration)', () => {
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('message');
     expect(res.body).toHaveProperty('name');
+  });
+
+  it('DELETE /resources/:id deletes a workshop and returns 200', async () => {
+    const listRes = await request(app)
+      .get('/resources')
+      .query({ page: 0, sortOption: 'Nombre (A-Z)', typeOption: 'Taller' });
+
+    const workshopId = listRes.body.resources[0]._id;
+    const res = await request(app).delete(`/resources/${workshopId}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty(
+      'message',
+      'Recurso eliminado correctamente',
+    );
+  });
+
+  it('DELETE /resources/:id deletes a manual and returns 200', async () => {
+    const listRes = await request(app)
+      .get('/resources')
+      .query({ page: 0, sortOption: 'Nombre (A-Z)', typeOption: 'Manual' });
+
+    const manualId = listRes.body.resources[0]._id;
+    const res = await request(app).delete(`/resources/${manualId}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty(
+      'message',
+      'Recurso eliminado correctamente',
+    );
+  });
+
+  it('DELETE /resources/:id returns 404 for a non-existent id', async () => {
+    const res = await request(app).delete(
+      '/resources/000000000000000000000000',
+    );
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty('message');
+  });
+
+  it('DELETE /resources/:id removes the resource from subsequent GET requests', async () => {
+    const listRes = await request(app)
+      .get('/resources')
+      .query({ page: 0, sortOption: 'Nombre (A-Z)' });
+
+    const resourceId = listRes.body.resources[0]._id;
+
+    await request(app).delete(`/resources/${resourceId}`);
+
+    const afterRes = await request(app)
+      .get('/resources')
+      .query({ id: resourceId });
+
+    expect(afterRes.body.resources).toHaveLength(0);
   });
 });

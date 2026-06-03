@@ -14,7 +14,7 @@ export const workshopQuery = z
 
 export const ContentBlockZodSchema = z.object({
   content: z.string(),
-  type: z.enum(['texto', 'image', 'link']),
+  type: z.string(),
 });
 
 export const workshopBody = z.object({

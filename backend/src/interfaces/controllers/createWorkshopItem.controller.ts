@@ -47,9 +47,6 @@ function validateBlock(raw: unknown, index: number): ContentBlockBody | string {
   if (typeof b.content !== 'string')
     return `Bloque ${index + 1}: value debe ser texto`;
 
-  if (!VALID_BLOCK_KINDS.includes(b.type as ValidBlockKind))
-    return `Bloque ${index + 1}: tipo inválido. Debe ser uno de: ${VALID_BLOCK_KINDS.join(', ')}`;
-
   if (b.type === 'texto' && b.content.length > MAX_TEXT_LENGTH)
     return `Bloque ${index + 1}: texto supera ${MAX_TEXT_LENGTH} caracteres`;
 

@@ -10,6 +10,7 @@ interface Props {
   resource: Resource | null;
   cancel: () => void;
   close: () => void;
+  success: () => void;
 }
 
 export type WorkshopItemType = 'manual' | 'taller';
@@ -40,7 +41,7 @@ export type ContentBlock =
 const FIELD_CLASS =
   'w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none  bg-white';
 
-const EditResourceModal = ({ resource, cancel }: Props) => {
+const EditResourceModal = ({ resource, cancel, success }: Props) => {
   const {
     nameHook: [name, setName],
     typeHook: [type, setType],
@@ -62,8 +63,6 @@ const EditResourceModal = ({ resource, cancel }: Props) => {
     emailHook: [emailContent, setEmailContent],
     MAX_EMAIL_CONTENT_LENGTH,
   } = useEditResource(resource, success);
-
-  function success() {}
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // strip everything except digits

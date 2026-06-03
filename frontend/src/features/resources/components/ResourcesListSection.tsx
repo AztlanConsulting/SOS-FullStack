@@ -10,11 +10,13 @@ import { type ResourceResult, type Resource } from '../types/resource';
 import queryResources from '../services/queryResources';
 import useResourceFilter from '../hooks/useResourceFilter';
 import EditResourceModal from './EditResourceModal.tsx';
+import { Modal } from '@/shared/components/ui/Modal/Modal.tsx';
 
 const ResourcesListSection = () => {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null,
   );
+  const [success, setSuccess] = useState(false);
   const [edit, setEdit] = useState(false);
   const { searchHook, query, pages } = useResourceFilter<ResourceResult>(
     queryResources,
@@ -67,6 +69,11 @@ const ResourcesListSection = () => {
                 setEdit(false);
                 setSelectedResource(null);
               }}
+              success={() => {
+                setEdit(false);
+                setSelectedResource(null);
+                setSuccess(true);
+              }}
             />
           ) : (
             <ResourceModal
@@ -75,6 +82,14 @@ const ResourcesListSection = () => {
               setEdit={() => setEdit(true)}
             />
           ))}
+        {success && (
+          <Modal
+            title={'Se ha actualizado correctamente'}
+            onClose={() => setSuccess(false)}
+          >
+            El recurso seleccionado se ha actualizado correctamente
+          </Modal>
+        )}
 
         {/* Pagination */}
         {data && data.resources.length > 0 && <Pagination pages={pages} />}

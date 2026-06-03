@@ -85,6 +85,27 @@ const addCenteredImageToPdf = (
   pdf.addImage(imageDataUrl, 'JPEG', x, y, imageWidth, imageHeight);
 };
 
+/**
+ * Converts a data URL to a Blob without using fetch
+ * This is more compatible with iOS Safari
+ */
+const dataUrlToBlob = (dataUrl: string): Blob => {
+  const parts = dataUrl.split(',');
+  const header = parts[0];
+  const bstr = atob(parts[1]);
+  const n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  for (let i = 0; i < n; i++) {
+    u8arr[i] = bstr.charCodeAt(i);
+  }
+
+  const mimeMatch = header.match(/:(.*?);/);
+  const mimeType = mimeMatch ? mimeMatch[1] : 'image/png';
+
+  return new Blob([u8arr], { type: mimeType });
+};
+
 export const exportPosterAsFile = async (
   node: HTMLElement | null,
   fileName: string,
@@ -97,8 +118,8 @@ export const exportPosterAsFile = async (
     cacheBust: false,
   });
 
-  const res = await fetch(dataUrl);
-  const blob = await res.blob();
+  // Use direct conversion instead of fetch for iOS Safari compatibility
+  const blob = dataUrlToBlob(dataUrl);
 
   const file = new File([blob], `${fileName}.png`, {
     type: 'image/png',

@@ -92,8 +92,6 @@ export const ReportConfirmationPage: React.FC = () => {
         console.warn('No poster generated?');
       }
 
-      console.log('poster', posterFile);
-
       if (posterFile) {
         const imageCount = parseInt(lostPetReportData.imageLayout || '1', 10);
         const currentImageCount = lostPetReportData.images?.length || 0;
@@ -132,22 +130,6 @@ export const ReportConfirmationPage: React.FC = () => {
   };
 
   const handleProceedToPayment = async () => {
-    exportPosterAsFile(posterRef.current, 'poster-poster')
-      .then((posterFile) => {
-        if (posterFile) {
-          console.log('aa', posterFile);
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(posterFile);
-          a.download = `aaaaa_ok-${Date.now()}.jpeg`;
-          a.click();
-
-          URL.revokeObjectURL(a.href);
-        }
-      })
-      .catch((err) => {
-        console.error('err', err);
-      });
-
     // Can't continue until no edit fields are open
     setShowErrors(false);
     if (editOpen.length > 0) {

@@ -6,6 +6,8 @@ import { MembersOnlyModel } from '@domain/models/membersOnly.model';
 
 jest.mock('@interfaces/middleware/auth.middleware', () => ({
   authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
+  requirePermission: () => (_req: unknown, _res: unknown, next: () => void) =>
+    next(),
 }));
 
 // Minimal valid base64 payloads for POST tests

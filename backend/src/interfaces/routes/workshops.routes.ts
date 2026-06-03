@@ -1,6 +1,7 @@
 import {
   getWorkshops,
   postWorkshop,
+  deleteWorkshopById,
 } from '@interfaces/controllers/workshops.controller';
 import express from 'express';
 import multer from 'multer';
@@ -19,5 +20,6 @@ const upload = multer({
 
 router.get('/', getWorkshops);
 router.post('/', authMiddleware, upload.single('image'), postWorkshop);
+router.delete('/:id', authMiddleware, deleteWorkshopById);
 
 export default router;

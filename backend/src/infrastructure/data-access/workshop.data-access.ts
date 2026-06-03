@@ -43,7 +43,7 @@ export const WorkshopDataAccess: WorkshopRepository = {
    * @returns Workshop
    */
   getWorkshopById: async function (id: string): Promise<Workshop | null> {
-    const workshop = await WorkshopModel.findById(id).exec();
+    const workshop = await WorkshopModel.findById(id).lean().exec();
     return workshop;
   },
   /**
@@ -88,5 +88,10 @@ export const WorkshopDataAccess: WorkshopRepository = {
       return { workshopId: null, error: response.errors.toString() };
     }
     return { workshopId: response._id.toString(), error: null };
+  },
+
+  deleteWorkshop: async function (id: string): Promise<boolean> {
+    const deleted = await WorkshopModel.findByIdAndDelete(id);
+    return deleted !== null;
   },
 };

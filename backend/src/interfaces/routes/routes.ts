@@ -15,6 +15,7 @@ import foundPetRoutes from './foundPet.routes';
 import searchFormRoutes from './searchForm.routes';
 import membersOnlyRoutes from './membersOnly.routes';
 import pricingRoutes from './pricing.routes';
+import workshopItemRoutes from './workshopItem.routes';
 import resourcesRoutes from './resources.routes';
 
 const router = express.Router();
@@ -38,6 +39,7 @@ router.use('/searchform', searchFormRoutes);
 router.use('/members-only', membersOnlyRoutes);
 router.use('/resources', resourcesRoutes);
 router.use('/', pricingRoutes);
+router.use('/workshop-item', workshopItemRoutes);
 
 //Route for the Ip based geolocation.
 router.get('/ip', LocationController.handle);

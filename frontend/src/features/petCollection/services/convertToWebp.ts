@@ -1,6 +1,5 @@
 // Generado por IA - Convierte una imagen a webp para que subir archivos sea más rápido
 async function convertToWebP(file: File, quality = 0.5): Promise<File> {
-  return file;
   return new Promise((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();

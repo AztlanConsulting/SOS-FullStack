@@ -18,3 +18,7 @@ export default async function queryResources(
 
   return response.data;
 }
+
+export async function deleteResource(id: string): Promise<void> {
+  await axiosInstance.delete(`/resources/${id}`);
+}

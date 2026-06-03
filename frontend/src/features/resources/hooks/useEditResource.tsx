@@ -59,6 +59,23 @@ export const useEditResource = (
   const [coverPreview, setCoverPreview] = coverPreviewHook;
   const [secretUrl] = secretUrlHook;
 
+  resource?.content.forEach(async (block, i) => {
+    if (block.type == 'image') {
+      const previewUrl = block.content;
+      const response = await fetch(block.content);
+      const blob = await response.blob();
+      const file = new File([blob], 'image.jpg', { type: blob.type });
+
+      setBlocks((p) =>
+        p.map((b, idx) =>
+          idx === i && b.kind === 'imagen'
+            ? { ...b, file, previewUrl, displayHeight: 400 }
+            : b,
+        ),
+      );
+    }
+  });
+
   // guard name length
   const setName = (v: string) => {
     if (v.length <= MAX_NAME_LENGTH) setNameRaw(v);
@@ -179,11 +196,12 @@ export const useEditResource = (
 
       const serialised = await Promise.all(
         blocks.map(async (block) => {
+          console.log(block);
           if (block.kind === 'texto')
-            return { type: 'texto' as const, content: block.value }; // value → content
+            return { type: 'text' as const, content: block.value }; // value → content
           if (block.kind === 'link')
             return {
-              type: 'link' as const,
+              type: 'text' as const,
               content: normaliseLink(block.value),
             }; // value → content
           const base64 = await ResourceService.uploadImage(block.file!);

@@ -41,18 +41,6 @@ const FIELD_CLASS =
   'w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none  bg-white';
 
 const EditResourceModal = ({ resource, cancel }: Props) => {
-  const [file, setFile] = useState<File | null>(null);
-  useEffect(() => {
-    async function getImageFile() {
-      const response = await fetch(resource?.imageUrl!);
-      const blob = await response.blob();
-      const file = new File([blob], 'image.jpg', { type: blob.type });
-      setFile(file);
-    }
-
-    getImageFile();
-  }, []);
-
   const {
     nameHook: [name, setName],
     typeHook: [type, setType],

@@ -15,7 +15,8 @@ function getType(resource: ContentBlock): string {
     text: 'texto',
     image: 'imagen',
   };
-  if (regex.test(resource.content)) return 'link';
+
+  if (regex.test(resource.content) && resource.type == 'text') return 'link';
   return types[resource.type];
 }
 

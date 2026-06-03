@@ -12,6 +12,7 @@ import updateResourceUC from '@/use-cases/resources/updateResourceUC.usecase';
 import { type Request, type Response } from 'express';
 
 async function updateResource(req: Request, res: Response) {
+  console.log(req.body, req.params);
   try {
     const query = resourceSearchQuery.safeParse(req.query);
     const body = updateResourceSchema.safeParse(req.body);

@@ -1,5 +1,5 @@
-import { toPng, toJpeg } from 'html-to-image';
 import jsPDF from 'jspdf';
+import { toBlob, toJpeg } from 'html-to-image';
 
 type PosterSource = HTMLElement | string | File | null;
 
@@ -18,8 +18,9 @@ const loadImageFromSource = async (source: Exclude<PosterSource, null>) => {
 
     const dataUrl = await toJpeg(source, {
       quality: 1,
-      pixelRatio: 3,
       cacheBust: true,
+      backgroundColor: '#ffffff',
+      skipFonts: false,
     });
 
     const image = new Image();
@@ -166,77 +167,27 @@ export const exportPosterAsFile = async (
     fileName,
   );
 
-  if (!node) {
-    console.warn('[posterExport] exportPosterAsFile: No HTML node provided');
-    return null;
-  }
-
-  console.log(
-    '[posterExport] exportPosterAsFile: Node found, generating PNG...',
-  );
-
   try {
-    const dataUrl = await toPng(node, {
-      quality: 1,
+    console.log('seeking next');
+
+    const blob = await toBlob(node, {
       pixelRatio: 1,
-      cacheBust: false,
+      cacheBust: true,
+      skipAutoScale: true,
     });
 
-    console.log(
-      '[posterExport] exportPosterAsFile: toPng succeeded, dataUrl length:',
-      dataUrl.length,
-    );
-
-    if (!dataUrl) {
-      console.warn(
-        '[posterExport] exportPosterAsFile: toPng returned empty data URL',
-      );
-      return null;
-    }
-
-    console.log(
-      '[posterExport] exportPosterAsFile: Converting data URL to Blob...',
-    );
-
-    // Use direct conversion instead of fetch() for iOS Safari compatibility
-    let blob: Blob;
-    try {
-      blob = dataUrlToBlob(dataUrl);
-      console.log(
-        '[posterExport] exportPosterAsFile: Blob conversion succeeded',
-      );
-    } catch (error) {
-      console.error(
-        '[posterExport] exportPosterAsFile: Blob conversion failed:',
-        error,
-      );
-      return null;
-    }
-
-    console.log('[posterExport] exportPosterAsFile: Creating File object...');
+    if (!blob) throw new Error('NO');
 
     const file = new File([blob], `${fileName}.png`, {
       type: 'image/png',
     });
 
-    console.log(
-      '[posterExport] exportPosterAsFile: File created successfully',
-      {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-      },
-    );
-
     return file;
-  } catch (error) {
-    console.error('[posterExport] exportPosterAsFile: CRITICAL ERROR:', error);
-    console.error(
-      '[posterExport] exportPosterAsFile: Error stack:',
-      error instanceof Error ? error.stack : 'No stack',
-    );
-    return null;
+  } catch (err) {
+    console.error('Error in handleContinueForm:', err);
   }
+
+  return null;
 };
 
 export const exportPosterAsPdfColor = async (

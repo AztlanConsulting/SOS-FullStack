@@ -80,7 +80,7 @@ export async function postWorkshop(req: Request, res: Response) {
 
 export async function deleteWorkshopById(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const deleted = await WorkshopDataAccess.deleteWorkshop(id);
     if (!deleted) {
       return res.status(404).json({ message: 'Taller no encontrado' });

@@ -5,9 +5,7 @@ import type { LostPetReportData } from '@/shared/types/petReport.types';
 
 class MockResizeObserver {
   observe() {}
-
   unobserve() {}
-
   disconnect() {}
 }
 
@@ -16,7 +14,9 @@ vi.stubGlobal('ResizeObserver', MockResizeObserver);
 describe('Poster component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:poster-image');
+    // Use vi.mocked to properly mock the global URL object
+    const mockCreateObjectURL = vi.fn().mockReturnValue('blob:poster-image');
+    URL.createObjectURL = mockCreateObjectURL;
   });
 
   test('renders the poster title and image preview for a single uploaded photo', () => {

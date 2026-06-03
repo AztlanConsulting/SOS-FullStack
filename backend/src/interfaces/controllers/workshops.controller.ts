@@ -75,4 +75,5 @@ export async function postWorkshop(req: Request, res: Response) {
     console.error(error);
     return res.status(500).send(error);
   }
+}
 

@@ -15,10 +15,15 @@ export type RequestPasswordResetResult =
   | { status: 'RESET_LINK_ALREADY_ACTIVE'; expiresAt: Date };
 
 const buildResetUrl = (token: string): string => {
-  const frontendUrl =
-    process.env.FRONT_END_URL ??
-    process.env.FRONTEND_URL ??
-    'http://localhost:5173';
+  const frontendUrl = process.env.FRONT_END_URL ?? process.env.FRONTEND_URL;
+
+  if (frontendUrl == null || frontendUrl.trim() === '') {
+    if (process.env.ENV === 'production') {
+      throw new Error('FRONTEND_URL_CONFIG_MISSING');
+    }
+
+    return `http://localhost:5173/recuperar-contrasena?token=${encodeURIComponent(token)}`;
+  }
 
   return `${frontendUrl.replace(/\/$/, '')}/recuperar-contrasena?token=${encodeURIComponent(token)}`;
 };

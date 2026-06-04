@@ -230,7 +230,6 @@ export const useEditResource = (
     setLoading(true);
     try {
       if (Object.keys(newErrors).length > 0) {
-        console.log(newErrors);
         throw newErrors;
       }
       let coverUrl = resource?.imageUrl;
@@ -260,9 +259,6 @@ export const useEditResource = (
         }),
       );
 
-      console.log(secretUrl);
-      console.log(type);
-
       const newObj: Partial<Resource> = {
         type,
         name: name.trim(),
@@ -278,8 +274,6 @@ export const useEditResource = (
           resourceUrl: secretUrl.trim(),
         }),
       };
-
-      // console.log(newObj)
 
       const changeset = Object.fromEntries(
         (
@@ -314,8 +308,6 @@ export const useEditResource = (
         }),
       ) as Partial<Resource>;
 
-      console.log('Changeset', changeset);
-
       if (Object.keys(changeset).length < 3) {
         setErrors((prev) => ({ ...prev, general: 'No hay cambios' }));
         // throw Error("No hay cambios")
@@ -329,7 +321,6 @@ export const useEditResource = (
 
       onSuccess?.();
     } catch (error) {
-      console.log(error);
       setErrors({ general: 'Ocurrió un error al guardar. Intenta de nuevo.' });
     } finally {
       setLoading(false);

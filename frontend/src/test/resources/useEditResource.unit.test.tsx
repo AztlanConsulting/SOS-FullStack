@@ -134,7 +134,9 @@ describe('useEditResource Hook', () => {
       result.current.updateBlocks.updateImageBlock(0, largeFile);
     });
 
-    expect(result.current.error).toContain('La imagen no puede superar 5 MB');
+    expect(result.current.errors).toStrictEqual({
+      imageBlock_0: 'La imagen no puede superar 5 MB',
+    });
   });
 
   // ── Form Submission Tests ───────────────────────────────────────────────────
@@ -152,7 +154,9 @@ describe('useEditResource Hook', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.error).toBe('El título es requerido');
+    expect(result.current.errors).toStrictEqual({
+      name: 'El título es requerido',
+    });
     expect(ResourceService.updateResource).not.toHaveBeenCalled();
   });
 
@@ -170,7 +174,9 @@ describe('useEditResource Hook', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.error).toBe('Ingresa un precio válido');
+    expect(result.current.errors).toStrictEqual({
+      price: 'Ingresa un precio válido',
+    });
   });
 
   it('should call updateResource service and trigger onSuccess hook on a successful patch submit', async () => {
@@ -186,7 +192,7 @@ describe('useEditResource Hook', () => {
 
     expect(ResourceService.updateResource).toHaveBeenCalled();
     expect(onSuccessMock).toHaveBeenCalled();
-    expect(result.current.error).toBeNull();
+    expect(result.current.errors).toStrictEqual({ general: 'No hay cambios' });
   });
 
   it('should catch service failures safely and provide user feedback error', async () => {
@@ -202,9 +208,9 @@ describe('useEditResource Hook', () => {
       await result.current.handleSubmit();
     });
 
-    expect(result.current.error).toBe(
-      'Ocurrió un error al guardar. Intenta de nuevo.',
-    );
+    expect(result.current.errors).toStrictEqual({
+      general: 'Ocurrió un error al guardar. Intenta de nuevo.',
+    });
     expect(onSuccessMock).not.toHaveBeenCalled();
   });
 });

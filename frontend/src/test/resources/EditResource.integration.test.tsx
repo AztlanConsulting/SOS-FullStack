@@ -6,6 +6,7 @@ import { ResourceModal } from '@/features/resources/components/ResourceModal'; /
 import EditResourceModal from '@/features/resources/components/EditResourceModal';
 import { ResourceService } from '@/features/resources/services/resourceItem.service';
 import type { Resource } from '@/features/resources/types/resource';
+import wrapper from '../utils/wrapper.util';
 
 // 1. Mock External Services and Utils
 vi.mock('@/features/resources/services/resourceItem.service', () => ({
@@ -82,7 +83,9 @@ describe('Resource Feature Integration Workflow', () => {
 
   it('should navigate through full view, edit, update block, and successful save flow', async () => {
     const user = userEvent.setup();
-    render(<TestResourceWorkflowContainer initialResource={mockResource} />);
+    render(<TestResourceWorkflowContainer initialResource={mockResource} />, {
+      wrapper,
+    });
 
     // ── STEP A: Verify Resource View State ──
     expect(screen.getByText('Detalle del recurso')).toBeTruthy();
@@ -144,7 +147,9 @@ describe('Resource Feature Integration Workflow', () => {
 
   it('should display error messages inside the modal template when submit actions reject', async () => {
     const user = userEvent.setup();
-    render(<TestResourceWorkflowContainer initialResource={mockResource} />);
+    render(<TestResourceWorkflowContainer initialResource={mockResource} />, {
+      wrapper,
+    });
 
     // Switch to edit window
     await user.click(screen.getByRole('button', { name: /editar/i }));

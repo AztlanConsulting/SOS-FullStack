@@ -26,7 +26,7 @@ export const resourceQuery = z
   );
 
 export const resourceSearchQuery = z.object({
-  resource: z.string().max(20),
+  resource: z.string().max(20).optional(),
 });
 
 export const resourceSchema = z.object({

@@ -24,9 +24,6 @@ async function updateResource(req: Request, res: Response) {
         .status(401)
         .send("Couldn't find repository. Query must be [workshop | manual]");
 
-    console.log(query.data);
-    console.log(body.data);
-
     const result = await updateResourceUC(
       resourceDA,
       body.data as PartialResourceWithId,

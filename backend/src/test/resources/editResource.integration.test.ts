@@ -5,6 +5,12 @@ import app from '@/index';
 import { WorkshopModel } from '@/domain/models/workshop.model';
 import { ManualModel } from '@/domain/models/manual.model';
 
+jest.mock('@interfaces/middleware/auth.middleware', () => ({
+  authMiddleware: (_req: unknown, _res: unknown, next: () => void) => next(),
+  requirePermission: () => (_req: unknown, _res: unknown, next: () => void) =>
+    next(),
+}));
+
 describe('Update resource integration test', () => {
   let workshopId: string;
   let manualId: string;

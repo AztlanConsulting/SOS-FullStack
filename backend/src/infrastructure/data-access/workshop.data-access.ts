@@ -1,3 +1,4 @@
+import type { PartialResourceWithId } from '@/domain/repositories/resource.repository';
 import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopModel } from '@domain/models/workshop.model';
 import type {
@@ -5,7 +6,7 @@ import type {
   GetWorkshop,
   WorkshopRepository,
 } from '@domain/repositories/workshop.repository';
-import type { SortOrder } from 'mongoose';
+import { Types, type SortOrder } from 'mongoose';
 
 const limit = 6;
 export const WorkshopDataAccess: WorkshopRepository = {
@@ -88,6 +89,27 @@ export const WorkshopDataAccess: WorkshopRepository = {
       return { workshopId: null, error: response.errors.toString() };
     }
     return { workshopId: response._id.toString(), error: null };
+  },
+
+  updateResourceById: async function (
+    updateInfo: PartialResourceWithId,
+  ): Promise<boolean> {
+    updateInfo = {
+      ...updateInfo,
+      ...(updateInfo.resourceUrl !== undefined && {
+        videoUrl: updateInfo.resourceUrl,
+      }),
+    };
+    const { _id, ...fields } = updateInfo;
+
+    const result = await WorkshopModel.updateOne(
+      { _id: new Types.ObjectId(_id) },
+      { $set: fields },
+    );
+
+    console.log(result);
+
+    return result.matchedCount > 0;
   },
 
   deleteWorkshop: async function (id: string): Promise<boolean> {

@@ -10,9 +10,14 @@ import { deleteResource } from '../services/queryResources';
 type ResourceModalProps = {
   resource: Resource | null;
   onClose: () => void;
+  setEdit: () => void;
 };
 
-export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
+export const ResourceModal = ({
+  resource,
+  onClose,
+  setEdit,
+}: ResourceModalProps) => {
   const queryClient = useQueryClient();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -161,7 +166,7 @@ export const ResourceModal = ({ resource, onClose }: ResourceModalProps) => {
               )}
             </div>
             <div className="w-full flex flex-col lg:flex-row-reverse color-grey-border-top gap-4 px-5 py-4">
-              <Button label="Editar" variant="primary" />
+              <Button label="Editar" variant="primary" onClick={setEdit} />
               <Button
                 label="Eliminar"
                 variant="secondary"

@@ -24,6 +24,10 @@ const allowedOrigins = [
 ].filter((origin): origin is string => Boolean(origin));
 
 // app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+// app.use((req, res, next) => {
+//   console.log(req.path);
+//   next();
+// });
 
 app.use(
   '/uploads',

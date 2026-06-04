@@ -36,7 +36,7 @@ const PaypalButton = ({ data, purchaseDetail, success }: Props) => {
       <div className="mx-auto w-full flex justify-center">
         <PayPalOneTimePaymentButton
           className="-z-20 w-full"
-          presentationMode="auto"
+          presentationMode="redirect"
           createOrder={async () => {
             const response = await createPaypalPayment(data, exchangeRate);
             if (response.status !== 201)

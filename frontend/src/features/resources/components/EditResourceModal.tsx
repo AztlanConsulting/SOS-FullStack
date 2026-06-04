@@ -1,118 +1,69 @@
-import { useRef, useState, useEffect } from 'react';
-import { HiTrash, HiPhotograph, HiLink, HiDocumentText } from 'react-icons/hi';
-import { Modal } from '@shared/components/ui/Modal/Modal';
-import { Button } from '@shared/components/ui/Button/Button';
-import { Text } from '@shared/components/ui/Text/Text';
-import { useCreateWorkshopItem } from '@/features/workshop/hooks/useCreateWorkshopItem';
-import type { ContentBlock } from '@/features/workshop/types/workshopItem';
+import { Button, Text } from '@/shared/components/ui';
+import type { Resource } from '../types/resource';
+import { Modal } from '@/shared/components/ui/Modal/Modal';
+import { useEditResource } from '../hooks/useEditResource';
+import { useRef } from 'react';
+import { HiDocumentText, HiLink, HiPhotograph, HiTrash } from 'react-icons/hi';
+import formatPrice from '@/shared/utils/formatPrice';
 
 interface Props {
-  onClose: () => void;
-  onSuccess: () => void;
+  resource: Resource | null;
+  cancel: () => void;
+  close: () => void;
+  success: () => void;
 }
+
+export type WorkshopItemType = 'manual' | 'taller';
+
+export type ContentBlockType = 'texto' | 'image' | 'link';
+
+export interface TextContentBlock {
+  kind: 'texto';
+  value: string;
+}
+
+export interface ImageContentBlock {
+  kind: 'imagen';
+  file: File;
+  previewUrl: string;
+}
+
+export interface LinkContentBlock {
+  kind: 'link';
+  value: string;
+}
+
+export type ContentBlock =
+  | TextContentBlock
+  | ImageContentBlock
+  | LinkContentBlock;
 
 const FIELD_CLASS =
   'w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none  bg-white';
 
-/** Format a raw digit string as comma-separated integer e.g. "1234567" → "1,234,567" */
-const formatPrice = (raw: string) => {
-  if (!raw) return '';
-  return Number(raw).toLocaleString('en-US');
-};
-
-export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
+const EditResourceModal = ({ resource, cancel, success }: Props) => {
   const {
-    name,
-    setName,
-    type,
-    setType,
-    price,
-    setPrice,
+    nameHook: [name, setName],
+    typeHook: [type, setType],
+    priceHook: [price, setPrice],
+    secretUrlHook: [secretUrl, setSecretUrl],
+    coverImageHook: [, setCoverImage],
+    coverDisplayHeightHook: [coverDisplayHeight, setCoverDisplayHeight],
     blocks,
     loading,
-    error,
+    errors,
     canAddBlock,
     MAX_NAME_LENGTH,
     MAX_TEXT_LENGTH,
     MAX_PRICE,
     addBlock,
-    updateTextBlock,
-    updateLinkBlock,
-    updateImageBlock,
-    removeBlock,
+    updateBlocks,
     handleSubmit,
-    secretUrl,
     coverPreview,
-    setCoverImage,
-    setSecretUrl,
-    coverDisplayHeight,
-    setCoverDisplayHeight,
-    emailContent,
-    setEmailContent,
+    clearError,
+    emailHook: [emailContent, setEmailContent],
     MAX_EMAIL_CONTENT_LENGTH,
-  } = useCreateWorkshopItem(() => {
-    onSuccess();
-    onClose();
-    window.location.reload();
-  });
-
-  // Field-level error state
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const errorTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
-
-  // Auto-dismiss error after 5 seconds
-  const setFieldError = (field: string, message: string) => {
-    setFieldErrors((prev) => ({ ...prev, [field]: message }));
-
-    // Clear any existing timeout for this field
-    if (errorTimeoutRef.current[field]) {
-      clearTimeout(errorTimeoutRef.current[field]);
-    }
-
-    // Set new timeout
-    errorTimeoutRef.current[field] = setTimeout(() => {
-      setFieldErrors((prev) => {
-        const updated = { ...prev };
-        delete updated[field];
-        return updated;
-      });
-      delete errorTimeoutRef.current[field];
-    }, 100000000);
-  };
-
-  const clearFieldError = (field: string) => {
-    setFieldErrors((prev) => {
-      const updated = { ...prev };
-      delete updated[field];
-      return updated;
-    });
-  };
-
-  // Wire hook error to field error
-  useEffect(() => {
-    if (error) {
-      setFieldError('submit', error);
-    }
-  }, [error]);
-
-  // Cleanup timeouts on unmount
-  useEffect(() => {
-    return () => {
-      Object.values(errorTimeoutRef.current).forEach((timeout) =>
-        clearTimeout(timeout),
-      );
-    };
-  }, []);
-
-  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const coverInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleAddBlock = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value as ContentBlock['kind'];
-    if (!val) return;
-    addBlock(val);
-    e.target.value = '';
-  };
+  } = useEditResource(resource, success);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // strip everything except digits
@@ -126,42 +77,20 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
     setPrice(digits);
   };
 
-  const handleSubmitWithFieldErrors = async () => {
-    const errors: Record<string, string> = {};
-
-    if (!name.trim()) {
-      errors['name'] = 'El título es requerido';
-    }
-    const priceNum = parseInt(price, 10);
-    if (!price || isNaN(priceNum) || priceNum <= 0) {
-      errors['price'] = 'El precio es requerido y debe ser mayor a 0';
-    }
-    if (!secretUrl.trim()) {
-      errors['secretUrl'] = 'La URL es requerida';
-    }
-    if (!coverPreview) {
-      errors['cover'] = 'La imagen de portada es requerida';
-    }
-    if (type === 'taller' && !emailContent.trim()) {
-      errors['emailContent'] =
-        'El contenido del email es requerido para talleres';
-    }
-
-    if (Object.keys(errors).length > 0) {
-      // Set all errors at once with auto-dismiss
-      Object.entries(errors).forEach(([field, message]) => {
-        setFieldError(field, message);
-      });
-      return;
-    }
-
-    await handleSubmit();
+  const handleAddBlock = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value as ContentBlock['kind'];
+    if (!val) return;
+    addBlock(val);
+    e.target.value = '';
   };
+
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const coverInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <Modal
       title="Registrando un recurso"
-      onClose={onClose}
+      onClose={cancel}
       color="yellow"
       childrenClassName="px-0"
     >
@@ -182,9 +111,9 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) setCoverImage(file);
-                clearFieldError('cover');
               }}
             />
+
             {coverPreview ? (
               <div className="flex flex-col gap-2">
                 <img
@@ -224,12 +153,14 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                 <Button
                   variant="toolbar"
                   label="Cambiar portada"
-                  onClick={() => {
-                    clearFieldError('cover');
-                    coverInputRef.current?.click();
-                  }}
                   icon={HiPhotograph}
+                  onClick={() => coverInputRef.current?.click()}
                 />
+                {errors.coverImage && (
+                  <Text variant="small" color="text-red-500">
+                    {errors.coverImage}
+                  </Text>
+                )}
               </div>
             ) : (
               <button
@@ -243,11 +174,6 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                 </Text>
               </button>
             )}
-            {fieldErrors['cover'] && (
-              <Text variant="small" color="text-red-500">
-                {fieldErrors['cover']}
-              </Text>
-            )}
           </div>
 
           <Text variant="small" weight="medium" color="text-gray-500">
@@ -256,17 +182,15 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
           <input
             type="text"
             value={name}
-            onFocus={() => clearFieldError('name')}
             maxLength={MAX_NAME_LENGTH}
+            onFocus={() => clearError('name')}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nombre del recurso"
-            className={
-              FIELD_CLASS + (fieldErrors['name'] ? ' border-red-500' : '')
-            }
+            className={FIELD_CLASS + (errors.name ? ' border-red-500' : '')}
           />
-          {fieldErrors['name'] && (
+          {errors.name && (
             <Text variant="small" color="text-red-500">
-              {fieldErrors['name']}
+              {errors.name}
             </Text>
           )}
           <Text
@@ -291,7 +215,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
           </Text>
           <div className="relative">
             <select
-              value={type}
+              value={type.toLowerCase()}
               onChange={(e) => setType(e.target.value as 'manual' | 'taller')}
               className={FIELD_CLASS + ' appearance-none'}
             >
@@ -313,11 +237,11 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             <input
               type="text"
               inputMode="numeric"
-              onFocus={() => clearFieldError('price')}
               value={formatPrice(price)}
               onChange={handlePriceChange}
+              onFocus={() => clearError('price')}
               placeholder="0"
-              className="flex-1 px-3 py-2 text-sm focus:outline-none"
+              className={`flex-1 px-3 py-2 text-sm focus:outline-none ${errors.price ? ' border-red-500 border-1 rounded-md' : ''}`}
             />
             <Text
               variant="small"
@@ -328,9 +252,9 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
               USD
             </Text>
           </div>
-          {fieldErrors['price'] && (
+          {errors.price && (
             <Text variant="small" color="text-red-500">
-              {fieldErrors['price']}
+              {errors.price}
             </Text>
           )}
           <Text variant="small" as="span" color="text-gray-400 text-right">
@@ -341,46 +265,33 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
         {/* ── PDF / Video URL ── */}
         <div className="flex flex-col gap-1 ">
           <Text variant="small" weight="medium" color="text-gray-500">
-            {type === 'manual' ? 'PDF URL' : 'Video URL'}
+            {type.toLowerCase() === 'manual' ? 'PDF URL' : 'Video URL'}
           </Text>
           <input
             type="text"
             value={secretUrl}
             maxLength={200}
-            onFocus={() => clearFieldError('secretUrl')}
-            onChange={(e) => {
-              const url = e.target.value;
-              setSecretUrl(url);
-              if (url && !/^https?:\/\/.+/.test(url)) {
-                setFieldError(
-                  'secretUrl',
-                  'Debe ser una URL válida (https://...)',
-                );
-              } else {
-                setFieldErrors((prev) => {
-                  const u = { ...prev };
-                  delete u.secretUrl;
-                  return u;
-                });
-              }
-            }}
+            onFocus={() => clearError('secretUrl')}
+            onChange={(e) => setSecretUrl(e.target.value)}
             placeholder={
-              type === 'manual' ? 'https://...pdf' : 'https://...video'
+              type.toLowerCase() === 'manual'
+                ? 'https://...pdf'
+                : 'https://...video'
             }
             className={
-              FIELD_CLASS + (fieldErrors['secretUrl'] ? ' border-red-500' : '')
+              FIELD_CLASS + (errors.secretUrl ? ' border-red-500' : '')
             }
           />
-          {fieldErrors['secretUrl'] && (
-            <Text variant="small" color="text-red-500">
-              {fieldErrors['secretUrl']}
-            </Text>
-          )}
           <Text variant="small" color="text-gray-400" className="text-right">
-            {type === 'manual'
+            {type.toLowerCase() === 'manual'
               ? 'El cliente recibirá este PDF por correo al adquirir el manual'
               : 'El cliente recibirá este video por correo al adquirir el taller'}
           </Text>
+          {errors.secretUrl && (
+            <Text variant="small" color="text-red-500">
+              {errors.secretUrl}
+            </Text>
+          )}
         </div>
 
         {type === 'taller' && (
@@ -391,18 +302,15 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             <textarea
               value={emailContent}
               maxLength={MAX_EMAIL_CONTENT_LENGTH}
+              onFocus={() => clearError('emailContent')}
               onChange={(e) => setEmailContent(e.target.value)}
               rows={4}
-              onFocus={() => clearFieldError('emailContent')}
               placeholder="Mensaje que recibirá el cliente al comprar el taller..."
-              className={
-                'w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none focus:outline-none' +
-                (fieldErrors['emailContent'] ? ' border-red-500' : '')
-              }
+              className={`w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none focus:outline-none + ${errors.emailContent ? ' border-red-500 border-1 rounded-md' : ''}`}
             />
-            {fieldErrors['emailContent'] && (
+            {errors.emailContent && (
               <Text variant="small" color="text-red-500">
-                {fieldErrors['emailContent']}
+                {errors.emailContent}
               </Text>
             )}
             <Text
@@ -431,7 +339,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
               >
                 <button
                   type="button"
-                  onClick={() => removeBlock(i)}
+                  onClick={() => updateBlocks.removeBlock(i)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
                 >
                   <HiTrash size={15} />
@@ -449,11 +357,23 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                     <textarea
                       value={block.value}
                       maxLength={MAX_TEXT_LENGTH}
-                      onChange={(e) => updateTextBlock(i, e.target.value)}
+                      onChange={(e) =>
+                        updateBlocks.updateTextBlock(i, e.target.value)
+                      }
                       rows={5}
                       placeholder="Escribe el contenido aquí..."
-                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm resize-none"
+                      className={
+                        'w-full border rounded-md px-3 py-2 text-sm resize-none ' +
+                        (errors[`block_${i}`]
+                          ? ' border-red-500'
+                          : 'border-gray-200')
+                      }
                     />
+                    {errors[`block_${i}`] && (
+                      <Text variant="small" color="text-red-500">
+                        {errors[`block_${i}`]}
+                      </Text>
+                    )}
                     <Text
                       variant="small"
                       as="span"
@@ -488,7 +408,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                       className="hidden"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
-                        if (file) updateImageBlock(i, file);
+                        if (file) updateBlocks.updateImageBlock(i, file);
                       }}
                     />
                     {block.previewUrl ? (
@@ -516,7 +436,11 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                             step={8}
                             value={block.displayHeight ?? 128}
                             onChange={(e) =>
-                              updateImageBlock(i, null, Number(e.target.value))
+                              updateBlocks.updateImageBlock(
+                                i,
+                                null,
+                                Number(e.target.value),
+                              )
                             }
                             className="flex-1 accent-yellow-400"
                           />
@@ -547,6 +471,11 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                         </Text>
                       </button>
                     )}
+                    {errors[`block_${i}`] && (
+                      <Text variant="small" color="text-red-500">
+                        {errors[`block_${i}`]}
+                      </Text>
+                    )}
                   </div>
                 )}
 
@@ -563,31 +492,18 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                       type="text"
                       value={block.value}
                       maxLength={500}
-                      onChange={(e) => {
-                        const url = e.target.value;
-                        updateLinkBlock(i, url);
-                        if (url && !/^https?:\/\/.+/.test(url)) {
-                          setFieldError(
-                            `link-${i}`,
-                            'Debe ser una URL válida (https://...)',
-                          );
-                        } else {
-                          setFieldErrors((prev) => {
-                            const u = { ...prev };
-                            delete u[`link-${i}`];
-                            return u;
-                          });
-                        }
-                      }}
+                      onChange={(e) =>
+                        updateBlocks.updateLinkBlock(i, e.target.value)
+                      }
                       placeholder="https://..."
                       className={
                         FIELD_CLASS +
-                        (fieldErrors[`link-${i}`] ? ' border-red-500' : '')
+                        (errors[`block_${i}`] ? ' border-red-500' : '')
                       }
                     />
-                    {fieldErrors[`link-${i}`] && (
+                    {errors[`block_${i}`] && (
                       <Text variant="small" color="text-red-500">
-                        {fieldErrors[`link-${i}`]}
+                        {errors[`block_${i}`]}
                       </Text>
                     )}
                   </div>
@@ -601,6 +517,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
         {canAddBlock ? (
           <div className="relative mt-4">
             <select
+              id="create-box"
               defaultValue=""
               onChange={handleAddBlock}
               className={
@@ -622,6 +539,18 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             Máximo de 10 bloques alcanzado
           </Text>
         )}
+
+        {/* ── Error ── */}
+        {errors.general && (
+          <Text
+            variant="small"
+            weight="medium"
+            color="text-red-500"
+            className="text-center"
+          >
+            {errors.general}
+          </Text>
+        )}
       </div>
       {/* ── Actions ── */}
       <div className=" flex flex-col lg:flex-row-reverse color-grey-border-top gap-4 px-5 py-4">
@@ -630,15 +559,17 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
           label="Guardar"
           isLoading={loading}
           disabled={loading}
-          onClick={handleSubmitWithFieldErrors}
+          onClick={handleSubmit}
         />
         <Button
           variant="secondary"
           label="Cancelar"
           disabled={loading}
-          onClick={onClose}
+          onClick={cancel}
         />
       </div>
     </Modal>
   );
 };
+
+export default EditResourceModal;

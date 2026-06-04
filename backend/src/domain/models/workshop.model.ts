@@ -21,7 +21,7 @@ export interface Workshop {
 
 const WorkshopSchema = new Schema<Workshop>({
   name: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String },
   price: { type: Number, required: true },
   content: { type: [ContentBlockSchema], required: true, default: [] },
   category: { type: [String] },

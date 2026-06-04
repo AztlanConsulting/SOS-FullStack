@@ -2,22 +2,32 @@ import ListAdmin from '@shared/components/ui/ListAdmin';
 import Pagination from '@shared/components/ui/Pagination';
 import LoadingSpinner from '@shared/components/ui/LoadingSpinner';
 import { Text } from '@shared/components/ui/Text';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResourceCard from './ResourceCard';
 import { ResourceModal } from './ResourceModal';
 import ResourceSearch from './ResourceSearch.tsx';
 import { type ResourceResult, type Resource } from '../types/resource';
 import queryResources from '../services/queryResources';
 import useResourceFilter from '../hooks/useResourceFilter';
+import EditResourceModal from './EditResourceModal.tsx';
+import { Modal } from '@/shared/components/ui/Modal/Modal.tsx';
 
 const ResourcesListSection = () => {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null,
   );
+  const [success, setSuccess] = useState(false);
+  const [edit, setEdit] = useState(false);
   const { searchHook, query, pages } = useResourceFilter<ResourceResult>(
     queryResources,
+    edit,
     'resources',
   );
+
+  useEffect(() => {
+    console.log('Edit: ', edit, 'Selected Resource: ', selectedResource);
+  }, []);
+
   const { isLoading, error, data } = query;
 
   return (
@@ -51,11 +61,35 @@ const ResourcesListSection = () => {
           />
         )}
 
-        {selectedResource && (
-          <ResourceModal
-            resource={selectedResource}
-            onClose={() => setSelectedResource(null)}
-          />
+        {selectedResource &&
+          (edit ? (
+            <EditResourceModal
+              resource={selectedResource}
+              cancel={() => setEdit(false)}
+              close={() => {
+                setEdit(false);
+                setSelectedResource(null);
+              }}
+              success={() => {
+                setEdit(false);
+                setSelectedResource(null);
+                setSuccess(true);
+              }}
+            />
+          ) : (
+            <ResourceModal
+              resource={selectedResource}
+              onClose={() => setSelectedResource(null)}
+              setEdit={() => setEdit(true)}
+            />
+          ))}
+        {success && (
+          <Modal
+            title={'Se ha actualizado correctamente'}
+            onClose={() => setSuccess(false)}
+          >
+            El recurso seleccionado se ha actualizado correctamente
+          </Modal>
         )}
 
         {/* Pagination */}

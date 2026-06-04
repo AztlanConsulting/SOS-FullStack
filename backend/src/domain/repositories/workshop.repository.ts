@@ -1,4 +1,5 @@
 import type { Workshop } from '@domain/models/workshop.model';
+import type { ResourceRepository } from './resource.repository';
 
 export interface CreateWorkshop {
   workshopId: string | null;
@@ -11,7 +12,7 @@ export interface GetWorkshop {
   sortOption?: string;
 }
 
-export interface WorkshopRepository {
+export interface WorkshopRepository extends ResourceRepository {
   createWorkshop(workshop: Workshop): Promise<CreateWorkshop>;
   getWorkshops(workshopRequest: GetWorkshop): Promise<Workshop[]>;
   getTotalWorkshops(workshopRequest: GetWorkshop): Promise<number>;

@@ -24,6 +24,7 @@ describe('createWorkshop use-case (unit)', () => {
       workshopId: 'workshop-123',
       error: null,
     }),
+    updateResourceById: jest.fn(),
     deleteWorkshop: jest.fn(),
     ...overrides,
   });
@@ -80,6 +81,7 @@ describe('createManual use-case (unit)', () => {
     }),
     deleteManual: jest.fn(),
     ...overrides,
+    updateResourceById: jest.fn(),
   });
 
   test('createManual returns the manualId on success', async () => {

@@ -16,7 +16,7 @@ import LoginPage from '../pages/LoginPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
-import routerClients from './client.routes';
+import routerAdmin from './admin.routes.tsx';
 import routerMembersOnly from './membersOnly.routes';
 import { PetReportProvider } from '@/shared/context/PetReportContext';
 import ClientDashboard from '@/pages/ClientDashboard';
@@ -92,7 +92,7 @@ export const router = createBrowserRouter([
       ...routerPlans,
       ...routerManuals,
       ...routerBlogs,
-      ...routerClients,
+      ...routerAdmin,
     ],
   },
 ]);

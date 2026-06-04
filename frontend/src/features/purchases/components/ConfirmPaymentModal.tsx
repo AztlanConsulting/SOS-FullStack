@@ -19,6 +19,7 @@ const ConfirmPaymentModal = ({ plan, product, onClose }: Props) => {
 
   function close() {
     if (onClose) onClose();
+    else console.log('Hola que hace');
     window.scrollTo(0, 0);
     navigate('/');
   }

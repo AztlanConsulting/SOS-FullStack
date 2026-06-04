@@ -30,6 +30,8 @@ function usePurchasePage() {
 
   // Construct product for use in application in common structure
   useEffect(() => {
+    if (queryParams.get('token')) return;
+
     if (selectedPlan && productType === 'plan-extension') {
       setProduct({
         _id: productId,
@@ -45,6 +47,7 @@ function usePurchasePage() {
         })),
         petId: selectedPlan.petId,
       });
+      console.log('Set product - Construct product for use in application IF');
 
       return;
     }
@@ -78,27 +81,25 @@ function usePurchasePage() {
 
   // Redirect when needed
   useEffect(() => {
-    if (
-      !Boolean(state) &&
-      !Boolean(reportDataForCheckout) &&
-      !queryParams.get('token')
-    ) {
+    if (!queryParams.get('token')) return;
+
+    setSuccess(true);
+
+    const checkoutData = sessionStorage.getItem('checkoutData');
+    const cachedData = checkoutData ? JSON.parse(checkoutData) : null;
+
+    setReportDataForCheckout(
+      cachedData?.reportDataForCheckout ?? lostPetReportData,
+    );
+
+    setProduct(cachedData?.product);
+  }, []);
+
+  useEffect(() => {
+    if (!state && !reportDataForCheckout && !queryParams.get('token')) {
       navigate('/');
     }
-    if (queryParams.get('token')) {
-      setSuccess(true);
-      const checkoutData = sessionStorage.getItem('checkoutData');
-
-      const cachedData = checkoutData ? JSON.parse(checkoutData) : null;
-
-      setReportDataForCheckout(
-        cachedData?.reportDataForCheckout ?? lostPetReportData,
-      );
-
-      setProduct(cachedData?.product);
-    }
-    // console.log(queryParams)
-  }, [state, reportDataForCheckout]);
+  }, [state, reportDataForCheckout, navigate, queryParams]);
 
   function navigateHome() {
     navigate('/');

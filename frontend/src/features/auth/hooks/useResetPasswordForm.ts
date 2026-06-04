@@ -5,8 +5,7 @@ import {
   resetPasswordRequest,
   validateResetToken,
 } from '../services/auth.service';
-
-const MIN_PASSWORD_LENGTH = 8;
+import { getPasswordPolicyError } from '../utils/passwordPolicy';
 
 type ResetPasswordFormData = {
   newPassword: string;
@@ -107,8 +106,12 @@ export const useResetPasswordForm = ({
 
     if (!formData.newPassword) {
       newErrors.newPassword = 'Ingresa una contraseña';
-    } else if (formData.newPassword.length < MIN_PASSWORD_LENGTH) {
-      newErrors.newPassword = `La contraseña debe tener al menos ${MIN_PASSWORD_LENGTH} caracteres`;
+    } else {
+      const passwordPolicyError = getPasswordPolicyError(formData.newPassword);
+
+      if (passwordPolicyError != null) {
+        newErrors.newPassword = passwordPolicyError;
+      }
     }
 
     if (!formData.confirmPassword) {

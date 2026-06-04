@@ -84,16 +84,18 @@ export const ResetPasswordForm = () => {
                   noValidate
                   className="flex flex-col gap-5 text-left"
                 >
-                  <Input
-                    type="password"
-                    id="new-password"
-                    label="Nueva contraseña"
-                    value={newPassword}
-                    onChange={handleNewPasswordChange}
-                    autoComplete="new-password"
-                    hasLength={false}
-                    error={errors.newPassword}
-                  />
+                  <div className="[&_small]:whitespace-pre-line">
+                    <Input
+                      type="password"
+                      id="new-password"
+                      label="Nueva contraseña"
+                      value={newPassword}
+                      onChange={handleNewPasswordChange}
+                      autoComplete="new-password"
+                      hasLength={false}
+                      error={errors.newPassword}
+                    />
+                  </div>
 
                   <Input
                     type="password"

@@ -4,6 +4,10 @@ import type { UserRepository } from '@domain/repositories/user.repository';
 import type { RefreshTokenRepository } from '@domain/repositories/refreshToken.repository';
 import type { PasswordResetTokenRepository } from '@domain/repositories/passwordResetToken.repository';
 import { hashPasswordResetToken } from '@utils/passwordResetToken.utils';
+import {
+  getPasswordPolicyError,
+  PASSWORD_POLICY_ERROR_CODE,
+} from '@utils/passwordPolicy.utils';
 
 /**
  * Applies a new password using a valid reset token.
@@ -23,6 +27,14 @@ export const resetPassword = async (
     newPassword: string;
   },
 ): Promise<void> => {
+  const passwordPolicyError = getPasswordPolicyError(input.newPassword);
+
+  if (passwordPolicyError != null) {
+    const error = new Error(passwordPolicyError);
+    error.name = PASSWORD_POLICY_ERROR_CODE;
+    throw error;
+  }
+
   const tokenHash = hashPasswordResetToken(input.token.trim());
   const tokenRecord =
     await repositories.passwordResetTokenRepository.findValidToken(

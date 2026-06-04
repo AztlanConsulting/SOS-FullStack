@@ -10,9 +10,13 @@ import { refreshTokenDataAccess } from '@infrastructure/data-access/refreshToken
 import { passwordResetTokenDataAccess } from '@infrastructure/data-access/passwordResetToken.data-access';
 import { emailService } from '@infrastructure/service/email.service';
 import { verifyRefreshToken } from '@utils/jwt.utils';
+import {
+  getPasswordPolicyError,
+  PASSWORD_POLICY_ERROR_CODE,
+  PASSWORD_POLICY_MESSAGE,
+} from '@utils/passwordPolicy.utils';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const minPasswordLength = 8;
 
 /**
  * Authenticates user credentials and issues JWT tokens.
@@ -194,7 +198,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     if (result.status === 'EMAIL_SENT') {
       res.status(200).json({
-        message: 'Se enviaron instrucciones para recuperar la contraseña.',
+        message:
+          '¡Se ha enviado un link a tu correo!\n Revisa en las últimas entradas o en el spam.',
         expiresAt: result.expiresAt,
       });
       return;
@@ -272,10 +277,12 @@ export const resetPassword = async (req: Request, res: Response) => {
       return;
     }
 
-    if (newPassword.length < minPasswordLength) {
+    const passwordPolicyError = getPasswordPolicyError(newPassword);
+
+    if (passwordPolicyError != null) {
       res.status(400).json({
         error: 'VALIDATION_ERROR',
-        message: `La contraseña debe tener al menos ${minPasswordLength} caracteres`,
+        message: passwordPolicyError,
       });
       return;
     }
@@ -312,6 +319,20 @@ export const resetPassword = async (req: Request, res: Response) => {
         res.status(400).json({
           error: 'RESET_TOKEN_INVALID',
           message: 'Link invalido o expirado',
+        });
+        return;
+      }
+
+      if (
+        error.message === PASSWORD_POLICY_ERROR_CODE ||
+        error.name === PASSWORD_POLICY_ERROR_CODE
+      ) {
+        res.status(400).json({
+          error: 'VALIDATION_ERROR',
+          message:
+            error.message === PASSWORD_POLICY_ERROR_CODE
+              ? PASSWORD_POLICY_MESSAGE
+              : error.message,
         });
         return;
       }

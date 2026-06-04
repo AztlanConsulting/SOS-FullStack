@@ -11,6 +11,7 @@
     "dev": "nodemon",
     "init:vectorDB": "tsx ./src/infrastructure/database/vectorDB/initDB.ts",
     "init:mongoDB": "tsx ./src/infrastructure/database/mongoDB/data/mock.data",
+    "init:real-content": "tsx ./src/infrastructure/database/mongoDB/data/import-real-content.ts",
     "vectorDB": "tsx ./src/infrastructure/database/vectorDB/vectorDBInterface.ts"
   },
   "author": "",

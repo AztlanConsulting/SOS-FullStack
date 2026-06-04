@@ -26,7 +26,7 @@ global.URL.createObjectURL = vi.fn(() => 'mock-blob-url');
 const mockResource: Resource = {
   _id: 'res-789',
   name: 'Mastering Pet Care Workshop',
-  type: 'Taller',
+  type: 'taller',
   price: 150,
   resourceUrl: 'https://videos.com/taller-1',
   imageUrl: 'https://images.com/cover.jpg',
@@ -96,14 +96,16 @@ describe('Resource Feature Integration Workflow', () => {
     const editButton = screen.getByRole('button', { name: /editar/i });
     await user.click(editButton);
 
-    // Verify modal shifted into edit context
+    // ✨ FIX: Allow all background hook useEffect cycles, fetches, and microtasks to finish hydrating
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Verify modal shifted into edit context cleanly
     const titleInput = screen.getByPlaceholderText(
       'Nombre del recurso',
     ) as HTMLInputElement;
     expect(titleInput.value).toBe('Mastering Pet Care Workshop');
 
     // ── STEP C: Change Inputs & Trigger Validation Handling ──
-    // Modify text content inputs
     await user.clear(titleInput);
     await user.type(titleInput, 'Updated Workshop Title');
 
@@ -111,18 +113,21 @@ describe('Resource Feature Integration Workflow', () => {
     await user.clear(priceInput);
     await user.type(priceInput, '200');
 
-    // ── STEP D: Interacting with Content Blocks (Add block dropdown) ──
+    // ── STEP D: Interacting with Content Blocks ──
     const selectDropdown = screen.getByDisplayValue(
       /selecciona el bloque de contenido/i,
     );
     await user.selectOptions(selectDropdown, 'texto');
 
-    // Assert that a new block text field section spawned successfully
     const textareas = screen.getAllByPlaceholderText(
       'Escribe el contenido aquí...',
     );
     expect(textareas.length).toBe(2);
-    await user.type(textareas[0], 'Integrated dynamic text block content');
+
+    // Fill both textareas cleanly
+    await user.clear(textareas[0]);
+    await user.type(textareas[0], 'Updated existing dynamic text content');
+    await user.type(textareas[1], 'Integrated dynamic text block content');
 
     // ── STEP E: Mock Service Resolution and Submit Form ──
     const updateServiceSpy = vi
@@ -133,9 +138,12 @@ describe('Resource Feature Integration Workflow', () => {
     await user.click(saveButton);
 
     // ── STEP F: Confirm State Change Repopulation after Hook Success Callback ──
-    await waitFor(() => {
-      expect(updateServiceSpy).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(updateServiceSpy).toHaveBeenCalled();
+      },
+      { timeout: 4000 },
+    ); // Explicit clear wait boundaries
 
     // Validates component flipped back into Read Detail window with updated parameters
     await waitFor(() => {

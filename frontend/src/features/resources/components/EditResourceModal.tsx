@@ -265,7 +265,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
         {/* ── PDF / Video URL ── */}
         <div className="flex flex-col gap-1 ">
           <Text variant="small" weight="medium" color="text-gray-500">
-            {type === 'manual' ? 'PDF URL' : 'Video URL'}
+            {type.toLowerCase() === 'manual' ? 'PDF URL' : 'Video URL'}
           </Text>
           <input
             type="text"
@@ -274,14 +274,16 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
             onFocus={() => clearError('secretUrl')}
             onChange={(e) => setSecretUrl(e.target.value)}
             placeholder={
-              type === 'manual' ? 'https://...pdf' : 'https://...video'
+              type.toLowerCase() === 'manual'
+                ? 'https://...pdf'
+                : 'https://...video'
             }
             className={
               FIELD_CLASS + (errors.secretUrl ? ' border-red-500' : '')
             }
           />
           <Text variant="small" color="text-gray-400" className="text-right">
-            {type === 'manual'
+            {type.toLowerCase() === 'manual'
               ? 'El cliente recibirá este PDF por correo al adquirir el manual'
               : 'El cliente recibirá este video por correo al adquirir el taller'}
           </Text>

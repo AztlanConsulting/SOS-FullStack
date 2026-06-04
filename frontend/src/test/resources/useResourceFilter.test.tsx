@@ -30,7 +30,8 @@ describe('useResourceFilter hook', () => {
     });
 
     const { result } = renderHook(
-      () => useResourceFilter(queryFunction, 'resources', 'Nombre (A-Z)'),
+      () =>
+        useResourceFilter(queryFunction, false, 'resources', 'Nombre (A-Z)'),
       {
         wrapper: createWrapper(),
       },
@@ -60,7 +61,8 @@ describe('useResourceFilter hook', () => {
     });
 
     const { result } = renderHook(
-      () => useResourceFilter(queryFunction, 'resources', 'Nombre (A-Z)'),
+      () =>
+        useResourceFilter(queryFunction, false, 'resources', 'Nombre (A-Z)'),
       {
         wrapper: createWrapper(),
       },

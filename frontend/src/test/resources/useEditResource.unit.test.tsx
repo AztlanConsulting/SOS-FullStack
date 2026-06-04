@@ -28,9 +28,10 @@ vi.mock('../util/parseResourceBlock', () => ({
 // 2. Global Mocking for Browser APIs
 global.URL.createObjectURL = vi.fn(() => 'mock-blob-url');
 
-const mockResource: Resource = {
+const mockResource = {
   _id: '123',
   name: 'Initial Name',
+  description: 'Initial Name',
   type: 'taller',
   price: 50,
   resourceUrl: 'https://video.url',
@@ -186,12 +187,38 @@ describe('useEditResource Hook', () => {
       useEditResource(mockResource, onSuccessMock),
     );
 
+    // Manually update a field so a difference is generated in the changeset
+    const [, setName] = result.current.nameHook;
+    act(() => {
+      setName('A Brand New Unique Name');
+    });
+
     await act(async () => {
       await result.current.handleSubmit();
     });
 
     expect(ResourceService.updateResource).toHaveBeenCalled();
     expect(onSuccessMock).toHaveBeenCalled();
+    expect(result.current.errors).toStrictEqual({});
+  });
+
+  it('should block submit and set error if no changes were made', async () => {
+    const { result } = renderHook(() =>
+      useEditResource(mockResource, onSuccessMock),
+    );
+
+    // Allow the hook's internal image hydration useEffect loop to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    // Now submit without modifying any state hook values
+    await act(async () => {
+      await result.current.handleSubmit();
+    });
+
+    expect(ResourceService.updateResource).not.toHaveBeenCalled();
+    expect(onSuccessMock).not.toHaveBeenCalled();
     expect(result.current.errors).toStrictEqual({ general: 'No hay cambios' });
   });
 
@@ -203,6 +230,11 @@ describe('useEditResource Hook', () => {
     const { result } = renderHook(() =>
       useEditResource(mockResource, onSuccessMock),
     );
+
+    const [, setName] = result.current.nameHook;
+    act(() => {
+      setName('A Brand New Unique Name');
+    });
 
     await act(async () => {
       await result.current.handleSubmit();

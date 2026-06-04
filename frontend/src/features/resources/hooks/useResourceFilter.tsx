@@ -1,5 +1,5 @@
 import calculatePages from '@shared/utils/calculatePages';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   useMemo,
   useState,
@@ -55,6 +55,7 @@ export default function useResourceFilter<T extends Props>(
     queryFn: async () =>
       queryFunction(page, searchTerm, sortOption, typeOption),
     enabled: !edit,
+    placeholderData: keepPreviousData,
   });
   const { data } = query;
 

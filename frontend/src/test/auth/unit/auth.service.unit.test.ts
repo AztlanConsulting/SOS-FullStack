@@ -5,6 +5,9 @@ import {
   logoutRequest,
   refreshRequest,
   meRequest,
+  forgotPasswordRequest,
+  resetPasswordRequest,
+  validateResetToken,
 } from '@features/auth/services/auth.service';
 import * as tokenStorage from '@shared/utils/tokenStorage';
 
@@ -96,5 +99,63 @@ describe('auth service (integration)', () => {
     );
 
     await expect(refreshRequest()).rejects.toThrow('refresh failed');
+  });
+
+  /**
+   * Verifies that forgotPasswordRequest posts the email and maps the response.
+   */
+  it('forgotPasswordRequest sends the email payload and returns backend response', async () => {
+    const postSpy = vi.spyOn(axiosInstance, 'post').mockResolvedValue({
+      data: {
+        message: 'email sent',
+        expiresAt: '2026-06-05T00:00:00.000Z',
+      },
+    });
+
+    const res = await forgotPasswordRequest('test@mail.com');
+
+    expect(postSpy).toHaveBeenCalledWith('/auth/forgot-password', {
+      email: 'test@mail.com',
+    });
+    expect(res.message).toBe('email sent');
+    expect(res.expiresAt).toBe('2026-06-05T00:00:00.000Z');
+  });
+
+  /**
+   * Verifies that token validation is sent through query parameters.
+   */
+  it('validateResetToken sends the token as query param', async () => {
+    const getSpy = vi.spyOn(axiosInstance, 'get').mockResolvedValue({
+      data: { valid: true },
+    });
+
+    const res = await validateResetToken('reset-token');
+
+    expect(getSpy).toHaveBeenCalledWith('/auth/reset-password/validate', {
+      params: { token: 'reset-token' },
+    });
+    expect(res.valid).toBe(true);
+  });
+
+  /**
+   * Verifies that resetPasswordRequest sends both password fields.
+   */
+  it('resetPasswordRequest sends token and password confirmation payload', async () => {
+    const postSpy = vi.spyOn(axiosInstance, 'post').mockResolvedValue({
+      data: { message: 'password updated' },
+    });
+
+    const res = await resetPasswordRequest(
+      'reset-token',
+      'Contraseña123!',
+      'Contraseña123!',
+    );
+
+    expect(postSpy).toHaveBeenCalledWith('/auth/reset-password', {
+      token: 'reset-token',
+      newPassword: 'Contraseña123!',
+      confirmPassword: 'Contraseña123!',
+    });
+    expect(res.message).toBe('password updated');
   });
 });

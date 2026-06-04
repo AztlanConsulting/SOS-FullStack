@@ -36,6 +36,7 @@ export const ReportConfirmationPage: React.FC = () => {
 
     if (lostPetReportData === pendingReportData) {
       setPendingNavigate(false);
+      window.scrollTo(0, 0);
       navigate('/planes');
     }
   }, [lostPetReportData, navigate, pendingNavigate, pendingReportData]);

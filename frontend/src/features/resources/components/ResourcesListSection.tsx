@@ -20,6 +20,7 @@ const ResourcesListSection = () => {
   const [edit, setEdit] = useState(false);
   const { searchHook, query, pages } = useResourceFilter<ResourceResult>(
     queryResources,
+    edit,
     'resources',
   );
 

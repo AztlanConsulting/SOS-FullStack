@@ -20,6 +20,7 @@ export default function useResourceFilter<T extends Props>(
     sortOption?: string,
     typeOption?: string,
   ) => Promise<T>,
+  edit: boolean,
   type: string,
   defaultSortOption: string = 'Nombre (A-Z)',
 ) {
@@ -50,9 +51,10 @@ export default function useResourceFilter<T extends Props>(
 
   // Query
   const query = useQuery({
-    queryKey: [type, page, searchTerm, sortOption, typeOption],
+    queryKey: [type, page, searchTerm, sortOption, typeOption, edit],
     queryFn: async () =>
       queryFunction(page, searchTerm, sortOption, typeOption),
+    enabled: !edit,
   });
   const { data } = query;
 

@@ -222,6 +222,18 @@ export const useEditResource = (
     if (type === 'taller' && !emailContent.trim())
       newErrors.emailContent = 'El contenido del correo es requerido';
 
+    blocks.forEach((block, i) => {
+      if (block.kind === 'texto' && !block.value.trim()) {
+        newErrors[`block_${i}`] = 'El bloque de texto no puede estar vacío';
+      }
+      if (block.kind === 'link' && !block.value.trim()) {
+        newErrors[`block_${i}`] = 'El bloque de link no puede estar vacío';
+      }
+      if (block.kind === 'imagen' && !block.previewUrl) {
+        newErrors[`block_${i}`] = 'Debes seleccionar una imagen';
+      }
+    });
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -230,6 +242,7 @@ export const useEditResource = (
     setLoading(true);
     try {
       if (Object.keys(newErrors).length > 0) {
+        console.log(newErrors);
         throw newErrors;
       }
       let coverUrl = resource?.imageUrl;
@@ -308,8 +321,9 @@ export const useEditResource = (
         }),
       ) as Partial<Resource>;
 
-      if (Object.keys(changeset).length < 3) {
+      if (Object.keys(changeset).length < 1) {
         setErrors((prev) => ({ ...prev, general: 'No hay cambios' }));
+        return;
         // throw Error("No hay cambios")
       }
 
@@ -321,6 +335,10 @@ export const useEditResource = (
 
       onSuccess?.();
     } catch (error) {
+      if (error && typeof error === 'object' && !('message' in error)) {
+        // thrown validation errors object — already set via setErrors above
+        return;
+      }
       setErrors({ general: 'Ocurrió un error al guardar. Intenta de nuevo.' });
     } finally {
       setLoading(false);
@@ -358,6 +376,7 @@ export const useEditResource = (
     handleSubmit,
     coverPreview,
     emailHook,
+    clearError,
     MAX_EMAIL_CONTENT_LENGTH,
   };
 };

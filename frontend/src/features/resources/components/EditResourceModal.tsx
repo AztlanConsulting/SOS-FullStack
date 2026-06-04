@@ -60,6 +60,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
     updateBlocks,
     handleSubmit,
     coverPreview,
+    clearError,
     emailHook: [emailContent, setEmailContent],
     MAX_EMAIL_CONTENT_LENGTH,
   } = useEditResource(resource, success);
@@ -182,9 +183,10 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
             type="text"
             value={name}
             maxLength={MAX_NAME_LENGTH}
+            onFocus={() => clearError('name')}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nombre del recurso"
-            className={FIELD_CLASS}
+            className={FIELD_CLASS + (errors.name ? ' border-red-500' : '')}
           />
           {errors.name && (
             <Text variant="small" color="text-red-500">
@@ -213,7 +215,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
           </Text>
           <div className="relative">
             <select
-              value={type}
+              value={type.toLowerCase()}
               onChange={(e) => setType(e.target.value as 'manual' | 'taller')}
               className={FIELD_CLASS + ' appearance-none'}
             >
@@ -237,8 +239,9 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
               inputMode="numeric"
               value={formatPrice(price)}
               onChange={handlePriceChange}
+              onFocus={() => clearError('price')}
               placeholder="0"
-              className="flex-1 px-3 py-2 text-sm focus:outline-none"
+              className={`flex-1 px-3 py-2 text-sm focus:outline-none ${errors.price ? ' border-red-500 border-1 rounded-md' : ''}`}
             />
             <Text
               variant="small"
@@ -268,11 +271,14 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
             type="text"
             value={secretUrl}
             maxLength={200}
+            onFocus={() => clearError('secretUrl')}
             onChange={(e) => setSecretUrl(e.target.value)}
             placeholder={
               type === 'manual' ? 'https://...pdf' : 'https://...video'
             }
-            className={FIELD_CLASS}
+            className={
+              FIELD_CLASS + (errors.secretUrl ? ' border-red-500' : '')
+            }
           />
           <Text variant="small" color="text-gray-400" className="text-right">
             {type === 'manual'
@@ -294,10 +300,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
             <textarea
               value={emailContent}
               maxLength={MAX_EMAIL_CONTENT_LENGTH}
+              onFocus={() => clearError('emailContent')}
               onChange={(e) => setEmailContent(e.target.value)}
               rows={4}
               placeholder="Mensaje que recibirá el cliente al comprar el taller..."
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none focus:outline-none"
+              className={`w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none focus:outline-none + ${errors.emailContent ? ' border-red-500 border-1 rounded-md' : ''}`}
             />
             {errors.emailContent && (
               <Text variant="small" color="text-red-500">
@@ -353,8 +360,18 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                       }
                       rows={5}
                       placeholder="Escribe el contenido aquí..."
-                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm resize-none"
+                      className={
+                        'w-full border rounded-md px-3 py-2 text-sm resize-none ' +
+                        (errors[`block_${i}`]
+                          ? ' border-red-500'
+                          : 'border-gray-200')
+                      }
                     />
+                    {errors[`block_${i}`] && (
+                      <Text variant="small" color="text-red-500">
+                        {errors[`block_${i}`]}
+                      </Text>
+                    )}
                     <Text
                       variant="small"
                       as="span"
@@ -452,6 +469,11 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                         </Text>
                       </button>
                     )}
+                    {errors[`block_${i}`] && (
+                      <Text variant="small" color="text-red-500">
+                        {errors[`block_${i}`]}
+                      </Text>
+                    )}
                   </div>
                 )}
 
@@ -472,8 +494,16 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                         updateBlocks.updateLinkBlock(i, e.target.value)
                       }
                       placeholder="https://..."
-                      className={FIELD_CLASS}
+                      className={
+                        FIELD_CLASS +
+                        (errors[`block_${i}`] ? ' border-red-500' : '')
+                      }
                     />
+                    {errors[`block_${i}`] && (
+                      <Text variant="small" color="text-red-500">
+                        {errors[`block_${i}`]}
+                      </Text>
+                    )}
                   </div>
                 )}
               </div>

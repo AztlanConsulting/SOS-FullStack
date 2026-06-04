@@ -603,7 +603,9 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             <select
               defaultValue=""
               onChange={handleAddBlock}
-              className={FIELD_CLASS + ' appearance-none text-gray-500'}
+              className={
+                FIELD_CLASS + ' appearance-none text-gray-500 !text-sm'
+              }
             >
               <option value="" disabled>
                 Selecciona el bloque de contenido que quisieras insertar

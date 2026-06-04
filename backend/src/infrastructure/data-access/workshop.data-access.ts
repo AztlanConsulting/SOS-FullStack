@@ -107,6 +107,8 @@ export const WorkshopDataAccess: WorkshopRepository = {
       { $set: fields },
     );
 
+    console.log(result);
+
     return result.matchedCount > 0;
   },
 

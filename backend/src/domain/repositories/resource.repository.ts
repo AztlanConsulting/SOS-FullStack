@@ -8,6 +8,8 @@ export interface Resource {
   content: ContentBlock[];
   resourceUrl: string;
   emailContent?: string;
+  description?: string;
+  category?: string[];
 }
 
 export type PartialResourceWithId = Partial<Resource> & Pick<Resource, '_id'>;

@@ -33,7 +33,7 @@ async function updateResourceUC(
       if (!manual) {
         return {
           success: false,
-          error: 'Manual not found',
+          error: "Couldn't find or update resource",
         };
       }
 
@@ -46,7 +46,7 @@ async function updateResourceUC(
         description: update.description ?? '',
         category: update.category ?? [],
 
-        videoUrl: update.resourceUrl,
+        videoUrl: update.resourceUrl ?? manual.pdfUrl,
         emailContent: update.emailContent ?? manual.emailContent,
       };
 
@@ -66,7 +66,7 @@ async function updateResourceUC(
       if (!workshop) {
         return {
           success: false,
-          error: 'Manual not found',
+          error: "Couldn't find or update resource",
         };
       }
 
@@ -88,7 +88,7 @@ async function updateResourceUC(
       return { success: true, error: null };
       break;
     default:
-      return { success: false, error: 'Something went really wrong' };
+      return { success: false, error: "Couldn't find or update resource" };
   }
 }
 

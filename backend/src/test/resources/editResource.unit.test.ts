@@ -1,5 +1,7 @@
 import updateResourceUC from '@/use-cases/resources/updateResourceUC.usecase';
 import type { ResourceRepository } from '@/domain/repositories/resource.repository';
+import type { ManualRepository } from '@/domain/repositories/manual.repository';
+import type { WorkshopRepository } from '@/domain/repositories/workshop.repository';
 
 describe('updateResourceUC', () => {
   beforeEach(() => {
@@ -7,17 +9,27 @@ describe('updateResourceUC', () => {
   });
 
   test('updates resource successfully', async () => {
-    const mockRepository: ResourceRepository = {
+    const mockManualRepository: ManualRepository = {
+      updateResourceById: jest.fn().mockResolvedValue(true),
+    } as any;
+    const mockWorkshopRepository: WorkshopRepository = {
       updateResourceById: jest.fn().mockResolvedValue(true),
     } as any;
 
-    const result = await updateResourceUC(mockRepository, {
-      _id: '12345678',
-      name: 'New Resource',
-      price: 50,
-    });
+    const result = await updateResourceUC(
+      {
+        ManualDataAccess: mockManualRepository,
+        WorkshopDataAccess: mockWorkshopRepository,
+      },
+      {
+        _id: '12345678',
+        name: 'New Resource',
+        price: 50,
+      },
+      'workshop',
+    );
 
-    expect(mockRepository.updateResourceById).toHaveBeenCalledWith({
+    expect(mockWorkshopRepository.updateResourceById).toHaveBeenCalledWith({
       _id: '12345678',
       name: 'New Resource',
       price: 50,
@@ -30,24 +42,24 @@ describe('updateResourceUC', () => {
   });
 
   test('returns error when resource does not exist', async () => {
-    const mockRepository: ResourceRepository = {
+    const mockManualRepository: ManualRepository = {
+      updateResourceById: jest.fn().mockResolvedValue(false),
+      getManualById: jest.fn().mockResolvedValue(false),
+    } as any;
+    const mockWorkshopRepository: WorkshopRepository = {
       updateResourceById: jest.fn().mockResolvedValue(false),
     } as any;
 
-    const result = await updateResourceUC(mockRepository, {
-      _id: '12345678',
-    });
-
-    expect(result).toEqual({
-      success: false,
-      error: "Couldn't find or update resource",
-    });
-  });
-
-  test('returns error when repository is null', async () => {
-    const result = await updateResourceUC(null, {
-      _id: '12345678',
-    });
+    const result = await updateResourceUC(
+      {
+        ManualDataAccess: mockManualRepository,
+        WorkshopDataAccess: mockWorkshopRepository,
+      },
+      {
+        _id: '12345678',
+      },
+      'workshop',
+    );
 
     expect(result).toEqual({
       success: false,

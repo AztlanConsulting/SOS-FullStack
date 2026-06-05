@@ -1,6 +1,11 @@
 import axiosInstance from '@shared/utils/axios';
 import refreshClient from '@shared/utils/axios';
-import type { LoginResponse, RefreshResponse } from '../types/auth.types';
+import type {
+  LoginResponse,
+  PasswordResetResponse,
+  RefreshResponse,
+  ValidateResetTokenResponse,
+} from '../types/auth.types';
 import { setAccessToken } from '@shared/utils/tokenStorage';
 
 /**
@@ -73,5 +78,59 @@ export const refreshRequest = async () => {
  */
 export const meRequest = async () => {
   const { data } = await axiosInstance.get('/auth/me');
+  return data;
+};
+
+/**
+ * Requests a password reset link for the provided email.
+ *
+ * @param email - User email associated with the account
+ * @return Backend message for the recovery request
+ */
+export const forgotPasswordRequest = async (
+  email: string,
+): Promise<PasswordResetResponse> => {
+  const { data } = await axiosInstance.post('/auth/forgot-password', {
+    email,
+  });
+
+  return data;
+};
+
+/**
+ * Validates whether a password reset token is still usable.
+ *
+ * @param token - Raw reset token from the email link
+ * @return Token validity response
+ */
+export const validateResetToken = async (
+  token: string,
+): Promise<ValidateResetTokenResponse> => {
+  const { data } = await axiosInstance.get('/auth/reset-password/validate', {
+    params: { token },
+  });
+
+  return data;
+};
+
+/**
+ * Updates the user's password using a valid reset token.
+ *
+ * @param token - Raw reset token from the email link
+ * @param newPassword - New password entered by the user
+ * @param confirmPassword - Confirmation password entered by the user
+ * @return Backend confirmation message
+ */
+export const resetPasswordRequest = async (
+  token: string,
+  newPassword: string,
+  confirmPassword: string,
+): Promise<PasswordResetResponse> => {
+  const { data } = await axiosInstance.post('/auth/reset-password', {
+    token,
+    newPassword,
+    confirmPassword,
+  });
+
   return data;
 };

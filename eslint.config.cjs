@@ -25,6 +25,7 @@ module.exports = [
       'backend/jest.config.js',
       'backend/__mocks__/**/*',
       'ecosystem.config.js',
+      'backend/k6/**/*'
     ],
   },
 

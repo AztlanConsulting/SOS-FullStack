@@ -3,16 +3,14 @@ import nodemailer from 'nodemailer';
 import type {
   EmailService,
   SendActivatePlanEmailDTO,
+  SendPasswordResetEmailDTO,
 } from '@domain/ports/emailService.port';
 
 let transporterPromise: Promise<nodemailer.Transporter> | null = null;
 
 /**
- * Development:
- * Uses Ethereal test SMTP automatically.
- *
- * Production:
- * Uses real SMTP credentials from .env
+ * Uses real SMTP credentials when they are configured.
+ * Falls back to Ethereal only for local environments without SMTP settings.
  */
 const getTransporter = async (): Promise<nodemailer.Transporter> => {
   if (transporterPromise) {
@@ -20,29 +18,38 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   }
 
   transporterPromise = (async () => {
-    const isDevelopment = process.env.ENV !== 'production';
+    const hasSmtpConfig = Boolean(
+      process.env.SMTP_HOST &&
+      process.env.SMTP_PORT &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASS,
+    );
 
-    if (isDevelopment) {
-      const testAccount = await nodemailer.createTestAccount();
-
+    if (hasSmtpConfig) {
       return nodemailer.createTransport({
-        host: testAccount.smtp.host,
-        port: testAccount.smtp.port,
-        secure: testAccount.smtp.secure,
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: Number(process.env.SMTP_PORT) === 465,
         auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
         },
       });
     }
 
+    if (process.env.ENV === 'production') {
+      throw new Error('SMTP_CONFIG_MISSING');
+    }
+
+    const testAccount = await nodemailer.createTestAccount();
+
     return nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: Number(process.env.SMTP_PORT) === 465,
+      host: testAccount.smtp.host,
+      port: testAccount.smtp.port,
+      secure: testAccount.smtp.secure,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: testAccount.user,
+        pass: testAccount.pass,
       },
     });
   })();
@@ -50,7 +57,106 @@ const getTransporter = async (): Promise<nodemailer.Transporter> => {
   return transporterPromise;
 };
 
+const logPreviewUrl = (info: nodemailer.SentMessageInfo): void => {
+  const previewUrl = nodemailer.getTestMessageUrl(info);
+
+  if (previewUrl) {
+    console.log(previewUrl);
+  }
+};
+
 export const emailService: EmailService = {
+  /**
+   * Sends the password reset email with the temporary recovery link.
+   *
+   * @param data - Recipient and reset link metadata
+   */
+  async sendPasswordResetEmail(data: SendPasswordResetEmailDTO): Promise<void> {
+    const transporter = await getTransporter();
+
+    const info = await transporter.sendMail({
+      from: `"SOS Pets" <${process.env.SMTP_USER ?? 'test@sospets.local'}>`,
+      to: data.to,
+      subject: 'Recupera tu contraseña',
+      html: `
+        <div style="margin:0;padding:0;background-color:#f8f9fa;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f9fa;padding:40px 10px;">
+            <tr>
+              <td align="center">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05);">
+                  <tr>
+                    <td style="background-color:#f9cd48;height:6px;"></td>
+                  </tr>
+
+                  <tr>
+                    <td align="center" style="padding:24px 30px 8px 30px;">
+                      <img
+                        src="https://encontrandomascotas.com/api/logo/yellowIcon.png"
+                        alt="SOS Encontrando Mascotas"
+                        height="80"
+                        style="display:block;height:80px;width:auto;border:0;outline:none;text-decoration:none;"
+                      />
+                      <h1 style="margin:12px 0 0 0;color:#1a1a1a;font-size:22px;line-height:32px;font-weight:bold;">
+                        Recupera tu contraseña
+                      </h1>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding:0 30px 40px 30px;color:#444444;line-height:1.6;">
+                      <p style="font-size:16px;margin-bottom:12px;">Hola <strong>${data.username ?? data.to}</strong>,</p>
+                      <p style="font-size:15px;color:#666;margin-bottom:24px;">
+                        Recibimos una solicitud para restablecer la contraseña de tu cuenta.
+                        Usa el siguiente boton para crear una nueva contraseña.
+                      </p>
+
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px auto;" align="center">
+                        <tr>
+                          <td align="center">
+                            <a href="${data.resetUrl}" target="_blank" style="background-color:#f9cd48;color:#1a1a1a;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">
+                              Restablecer contraseña
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <p style="font-size:14px;color:#777;margin-bottom:12px;">
+                        Este enlace expira en ${data.expiresInMinutes} minutos y solo puede utilizarse una vez. Después de este tiempo, podrás volver a intentarlo.
+                      </p>
+                      <p style="font-size:13px;color:#999;margin-bottom:0;">
+                        Si no solicitaste este cambio, puedes ignorar este correo.
+                      </p>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td align="center" style="padding:32px;background-color:#fafafa;border-top:1px solid #f0f0f0;">
+                      <p style="margin:0;font-size:13px;color:#777;">
+                        ¿Tienes alguna duda? <br/>
+                        <a href="mailto:hola@sosencontrandomascotas.com" style="color:#f9cd48;text-decoration:none;font-weight:bold;">Contáctanos aquí</a>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin-top:24px;">
+                  <tr>
+                    <td align="center" style="font-size:11px;color:#aaa;line-height:1.5;">
+                      <p>© ${new Date().getFullYear()} SOS Encontrando Mascotas. <br/>
+                      Este es un correo automatico, por favor no respondas directamente.</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `,
+    });
+
+    logPreviewUrl(info);
+  },
+
   async sendActivatePlanEmail(data: SendActivatePlanEmailDTO): Promise<void> {
     const transporter = await getTransporter();
 
@@ -173,8 +279,6 @@ export const emailService: EmailService = {
         `,
     });
 
-    const previewUrl = nodemailer.getTestMessageUrl(info);
-
-    console.log(previewUrl);
+    logPreviewUrl(info);
   },
 };

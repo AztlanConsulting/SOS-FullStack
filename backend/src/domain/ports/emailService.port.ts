@@ -42,6 +42,13 @@ export interface SendActivatePlanEmailDTO {
   instagramUrl?: string;
 }
 
+export interface SendPasswordResetEmailDTO {
+  to: string;
+  username?: string;
+  resetUrl: string;
+  expiresInMinutes: number;
+}
+
 export interface StripeEmailService {
   sendStripePaymentEmail(data: SendStripePaymentEmailDTO): Promise<void>;
 }
@@ -56,4 +63,5 @@ export interface WorkshopEmailService {
 
 export interface EmailService {
   sendActivatePlanEmail(data: SendActivatePlanEmailDTO): Promise<void>;
+  sendPasswordResetEmail(data: SendPasswordResetEmailDTO): Promise<void>;
 }

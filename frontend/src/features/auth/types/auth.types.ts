@@ -14,3 +14,11 @@ export interface LoginResponse {
 export interface RefreshResponse {
   accessToken: string;
 }
+
+export interface PasswordResetResponse {
+  message: string;
+}
+
+export interface ValidateResetTokenResponse {
+  valid: boolean;
+}

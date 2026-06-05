@@ -15,11 +15,7 @@ export const ManualsListSection = () => {
     'manuals',
   );
   const { isLoading, error, data } = query;
-  const { manuals: localizedManuals, currencyCode } = useLocationContext();
-  const getlocalizedPrice = (name: string, fallback: number): number => {
-    const found = localizedManuals.find((m) => m.name === name);
-    return found?.localizedPrice ?? fallback;
-  };
+  const { exchangeRate, currencyCode } = useLocationContext();
 
   return (
     <section className="bg-secondary w-full flex flex-col items-center justify-center">
@@ -40,7 +36,9 @@ export const ManualsListSection = () => {
             component={(card, idx) => (
               <ManualItem
                 manual={card}
-                localizedPrice={getlocalizedPrice(card.name, card.price)}
+                localizedPrice={
+                  Math.round(card.price * exchangeRate * 100) / 100
+                }
                 currencyCode={currencyCode}
                 key={idx}
               />

@@ -35,6 +35,7 @@ export const WorkshopDataAccess: WorkshopRepository = {
       .skip(page * limit)
       .limit(limit)
       .sort(sort[sortOption])
+      .collation({ locale: 'es', strength: 2 })
       .exec();
     return workshops;
   },

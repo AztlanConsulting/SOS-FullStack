@@ -123,36 +123,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                   src={coverPreview}
                   alt="portada"
                   className="w-full rounded-md object-cover"
-                  style={{ maxHeight: `${coverDisplayHeight}px` }}
                 />
-                {/* height slider */}
-                <div className="flex items-center gap-2">
-                  <Text
-                    variant="small"
-                    color="text-gray-400"
-                    className="shrink-0"
-                  >
-                    Tamaño
-                  </Text>
-                  <input
-                    type="range"
-                    min={80}
-                    max={400}
-                    step={8}
-                    value={coverDisplayHeight}
-                    onChange={(e) =>
-                      setCoverDisplayHeight(Number(e.target.value))
-                    }
-                    className="flex-1 accent-yellow-400"
-                  />
-                  <Text
-                    variant="small"
-                    color="text-gray-400"
-                    className="shrink-0 w-10 text-right"
-                  >
-                    {coverDisplayHeight}px
-                  </Text>
-                </div>
                 <Button
                   variant="toolbar"
                   label="Cambiar portada"
@@ -422,41 +393,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                           src={block.previewUrl}
                           alt="preview"
                           className="w-full rounded-md object-cover"
-                          style={{
-                            maxHeight: `${block.displayHeight ?? 128}px`,
-                          }}
                         />
-                        <div className="flex items-center gap-2">
-                          <Text
-                            variant="small"
-                            color="text-gray-400"
-                            className="shrink-0"
-                          >
-                            Tamaño
-                          </Text>
-                          <input
-                            type="range"
-                            min={80}
-                            max={400}
-                            step={8}
-                            value={block.displayHeight ?? 128}
-                            onChange={(e) =>
-                              updateBlocks.updateImageBlock(
-                                i,
-                                null,
-                                Number(e.target.value),
-                              )
-                            }
-                            className="flex-1 accent-yellow-400"
-                          />
-                          <Text
-                            variant="small"
-                            color="text-gray-400"
-                            className="shrink-0 w-10 text-right"
-                          >
-                            {block.displayHeight ?? 128}px
-                          </Text>
-                        </div>
                         <Button
                           variant="toolbar"
                           label="Cambiar imagen"

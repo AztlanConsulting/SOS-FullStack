@@ -44,7 +44,11 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
   };
 
   // Auto-dismiss error after 5 seconds
-  const setFieldError = (field: string, message: string) => {
+  const setFieldError = (
+    field: string,
+    message: string,
+    durationMs?: number,
+  ) => {
     setFieldErrors((prev) => ({ ...prev, [field]: message }));
 
     // Clear any existing timeout for this field
@@ -60,7 +64,7 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
         return updated;
       });
       delete errorTimeoutRef.current[field];
-    }, 100000000);
+    }, durationMs ?? 1000000);
   };
 
   // ── block helpers ───────────────────────────────────────────────────────────

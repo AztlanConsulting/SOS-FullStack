@@ -57,7 +57,7 @@ export const ResourceModal = ({
         )}
         {resource && (
           <>
-            <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-200px)] modal-scrollbar pl-6 pr-5 py-5">
+            <div className="flex flex-col gap-3 overflow-y-auto max-h-[calc(100vh-200px)] modal-scrollbar overflow-x-hidden pl-6 pr-5 py-5">
               <Text variant="caption" as="p" color="text-gray-600">
                 Imagen de portada
               </Text>
@@ -69,7 +69,11 @@ export const ResourceModal = ({
               <Text variant="caption" as="p" color="text-gray-600">
                 Título
               </Text>
-              <Text variant="body" color="text-black" className="mb-6">
+              <Text
+                variant="body"
+                color="text-black"
+                className="mb-6 break-words"
+              >
                 {resource.name}
               </Text>
               <Text variant="caption" as="p" color="text-gray-600">
@@ -103,7 +107,11 @@ export const ResourceModal = ({
               <Text variant="caption" as="p" color="text-gray-600">
                 Precio
               </Text>
-              <Text variant="body" color="text-black" className="mb-6">
+              <Text
+                variant="body"
+                color="text-black"
+                className="mb-6 break-words"
+              >
                 $
                 {resource.price
                   .toString()
@@ -118,12 +126,12 @@ export const ResourceModal = ({
                   href={resource.resourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline mb-6"
+                  className="text-blue-500 hover:underline mb-6 break-words"
                 >
                   {resource.resourceUrl}
                 </a>
               ) : (
-                <Text variant="body" className="mb-6">
+                <Text variant="body" className="mb-6 break-words">
                   N/A
                 </Text>
               )}
@@ -133,7 +141,11 @@ export const ResourceModal = ({
               {resource.content.map((content) => {
                 if (content.type === 'text') {
                   return (
-                    <Text variant="body" color="text-black" className="mb-2">
+                    <Text
+                      variant="body"
+                      color="text-black"
+                      className="mb-2 break-words"
+                    >
                       {content.content}
                     </Text>
                   );
@@ -159,7 +171,11 @@ export const ResourceModal = ({
                   >
                     Contenido del correo electrónico
                   </Text>
-                  <Text variant="body" color="text-black">
+                  <Text
+                    variant="body"
+                    color="text-black"
+                    className="break-words"
+                  >
                     {resource.emailContent}
                   </Text>
                 </>

@@ -8,7 +8,7 @@ import type { LocalBlock } from '../types/block.types';
 export const MAX_NAME_LENGTH = 100;
 export const MAX_TEXT_LENGTH = 400;
 export const MAX_LINK_LENGTH = 100;
-export const MAX_PRICE = 99_999;
+export const MAX_PRICE = 400;
 export const MAX_BLOCKS = 10;
 export const MAX_FILE_SIZE_MB = 5;
 export const MAX_EMAIL_CONTENT_LENGTH = 400;
@@ -203,7 +203,7 @@ export const useEditResource = (
           : 'El Video URL es requerido';
 
     const urlRegex =
-      /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+      /(?:http[s]?:\/\/.)(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
     if (!urlRegex.test(secretUrl)) newErrors.secretUrl = 'URL inválido';
     if (type === 'taller' && !emailContent.trim())
       newErrors.emailContent = 'El contenido del correo es requerido';

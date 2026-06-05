@@ -128,7 +128,10 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                   variant="toolbar"
                   label="Cambiar portada"
                   icon={HiPhotograph}
-                  onClick={() => coverInputRef.current?.click()}
+                  onClick={() => {
+                    coverInputRef.current?.click();
+                    clearError('coverImage');
+                  }}
                 />
                 {errors.coverImage && (
                   <Text variant="small" color="text-red-500">
@@ -139,7 +142,10 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
             ) : (
               <button
                 type="button"
-                onClick={() => coverInputRef.current?.click()}
+                onClick={() => {
+                  coverInputRef.current?.click();
+                  clearError('coverImage');
+                }}
                 className="w-full border-2 border-dashed border-gray-300 rounded-md py-6 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-1"
               >
                 <HiPhotograph size={22} />
@@ -398,13 +404,19 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                           variant="toolbar"
                           label="Cambiar imagen"
                           icon={HiPhotograph}
-                          onClick={() => fileInputRefs.current[i]?.click()}
+                          onClick={() => {
+                            fileInputRefs.current[i]?.click();
+                            clearError(`block_${i}`);
+                          }}
                         />
                       </div>
                     ) : (
                       <button
                         type="button"
-                        onClick={() => fileInputRefs.current[i]?.click()}
+                        onClick={() => {
+                          fileInputRefs.current[i]?.click();
+                          clearError(`block_${i}`);
+                        }}
                         className="w-full border-2 border-dashed border-gray-300 rounded-md py-6 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-1"
                       >
                         <HiPhotograph size={22} />

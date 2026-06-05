@@ -17,13 +17,16 @@ export const ResetPasswordForm = () => {
     tokenValid,
     loading,
     submitError,
-    message,
     handleNewPasswordChange,
     handleConfirmPasswordChange,
     handleSubmit,
   } = useResetPasswordForm({
     token,
-    onPasswordReset: () => navigate('/login', { replace: true }),
+    onPasswordReset: () =>
+      navigate('/login', {
+        replace: true,
+        state: { passwordResetMessage: 'Contraseña cambiada correctamente' },
+      }),
   });
 
   return (
@@ -121,12 +124,6 @@ export const ResetPasswordForm = () => {
                   {submitError && (
                     <Text variant="caption" as="p" className="color-danger">
                       {submitError}
-                    </Text>
-                  )}
-
-                  {message && (
-                    <Text variant="caption" as="p" className="color-success">
-                      {message}
                     </Text>
                   )}
                 </form>

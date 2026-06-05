@@ -20,7 +20,7 @@ export const passwordResetTokenDataAccess: PasswordResetTokenRepository = {
    * Creates or rotates a reset token only if the user's last token is old enough.
    *
    * The unique userId index prevents concurrent requests from creating
-   * multiple reset links for the same user inside the 24-hour window.
+   * multiple reset links for the same user inside the cooldown window.
    *
    * @param token - Token document data to persist
    * @param createdAfter - Earliest creation date still considered active

@@ -121,7 +121,7 @@ export const emailService: EmailService = {
                       </table>
 
                       <p style="font-size:14px;color:#777;margin-bottom:12px;">
-                        Este enlace expira en ${data.expiresInHours} horas y solo puede utilizarse una vez.
+                        Este enlace expira en ${data.expiresInMinutes} minutos y solo puede utilizarse una vez. Después de este tiempo, podrás volver a intentarlo.
                       </p>
                       <p style="font-size:13px;color:#999;margin-bottom:0;">
                         Si no solicitaste este cambio, puedes ignorar este correo.

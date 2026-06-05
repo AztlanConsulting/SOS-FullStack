@@ -37,7 +37,6 @@ export const useResetPasswordForm = ({
   const [tokenValid, setTokenValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -132,19 +131,17 @@ export const useResetPasswordForm = ({
 
     setErrors(newErrors);
     setSubmitError(null);
-    setMessage(null);
 
     if (Object.keys(newErrors).length > 0) return;
 
     try {
       setLoading(true);
-      const response = await resetPasswordRequest(
+      await resetPasswordRequest(
         token,
         formData.newPassword,
         formData.confirmPassword,
       );
-      setMessage(response.message);
-      window.setTimeout(onPasswordReset, 700);
+      onPasswordReset();
     } catch (requestError) {
       setSubmitError(
         getErrorMessage(requestError, 'No se pudo actualizar la contraseña.'),
@@ -162,7 +159,6 @@ export const useResetPasswordForm = ({
     tokenValid,
     loading,
     submitError,
-    message,
     handleNewPasswordChange,
     handleConfirmPasswordChange,
     handleSubmit,

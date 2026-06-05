@@ -107,7 +107,7 @@ export const ForgotPasswordForm = () => {
               <div className="px-5 py-6 text-left">
                 <Text variant="caption" as="p" className="color-grey-text mb-6">
                   {message ??
-                    '¡Se ha enviado un link a tu correo! Revisa en las últimas entradas o en el spam.'}
+                    'Si existe el correo, se enviará un link. Revisa en las últimas entradas o en el spam. Si ya has intentado de recuperar tu contraseña, intenta más tarde.'}
                 </Text>
 
                 <div className="flex justify-center">

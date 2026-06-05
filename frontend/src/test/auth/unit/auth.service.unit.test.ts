@@ -108,7 +108,6 @@ describe('auth service (integration)', () => {
     const postSpy = vi.spyOn(axiosInstance, 'post').mockResolvedValue({
       data: {
         message: 'email sent',
-        expiresAt: '2026-06-05T00:00:00.000Z',
       },
     });
 
@@ -118,7 +117,6 @@ describe('auth service (integration)', () => {
       email: 'test@mail.com',
     });
     expect(res.message).toBe('email sent');
-    expect(res.expiresAt).toBe('2026-06-05T00:00:00.000Z');
   });
 
   /**

@@ -7,7 +7,9 @@ import {
   hashPasswordResetToken,
 } from '@utils/passwordResetToken.utils';
 
-const PASSWORD_RESET_EXPIRATION_MS = 24 * 60 * 60 * 1000;
+const PASSWORD_RESET_EXPIRATION_MINUTES = 30;
+const PASSWORD_RESET_EXPIRATION_MS =
+  PASSWORD_RESET_EXPIRATION_MINUTES * 60 * 1000;
 
 export type RequestPasswordResetResult =
   | { status: 'EMAIL_SENT'; expiresAt: Date }
@@ -30,7 +32,7 @@ const buildResetUrl = (token: string): string => {
 
 /**
  * Starts the password recovery flow for an active user.
- * Does not reveal whether an email exists and enforces one reset link per 24 hours.
+ * Does not reveal whether an email exists and enforces one reset link per cooldown window.
  *
  * @param repositories - User and reset token persistence layers
  * @param emailService - Email sender used to deliver the reset link
@@ -103,7 +105,7 @@ export const requestPasswordReset = async (
       to: normalizedEmail,
       username: user.username,
       resetUrl: buildResetUrl(rawToken),
-      expiresInHours: 24,
+      expiresInMinutes: PASSWORD_RESET_EXPIRATION_MINUTES,
     });
   } catch (error) {
     await repositories.passwordResetTokenRepository.deleteTokenByHash(

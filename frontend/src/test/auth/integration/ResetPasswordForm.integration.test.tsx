@@ -122,12 +122,12 @@ describe('ResetPasswordForm integration', () => {
   });
 
   /**
-   * Verifies that secure matching passwords are submitted successfully.
+   * Verifies that secure matching passwords navigate back to login.
    */
-  test('submits secure matching passwords and shows success message', async () => {
+  test('submits secure matching passwords and navigates back to login', async () => {
     const user = userEvent.setup();
     mockResetPasswordRequest.mockResolvedValue({
-      message: 'contraseña actualizada correctamente',
+      message: 'Contraseña cambiada correctamente',
     });
 
     renderResetPasswordForm();
@@ -152,8 +152,6 @@ describe('ResetPasswordForm integration', () => {
         'Contraseña123!',
       );
     });
-    expect(
-      await screen.findByText('contraseña actualizada correctamente'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Login')).toBeInTheDocument();
   });
 });

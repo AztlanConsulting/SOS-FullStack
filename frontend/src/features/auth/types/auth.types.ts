@@ -17,7 +17,6 @@ export interface RefreshResponse {
 
 export interface PasswordResetResponse {
   message: string;
-  expiresAt?: string;
 }
 
 export interface ValidateResetTokenResponse {

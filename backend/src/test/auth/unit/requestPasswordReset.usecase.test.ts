@@ -141,7 +141,7 @@ describe('requestPasswordReset use-case (unit)', () => {
       expect.objectContaining({
         to: 'user@test.com',
         username: activeUser.username,
-        expiresInHours: 24,
+        expiresInMinutes: 30,
       }),
     );
     expect(rawToken).toBeTruthy();

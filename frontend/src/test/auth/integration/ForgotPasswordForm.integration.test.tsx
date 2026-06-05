@@ -8,6 +8,8 @@ import { ForgotPasswordForm } from '@features/auth/components/ForgotPasswordForm
 const { mockForgotPasswordRequest } = vi.hoisted(() => ({
   mockForgotPasswordRequest: vi.fn(),
 }));
+const PASSWORD_RESET_PUBLIC_MESSAGE =
+  'Si existe el correo, se enviará un link. Revisa en las últimas entradas o en el spam. Si ya has intentado de recuperar tu contraseña, intenta más tarde.';
 
 vi.mock('@features/auth/services/auth.service', () => ({
   forgotPasswordRequest: mockForgotPasswordRequest,
@@ -101,8 +103,7 @@ describe('ForgotPasswordForm integration', () => {
   test('submits a valid email and shows the response modal', async () => {
     const user = userEvent.setup();
     mockForgotPasswordRequest.mockResolvedValue({
-      message:
-        '¡Se ha enviado un link a tu correo! Revisa en las últimas entradas o en el spam.',
+      message: PASSWORD_RESET_PUBLIC_MESSAGE,
     });
 
     renderForgotPasswordForm();
@@ -121,8 +122,6 @@ describe('ForgotPasswordForm integration', () => {
       expect(mockForgotPasswordRequest).toHaveBeenCalledWith('test@test.com');
     });
     expect(screen.getByText('¡Advertencia!')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Se ha enviado un link a tu correo/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(PASSWORD_RESET_PUBLIC_MESSAGE)).toBeInTheDocument();
   });
 });

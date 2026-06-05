@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import yellowIcon from '@assets/images/yellowIcon.webp';
 import { Text } from '@shared/components/ui/Text';
 import type { User } from '../types/auth.types';
 import roleNavigation from '@/shared/utils/roleNavigation';
+
+type LoginLocationState = {
+  passwordResetMessage?: string;
+};
 
 /**
  * LoginForm component
@@ -17,7 +21,10 @@ import roleNavigation from '@/shared/utils/roleNavigation';
  */
 export const LoginForm = () => {
   const { login, loading, error, setError } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+  const passwordResetMessage = (location.state as LoginLocationState | null)
+    ?.passwordResetMessage;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -86,6 +93,12 @@ export const LoginForm = () => {
             >
               Iniciar Sesión
             </Text>
+
+            {passwordResetMessage && !error && (
+              <Text variant="caption" as="p" className="color-success mb-2">
+                {passwordResetMessage}
+              </Text>
+            )}
 
             <form onSubmit={handle} noValidate className="flex flex-col gap-5">
               {/* EMAIL */}

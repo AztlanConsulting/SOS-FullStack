@@ -40,13 +40,19 @@ const AuthWrapper = ({ children }: { children: ReactNode }) =>
     children,
   });
 
+type TestInitialEntry = string | { pathname: string; state?: unknown };
+
 // Creates full app with real router integration
-const renderApp = () => {
+const renderApp = (initialEntries: TestInitialEntry[] = ['/']) => {
   // Define in-memory router for integration testing
   const router = createMemoryRouter(
     [
       {
         path: '/',
+        element: <LoginForm />,
+      },
+      {
+        path: '/login',
         element: <LoginForm />,
       },
       {
@@ -58,7 +64,7 @@ const renderApp = () => {
         element: <h1>Client</h1>,
       },
     ],
-    { initialEntries: ['/'] },
+    { initialEntries },
   );
 
   // Render app with Auth context provider
@@ -82,6 +88,19 @@ describe('LoginForm integration', () => {
     expect(screen.getByText('Iniciar Sesión')).toBeInTheDocument();
     expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
+  });
+
+  it('shows password reset success message from route state', () => {
+    renderApp([
+      {
+        pathname: '/login',
+        state: { passwordResetMessage: 'Contraseña cambiada correctamente' },
+      },
+    ]);
+
+    expect(
+      screen.getByText('Contraseña cambiada correctamente'),
+    ).toBeInTheDocument();
   });
 
   it('prevents login when email is invalid', async () => {

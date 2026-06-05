@@ -46,7 +46,7 @@ export interface SendPasswordResetEmailDTO {
   to: string;
   username?: string;
   resetUrl: string;
-  expiresInHours: number;
+  expiresInMinutes: number;
 }
 
 export interface StripeEmailService {

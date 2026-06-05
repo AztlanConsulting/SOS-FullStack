@@ -85,7 +85,7 @@ export const meRequest = async () => {
  * Requests a password reset link for the provided email.
  *
  * @param email - User email associated with the account
- * @return Backend message and optional reset link expiration
+ * @return Backend message for the recovery request
  */
 export const forgotPasswordRequest = async (
   email: string,

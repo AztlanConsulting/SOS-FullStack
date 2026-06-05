@@ -4,6 +4,8 @@ import request from 'supertest';
 import cookieParser from 'cookie-parser';
 
 const mockSendPasswordResetEmail = jest.fn();
+const PASSWORD_RESET_PUBLIC_MESSAGE =
+  'Si existe el correo, se enviará un link. Revisa en las últimas entradas o en el spam. Si ya has intentado de recuperar tu contraseña, intenta más tarde.';
 
 jest.mock('@interfaces/middleware/rateLimit.middleware', () => {
   const passThrough = (_req: unknown, _res: unknown, next: () => void) =>
@@ -201,7 +203,7 @@ describe('auth routes (integration)', () => {
     });
 
     expect(res.status).toBe(200);
-    expect(res.body.message).toContain('Si el correo existe');
+    expect(res.body).toEqual({ message: PASSWORD_RESET_PUBLIC_MESSAGE });
     expect(mockSendPasswordResetEmail).not.toHaveBeenCalled();
     await expect(PasswordResetTokenModel.countDocuments()).resolves.toBe(0);
   });
@@ -224,7 +226,7 @@ describe('auth routes (integration)', () => {
       expect.objectContaining({
         to: 'test@test.com',
         username: 'test',
-        expiresInHours: 24,
+        expiresInMinutes: 30,
       }),
     );
     expect(emailPayload.resetUrl).toContain(
@@ -233,7 +235,7 @@ describe('auth routes (integration)', () => {
   });
 
   /**
-   * Verifies the 24-hour guard that prevents duplicate active reset links.
+   * Verifies the cooldown guard that prevents duplicate active reset links.
    */
   test('POST /auth/forgot-password does not send another link while one is active', async () => {
     await requestResetLink();
@@ -244,7 +246,7 @@ describe('auth routes (integration)', () => {
     });
 
     expect(res.status).toBe(200);
-    expect(res.body.message).toContain('Ya existe un enlace vigente');
+    expect(res.body).toEqual({ message: PASSWORD_RESET_PUBLIC_MESSAGE });
     expect(mockSendPasswordResetEmail).not.toHaveBeenCalled();
     await expect(PasswordResetTokenModel.countDocuments()).resolves.toBe(1);
   });
@@ -339,7 +341,7 @@ describe('auth routes (integration)', () => {
     });
 
     expect(resetRes.status).toBe(200);
-    expect(resetRes.body.message).toContain('contraseña actualizada');
+    expect(resetRes.body.message).toBe('Contraseña cambiada correctamente');
     expect(oldPasswordLogin.status).toBe(401);
     expect(newPasswordLogin.status).toBe(200);
     expect(reuseRes.status).toBe(400);

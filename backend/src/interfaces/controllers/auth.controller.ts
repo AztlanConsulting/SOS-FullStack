@@ -17,6 +17,8 @@ import {
 } from '@utils/passwordPolicy.utils';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PASSWORD_RESET_PUBLIC_MESSAGE =
+  'Si existe el correo, se enviará un link. Revisa en las últimas entradas o en el spam. Si ya has intentado de recuperar tu contraseña, intenta más tarde.';
 
 /**
  * Authenticates user credentials and issues JWT tokens.
@@ -178,7 +180,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await requestPasswordReset(
+    await requestPasswordReset(
       {
         userRepository: userDataAccess,
         passwordResetTokenRepository: passwordResetTokenDataAccess,
@@ -187,27 +189,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
       email,
     );
 
-    if (result.status === 'RESET_LINK_ALREADY_ACTIVE') {
-      res.status(200).json({
-        message:
-          'Ya existe un enlace vigente. Revisa tu correo o espera 24 horas.',
-        expiresAt: result.expiresAt,
-      });
-      return;
-    }
-
-    if (result.status === 'EMAIL_SENT') {
-      res.status(200).json({
-        message:
-          '¡Se ha enviado un link a tu correo!\n Revisa en las últimas entradas o en el spam.',
-        expiresAt: result.expiresAt,
-      });
-      return;
-    }
-
     res.status(200).json({
-      message:
-        'Si el correo existe, se enviaran instrucciones para recuperar la contraseña.',
+      message: PASSWORD_RESET_PUBLIC_MESSAGE,
     });
   } catch (_error) {
     res.status(500).json({
@@ -308,7 +291,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     );
 
     res.status(200).json({
-      message: 'contraseña actualizada correctamente',
+      message: 'Contraseña cambiada correctamente',
     });
   } catch (error) {
     if (error instanceof Error) {

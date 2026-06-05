@@ -15,12 +15,7 @@ const WorkshopListSection = () => {
     'workshops',
   );
   const { isLoading, error, data } = query;
-  const { workshops: localizedWorkshops, currencyCode } = useLocationContext();
-
-  const getLocalizedPrice = (name: string, fallback: number): number => {
-    const found = localizedWorkshops.find((w) => w.name === name);
-    return found?.localizedPrice ?? fallback;
-  };
+  const { exchangeRate, currencyCode } = useLocationContext();
 
   return (
     <section className="bg-white w-full flex flex-col items-center justify-center">
@@ -44,7 +39,9 @@ const WorkshopListSection = () => {
             component={(card, idx) => (
               <WorkshopCard
                 workshop={card}
-                localizedPrice={getLocalizedPrice(card.name, card.price)}
+                localizedPrice={
+                  Math.round(card.price * exchangeRate * 100) / 100
+                }
                 currencyCode={currencyCode}
                 key={idx}
               />

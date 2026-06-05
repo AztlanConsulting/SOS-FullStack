@@ -54,39 +54,15 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
     emailContent,
     setEmailContent,
     MAX_EMAIL_CONTENT_LENGTH,
+    errorTimeoutRef,
+    fieldErrors,
+    setFieldError,
+    setFieldErrors,
   } = useCreateWorkshopItem(() => {
     onSuccess();
     onClose();
     window.location.reload();
   });
-
-  // Field-level error state
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const errorTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
-
-  // Auto-dismiss error after 5 seconds
-  const setFieldError = (
-    field: string,
-    message: string,
-    durationMs?: number,
-  ) => {
-    setFieldErrors((prev) => ({ ...prev, [field]: message }));
-
-    // Clear any existing timeout for this field
-    if (errorTimeoutRef.current[field]) {
-      clearTimeout(errorTimeoutRef.current[field]);
-    }
-
-    // Set new timeout
-    errorTimeoutRef.current[field] = setTimeout(() => {
-      setFieldErrors((prev) => {
-        const updated = { ...prev };
-        delete updated[field];
-        return updated;
-      });
-      delete errorTimeoutRef.current[field];
-    }, durationMs ?? 1000000);
-  };
 
   const clearFieldError = (field: string) => {
     setFieldErrors((prev) => {
@@ -354,17 +330,24 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
           <input
             type="text"
             value={secretUrl}
-            maxLength={200}
+            maxLength={100}
             onFocus={() => clearFieldError('secretUrl')}
             onChange={(e) => {
               const url = e.target.value;
               setSecretUrl(url);
-              if (url && !/^https?:\/\/.+/.test(url)) {
+              const urlRegex =
+                /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+              if (url && !urlRegex.test(url)) {
                 setFieldError(
                   'secretUrl',
                   'Debe ser una URL válida (https://...)',
                 );
-              } else {
+              } else if (url.length > 100)
+                setFieldError(
+                  'secretUrl',
+                  'El url no puede ser mayor a 100 carácteres',
+                );
+              else {
                 setFieldErrors((prev) => {
                   const u = { ...prev };
                   delete u.secretUrl;

@@ -5,9 +5,11 @@ import { HiPlus } from 'react-icons/hi2';
 import ResourcesListSection from '@/features/resources/components/ResourcesListSection';
 import { Sidebar } from '@/shared/components/layout/Sidebar';
 import { RegisterWorkshopItemModal } from '@/shared/components/ui/Modal/workshopItemModal';
+import { Modal } from '@/shared/components/ui/Modal/Modal';
 
 export const ResourcesPage = () => {
   const [showModal, setShowModal] = useState(false);
+  const [success, setSuccess] = useState<boolean | string>(false);
   return (
     <div className="flex min-h-screen bg-[#F6F6F6] overflow-x-hidden w-full">
       <Sidebar />
@@ -30,8 +32,19 @@ export const ResourcesPage = () => {
       {showModal && (
         <RegisterWorkshopItemModal
           onClose={() => setShowModal(false)}
-          onSuccess={() => setShowModal(false)}
+          onSuccess={() => {
+            setShowModal(false);
+            setSuccess('creado');
+          }}
         />
+      )}
+      {success && (
+        <Modal
+          title={'Se ha actualizado correctamente'}
+          onClose={() => setSuccess(false)}
+        >
+          El recurso seleccionado se ha {success} correctamente
+        </Modal>
       )}
     </div>
   );

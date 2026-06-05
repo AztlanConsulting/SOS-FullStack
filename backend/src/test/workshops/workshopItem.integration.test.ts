@@ -35,7 +35,7 @@ describe('POST /workshop-item integration tests', () => {
       emailContent: 'Gracias por tu compra',
       content: [
         { type: 'texto', content: 'Bloque de texto' },
-        { type: 'image', content: 'data:image/webp;base64,abc123' },
+        { type: 'imagen', content: 'https://image.com' },
         { type: 'link', content: 'https://example.com' },
       ],
       category: ['test'],
@@ -55,9 +55,9 @@ describe('POST /workshop-item integration tests', () => {
       expect(saved?.name).toBe('Taller de integración');
       expect(saved?.price).toBe(500);
       expect(saved?.content).toHaveLength(3);
-      expect(saved?.content[0].type).toBe('texto');
+      expect(saved?.content[0].type).toBe('text');
       expect(saved?.content[1].type).toBe('image');
-      expect(saved?.content[2].type).toBe('link');
+      expect(saved?.content[2].type).toBe('text');
     });
 
     test('returns 400 when name is missing', async () => {
@@ -152,7 +152,7 @@ describe('POST /workshop-item integration tests', () => {
       const saved = await WorkshopModel.findById(response.body.id).lean();
       saved?.content.forEach((block) => {
         expect(block.type).toBeDefined();
-        expect(['texto', 'image', 'link']).toContain(block.type);
+        expect(['text', 'image', 'link']).toContain(block.type);
       });
     });
   });
@@ -182,7 +182,7 @@ describe('POST /workshop-item integration tests', () => {
       expect(saved).toBeDefined();
       expect(saved?.name).toBe('Manual de integración');
       expect(saved?.price).toBe(200);
-      expect(saved?.content[0].type).toBe('texto');
+      expect(saved?.content[0].type).toBe('text');
     });
 
     test('returns 400 when name is missing', async () => {

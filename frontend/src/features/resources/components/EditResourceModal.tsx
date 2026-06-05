@@ -2,9 +2,10 @@ import { Button, Text } from '@/shared/components/ui';
 import type { Resource } from '../types/resource';
 import { Modal } from '@/shared/components/ui/Modal/Modal';
 import { useEditResource } from '../hooks/useEditResource';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { HiDocumentText, HiLink, HiPhotograph, HiTrash } from 'react-icons/hi';
 import formatPrice from '@/shared/utils/formatPrice';
+import { ConfirmationModal } from '@/shared/components/ui/Modal/ConfirmationModal';
 
 interface Props {
   resource: Resource | null;
@@ -63,7 +64,9 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
     clearError,
     emailHook: [emailContent, setEmailContent],
     MAX_EMAIL_CONTENT_LENGTH,
+    validateData,
   } = useEditResource(resource, success);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // strip everything except digits
@@ -89,7 +92,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
 
   return (
     <Modal
-      title="Registrando un recurso"
+      title={`Editando un ${type}`}
       onClose={cancel}
       color="yellow"
       childrenClassName="px-0"
@@ -253,16 +256,16 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
               FIELD_CLASS + (errors.secretUrl ? ' border-red-500' : '')
             }
           />
-          <Text variant="small" color="text-gray-400" className="text-right">
-            {type.toLowerCase() === 'manual'
-              ? 'El cliente recibirá este PDF por correo al adquirir el manual'
-              : 'El cliente recibirá este video por correo al adquirir el taller'}
-          </Text>
           {errors.secretUrl && (
             <Text variant="small" color="text-red-500">
               {errors.secretUrl}
             </Text>
           )}
+          <Text variant="small" color="text-gray-400" className="text-right">
+            {type.toLowerCase() === 'manual'
+              ? 'El cliente recibirá este PDF por correo al adquirir el manual'
+              : 'El cliente recibirá este video por correo al adquirir el taller'}
+          </Text>
         </div>
 
         {type === 'taller' && (
@@ -331,6 +334,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                       onChange={(e) =>
                         updateBlocks.updateTextBlock(i, e.target.value)
                       }
+                      onFocus={() => clearError(`block_${i}`)}
                       rows={5}
                       placeholder="Escribe el contenido aquí..."
                       className={
@@ -377,6 +381,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                       type="file"
                       accept="image/*"
                       className="hidden"
+                      onFocus={() => clearError(`block_${i}`)}
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) updateBlocks.updateImageBlock(i, file);
@@ -429,6 +434,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
                       type="text"
                       value={block.value}
                       maxLength={500}
+                      onFocus={() => clearError(`block_${i}`)}
                       onChange={(e) =>
                         updateBlocks.updateLinkBlock(i, e.target.value)
                       }
@@ -496,7 +502,12 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
           label="Guardar"
           isLoading={loading}
           disabled={loading}
-          onClick={handleSubmit}
+          onClick={() => {
+            const newErrors = validateData();
+            if (Object.keys(newErrors).length == 0) {
+              setShowConfirmation(true);
+            }
+          }}
         />
         <Button
           variant="secondary"
@@ -505,6 +516,24 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
           onClick={cancel}
         />
       </div>
+      {showConfirmation && (
+        <ConfirmationModal
+          title="Editar recurso"
+          description={`¿Estas seguro de editar este el ${type}?`}
+          confirmLabel="Sí, editar"
+          cancelLabel="Cancelar"
+          tone="warning"
+          // isLoading={isDeleting}
+          // errorMessage={deleteError}
+          onConfirm={() => {
+            setShowConfirmation(false);
+            handleSubmit();
+          }}
+          onCancel={() => {
+            setShowConfirmation(false);
+          }}
+        />
+      )}
     </Modal>
   );
 };

@@ -346,17 +346,24 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
           <input
             type="text"
             value={secretUrl}
-            maxLength={200}
+            maxLength={100}
             onFocus={() => clearFieldError('secretUrl')}
             onChange={(e) => {
               const url = e.target.value;
               setSecretUrl(url);
-              if (url && !/^https?:\/\/.+/.test(url)) {
+              const urlRegex =
+                /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+              if (url && !urlRegex.test(url)) {
                 setFieldError(
                   'secretUrl',
                   'Debe ser una URL válida (https://...)',
                 );
-              } else {
+              } else if (url.length > 100)
+                setFieldError(
+                  'secretUrl',
+                  'El url no puede ser mayor a 100 carácteres',
+                );
+              else {
                 setFieldErrors((prev) => {
                   const u = { ...prev };
                   delete u.secretUrl;

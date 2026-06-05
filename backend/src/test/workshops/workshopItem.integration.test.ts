@@ -55,7 +55,7 @@ describe('POST /workshop-item integration tests', () => {
       expect(saved?.name).toBe('Taller de integración');
       expect(saved?.price).toBe(500);
       expect(saved?.content).toHaveLength(3);
-      expect(saved?.content[0].type).toBe('texto');
+      expect(saved?.content[0].type).toBe('text');
       expect(saved?.content[1].type).toBe('image');
       expect(saved?.content[2].type).toBe('link');
     });

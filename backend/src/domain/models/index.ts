@@ -1,4 +1,5 @@
 import '@domain/models/payment.model';
+import '@domain/models/passwordResetToken.model';
 import '@/domain/models/permission.model';
 import '@domain/models/plan.model';
 import '@domain/models/refreshToken.model';

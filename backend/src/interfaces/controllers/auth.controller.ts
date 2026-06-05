@@ -2,9 +2,23 @@ import type { CookieOptions, Request, Response } from 'express';
 import { loginUser } from '@use-cases/auth/login.usecase';
 import { refreshAccessToken } from '@use-cases/auth/refreshTokens.usecase';
 import { logoutUser } from '@/use-cases/auth/logout.usecase';
+import { requestPasswordReset } from '@use-cases/auth/requestPasswordReset.usecase';
+import { validateResetToken } from '@use-cases/auth/validateResetToken.usecase';
+import { resetPassword as resetPasswordUseCase } from '@use-cases/auth/resetPassword.usecase';
 import { userDataAccess } from '@infrastructure/data-access/user.data-access';
 import { refreshTokenDataAccess } from '@infrastructure/data-access/refreshToken.data-acces';
+import { passwordResetTokenDataAccess } from '@infrastructure/data-access/passwordResetToken.data-access';
+import { emailService } from '@infrastructure/service/email.service';
 import { verifyRefreshToken } from '@utils/jwt.utils';
+import {
+  getPasswordPolicyError,
+  PASSWORD_POLICY_ERROR_CODE,
+  PASSWORD_POLICY_MESSAGE,
+} from '@utils/passwordPolicy.utils';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PASSWORD_RESET_PUBLIC_MESSAGE =
+  'Si existe el correo, se enviará un link. Revisa en las últimas entradas o en el spam. Si ya has intentado de recuperar tu contraseña, intenta más tarde.';
 
 /**
  * Authenticates user credentials and issues JWT tokens.
@@ -17,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
     if (!Boolean(email) || !Boolean(password)) {
       res.status(400).json({
         error: 'VALIDATION_ERROR',
-        message: 'Email y contrasena son requeridos',
+        message: 'Email y contraseña son requeridos',
       });
       return;
     }
@@ -150,6 +164,170 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Sesion cerrada correctamente' });
 };
 
+/**
+ * Requests a password reset link for an email address.
+ * Uses generic responses for unknown emails to avoid account enumeration.
+ */
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body ?? {};
+
+    if (typeof email !== 'string' || !emailRegex.test(email.trim())) {
+      res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Correo invalido',
+      });
+      return;
+    }
+
+    await requestPasswordReset(
+      {
+        userRepository: userDataAccess,
+        passwordResetTokenRepository: passwordResetTokenDataAccess,
+      },
+      emailService,
+      email,
+    );
+
+    res.status(200).json({
+      message: PASSWORD_RESET_PUBLIC_MESSAGE,
+    });
+  } catch (_error) {
+    res.status(500).json({
+      error: 'INTERNAL_ERROR',
+      message: 'Error al solicitar recuperacion de contraseña',
+    });
+  }
+};
+
+/**
+ * Validates whether the reset link token can still be used.
+ */
+export const validateResetPasswordToken = async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    const token = req.query.token;
+
+    if (typeof token !== 'string' || token.trim() === '') {
+      res.status(400).json({
+        valid: false,
+        message: 'Link invalido o expirado',
+      });
+      return;
+    }
+
+    const isValid = await validateResetToken(
+      passwordResetTokenDataAccess,
+      token,
+    );
+
+    if (!isValid) {
+      res.status(400).json({
+        valid: false,
+        message: 'Link invalido o expirado',
+      });
+      return;
+    }
+
+    res.status(200).json({ valid: true });
+  } catch (_error) {
+    res.status(500).json({
+      error: 'INTERNAL_ERROR',
+      message: 'Error al validar link de recuperacion',
+    });
+  }
+};
+
+/**
+ * Updates the user's password using a valid reset token.
+ */
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { token, newPassword, confirmPassword } = req.body ?? {};
+
+    if (
+      typeof token !== 'string' ||
+      token.trim() === '' ||
+      typeof newPassword !== 'string' ||
+      typeof confirmPassword !== 'string'
+    ) {
+      res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Datos incompletos',
+      });
+      return;
+    }
+
+    const passwordPolicyError = getPasswordPolicyError(newPassword);
+
+    if (passwordPolicyError != null) {
+      res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: passwordPolicyError,
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Las contraseñas no coinciden',
+      });
+      return;
+    }
+
+    await resetPasswordUseCase(
+      {
+        userRepository: userDataAccess,
+        refreshTokenRepository: refreshTokenDataAccess,
+        passwordResetTokenRepository: passwordResetTokenDataAccess,
+      },
+      {
+        token,
+        newPassword,
+      },
+    );
+
+    res.status(200).json({
+      message: 'Contraseña cambiada correctamente',
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      if (
+        error.message === 'RESET_TOKEN_INVALID' ||
+        error.message === 'USER_NOT_AVAILABLE'
+      ) {
+        res.status(400).json({
+          error: 'RESET_TOKEN_INVALID',
+          message: 'Link invalido o expirado',
+        });
+        return;
+      }
+
+      if (
+        error.message === PASSWORD_POLICY_ERROR_CODE ||
+        error.name === PASSWORD_POLICY_ERROR_CODE
+      ) {
+        res.status(400).json({
+          error: 'VALIDATION_ERROR',
+          message:
+            error.message === PASSWORD_POLICY_ERROR_CODE
+              ? PASSWORD_POLICY_MESSAGE
+              : error.message,
+        });
+        return;
+      }
+    }
+
+    res.status(500).json({
+      error: 'INTERNAL_ERROR',
+      message: 'Error al actualizar contraseña',
+    });
+  }
+};
+
 export const me = (req: Request, res: Response): void => {
   if (!req.user) {
     res.status(401).json({
@@ -167,5 +345,8 @@ export default {
   login,
   refresh,
   logout,
+  forgotPassword,
+  validateResetPasswordToken,
+  resetPassword,
   me,
 };

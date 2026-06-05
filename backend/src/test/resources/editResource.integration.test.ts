@@ -53,7 +53,7 @@ describe('Update resource integration test', () => {
     const res = await request(app).put(`/resources?resource=workshop`).send({
       _id: workshopId,
       name: 'Updated Workshop',
-      price: 500,
+      price: 200,
     });
 
     expect(res.status).toBe(200);
@@ -61,7 +61,7 @@ describe('Update resource integration test', () => {
     const updated = await WorkshopModel.findById(workshopId);
 
     expect(updated?.name).toBe('Updated Workshop');
-    expect(updated?.price).toBe(500);
+    expect(updated?.price).toBe(200);
   });
 
   it('update manual successfully', async () => {

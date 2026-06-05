@@ -8,7 +8,7 @@ import type { LocalBlock } from '../types/block.types';
 export const MAX_NAME_LENGTH = 100;
 export const MAX_TEXT_LENGTH = 400;
 export const MAX_LINK_LENGTH = 100;
-export const MAX_PRICE = 99_999;
+export const MAX_PRICE = 400;
 export const MAX_BLOCKS = 10;
 export const MAX_FILE_SIZE_MB = 5;
 export const MAX_EMAIL_CONTENT_LENGTH = 400;

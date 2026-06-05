@@ -7,7 +7,7 @@ import type { Request, Response } from 'express';
 const MAX_NAME_LENGTH = 100;
 const MAX_TEXT_LENGTH = 400;
 const MAX_LINK_LENGTH = 500;
-const MAX_PRICE = 99_999;
+const MAX_PRICE = 400;
 const MAX_BLOCKS = 10;
 const MAX_SECRET_URL_LENGTH = 100;
 const VALID_TYPES = ['manual', 'taller'] as const;

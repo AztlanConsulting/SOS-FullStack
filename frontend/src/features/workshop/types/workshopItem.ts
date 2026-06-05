@@ -28,7 +28,7 @@ export interface CreateWorkshopItemPayload {
   name: string;
   price: number;
   imageUrl: string;
-  content: { type: ContentBlockType; value: string }[];
+  content: { type: ContentBlockType; content: string }[];
   // taller-specific
   description?: string;
   category?: string[];

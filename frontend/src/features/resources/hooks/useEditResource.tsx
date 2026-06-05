@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ResourceService } from '../services/resourceItem.service';
 import type { Resource } from '../types/resource';
 import parseResourceBlock from '../util/parseResourceBlock';
+import type { LocalBlock } from '../types/block.types';
 
 // ── Hard limits (must mirror backend validation) ──────────────────────────────
 export const MAX_NAME_LENGTH = 100;
@@ -11,24 +12,6 @@ export const MAX_PRICE = 99_999;
 export const MAX_BLOCKS = 10;
 export const MAX_FILE_SIZE_MB = 5;
 export const MAX_EMAIL_CONTENT_LENGTH = 400;
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-export interface TextBlock {
-  kind: 'texto';
-  value: string;
-}
-export interface LinkBlock {
-  kind: 'link';
-  value: string;
-}
-export interface ImageBlock {
-  kind: 'imagen';
-  file: File | null;
-  originalString?: string;
-  previewUrl: string;
-  displayHeight: number;
-}
-export type LocalBlock = TextBlock | LinkBlock | ImageBlock;
 
 const normaliseLink = (v: string) =>
   /^https?:\/\//i.test(v.trim()) ? v.trim() : `https://${v.trim()}`;

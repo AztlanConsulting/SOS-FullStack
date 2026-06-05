@@ -1,11 +1,30 @@
 import axiosInstance from '@shared/utils/axios';
 import type { Resource } from '../types/resource';
+import type {
+  CreateWorkshopItemPayload,
+  CreateWorkshopItemResponse,
+} from '@/features/workshop/types/workshopItem';
 
 /**
  * Service for workshop item (manual / taller) management.
  * Handles creation requests against the /workshop-item endpoint.
  */
 export const ResourceService = {
+  /**
+   * Creates a new workshop item (manual or taller).
+   * Uploads the cover image first via /images, then posts the full payload.
+   * @param payload - The complete workshop item data.
+   * @returns The created item's id and type.
+   */
+  createWorkshopItem: async (
+    payload: CreateWorkshopItemPayload,
+  ): Promise<CreateWorkshopItemResponse> => {
+    const { data } = await axiosInstance.post<CreateWorkshopItemResponse>(
+      '/workshop-item',
+      payload,
+    );
+    return data;
+  },
   /**
    * Creates a new workshop item (manual or taller).
    * Uploads the cover image first via /images, then posts the full payload.

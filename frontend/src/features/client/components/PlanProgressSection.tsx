@@ -45,6 +45,9 @@ const PlanProgressSection = ({ petData }: PlanProgressSectionProps) => {
     navigate('/inicio/extender-plan', {
       state: { petId: petData?.petId },
     });
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
   };
 
   const handleContactAdviser = () => {

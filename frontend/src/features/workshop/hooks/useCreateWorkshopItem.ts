@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import type { WorkshopItemType } from '@/features/workshop/types/workshopItem';
+import type {
+  ContentBlockType,
+  WorkshopItemType,
+} from '@/features/workshop/types/workshopItem';
 import { WorkshopItemService } from '@/features/workshop/services/workshopItem';
+import { ResourceService } from '@/features/resources/services/resourceItem.service';
+import type { LocalBlock } from '@/features/resources/types/block.types';
 
 // ── Hard limits (must mirror backend validation) ──────────────────────────────
 export const MAX_NAME_LENGTH = 100;
@@ -10,23 +15,6 @@ export const MAX_PRICE = 99_999;
 export const MAX_BLOCKS = 10;
 export const MAX_FILE_SIZE_MB = 5;
 export const MAX_EMAIL_CONTENT_LENGTH = 400;
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-export interface TextBlock {
-  kind: 'texto';
-  value: string;
-}
-export interface LinkBlock {
-  kind: 'link';
-  value: string;
-}
-export interface ImageBlock {
-  kind: 'imagen';
-  file: File | null;
-  previewUrl: string;
-  displayHeight: number;
-}
-export type LocalBlock = TextBlock | LinkBlock | ImageBlock;
 
 const normaliseLink = (v: string) =>
   /^https?:\/\//i.test(v.trim()) ? v.trim() : `https://${v.trim()}`;
@@ -167,23 +155,37 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
 
     setLoading(true);
     try {
-      const coverUrl = await WorkshopItemService.uploadImage(coverImage);
+      const coverUrl = await ResourceService.uploadImage(coverImage);
 
       const serialised = await Promise.all(
         blocks.map(async (block) => {
+          console.log(block);
           if (block.kind === 'texto')
-            return { type: 'texto' as const, content: block.value }; // value → content
+            return {
+              type: block.kind as ContentBlockType,
+              content: block.value,
+            }; // value → content
           if (block.kind === 'link')
             return {
-              type: 'link' as const,
+              type: block.kind as ContentBlockType,
               content: normaliseLink(block.value),
             }; // value → content
-          const base64 = await WorkshopItemService.uploadImage(block.file!);
-          return { type: 'image' as const, content: base64 }; // value → content
+          if (
+            block.kind === 'imagen' &&
+            block.file?.name != 'defaultImage.jpg'
+          ) {
+            const imageUrl = await ResourceService.uploadImage(block.file!);
+            return { type: block.kind as ContentBlockType, content: imageUrl }; // value → content
+          } else {
+            return {
+              type: block.kind as ContentBlockType,
+              content: block.originalString ?? '',
+            };
+          }
         }),
       );
 
-      await WorkshopItemService.createWorkshopItem({
+      await ResourceService.createWorkshopItem({
         type,
         name: name.trim(),
         price: priceNum,

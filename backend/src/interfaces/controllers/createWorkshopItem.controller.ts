@@ -71,16 +71,19 @@ export const CreateWorkshopItemController = {
 
       // ── type ──
       if (!VALID_TYPES.includes(body.type as ValidType)) {
+        console.log('Type debe ser manual o taller');
         res.status(400).json({ message: 'type debe ser "manual" o "taller"' });
         return;
       }
 
       // ── name ──
       if (typeof body.name !== 'string' || !body.name.trim()) {
+        console.error('Nombre es requerido');
         res.status(400).json({ message: 'El nombre es requerido' });
         return;
       }
       if (body.name.trim().length > MAX_NAME_LENGTH) {
+        console.log('Nombre demasiado largo');
         res.status(400).json({
           message: `El nombre no puede superar ${MAX_NAME_LENGTH} caracteres`,
         });
@@ -90,12 +93,14 @@ export const CreateWorkshopItemController = {
       // ── price ──
       const price = Number(body.price);
       if (isNaN(price) || price <= 0) {
+        console.log('Precio no es un número');
         res
           .status(400)
           .json({ message: 'El precio debe ser un número positivo' });
         return;
       }
       if (price > MAX_PRICE) {
+        console.log('price is more than the max');
         res.status(400).json({
           message: `El precio no puede superar ${MAX_PRICE.toLocaleString()} USD`,
         });
@@ -104,6 +109,7 @@ export const CreateWorkshopItemController = {
 
       // ── imageUrl ──
       if (typeof body.imageUrl !== 'string' || !body.imageUrl.trim()) {
+        console.error('imageUrl is required');
         res.status(400).json({ message: 'imageUrl es requerido' });
         return;
       }
@@ -111,6 +117,7 @@ export const CreateWorkshopItemController = {
       // ── content blocks ──
       const rawBlocks = Array.isArray(body.content) ? body.content : [];
       if (rawBlocks.length > MAX_BLOCKS) {
+        console.log('Raw blocks exceeded');
         res.status(400).json({
           message: `No se permiten más de ${MAX_BLOCKS} bloques de contenido`,
         });
@@ -121,6 +128,7 @@ export const CreateWorkshopItemController = {
       for (let i = 0; i < rawBlocks.length; i++) {
         const result = validateBlock(rawBlocks[i], i);
         if (typeof result === 'string') {
+          console.log('Result not string');
           res.status(400).json({ message: result });
           return;
         }
@@ -135,6 +143,7 @@ export const CreateWorkshopItemController = {
           typeof body.pdfUrl === 'string' &&
           body.pdfUrl.trim().length > MAX_SECRET_URL_LENGTH
         ) {
+          console.log('PDF url error');
           res
             .status(400)
             .json({ message: 'El pdfUrl supera el límite permitido' });
@@ -154,6 +163,7 @@ export const CreateWorkshopItemController = {
 
       // taller
       if (typeof body.description !== 'string' || !body.description.trim()) {
+        console.log('Description needed');
         res
           .status(400)
           .json({ message: 'description es requerido para talleres' });
@@ -171,6 +181,7 @@ export const CreateWorkshopItemController = {
         typeof body.videoUrl === 'string' &&
         body.videoUrl.trim().length > MAX_SECRET_URL_LENGTH
       ) {
+        console.log('VideoURL exceeds expected length');
         res
           .status(400)
           .json({ message: 'El videoUrl supera el límite permitido' });

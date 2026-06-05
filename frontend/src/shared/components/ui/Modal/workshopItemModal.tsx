@@ -124,7 +124,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
       errors['secretUrl'] = 'La URL es requerida';
     }
     const urlRegex =
-      /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+      /(?:http[s]?:\/\/.)(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
     if (!urlRegex.test(secretUrl)) {
       errors['secretUrl'] = 'URL inválido';
     }
@@ -338,10 +338,10 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
               const urlRegex =
                 /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
               if (url && !urlRegex.test(url)) {
-                setFieldError(
-                  'secretUrl',
-                  'Debe ser una URL válida (https://...)',
-                );
+                // setFieldError(
+                //   'secretUrl',
+                //   'Debe ser una URL válida (https://...)',
+                // );
               } else if (url.length > 100)
                 setFieldError(
                   'secretUrl',

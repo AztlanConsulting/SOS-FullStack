@@ -3,7 +3,10 @@ import { HiTrash, HiPhotograph, HiLink, HiDocumentText } from 'react-icons/hi';
 import { Modal } from '@shared/components/ui/Modal/Modal';
 import { Button } from '@shared/components/ui/Button/Button';
 import { Text } from '@shared/components/ui/Text/Text';
-import { useCreateWorkshopItem } from '@/features/workshop/hooks/useCreateWorkshopItem';
+import {
+  MAX_FILE_SIZE_MB,
+  useCreateWorkshopItem,
+} from '@/features/workshop/hooks/useCreateWorkshopItem';
 import type { ContentBlock } from '@/features/workshop/types/workshopItem';
 
 interface Props {
@@ -42,6 +45,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
     removeBlock,
     handleSubmit,
     secretUrl,
+    coverImage,
     coverPreview,
     setCoverImage,
     setSecretUrl,
@@ -61,7 +65,11 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
   const errorTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
 
   // Auto-dismiss error after 5 seconds
-  const setFieldError = (field: string, message: string) => {
+  const setFieldError = (
+    field: string,
+    message: string,
+    durationMs?: number,
+  ) => {
     setFieldErrors((prev) => ({ ...prev, [field]: message }));
 
     // Clear any existing timeout for this field
@@ -77,7 +85,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
         return updated;
       });
       delete errorTimeoutRef.current[field];
-    }, 100000000);
+    }, durationMs ?? 1000000);
   };
 
   const clearFieldError = (field: string) => {
@@ -139,6 +147,11 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
     if (!secretUrl.trim()) {
       errors['secretUrl'] = 'La URL es requerida';
     }
+    const urlRegex =
+      /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+    if (!urlRegex.test(secretUrl)) {
+      errors['secretUrl'] = 'URL inválido';
+    }
     if (!coverPreview) {
       errors['cover'] = 'La imagen de portada es requerida';
     }
@@ -146,6 +159,16 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
       errors['emailContent'] =
         'El contenido del email es requerido para talleres';
     }
+
+    blocks.forEach((block, i) => {
+      if (block.kind === 'texto' && !block.value?.trim()) {
+        errors[`text-${i}`] = 'El bloque de texto no puede estar vacío';
+      }
+
+      if (block.kind === 'imagen' && !block.previewUrl) {
+        errors[`image-${i}`] = 'Debes seleccionar una imagen';
+      }
+    });
 
     if (Object.keys(errors).length > 0) {
       // Set all errors at once with auto-dismiss
@@ -181,8 +204,19 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
               className="hidden"
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                if (file) setCoverImage(file);
-                clearFieldError('cover');
+                if (file) {
+                  setCoverImage(file);
+                  if (file.size / (1024 * 1024) > MAX_FILE_SIZE_MB) {
+                    setFieldError(
+                      `cover`,
+                      `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`,
+                      2000,
+                    );
+                  } else {
+                    // Clean up the error if they upload a valid, smaller image later
+                    clearFieldError(`cover`);
+                  }
+                }
               }}
             />
             {coverPreview ? (
@@ -191,36 +225,7 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                   src={coverPreview}
                   alt="portada"
                   className="w-full rounded-md object-cover"
-                  style={{ maxHeight: `${coverDisplayHeight}px` }}
                 />
-                {/* height slider */}
-                <div className="flex items-center gap-2">
-                  <Text
-                    variant="small"
-                    color="text-gray-400"
-                    className="shrink-0"
-                  >
-                    Tamaño
-                  </Text>
-                  <input
-                    type="range"
-                    min={80}
-                    max={400}
-                    step={8}
-                    value={coverDisplayHeight}
-                    onChange={(e) =>
-                      setCoverDisplayHeight(Number(e.target.value))
-                    }
-                    className="flex-1 accent-yellow-400"
-                  />
-                  <Text
-                    variant="small"
-                    color="text-gray-400"
-                    className="shrink-0 w-10 text-right"
-                  >
-                    {coverDisplayHeight}px
-                  </Text>
-                </div>
                 <Button
                   variant="toolbar"
                   label="Cambiar portada"
@@ -234,7 +239,10 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
             ) : (
               <button
                 type="button"
-                onClick={() => coverInputRef.current?.click()}
+                onClick={() => {
+                  clearFieldError('cover');
+                  coverInputRef.current?.click();
+                }}
                 className="w-full border-2 border-dashed border-gray-300 rounded-md py-6 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-1"
               >
                 <HiPhotograph size={22} />
@@ -450,6 +458,9 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                       value={block.value}
                       maxLength={MAX_TEXT_LENGTH}
                       onChange={(e) => updateTextBlock(i, e.target.value)}
+                      onFocus={() => {
+                        clearFieldError(`text-${i}`);
+                      }}
                       rows={5}
                       placeholder="Escribe el contenido aquí..."
                       className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm resize-none"
@@ -467,6 +478,11 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                     >
                       Quedan {MAX_TEXT_LENGTH - block.value.length} caracteres
                     </Text>
+                    {fieldErrors[`text-${i}`] && (
+                      <Text variant="small" color="text-red-500">
+                        {fieldErrors[`text-${i}`]}
+                      </Text>
+                    )}
                   </div>
                 )}
 
@@ -488,46 +504,29 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                       className="hidden"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
-                        if (file) updateImageBlock(i, file);
+                        if (file) {
+                          updateImageBlock(i, file);
+                          if (file.size / (1024 * 1024) > MAX_FILE_SIZE_MB) {
+                            setFieldError(
+                              `image-${i}`,
+                              `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`,
+                              2000,
+                            );
+                          } else {
+                            // Clean up the error if they upload a valid, smaller image later
+                            clearFieldError(`image-${i}`);
+                          }
+                        }
                       }}
+                      onFocus={() => clearFieldError(`image-${i}`)}
                     />
                     {block.previewUrl ? (
                       <div className="flex flex-col gap-2">
                         <img
                           src={block.previewUrl}
                           alt="preview"
-                          className="w-full rounded-md object-cover"
-                          style={{
-                            maxHeight: `${block.displayHeight ?? 128}px`,
-                          }}
+                          className="w-full rounded-md"
                         />
-                        <div className="flex items-center gap-2">
-                          <Text
-                            variant="small"
-                            color="text-gray-400"
-                            className="shrink-0"
-                          >
-                            Tamaño
-                          </Text>
-                          <input
-                            type="range"
-                            min={80}
-                            max={400}
-                            step={8}
-                            value={block.displayHeight ?? 128}
-                            onChange={(e) =>
-                              updateImageBlock(i, null, Number(e.target.value))
-                            }
-                            className="flex-1 accent-yellow-400"
-                          />
-                          <Text
-                            variant="small"
-                            color="text-gray-400"
-                            className="shrink-0 w-10 text-right"
-                          >
-                            {block.displayHeight ?? 128}px
-                          </Text>
-                        </div>
                         <Button
                           variant="toolbar"
                           label="Cambiar imagen"
@@ -538,7 +537,10 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => fileInputRefs.current[i]?.click()}
+                        onClick={() => {
+                          clearFieldError(`image-${i}`);
+                          fileInputRefs.current[i]?.click();
+                        }}
                         className="w-full border-2 border-dashed border-gray-300 rounded-md py-6 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-1"
                       >
                         <HiPhotograph size={22} />
@@ -547,47 +549,9 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
                         </Text>
                       </button>
                     )}
-                  </div>
-                )}
-
-                {/* link */}
-                {block.kind === 'link' && (
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-1 mb-1">
-                      <HiLink size={13} className="text-gray-400" />
-                      <Text variant="small" color="text-gray-400">
-                        Link
-                      </Text>
-                    </div>
-                    <input
-                      type="text"
-                      value={block.value}
-                      maxLength={500}
-                      onChange={(e) => {
-                        const url = e.target.value;
-                        updateLinkBlock(i, url);
-                        if (url && !/^https?:\/\/.+/.test(url)) {
-                          setFieldError(
-                            `link-${i}`,
-                            'Debe ser una URL válida (https://...)',
-                          );
-                        } else {
-                          setFieldErrors((prev) => {
-                            const u = { ...prev };
-                            delete u[`link-${i}`];
-                            return u;
-                          });
-                        }
-                      }}
-                      placeholder="https://..."
-                      className={
-                        FIELD_CLASS +
-                        (fieldErrors[`link-${i}`] ? ' border-red-500' : '')
-                      }
-                    />
-                    {fieldErrors[`link-${i}`] && (
+                    {fieldErrors[`image-${i}`] && (
                       <Text variant="small" color="text-red-500">
-                        {fieldErrors[`link-${i}`]}
+                        {fieldErrors[`image-${i}`]}
                       </Text>
                     )}
                   </div>

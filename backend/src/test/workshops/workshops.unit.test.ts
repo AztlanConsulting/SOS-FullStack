@@ -59,6 +59,7 @@ describe('Workshop unit-test', () => {
       skip: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
       sort: jest.fn().mockReturnThis(),
+      collation: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue(mockWorkshops),
     });
     const result = await WorkshopDataAccess.getWorkshops(getWorkshop);
@@ -76,6 +77,7 @@ describe('Workshop unit-test', () => {
       skip: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
       sort: jest.fn().mockReturnThis(),
+      collation: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue([]),
     });
     const getWorkshop: GetWorkshop = {
@@ -105,6 +107,7 @@ describe('Workshop unit-test', () => {
       skip: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
       sort: jest.fn().mockReturnThis(),
+      collation: jest.fn().mockReturnThis(),
       exec: jest.fn().mockRejectedValue(mockError),
     });
 

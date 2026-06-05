@@ -50,35 +50,15 @@ export const RegisterWorkshopItemModal = ({ onClose, onSuccess }: Props) => {
     emailContent,
     setEmailContent,
     MAX_EMAIL_CONTENT_LENGTH,
+    errorTimeoutRef,
+    fieldErrors,
+    setFieldError,
+    setFieldErrors,
   } = useCreateWorkshopItem(() => {
     onSuccess();
     onClose();
     window.location.reload();
   });
-
-  // Field-level error state
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const errorTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
-
-  // Auto-dismiss error after 5 seconds
-  const setFieldError = (field: string, message: string) => {
-    setFieldErrors((prev) => ({ ...prev, [field]: message }));
-
-    // Clear any existing timeout for this field
-    if (errorTimeoutRef.current[field]) {
-      clearTimeout(errorTimeoutRef.current[field]);
-    }
-
-    // Set new timeout
-    errorTimeoutRef.current[field] = setTimeout(() => {
-      setFieldErrors((prev) => {
-        const updated = { ...prev };
-        delete updated[field];
-        return updated;
-      });
-      delete errorTimeoutRef.current[field];
-    }, 100000000);
-  };
 
   const clearFieldError = (field: string) => {
     setFieldErrors((prev) => {

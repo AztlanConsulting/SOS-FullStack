@@ -16,7 +16,7 @@ const ResourcesListSection = () => {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null,
   );
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<boolean | string>(false);
   const [edit, setEdit] = useState(false);
   const { searchHook, query, pages } = useResourceFilter<ResourceResult>(
     queryResources,
@@ -73,7 +73,7 @@ const ResourcesListSection = () => {
               success={() => {
                 setEdit(false);
                 setSelectedResource(null);
-                setSuccess(true);
+                setSuccess('editado');
               }}
             />
           ) : (
@@ -88,7 +88,7 @@ const ResourcesListSection = () => {
             title={'Se ha actualizado correctamente'}
             onClose={() => setSuccess(false)}
           >
-            El recurso seleccionado se ha actualizado correctamente
+            El recurso seleccionado se ha {success} correctamente
           </Modal>
         )}
 

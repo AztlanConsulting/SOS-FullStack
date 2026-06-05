@@ -92,7 +92,7 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
 
   return (
     <Modal
-      title="Registrando un recurso"
+      title={`Editando un ${type}`}
       onClose={cancel}
       color="yellow"
       childrenClassName="px-0"

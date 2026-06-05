@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type {
   ContentBlockType,
   WorkshopItemType,
@@ -34,10 +34,33 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
   const [coverPreview, setCoverPreview] = useState('');
   const [coverDisplayHeight, setCoverDisplayHeight] = useState(144);
   const [emailContent, setEmailContentRaw] = useState('');
+  // Field-level error state
+  const errorTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // guard name length
   const setName = (v: string) => {
     if (v.length <= MAX_NAME_LENGTH) setNameRaw(v);
+  };
+
+  // Auto-dismiss error after 5 seconds
+  const setFieldError = (field: string, message: string) => {
+    setFieldErrors((prev) => ({ ...prev, [field]: message }));
+
+    // Clear any existing timeout for this field
+    if (errorTimeoutRef.current[field]) {
+      clearTimeout(errorTimeoutRef.current[field]);
+    }
+
+    // Set new timeout
+    errorTimeoutRef.current[field] = setTimeout(() => {
+      setFieldErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[field];
+        return updated;
+      });
+      delete errorTimeoutRef.current[field];
+    }, 100000000);
   };
 
   // ── block helpers ───────────────────────────────────────────────────────────
@@ -114,7 +137,9 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
     }
     const sizeMB = file.size / (1024 * 1024);
     if (sizeMB > MAX_FILE_SIZE_MB) {
+      console.log('sizeMB', sizeMB);
       setError(`La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`);
+      setFieldError('cover', 'La imagen no puede superar los 5MB');
       return;
     }
     setCoverImageRaw(file);
@@ -263,5 +288,9 @@ export const useCreateWorkshopItem = (onSuccess?: () => void) => {
     emailContent,
     setEmailContent,
     MAX_EMAIL_CONTENT_LENGTH,
+    errorTimeoutRef,
+    fieldErrors,
+    setFieldError,
+    setFieldErrors,
   };
 };

@@ -681,7 +681,7 @@ export const DataConfirmation: React.FC<DataConfirmationProps> = ({
             weight="medium"
             className="text-center mb-8"
           >
-            Donde se perdió
+            ¿Donde se perdió?
           </Text>
           <EditableLocation
             formData={formData}

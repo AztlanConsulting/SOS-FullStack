@@ -7,7 +7,7 @@ COPY package.json ./
 RUN npm install
 
 COPY tsconfig.json ./
-COPY assets ./
+COPY assets ./assets
 COPY src/ ./src/
 
 RUN npm run build

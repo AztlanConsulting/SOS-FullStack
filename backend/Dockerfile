@@ -23,6 +23,7 @@ COPY package.json ./
 RUN npm install
 
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/assets ./assets
 
 EXPOSE 3000
 

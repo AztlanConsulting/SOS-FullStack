@@ -28,7 +28,7 @@ describe('POST /workshop-item integration tests', () => {
     const validTallerPayload = {
       type: 'taller',
       name: 'Taller de integración',
-      price: 500,
+      price: 200,
       imageUrl: 'https://example.com/image.jpg',
       description: 'Descripción del taller',
       videoUrl: 'https://example.com/video.mp4',
@@ -53,7 +53,7 @@ describe('POST /workshop-item integration tests', () => {
       const saved = await WorkshopModel.findById(response.body.id).lean();
       expect(saved).toBeDefined();
       expect(saved?.name).toBe('Taller de integración');
-      expect(saved?.price).toBe(500);
+      expect(saved?.price).toBe(200);
       expect(saved?.content).toHaveLength(3);
       expect(saved?.content[0].type).toBe('text');
       expect(saved?.content[1].type).toBe('image');
@@ -83,9 +83,10 @@ describe('POST /workshop-item integration tests', () => {
     test('returns 400 when price exceeds maximum', async () => {
       const response = await request(app)
         .post('/workshop-item')
-        .send({ ...validTallerPayload, price: 100_000 });
+        .send({ ...validTallerPayload, price: 401 });
 
       expect(response.status).toBe(400);
+      expect(response.body.message).toBe('El precio no puede superar 400 USD');
     });
 
     test('returns 400 when imageUrl is missing', async () => {

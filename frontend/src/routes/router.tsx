@@ -15,6 +15,7 @@ import { PetReportForm } from '@features/users/components/PetReportForm';
 import LoginPage from '../pages/LoginPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
+import { NotFoundPage } from '../pages/NotFoundPage';
 import { Dashboard } from '@features/auth/components/TempDashboard';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ForbiddenPage } from '../pages/ForbiddenPage';
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
       ...routerManuals,
       ...routerBlogs,
       ...routerAdmin,
+      {
+        path: '*',
+        element: <NotFoundPage />,
+      },
     ],
   },
 ]);

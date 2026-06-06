@@ -32,7 +32,7 @@ export const resourceSearchQuery = z.object({
 export const resourceSchema = z.object({
   _id: z.string().max(100),
   name: z.string().max(100),
-  price: z.number(),
+  price: z.number().max(400),
   imageUrl: z.string().max(200),
   resourceUrl: z.string().max(200),
   emailContent: z.string().max(400).optional(),

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Eye, EyeClosed } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router';
 import yellowIcon from '@assets/images/yellowIcon.webp';
@@ -28,7 +29,11 @@ export const LoginForm = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
+  const passwordToggleLabel = isPasswordVisible
+    ? 'Ocultar clave'
+    : 'Mostrar clave';
 
   useEffect(() => {
     setError(null);
@@ -122,13 +127,27 @@ export const LoginForm = () => {
               {/* PASSWORD */}
               <div className="relative w-full max-w-lg bg-white rounded-lg mb-2">
                 <input
-                  type="password"
+                  type={isPasswordVisible ? 'text' : 'password'}
                   id="password"
                   placeholder=" "
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="peer w-full rounded-lg border border-[var(--color-grey-border)] px-4 pt-5 pb-2 text-sm focus:border-[var(--color-primary)] focus:outline-none text-black"
+                  className="peer w-full rounded-lg border border-[var(--color-grey-border)] px-4 pt-5 pb-2 pr-12 text-sm focus:border-[var(--color-primary)] focus:outline-none text-black"
                 />
+                <button
+                  type="button"
+                  aria-label={passwordToggleLabel}
+                  aria-pressed={isPasswordVisible}
+                  title={passwordToggleLabel}
+                  onClick={() => setIsPasswordVisible((current) => !current)}
+                  className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-gray-500 transition-colors hover:text-[var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
+                >
+                  {isPasswordVisible ? (
+                    <Eye size={20} aria-hidden="true" />
+                  ) : (
+                    <EyeClosed size={20} aria-hidden="true" />
+                  )}
+                </button>
                 <label
                   htmlFor="password"
                   className="absolute left-4 top-0.5 text-sm color-grey-text pointer-events-none transition-colors peer-focus:text-[var(--color-primary)]"

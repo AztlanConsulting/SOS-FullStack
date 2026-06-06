@@ -29,6 +29,10 @@ const ResourcesListSection = () => {
   }, []);
 
   const { isLoading, error, data } = query;
+  useEffect(() => {
+    if (data && data.resources.length <= 0 && pages.pageHook[0] > 1)
+      pages.pageHook[1]((prev) => prev - 1);
+  }, [data]);
 
   return (
     <section className="color-grey-border-top w-full flex flex-col items-center justify-center">
@@ -45,7 +49,7 @@ const ResourcesListSection = () => {
             Error cargando resultados de búsqueda, ${error.message}
           </Text>
         )}
-        {data && data.resources.length == 0 && (
+        {data && data.resources.length == 0 && pages.pageHook[0] == 1 && (
           <Text className="mb-20">No hay resultados...</Text>
         )}
         {!isLoading && !error && data && (

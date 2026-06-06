@@ -18,7 +18,7 @@ router.put('/', authMiddleware, updateResource);
 router.delete(
   '/:id',
   authMiddleware,
-  requirePermission('resources', 'delete'),
+  // requirePermission('resources', 'delete'),
   deleteResourceById,
 );
 

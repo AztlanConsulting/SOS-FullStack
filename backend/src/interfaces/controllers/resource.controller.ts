@@ -29,7 +29,6 @@ export async function deleteResourceById(req: Request, res: Response) {
   try {
     const { id } = req.params;
     const idStr = Array.isArray(id) ? id[0] : id;
-    console.log(id);
 
     const deleted = await deleteResource(
       WorkshopDataAccess,

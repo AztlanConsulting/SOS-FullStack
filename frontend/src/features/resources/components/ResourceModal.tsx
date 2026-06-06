@@ -24,6 +24,7 @@ export const ResourceModal = ({
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const handleDelete = async () => {
+    console.log('Delete');
     if (!resource) return;
     setIsDeleting(true);
     setDeleteError(null);
@@ -32,7 +33,8 @@ export const ResourceModal = ({
       await queryClient.invalidateQueries({ queryKey: ['resources'] });
       setShowDeleteModal(false);
       onClose();
-    } catch {
+    } catch (err) {
+      console.log(err);
       setDeleteError('Error al eliminar el recurso. Intente de nuevo.');
     } finally {
       setIsDeleting(false);

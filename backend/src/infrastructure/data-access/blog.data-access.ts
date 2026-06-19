@@ -63,11 +63,17 @@ export const BlogDataAccess: BlogRepository = {
     return newBlog;
   },
   editBlog: async function (blog: Partial<Blog>): Promise<Blog | null> {
-    const editBlog = await BlogModel.findOneAndUpdate({ _id: blog._id }, blog);
+    const editBlog = await BlogModel.findOneAndUpdate(
+      { _id: blog._id },
+      { $set: { ...blog } },
+    );
+    BlogModel.updateOne;
+
     return editBlog;
   },
   deleteBlog: async function (blogId: string): Promise<Blog | null> {
     const deletedBlog = await BlogModel.findOneAndDelete({ _id: blogId });
+
     return deletedBlog;
   },
 };

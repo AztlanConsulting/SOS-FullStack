@@ -2,6 +2,7 @@ import { clearDatabase, closeDatabase, mongoDB } from '@db/mongoDB/mongoDB';
 import app from '@/index';
 import request from 'supertest';
 import initBlogDB from '@db/mongoDB/data/blogs.data';
+import type { CreateBlog } from '@/domain/repositories/blog.repository';
 
 describe('blog routes (integration)', () => {
   beforeAll(async () => {
@@ -104,5 +105,66 @@ describe('blog routes (integration)', () => {
     expect(data.total).toBe(1);
 
     expect(data.blogs[0].name.toLowerCase()).toContain(searchTerm);
+  });
+
+  it('POST /blog create new blog', async () => {
+    const newBlog: CreateBlog = {
+      name: 'Como encontrar perros',
+      duration: 10,
+      content: [
+        {
+          type: 'text',
+          content: 'Hola que hace',
+        },
+        {
+          type: 'image',
+          content: 'http://example.com',
+        },
+      ],
+      imageUrl: 'http://example.com',
+    };
+
+    const res = await request(app).post(`/blog`).send(newBlog);
+
+    expect(res.status).toBe(200);
+
+    const data = res.body;
+
+    expect(data).toMatchObject(newBlog);
+  });
+
+  it('update /blog updates existing blog', async () => {
+    const blogs = await request(app).get('/blog?page=0');
+    const blog = blogs.body.blogs[0];
+
+    const res = await request(app)
+      .put(`/blog`)
+      .send({ _id: blog._id, name: 'Perdí a mi perro 2' });
+
+    expect(res.status).toBe(200);
+
+    const updatedRequest = await request(app).get(`/blog?id=${blog._id}`);
+
+    expect(updatedRequest.status).toBe(200);
+
+    const { updatedAt: _u, ...updatedBody } = updatedRequest.body.blogs[0];
+    const { updatedAt: _e, ...expected } = blog;
+    expect(updatedBody).toMatchObject({
+      ...expected,
+      name: 'Perdí a mi perro 2',
+    });
+  });
+
+  it('delete /blog', async () => {
+    const blogs = await request(app).get('/blog?page=0');
+    const blog = blogs.body.blogs[0];
+
+    const res = await request(app).delete(`/blog`).send({ _id: blog._id });
+
+    expect(res.status).toBe(200);
+
+    const updatedRequest = await request(app).get(`/blog?id=${blog._id}`);
+
+    expect(updatedRequest.status).toBe(404);
   });
 });

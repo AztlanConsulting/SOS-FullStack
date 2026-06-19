@@ -1,5 +1,14 @@
+import type { Blog } from '@domain/models/blog.model';
 import { BlogModel } from '@domain/models/blog.model';
 import { BlogDataAccess } from '@/infrastructure/data-access/blog.data-access';
+import type {
+  CreateBlog,
+  EditBlog,
+} from '@/domain/repositories/blog.repository';
+import { Types } from 'mongoose';
+import createBlogUC from '@/use-cases/blogs/createBlog.usecase';
+import editBlogUC from '@/use-cases/blogs/editBlog.usecase';
+import deleteBlogUC from '@/use-cases/blogs/deleteBlog.usecase';
 
 jest.mock('@domain/models/blog.model');
 
@@ -106,5 +115,73 @@ describe('blog data access unit tests', () => {
     });
 
     expect(result).toBe(mockTotal);
+  });
+
+  test('create new blog', async () => {
+    const mockBlog: CreateBlog = {
+      name: 'Perros perdidos',
+      duration: 1,
+      content: [{ type: 'text', content: 'Hola que hace' }],
+      imageUrl: 'https://examlpeImage.com',
+    };
+
+    const createdBlog: Blog = {
+      _id: new Types.ObjectId('507f1f77bcf86cd799439011'),
+      name: 'Perros perdidos',
+      duration: 1,
+      content: [{ type: 'text', content: 'Hola que hace' }],
+      imageUrl: 'https://examlpeImage.com',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    (BlogModel.create as jest.Mock).mockResolvedValue(createdBlog);
+
+    const blog = await createBlogUC(BlogDataAccess, mockBlog);
+
+    expect(blog).toBe(createdBlog);
+  });
+
+  test('create new blog', async () => {
+    const mockBlog: EditBlog = {
+      _id: '507f1f77bcf86cd799439011',
+      name: 'Perros perdidos 2',
+    };
+
+    const updatedBlog: Blog = {
+      _id: new Types.ObjectId('507f1f77bcf86cd799439011'),
+      name: 'Perros perdidos 2',
+      duration: 1,
+      content: [{ type: 'text', content: 'Hola que hace' }],
+      imageUrl: 'https://examlpeImage.com',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    (BlogModel.findOneAndUpdate as jest.Mock).mockResolvedValue(updatedBlog);
+
+    const blog = await editBlogUC(BlogDataAccess, mockBlog);
+
+    expect(blog).toBe(updatedBlog);
+  });
+
+  test('create new blog', async () => {
+    const mockBlogId = 'id_123456789';
+
+    const deletedBlog: Blog = {
+      _id: new Types.ObjectId('507f1f77bcf86cd799439011'),
+      name: 'Perros perdidos 2',
+      duration: 1,
+      content: [{ type: 'text', content: 'Hola que hace' }],
+      imageUrl: 'https://examlpeImage.com',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    (BlogModel.findOneAndDelete as jest.Mock).mockResolvedValue(deletedBlog);
+
+    const blog = await deleteBlogUC(BlogDataAccess, mockBlogId);
+
+    expect(blog).toBe(deletedBlog);
   });
 });

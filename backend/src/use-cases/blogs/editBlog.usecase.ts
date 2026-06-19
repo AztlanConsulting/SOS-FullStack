@@ -1,12 +1,9 @@
 import type {
   BlogRepository,
-  CreateBlog,
+  EditBlog,
 } from '@/domain/repositories/blog.repository';
 
-async function editBlogUC(
-  blogProvider: BlogRepository,
-  blogData: Partial<CreateBlog>,
-) {
+async function editBlogUC(blogProvider: BlogRepository, blogData: EditBlog) {
   const blog = await blogProvider.editBlog(blogData);
   return blog;
 }

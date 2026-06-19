@@ -6,7 +6,8 @@ export interface BlogRequest {
   sortOption?: string;
 }
 
-export type CreateBlog = Omit<Blog, 'createdAt' | 'updatedAt'>;
+export type CreateBlog = Omit<Blog, '_id' | 'createdAt' | 'updatedAt'>;
+export type EditBlog = Partial<CreateBlog> & { _id: string };
 
 export interface BlogRepository {
   getBlogs(query: BlogRequest): Promise<Blog[]>;

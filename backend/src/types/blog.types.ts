@@ -6,6 +6,10 @@ export const blogQuery = z
     sortOption: z.string().optional(),
     page: z.coerce.number().optional(),
     searchTerm: z.string().optional(),
+    active: z
+      .enum(['true', 'false'])
+      .transform((val) => val === 'true')
+      .optional(),
     id: z.string().optional(),
   })
   .refine((data) => data.page !== undefined || data.id !== undefined, {
@@ -22,6 +26,7 @@ export const blogSchema = z.object({
       type: z.string(),
     }),
   ),
+  active: z.boolean().default(true),
   imageUrl: z.string(),
 });
 

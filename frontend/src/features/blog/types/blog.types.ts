@@ -5,6 +5,7 @@ export type Blog = {
   name: string;
   duration: number;
   content: ContentBlock[];
+  active: boolean;
   imageUrl: string;
   createdAt: string;
   updatedAt: string;

@@ -12,6 +12,7 @@ export default function useProduct<T extends Props>(
     page: number,
     searchTerm?: string,
     sortOption?: string,
+    active?: boolean | null,
   ) => Promise<T>,
   type: string,
 ) {
@@ -24,10 +25,13 @@ export default function useProduct<T extends Props>(
   const sortHook = useState<string>('Nombre (A-Z)');
   const sortOption = sortHook[0];
 
+  // fetch all when false, fetch only active when true
+  const [active, setActive] = useState<boolean | null>(null);
+
   // Query
   const query = useQuery({
-    queryKey: [type, page, searchTerm, sortOption],
-    queryFn: async () => queryFunction(page, searchTerm, sortOption),
+    queryKey: [type, page, searchTerm, sortOption, active],
+    queryFn: async () => queryFunction(page, searchTerm, sortOption, active),
   });
   const { data } = query;
 
@@ -45,5 +49,5 @@ export default function useProduct<T extends Props>(
   const searchHook = { handleSearch, sortHook };
   const pages = { pageHook, visiblePages, totalPages };
 
-  return { searchHook, query, pages };
+  return { searchHook, query, pages, setActive };
 }

@@ -11,6 +11,7 @@ export async function getBlogs(req: Request, res: Response) {
     const query = blogQuery.safeParse(req.query);
 
     if (!query.success) {
+      console.log(query.error);
       return res.status(400).json(query.error);
     }
 

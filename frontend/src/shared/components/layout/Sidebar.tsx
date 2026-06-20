@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router';
-import { HiUsers, HiCog } from 'react-icons/hi';
+import { HiUsers, HiCog, HiBookOpen, HiCollection } from 'react-icons/hi';
 import { TbLogout } from 'react-icons/tb';
 import { useState } from 'react';
 import { Text } from '@/shared/components/ui/Text';
@@ -7,14 +7,13 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import SignOut from '@/shared/components/ui/Button/SignOut';
 import { DecisionModal } from '@/shared/components/ui/Modal/DecisionModal';
 import whiteIcon from '@/assets/images/whiteIcon.webp';
-import { HiCollection } from 'react-icons/hi';
 
 const NAV_ITEMS = [
   { label: 'Clientes', icon: HiUsers, path: '/clientes', enabled: true },
   // { label: 'Mascotas', icon: FaDog, path: '/pets', enabled: false },
   // { label: 'Links', icon: HiLink, path: '/links', enabled: false },
   // { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
-  // { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
+  { label: 'Blog', icon: HiBookOpen, path: '/admin/blogs', enabled: true },
   { label: 'Recursos', icon: HiCollection, path: '/recursos', enabled: true },
   // { label: 'Planes', icon: HiClipboardList, path: '/plans', enabled: false },
 ];

@@ -19,6 +19,7 @@ export const BlogDataAccess: BlogRepository = {
     page = 0,
     sortOption = 'Nombre (A-Z)',
     searchTerm = '',
+    active = null,
   }: BlogRequest): Promise<Blog[]> {
     const sort: Record<string, { [key: string]: SortOrder }> = {
       'Nombre (A-Z)': { name: 1 },
@@ -27,6 +28,7 @@ export const BlogDataAccess: BlogRepository = {
 
     const blogs = await BlogModel.find({
       name: { $regex: searchTerm, $options: 'i' },
+      ...(active != null ? { active: active } : {}),
     })
       .skip(page * limit)
       .limit(limit)
@@ -51,9 +53,13 @@ export const BlogDataAccess: BlogRepository = {
    * @param searchTerm - filter to better calculate the amount of pages
    * @returns number of records
    */
-  getTotalBlogs: async function ({ searchTerm = '' }): Promise<number> {
+  getTotalBlogs: async function ({
+    searchTerm = '',
+    active = null,
+  }): Promise<number> {
     const totalBlogs = await BlogModel.countDocuments({
       name: { $regex: searchTerm, $options: 'i' },
+      ...(active != null ? { active: active } : {}),
     });
     return totalBlogs;
   },

@@ -2,6 +2,7 @@
 
 @theme {
   --color-primary: #f9cd48;
+  --color-dark-yellow: #c2991d;
   --color-purple: #9d7fad;
   --color-light-purple: #9d7fad33;
   --radius-c: 20px;
@@ -10,6 +11,8 @@
   --color-purple-secondary: #ddd2e3;
   --color-dark-purple: #673881;
   --color-light-dark-purple: #67388133;
+  --color-base: #f6f6f6;
+  --color-base-gray: #afb1b6;
 }
 
 html,

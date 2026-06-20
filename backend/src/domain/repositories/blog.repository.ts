@@ -4,6 +4,7 @@ export interface BlogRequest {
   page?: number;
   searchTerm?: string;
   sortOption?: string;
+  active?: boolean | null;
 }
 
 export type CreateBlog = Omit<Blog, '_id' | 'createdAt' | 'updatedAt'>;

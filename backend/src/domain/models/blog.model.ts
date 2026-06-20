@@ -8,6 +8,7 @@ export interface Blog {
   name: string;
   duration: number;
   content: ContentBlock[];
+  active: boolean;
   imageUrl: string;
   createdAt: Date;
   updatedAt: Date;
@@ -18,6 +19,7 @@ const BlogSchema = new Schema<Blog>(
     name: { type: String, required: true },
     duration: { type: Number, required: true },
     content: { type: [ContentBlockSchema], required: true, default: [] },
+    active: { type: Boolean, default: true },
     imageUrl: { type: String, required: true },
   },
   { timestamps: true },

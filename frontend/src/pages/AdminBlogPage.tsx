@@ -87,6 +87,7 @@ const AdminBlogPage = () => {
         {showModal && (
           <BlogModal
             blog={blogs && blogs.filter((b) => b._id == selectedBlog)[0]}
+            edit={false}
             save={handleSave}
             closeModal={handleCloseModal}
           />

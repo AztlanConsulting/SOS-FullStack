@@ -1,7 +1,13 @@
 import { Text } from '@/shared/components/ui';
 import { useState } from 'react';
+import type { BlogElement } from '../types/blog.types';
+import type { Blog } from '@/features/blog/types/blog.types';
 
-const BlogTags = () => {
+interface Props extends BlogElement {
+  blog: Blog | undefined;
+}
+
+const BlogTags = ({}: Props) => {
   const [tags, setTags] = useState([]);
   return (
     <section className="flex flex-col gap-2">

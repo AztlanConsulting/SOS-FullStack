@@ -4,13 +4,22 @@ import { Text } from './Text';
 import { Button } from './Button';
 
 interface Props {
+  edit: boolean;
   previewUrl?: string;
   onChange: (file: File) => void;
   onDelete: () => void;
 }
 
-const ContentImageBlock = ({ previewUrl, onChange, onDelete }: Props) => {
+const ContentImageBlock = ({ edit, previewUrl, onChange, onDelete }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  if (!edit)
+    return (
+      <img
+        src={previewUrl}
+        className="w-full h-auto object-cover rounded-lg mb-2"
+      />
+    );
 
   return (
     <div className="relative border border-gray-200 rounded-md p-3">

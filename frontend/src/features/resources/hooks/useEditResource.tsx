@@ -3,6 +3,7 @@ import { ResourceService } from '../services/resourceItem.service';
 import type { Resource } from '../types/resource';
 import parseResourceBlock from '../util/parseResourceBlock';
 import type { LocalBlock } from '../types/block.types';
+import useUpdateContentImage from '@/shared/hooks/updateConentImage';
 
 // ── Hard limits (must mirror backend validation) ──────────────────────────────
 export const MAX_NAME_LENGTH = 100;
@@ -43,34 +44,7 @@ export const useEditResource = (
   const [coverPreview, setCoverPreview] = coverPreviewHook;
   const [secretUrl] = secretUrlHook;
 
-  useEffect(() => {
-    if (!resource?.content) return;
-
-    resource.content.forEach(async (block, i) => {
-      if (block.type === 'image') {
-        const previewUrl = block.content;
-        const response = await fetch(block.content);
-        const blob = await response.blob();
-        const file = new File([blob], 'defaultImage.jpg', {
-          type: blob.type,
-        });
-
-        setBlocks((p) =>
-          p.map((b, idx) =>
-            idx === i && b.kind === 'imagen'
-              ? {
-                  ...b,
-                  file,
-                  previewUrl,
-                  displayHeight: 400,
-                  originalString: block.content,
-                }
-              : b,
-          ),
-        );
-      }
-    });
-  }, [resource]);
+  useUpdateContentImage<Resource>(resource ?? undefined, setBlocks);
 
   // guard name length
   const setName = (v: string) => {

@@ -32,7 +32,7 @@ const AdminBlogCard = ({ blog }: Props) => {
           <div
             className={`text-center px-2 py-1 border-1 ${blog.active ? 'bg-green-400 border-green-600 text-green-600' : 'bg-base border-base-gray text-base-gray'} rounded-full`}
           >
-            {blog.active ? 'Publicado' : 'Borrado'}
+            {blog.active ? 'Publicado' : 'Borrador'}
           </div>
           <Text variant="caption" color="text-base-gray">
             {diffDays < 15 ? `Hace ${diffDays} días` : formattedDate}

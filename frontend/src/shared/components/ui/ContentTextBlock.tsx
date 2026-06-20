@@ -2,6 +2,7 @@ import { Text } from './Text';
 import { HiDocumentText, HiTrash } from 'react-icons/hi';
 
 interface Props {
+  edit: boolean;
   value: string;
   onChange: (value: string) => void;
   onDelete: () => void;
@@ -9,11 +10,18 @@ interface Props {
 }
 
 const ContentTextBlock = ({
+  edit,
   value,
   onChange,
   onDelete,
   maxLength = 2000,
 }: Props) => {
+  if (!edit)
+    return (
+      <Text variant="body" color="text-black" className="mb-2 break-words">
+        {value}
+      </Text>
+    );
   return (
     <div className="relative border border-gray-200 rounded-md p-3">
       <button

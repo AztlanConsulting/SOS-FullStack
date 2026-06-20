@@ -3,7 +3,18 @@ import Search from '@/shared/components/ui/Search';
 import { HiPlus } from 'react-icons/hi';
 import { Link, useLocation } from 'react-router';
 
-const AdminBlogHeader = () => {
+interface Props {
+  searchHook: {
+    handleSearch: (s: string) => void;
+    sortHook: [
+      sortOption: string,
+      setSortOption: React.Dispatch<React.SetStateAction<string>>,
+    ];
+  };
+  onlyAlphabetic?: boolean;
+}
+
+const AdminBlogHeader = ({ searchHook }: Props) => {
   return (
     <section className="w-full">
       <div className="flex justify-between">
@@ -30,14 +41,7 @@ const AdminBlogHeader = () => {
           <Tag label={'Borrados'} amount={0} route={'/admin/blogs/borrados'} />
         </div>
         <div className="h-fit -my-8 w-4/5 flex justify-end">
-          <Search
-            searchHook={{
-              handleSearch: function (): void {
-                throw new Error('Function not implemented.');
-              },
-              sortHook: ['', () => {}],
-            }}
-          />
+          <Search searchHook={searchHook} />
         </div>
       </div>
     </section>

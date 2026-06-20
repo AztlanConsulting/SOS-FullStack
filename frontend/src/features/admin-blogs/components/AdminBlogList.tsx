@@ -3,13 +3,17 @@ import AdminBlogCard from './AdminBlogCard';
 
 interface Props {
   blogs: Blog[];
+  openModal: (id: string) => void;
 }
 
-const AdminBlogList = ({ blogs }: Props) => {
+const AdminBlogList = ({ blogs, openModal }: Props) => {
   return (
-    <div className="flex flex-col gap-5 w-full px-20">
+    // h-138
+    <div className="flex flex-col gap-5 w-full px-20 overflow-scroll">
       {blogs.map((b) => (
-        <AdminBlogCard blog={b} />
+        <button onClick={() => openModal(b._id)}>
+          <AdminBlogCard blog={b} />
+        </button>
       ))}
     </div>
   );

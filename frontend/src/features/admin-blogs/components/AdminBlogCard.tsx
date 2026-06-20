@@ -21,7 +21,7 @@ const AdminBlogCard = ({ blog }: Props) => {
   const formattedDate = `${setDay}/${setMonth}/${year}`;
 
   return (
-    <div className="relative h-42 rounded-md overflow-hidden hover:shadow-lg shadow-base-gray">
+    <div className="relative h-42 rounded-md hover:shadow-lg shadow-base-gray">
       <img src={blog.imageUrl} alt="" className="size-full object-cover" />
 
       <div className="absolute bottom-0 left-0 right-0 min-h-1/4 max-h-1/3 h-fit bg-white p-2 flex justify-between items-center gap-2">

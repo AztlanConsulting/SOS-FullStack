@@ -2,6 +2,7 @@ import type { Document, Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 export interface SearchFormReport {
+  createdBy: Types.ObjectId;
   species: 'Dog' | 'Cat' | 'Other';
   size: 'Mini' | 'Small' | 'Medium' | 'Large' | 'Giant';
   approximateAge: number;
@@ -44,6 +45,11 @@ export interface ISearchForm extends SearchFormReport, Document {}
 
 const searchFormSchema = new Schema<ISearchForm>(
   {
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
+      required: true,
+    },
     species: {
       type: String,
       required: true,

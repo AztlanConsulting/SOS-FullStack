@@ -7,10 +7,10 @@ import owner from '@assets/images/PortalExclusivo.webp';
 import { Text } from '@shared/components/ui/Text';
 import { Button } from '@shared/components/ui/Button';
 import { HiChevronRight } from 'react-icons/hi';
-// import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 const MembersOnly = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen">
@@ -31,17 +31,14 @@ const MembersOnly = () => {
                   personalizadas según el comportamiento de tu mascota para
                   enfocar mejor la búsqueda.
                 </Text>
-                <a
-                  href="https://www.sosencontrandomascotas.com/etologia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    label="Completar Perfil de Búsqueda"
-                    variant="purple"
-                    icon={HiChevronRight}
-                  />
-                </a>
+                <Button
+                  label="Completar Perfil de Búsqueda"
+                  variant="purple"
+                  icon={HiChevronRight}
+                  onClick={() =>
+                    navigate('/inicio/contenido-exclusivo/formulario')
+                  }
+                />
               </div>
             </>
           }

@@ -7,7 +7,7 @@ COPY package.json ./
 RUN npm install
 
 COPY tsconfig.json ./
-COPY assets ./
+COPY assets ./assets
 COPY src/ ./src/
 
 RUN npm run build
@@ -23,6 +23,7 @@ COPY package.json ./
 RUN npm install
 
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/assets ./assets
 
 EXPOSE 3000
 

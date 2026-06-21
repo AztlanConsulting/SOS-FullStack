@@ -83,7 +83,7 @@ const ResourceCard = ({
           color="text-gray-500"
           className="text-right py-2"
         >
-          ${resource.price} USD
+          ${resource.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} USD
         </Text>
       </div>
     </div>

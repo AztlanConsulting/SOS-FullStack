@@ -90,6 +90,21 @@ describe('LoginForm integration', () => {
     expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
   });
 
+  it('toggles password visibility', async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const passwordInput = screen.getByLabelText(/contraseña/i);
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    await user.click(screen.getByRole('button', { name: /mostrar clave/i }));
+    expect(passwordInput).toHaveAttribute('type', 'text');
+
+    await user.click(screen.getByRole('button', { name: /ocultar clave/i }));
+    expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
   it('shows password reset success message from route state', () => {
     renderApp([
       {

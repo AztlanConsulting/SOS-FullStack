@@ -38,6 +38,10 @@ app.use(
   },
   express.static('uploads'),
 );
+// app.use((req, __, next) => {
+//   console.log(req.path);
+//   next();
+// });
 
 app.use(
   '/logo',

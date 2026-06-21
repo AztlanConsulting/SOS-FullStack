@@ -136,7 +136,7 @@ describe('useEditResource Hook', () => {
     });
 
     expect(result.current.errors).toStrictEqual({
-      imageBlock_0: 'La imagen no puede superar 5 MB',
+      block_0: 'La imagen no puede superar 5 MB',
     });
   });
 

@@ -31,6 +31,8 @@ const formatExpirationTime = (timestamp: number | null) => {
   return `${minutes} minuto${minutes !== 1 ? 's' : ''}`;
 };
 
+const formatPrice = (amount: number | string) =>
+  amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 /**
  * Development:
  * Uses Ethereal test SMTP automatically.
@@ -134,7 +136,7 @@ export const pendingPaymentEmailService: StripeEmailService = {
 
                       <div style="background-color:#fcfcfc;border:1px solid #eeeeee;border-radius:12px;padding:20px;text-align:center;">
                         <p style="margin:0 0 8px 0;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;">Total a pagar</p>
-                        <h2 style="margin:0 0 24px 0;font-size:36px;color:#1a1a1a;">$${data.amount} <span style="font-size:18px;font-weight:normal;color:#888;">MXN</span></h2>
+                        <h2 style="margin:0 0 24px 0;font-size:36px;color:#1a1a1a;">$${formatPrice(data.amount)} <span style="font-size:18px;font-weight:normal;color:#888;">MXN</span></h2>
 
                         ${
                           data.method === 'oxxo'
@@ -180,7 +182,7 @@ export const pendingPaymentEmailService: StripeEmailService = {
                               <p style="margin:0; font-size:13px; color:#856404; line-height:1.6;">
                                 Para que tu pago se valide automáticamente, es <strong>obligatorio</strong> capturar:
                                 <br/>• La <strong>CLABE</strong> correctamente.
-                                <br/>• El <strong>monto exacto</strong> de $${data.amount}.
+                                <br/>• El <strong>monto exacto</strong> de $${formatPrice(data.amount)}.
                                 <br/>• La <strong>referencia</strong> indicada abajo.
                               </p>
                             </div>

@@ -8,7 +8,7 @@ import type { LocalBlock } from '../types/block.types';
 export const MAX_NAME_LENGTH = 100;
 export const MAX_TEXT_LENGTH = 400;
 export const MAX_LINK_LENGTH = 100;
-export const MAX_PRICE = 99_999;
+export const MAX_PRICE = 400;
 export const MAX_BLOCKS = 10;
 export const MAX_FILE_SIZE_MB = 5;
 export const MAX_EMAIL_CONTENT_LENGTH = 400;
@@ -128,7 +128,7 @@ export const useEditResource = (
       if (sizeMB > MAX_FILE_SIZE_MB) {
         setErrors((prev) => ({
           ...prev,
-          [`imageBlock_${i}`]: `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`,
+          [`block_${i}`]: `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB`,
         }));
         return;
       }
@@ -167,8 +167,11 @@ export const useEditResource = (
     setCoverPreview(URL.createObjectURL(file));
   };
 
-  const removeBlock = (i: number) =>
-    setBlocks((p) => p.filter((_, idx) => idx !== i));
+  const removeBlock = (i: number) => {
+    const newBlocks = blocks.filter((_, idx) => idx !== i);
+    validateData(newBlocks);
+    setBlocks(newBlocks);
+  };
 
   const clearError = (key: string) =>
     setErrors((prev) => {
@@ -177,8 +180,7 @@ export const useEditResource = (
       return copy;
     });
 
-  // ── submit ──────────────────────────────────────────────────────────────────
-  const handleSubmit = async () => {
+  function validateData(currBlocks?: LocalBlock[]) {
     setErrors({});
 
     // ── All sync validations first ──
@@ -199,13 +201,14 @@ export const useEditResource = (
         type === 'manual'
           ? 'El PDF URL es requerido'
           : 'El Video URL es requerido';
+
     const urlRegex =
-      /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
+      /(?:http[s]?:\/\/.)(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/;
     if (!urlRegex.test(secretUrl)) newErrors.secretUrl = 'URL inválido';
     if (type === 'taller' && !emailContent.trim())
       newErrors.emailContent = 'El contenido del correo es requerido';
 
-    blocks.forEach((block, i) => {
+    (currBlocks ?? blocks).forEach((block, i) => {
       if (block.kind === 'texto' && !block.value.trim()) {
         newErrors[`block_${i}`] = 'El bloque de texto no puede estar vacío';
       }
@@ -219,8 +222,14 @@ export const useEditResource = (
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return;
+      return newErrors;
     }
+    return {};
+  }
+
+  // ── submit ──────────────────────────────────────────────────────────────────
+  const handleSubmit = async () => {
+    const newErrors = validateData();
 
     setLoading(true);
     try {
@@ -255,6 +264,7 @@ export const useEditResource = (
         }),
       );
 
+      const priceNum = parseInt(price, 10);
       const newObj: Partial<Resource> = {
         type,
         name: name.trim(),
@@ -361,5 +371,6 @@ export const useEditResource = (
     emailHook,
     clearError,
     MAX_EMAIL_CONTENT_LENGTH,
+    validateData,
   };
 };

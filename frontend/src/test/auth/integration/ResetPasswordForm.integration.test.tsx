@@ -95,6 +95,33 @@ describe('ResetPasswordForm integration', () => {
     expect(mockResetPasswordRequest).not.toHaveBeenCalled();
   });
 
+  test('toggles each password field visibility independently', async () => {
+    const user = userEvent.setup();
+    renderResetPasswordForm();
+
+    const newPasswordInput =
+      await screen.findByLabelText(/^nueva contraseña$/i);
+    const confirmPasswordInput = screen.getByLabelText(
+      /repite tu nueva contraseña/i,
+    );
+    const toggleButtons = screen.getAllByRole('button', {
+      name: /mostrar clave/i,
+    });
+
+    expect(newPasswordInput).toHaveAttribute('type', 'password');
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    await user.click(toggleButtons[0]);
+    expect(newPasswordInput).toHaveAttribute('type', 'text');
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    await user.click(screen.getByRole('button', { name: /ocultar clave/i }));
+    expect(newPasswordInput).toHaveAttribute('type', 'password');
+
+    await user.click(toggleButtons[1]);
+    expect(confirmPasswordInput).toHaveAttribute('type', 'text');
+  });
+
   /**
    * Verifies that different password values are rejected locally.
    */

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Eye, EyeClosed } from 'lucide-react';
 import { Text } from '../Text';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -21,6 +22,13 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   const { type = 'text' } =
     props as React.InputHTMLAttributes<HTMLInputElement>;
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const isPasswordField = type === 'password';
+  const inputType =
+    isPasswordField && isPasswordVisible ? 'text' : String(type);
+  const passwordToggleLabel = isPasswordVisible
+    ? 'Ocultar clave'
+    : 'Mostrar clave';
   const currentLength = String(value).length;
   const remaining = maxLength - currentLength;
   const hasErrorState = Boolean(error);
@@ -86,15 +94,34 @@ export const Input: React.FC<InputProps> = ({
         </label>
         <input
           {...props}
+          type={inputType}
           id={id}
           required={required}
           maxLength={maxLength}
           value={value}
-          className="w-full text-base text-gray-700 bg-transparent outline-none"
+          className={`w-full text-base text-gray-700 bg-transparent outline-none ${
+            isPasswordField ? 'pr-10' : ''
+          }`}
           max={maxNumberValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         />
+        {isPasswordField && (
+          <button
+            type="button"
+            aria-label={passwordToggleLabel}
+            aria-pressed={isPasswordVisible}
+            title={passwordToggleLabel}
+            onClick={() => setIsPasswordVisible((current) => !current)}
+            className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-gray-500 transition-colors hover:text-[var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
+          >
+            {isPasswordVisible ? (
+              <Eye size={20} aria-hidden="true" />
+            ) : (
+              <EyeClosed size={20} aria-hidden="true" />
+            )}
+          </button>
+        )}
       </div>
       <div
         className={`flex ${hasErrorState ? 'justify-between' : 'justify-end'}`}

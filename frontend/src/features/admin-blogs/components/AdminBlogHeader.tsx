@@ -11,10 +11,11 @@ interface Props {
       setSortOption: React.Dispatch<React.SetStateAction<string>>,
     ];
   };
+  createBlog: () => void;
   onlyAlphabetic?: boolean;
 }
 
-const AdminBlogHeader = ({ searchHook }: Props) => {
+const AdminBlogHeader = ({ searchHook, createBlog }: Props) => {
   return (
     <section className="w-full">
       <div className="flex justify-between">
@@ -24,7 +25,10 @@ const AdminBlogHeader = ({ searchHook }: Props) => {
           </Text>
           <Text variant="caption">Gestiona y publica tus entradas</Text>
         </div>
-        <button className="h-fit my-auto flex gap-2 border-2 group pl-1 pr-2 rounded-md color-grey-border hover:bg-secondary hover:border-primary hover:text-primary items-center">
+        <button
+          className="h-fit my-auto flex gap-2 border-2 group pl-1 pr-2 rounded-md color-grey-border hover:bg-secondary hover:border-primary hover:text-primary items-center"
+          onClick={createBlog}
+        >
           <HiPlus />
           <Text className="group-hover:text-primary">Agregar entrada</Text>
         </button>

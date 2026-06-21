@@ -1,42 +1,64 @@
-import type { Blog } from '@/features/blog/types/blog.types';
-import { Text } from '@/shared/components/ui';
+import { Button, Text } from '@/shared/components/ui';
 import { HiPhotograph } from 'react-icons/hi';
 import type { BlogElement } from '../types/blog.types';
+import { useRef } from 'react';
 
 interface Props extends BlogElement {
-  blog: Blog | undefined;
-  changeImage: () => void;
+  coverPreview?: string;
+  changeImage: (file: File) => void;
 }
 
-const BlogCover = ({ edit, blog, changeImage }: Props) => {
+const BlogCover = ({ edit, coverPreview, changeImage }: Props) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    // Cover
     <section className="flex flex-col gap-2">
       <Text variant="small" color="text-gray-500">
         Imagen de portada
       </Text>
 
-      {blog && <img src={blog.imageUrl} className="rounded-md" />}
-      {edit &&
-        (blog ? (
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) changeImage(file);
+        }}
+      />
+
+      {coverPreview ? (
+        <div className="flex flex-col gap-2">
+          <img
+            src={coverPreview}
+            alt="portada"
+            className="w-full rounded-md object-cover"
+          />
+
+          {edit && (
+            <Button
+              variant="toolbar"
+              label="Cambiar portada"
+              icon={HiPhotograph}
+              onClick={() => inputRef.current?.click()}
+            />
+          )}
+        </div>
+      ) : (
+        edit && (
           <button
             type="button"
-            className="border-2 border-dashed border-gray-300 rounded-md py-2 flex items-center text-gray-400 hover:border-yellow-400 hover:text-yellow-500 justify-center gap-5"
-            onClick={changeImage}
+            onClick={() => inputRef.current?.click()}
+            className="w-full border-2 border-dashed border-gray-300 rounded-md py-6 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-1"
           >
-            <HiPhotograph size={24} />
-            <span>Cambiar portada</span>
+            <HiPhotograph size={22} />
+            <Text variant="small" color="text-inherit">
+              Seleccionar imagen de portada
+            </Text>
           </button>
-        ) : (
-          <button
-            type="button"
-            className="border-2 border-dashed border-gray-300 rounded-md py-8 flex flex-col items-center text-gray-400 hover:border-yellow-400 hover:text-yellow-500"
-            onClick={changeImage}
-          >
-            <HiPhotograph size={24} />
-            <span>Seleccionar portada</span>
-          </button>
-        ))}
+        )
+      )}
     </section>
   );
 };

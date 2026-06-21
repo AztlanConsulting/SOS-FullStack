@@ -20,6 +20,7 @@ const AdminBlogPage = () => {
   );
   const [showModal, setShowModal] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
+  const [edit, setEdit] = useState(false);
 
   const { state } = useParams();
 
@@ -34,11 +35,12 @@ const AdminBlogPage = () => {
     id && setSelectedBlog(id);
   }
 
-  function handleSave() {}
-
   function handleCloseModal() {
-    setShowModal(false);
-    setSelectedBlog(null);
+    if ((edit && !selectedBlog) || (!edit && selectedBlog)) {
+      setShowModal(false);
+      setSelectedBlog(null);
+    }
+    setEdit(false);
   }
 
   const { isLoading, error } = query;
@@ -54,7 +56,13 @@ const AdminBlogPage = () => {
           className="absolute size-144 right-0 top-80 z-0 pointer-events-none"
         />
         <div className="relative z-10">
-          <AdminBlogHeader searchHook={searchHook} />
+          <AdminBlogHeader
+            searchHook={searchHook}
+            createBlog={() => {
+              setShowModal(true);
+              setEdit(true);
+            }}
+          />
           <hr className="w-2/3" />
           <section className="grid grid-cols-5 mt-5 gap-5">
             <div className="col-span-3 overflow-x-scroll ">
@@ -87,8 +95,8 @@ const AdminBlogPage = () => {
         {showModal && (
           <BlogModal
             blog={blogs && blogs.filter((b) => b._id == selectedBlog)[0]}
-            edit={false}
-            save={handleSave}
+            edit={edit}
+            setEdit={setEdit}
             closeModal={handleCloseModal}
           />
         )}

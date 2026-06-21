@@ -10,21 +10,30 @@ import useBlog from '../hooks/useBlog';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/shared/components/ui/Modal/ConfirmationModal';
 import BlogModalActions from './BlogModalActions';
+import Header from './Header';
 
 interface Props {
   blog: Blog | undefined;
   edit: boolean;
-  save: () => void;
+  setEdit: (b: boolean) => void;
   closeModal: () => void;
 }
 
-const BlogModal = ({ blog, save, closeModal }: Props) => {
-  const { blocksHook, statusHook, handleBlocks } = useBlog(blog);
-  const [editBlog, seteEditBlog] = useState(blog);
+const BlogModal = ({ blog, edit, setEdit, closeModal }: Props) => {
+  const {
+    blocksHook,
+    statusHook,
+    handleBlocks,
+    updateBlocks,
+    coverPreview,
+    updateCoverImage,
+    validateData,
+    errors,
+    setTitle,
+    save,
+  } = useBlog(blog);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [edit, setEdit] = useState(false);
   const { blocks } = blocksHook;
-  const loading = false;
 
   return (
     <main
@@ -33,39 +42,33 @@ const BlogModal = ({ blog, save, closeModal }: Props) => {
         e.target === e.currentTarget && closeModal();
       }}
     >
-      <section className="bg-white w-1/3 h-4/5 overflow-scroll mx-auto p-3 rounded-md">
-        <header className="flex justify-between">
-          <div className="">
-            <Text variant="h3" weight="semibold">
-              {blog ? `Editar: ${blog.name}` : 'Nueva entrada'}
+      <section className="bg-white w-1/3 h-4/5 overflow-scroll mx-auto rounded-md">
+        <Header blog={blog} closeModal={closeModal} edit={edit} />
+        <form className="flex flex-col gap-3 p-3">
+          <BlogCover
+            edit={edit}
+            coverPreview={coverPreview}
+            changeImage={updateCoverImage}
+          />
+          {errors.coverImage && (
+            <Text variant="small" color="text-red-500">
+              {errors.coverImage}
             </Text>
-            <Text>Estas {blog ? 'editando' : 'agregando'} un blog</Text>
-          </div>
-          <button
-            className="rounded-full size-10 text-white bg-base-gray hover:bg-gray-600 flex items-center justify-center"
-            onClick={closeModal}
-          >
-            <HiX className="size-5" />
-          </button>
-        </header>
-        <hr className="w-full my-1 mb-3" />
-        <form className="flex flex-col gap-3">
-          <BlogCover edit={edit} blog={blog} changeImage={() => {}} />
-          {edit && <BlogTitle blog={blog} changeTitle={() => {}} />}
+          )}
+          {edit && <BlogTitle blog={blog} changeTitle={setTitle} />}
+          {errors.name && (
+            <Text variant="small" color="text-red-500">
+              {errors.name}
+            </Text>
+          )}
           {/* <BlogTags edit={edit} blog={blog} /> */}
           <BlogStatus edit={edit} statusHook={statusHook} />
           <BlogContent
             edit={edit}
             blocks={blocks}
-            updateBlocks={{
-              updateTextBlock: function (idx: number, val: string): void {
-                throw new Error('Function not implemented.');
-              },
-              updateImageBlock: function (idx: number, file: File): void {
-                throw new Error('Function not implemented.');
-              },
-            }}
+            updateBlocks={updateBlocks}
             handleBlocks={handleBlocks}
+            errors={errors}
           />
           {/* ── Actions ── */}
           {edit ? (
@@ -73,8 +76,11 @@ const BlogModal = ({ blog, save, closeModal }: Props) => {
               loading={false}
               successLabel={'Guardar'}
               closeLabel={'Cancelar'}
-              save={() => setShowConfirmation(true)}
-              close={() => setEdit(false)}
+              save={() => {
+                if (Object.keys(validateData()).length > 0) return;
+                setShowConfirmation(true);
+              }}
+              close={closeModal}
             />
           ) : (
             <BlogModalActions
@@ -82,7 +88,7 @@ const BlogModal = ({ blog, save, closeModal }: Props) => {
               successLabel={'Editar'}
               closeLabel={'Cancelar'}
               save={() => setEdit(true)}
-              close={close}
+              close={closeModal}
             />
           )}
           {showConfirmation && (

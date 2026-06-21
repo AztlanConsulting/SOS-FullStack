@@ -4,6 +4,7 @@ import { HiDocumentText, HiTrash } from 'react-icons/hi';
 interface Props {
   edit: boolean;
   value: string;
+  error: string | null;
   onChange: (value: string) => void;
   onDelete: () => void;
   maxLength?: number;
@@ -12,10 +13,12 @@ interface Props {
 const ContentTextBlock = ({
   edit,
   value,
+  error,
   onChange,
   onDelete,
   maxLength = 2000,
 }: Props) => {
+  console.log(error);
   if (!edit)
     return (
       <Text variant="body" color="text-black" className="mb-2 break-words">
@@ -44,9 +47,16 @@ const ContentTextBlock = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Escribe el contenido..."
-        className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm resize-none focus:outline-none"
+        className={
+          'w-full border rounded-md px-3 py-2 text-sm resize-none focus:outline-none' +
+          (error ? ' border-red-500' : 'border-gray-200')
+        }
       />
-
+      {error && (
+        <Text variant="small" color="text-red-500">
+          error
+        </Text>
+      )}
       <Text
         variant="small"
         color="text-gray-400"

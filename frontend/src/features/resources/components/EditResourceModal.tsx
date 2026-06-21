@@ -49,7 +49,6 @@ const EditResourceModal = ({ resource, cancel, success }: Props) => {
     priceHook: [price, setPrice],
     secretUrlHook: [secretUrl, setSecretUrl],
     coverImageHook: [, setCoverImage],
-    coverDisplayHeightHook: [coverDisplayHeight, setCoverDisplayHeight],
     blocks,
     loading,
     errors,

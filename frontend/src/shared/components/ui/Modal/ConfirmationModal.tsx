@@ -68,7 +68,7 @@ export const ConfirmationModal = ({
             className={`${accentClass} mt-0.5 shrink-0`}
           />
           <div id="confirmation-modal-description">
-            <Text variant="body" color="text-[var(--color-grey-text)]" as="p">
+            <Text variant="body" color="text-gray-600" as="p">
               {description}
             </Text>
           </div>
@@ -86,7 +86,7 @@ export const ConfirmationModal = ({
             onClick={handleCancel}
             variant="secondary"
             disabled={isLoading}
-            textColor={`border border-[var(--color-grey-border)] bg-white text-[var(--color-grey-text)] hover:bg-[var(--color-grey-bg)]`}
+            textColor={`border border-[var(--color-grey-border)] bg-white text-gray-600 hover:bg-[var(--color-grey-bg)]`}
           />
           <Button
             label={confirmLabel}

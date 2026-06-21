@@ -2,7 +2,7 @@ import type { LocalBlock } from '@/features/resources/types/block.types';
 import { Text } from '@/shared/components/ui';
 import ContentImageBlock from '@/shared/components/ui/ContentImageBlock';
 import ContentTextBlock from '@/shared/components/ui/ContentTextBlock';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { BlogElement } from '../types/blog.types';
 
 interface Props extends BlogElement {
@@ -15,16 +15,28 @@ interface Props extends BlogElement {
     addBlock: (kind: LocalBlock['kind']) => void;
     removeBlock: (idx: number) => void;
   };
+  errors: Record<string, string>;
 }
 
 const FIELD_CLASS =
   'w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none  bg-white';
 
-const BlogContent = ({ edit, blocks, updateBlocks, handleBlocks }: Props) => {
+const BlogContent = ({
+  edit,
+  blocks,
+  updateBlocks,
+  handleBlocks,
+  errors,
+}: Props) => {
   const { updateTextBlock, updateImageBlock } = updateBlocks;
 
   const [canAddBlock, setCanAddBlock] = useState(blocks.length < 10);
   const { addBlock, removeBlock } = handleBlocks;
+
+  useEffect(() => {
+    if (blocks.length >= 10) setCanAddBlock(false);
+    else setCanAddBlock(true);
+  }, [blocks]);
 
   const handleAddBlock = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value as LocalBlock['kind'];
@@ -47,19 +59,23 @@ const BlogContent = ({ edit, blocks, updateBlocks, handleBlocks }: Props) => {
                 key={idx}
                 edit={edit}
                 value={block.value}
+                error={errors[`block_${idx}`] ?? null}
                 onChange={(value) => updateTextBlock(idx, value)}
                 onDelete={() => removeBlock(idx)}
               />
             );
           case 'imagen':
             return (
-              <ContentImageBlock
-                key={idx}
-                edit={edit}
-                previewUrl={block.previewUrl}
-                onChange={(file) => updateImageBlock(idx, file)}
-                onDelete={() => removeBlock(idx)}
-              />
+              <>
+                <ContentImageBlock
+                  key={idx}
+                  edit={edit}
+                  error={errors[`block_${idx}`] ?? null}
+                  previewUrl={block.previewUrl}
+                  onChange={(file) => updateImageBlock(idx, file)}
+                  onDelete={() => removeBlock(idx)}
+                />
+              </>
             );
         }
       })}

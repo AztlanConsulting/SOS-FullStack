@@ -6,11 +6,18 @@ import { Button } from './Button';
 interface Props {
   edit: boolean;
   previewUrl?: string;
+  error: string | null;
   onChange: (file: File) => void;
   onDelete: () => void;
 }
 
-const ContentImageBlock = ({ edit, previewUrl, onChange, onDelete }: Props) => {
+const ContentImageBlock = ({
+  edit,
+  previewUrl,
+  error,
+  onChange,
+  onDelete,
+}: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   if (!edit)
@@ -65,16 +72,23 @@ const ContentImageBlock = ({ edit, previewUrl, onChange, onDelete }: Props) => {
           />
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="w-full border-2 border-dashed border-gray-300 rounded-md py-8 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-2"
-        >
-          <HiPhotograph size={24} />
-          <Text variant="small" color="text-inherit">
-            Seleccionar imagen
-          </Text>
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="w-full border-2 border-dashed border-gray-300 rounded-md py-8 text-gray-400 hover:border-yellow-400 hover:text-yellow-500 transition-colors flex flex-col items-center gap-2"
+          >
+            <HiPhotograph size={24} />
+            <Text variant="small" color="text-inherit">
+              Seleccionar imagen
+            </Text>
+          </button>
+          {error && (
+            <Text variant="small" color="text-red-500">
+              {error}
+            </Text>
+          )}
+        </>
       )}
     </div>
   );

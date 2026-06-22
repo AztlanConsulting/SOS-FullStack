@@ -2,6 +2,7 @@ import { Text } from '@/shared/components/ui/Text';
 import { Modal } from '@/shared/components/ui/Modal/Modal';
 import { Button } from '@/shared/components/ui/Button';
 import { HiExclamationCircle } from 'react-icons/hi';
+import type React from 'react';
 
 /**
  * Configuration properties for the ConfirmationModal component.
@@ -10,7 +11,7 @@ type ConfirmationModalProps = {
   /** Title displayed in the shared Modal header. */
   title: string;
   /** Message that explains the action the administrator is confirming. */
-  description: string;
+  description: string | React.ReactNode;
   /** Label for the primary confirmation button. */
   confirmLabel?: string;
   /** Label for the secondary cancel button. */

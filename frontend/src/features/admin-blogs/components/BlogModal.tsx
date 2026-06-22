@@ -10,6 +10,7 @@ import { ConfirmationModal } from '@/shared/components/ui/Modal/ConfirmationModa
 import BlogModalActions from './BlogModalActions';
 import Header from './Header';
 import BlogTime from './BlogTime';
+import deleteBlog from '../service/deleteBlog.service';
 
 interface Props {
   blog: Blog | undefined;
@@ -111,12 +112,14 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
             <BlogModalActions
               loading={false}
               successLabel={'Editar'}
-              closeLabel={'Cancelar'}
+              closeLabel={'Eliminar'}
               save={() => setEdit(true)}
-              close={closeModal}
+              close={() => {
+                setShowConfirmation(true);
+              }}
             />
           )}
-          {showConfirmation && (
+          {showConfirmation && edit && (
             <ConfirmationModal
               title={newBlog ? 'Crear blog' : 'Editar blog'}
               description={
@@ -132,6 +135,34 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
               onConfirm={() => {
                 setShowConfirmation(false);
                 save();
+              }}
+              onCancel={() => {
+                setShowConfirmation(false);
+              }}
+            />
+          )}
+          {showConfirmation && !edit && (
+            <ConfirmationModal
+              title={'Eliminar blog'}
+              description={
+                <>
+                  <p>¿Estas segura de eliminar este el blog?</p>
+                  <p>Este no se podrá restaurar posteriormente.</p>
+                  <p className="text-sm text-base-gray">
+                    [Recuerda que puedes ponerlo en borrador si buscas
+                    ocultarlo]
+                  </p>
+                </>
+              }
+              confirmLabel={'Borrar'}
+              cancelLabel="Cancelar"
+              tone="warning"
+              // isLoading={isDeleting}
+              // errorMessage={deleteError}
+              onConfirm={() => {
+                setShowConfirmation(false);
+                deleteBlog(blog!._id!);
+                success();
               }}
               onCancel={() => {
                 setShowConfirmation(false);

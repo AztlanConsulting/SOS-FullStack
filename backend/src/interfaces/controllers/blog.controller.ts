@@ -76,11 +76,11 @@ async function updateBlog(req: Request, res: Response) {
 
 async function deleteBlog(req: Request, res: Response) {
   try {
-    const { _id: blogId } = req.body;
+    const { blogId } = req.params;
 
     if (!blogId) return res.status(401).json('Blog id not provided');
 
-    const blog = await deleteBlogUC(BlogDataAccess, blogId);
+    const blog = await deleteBlogUC(BlogDataAccess, blogId as string);
 
     if (blog) return res.status(200).json(blog);
   } catch (error) {

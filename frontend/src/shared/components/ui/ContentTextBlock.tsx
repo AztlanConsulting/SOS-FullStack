@@ -18,7 +18,6 @@ const ContentTextBlock = ({
   onDelete,
   maxLength = 2000,
 }: Props) => {
-  console.log(error);
   if (!edit)
     return (
       <Text variant="body" color="text-black" className="mb-2 break-words">

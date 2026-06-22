@@ -9,13 +9,20 @@ import {
 } from '@/features/resources/hooks/useEditResource';
 import { useState } from 'react';
 import useUpdateContentImage from '@/shared/hooks/updateConentImage';
-import editBlog from '../service/editBlog.service';
 import updateBlog from './updateBlog';
+import registerBlog from './registerBlog';
 
 function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
-  const statusHook = useState(blog?.active ?? true);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [title, setTitle] = useState<string>(blog?.name ?? '');
+  const [blogChangeset, setBlogChangeset] = useState<Blog>(
+    blog ?? {
+      name: '',
+      duration: 0,
+      content: [],
+      active: true,
+      imageUrl: '',
+    },
+  );
 
   const coverImageHook = useState<File | null>(null);
   const [coverImage, setCoverImage] = coverImageHook;
@@ -55,6 +62,7 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     // ── All sync validations first ──
     const newErrors: Record<string, string> = {};
 
+    const title = blogChangeset.name;
     if (!title.trim()) newErrors.name = 'El título es requerido';
     if (title.trim().length > MAX_NAME_LENGTH)
       newErrors.name = `El título no puede superar ${MAX_NAME_LENGTH} caracteres`;
@@ -143,7 +151,7 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     }
   };
 
-  const dependencies = { blog, coverImage, blocks, title, setErrors, editBlog };
+  const dependencies = { blog: blogChangeset, coverImage, blocks, setErrors };
 
   async function save() {
     const newErrors = validateData();
@@ -151,7 +159,7 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     if (blog) {
       updateBlog(dependencies, newErrors, onSuccess);
     } else {
-      console.log('Crear');
+      registerBlog(dependencies, newErrors, onSuccess);
     }
     setLoading(false);
   }
@@ -164,7 +172,8 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
   const handleBlocks = { addBlock, removeBlock };
   return {
     blocksHook,
-    statusHook,
+    blogChangeset,
+    setBlogChangeset,
     handleBlocks,
     loading,
     updateBlocks,
@@ -173,7 +182,6 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     updateCoverImage,
     validateData,
     errors,
-    setTitle,
     save,
   };
 }

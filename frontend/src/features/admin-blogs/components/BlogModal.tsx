@@ -1,9 +1,7 @@
 import type { Blog } from '@/features/blog/types/blog.types';
-import { Button, Text } from '@/shared/components/ui';
-import { HiX } from 'react-icons/hi';
+import { Text } from '@/shared/components/ui';
 import BlogTitle from './BlogTitle';
 import BlogCover from './BlogCover';
-import BlogTags from './BlogTags';
 import BlogStatus from './BlogStatus';
 import BlogContent from './BlogContent';
 import useBlog from '../hooks/useBlog';
@@ -17,21 +15,22 @@ interface Props {
   edit: boolean;
   setEdit: (b: boolean) => void;
   closeModal: () => void;
+  success: () => void;
 }
 
-const BlogModal = ({ blog, edit, setEdit, closeModal }: Props) => {
+const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
   const {
     blocksHook,
-    statusHook,
+    blogChangeset,
+    setBlogChangeset,
     handleBlocks,
     updateBlocks,
     coverPreview,
     updateCoverImage,
     validateData,
     errors,
-    setTitle,
     save,
-  } = useBlog(blog);
+  } = useBlog(blog, success);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { blocks } = blocksHook;
 
@@ -43,7 +42,7 @@ const BlogModal = ({ blog, edit, setEdit, closeModal }: Props) => {
       }}
     >
       <section className="bg-white w-1/3 h-4/5 overflow-scroll mx-auto rounded-md">
-        <Header blog={blog} closeModal={closeModal} edit={edit} />
+        <Header blog={blogChangeset} closeModal={closeModal} edit={edit} />
         <form className="flex flex-col gap-3 p-3">
           <BlogCover
             edit={edit}
@@ -55,14 +54,29 @@ const BlogModal = ({ blog, edit, setEdit, closeModal }: Props) => {
               {errors.coverImage}
             </Text>
           )}
-          {edit && <BlogTitle blog={blog} changeTitle={setTitle} />}
+          {edit && (
+            <BlogTitle
+              blog={blogChangeset}
+              changeTitle={(t: string) => {
+                setBlogChangeset((prev) => ({ ...prev, name: t }));
+              }}
+            />
+          )}
           {errors.name && (
             <Text variant="small" color="text-red-500">
               {errors.name}
             </Text>
           )}
           {/* <BlogTags edit={edit} blog={blog} /> */}
-          <BlogStatus edit={edit} statusHook={statusHook} />
+          <BlogStatus
+            edit={edit}
+            statusHook={[
+              blogChangeset.active,
+              (s: boolean) => {
+                setBlogChangeset((prev) => ({ ...prev, active: s }));
+              },
+            ]}
+          />
           <BlogContent
             edit={edit}
             blocks={blocks}

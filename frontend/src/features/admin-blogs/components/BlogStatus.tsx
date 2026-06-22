@@ -1,9 +1,8 @@
 import { Text } from '@/shared/components/ui';
-import type { Dispatch, SetStateAction } from 'react';
 import type { BlogElement } from '../types/blog.types';
 
 interface Props extends BlogElement {
-  statusHook: [boolean, Dispatch<SetStateAction<boolean>>];
+  statusHook: [boolean, (b: boolean) => void];
 }
 
 const BlogStatus = ({ edit, statusHook }: Props) => {

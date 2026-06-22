@@ -1,9 +1,9 @@
 import type { Blog } from '@/features/blog/types/blog.types';
 import { ResourceService } from '@/features/resources/services/resourceItem.service';
 import type { BlogDependencies } from '../types/blog.types';
-import editBlog from '../service/editBlog.service';
+import createBlog from '../service/creaetBlog.service';
 
-async function updateBlog(
+async function registerBlog(
   dependencies: BlogDependencies,
   newErrors: Record<string, string>,
   onSuccess?: () => void,
@@ -34,57 +34,17 @@ async function updateBlog(
       }),
     );
 
-    const newObj: Partial<Blog> = {
+    const newObj: Blog = {
       name: blog.name.trim(),
       imageUrl: coverUrl,
       content: serialised,
+      active: true,
+      duration: blog.duration,
     };
 
-    const changeset = Object.fromEntries(
-      (Object.entries(newObj) as [keyof Blog, Blog[keyof Blog]][]).filter(
-        ([key, value]) => {
-          if (key == 'content') {
-            const sortKeysDeep = (val: unknown): unknown => {
-              if (Array.isArray(val)) return val.map(sortKeysDeep);
-              if (val !== null && typeof val === 'object') {
-                return Object.keys(val)
-                  .sort()
-                  .reduce(
-                    (acc, k) => {
-                      acc[k] = sortKeysDeep(
-                        (val as Record<string, unknown>)[k],
-                      );
-                      return acc;
-                    },
-                    {} as Record<string, unknown>,
-                  );
-              }
-              return val;
-            };
+    await createBlog(newObj);
 
-            const normalize = (val: unknown) =>
-              JSON.stringify(sortKeysDeep(val));
-
-            const isEqual = normalize(blog?.[key]) === normalize(value);
-            return !isEqual;
-          }
-          return blog?.[key] != value;
-        },
-      ),
-    ) as Partial<Blog>;
-
-    if (Object.keys(changeset).length < 1) {
-      setErrors((prev) => ({ ...prev, general: 'No hay cambios' }));
-      return;
-    }
-
-    console.log(newObj);
-
-    await editBlog({
-      ...(blog ? { _id: blog._id } : {}),
-      ...changeset,
-    });
-
+    console.log('Success!');
     onSuccess?.();
   } catch (error) {
     if (error && typeof error === 'object' && !('message' in error)) {
@@ -95,4 +55,4 @@ async function updateBlog(
   }
 }
 
-export default updateBlog;
+export default registerBlog;

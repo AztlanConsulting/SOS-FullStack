@@ -7,6 +7,7 @@ import type { BlogResult } from '@/features/blog/types/blog.types';
 import { Sidebar } from '@/shared/components/layout/Sidebar';
 import Error from '@/shared/components/ui/Error';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
+import { Modal } from '@/shared/components/ui/Modal/Modal';
 import Pagination from '@/shared/components/ui/Pagination';
 import useProduct from '@/shared/hooks/useProduct';
 import trace from '@assets/images/trace.svg';
@@ -21,6 +22,7 @@ const AdminBlogPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const { state } = useParams();
 
@@ -98,9 +100,28 @@ const AdminBlogPage = () => {
             edit={edit}
             setEdit={setEdit}
             closeModal={handleCloseModal}
+            success={() => {
+              setShowModal(false);
+              setSuccess(true);
+            }}
           />
         )}
       </main>
+      {success && (
+        <Modal
+          title={
+            edit
+              ? 'El blog se ha actualizado correctamente'
+              : 'Se ha creado un nuevo blog'
+          }
+          onClose={() => {
+            setSuccess(false);
+            setEdit(false);
+          }}
+        >
+          El blog se ha {edit ? 'editado' : 'creado'} correctamente.
+        </Modal>
+      )}
     </div>
   );
 };

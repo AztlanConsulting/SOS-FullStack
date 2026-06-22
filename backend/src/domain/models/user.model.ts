@@ -20,6 +20,7 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   notes?: string;
+  publicNote?: string;
 }
 
 /**
@@ -79,6 +80,7 @@ const UserSchema = new Schema<User>(
     conversation: { type: String },
     active: { type: Boolean, default: false },
     notes: { type: String, default: '' },
+    publicNote: { type: String, default: '' },
   },
   {
     timestamps: true,

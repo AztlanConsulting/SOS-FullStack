@@ -73,6 +73,7 @@ export interface ClientDetail {
   fbUser?: string;
   conversation?: string;
   notes?: string;
+  publicNote?: string;
   createdAt?: string;
   paymentMethod?: string;
   pets: ClientPet[];

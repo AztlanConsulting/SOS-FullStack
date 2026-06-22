@@ -28,7 +28,8 @@ interface Props {
 
 type PendingDetailUpdate =
   | { type: 'conversation'; value: string }
-  | { type: 'notes'; value: string };
+  | { type: 'notes'; value: string }
+  | { type: 'publicNote'; value: string };
 
 export const ClientDetailModal = ({
   client,
@@ -67,6 +68,8 @@ export const ClientDetailModal = ({
   );
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState('');
+  const [editingPublicNote, setEditingPublicNote] = useState(false);
+  const [publicNoteValue, setPublicNoteValue] = useState('');
 
   const petsToShow = petId
     ? detail?.pets?.filter((p) => p._id === petId)
@@ -93,6 +96,12 @@ export const ClientDetailModal = ({
   useEffect(() => {
     if (detail?.notes !== undefined) {
       setNotesValue(detail.notes);
+    }
+  }, [detail]);
+
+  useEffect(() => {
+    if (detail?.publicNote !== undefined) {
+      setPublicNoteValue(detail.publicNote);
     }
   }, [detail]);
 
@@ -146,11 +155,17 @@ export const ClientDetailModal = ({
         );
         setEditingConversation(false);
         onUpdate(pendingDetailUpdate.value);
-      } else {
+      } else if (pendingDetailUpdate.type === 'notes') {
         await ClientService.updateClient(client._id, {
           notes: pendingDetailUpdate.value,
         });
         setEditingNotes(false);
+        onUpdate(detail?.conversation ?? '');
+      } else if (pendingDetailUpdate.type === 'publicNote') {
+        await ClientService.updateClient(client._id, {
+          publicNote: pendingDetailUpdate.value,
+        });
+        setEditingPublicNote(false);
         onUpdate(detail?.conversation ?? '');
       }
       setPendingDetailUpdate(null);
@@ -184,6 +199,17 @@ export const ClientDetailModal = ({
     } finally {
       setIsUpdatingStatus(false);
     }
+  };
+
+  const getConfirmationDescription = () => {
+    if (!pendingDetailUpdate) return '';
+    if (pendingDetailUpdate.type === 'conversation') {
+      return `¿Está segura de guardar el nuevo link de conversación de ${client.username}?`;
+    }
+    if (pendingDetailUpdate.type === 'publicNote') {
+      return `¿Está segura de guardar la nota pública de ${client.username}?`;
+    }
+    return `¿Está segura de guardar los cambios en las notas de ${client.username}?`;
   };
 
   return (
@@ -237,10 +263,10 @@ export const ClientDetailModal = ({
                 <Text variant="small" color="text-gray-600">
                   {detail.createdAt
                     ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                      })
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
                     : '—'}
                 </Text>
               </div>
@@ -302,7 +328,7 @@ export const ClientDetailModal = ({
                 ) : (
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     {conversationValue &&
-                    conversationValue.startsWith('http') ? (
+                      conversationValue.startsWith('http') ? (
                       <a
                         href={conversationValue}
                         target="_blank"
@@ -342,15 +368,15 @@ export const ClientDetailModal = ({
             {petsToShow?.map((pet, petIndex) => {
               const expiryDates = pet.plans
                 ? calculateStackedExpiry(
-                    pet.plans.filter(
-                      (
-                        p,
-                      ): p is typeof p & {
-                        createdAt: string;
-                        duration: number;
-                      } => Boolean(p.createdAt && p.duration),
-                    ),
-                  )
+                  pet.plans.filter(
+                    (
+                      p,
+                    ): p is typeof p & {
+                      createdAt: string;
+                      duration: number;
+                    } => Boolean(p.createdAt && p.duration),
+                  ),
+                )
                 : [];
 
               return (
@@ -504,13 +530,13 @@ export const ClientDetailModal = ({
                                   {expiryDates[index] < new Date()
                                     ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                                     : expiryDates[index].toLocaleDateString(
-                                        'es-MX',
-                                        {
-                                          day: '2-digit',
-                                          month: '2-digit',
-                                          year: 'numeric',
-                                        },
-                                      )}
+                                      'es-MX',
+                                      {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric',
+                                      },
+                                    )}
                                 </span>
                               </Text>
                             )}
@@ -525,6 +551,90 @@ export const ClientDetailModal = ({
 
             <div className="h-px bg-gray-100" />
 
+            {/* Nota pública */}
+            <div className="flex flex-col gap-2">
+              <Text variant="small" weight="medium" color="text-gray-500">
+                Nota pública
+              </Text>
+              {editingPublicNote ? (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    value={publicNoteValue}
+                    onChange={(e) =>
+                      setPublicNoteValue(stripEmojis(e.target.value))
+                    }
+                    maxLength={200}
+                    rows={3}
+                    className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
+                    autoFocus
+                  />
+                  <div className="flex flex-col gap-2 items-end">
+                    <Text
+                      variant="small"
+                      as="span"
+                      weight="medium"
+                      className="text-emerald-700"
+                    >
+                      Quedan {200 - publicNoteValue.length} caracteres
+                    </Text>
+                    <div className="flex gap-2.5">
+                      <button
+                        onClick={() => {
+                          setDetailUpdateError(null);
+                          setPendingDetailUpdate({
+                            type: 'publicNote',
+                            value: publicNoteValue,
+                          });
+                        }}
+                        disabled={isUpdatingDetail}
+                        className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
+                      >
+                        <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                          Guardar
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setPublicNoteValue(detail?.publicNote ?? '');
+                          setEditingPublicNote(false);
+                        }}
+                        className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
+                      >
+                        <span className="text-xs text-gray-400 group-hover:text-red-400">
+                          Cancelar
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-start gap-2">
+                  <Text
+                    variant="small"
+                    color="text-gray-600"
+                    className="flex-1 break-all"
+                  >
+                    {publicNoteValue || 'Sin nota pública'}
+                  </Text>
+                  <button
+                    onClick={() => setEditingPublicNote(true)}
+                    className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
+                  >
+                    <HiPencil
+                      size={11}
+                      className="text-gray-400 group-hover:text-[#C2991D]"
+                    />
+                    <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                      Editar
+                    </span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="h-px bg-gray-100" />
+
+            {/* Notas internas */}
             <div className="flex flex-col gap-2">
               <Text variant="small" weight="medium" color="text-gray-500">
                 Notas
@@ -608,11 +718,7 @@ export const ClientDetailModal = ({
       {pendingDetailUpdate && (
         <ConfirmationModal
           title="Confirmar edición"
-          description={
-            pendingDetailUpdate.type === 'conversation'
-              ? `¿Está segura de guardar el nuevo link de conversación de ${client.username}?`
-              : `¿Está segura de guardar los cambios en las notas de ${client.username}?`
-          }
+          description={getConfirmationDescription()}
           confirmLabel="Sí, guardar"
           isLoading={isUpdatingDetail}
           errorMessage={detailUpdateError}

@@ -35,11 +35,9 @@ async function updateBlog(
     );
 
     const newObj: Partial<Blog> = {
-      _id: blog._id,
-      name: blog.name.trim(),
+      ...blog,
       imageUrl: coverUrl,
       content: serialised,
-      active: blog.active,
     };
 
     await editBlog({

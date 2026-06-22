@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { ConfirmationModal } from '@/shared/components/ui/Modal/ConfirmationModal';
 import BlogModalActions from './BlogModalActions';
 import Header from './Header';
+import BlogTime from './BlogTime';
 
 interface Props {
   blog: Blog | undefined;
@@ -33,6 +34,8 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
   } = useBlog(blog, success);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { blocks } = blocksHook;
+
+  const newBlog = edit && !blog;
 
   return (
     <main
@@ -77,6 +80,14 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
               },
             ]}
           />
+          <BlogTime
+            edit={edit}
+            setTime={(n: number) => {
+              setBlogChangeset((prev) => ({ ...prev, duration: n }));
+            }}
+            blog={blogChangeset}
+            errors={errors}
+          />
           <BlogContent
             edit={edit}
             blocks={blocks}
@@ -107,9 +118,13 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
           )}
           {showConfirmation && (
             <ConfirmationModal
-              title="Editar recurso"
-              description={`¿Estas seguro de editar este el blog?`}
-              confirmLabel="Sí, editar"
+              title={newBlog ? 'Crear blog' : 'Editar blog'}
+              description={
+                newBlog
+                  ? `Crear nuevo blog: ${blogChangeset.name}`
+                  : `¿Estas segura de editar este el blog?`
+              }
+              confirmLabel={newBlog ? 'Si, crear' : 'Sí, editar'}
               cancelLabel="Cancelar"
               tone="warning"
               // isLoading={isDeleting}

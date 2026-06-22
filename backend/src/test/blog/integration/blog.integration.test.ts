@@ -122,6 +122,7 @@ describe('blog routes (integration)', () => {
         },
       ],
       imageUrl: 'http://example.com',
+      active: true,
     };
 
     const res = await request(app).post(`/blog`).send(newBlog);

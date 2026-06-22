@@ -17,7 +17,7 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
   const [blogChangeset, setBlogChangeset] = useState<Blog>(
     blog ?? {
       name: '',
-      duration: 0,
+      duration: 1,
       content: [],
       active: true,
       imageUrl: '',
@@ -66,6 +66,9 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     if (!title.trim()) newErrors.name = 'El título es requerido';
     if (title.trim().length > MAX_NAME_LENGTH)
       newErrors.name = `El título no puede superar ${MAX_NAME_LENGTH} caracteres`;
+
+    if (blogChangeset.duration < 1)
+      newErrors.duration = `El contenido debe tener una duración mínima de 1 minuto`;
 
     (currBlocks ?? blocks).forEach((block, i) => {
       if (block.kind === 'texto' && !block.value.trim()) {

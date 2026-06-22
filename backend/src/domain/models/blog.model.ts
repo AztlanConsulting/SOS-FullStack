@@ -10,8 +10,8 @@ export interface Blog {
   content: ContentBlock[];
   active: boolean;
   imageUrl: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const BlogSchema = new Schema<Blog>(

@@ -123,6 +123,7 @@ describe('blog data access unit tests', () => {
       duration: 1,
       content: [{ type: 'text', content: 'Hola que hace' }],
       imageUrl: 'https://examlpeImage.com',
+      active: true,
     };
 
     const createdBlog: Blog = {
@@ -133,6 +134,7 @@ describe('blog data access unit tests', () => {
       imageUrl: 'https://examlpeImage.com',
       createdAt: new Date(),
       updatedAt: new Date(),
+      active: true,
     };
 
     (BlogModel.create as jest.Mock).mockResolvedValue(createdBlog);
@@ -156,6 +158,7 @@ describe('blog data access unit tests', () => {
       imageUrl: 'https://examlpeImage.com',
       createdAt: new Date(),
       updatedAt: new Date(),
+      active: true,
     };
 
     (BlogModel.findOneAndUpdate as jest.Mock).mockResolvedValue(updatedBlog);
@@ -176,6 +179,7 @@ describe('blog data access unit tests', () => {
       imageUrl: 'https://examlpeImage.com',
       createdAt: new Date(),
       updatedAt: new Date(),
+      active: true,
     };
 
     (BlogModel.findOneAndDelete as jest.Mock).mockResolvedValue(deletedBlog);

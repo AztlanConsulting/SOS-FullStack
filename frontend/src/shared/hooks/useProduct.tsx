@@ -15,6 +15,7 @@ export default function useProduct<T extends Props>(
     active?: boolean | null,
   ) => Promise<T>,
   type: string,
+  queryKey: unknown[] = [],
 ) {
   // Pagination state
   const pageHook = useState(1);
@@ -30,7 +31,7 @@ export default function useProduct<T extends Props>(
 
   // Query
   const query = useQuery({
-    queryKey: [type, page, searchTerm, sortOption, active],
+    queryKey: [type, page, searchTerm, sortOption, active, ...queryKey],
     queryFn: async () => queryFunction(page, searchTerm, sortOption, active),
   });
   const { data } = query;

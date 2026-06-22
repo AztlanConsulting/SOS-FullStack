@@ -35,58 +35,20 @@ async function updateBlog(
     );
 
     const newObj: Partial<Blog> = {
+      _id: blog._id,
       name: blog.name.trim(),
       imageUrl: coverUrl,
       content: serialised,
+      active: blog.active,
     };
 
-    const changeset = Object.fromEntries(
-      (Object.entries(newObj) as [keyof Blog, Blog[keyof Blog]][]).filter(
-        ([key, value]) => {
-          if (key == 'content') {
-            const sortKeysDeep = (val: unknown): unknown => {
-              if (Array.isArray(val)) return val.map(sortKeysDeep);
-              if (val !== null && typeof val === 'object') {
-                return Object.keys(val)
-                  .sort()
-                  .reduce(
-                    (acc, k) => {
-                      acc[k] = sortKeysDeep(
-                        (val as Record<string, unknown>)[k],
-                      );
-                      return acc;
-                    },
-                    {} as Record<string, unknown>,
-                  );
-              }
-              return val;
-            };
-
-            const normalize = (val: unknown) =>
-              JSON.stringify(sortKeysDeep(val));
-
-            const isEqual = normalize(blog?.[key]) === normalize(value);
-            return !isEqual;
-          }
-          return blog?.[key] != value;
-        },
-      ),
-    ) as Partial<Blog>;
-
-    if (Object.keys(changeset).length < 1) {
-      setErrors((prev) => ({ ...prev, general: 'No hay cambios' }));
-      return;
-    }
-
-    console.log(newObj);
-
     await editBlog({
-      ...(blog ? { _id: blog._id } : {}),
-      ...changeset,
+      ...newObj,
     });
 
     onSuccess?.();
   } catch (error) {
+    console.log(error);
     if (error && typeof error === 'object' && !('message' in error)) {
       // thrown validation errors object — already set via setErrors above
       return;

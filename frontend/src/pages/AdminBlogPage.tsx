@@ -15,14 +15,15 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 const AdminBlogPage = () => {
+  const [success, setSuccess] = useState(false);
   const { searchHook, query, pages, setActive } = useProduct<BlogResult>(
     queryBlog,
     'blogs',
+    [success],
   );
   const [showModal, setShowModal] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const { state } = useParams();
 

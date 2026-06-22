@@ -55,7 +55,7 @@ const formatDateMissing = (dateMissing?: string | null) => {
 };
 
 const ClientDashboardOverview = () => {
-  const { metrics, loading, error } = useDashboardMetrics();
+  const { metrics, clientNotes, loading, error } = useDashboardMetrics();
   const navigate = useNavigate();
   const [openPetIndex, setOpenPetIndex] = useState<number | null>(null);
 
@@ -118,6 +118,20 @@ const ClientDashboardOverview = () => {
                 alt="Portal exclusivo"
                 className="w-full"
               />
+              <Text
+                variant="body"
+                weight="medium"
+                as="div"
+                className="my-3 w-full text-white"
+              >
+                Nota del asesor
+              </Text>
+              <div className="mt-1 rounded-lg bg-white p-4 shadow-sm border border-gray-100 w-full">
+                <Text variant="body" color="text-gray-600" as="div">
+                  {clientNotes?.toString() ||
+                    'No hay nota disponible por el momento.'}
+                </Text>
+              </div>
             </div>
           </section>
           <div className="py-5">

@@ -1,5 +1,6 @@
 import { safeParse } from 'zod';
 import type { Request, Response } from 'express';
+import type { TokenPayload } from '@/types/auth.types';
 import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { getClientById } from '@/use-cases/clients/getClientById.usecase';
 import { getClients } from '@/use-cases/clients/getClients.usecase';
@@ -127,6 +128,33 @@ export const ClientController = {
       res.status(200).json({ message: 'Client updated successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Error updating client' });
+    }
+  },
+
+  getClientNotesById: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const reqWithUser = req as Request & { user?: TokenPayload };
+      const userId = reqWithUser.user?.userId;
+
+      if (!userId) {
+        res.status(401).json({
+          message: 'No autorizado: Credenciales incompletas en el token.',
+        });
+        return;
+      }
+
+      const client = await getClientById(deps, userId.toString());
+      if (!client) {
+        res.status(404).json({ error: `Client not found: ${userId}` });
+        return;
+      }
+      console.log('Fetched client:', client);
+      console.log('Client public note:', client.publicNote);
+      res.status(200).json(client.publicNote);
+    } catch (error) {
+      res.status(500).json({
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
     }
   },
 };

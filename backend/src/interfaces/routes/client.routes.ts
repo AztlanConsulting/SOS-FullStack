@@ -1,5 +1,6 @@
 import express from 'express';
 import { ClientController } from '../controllers/client.controller';
+import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
@@ -19,6 +20,9 @@ router.put('/plan-status/:planId', ClientController.updatePlanStatus);
  * @desc    Retrieve full details of a specific client by ID.
  * @access  Protected
  */
+
+router.get('/notes', authMiddleware, ClientController.getClientNotesById);
+
 router.get('/:id', ClientController.getClientById);
 /**
  * @route   PUT /api/clientes/:id

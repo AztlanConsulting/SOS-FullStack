@@ -1,7 +1,7 @@
 import { Modal } from '@/shared/components/ui/Modal/Modal';
 import { ConfirmationModal } from '@/shared/components/ui/Modal/ConfirmationModal';
 import type { PlanStatus } from '@/features/clients/types/client.type';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Text } from '@/shared/components/ui/Text';
 import { stripEmojis } from '@/shared/utils/stripEmojis';
 import {
@@ -11,12 +11,15 @@ import {
   HiPencil,
   HiCalendar,
   HiCreditCard,
+  HiPhotograph,
+  HiX,
 } from 'react-icons/hi';
 import { useClientDetail } from '@/features/clients/hooks/useClientDetail';
 import type { ClientListItem } from '@/features/clients/types/client.type';
 import { ClientService } from '@/features/clients/services/client.service';
-import { calculateStackedExpiry } from '@/shared/utils/planDates';
+import { ResourceService } from '@/features/resources/services/resourceItem.service';
 import LoadingSpinner from '../LoadingSpinner';
+import { calculateStackedExpiry } from '@/shared/utils/planDates';
 
 interface Props {
   client: ClientListItem;
@@ -29,7 +32,7 @@ interface Props {
 type PendingDetailUpdate =
   | { type: 'conversation'; value: string }
   | { type: 'notes'; value: string }
-  | { type: 'publicNote'; value: string };
+  | { type: 'publicNote'; value: { text: string; image: string } };
 
 export const ClientDetailModal = ({
   client,
@@ -68,8 +71,15 @@ export const ClientDetailModal = ({
   );
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue, setNotesValue] = useState('');
+
+  // publicNote state
   const [editingPublicNote, setEditingPublicNote] = useState(false);
-  const [publicNoteValue, setPublicNoteValue] = useState('');
+  const [publicNoteText, setPublicNoteText] = useState('');
+  const [publicNoteImage, setPublicNoteImage] = useState('');
+  const [publicNoteImageFile, setPublicNoteImageFile] = useState<File | null>(null);
+  const [publicNoteImagePreview, setPublicNoteImagePreview] = useState('');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const petsToShow = petId
     ? detail?.pets?.filter((p) => p._id === petId)
@@ -101,9 +111,60 @@ export const ClientDetailModal = ({
 
   useEffect(() => {
     if (detail?.publicNote !== undefined) {
-      setPublicNoteValue(detail.publicNote);
+      setPublicNoteText(detail.publicNote.text ?? '');
+      setPublicNoteImage(detail.publicNote.image ?? '');
+      setPublicNoteImagePreview(detail.publicNote.image ?? '');
     }
   }, [detail]);
+
+  const handlePublicNoteImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      setDetailUpdateError('La imagen no puede pesar más de 2 MB.');
+      return;
+    }
+    setPublicNoteImageFile(file);
+    setPublicNoteImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleRemovePublicNoteImage = () => {
+    setPublicNoteImageFile(null);
+    setPublicNoteImagePreview('');
+    setPublicNoteImage('');
+    if (imageInputRef.current) imageInputRef.current.value = '';
+  };
+
+  const handleCancelPublicNote = () => {
+    setPublicNoteText(detail?.publicNote?.text ?? '');
+    setPublicNoteImage(detail?.publicNote?.image ?? '');
+    setPublicNoteImagePreview(detail?.publicNote?.image ?? '');
+    setPublicNoteImageFile(null);
+    if (imageInputRef.current) imageInputRef.current.value = '';
+    setEditingPublicNote(false);
+  };
+
+  const handleSavePublicNote = async () => {
+    setDetailUpdateError(null);
+    let imageUrl = publicNoteImage;
+
+    if (publicNoteImageFile) {
+      setIsUploadingImage(true);
+      try {
+        imageUrl = await ResourceService.uploadImage(publicNoteImageFile);
+      } catch {
+        setDetailUpdateError('No se pudo subir la imagen.');
+        setIsUploadingImage(false);
+        return;
+      }
+      setIsUploadingImage(false);
+    }
+
+    setPendingDetailUpdate({
+      type: 'publicNote',
+      value: { text: publicNoteText, image: imageUrl },
+    });
+  };
 
   const statusLabels: Record<PlanStatus, string> = {
     continua: 'Continua',
@@ -165,6 +226,9 @@ export const ClientDetailModal = ({
         await ClientService.updateClient(client._id, {
           publicNote: pendingDetailUpdate.value,
         });
+        setPublicNoteImage(pendingDetailUpdate.value.image);
+        setPublicNoteImagePreview(pendingDetailUpdate.value.image);
+        setPublicNoteImageFile(null);
         setEditingPublicNote(false);
         onUpdate(detail?.conversation ?? '');
       }
@@ -559,75 +623,118 @@ export const ClientDetailModal = ({
               {editingPublicNote ? (
                 <div className="flex flex-col gap-2">
                   <textarea
-                    value={publicNoteValue}
+                    value={publicNoteText}
                     onChange={(e) =>
-                      setPublicNoteValue(stripEmojis(e.target.value))
+                      setPublicNoteText(stripEmojis(e.target.value))
                     }
                     maxLength={200}
                     rows={3}
+                    placeholder="Escribe una nota visible para el cliente..."
                     className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
                     autoFocus
                   />
-                  <div className="flex flex-col gap-2 items-end">
-                    <Text
-                      variant="small"
-                      as="span"
-                      weight="medium"
-                      className="text-emerald-700"
-                    >
-                      Quedan {200 - publicNoteValue.length} caracteres
-                    </Text>
-                    <div className="flex gap-2.5">
+                  <Text
+                    variant="small"
+                    as="span"
+                    weight="medium"
+                    className="text-emerald-700 self-end"
+                  >
+                    Quedan {200 - publicNoteText.length} caracteres
+                  </Text>
+
+                  {/* Image picker */}
+                  <div className="flex flex-col gap-1">
+                    {publicNoteImagePreview ? (
+                      <div className="relative w-fit">
+                        <img
+                          src={publicNoteImagePreview}
+                          alt="Vista previa"
+                          className="h-24 w-auto rounded-md border border-gray-200 object-cover"
+                        />
+                        <button
+                          onClick={handleRemovePublicNoteImage}
+                          className="absolute -top-1.5 -right-1.5 bg-white border border-gray-300 rounded-full p-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
+                        >
+                          <HiX size={11} className="text-gray-400 hover:text-red-400" />
+                        </button>
+                      </div>
+                    ) : (
                       <button
-                        onClick={() => {
-                          setDetailUpdateError(null);
-                          setPendingDetailUpdate({
-                            type: 'publicNote',
-                            value: publicNoteValue,
-                          });
-                        }}
-                        disabled={isUpdatingDetail}
-                        className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
+                        onClick={() => imageInputRef.current?.click()}
+                        className="group flex items-center gap-1.5 self-start border border-dashed border-gray-300 rounded-md px-3 py-1.5 hover:border-[#C2991D] hover:bg-[#F9CD48]/10 transition-colors"
                       >
+                        <HiPhotograph size={13} className="text-gray-400 group-hover:text-[#C2991D]" />
                         <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
-                          Guardar
+                          Agregar imagen
                         </span>
                       </button>
-                      <button
-                        onClick={() => {
-                          setPublicNoteValue(detail?.publicNote ?? '');
-                          setEditingPublicNote(false);
-                        }}
-                        className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
-                      >
-                        <span className="text-xs text-gray-400 group-hover:text-red-400">
-                          Cancelar
-                        </span>
-                      </button>
-                    </div>
+                    )}
+                    <input
+                      ref={imageInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handlePublicNoteImageChange}
+                    />
+                  </div>
+
+                  {detailUpdateError && (
+                    <Text variant="small" color="text-red-500">
+                      {detailUpdateError}
+                    </Text>
+                  )}
+
+                  <div className="flex gap-2.5 self-end">
+                    <button
+                      onClick={handleSavePublicNote}
+                      disabled={isUpdatingDetail || isUploadingImage}
+                      className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors disabled:opacity-50"
+                    >
+                      <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                        {isUploadingImage ? 'Subiendo...' : 'Guardar'}
+                      </span>
+                    </button>
+                    <button
+                      onClick={handleCancelPublicNote}
+                      disabled={isUploadingImage}
+                      className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
+                    >
+                      <span className="text-xs text-gray-400 group-hover:text-red-400">
+                        Cancelar
+                      </span>
+                    </button>
                   </div>
                 </div>
               ) : (
-                <div className="flex items-start gap-2">
-                  <Text
-                    variant="small"
-                    color="text-gray-600"
-                    className="flex-1 break-all"
-                  >
-                    {publicNoteValue || 'Sin nota pública'}
-                  </Text>
-                  <button
-                    onClick={() => setEditingPublicNote(true)}
-                    className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
-                  >
-                    <HiPencil
-                      size={11}
-                      className="text-gray-400 group-hover:text-[#C2991D]"
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-start gap-2">
+                    <Text
+                      variant="small"
+                      color="text-gray-600"
+                      className="flex-1 break-all"
+                    >
+                      {publicNoteText || 'Sin nota pública'}
+                    </Text>
+                    <button
+                      onClick={() => setEditingPublicNote(true)}
+                      className="group flex items-center gap-1 border border-gray-300 rounded-full px-2 py-0.5 hover:bg-[#F9CD48]/25 hover:border hover:border-[#C2991D] transition-colors"
+                    >
+                      <HiPencil
+                        size={11}
+                        className="text-gray-400 group-hover:text-[#C2991D]"
+                      />
+                      <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
+                        Editar
+                      </span>
+                    </button>
+                  </div>
+                  {publicNoteImagePreview && (
+                    <img
+                      src={publicNoteImagePreview}
+                      alt="Nota pública"
+                      className="h-full w-auto rounded-md border border-gray-200 object-cover"
                     />
-                    <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
-                      Editar
-                    </span>
-                  </button>
+                  )}
                 </div>
               )}
             </div>

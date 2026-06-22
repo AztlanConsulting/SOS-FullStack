@@ -4,6 +4,14 @@ import type { Role } from '@domain/models/role.model';
 import type { Permission } from '@domain/models/permission.model';
 
 /**
+ * Public note visible to the client, containing optional text and image URL.
+ */
+export interface PublicNote {
+  text?: string;
+  image?: string;
+}
+
+/**
  * Core User Entity interface matching the persisted database document structure.
  */
 export interface User {
@@ -20,7 +28,7 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   notes?: string;
-  publicNote?: string;
+  publicNote?: PublicNote;
 }
 
 /**
@@ -80,7 +88,10 @@ const UserSchema = new Schema<User>(
     conversation: { type: String },
     active: { type: Boolean, default: false },
     notes: { type: String, default: '' },
-    publicNote: { type: String, default: '' },
+    publicNote: {
+      text: { type: String, default: '' },
+      image: { type: String, default: '' },
+    },
   },
   {
     timestamps: true,

@@ -126,6 +126,7 @@ export const ClientController = {
       await updateClient(deps, id, { conversation, notes, publicNote });
       res.status(200).json({ message: 'Client updated successfully' });
     } catch (error) {
+      console.error('updateClient error:', error); // add this
       res.status(500).json({ error: 'Error updating client' });
     }
   },

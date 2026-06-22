@@ -114,5 +114,10 @@ export interface DashboardResponse {
 export const notesSchema = z.object({
   conversation: z.string().max(100, 'Error link demasiado grande').optional(),
   notes: z.string().max(200, 'demasiadas notas').optional(),
-  publicNote: z.string().max(200).optional(),
+  publicNote: z
+    .object({
+      text: z.string().max(200).optional(),
+      image: z.string().optional(),
+    })
+    .optional(),
 });

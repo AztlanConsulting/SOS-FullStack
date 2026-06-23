@@ -617,7 +617,7 @@ export const ClientDetailModal = ({
 
             {/* Nota pública */}
             <div className="flex flex-col gap-2">
-              <Text variant="small" weight="medium" color="text-gray-500">
+              <Text variant="small" weight="medium" color="text-red-500">
                 Nota pública
               </Text>
               {editingPublicNote ? (
@@ -627,7 +627,7 @@ export const ClientDetailModal = ({
                     onChange={(e) =>
                       setPublicNoteText(stripEmojis(e.target.value))
                     }
-                    maxLength={200}
+                    maxLength={600}
                     rows={3}
                     placeholder="Escribe una nota visible para el cliente..."
                     className="text-xs border border-gray-300 rounded px-2 py-1.5 outline-none focus:border-yellow-400 resize-none w-full"
@@ -639,7 +639,7 @@ export const ClientDetailModal = ({
                     weight="medium"
                     className="text-emerald-700 self-end"
                   >
-                    Quedan {200 - publicNoteText.length} caracteres
+                    Quedan {600 - publicNoteText.length} caracteres
                   </Text>
 
                   {/* Image picker */}

@@ -19,7 +19,7 @@ export const blogQuery = z
 
 export const blogSchema = z.object({
   name: z.string().max(120, 'Name is too long').min(1, "Name can't be blank"),
-  duration: z.coerce.number().default(1),
+  duration: z.coerce.number(),
   content: z.array(
     z.object({
       content: z.string(),

@@ -5,6 +5,7 @@ import { getBlogsList, getBlogById } from '@use-cases/blogs/getBlogs.usecase';
 import createBlogUC from '@/use-cases/blogs/createBlog.usecase';
 import editBlogUC from '@/use-cases/blogs/editBlog.usecase';
 import deleteBlogUC from '@/use-cases/blogs/deleteBlog.usecase';
+import getBlogStatsUC from '@/use-cases/blogs/getBlogStats.usecase';
 
 export async function getBlogs(req: Request, res: Response) {
   try {
@@ -40,6 +41,16 @@ export async function getBlogs(req: Request, res: Response) {
       total: totalBlogs,
     });
   } catch (error) {
+    return res.status(500).send(error);
+  }
+}
+
+async function getStats(req: Request, res: Response) {
+  try {
+    const blogStats = await getBlogStatsUC(BlogDataAccess);
+    return res.status(200).json(blogStats);
+  } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 }
@@ -89,4 +100,4 @@ async function deleteBlog(req: Request, res: Response) {
   }
 }
 
-export default { getBlogs, createBlog, updateBlog, deleteBlog };
+export default { getBlogs, getStats, createBlog, updateBlog, deleteBlog };

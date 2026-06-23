@@ -160,7 +160,7 @@ describe('blog routes (integration)', () => {
     const blogs = await request(app).get('/blog?page=0');
     const blog = blogs.body.blogs[0];
 
-    const res = await request(app).delete(`/blog`).send({ _id: blog._id });
+    const res = await request(app).delete(`/blog/${blog._id}`);
 
     expect(res.status).toBe(200);
 

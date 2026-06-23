@@ -82,4 +82,10 @@ export const BlogDataAccess: BlogRepository = {
 
     return deletedBlog;
   },
+  countState: function (): Promise<number[]> {
+    throw new Error('Function not implemented.');
+  },
+  getPercentageChange: function (): Promise<number> {
+    throw new Error('Function not implemented.');
+  },
 };

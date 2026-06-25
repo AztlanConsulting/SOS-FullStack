@@ -126,9 +126,16 @@ const ClientDashboardOverview = () => {
               >
                 Nota del asesor
               </Text>
-              <div className="mt-1 rounded-lg bg-white p-4 shadow-sm border border-gray-100 w-full">
+              <div className="mt-1 rounded-lg bg-white p-4 shadow-sm border border-gray-100 w-full flex items-evenly gap-6">
+                {clientNotes?.image && (
+                  <img
+                    src={clientNotes.image}
+                    alt="Nota del asesor"
+                    className="w-1/4 h-auto"
+                  />
+                )}
                 <Text variant="body" color="text-gray-600" as="div">
-                  {clientNotes?.toString() ||
+                  {clientNotes?.text ||
                     'No hay nota disponible por el momento.'}
                 </Text>
               </div>

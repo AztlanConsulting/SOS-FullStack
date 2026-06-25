@@ -18,6 +18,9 @@ export const useDashboardMetrics = () => {
         const note = await getNotes();
         setMetrics(data);
         setClientNotes(note);
+        console.log('Client notes:', note);
+        console.log('Client image:', note?.image);
+        console.log('Client text:', note?.text);
       } catch (err) {
         console.error(err);
         setError('Error al cargar la información del dashboard');

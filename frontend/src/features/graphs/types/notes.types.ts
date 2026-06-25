@@ -1,3 +1,4 @@
 export interface Notes {
-  publicNote: string;
+  text?: string;
+  image?: string;
 }

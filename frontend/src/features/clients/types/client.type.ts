@@ -86,7 +86,7 @@ export interface ClientDetail {
   pets: ClientPet[];
   plans: ClientPlan[];
   notes?: string;
-  publicNote?: string;
+  publicNote?: { text?: string; image?: string };
   paymentMethod?: string;
   paymentStatus?: 'pending' | 'succeeded' | 'failed';
 }

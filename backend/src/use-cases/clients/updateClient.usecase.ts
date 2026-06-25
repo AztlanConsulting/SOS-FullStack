@@ -7,7 +7,7 @@ import type { UserRepository } from '@/domain/repositories/user.repository';
 export interface UpdateClientInput {
   conversation?: string;
   notes?: string;
-  publicNote?: string;
+  publicNote?: { text?: string; image?: string };
 }
 
 /**

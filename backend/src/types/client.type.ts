@@ -6,6 +6,14 @@
 export type PlanStatus = 'continua' | 'casi expira' | 'expirada' | 'RIP';
 
 /**
+ * Public note visible to the client, containing optional text and image URL.
+ */
+export interface PublicNote {
+  text?: string;
+  image?: string;
+}
+
+/**
  * Detailed information about a pet belonging to a client.
  */
 export interface ClientPet {
@@ -31,6 +39,7 @@ export interface ClientPet {
   };
   plans?: ClientPlan[];
 }
+
 /**
  * Configuration and metadata of a plan purchased by a client.
  */
@@ -73,7 +82,7 @@ export interface ClientDetail {
   fbUser?: string;
   conversation?: string;
   notes?: string;
-  publicNote?: string;
+  publicNote?: { text?: string; image?: string };
   createdAt?: string;
   paymentMethod?: string;
   pets: ClientPet[];

@@ -95,6 +95,36 @@ function formatValue(key: string, value: unknown): string {
   return strValue;
 }
 
+const VaccinationCardRenderer = ({ value }: { value: string }) => {
+  if (value.startsWith('data:image/')) {
+    return (
+      <img
+        src={value}
+        alt="Tarjeta de vacunación"
+        className="max-w-full h-auto rounded border"
+      />
+    );
+  }
+
+  if (value.startsWith('data:application/pdf')) {
+    return (
+      <a
+        href={value}
+        download="tarjeta-vacunacion.pdf"
+        className="text-primary underline hover:text-yellow-600"
+      >
+        Descargar PDF
+      </a>
+    );
+  }
+
+  return (
+    <Text variant="body" color="text-gray-800">
+      {value}
+    </Text>
+  );
+};
+
 const QaMModal = ({
   form,
   onClose,
@@ -118,9 +148,15 @@ const QaMModal = ({
               <Text variant="small" weight="medium" color="text-gray-500">
                 {label}
               </Text>
-              <Text variant="body" color="text-gray-800">
-                {formatValue(key, value)}
-              </Text>
+              {key === 'vaccinationCard' &&
+              typeof value === 'string' &&
+              value.startsWith('data:') ? (
+                <VaccinationCardRenderer value={value} />
+              ) : (
+                <Text variant="body" color="text-gray-800">
+                  {formatValue(key, value)}
+                </Text>
+              )}
             </div>
           );
         })}

@@ -17,6 +17,8 @@ export interface Pet {
   location: GeocodingResult;
   createdAt: Date;
   updatedAt: Date;
+  notes?: string;
+  publicNote?: { text?: string; image?: string };
 }
 
 export type PetCreateInput = Omit<Pet, '_id' | 'createdAt' | 'updatedAt'>;
@@ -41,6 +43,11 @@ const PetSchema = new Schema<Pet>(
         country: { type: String, required: true },
         state: { type: String, required: true },
       },
+    },
+    notes: { type: String, default: '' },
+    publicNote: {
+      text: { type: String, default: '' },
+      image: { type: String, default: '' },
     },
   },
   { timestamps: true },

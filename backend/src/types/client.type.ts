@@ -28,6 +28,8 @@ export interface ClientPet {
   photos?: string[];
   dateMissing?: string;
   placeMissing?: string;
+  notes?: string;
+  publicNote?: { text?: string; image?: string };
   location?: {
     coords: [number, number];
     displayName: string;

@@ -116,14 +116,14 @@ export const ClientController = {
         return;
       }
 
-      const { conversation, notes, publicNote } = body.data;
+      const { conversation } = body.data;
 
       if (!id || typeof id !== 'string') {
         res.status(400).json({ error: 'Invalid client id' });
         return;
       }
 
-      await updateClient(deps, id, { conversation, notes, publicNote });
+      await updateClient(deps, id, { conversation });
       res.status(200).json({ message: 'Client updated successfully' });
     } catch (error) {
       console.error('updateClient error:', error); // add this

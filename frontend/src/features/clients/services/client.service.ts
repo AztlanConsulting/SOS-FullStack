@@ -52,8 +52,9 @@ export const ClientService = {
 
   /**
    * Dispatches an HTTP PUT request to modify the operational status of a specific subscription ledger.
-   * * @param planId - The target unique identifier for the subscription ledger.
-   * @param status - The new string state to apply (e.g., 'active', 'expirado', 'cancelado').
+   *
+   * @param planId - The target unique identifier for the subscription ledger.
+   * @param status - The new string state to apply.
    * @returns {Promise<void>} Resolves when the network layer successfully finishes processing the update.
    */
   updatePlanStatus: async (planId: string, status: string): Promise<void> => {
@@ -63,15 +64,19 @@ export const ClientService = {
   },
 
   /**
-   * Dispatches an HTTP PUT request to update arbitrary metadata flags attached to a client's core profile.
-   * Typically used for syncing persistent administration overrides like support conversation URLs or CRM logs.
-   * * @param id - The unique user profile identification database token string.
-   * @param data - Fragmented payload shape containing tracking variables or text logs.
+   * Updates arbitrary metadata fields on a client profile.
+   *
+   * @param id - The unique user profile identification database token string.
+   * @param data - Fields to update: conversation link, internal notes, or public note.
    * @returns {Promise<void>} Resolves once network transactions conclude successfully.
    */
   updateClient: async (
     id: string,
-    data: { conversation?: string; notes?: string },
+    data: {
+      conversation?: string;
+      notes?: string;
+      publicNote?: { text?: string; image?: string };
+    },
   ) => {
     await axiosInstance.put(`/clientDashboard/${id}`, data);
   },

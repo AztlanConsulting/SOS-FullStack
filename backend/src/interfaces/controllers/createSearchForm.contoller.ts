@@ -2,6 +2,7 @@ import { createSearchForm } from '@/use-cases/members-only/createSearchForm';
 import type { Request, Response } from 'express';
 import { SearchFormDataAccess } from '@infrastructure/data-access/searchForm.data-access';
 import { searchFormSchema } from '../../types/createSearchForm.types';
+import type { TokenPayload } from '@/types/auth.types';
 
 export default async function createSearchFormController(
   req: Request,
@@ -17,7 +18,11 @@ export default async function createSearchFormController(
     return;
   }
 
-  const sanitized = { ...parsed.data };
+  const { createdBy: _, ...formData } = parsed.data;
+  const sanitized = {
+    ...formData,
+    createdBy: (req as Request & { user?: TokenPayload }).user!.userId,
+  };
   if (typeof sanitized.approximateAge === 'number') {
     const n = Math.trunc(sanitized.approximateAge);
     sanitized.approximateAge = Number.isFinite(n)

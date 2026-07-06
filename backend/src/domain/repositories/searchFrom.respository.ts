@@ -7,6 +7,18 @@ export interface SearchFormResult extends SearchFormReport {
   updatedAt: Date;
 }
 
+export interface SearchFormWithUser extends Omit<
+  SearchFormResult,
+  'createdBy'
+> {
+  createdBy: {
+    _id: Types.ObjectId;
+    username: string;
+    email: string;
+  };
+}
+
 export interface SearchFormRepository {
   createSearchForm(searchFormData: SearchFormReport): Promise<SearchFormResult>;
+  getAllSearchForms(): Promise<SearchFormWithUser[]>;
 }

@@ -82,10 +82,37 @@ export const BlogDataAccess: BlogRepository = {
 
     return deletedBlog;
   },
-  countState: function (): Promise<number[]> {
-    throw new Error('Function not implemented.');
+  countState: async function (): Promise<{
+    published: number;
+    drafts: number;
+  }> {
+    const published = await BlogModel.countDocuments({ active: true });
+    const drafts = await BlogModel.countDocuments({ active: false });
+
+    return { published, drafts };
   },
-  getPercentageChange: function (): Promise<number> {
-    throw new Error('Function not implemented.');
+  getPercentageChange: async function (): Promise<number> {
+    const now = new Date();
+
+    // Beginning of this month
+    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Beginning of last month
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    const thisMonth = await BlogModel.countDocuments({
+      createdAt: {
+        $gte: startOfThisMonth,
+      },
+    });
+
+    const lastMonth = await BlogModel.countDocuments({
+      createdAt: {
+        $gte: startOfLastMonth,
+        $lt: startOfThisMonth,
+      },
+    });
+
+    return thisMonth - lastMonth;
   },
 };

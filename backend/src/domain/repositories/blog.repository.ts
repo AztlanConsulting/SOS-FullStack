@@ -17,6 +17,6 @@ export interface BlogRepository {
   registerBlog(blog: CreateBlog): Promise<Blog>;
   editBlog(blog: Partial<CreateBlog>): Promise<Blog | null>;
   deleteBlog(blogId: string): Promise<Blog | null>;
-  countState(): Promise<number[]>;
+  countState(): Promise<{ published: number; drafts: number }>;
   getPercentageChange(): Promise<number>;
 }

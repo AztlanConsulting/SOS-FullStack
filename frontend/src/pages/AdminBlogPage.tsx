@@ -2,6 +2,7 @@ import AdminBlogHeader from '@/features/admin-blogs/components/AdminBlogHeader';
 import AdminBlogList from '@/features/admin-blogs/components/AdminBlogList';
 import BlogModal from '@/features/admin-blogs/components/BlogModal';
 import BlogStats from '@/features/admin-blogs/components/BlogStats';
+import getBlogStats from '@/features/admin-blogs/service/getBlogStats.service';
 import queryBlog from '@/features/blog/services/queryBlog';
 import type { BlogResult } from '@/features/blog/types/blog.types';
 import { Sidebar } from '@/shared/components/layout/Sidebar';
@@ -11,16 +12,27 @@ import { Modal } from '@/shared/components/ui/Modal/Modal';
 import Pagination from '@/shared/components/ui/Pagination';
 import useProduct from '@/shared/hooks/useProduct';
 import trace from '@assets/images/trace.svg';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 const AdminBlogPage = () => {
+  // Should be a hook but idgaf
   const [success, setSuccess] = useState(false);
   const { searchHook, query, pages, setActive } = useProduct<BlogResult>(
     queryBlog,
     'blogs',
     [success],
   );
+  const {
+    isLoading: statsLoading,
+    error: statsError,
+    data: blogStats,
+  } = useQuery({
+    queryKey: ['blog-stats'],
+    queryFn: async () => await getBlogStats(),
+  });
+
   const [showModal, setShowModal] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
@@ -49,6 +61,7 @@ const AdminBlogPage = () => {
   const { isLoading, error } = query;
   const blogs = query.data?.blogs;
 
+  // Component structure
   return (
     <div className="flex h-screen bg-base overflow-x-hidden w-full">
       <Sidebar />
@@ -65,6 +78,7 @@ const AdminBlogPage = () => {
               setShowModal(true);
               setEdit(true);
             }}
+            blogStats={blogStats}
           />
           <hr className="w-2/3" />
           <section className="grid grid-cols-5 mt-5 gap-5">
@@ -92,7 +106,11 @@ const AdminBlogPage = () => {
               )}
             </div>
 
-            <BlogStats />
+            <BlogStats
+              blogStats={blogStats}
+              isLoading={statsLoading}
+              error={statsError}
+            />
           </section>
         </div>
         {showModal && (

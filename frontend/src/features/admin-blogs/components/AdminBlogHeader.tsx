@@ -2,6 +2,7 @@ import { Text } from '@/shared/components/ui';
 import Search from '@/shared/components/ui/Search';
 import { HiPlus } from 'react-icons/hi';
 import { Link, useLocation } from 'react-router';
+import type { BlogStatsSchema } from '../types/blog.types';
 
 interface Props {
   searchHook: {
@@ -12,10 +13,17 @@ interface Props {
     ];
   };
   createBlog: () => void;
-  onlyAlphabetic?: boolean;
+  blogStats: BlogStatsSchema | undefined;
 }
 
-const AdminBlogHeader = ({ searchHook, createBlog }: Props) => {
+const AdminBlogHeader = ({ searchHook, createBlog, blogStats }: Props) => {
+  const { published, drafts } = blogStats ?? {
+    published: 0,
+    drafts: 0,
+    comparison: 0,
+  };
+  const total = published + drafts;
+
   return (
     <section className="w-full">
       <div className="flex justify-between">
@@ -36,13 +44,17 @@ const AdminBlogHeader = ({ searchHook, createBlog }: Props) => {
 
       <div className="flex w-full justify-between mt-4">
         <div className="flex w-1/2 gap-5 h-fit">
-          <Tag label={'Todos'} amount={0} route={'/admin/blogs'} />
+          <Tag label={'Todos'} amount={total} route={'/admin/blogs'} />
           <Tag
             label={'Publicados'}
-            amount={0}
+            amount={published}
             route={'/admin/blogs/publicados'}
           />
-          <Tag label={'Borrados'} amount={0} route={'/admin/blogs/borrados'} />
+          <Tag
+            label={'Borrados'}
+            amount={drafts}
+            route={'/admin/blogs/borrados'}
+          />
         </div>
         <div className="h-fit -my-8 w-4/5 flex justify-end">
           <Search searchHook={searchHook} />

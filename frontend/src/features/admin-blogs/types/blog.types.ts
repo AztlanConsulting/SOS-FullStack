@@ -12,3 +12,9 @@ export type BlogDependencies = {
   blocks: LocalBlock[];
   setErrors: Dispatch<SetStateAction<Record<string, string>>>;
 };
+
+export type BlogStatsSchema = {
+  published: number;
+  drafts: number;
+  comparison: number;
+};

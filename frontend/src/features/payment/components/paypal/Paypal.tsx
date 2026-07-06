@@ -19,6 +19,7 @@ const Paypal = ({ data, purchaseDetail, success }: Props) => {
     <>
       <PayPalProvider
         clientId={import.meta.env.VITE_PAYPAL_CLIENT}
+        environment="production"
         components={['paypal-payments']}
         pageType="checkout"
       >

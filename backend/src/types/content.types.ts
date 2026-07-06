@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 
 export interface ContentBlock {
   content: string;
-  type: string;
+  type: string; // 'text' | 'image'
 }
 
 export const ContentBlockSchema = new Schema<ContentBlock>(

@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router';
-import { HiUsers, HiCog, HiCollection, HiSearch } from 'react-icons/hi';
+import { HiUsers, HiBookOpen, HiCollection, HiSearch } from 'react-icons/hi';
 import { TbLogout } from 'react-icons/tb';
 import { useState } from 'react';
 import { Text } from '@/shared/components/ui/Text';
@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   // { label: 'Mascotas', icon: FaDog, path: '/pets', enabled: false },
   // { label: 'Links', icon: HiLink, path: '/links', enabled: false },
   // { label: 'Colaboradoras', icon: HiUserGroup, path: '/collaborators', enabled: false },
-  // { label: 'Blog', icon: HiBookOpen, path: '/blog', enabled: false },
+  { label: 'Blog', icon: HiBookOpen, path: '/admin/blogs', enabled: true },
   { label: 'Recursos', icon: HiCollection, path: '/recursos', enabled: true },
   {
     label: 'Perfil de Búsqueda',

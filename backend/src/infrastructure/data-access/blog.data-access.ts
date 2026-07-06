@@ -19,6 +19,7 @@ export const BlogDataAccess: BlogRepository = {
     page = 0,
     sortOption = 'Nombre (A-Z)',
     searchTerm = '',
+    active = null,
   }: BlogRequest): Promise<Blog[]> {
     const sort: Record<string, { [key: string]: SortOrder }> = {
       'Nombre (A-Z)': { name: 1 },
@@ -27,6 +28,7 @@ export const BlogDataAccess: BlogRepository = {
 
     const blogs = await BlogModel.find({
       name: { $regex: searchTerm, $options: 'i' },
+      ...(active != null ? { active: active } : {}),
     })
       .skip(page * limit)
       .limit(limit)
@@ -51,10 +53,66 @@ export const BlogDataAccess: BlogRepository = {
    * @param searchTerm - filter to better calculate the amount of pages
    * @returns number of records
    */
-  getTotalBlogs: async function ({ searchTerm = '' }): Promise<number> {
+  getTotalBlogs: async function ({
+    searchTerm = '',
+    active = null,
+  }): Promise<number> {
     const totalBlogs = await BlogModel.countDocuments({
       name: { $regex: searchTerm, $options: 'i' },
+      ...(active != null ? { active: active } : {}),
     });
     return totalBlogs;
+  },
+  registerBlog: async function (blog: Blog): Promise<Blog> {
+    const newBlog = await BlogModel.create(blog);
+
+    return newBlog;
+  },
+  editBlog: async function (blog: Partial<Blog>): Promise<Blog | null> {
+    const editBlog = await BlogModel.findOneAndUpdate(
+      { _id: blog._id },
+      { $set: { ...blog } },
+    );
+    BlogModel.updateOne;
+
+    return editBlog;
+  },
+  deleteBlog: async function (blogId: string): Promise<Blog | null> {
+    const deletedBlog = await BlogModel.findOneAndDelete({ _id: blogId });
+
+    return deletedBlog;
+  },
+  countState: async function (): Promise<{
+    published: number;
+    drafts: number;
+  }> {
+    const published = await BlogModel.countDocuments({ active: true });
+    const drafts = await BlogModel.countDocuments({ active: false });
+
+    return { published, drafts };
+  },
+  getPercentageChange: async function (): Promise<number> {
+    const now = new Date();
+
+    // Beginning of this month
+    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Beginning of last month
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    const thisMonth = await BlogModel.countDocuments({
+      createdAt: {
+        $gte: startOfThisMonth,
+      },
+    });
+
+    const lastMonth = await BlogModel.countDocuments({
+      createdAt: {
+        $gte: startOfLastMonth,
+        $lt: startOfThisMonth,
+      },
+    });
+
+    return thisMonth - lastMonth;
   },
 };

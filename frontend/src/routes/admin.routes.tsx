@@ -1,3 +1,4 @@
+import AdminBlogPage from '@/pages/AdminBlogPage';
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ClientsPage } from '@/pages/ClientPage';
 import { ResourcesPage } from '@/pages/ResourcesPage';
@@ -25,6 +26,19 @@ const routerAdmin = [
       {
         path: 'recursos',
         element: <ResourcesPage />,
+      },
+      {
+        path: 'admin',
+        children: [
+          {
+            path: 'blogs',
+            element: <AdminBlogPage />,
+          },
+          {
+            path: 'blogs/:state',
+            element: <AdminBlogPage />,
+          },
+        ],
       },
       {
         path: 'perfil-busqueda',

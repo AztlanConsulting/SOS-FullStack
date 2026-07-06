@@ -1,5 +1,5 @@
 import type { ContentBlock } from '@/shared/types/content.types';
-import type { LocalBlock } from '../hooks/useEditResource';
+import type { LocalBlock } from '../types/block.types';
 
 function parseResourceBlock(resourceBlock: ContentBlock[]): LocalBlock[] {
   const newResources = resourceBlock.map(

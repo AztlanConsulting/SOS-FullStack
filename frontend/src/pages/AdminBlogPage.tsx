@@ -81,8 +81,8 @@ const AdminBlogPage = () => {
             blogStats={blogStats}
           />
           <hr className="w-2/3" />
-          <section className="grid grid-cols-5 mt-5 gap-5">
-            <div className="col-span-3 overflow-x-scroll ">
+          <section className="grid grid-cols-2 mt-5 gap-5">
+            <div className="overflow-x-scroll">
               {!blogs && isLoading && <LoadingSpinner />}
               {!blogs && error && (
                 <Error

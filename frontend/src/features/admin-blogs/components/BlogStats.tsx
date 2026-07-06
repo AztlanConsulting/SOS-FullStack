@@ -18,7 +18,7 @@ const BlogStats = ({ blogStats, isLoading, error }: Props) => {
   const more = comparison > 0;
 
   return (
-    <div className="h-1/4 flex-1 py-5 px-3 border border-gray-300 bg-white my-5 gap-3 rounded-md grid grid-cols-3 col-span-2">
+    <div className="h-1/4 flex-1 py-5 px-3 border border-gray-300 bg-white my-5 gap-3 rounded-md grid grid-cols-3">
       {!blogStats && isLoading && (
         <div className="col-span-3">
           <LoadingSpinner />
@@ -53,9 +53,16 @@ const BlogStats = ({ blogStats, isLoading, error }: Props) => {
             <Text
               variant="h1"
               weight="semibold"
-              className={`text-gray-600 text-5xl! ${more ? 'text-green-600' : 'text-red-600'} flex gap-1`}
+              className={`text-gray-600 text-5xl! ${more ? 'text-green-600' : 'text-red-600'}`}
             >
-              {more ? <IoArrowUp /> : <IoArrowDown />} {comparison}
+              <div className="flex items-center gap-1">
+                {more ? (
+                  <IoArrowUp className="size-6" />
+                ) : (
+                  <IoArrowDown className="size-6" />
+                )}{' '}
+                {comparison}
+              </div>
             </Text>
             <Text variant="h3" className="text-center">
               Comparación con el mes pasado

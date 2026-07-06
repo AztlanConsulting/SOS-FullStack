@@ -9,7 +9,7 @@ interface Props {
 const AdminBlogList = ({ blogs, openModal }: Props) => {
   return (
     // h-138
-    <div className="flex flex-col gap-5 w-full px-20 overflow-scroll">
+    <div className="flex flex-col gap-5 w-full px-5 overflow-scroll">
       {blogs.map((b) => (
         <button onClick={() => openModal(b._id)}>
           <AdminBlogCard blog={b} />

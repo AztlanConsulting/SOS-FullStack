@@ -76,7 +76,9 @@ export const ClientDetailModal = ({
   const [editingPublicNote, setEditingPublicNote] = useState(false);
   const [publicNoteText, setPublicNoteText] = useState('');
   const [publicNoteImage, setPublicNoteImage] = useState('');
-  const [publicNoteImageFile, setPublicNoteImageFile] = useState<File | null>(null);
+  const [publicNoteImageFile, setPublicNoteImageFile] = useState<File | null>(
+    null,
+  );
   const [publicNoteImagePreview, setPublicNoteImagePreview] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -117,7 +119,9 @@ export const ClientDetailModal = ({
     }
   }, [detail]);
 
-  const handlePublicNoteImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePublicNoteImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) {
@@ -327,10 +331,10 @@ export const ClientDetailModal = ({
                 <Text variant="small" color="text-gray-600">
                   {detail.createdAt
                     ? new Date(detail.createdAt).toLocaleDateString('es-MX', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    })
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })
                     : '—'}
                 </Text>
               </div>
@@ -392,7 +396,7 @@ export const ClientDetailModal = ({
                 ) : (
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     {conversationValue &&
-                      conversationValue.startsWith('http') ? (
+                    conversationValue.startsWith('http') ? (
                       <a
                         href={conversationValue}
                         target="_blank"
@@ -432,15 +436,15 @@ export const ClientDetailModal = ({
             {petsToShow?.map((pet, petIndex) => {
               const expiryDates = pet.plans
                 ? calculateStackedExpiry(
-                  pet.plans.filter(
-                    (
-                      p,
-                    ): p is typeof p & {
-                      createdAt: string;
-                      duration: number;
-                    } => Boolean(p.createdAt && p.duration),
-                  ),
-                )
+                    pet.plans.filter(
+                      (
+                        p,
+                      ): p is typeof p & {
+                        createdAt: string;
+                        duration: number;
+                      } => Boolean(p.createdAt && p.duration),
+                    ),
+                  )
                 : [];
 
               return (
@@ -594,13 +598,13 @@ export const ClientDetailModal = ({
                                   {expiryDates[index] < new Date()
                                     ? `Expirado el ${expiryDates[index].toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
                                     : expiryDates[index].toLocaleDateString(
-                                      'es-MX',
-                                      {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric',
-                                      },
-                                    )}
+                                        'es-MX',
+                                        {
+                                          day: '2-digit',
+                                          month: '2-digit',
+                                          year: 'numeric',
+                                        },
+                                      )}
                                 </span>
                               </Text>
                             )}
@@ -655,7 +659,10 @@ export const ClientDetailModal = ({
                           onClick={handleRemovePublicNoteImage}
                           className="absolute -top-1.5 -right-1.5 bg-white border border-gray-300 rounded-full p-0.5 hover:bg-red-50 hover:border-red-300 transition-colors"
                         >
-                          <HiX size={11} className="text-gray-400 hover:text-red-400" />
+                          <HiX
+                            size={11}
+                            className="text-gray-400 hover:text-red-400"
+                          />
                         </button>
                       </div>
                     ) : (
@@ -663,7 +670,10 @@ export const ClientDetailModal = ({
                         onClick={() => imageInputRef.current?.click()}
                         className="group flex items-center gap-1.5 self-start border border-dashed border-gray-300 rounded-md px-3 py-1.5 hover:border-[#C2991D] hover:bg-[#F9CD48]/10 transition-colors"
                       >
-                        <HiPhotograph size={13} className="text-gray-400 group-hover:text-[#C2991D]" />
+                        <HiPhotograph
+                          size={13}
+                          className="text-gray-400 group-hover:text-[#C2991D]"
+                        />
                         <span className="text-xs text-gray-400 group-hover:text-[#C2991D]">
                           Agregar imagen
                         </span>

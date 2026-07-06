@@ -27,8 +27,6 @@ export interface User {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
-  notes?: string;
-  publicNote?: PublicNote;
 }
 
 /**
@@ -87,11 +85,6 @@ const UserSchema = new Schema<User>(
     fbUser: { type: String },
     conversation: { type: String },
     active: { type: Boolean, default: false },
-    notes: { type: String, default: '' },
-    publicNote: {
-      text: { type: String, default: '' },
-      image: { type: String, default: '' },
-    },
   },
   {
     timestamps: true,

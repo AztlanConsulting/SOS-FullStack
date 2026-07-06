@@ -80,4 +80,18 @@ export const ClientService = {
   ) => {
     await axiosInstance.put(`/clientDashboard/${id}`, data);
   },
+
+  /**
+   * Updates the notes associated with a specific pet profile.
+   *
+   * @param petId - The unique identifier of the pet to update.
+   * @param data - An object containing optional `notes` and `publicNote` fields.
+   * @returns {Promise<void>} Resolves when the update request completes successfully.
+   */
+  updatePetNotes: async (
+    petId: string,
+    data: { notes?: string; publicNote?: { text?: string; image?: string } },
+  ) => {
+    await axiosInstance.patch(`/pets/${petId}/notes`, data);
+  },
 };

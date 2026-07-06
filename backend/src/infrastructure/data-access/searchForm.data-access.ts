@@ -3,6 +3,7 @@ import { SearchFormModel } from '@domain/models/searchForm.model';
 import type {
   SearchFormRepository,
   SearchFormResult,
+  SearchFormWithUser,
 } from '@domain/repositories/searchFrom.respository';
 
 /**
@@ -21,5 +22,17 @@ export const SearchFormDataAccess: SearchFormRepository = {
   ): Promise<SearchFormResult> {
     const created = await SearchFormModel.create(searchFormData);
     return created.toObject() as unknown as SearchFormResult;
+  },
+
+  /**
+   * Retrieves all search form reports with populated user data.
+   * @returns Array of search forms with user details.
+   */
+  async getAllSearchForms(): Promise<SearchFormWithUser[]> {
+    const forms = await SearchFormModel.find()
+      .populate('createdBy', 'username email')
+      .sort({ createdAt: -1 })
+      .lean();
+    return forms as unknown as SearchFormWithUser[];
   },
 };

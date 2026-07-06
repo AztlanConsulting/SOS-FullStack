@@ -1,6 +1,7 @@
 import { RoleProtectedRoute } from './RoleProtectedRoute';
 import { ClientsPage } from '@/pages/ClientPage';
 import { ResourcesPage } from '@/pages/ResourcesPage';
+import { SearchProfilePage } from '@/pages/SearchProfilePage';
 import { Outlet } from 'react-router';
 
 /**
@@ -24,6 +25,10 @@ const routerAdmin = [
       {
         path: 'recursos',
         element: <ResourcesPage />,
+      },
+      {
+        path: 'perfil-busqueda',
+        element: <SearchProfilePage />,
       },
     ],
   },

@@ -30,6 +30,7 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
     coverPreview,
     updateCoverImage,
     validateData,
+    defaultBlog,
     errors,
     save,
   } = useBlog(blog, success);
@@ -106,7 +107,10 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
                 if (Object.keys(validateData()).length > 0) return;
                 setShowConfirmation(true);
               }}
-              close={closeModal}
+              close={() => {
+                defaultBlog();
+                closeModal();
+              }}
             />
           ) : (
             <BlogModalActions

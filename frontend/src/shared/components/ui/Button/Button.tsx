@@ -41,7 +41,7 @@ export function Button({
     secondary:
       'bg-white text-yellow-400 hover:bg-yellow-200 w-full md:max-w-lg mx-auto border-2 border-yellow-400',
     danger:
-      'bg-[#F5F5F5] text-[#61646B] hover:bg-[#D3D3D3] w-full md:max-w-lg mx-auto border-1 border-[#61646B]',
+      'bg-gray-200 text-gray-600 hover:bg-gray-50 w-full md:max-w-lg mx-auto border-1 border-[#61646B]',
     plans:
       'bg-yellow-400 text-black hover:bg-yellow-500 w-3/7 md:w-3/7 lg:w-3/7 xl:w-3/7',
     purplePlans:

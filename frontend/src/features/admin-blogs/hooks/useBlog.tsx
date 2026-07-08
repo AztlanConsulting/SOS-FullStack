@@ -167,6 +167,11 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     setLoading(false);
   }
 
+  function defaultBlog() {
+    blog && setBlogChangeset(blog);
+    setBlocks(parseResourceBlock(blog?.content ?? []));
+  }
+
   const updateBlocks = {
     updateTextBlock,
     updateImageBlock,
@@ -183,6 +188,7 @@ function useBlog(blog?: Blog | undefined, onSuccess?: () => void) {
     coverImageHook,
     coverPreview,
     updateCoverImage,
+    defaultBlog,
     validateData,
     errors,
     save,

@@ -31,6 +31,7 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
     updateCoverImage,
     validateData,
     errors,
+    loading,
     save,
   } = useBlog(blog, success);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -99,7 +100,7 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
           {/* ── Actions ── */}
           {edit ? (
             <BlogModalActions
-              loading={false}
+              loading={loading}
               successLabel={'Guardar'}
               closeLabel={'Cancelar'}
               save={() => {
@@ -110,7 +111,7 @@ const BlogModal = ({ blog, edit, setEdit, closeModal, success }: Props) => {
             />
           ) : (
             <BlogModalActions
-              loading={false}
+              loading={loading}
               successLabel={'Editar'}
               closeLabel={'Eliminar'}
               save={() => setEdit(true)}

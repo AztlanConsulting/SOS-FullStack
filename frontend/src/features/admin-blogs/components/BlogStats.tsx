@@ -18,7 +18,7 @@ const BlogStats = ({ blogStats, isLoading, error }: Props) => {
   const more = comparison > 0;
 
   return (
-    <div className="h-1/4 flex-1 py-5 px-3 border border-gray-300 bg-white my-5 gap-3 rounded-md grid grid-cols-3">
+    <div className="h-fit flex-1 py-5 px-3 border border-gray-300 bg-white my-5 gap-3 rounded-md grid grid-cols-3">
       {!blogStats && isLoading && (
         <div className="col-span-3">
           <LoadingSpinner />

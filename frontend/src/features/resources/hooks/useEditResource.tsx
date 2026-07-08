@@ -7,7 +7,7 @@ import useUpdateContentImage from '@/shared/hooks/updateConentImage';
 
 // ── Hard limits (must mirror backend validation) ──────────────────────────────
 export const MAX_NAME_LENGTH = 100;
-export const MAX_TEXT_LENGTH = 400;
+export const MAX_TEXT_LENGTH = 2000;
 export const MAX_LINK_LENGTH = 100;
 export const MAX_PRICE = 400;
 export const MAX_BLOCKS = 10;

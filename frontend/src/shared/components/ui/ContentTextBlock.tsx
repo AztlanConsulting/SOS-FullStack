@@ -44,6 +44,7 @@ const ContentTextBlock = ({
       <textarea
         rows={6}
         value={value}
+        maxLength={maxLength}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Escribe el contenido..."
         className={

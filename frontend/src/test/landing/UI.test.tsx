@@ -40,7 +40,7 @@ describe('Button component', () => {
     expect(screen.getByRole('button').className).toContain('bg-yellow-400');
 
     rerender(<Button label="Button" variant="danger" />);
-    expect(screen.getByRole('button').className).toContain('bg-[#F5F5F5]');
+    expect(screen.getByRole('button').className).toContain('bg-gray-200');
   });
 });
 

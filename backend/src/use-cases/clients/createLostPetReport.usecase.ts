@@ -93,6 +93,12 @@ export const createLostPetReport = async (
     });
   } else {
     userId = user._id.toString();
+
+    if (user.phone !== input.phoneNumber) {
+      await userRepository.updateUser(userId, {
+        phone: input.phoneNumber,
+      });
+    }
   }
 
   const petData = mapToPet(input, userId);

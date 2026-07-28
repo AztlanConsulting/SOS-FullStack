@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import {
   getManualsDB,
   getManualByIdDB,
@@ -39,28 +40,35 @@ export async function getManuals(req: Request, res: Response) {
 
     return res.status(200).json({ manuals, total: totalManuals });
   } catch (error) {
+    logger.error('getManuals error', {
+      error,
+      query: req.query,
+    });
     res.status(500).send(error);
   }
 }
 
 export const getManualById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const idStr = Array.isArray(id) ? id[0] : id;
   try {
-    const { id } = req.params;
-    const idStr = Array.isArray(id) ? id[0] : id;
     const manual = await ManualDataAccess.getManualById(idStr);
     if (!manual)
       return res.status(404).json({ message: 'Manual no encontrado' });
     return res.status(200).json(manual);
   } catch (err) {
+    logger.error('getManualById error', {
+      error: err,
+      manualId: idStr,
+    });
     return res.status(500).json({ message: 'Error al obtener el manual' });
   }
 };
 
 export const deleteManualById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const idStr = Array.isArray(id) ? id[0] : id;
   try {
-    const { id } = req.params;
-    const idStr = Array.isArray(id) ? id[0] : id;
-
     const deleted = await deleteManual(ManualDataAccess, idStr);
 
     if (!deleted) {
@@ -71,6 +79,10 @@ export const deleteManualById = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'Manual eliminado correctamente' });
   } catch (err) {
+    logger.error('deleteManualById error', {
+      error: err,
+      manualId: idStr,
+    });
     return res.status(500).json({ message: 'Error al eliminar el manual' });
   }
 };

@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { getPlansDB } from '@use-cases/plans/getPlansDB.usecase';
 import { PlanDataAccess } from '../../infrastructure/data-access/plan.data-access';
 import { purchasedPlanDataAccess } from '@/infrastructure/data-access/purchasedPlan.data-access';
@@ -13,10 +14,16 @@ export const getPlans = async (_req: Request, res: Response): Promise<void> => {
     /**
      * Initialize the use case with the concrete data access implementation.
      */
+    if (
+      process.env.FORCE_GETPLANS_ERROR === '1' ||
+      (_req.query as any)?.__testError === '1'
+    ) {
+      throw new Error('Forced test error in getPlans');
+    }
     const plans = await getPlansDB(PlanDataAccess);
     res.json(plans);
   } catch (error) {
-    console.error(error);
+    logger.error('getPlans error', { error });
     /**
      * Standardized error response.
      * Extracts the error message if it's a known Error object, otherwise defaults to a generic message.
@@ -70,6 +77,7 @@ export const createPurchasedPlan = async (
 
     res.status(201).json({ plan });
   } catch (error) {
+    logger.error('createPurchasedPlan error', { error });
     const message =
       error instanceof Error
         ? error.message

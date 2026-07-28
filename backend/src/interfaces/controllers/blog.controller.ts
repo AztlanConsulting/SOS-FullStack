@@ -6,13 +6,14 @@ import createBlogUC from '@/use-cases/blogs/createBlog.usecase';
 import editBlogUC from '@/use-cases/blogs/editBlog.usecase';
 import deleteBlogUC from '@/use-cases/blogs/deleteBlog.usecase';
 import getBlogStatsUC from '@/use-cases/blogs/getBlogStats.usecase';
+import logger from '@/utils/logger';
 
 export async function getBlogs(req: Request, res: Response) {
   try {
     const query = blogQuery.safeParse(req.query);
 
     if (!query.success) {
-      console.log(query.error);
+      logger.error('getBlogs validation failed', { error: query.error });
       return res.status(400).json(query.error);
     }
 
@@ -41,6 +42,7 @@ export async function getBlogs(req: Request, res: Response) {
       total: totalBlogs,
     });
   } catch (error) {
+    logger.error('getBlogs error', { error });
     return res.status(500).send(error);
   }
 }
@@ -50,7 +52,7 @@ async function getStats(req: Request, res: Response) {
     const blogStats = await getBlogStatsUC(BlogDataAccess);
     return res.status(200).json(blogStats);
   } catch (error) {
-    console.log(error);
+    logger.error('getStats error', { error });
     return res.status(500).send(error);
   }
 }
@@ -65,7 +67,7 @@ async function createBlog(req: Request, res: Response) {
 
     if (blog) return res.status(200).json(blog);
   } catch (error) {
-    console.error(error);
+    logger.error('createBlog error', { error });
     return res.status(500).send(error);
   }
 }
@@ -80,7 +82,7 @@ async function updateBlog(req: Request, res: Response) {
 
     if (blog) return res.status(200).json(blog);
   } catch (error) {
-    console.error(error);
+    logger.error('updateBlog error', { error });
     return res.status(500).send(error);
   }
 }
@@ -95,7 +97,7 @@ async function deleteBlog(req: Request, res: Response) {
 
     if (blog) return res.status(200).json(blog);
   } catch (error) {
-    console.error(error);
+    logger.error('deleteBlog error', { error });
     return res.status(500).send(error);
   }
 }

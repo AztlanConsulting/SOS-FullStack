@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { default as ucCaptureOrder } from '@use-cases/payments/captureOrder';
 import paypalApi from '@infrastructure/api/paypal.api';
 import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-access';
@@ -24,7 +25,13 @@ export default async function captureOrder(req: Request, res: Response) {
     const { orderId } = req.params;
 
     const details = purchaseDetailsSchema.safeParse(req.body);
-    if (details.error) throw details.error;
+    if (details.error) {
+      logger.error('captureOrder validation failed', {
+        error: details.error,
+        body: req.body,
+      });
+      throw details.error;
+    }
 
     const { purchaseDetails, planId, extensionPlan } = details.data;
     const { userEmail, productId, productType } = purchaseDetails;
@@ -39,6 +46,9 @@ export default async function captureOrder(req: Request, res: Response) {
 
     if (extensionPlan) {
       if (!Types.ObjectId.isValid(extensionPlan.petId)) {
+        logger.error('captureOrder invalid extension plan petId', {
+          extensionPlan,
+        });
         return res.status(400).json({ error: 'Invalid extension plan petId' });
       }
 
@@ -108,6 +118,11 @@ export default async function captureOrder(req: Request, res: Response) {
     if (capturedOrder.id !== undefined)
       return res.status(200).send(capturedOrder.id);
   } catch (error) {
+    logger.error('captureOrder error', {
+      error,
+      orderId: req.params.orderId,
+      body: req.body,
+    });
     const message =
       error instanceof Error ? error.message : 'Failed to capture order';
     res.status(500).json({ error: message });

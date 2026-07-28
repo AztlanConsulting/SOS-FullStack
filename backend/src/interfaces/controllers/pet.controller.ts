@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { z } from 'zod';
 import { PetModel } from '@domain/models/pet.model';
 
@@ -37,7 +38,7 @@ export const PetController = {
       await PetModel.findByIdAndUpdate(petId, { $set: body.data });
       res.status(200).json({ message: 'Pet notes updated successfully' });
     } catch (error) {
-      console.error('updatePetNotes error:', error);
+      logger.error('updatePetNotes error', { error, petId: req.params.id });
       res.status(500).json({ error: 'Error updating pet notes' });
     }
   },

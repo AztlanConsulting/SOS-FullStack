@@ -1,5 +1,6 @@
 import { safeParse } from 'zod';
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { userDataAccess } from '@/infrastructure/data-access/user.data-access';
 import { getClientById } from '@/use-cases/clients/getClientById.usecase';
 import { getClients } from '@/use-cases/clients/getClients.usecase';
@@ -45,6 +46,7 @@ export const ClientController = {
       });
       res.status(200).json(result);
     } catch (error) {
+      logger.error('getClients error', { error });
       res.status(500).json({ error: 'Error fetching clients' });
     }
   },
@@ -65,6 +67,7 @@ export const ClientController = {
       }
       res.status(200).json(client);
     } catch (error) {
+      logger.error('getClientById error', { error, clientId: req.params.id });
       res.status(500).json({ error: 'Error fetching client' });
     }
   },
@@ -96,6 +99,11 @@ export const ClientController = {
       );
       res.status(200).json({ message: 'Plan status updated successfully' });
     } catch (error) {
+      logger.error('updatePlanStatus error', {
+        error,
+        planId: req.params.planId,
+        body: req.body,
+      });
       res.status(500).json({ error: 'Error updating plan status' });
     }
   },
@@ -126,7 +134,11 @@ export const ClientController = {
       await updateClient(deps, id, { conversation });
       res.status(200).json({ message: 'Client updated successfully' });
     } catch (error) {
-      console.error('updateClient error:', error); // add this
+      logger.error('updateClient error', {
+        error,
+        clientId: req.params.id,
+        body: req.body,
+      });
       res.status(500).json({ error: 'Error updating client' });
     }
   },

@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { createPaymentIntent } from '@use-cases/payments/createPaymentIntent.usecase';
 import { handleStripeWebhook } from '@use-cases/payments/handleStripeWebhook.usecase';
 import { createPendingIntentDB } from '@use-cases/payments/createPendingIntentDB.usecase';
@@ -39,6 +40,11 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
 
     const idempotencyKey = req.headers['x-idempotency-key'];
     if (amount === undefined || currency === undefined) {
+      logger.warn('makeCreatePaymentIntent missing required fields', {
+        amount,
+        currency,
+        body: req.body,
+      });
       return res.status(400).json({ error: 'Missing amount or currency' });
     }
 
@@ -105,6 +111,10 @@ export const makeCreatePaymentIntent = async (req: Request, res: Response) => {
       throw error;
     }
   } catch (error) {
+    logger.error('makeCreatePaymentIntent error', {
+      error,
+      body: req.body,
+    });
     const message = error instanceof Error ? error.message : 'Payment failed';
     return res.status(500).json({ error: message });
   }
@@ -178,9 +188,9 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
       }
 
       if (!purchase) {
-        // console.warn(
-        //   `No purchase found for payment ${paymentIntent.id} after retries`,
-        // );
+        logger.warn('makehandleStripeWebhook no purchase found after retries', {
+          paymentIntentId: paymentIntent.id,
+        });
         res.json({ received: true });
         return;
       }
@@ -231,6 +241,10 @@ export const makehandleStripeWebhook = async (req: Request, res: Response) => {
 
     res.json({ received: true });
   } catch (err: unknown) {
+    logger.error('makehandleStripeWebhook error', {
+      error: err,
+      signature: sig,
+    });
     const message =
       err instanceof Error ? err.message : 'Unknown webhook error';
     res.status(400).send(`Webhook Error: ${message}`);

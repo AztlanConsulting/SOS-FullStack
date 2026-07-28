@@ -9,6 +9,7 @@ import {
   updateResourceSchema,
 } from '@/types/resource.types';
 import updateResourceUC from '@/use-cases/resources/updateResourceUC.usecase';
+import logger from '@/utils/logger';
 import { type Request, type Response } from 'express';
 
 async function updateResource(req: Request, res: Response) {
@@ -31,13 +32,20 @@ async function updateResource(req: Request, res: Response) {
     );
 
     if (result.error) {
-      console.error(result.error);
+      logger.warn('updateResource not found', {
+        error: result.error,
+        query: req.query,
+      });
       return res.status(404).send("Couldn't find object");
     }
 
     return res.status(200).send('success');
   } catch (err) {
-    console.log(err);
+    logger.error('updateResource error', {
+      error: err,
+      query: req.query,
+      body: req.body,
+    });
     res.status(500).send(err);
   }
 }

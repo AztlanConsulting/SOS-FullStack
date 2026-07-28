@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { createPurchaseDB } from '@use-cases/purchases/createPurchaseDB.usecase';
 import { PurchaseDataAccess } from '@infrastructure/data-access/purchase.data-access';
 import { activatePlan } from '@/use-cases/plans/activatePlan.usecase';
@@ -25,6 +26,9 @@ export const makeCreatePurchase = () => {
         productId === undefined ||
         productType === undefined
       ) {
+        logger.warn('makeCreatePurchase missing required fields', {
+          body: req.body,
+        });
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -48,6 +52,10 @@ export const makeCreatePurchase = () => {
         message: 'Purchase created successfully',
       });
     } catch (error) {
+      logger.error('makeCreatePurchase error', {
+        error,
+        body: req.body,
+      });
       const message =
         error instanceof Error ? error.message : 'Purchase failed';
       return res.status(500).json({ error: message });

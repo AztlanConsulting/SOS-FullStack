@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { paymentDetails } from '@/types/payment.types';
 import { createOrder as usCreateOrder } from '@/use-cases/payments/createOrder';
 import PaypalProvider from '@/infrastructure/api/paypal.api';
@@ -17,7 +18,13 @@ import { PaymentDataAccess } from '@infrastructure/data-access/payment.data-acce
 export default async function createOrder(req: Request, res: Response) {
   try {
     const paymentDetail = paymentDetails.safeParse(req.body);
-    if (paymentDetail.error) throw paymentDetail.error;
+    if (paymentDetail.error) {
+      logger.error('createOrder validation failed', {
+        error: paymentDetail.error,
+        body: req.body,
+      });
+      throw paymentDetail.error;
+    }
 
     const result = await usCreateOrder(PaypalProvider, paymentDetail.data);
 
@@ -34,6 +41,10 @@ export default async function createOrder(req: Request, res: Response) {
       result,
     });
   } catch (error) {
+    logger.error('createOrder error', {
+      error,
+      body: req.body,
+    });
     const message = error instanceof Error ? error.message : 'Payment failed';
     return res.status(500).json({ error: message });
   }

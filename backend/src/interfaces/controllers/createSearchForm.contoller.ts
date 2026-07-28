@@ -1,4 +1,5 @@
 import { createSearchForm } from '@/use-cases/members-only/createSearchForm';
+import logger from '@/utils/logger';
 import type { Request, Response } from 'express';
 import { SearchFormDataAccess } from '@infrastructure/data-access/searchForm.data-access';
 import { searchFormSchema } from '../../types/createSearchForm.types';
@@ -11,6 +12,10 @@ export default async function createSearchFormController(
   const parsed = searchFormSchema.safeParse(req.body);
 
   if (!parsed.success) {
+    logger.error('createSearchForm validation failed', {
+      error: parsed.error,
+      body: req.body,
+    });
     res.status(400).json({
       error: 'Invalid search form data',
       details: parsed.error.flatten(),
@@ -87,11 +92,16 @@ export default async function createSearchFormController(
       data: createdReport,
     });
   } catch (err: unknown) {
+    logger.error('createSearchForm error', {
+      error: err,
+      body: req.body,
+    });
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
 
     res.status(500).json({
       error:
         'Ocurrió un error inesperado. Vuelva a intentarlo en unos minutos.',
+      details: errorMessage,
     });
   }
 }

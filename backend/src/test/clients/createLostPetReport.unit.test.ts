@@ -42,6 +42,7 @@ describe('createLostPetReport', () => {
     userRepo = {
       getUserByEmail: jest.fn(),
       createUser: jest.fn(),
+      updateUser: jest.fn(),
     } as unknown as jest.Mocked<UserRepository>;
 
     petRepo = {

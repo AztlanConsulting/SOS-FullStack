@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import type { TokenPayload } from '@/types/auth.types';
 import type { DashboardResponse } from '@validation/clients.type';
 
@@ -20,12 +21,20 @@ const createLostPetReportController = async (req: Request, res: Response) => {
     const images = req.files as Express.Multer.File[] | undefined;
 
     if (!images || images.length < 2) {
+      logger.warn('createLostPetReport validation failed', {
+        reason: 'missing images',
+        imagesCount: images?.length ?? 0,
+      });
       return res.status(400).json({ error: 'Se requiere al menos una imagen' });
     }
 
     const validation = createPetReportDTOSchema.safeParse(req.body);
 
     if (!validation.success) {
+      logger.warn('createLostPetReport validation failed', {
+        error: validation.error,
+        body: req.body,
+      });
       return res.status(400).json({
         error: 'Datos inválidos',
         details: getCreatePetReportFieldErrors(validation.error),
@@ -73,6 +82,10 @@ const createLostPetReportController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: unknown) {
+    logger.error('createLostPetReport error', {
+      error: err,
+      body: req.body,
+    });
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
     return res.status(500).json({
       error: 'Error creando el reporte de mascota',
@@ -87,6 +100,9 @@ export const getDashboardController = async (req: Request, res: Response) => {
     const userId = reqWithUser.user?.userId;
 
     if (!userId) {
+      logger.warn('getDashboardController unauthorized', {
+        reason: 'missing userId',
+      });
       return res.status(401).json({
         message: 'No autorizado: Credenciales incompletas en el token.',
       });
@@ -106,6 +122,10 @@ export const getDashboardController = async (req: Request, res: Response) => {
 
     return res.status(200).json(dashboardData);
   } catch (err: unknown) {
+    logger.error('getDashboardController error', {
+      error: err,
+      userId: (req as Request & { user?: TokenPayload }).user?.userId,
+    });
     const errorMessage =
       err instanceof Error ? err.message : 'Error desconocido';
     return res.status(500).json({

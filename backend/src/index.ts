@@ -5,6 +5,7 @@ import routes from '@interfaces/routes/routes';
 import '@domain/models';
 import cors from 'cors';
 import path from 'path';
+import { expressErrorHandler } from '@/utils/expressErrorHandler';
 
 async function loadWorkers() {
   if (process.env.ENV !== 'test') {
@@ -83,5 +84,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/', routes);
+
+app.use(expressErrorHandler);
 
 export default app;

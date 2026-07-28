@@ -1,5 +1,6 @@
 import { WorkshopDataAccess } from '@infrastructure/data-access/workshop.data-access';
 import { ManualDataAccess } from '@infrastructure/data-access/manual.data-access';
+import logger from '@/utils/logger';
 import { resourceQuery } from '../../types/resource.types';
 import { getResourcesList } from '@use-cases/resources/getResources.usecase';
 import { deleteResource } from '@use-cases/resources/deleteResource.usecase';
@@ -10,6 +11,10 @@ export async function getResources(req: Request, res: Response) {
     const query = resourceQuery.safeParse(req.query);
 
     if (!query.success) {
+      logger.error('getResources validation failed', {
+        error: query.error,
+        query: req.query,
+      });
       return res.status(400).json(query.error);
     }
 
@@ -21,6 +26,10 @@ export async function getResources(req: Request, res: Response) {
 
     return res.status(200).json({ resources, total: totalResources });
   } catch (error) {
+    logger.error('getResources error', {
+      error,
+      query: req.query,
+    });
     res.status(500).send(error);
   }
 }
@@ -29,7 +38,7 @@ export async function deleteResourceById(req: Request, res: Response) {
   try {
     const { id } = req.params;
     const idStr = Array.isArray(id) ? id[0] : id;
-    console.log(id);
+    logger.info('deleteResourceById called', { id: idStr });
 
     const deleted = await deleteResource(
       WorkshopDataAccess,
@@ -45,7 +54,10 @@ export async function deleteResourceById(req: Request, res: Response) {
 
     return res.status(200).json({ message: 'Recurso eliminado correctamente' });
   } catch (error) {
-    console.log(error);
+    logger.error('deleteResourceById error', {
+      error,
+      resourceId: req.params.id,
+    });
     return res.status(500).send(error);
   }
 }

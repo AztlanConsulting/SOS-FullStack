@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import type { FoundPetReport } from '@domain/models/foundPet.model';
 import type { PetImageDto } from '@domain/repositories/petImage.repository';
 import { createFoundPet } from '@use-cases/foundPet/createFoundPet.usecase';
+import logger from '@/utils/logger';
 import { parseBase64Image } from '@use-cases/foundPet/parseBase64Image.usecase';
 import type { Request, Response } from 'express';
 import { FoundPetDataAccess } from '@/infrastructure/data-access/foundPet.data-access';
@@ -14,7 +15,13 @@ export async function postFoundPetReport(req: Request, res: Response) {
   try {
     const body = foundPet.safeParse(req.body);
 
-    if (body.error) throw body.error;
+    if (body.error) {
+      logger.error('postFoundPetReport validation failed', {
+        error: body.error,
+        body: req.body,
+      });
+      throw body.error;
+    }
 
     const {
       species,
@@ -32,6 +39,9 @@ export async function postFoundPetReport(req: Request, res: Response) {
       images,
     } = body.data;
     if (!images || !Array.isArray(images) || images.length === 0) {
+      logger.warn('postFoundPetReport invalid or missing images', {
+        body: req.body,
+      });
       return res.status(400).json({
         error: 'Invalid or missing images',
         details: 'At least one valid base64 image is required',
@@ -103,7 +113,10 @@ export async function postFoundPetReport(req: Request, res: Response) {
       data: result,
     });
   } catch (error) {
-    console.error(error);
+    logger.error('postFoundPetReport error', {
+      error,
+      body: req.body,
+    });
     return res.status(500).json({
       error:
         'Ocurrió un error inesperado. Vuelva a intentarlo en unos minutos.',

@@ -2,6 +2,7 @@ import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-acces
 import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
 import { createManual } from '@/use-cases/manuals/createManual.usecase';
 import { createWorkshop } from '@/use-cases/workshops/createWorkshop.usecase';
+import logger from '@/utils/logger';
 import type { Request, Response } from 'express';
 // ── Mirror of frontend limits — single source of truth on the server ──────────
 const MAX_NAME_LENGTH = 100;
@@ -79,19 +80,27 @@ export const CreateWorkshopItemController = {
 
       // ── type ──
       if (!VALID_TYPES.includes(body.type as ValidType)) {
-        console.log('Type debe ser manual o taller');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'invalid type',
+          type: body.type,
+        });
         res.status(400).json({ message: 'type debe ser "manual" o "taller"' });
         return;
       }
 
       // ── name ──
       if (typeof body.name !== 'string' || !body.name.trim()) {
-        console.error('Nombre es requerido');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'missing name',
+        });
         res.status(400).json({ message: 'El nombre es requerido' });
         return;
       }
       if (body.name.trim().length > MAX_NAME_LENGTH) {
-        console.log('Nombre demasiado largo');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'name too long',
+          length: body.name.trim().length,
+        });
         res.status(400).json({
           message: `El nombre no puede superar ${MAX_NAME_LENGTH} caracteres`,
         });
@@ -101,14 +110,20 @@ export const CreateWorkshopItemController = {
       // ── price ──
       const price = Number(body.price);
       if (isNaN(price) || price <= 0) {
-        console.log('Precio no es un número');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'invalid price',
+          price: body.price,
+        });
         res
           .status(400)
           .json({ message: 'El precio debe ser un número positivo' });
         return;
       }
       if (price > MAX_PRICE) {
-        console.log('price is more than the max');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'price exceeds max',
+          price,
+        });
         res.status(400).json({
           message: `El precio no puede superar ${MAX_PRICE.toLocaleString()} USD`,
         });
@@ -117,7 +132,9 @@ export const CreateWorkshopItemController = {
 
       // ── imageUrl ──
       if (typeof body.imageUrl !== 'string' || !body.imageUrl.trim()) {
-        console.error('imageUrl is required');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'missing imageUrl',
+        });
         res.status(400).json({ message: 'imageUrl es requerido' });
         return;
       }
@@ -125,7 +142,10 @@ export const CreateWorkshopItemController = {
       // ── content blocks ──
       const rawBlocks = Array.isArray(body.content) ? body.content : [];
       if (rawBlocks.length > MAX_BLOCKS) {
-        console.log('Raw blocks exceeded');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'too many blocks',
+          count: rawBlocks.length,
+        });
         res.status(400).json({
           message: `No se permiten más de ${MAX_BLOCKS} bloques de contenido`,
         });
@@ -136,8 +156,10 @@ export const CreateWorkshopItemController = {
       for (let i = 0; i < rawBlocks.length; i++) {
         const result = validateBlock(rawBlocks[i], i);
         if (typeof result === 'string') {
-          console.log(result);
-          console.log('Result not string');
+          logger.warn('createWorkshopItem validation failed', {
+            reason: result,
+            index: i,
+          });
           res.status(400).json({ message: result });
           return;
         }
@@ -152,7 +174,10 @@ export const CreateWorkshopItemController = {
           typeof body.pdfUrl === 'string' &&
           body.pdfUrl.trim().length > MAX_SECRET_URL_LENGTH
         ) {
-          console.log('PDF url error');
+          logger.warn('createWorkshopItem validation failed', {
+            reason: 'pdfUrl too long',
+            length: body.pdfUrl.trim().length,
+          });
           res
             .status(400)
             .json({ message: 'El pdfUrl supera el límite permitido' });
@@ -172,7 +197,9 @@ export const CreateWorkshopItemController = {
 
       // taller
       if (typeof body.description !== 'string' || !body.description.trim()) {
-        console.log('Description needed');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'missing description',
+        });
         res
           .status(400)
           .json({ message: 'description es requerido para talleres' });
@@ -190,7 +217,10 @@ export const CreateWorkshopItemController = {
         typeof body.videoUrl === 'string' &&
         body.videoUrl.trim().length > MAX_SECRET_URL_LENGTH
       ) {
-        console.log('VideoURL exceeds expected length');
+        logger.warn('createWorkshopItem validation failed', {
+          reason: 'videoUrl too long',
+          length: body.videoUrl.trim().length,
+        });
         res
           .status(400)
           .json({ message: 'El videoUrl supera el límite permitido' });
@@ -213,6 +243,10 @@ export const CreateWorkshopItemController = {
       });
       res.status(201).json({ id: workshopId, type: 'taller' });
     } catch (err) {
+      logger.error('createWorkshopItem error', {
+        error: err,
+        body: req.body,
+      });
       res.status(500).json({
         message:
           err instanceof Error

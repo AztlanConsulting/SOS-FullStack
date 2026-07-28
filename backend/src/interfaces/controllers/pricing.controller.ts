@@ -6,6 +6,7 @@ import { PlanDataAccess } from '@/infrastructure/data-access/plan.data-access';
 import { IpApiService } from '@/infrastructure/api/IpApiService';
 import { ManualDataAccess } from '@/infrastructure/data-access/manual.data-access';
 import { WorkshopDataAccess } from '@/infrastructure/data-access/workshop.data-access';
+import logger from '@/utils/logger';
 import type { Request, Response } from 'express';
 
 /**
@@ -33,35 +34,45 @@ export const PricingController = {
     // Ensure we don't query local interface addresses (uses Google DNS IP as fallback)
     const safeIp = ip === '127.0.0.1' || ip === '::1' ? '8.8.8.8' : ip;
     // const safeIp = '187.190.0.1';
-    // const safeIp = '61.74.0.1';
-    // const safeIp = '181.129.54.12';
-    // const safeIp = '146.70.231.210';
+    try {
+      // const safeIp = '61.74.0.1';
+      // const safeIp = '181.129.54.12';
+      // const safeIp = '146.70.231.210';
 
-    // 1. Identify User Location & Currency
-    const location = await GetLocationByIp(safeIp, IpApiService);
-    const currencyCode = location?.currency ?? 'USD';
-    // 2. Fetch all products from internal data access layers
-    const [plans, manuals, workshops] = await Promise.all([
-      getPlansDB(PlanDataAccess),
-      ManualDataAccess.getManuals({ page: 0, searchTerm: '' }),
-      WorkshopDataAccess.getWorkshops({ page: 0, searchTerm: '' }),
-    ]);
-
-    // 3. Transform prices based on the detected currency
-    const [localizedPlans, localizedManuals, localizedWorkshops] =
-      await Promise.all([
-        getLocalizedPricing(currencyCode, plans, ExchangeRateApiService),
-        getLocalizedPricing(currencyCode, manuals, ExchangeRateApiService),
-        getLocalizedPricing(currencyCode, workshops, ExchangeRateApiService),
+      // 1. Identify User Location & Currency
+      const location = await GetLocationByIp(safeIp, IpApiService);
+      const currencyCode = location?.currency ?? 'USD';
+      // 2. Fetch all products from internal data access layers
+      const [plans, manuals, workshops] = await Promise.all([
+        getPlansDB(PlanDataAccess),
+        ManualDataAccess.getManuals({ page: 0, searchTerm: '' }),
+        WorkshopDataAccess.getWorkshops({ page: 0, searchTerm: '' }),
       ]);
 
-    // 4. Return aggregated response
-    return res.json({
-      country: location?.country ?? null,
-      currencyCode,
-      plans: localizedPlans,
-      manuals: localizedManuals,
-      workshops: localizedWorkshops,
-    });
+      // 3. Transform prices based on the detected currency
+      const [localizedPlans, localizedManuals, localizedWorkshops] =
+        await Promise.all([
+          getLocalizedPricing(currencyCode, plans, ExchangeRateApiService),
+          getLocalizedPricing(currencyCode, manuals, ExchangeRateApiService),
+          getLocalizedPricing(currencyCode, workshops, ExchangeRateApiService),
+        ]);
+
+      // 4. Return aggregated response
+      return res.json({
+        country: location?.country ?? null,
+        currencyCode,
+        plans: localizedPlans,
+        manuals: localizedManuals,
+        workshops: localizedWorkshops,
+      });
+    } catch (error) {
+      logger.error('PricingController handle error', {
+        error,
+        ip: safeIp,
+      });
+      res.status(500).json({
+        error: 'Error interno al obtener precios localizados',
+      });
+    }
   },
 };

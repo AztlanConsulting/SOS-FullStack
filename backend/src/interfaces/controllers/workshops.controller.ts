@@ -1,3 +1,4 @@
+import logger from '@/utils/logger';
 import type { Workshop } from '@domain/models/workshop.model';
 import { WorkshopDataAccess } from '@infrastructure/data-access/workshop.data-access';
 import { workshopBody, workshopQuery } from '@validation/workshop.types';
@@ -14,6 +15,10 @@ export async function getWorkshops(req: Request, res: Response) {
     const query = workshopQuery.safeParse(req.query);
 
     if (!query.success) {
+      logger.error('getWorkshops validation failed', {
+        error: query.error,
+        query: req.query,
+      });
       return res.status(400).json(query.error);
     }
 
@@ -41,6 +46,10 @@ export async function getWorkshops(req: Request, res: Response) {
 
     return res.status(200).json({ workshops, total: totalWorkshops });
   } catch (error) {
+    logger.error('getWorkshops error', {
+      error,
+      query: req.query,
+    });
     res.status(500).send(error);
   }
 }
@@ -50,9 +59,19 @@ export async function postWorkshop(req: Request, res: Response) {
     const body = workshopBody.safeParse(req.body);
     const image = req.file;
 
-    if (!body.success) throw body.error;
-    if (image !== undefined && body.data.imageUrl === undefined)
+    if (!body.success) {
+      logger.error('postWorkshop validation failed', {
+        error: body.error,
+        body: req.body,
+      });
+      throw body.error;
+    }
+    if (image !== undefined && body.data.imageUrl === undefined) {
+      logger.error('postWorkshop missing image when imageUrl absent', {
+        body: req.body,
+      });
       throw Error('Image not provided');
+    }
 
     // Only fills img if there is a file, unless it uses imageUrl
     const workshopData: Workshop = {
@@ -73,7 +92,10 @@ export async function postWorkshop(req: Request, res: Response) {
 
     return res.status(200).json({ workshopId });
   } catch (error) {
-    console.error(error);
+    logger.error('postWorkshop error', {
+      error,
+      body: req.body,
+    });
     return res.status(500).send(error);
   }
 }
@@ -87,6 +109,10 @@ export async function deleteWorkshopById(req: Request, res: Response) {
     }
     return res.status(200).json({ message: 'Taller eliminado correctamente' });
   } catch (error) {
+    logger.error('deleteWorkshopById error', {
+      error,
+      workshopId: req.params.id,
+    });
     return res.status(500).send(error);
   }
 }

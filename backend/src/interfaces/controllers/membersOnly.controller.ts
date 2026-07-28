@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import logger from '@/utils/logger';
 import { MembersOnlyDataAccess } from '@infrastructure/data-access/membersOnly.data-access';
 import {
   membersOnlyQuery,
@@ -18,6 +19,10 @@ export async function getMembersOnly(req: Request, res: Response) {
     const query = membersOnlyQuery.safeParse(req.query);
 
     if (!query.success) {
+      logger.error('getMembersOnly validation failed', {
+        error: query.error,
+        query: req.query,
+      });
       return res.status(400).json(query.error);
     }
 
@@ -54,6 +59,10 @@ export async function postMembersOnly(req: Request, res: Response) {
     const body = membersOnlyBody.safeParse(req.body);
 
     if (!body.success) {
+      logger.error('postMembersOnly validation failed', {
+        error: body.error,
+        body: req.body,
+      });
       return res.status(400).json(body.error);
     }
 

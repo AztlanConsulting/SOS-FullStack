@@ -212,7 +212,7 @@ const ClientDashboardOverview = () => {
                                 <Button
                                   label="Radar de coincidencias"
                                   variant="primary"
-                                  textColor="bg-white text-[var(--color-purple-primary)] hover:bg-dark-purple hover:text-white border-2 border-[var(--color-purple-primary)]"
+                                  textColor="bg-white text-purple-primary hover:bg-dark-purple hover:text-white border-2 border-purple-primary"
                                   onClick={handlePetCollection}
                                 />
                               </div>

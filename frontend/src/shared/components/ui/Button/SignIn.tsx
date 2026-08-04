@@ -16,20 +16,18 @@ const SignIn = () => {
         if (isAuthLoading) return;
         navigate(user ? roleNavigation(user.role) : '/login');
       }}
-      className={`group border-1 border-[color:var(--color-primary)] py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
-        user
-          ? 'bg-[color:var(--color-primary)] hover:bg-white'
-          : 'bg-white hover:bg-[color:var(--color-primary)]'
+      className={`group border border-primary py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
+        user ? 'bg-primary hover:bg-white' : 'bg-white hover:bg-primary'
       }`}
     >
       <Text
         variant="body"
         weight="medium"
-        className={`${
+        color={
           user
-            ? 'text-white group-hover:text-[color:var(--color-primary)]'
-            : 'text-[color:var(--color-primary)] group-hover:text-white'
-        }`}
+            ? 'text-white group-hover:text-primary'
+            : 'text-primary group-hover:text-white'
+        }
       >
         {user ? `Hola, ${firstName}` : 'Iniciar Sesión'}
       </Text>

@@ -12,7 +12,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: {
-    fileSize: 20 * 1024 * 1024, // 20MB per file
+    fileSize: 15 * 1024 * 1024, // 15MB per file
   },
   fileFilter,
 });

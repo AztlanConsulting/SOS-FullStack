@@ -4,6 +4,7 @@ import multer from 'multer';
 import { authMiddleware } from '../middleware/auth.middleware';
 import countPetPages from '@interfaces/controllers/countPetPages.controller';
 import { fileFilter } from '../middleware/upload.middleware';
+import { compressImageMiddleware } from '../middleware/compressImage.middleware';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 2MB per file
+    fileSize: 20 * 1024 * 1024, // 20MB per file
   },
   fileFilter,
 });
@@ -20,12 +21,14 @@ router.post(
   '/findSimilarPets',
   authMiddleware,
   upload.single('image'),
+  compressImageMiddleware,
   findSimilarPets,
 );
 router.post(
   '/countPets',
   authMiddleware,
   upload.single('image'),
+  compressImageMiddleware,
   countPetPages,
 );
 

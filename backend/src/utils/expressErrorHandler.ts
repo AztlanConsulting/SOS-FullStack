@@ -78,6 +78,18 @@ export function expressErrorHandler(
         .status(400)
         .json({ error: 'Validation Error', details: error.issues });
     }
+
+    if (
+      error?.type === 'request.aborted' ||
+      error?.code === 'ECONNABORTED' ||
+      error?.message === 'request aborted'
+    ) {
+      return res.status(408).json({
+        error: 'Request aborted',
+        details: 'The request was interrupted before it completed.',
+      });
+    }
+
     return res
       .status(error?.status || 500)
       .json({ error: 'Internal Server Error' });

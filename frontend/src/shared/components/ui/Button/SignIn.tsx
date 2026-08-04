@@ -16,8 +16,9 @@ const SignIn = () => {
         if (isAuthLoading) return;
         navigate(user ? roleNavigation(user.role) : '/login');
       }}
-      className={`group border border-primary py-1 px-4 rounded-3xl cursor-pointer transition-colors ${user ? 'bg-primary hover:bg-white' : 'bg-white hover:bg-primary'
-        }`}
+      className={`group border border-primary py-1 px-4 rounded-3xl cursor-pointer transition-colors ${
+        user ? 'bg-primary hover:bg-white' : 'bg-white hover:bg-primary'
+      }`}
     >
       <Text
         variant="body"

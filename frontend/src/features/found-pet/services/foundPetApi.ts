@@ -13,20 +13,26 @@ export const reportFoundPet = async (data: FoundPetReportData) => {
     }),
   );
 
-  const response = await axiosInstance.post('/found-pets/report', {
-    species: data.species,
-    date: data.date,
-    breed: data.breed,
-    sex: data.sex,
-    color: data.color,
-    size: data.size,
-    description: data.description,
-    location: data.address,
-    locationCoords: data.locationCoords,
-    contactName: data.contactName,
-    phoneNumber: data.phoneNumber,
-    email: data.email,
-    images: imagesBase64,
-  });
+  const response = await axiosInstance.post(
+    '/found-pets/report',
+    {
+      species: data.species,
+      date: data.date,
+      breed: data.breed,
+      sex: data.sex,
+      color: data.color,
+      size: data.size,
+      description: data.description,
+      location: data.address,
+      locationCoords: data.locationCoords,
+      contactName: data.contactName,
+      phoneNumber: data.phoneNumber,
+      email: data.email,
+      images: imagesBase64,
+    },
+    {
+      timeout: 300000,
+    },
+  );
   return response.data;
 };
